@@ -5,8 +5,8 @@ import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
 import { PGlite } from '@electric-sql/pglite'
 import { makeSql } from '../pglite-sql.js'
-import { ALL_CARDS, SQUAD_SLOTS, isPlayerCard, personOf, squadRating } from '../src/engine/cards'
-import { enterCup, levelOf, newGacha, STAMINA_COST, STAMINA_MAX } from '../src/engine/gacha'
+import { ALL_CARDS, COACH_CARDS, SQUAD_SLOTS, isPlayerCard, personOf, squadRating } from '../src/engine/cards'
+import { enterCup, levelOf, newGacha, STAMINA_COST, STAMINA_MAX, cupBo } from '../src/engine/gacha'
 import type { CupRegistration, GachaState } from '../src/engine/gacha'
 import type { ArenaResult } from '../src/engine/arena'
 import { playCupMatch } from '../src/engine/arena'
@@ -47,8 +47,9 @@ function five(high: boolean) {
     return card.id
   })
 }
-const weak = { slots: five(false), coach: 'c:Cody' }
-const strong = { slots: five(true), coach: 'c:bonkar' }
+const coaches = COACH_CARDS.slice().sort((a, b) => a.rating - b.rating)
+const weak = { slots: five(false), coach: coaches[0].id }
+const strong = { slots: five(true), coach: coaches.at(-1)!.id }
 const today = new Date().toISOString().slice(0, 10)
 function account(id: string) {
   const g = newGacha(id, '杯赛验证', today)
@@ -110,7 +111,7 @@ try {
   // registered levels actually reach the simulation, rather than just storage.
   const env = { now: Date.now(), today, seed: 33145 }
   const deterministic = structuredClone(changed)
-  const expected = playCupMatch(registered.squad, id => registered.levels[id] ?? 0, path[0], 3, env.seed, changed.cup!.ease ?? 0)
+  const expected = playCupMatch(registered.squad, id => registered.levels[id] ?? 0, path[0], cupBo(changed.cup!), env.seed, changed.cup!.ease ?? 0, changed.cup!.balance ?? 1)
   const simulated = runAction(deterministic, 'cup_play', {}, env)
   assert(simulated.ok)
   assert.deepEqual((simulated.result as { res: ArenaResult }).res, expected)

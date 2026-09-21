@@ -1,32 +1,18 @@
 import CardFace from '../Card'
-import { cardById, chemistry, isPlayerCard, squadRating } from '../../engine/cards'
+import { cardById, chemistry, squadRating } from '../../engine/cards'
 import { WORLD_TEAMS } from '../../engine/teams'
-import { ATTR_CN } from '../../engine/types'
-import type { Attrs, Role } from '../../engine/types'
 import type { ArenaLine, ArenaResult } from '../../engine/arena'
-import type { PlayerCard, Squad } from '../../engine/cards'
+import type { Squad } from '../../engine/cards'
+import { useState } from 'react'
 
-/**
- * The scoreboard after a card match.
- *
- * When the opponent was another player's five, this is the only screen that
- * ever shows you what they were holding — so it shows both sides: the ten
- * cards, both coaches, both scoreboards, and how each map actually went. A
- * club opponent has no cards to lay out, so that half is simply absent rather
- * than faked.
- */
 export default function MatchReport({
   result, opponentId, opponentName, mySquad, mineTitle, level, onClose, extra, neutral,
 }: {
-  /** somebody else's match — 全服杯: no 「赢了」, both sides by name */
   neutral?: boolean
   result: ArenaResult
   opponentId: string
-  /** when the opponent is a person rather than a club — 真人卡组 and 好友房 */
   opponentName?: string
-  /** the five that played, so the report can lay it out beside theirs */
   mySquad?: Squad
-  /** what to call that five when it is not the player's own — 首尔征途 plays 2024's */
   mineTitle?: string
   level: (id: string) => number
   onClose: () => void
@@ -35,15 +21,26 @@ export default function MatchReport({
   const opp = WORLD_TEAMS.find((t) => t.id === opponentId)
   const them = result.opp
   const theirLevel = (id: string) => them?.levels[id] ?? 0
+  const isLoL = result.result.format === 'lol-v1'
+  const [selectedGame, setSelectedGame] = useState<number>(0)
+
+  const currentMap = result.result.maps[selectedGame]
+  const isSeriesView = selectedGame === -1
+  const perGame = (ls: ArenaLine[]) => !isLoL || isSeriesView ? ls : ls.map(l => {
+    const ml = l.playerId ? currentMap?.lines?.[l.playerId] : undefined
+    return ml ? { ...l, ...ml, maps: 1 } : l
+  })
+  const mergedLines = perGame(result.lines)
+  const mergedOppLines = perGame(them?.lines ?? [])
 
   return (
     <div className="modal-bg" onClick={onClose}>
-      <div className="modal" style={{ maxWidth: them ? 860 : 700 }} onClick={(e) => e.stopPropagation()}>
+      <div className="modal lol-match-report" style={{ maxWidth: them ? 860 : 700 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-head">
           <h2>
             {neutral
               ? <>{mineTitle} <span style={{ whiteSpace: 'nowrap' }}>{result.mapsWon}–{result.mapsLost}</span> {opponentName}</>
-              : <>{result.win ? '赢了' : '输了'} · {result.mapsWon}–{result.mapsLost} vs{' '}
+              : <>{result.win ? '赢了' : '输了'} · <span style={{ whiteSpace: 'nowrap' }}>{result.mapsWon}–{result.mapsLost}</span> vs{' '}
                 {opponentName ?? opp?.tag ?? '?'}</>}
           </h2>
           {result.bo && result.bo > 1 && <span className="tag" style={{ marginLeft: 8 }}>BO{result.bo}</span>}
@@ -53,11 +50,31 @@ export default function MatchReport({
         <div className="modal-body">
           {extra}
 
-          <p className="tiny faint">卡牌回合对战：每局先到 13 分并领先 2 分获胜，沿用原版机制。以下为模拟对局数据。</p>
-          <MapStrip result={result} />
+          {isLoL ? (
+            <>
+              <p className="tiny faint">英雄联盟模拟对战 · 摧毁基地获胜。以下为模拟对局数据。</p>
+              <div className="row wrap" style={{ gap: 6, margin: '8px 0 12px' }}>
+                <button className={`ghost sm ${isSeriesView ? 't1' : ''}`} onClick={() => setSelectedGame(-1)}>系列赛合计</button>
+                {result.result.maps.map((_m, i) => (
+                  <button key={i} className={`ghost sm ${selectedGame === i ? 't1' : ''}`} onClick={() => setSelectedGame(i)}>
+                    第{i + 1}局
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <p className="tiny faint">旧版战报 · 历史模拟数据（旧版比分）</p>
+          )}
+
+          {isLoL ? <LoLMapStrip result={result} selectedGame={selectedGame} mineLabel={mineTitle ?? '我方'} theirLabel={opponentName ?? them?.name ?? opp?.tag ?? '对方'} /> : <MapStrip result={result} />}
 
           {them ? (
             <>
+              <div className="grid c2" style={{ alignItems: 'start', marginTop: 4 }}>
+                <Board title={neutral ? `${mineTitle ?? ''} 数据` : '我方数据'} lines={isLoL ? mergedLines : result.lines} mvp={result.mvpCard} level={level} isLoL={isLoL} />
+                <Board title={neutral ? `${them.name} 数据` : '对方数据'} lines={isLoL ? mergedOppLines : them.lines} mvp={them.mvpCard} level={theirLevel} isLoL={isLoL} />
+              </div>
+              <details style={{ marginTop: 12 }}><summary>查看双方卡组与阵容分</summary>
               <SquadRow
                 title={mineTitle ?? '我的卡组'}
                 slots={mySquad?.slots ?? result.lines.map((l) => l.cardId)}
@@ -74,16 +91,13 @@ export default function MatchReport({
                 mvp={them.mvpCard}
                 won={!result.win}
               />
-              <div className="grid c2" style={{ alignItems: 'start', marginTop: 4 }}>
-                <Board title={neutral ? `${mineTitle ?? ''} 数据` : '我方数据'} lines={result.lines} mvp={result.mvpCard} level={level} />
-                <Board title={neutral ? `${them.name} 数据` : '对方数据'} lines={them.lines} mvp={them.mvpCard} level={theirLevel} />
-              </div>
+              </details>
             </>
           ) : (
-            <Board title="" lines={result.lines} mvp={result.mvpCard} level={level} />
+            <Board title="" lines={isLoL ? mergedLines : result.lines} mvp={result.mvpCard} level={level} isLoL={isLoL} />
           )}
 
-          {!!result.result.highlights.length && (
+          {(!isLoL || isSeriesView) && !!result.result.highlights.length && (
             <ul className="tiny muted" style={{ margin: '14px 0 0', paddingLeft: 16, lineHeight: 1.9 }}>
               {result.result.highlights.slice(0, 5).map((h, i) => <li key={i}>{h}</li>)}
             </ul>
@@ -94,19 +108,97 @@ export default function MatchReport({
   )
 }
 
-/**
- * Every map, and how it was actually won.
- *
- * The score alone does not say whether 13–9 was a walk or a comeback. The
- * engine keeps the round log, so the bar under each map is the real thing: one
- * tick per round in the order they were played, coloured by who took it, with
- * a gap where the sides swapped and a brighter tick for a round won on an eco.
- */
+function LoLMapStrip({ result, selectedGame, mineLabel, theirLabel }: { result: ArenaResult; selectedGame: number; mineLabel: string; theirLabel: string }) {
+  if (selectedGame === -1) {
+    // Series total view
+    return (
+      <div className="row wrap" style={{ gap: 10, margin: '4px 0 14px', alignItems: 'flex-start' }}>
+        <div style={{ minWidth: 200 }}>
+          <div className="row" style={{ gap: 6, alignItems: 'baseline' }}>
+            <b style={{ fontSize: 13 }}>系列赛合计</b>
+            <span className="mono" style={{ fontWeight: 800 }}>
+              总比分 {result.mapsWon}–{result.mapsLost}
+            </span>
+          </div>
+          <div className="tiny muted" style={{ marginTop: 4 }}>
+            击杀总数 {result.result.maps.reduce((s, m) => s + m.scoreA, 0)}–{result.result.maps.reduce((s, m) => s + m.scoreB, 0)}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const m = result.result.maps[selectedGame]
+  if (!m?.lol) return null
+  const lol = m.lol
+  const winner = lol.winner
+  const goldTotal = lol.goldA + lol.goldB
+  const goldAPct = goldTotal > 0 ? Math.round(100 * lol.goldA / goldTotal) : 50
+
+  return (
+    <div style={{ margin: '4px 0 14px' }}>
+      <div className="row" style={{ gap: 6, alignItems: 'baseline', flexWrap: 'wrap' }}>
+        <b style={{ fontSize: 13 }}>{m.map}</b>
+        <span className="tag t1" style={{ fontSize: 11 }}>{winner === 'A' ? mineLabel + '胜利' : theirLabel + '胜利'} · 摧毁基地</span>
+        <span style={{ fontSize: 12, fontWeight: 600 }}>
+          {Math.floor(lol.durationSeconds / 60)}:{(lol.durationSeconds % 60).toString().padStart(2, '0')}
+        </span>
+        <span className="mono" style={{ fontSize: 13, fontWeight: 800, color: winner === 'A' ? 'var(--win)' : 'var(--loss)' }}>
+          击杀 {m.scoreA}–{m.scoreB}
+        </span>
+      </div>
+
+      <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div className="row" style={{ gap: 8, alignItems: 'center' }}>
+          <span className="tiny" style={{ width: 40 }}>经济</span>
+          <div style={{ flex: 1, background: 'var(--panel)', height: 8, borderRadius: 4, overflow: 'hidden', display: 'flex' }}>
+            <div style={{ width: `${goldAPct}%`, background: 'var(--win)', height: '100%' }} />
+            <div style={{ width: `${100 - goldAPct}%`, background: 'var(--loss)', height: '100%' }} />
+          </div>
+          <span className="mono tiny" style={{ width: 100, textAlign: 'right' }}>{lol.goldA}–{lol.goldB}</span>
+        </div>
+        <div className="row" style={{ gap: 8, alignItems: 'center' }}>
+          <span className="tiny" style={{ width: 40 }}>推塔</span>
+          <div style={{ flex: 1, background: 'var(--panel)', height: 8, borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ width: `${lol.towersA + lol.towersB > 0 ? 100 * lol.towersA / (lol.towersA + lol.towersB) : 50}%`, background: 'var(--win)', height: '100%' }} />
+          </div>
+          <span className="mono tiny" style={{ width: 100, textAlign: 'right' }}>{lol.towersA}–{lol.towersB}</span>
+        </div>
+        <div className="row" style={{ gap: 8, alignItems: 'center' }}>
+          <span className="tiny" style={{ width: 40 }}>小龙</span>
+          <div style={{ flex: 1, background: 'var(--panel)', height: 8, borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ width: `${lol.dragonsA + lol.dragonsB > 0 ? 100 * lol.dragonsA / (lol.dragonsA + lol.dragonsB) : 50}%`, background: 'var(--win)', height: '100%' }} />
+          </div>
+          <span className="mono tiny" style={{ width: 100, textAlign: 'right' }}>{lol.dragonsA}–{lol.dragonsB}</span>
+        </div>
+        <div className="row" style={{ gap: 8, alignItems: 'center' }}>
+          <span className="tiny" style={{ width: 40 }}>大龙</span>
+          <div style={{ flex: 1, background: 'var(--panel)', height: 8, borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ width: `${lol.baronsA + lol.baronsB > 0 ? 100 * lol.baronsA / (lol.baronsA + lol.baronsB) : 50}%`, background: 'var(--win)', height: '100%' }} />
+          </div>
+          <span className="mono tiny" style={{ width: 100, textAlign: 'right' }}>{lol.baronsA}–{lol.baronsB}</span>
+        </div>
+      </div>
+
+      {lol.events?.length > 0 && (
+        <details className="tiny muted" style={{ marginTop: 8, lineHeight: 1.7 }}><summary>本局关键事件</summary>
+          {lol.events.map((e, i) => (
+            <div key={i}>
+              <span className="mono" style={{ marginRight: 6 }}>{e.minute}'</span>
+              {e.text}
+            </div>
+          ))}
+        </details>
+      )}
+    </div>
+  )
+}
+
 function MapStrip({ result }: { result: ArenaResult }) {
   return (
     <div className="row wrap" style={{ gap: 10, margin: '4px 0 14px', alignItems: 'flex-start' }}>
       {result.result.maps.map((m, i) => {
-        const mine = m.scoreA > m.scoreB
+        const mine = m.lol ? m.lol.winner === 'A' : m.scoreA > m.scoreB
         return (
           <div key={i} style={{ minWidth: 148 }}>
             <div className="row" style={{ gap: 6, alignItems: 'baseline' }}>
@@ -121,8 +213,6 @@ function MapStrip({ result }: { result: ArenaResult }) {
                   <i
                     key={r.n}
                     className={r.winner === 'A' ? 'a' : 'b'}
-                    // an eco round won is the one that turns a map, so it is
-                    // worth being able to see one
                     data-buy={(r.winner === 'A' ? r.buyA : r.buyB) === 'eco' ? 'eco' : undefined}
                   />
                 ))}
@@ -135,7 +225,6 @@ function MapStrip({ result }: { result: ArenaResult }) {
   )
 }
 
-/** Five cards and a coach, laid out the way the squad screen lays them out. */
 function SquadRow({
   title, slots, coach, level, mvp, won,
 }: {
@@ -147,8 +236,6 @@ function SquadRow({
   won: boolean
 }) {
   const ids = [...slots.filter((x): x is string => !!x)]
-  // the two numbers the squad screen shows, for both sides, so 「纸面实力」
-  // is something you can actually compare after the match
   const squad = { slots, coach }
   const paper = ids.length ? squadRating(squad, level) : 0
   const chem = chemistry(squad).score
@@ -183,34 +270,8 @@ function SquadRow({
   )
 }
 
-/**
- * The one stat each position is on the server for, and the number on the
- * card that drives it.
- *
- * The group asked how anyone is supposed to see what a card's numbers do in
- * a match. Not with a breakdown — this is a light game, and a list of ± terms
- * is a homework sheet nobody can practise for — but by putting the stat a
- * duelist is judged on next to the number that earns it: first kills beside
- * 枪法, assists beside 道具, survival beside 意识, clutches beside 残局. Read
- * off the card's own position, not the seat it sits in, so a man in the
- * 辅助 seat is still judged as what he is.
- */
-const SPOT: Record<Role, { label: string; attr: keyof Attrs; stat: (l: ArenaLine) => string }> = {
-  辅助: { label: '助攻', attr: 'communication', stat: (l) => String(l.assists) },
-  上单: { label: '首杀', attr: 'aim', stat: (l) => (l.firstKills == null ? '–' : String(l.firstKills)) },
-  打野: { label: '助攻', attr: 'utility', stat: (l) => String(l.assists) },
-  中单: {
-    label: '存活', attr: 'awareness',
-    stat: (l) => (l.rounds ? `${Math.round(100 * (1 - l.deaths / l.rounds))}%` : '–'),
-  },
-  下路: { label: '残局', attr: 'clutch', stat: (l) => (l.clutches == null ? '–' : String(l.clutches)) },
-}
-
-/** A flex player is judged on whichever of the four he is best at. */
-function spotFor(card: PlayerCard) { return SPOT[card.role] }
-
-function Board({ title, lines, mvp, level }: {
-  title: string; lines: ArenaLine[]; mvp: string | null; level: (id: string) => number
+function Board({ title, lines, mvp, isLoL }: {
+  title: string; lines: ArenaLine[]; mvp: string | null; level: (id: string) => number; isLoL: boolean
 }) {
   return (
     <div>
@@ -220,34 +281,26 @@ function Board({ title, lines, mvp, level }: {
           <thead>
             <tr>
               <th>选手</th><th className="right">K</th><th className="right">D</th>
-              <th className="right">A</th><th className="right">贡献分</th><th>位置亮点</th>
+              <th className="right">A</th><th className="right">KDA</th>
+              {isLoL && <th className="right">CS</th>}
             </tr>
           </thead>
           <tbody>
             {lines.map((l) => {
               const card = cardById(l.cardId)
               if (!card) return null
-              const spot = isPlayerCard(card) ? spotFor(card) : null
+              const kda = ((l.kills + l.assists) / Math.max(1, l.deaths)).toFixed(2)
               return (
                 <tr key={l.cardId} className={l.cardId === mvp ? 'me' : ''}>
                   <td>
                     {card.kind === 'player' ? card.ign : card.name}
-                    {l.cardId === mvp && <span className="tag t1" style={{ marginLeft: 6 }}>MVP</span>}
+                    {l.cardId === mvp && <span className="tag t1" style={{ marginLeft: 6 }}>系列赛 MVP</span>}
                   </td>
                   <td className="right mono">{l.kills}</td>
                   <td className="right mono">{l.deaths}</td>
                   <td className="right mono">{l.assists}</td>
-                  <td className="right mono">{l.acs}</td>
-                  <td className="mono" style={{ whiteSpace: 'nowrap' }}>
-                    {spot && isPlayerCard(card) && (
-                      <>
-                        {spot.label} {spot.stat(l)}
-                        <span className="tiny faint" style={{ marginLeft: 6 }}>
-                          {ATTR_CN[spot.attr]} {Math.min(99, card.attrs[spot.attr] + level(l.cardId))}
-                        </span>
-                      </>
-                    )}
-                  </td>
+                  <td className="right mono">{kda}</td>
+                  {isLoL && <td className="right mono">{l.cs ?? '–'}</td>}
                 </tr>
               )
             })}

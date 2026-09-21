@@ -149,7 +149,8 @@ export interface OpenCupMatchResult {
   /** what the match page shows: the maps and both scoreboards, not the round log */
   detail: {
     bo: 3 | 5
-    maps: { map: string; a: number; b: number }[]
+    format?: 'lol-v1'
+    maps: { map: string; a: number; b: number; lol?: import('./types').MapScore['lol']; lines?: import('./types').MapScore['lines'] }[]
     a: OpenCupSide
     b: OpenCupSide
   }
@@ -177,7 +178,8 @@ export function playOpenCupMatch(
     mapsB: res.mapsLost,
     detail: {
       bo,
-      maps: res.result.maps.map((m) => ({ map: m.map, a: m.scoreA, b: m.scoreB })),
+      format: res.result.format,
+      maps: res.result.maps.map((m) => ({ map: m.map, a: m.scoreA, b: m.scoreB, lol: m.lol, lines: m.lines })),
       a: { lines: res.lines, mvpCard: res.mvpCard },
       b: { lines: res.opp?.lines ?? [], mvpCard: res.opp?.mvpCard ?? null },
     },

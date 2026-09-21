@@ -176,7 +176,7 @@ export default function Ladder() {
                 </div>
               </div>
               <p className="tiny faint" style={{ lineHeight: 1.7 }}>
-                BO{LADDER_BO}，先赢 3 局。沿用原版卡牌回合制，<b>在服务器上结算</b>。
+                BO{LADDER_BO}，先赢 3 局。每局以摧毁基地决定胜负，<b>在服务器上结算</b>。
                 {rival
                   ? `　优先匹配阵容分相差 4 分以内的玩家。对面高出 ${RIVAL_MERCY_GAP} 分以上，输了不掉星，大师分只扣一半。`
                   : L.div >= 4 ? '　（暂时没匹配到真人卡组，先打俱乐部。）' : ''}

@@ -1,6 +1,6 @@
 /* The pack table is an original Lulu Cards ceremony, independent of the shop theme. */
 .ritual-stage{position:fixed;inset:0;z-index:60;isolation:isolate;display:flex;flex-direction:column;box-sizing:border-box;padding:max(24px,env(safe-area-inset-top)) max(28px,env(safe-area-inset-right)) max(22px,env(safe-area-inset-bottom)) max(28px,env(safe-area-inset-left));overflow:hidden;color:#eee4cf;color-scheme:dark;background:radial-gradient(ellipse at 50% 43%,#15393e 0%,#122225 32%,#11191c 55%,#090d10 90%);font-family:inherit;overscroll-behavior:contain;--ritual-gold:#d6b477;--text:#eee4cf;--muted:#aaa28f;--panel:#142025;--line:#65583d}
-.ritual-stage button{font-family:inherit;color:#e7d9b9;border:1px solid #776447;background:linear-gradient(#293036,#172126);box-shadow:0 3px 10px #0005;border-radius:5px;cursor:pointer;min-height:42px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.ritual-stage button{font-family:inherit;color:#e7d9b9;border:1px solid #776447;background:linear-gradient(#293036,#172126);box-shadow:0 3px 10px #0005;border-radius:5px;cursor:pointer;min-height:44px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .ritual-stage button:focus-visible{outline:2px solid #8ce4e5;outline-offset:5px}
 .ritual-stage button:hover{border-color:#e2c28b}
 .ritual-scenery{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background:repeating-linear-gradient(0deg,transparent 0 3px,#0000000c 4px 5px)}
@@ -15,6 +15,7 @@
 .ritual-stage .ritual-dismiss{width:42px;min-height:42px;font-size:18px;background:#0b121777;border-color:#ad956a44;color:#b6a88d}
 .ritual-opening{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;perspective:1100px}
 .ritual-stage .ritual-pack{position:relative;display:block;width:min(230px,48vw,33vh);aspect-ratio:.69;border:0;min-height:0;background:transparent;padding:0;box-shadow:none;transform:translateY(-14px) rotate(-7deg);animation:ritual-pack-hover 4s ease-in-out infinite;filter:drop-shadow(0 25px 20px #0009);isolation:isolate;transition:filter .25s}
+.ritual-stage button{min-height:44px}
 .ritual-stage .ritual-pack:hover{filter:drop-shadow(0 0 22px #a9e4cc55) drop-shadow(0 25px 20px #0009)}
 .ritual-pack-half{position:absolute;inset:0;border-radius:12px;background:linear-gradient(135deg,#789781,#263f37 13%,#182f2b 37%,#264838 65%,#152621);border:3px solid #bca276;box-shadow:inset 0 0 0 4px #171a18,inset 0 0 0 5px #92774f,inset 0 0 30px #040e0b;overflow:hidden}
 .ritual-pack-half:before{content:"";position:absolute;inset:14px;border:1px solid #d9b56977;border-radius:3px;background:repeating-conic-gradient(from 45deg at 50% 45%,#adb8900d 0deg 10deg,transparent 10deg 20deg);box-shadow:inset 0 0 30px #101d17}
@@ -39,9 +40,10 @@
 .phase-burst .ritual-burst:before{animation:ritual-burst-light .85s .16s both}.phase-burst .ritual-burst i{animation:ritual-fragment .85s .22s ease-out both}
 .ritual-dust i{position:absolute;left:calc(6% + var(--i)*5.1%);bottom:-10px;width:2px;height:2px;border-radius:50%;background:#edd4a5;box-shadow:0 0 5px #e6c277;animation:ritual-dust calc(7s + var(--i)*.27s) calc(var(--i)*-.6s) linear infinite;opacity:0}
 .ritual-board{position:relative;flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none;-webkit-user-select:none;padding:0;margin:8px 0;perspective:1400px}
+.ritual-board.is-scroll{overflow-y:auto;touch-action:pan-y;align-items:flex-start;justify-content:center;padding:12px;box-sizing:border-box;scrollbar-width:thin;scrollbar-gutter:stable}
 .ritual-spread{display:grid;grid-template-columns:repeat(var(--columns),var(--card-width));gap:24px;align-items:center;justify-content:center}
 .ritual-deal{width:var(--card-width);height:calc(var(--card-width)*282/184);animation:ritual-deal .65s calc(var(--order)*65ms) cubic-bezier(.16,.7,.25,1) both;perspective:1100px}
-.ritual-stage .ritual-card{display:block;position:relative;width:100%;height:100%;min-height:0;padding:0;border:0;border-radius:9px;background:transparent;box-shadow:none;--card-glow:#b08758;transition:filter .2s;perspective:1100px;touch-action:none}
+.ritual-stage .ritual-card{display:block;position:relative;width:100%;height:100%;min-height:0;padding:0;border:0;border-radius:9px;background:transparent;box-shadow:none;--card-glow:#b08758;transition:filter .2s;perspective:1100px;touch-action:manipulation}
 .ritual-card.rarity-silver{--card-glow:#c8e7ef}.ritual-card.rarity-gold{--card-glow:#ffcb64}.ritual-card.rarity-mythic{--card-glow:#c291ff}
 .ritual-flipper{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.2,.7,.2,1);transform:rotateY(0)}
 .is-revealed .ritual-flipper{transform:rotateY(180deg)}
@@ -135,3 +137,7 @@
 @media(max-width:650px){.altar-opening{--altar-x:50%;--altar-y:27%;--source-x:50%;--source-y:70%;--altar-size:min(210px,49vw,29vh);--pack-size:min(128px,29vw,21vh)}.altar-drag-path{left:calc(50% - 7px);top:48%;flex-direction:column;gap:1px;font-size:17px}.altar-drag-path span{display:none}.altar-drag-path b{transform:none}.altar-drop-label{font-size:10px}.altar-opening .ritual-open-hint{bottom:0}.mythic-spotlight{gap:12px;padding:50px 16px 20px}.mythic-announcement h2{font-size:23px}.mythic-hero-card{width:min(230px,57vw,31vh)}}
 @media(max-height:500px) and (min-width:600px){.mythic-spotlight{display:grid;grid-template-columns:180px 220px;gap:16px 24px;overflow:visible;padding:14px}.mythic-hero-card{grid-column:1;grid-row:1/4;width:min(180px,47vh)}.mythic-announcement,.mythic-identity,.mythic-continue{grid-column:2}.altar-opening{--pack-size:25vh;--altar-size:42vh}}
 @media(prefers-reduced-motion:reduce){.ritual-stage *,.ritual-stage *:before,.ritual-stage *:after{animation:none!important;transition:none!important}.ritual-dust,.ritual-burst,.ritual-flip-sparks,.mythic-pillar,.mythic-shockwave,.mythic-cosmos>i{display:none}.ritual-flipper{transform:none!important}.ritual-card-front{transform:none}.ritual-card:not(.is-revealed) .ritual-card-front{visibility:hidden}.ritual-card.is-revealed .ritual-card-back{visibility:hidden}}
+
+.ritual-board.is-scroll .ritual-spread{flex-shrink:0}
+.ritual-stage .ritual-dismiss{min-width:44px;min-height:44px}
+@media(max-height:280px){.ritual-stage{overflow-y:auto}.ritual-board{flex:none;min-height:180px}.ritual-opening{flex:none;min-height:160px}}

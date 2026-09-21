@@ -1354,11 +1354,24 @@ export function makeCardApi(sql, {
     if (!rel || !staticRoot) { json(res, 404, { ok: false }); return }
     try {
       const buf = await readFile(join(staticRoot, rel))
+      const mimeByExt = {
+        '.png': 'image/png',
+        '.jpeg': 'image/jpeg',
+        '.jpg': 'image/jpeg',
+        '.webp': 'image/webp',
+        '.svg': 'image/svg+xml',
+        '.gif': 'image/gif',
+        '.avif': 'image/avif',
+      }
+      const ext = rel.slice(rel.lastIndexOf('.')).toLowerCase()
+      const mime = mimeByExt[ext]
+      if (!mime) { json(res, 404, { ok: false }); return }
+      const safeName = `puzzle${ext}`
       res.writeHead(200, {
-        'Content-Type': rel.endsWith('.png') ? 'image/png' : 'image/webp',
+        'Content-Type': mime,
         'Content-Length': buf.length,
         'Cache-Control': 'no-store',
-        'Content-Disposition': 'inline; filename="puzzle.webp"',
+        'Content-Disposition': `inline; filename="${safeName}"`,
         // which data this picture was chosen from: a page holding other data asks for a refresh (challengeSig)
         'X-Puzzle-Sig': engine.challengeSig?.() ?? '',
       })

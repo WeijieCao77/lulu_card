@@ -468,12 +468,23 @@ function Replay({ report, onClose }: { report: { detail: OpenCupMatchDetail; fli
   const topWon = flip ? !d.aWon : d.aWon
   const result = {
     win: topWon,
+    bo: d.detail.bo,
     mapsWon: flip ? d.mapsB : d.mapsA,
     mapsLost: flip ? d.mapsA : d.mapsB,
     lines: topSide.lines,
     mvpCard: topSide.mvpCard,
     result: {
-      maps: d.detail.maps.map((m) => ({ map: m.map, scoreA: flip ? m.b : m.a, scoreB: flip ? m.a : m.b })),
+      format: d.detail.format,
+      maps: d.detail.maps.map((m) => ({ map: m.map, scoreA: flip ? m.b : m.a, scoreB: flip ? m.a : m.b,
+        lines: m.lines ?? {},
+        lol: !m.lol || !flip ? m.lol : { ...m.lol,
+          winner: m.lol.winner === 'A' ? 'B' : 'A',
+          goldA: m.lol.goldB, goldB: m.lol.goldA,
+          towersA: m.lol.towersB, towersB: m.lol.towersA,
+          dragonsA: m.lol.dragonsB, dragonsB: m.lol.dragonsA,
+          baronsA: m.lol.baronsB, baronsB: m.lol.baronsA,
+        },
+      })),
       highlights: [],
     },
     opp: {

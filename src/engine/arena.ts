@@ -1,18 +1,9 @@
-/**
- * Putting a collection of cards on a server against a real club.
- *
- * The card mode does not get its own match engine. It borrows the one the
- * career mode uses — veto, economy, round-by-round, the lot — by assembling a
- * throwaway `GameState` whose managed club is the five cards you picked. That
- * is why a well-linked 78-rated five can beat a pile of 85s: composition,
- * calling and cohesion are read by the same code that reads them in a VCT
- * season.
- */
+/** Card squads are seated into a temporary state and simulated as LoL games. */
 import { seoulArenaPlayer } from './seoul2024'
 import { createNewGame } from './world'
 import { WORLD_TEAMS } from './teams'
 import { cupTeam } from './cupTeams'
-import { runVeto, simulateMatch } from './match'
+import { simulateLolMatch as simulateMatch } from './lolMatch'
 import { NEUTRAL } from './bonds'
 import { Rng, clamp } from './rng'
 import { BALANCE_VERSION, cardStrengths } from './balance'
@@ -319,6 +310,9 @@ function seatSquad(
 }
 
 export interface ArenaLine {
+  playerId?: string
+  cs?: number
+  gold?: number
   cardId: string
   kills: number
   deaths: number
@@ -471,9 +465,12 @@ function linesFor(
       const cardId = cardOf[pid]
       if (!cardId) continue
       const t = (totals[cardId] ??= {
+        playerId: pid, cs: 0, gold: 0,
         kills: 0, deaths: 0, assists: 0, acs: 0, maps: 0, firstKills: 0, clutches: 0, rounds: 0,
       })
       t.kills += l.kills
+      t.cs! += l.cs ?? 0
+      t.gold! += l.gold ?? 0
       t.deaths += l.deaths
       t.assists += l.assists
       t.acs += l.acs
@@ -572,14 +569,8 @@ export function playRivalMatch(
     frozenScores?.[1] ?? squadPaper(rival, id => rival.levels[id] ?? 0).score, balance)
 
   const rng = new Rng(seed ^ 0x5b1d)
-  if (pool) {
-    // vetoed on a stream of its own; the match then skips its own veto and plays these maps.
-    // Dealt in a fresh order each time: with every preference level, runVeto leans on list
-    // position, and the alphabetical 2024 pool sent Sunset to 7% of maps against Haven's 20%.
-    const vetoRng = new Rng(seed ^ 0x9e70)
-    const veto = runVeto(state, ARENA_TEAM, ARENA_RIVAL, bo, vetoRng.shuffle(pool.slice()), vetoRng)
-    state.vetoPlan = { fixtureId: 'pool', maps: veto.maps, log: veto.log }
-  }
+  // Historical callers may still pass a map pool; LoL uses Summoner's Rift.
+  void pool
   const result = simulateMatch(state, ARENA_TEAM, ARENA_RIVAL, bo, rng)
   return {
     ...readResult(result, cardOf),

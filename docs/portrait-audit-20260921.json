@@ -1,0 +1,1874 @@
+{
+  "source": "DeepSeek V4 Pro research pipeline; independently reviewed before applying",
+  "playersAdded": [
+    {
+      "id": "P13",
+      "ign": "Angel",
+      "page": "https://chaincc.lol/free/players/Angel",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/angel-xiang-tao-.webp",
+      "country": "China",
+      "role": "Mid",
+      "team": "EDward Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P41",
+      "ign": "Hery",
+      "page": "https://chaincc.lol/free/players/Hery",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hery.webp",
+      "country": "China",
+      "role": "Top",
+      "team": "Oh My God",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P43",
+      "ign": "Juhan",
+      "page": "https://chaincc.lol/free/players/Juhan",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/juhan.webp",
+      "country": "South Korea",
+      "role": "Jungle",
+      "team": "Oh My God",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P44",
+      "ign": "haichao",
+      "page": "https://chaincc.lol/free/players/haichao",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/haichao.webp",
+      "country": "China",
+      "role": "Mid",
+      "team": "Oh My God",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P55",
+      "ign": "Ryan3",
+      "page": "https://chaincc.lol/free/players/Ryan3",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/ryan3.webp",
+      "country": "China",
+      "role": "Bot",
+      "team": "ThunderTalk Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P58",
+      "ign": "naiyou",
+      "page": "https://chaincc.lol/free/players/naiyou",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/naiyou.webp",
+      "country": "China",
+      "role": "Jungle",
+      "team": "Top Esports",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P62",
+      "ign": "Liangchen",
+      "page": "https://chaincc.lol/free/players/Liangchen",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/liangchen.webp",
+      "country": "China",
+      "role": "Top",
+      "team": "Bilibili Gaming Junior",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P184",
+      "ign": "Castle",
+      "page": "https://chaincc.lol/free/players/Castle",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/castle-cho-hyeon-seong-.webp",
+      "country": "South Korea",
+      "role": "Top",
+      "team": "LYON",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P237",
+      "ign": "Aress",
+      "page": "https://chaincc.lol/free/players/Aress",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/aress.webp",
+      "country": "Vietnam",
+      "role": "Mid",
+      "team": "GAM Esports",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P243",
+      "ign": "Shunn",
+      "page": "https://chaincc.lol/free/players/Shunn",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/shunn.webp",
+      "country": "Taiwan",
+      "role": "Bot",
+      "team": "Ground Zero Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P248",
+      "ign": "Kati",
+      "page": "https://chaincc.lol/free/players/Kati",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/kati.webp",
+      "country": "Vietnam",
+      "role": "Mid",
+      "team": "MVK Esports",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P268",
+      "ign": "YoungJae",
+      "page": "https://chaincc.lol/free/players/YoungJae",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/youngjae.webp",
+      "country": "South Korea",
+      "role": "Jungle",
+      "team": "LOUD",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P271",
+      "ign": "Bull",
+      "page": "https://chaincc.lol/free/players/Bull",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bull.webp",
+      "country": "South Korea",
+      "role": "Bot",
+      "team": "LOUD",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P272",
+      "ign": "RedBert",
+      "page": "https://chaincc.lol/free/players/RedBert",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/redbert.webp",
+      "country": "Brazil",
+      "role": "Support",
+      "team": "LOUD",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P276",
+      "ign": "ceo",
+      "page": "https://chaincc.lol/free/players/ceo",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/ceo.webp",
+      "country": "Argentina",
+      "role": "Bot",
+      "team": "Vivo Keyd Stars",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P277",
+      "ign": "TopLop",
+      "page": "https://chaincc.lol/free/players/TopLop",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/toplop.webp",
+      "country": "Argentina",
+      "role": "Support",
+      "team": "Leviatan",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P297",
+      "ign": "Trigger",
+      "page": "https://chaincc.lol/free/players/Trigger",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/trigger-kim-eui-joo-.webp",
+      "country": "South Korea",
+      "role": "Bot",
+      "team": "paiN Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P299",
+      "ign": "Kuri",
+      "page": "https://chaincc.lol/free/players/Kuri",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/kuri.webp",
+      "country": "South Korea",
+      "role": "Support",
+      "team": "paiN Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P354",
+      "ign": "Protos",
+      "page": "https://chaincc.lol/free/players/Protos",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/protos.webp",
+      "country": "United States",
+      "role": "Support",
+      "team": "Apex Mission Impossible",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P355",
+      "ign": "Ariana",
+      "page": "https://chaincc.lol/free/players/Ariana",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/ariana.webp",
+      "country": "Poland",
+      "role": "Top",
+      "team": "University of Mississippi",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P359",
+      "ign": "Rovex",
+      "page": "https://chaincc.lol/free/players/Rovex",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/rovex.webp",
+      "country": "Canada",
+      "role": "Support",
+      "team": "Blue Otter",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P361",
+      "ign": "Dardoch",
+      "page": "https://chaincc.lol/free/players/Dardoch",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/dardoch.webp",
+      "country": "United States",
+      "role": "Jungle",
+      "team": "Dignitas",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P377",
+      "ign": "Bounty",
+      "page": "https://chaincc.lol/free/players/Bounty",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bounty.webp",
+      "country": "Brazil",
+      "role": "Support",
+      "team": "University of Mississippi",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P383",
+      "ign": "Keii",
+      "page": "https://chaincc.lol/free/players/Keii",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/keii.webp",
+      "country": "Colombia",
+      "role": "Top",
+      "team": "Zeu5 Esports",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P392",
+      "ign": "shochi",
+      "page": "https://chaincc.lol/free/players/shochi",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/shochi.webp",
+      "country": "United States",
+      "role": "Mid",
+      "team": "Contingent Esports",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P393",
+      "ign": "Levitate",
+      "page": "https://chaincc.lol/free/players/Levitate",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/levitate.webp",
+      "country": "United States",
+      "role": "Bot",
+      "team": "Blue Otter",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P394",
+      "ign": "Zyko",
+      "page": "https://chaincc.lol/free/players/Zyko",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/zyko.webp",
+      "country": "South Korea",
+      "role": "Support",
+      "team": "Conviction",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P400",
+      "ign": "Leny",
+      "page": "https://chaincc.lol/free/players/Leny",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/leny.webp",
+      "country": "France",
+      "role": "Top",
+      "team": "Frites Esports Club",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P401",
+      "ign": "CRoNiiK",
+      "page": "https://chaincc.lol/free/players/CRoNiiK",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/croniik.webp",
+      "country": "Spain",
+      "role": "Jungle",
+      "team": "Team Phantasma",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P406",
+      "ign": "NattyNatt",
+      "page": "https://chaincc.lol/free/players/NattyNatt",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/nattynatt.webp",
+      "country": "Sweden",
+      "role": "Jungle",
+      "team": "French Flair",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P408",
+      "ign": "3XA",
+      "page": "https://chaincc.lol/free/players/3XA",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/3xa.webp",
+      "country": "France",
+      "role": "Bot",
+      "team": "Joblife",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P412",
+      "ign": "OMON",
+      "page": "https://chaincc.lol/free/players/OMON",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/omon.webp",
+      "country": "Czech Republic",
+      "role": "Mid",
+      "team": "Galions",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P423",
+      "ign": "Comp",
+      "page": "https://chaincc.lol/free/players/Comp",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/comp.webp",
+      "country": "Greece",
+      "role": "Bot",
+      "team": "Joblife",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P431",
+      "ign": "Zicssi",
+      "page": "https://chaincc.lol/free/players/Zicssi",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/zicssi.webp",
+      "country": "France",
+      "role": "Jungle",
+      "team": "Solary",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P434",
+      "ign": "Piero",
+      "page": "https://chaincc.lol/free/players/Piero",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/piero-kim-jung-hun-.webp",
+      "country": "South Korea",
+      "role": "Support",
+      "team": "Solary",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P439",
+      "ign": "Thomas",
+      "page": "https://chaincc.lol/free/players/Thomas",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/thomas.webp",
+      "country": "Croatia",
+      "role": "Support",
+      "team": "TLN Pirates",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P469",
+      "ign": "Prage",
+      "page": "https://chaincc.lol/free/players/Prage",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/prage.webp",
+      "country": "Taiwan",
+      "role": "Bot",
+      "team": "Sponge Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P471",
+      "ign": "Hasu7",
+      "page": "https://chaincc.lol/free/players/Hasu7",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hasu7.webp",
+      "country": "Taiwan",
+      "role": "Top",
+      "team": "SillySilly Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P472",
+      "ign": "Tianzhen",
+      "page": "https://chaincc.lol/free/players/Tianzhen",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/tianzhen.webp",
+      "country": "China",
+      "role": "Jungle",
+      "team": "SillySilly Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P473",
+      "ign": "Xzz",
+      "page": "https://chaincc.lol/free/players/Xzz",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/xzz.webp",
+      "country": "China",
+      "role": "Mid",
+      "team": "SillySilly Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P474",
+      "ign": "Hermes",
+      "page": "https://chaincc.lol/free/players/Hermes",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hermes-lin-you-ju-.webp",
+      "country": "Taiwan",
+      "role": "Bot",
+      "team": "SillySilly Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P478",
+      "ign": "BuLuKaKa",
+      "page": "https://chaincc.lol/free/players/BuLuKaKa",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bulukaka.webp",
+      "country": "Hong Kong",
+      "role": "Mid",
+      "team": "Reignfall",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P480",
+      "ign": "Keres",
+      "page": "https://chaincc.lol/free/players/Keres",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/keres.webp",
+      "country": "Hong Kong",
+      "role": "Support",
+      "team": "Viper Night Raider",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P482",
+      "ign": "Rbow",
+      "page": "https://chaincc.lol/free/players/Rbow",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/rbow.webp",
+      "country": "China",
+      "role": "Top",
+      "team": "wangting",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P486",
+      "ign": "TNS",
+      "page": "https://chaincc.lol/free/players/TNS",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/tns.webp",
+      "country": "Taiwan",
+      "role": "Support",
+      "team": "wangting",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P487",
+      "ign": "Feng55",
+      "page": "https://chaincc.lol/free/players/Feng55",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/feng55.webp",
+      "country": "Taiwan",
+      "role": "Support",
+      "team": "wangting",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P491",
+      "ign": "Beenie",
+      "page": "https://chaincc.lol/free/players/Beenie",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/beenie.webp",
+      "country": "Brazil",
+      "role": "Bot",
+      "team": "7REX",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P494",
+      "ign": "Dizin",
+      "page": "https://chaincc.lol/free/players/Dizin",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/dizin.webp",
+      "country": "Brazil",
+      "role": "Jungle",
+      "team": "Ei Nerd Esports",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P498",
+      "ign": "SuperCleber",
+      "page": "https://chaincc.lol/free/players/SuperCleber",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/supercleber.webp",
+      "country": "Brazil",
+      "role": "Top",
+      "team": "Vivo Keyd Stars Academy",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P504",
+      "ign": "Eradan",
+      "page": "https://chaincc.lol/free/players/Eradan",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/eradan.webp",
+      "country": "Brazil",
+      "role": "Top",
+      "team": "INTZ",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P507",
+      "ign": "scuro",
+      "page": "https://chaincc.lol/free/players/scuro",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/scuro.webp",
+      "country": "Brazil",
+      "role": "Bot",
+      "team": "INTZ",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P515",
+      "ign": "Randal",
+      "page": "https://chaincc.lol/free/players/Randal",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/randal.webp",
+      "country": "Brazil",
+      "role": "Jungle",
+      "team": "RMD Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P521",
+      "ign": "Aithusa",
+      "page": "https://chaincc.lol/free/players/Aithusa",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/aithusa.webp",
+      "country": "Brazil",
+      "role": "Mid",
+      "team": "Team Solid",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P522",
+      "ign": "Dioge",
+      "page": "https://chaincc.lol/free/players/Dioge",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/dioge-diogenes-barbosa-.webp",
+      "country": "Brazil",
+      "role": "Mid",
+      "team": "Team Solid",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P523",
+      "ign": "Gru",
+      "page": "https://chaincc.lol/free/players/Gru",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/gru-pedro-nunes-.webp",
+      "country": "Brazil",
+      "role": "Bot",
+      "team": "Team Solid",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P524",
+      "ign": "bipi",
+      "page": "https://chaincc.lol/free/players/bipi",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bipi.webp",
+      "country": "Brazil",
+      "role": "Bot",
+      "team": "Team Solid",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P525",
+      "ign": "Cavalo",
+      "page": "https://chaincc.lol/free/players/Cavalo",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/cavalo.webp",
+      "country": "Brazil",
+      "role": "Support",
+      "team": "Team Solid",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P528",
+      "ign": "Ale",
+      "page": "https://chaincc.lol/free/players/Ale",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/ale.webp",
+      "country": "China",
+      "role": "Top",
+      "team": "ZSM",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P533",
+      "ign": "Hang",
+      "page": "https://chaincc.lol/free/players/Hang",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hang.webp",
+      "country": "China",
+      "role": "Support",
+      "team": "Weibo Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P534",
+      "ign": "Light",
+      "page": "https://chaincc.lol/free/players/Light",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/light-wang-guang-yu-.webp",
+      "country": "China",
+      "role": "Bot",
+      "team": "Weibo Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P538",
+      "ign": "milkyway",
+      "page": "https://chaincc.lol/free/players/milkyway",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/milkyway.webp",
+      "country": "China",
+      "role": "Jungle",
+      "team": "FunPlus Phoenix",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P539",
+      "ign": "Beichuan",
+      "page": "https://chaincc.lol/free/players/Beichuan",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/beichuan.webp",
+      "country": "China",
+      "role": "Jungle",
+      "team": "Bilibili Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P540",
+      "ign": "ppgod",
+      "page": "https://chaincc.lol/free/players/ppgod",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/ppgod.webp",
+      "country": "China",
+      "role": "Support",
+      "team": "Ninjas in Pyjamas",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P541",
+      "ign": "Wink",
+      "page": "https://chaincc.lol/free/players/Wink",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/wink.webp",
+      "country": "China",
+      "role": "Support",
+      "team": "FRK",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P546",
+      "ign": "Solokill",
+      "page": "https://chaincc.lol/free/players/Solokill",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/solokill.webp",
+      "country": "Hong Kong",
+      "role": "Top",
+      "team": "Ninjas in Pyjamas",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P548",
+      "ign": "FoFo",
+      "page": "https://chaincc.lol/free/players/FoFo",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/fofo.webp",
+      "country": "Taiwan",
+      "role": "Mid",
+      "team": "ZSM",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P551",
+      "ign": "Niket",
+      "page": "https://chaincc.lol/free/players/Niket",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/niket.webp",
+      "country": "China",
+      "role": "Support",
+      "team": "Ninjas in Pyjamas",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P552",
+      "ign": "Climber",
+      "page": "https://chaincc.lol/free/players/Climber",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/climber.webp",
+      "country": "China",
+      "role": "Jungle",
+      "team": "LGD Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P555",
+      "ign": "LP",
+      "page": "https://chaincc.lol/free/players/LP",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/lp.webp",
+      "country": "China",
+      "role": "Bot",
+      "team": "LNG Esports",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P556",
+      "ign": "vital",
+      "page": "https://chaincc.lol/free/players/vital",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/vital.webp",
+      "country": "South Korea",
+      "role": "Bot",
+      "team": "Nongshim Esports Academy",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P561",
+      "ign": "Route",
+      "page": "https://chaincc.lol/free/players/Route",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/route.webp",
+      "country": "South Korea",
+      "role": "Bot",
+      "team": "LOUD",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P563",
+      "ign": "Baiye",
+      "page": "https://chaincc.lol/free/players/Baiye",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/baiye.webp",
+      "country": "China",
+      "role": "Bot",
+      "team": "Ultra Prime",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P568",
+      "ign": "Mihile",
+      "page": "https://chaincc.lol/free/players/Mihile",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/mihile.webp",
+      "country": "South Korea",
+      "role": "Top",
+      "team": "Team Heretics Academy",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P569",
+      "ign": "Execute",
+      "page": "https://chaincc.lol/free/players/Execute",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/execute.webp",
+      "country": "South Korea",
+      "role": "Support",
+      "team": "Rogue",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P570",
+      "ign": "Azhi",
+      "page": "https://chaincc.lol/free/players/Azhi",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/azhi.webp",
+      "country": "Taiwan",
+      "role": "Top",
+      "team": "PSG Talon",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P575",
+      "ign": "Linfeng",
+      "page": "https://chaincc.lol/free/players/Linfeng",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/linfeng.webp",
+      "country": "China",
+      "role": "Mid",
+      "team": "Oh My God",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P580",
+      "ign": "bat",
+      "page": "https://chaincc.lol/free/players/bat",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bat-gao-jun-.webp",
+      "country": "China",
+      "role": "Bot",
+      "team": "FunPlus Phoenix",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P583",
+      "ign": "Envyy",
+      "page": "https://chaincc.lol/free/players/Envyy",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/envyy.webp",
+      "country": "South Korea",
+      "role": "Bot",
+      "team": "BNK FEARX Youth",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P587",
+      "ign": "Hiro02",
+      "page": "https://chaincc.lol/free/players/Hiro02",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hiro02.webp",
+      "country": "Vietnam",
+      "role": "Top",
+      "team": "Team Secret Whales",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P588",
+      "ign": "Wizer",
+      "page": "https://chaincc.lol/free/players/Wizer",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/wizer.webp",
+      "country": "South Korea",
+      "role": "Top",
+      "team": "Vivo Keyd Stars",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P589",
+      "ign": "Renard",
+      "page": "https://chaincc.lol/free/players/Renard",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/renard.webp",
+      "country": "China",
+      "role": "Mid",
+      "team": "Invictus Gaming",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P590",
+      "ign": "charlotte",
+      "page": "https://chaincc.lol/free/players/charlotte",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/charlotte-xue-le-hui-.webp",
+      "country": "China",
+      "role": "Mid",
+      "team": "Oh My God Academy",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P591",
+      "ign": "Rosielove",
+      "page": "https://chaincc.lol/free/players/Rosielove",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/rosielove.webp",
+      "country": "China",
+      "role": "Support",
+      "team": "Ultra Prime",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P614",
+      "ign": "Puddin",
+      "page": "https://chaincc.lol/free/players/Puddin",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/puddin.webp",
+      "country": "Vietnam",
+      "role": "Bot",
+      "team": "Vietnam (National Team)",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P621",
+      "ign": "Zkai",
+      "page": "https://chaincc.lol/free/players/Zkai",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/zkai.webp",
+      "country": "Taiwan",
+      "role": "Top",
+      "team": "CTBC Flying Oyster Academy",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P622",
+      "ign": "Nern",
+      "page": "https://chaincc.lol/free/players/Nern",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/nern.webp",
+      "country": "Vietnam",
+      "role": "Top",
+      "team": "Saigon Warriors",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "P624",
+      "ign": "Closer",
+      "page": "https://chaincc.lol/free/players/Closer",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/closer-can-elik-.webp",
+      "country": "Turkey",
+      "role": "Jungle",
+      "team": "Misa Esports",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OEfdbc55e737",
+      "ign": "Hype",
+      "page": "https://chaincc.lol/free/players/Hype",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hype-byeon-jeong-hyeon-.webp",
+      "country": "South Korea",
+      "role": "Bot",
+      "team": "Team Heretics",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OE0569953773",
+      "ign": "Shini",
+      "page": "https://chaincc.lol/free/players/Shini",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/shini.webp",
+      "country": "Brazil",
+      "role": "Jungle",
+      "team": "FURIA",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OEd1f2210b30",
+      "ign": "Strensh",
+      "page": "https://chaincc.lol/free/players/Strensh",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/strensh.webp",
+      "country": "Chile",
+      "role": "Bot",
+      "team": "Leviatan",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OE5069decf74",
+      "ign": "Jeskla",
+      "page": "https://chaincc.lol/free/players/Jeskla",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/jeskla.webp",
+      "country": "Sweden",
+      "role": "Bot",
+      "team": "Vivo Keyd Stars",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OEb37e9d1225",
+      "ign": "Pockus",
+      "page": "https://chaincc.lol/free/players/Pockus",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/pockus.webp",
+      "country": "Canada",
+      "role": "Support",
+      "team": "Apex Mission Impossible",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OEbec95c8f49",
+      "ign": "Minui",
+      "page": "https://chaincc.lol/free/players/Minui",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/minui.webp",
+      "country": "United States",
+      "role": "Support",
+      "team": "Blue Otter",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OE1abf5aef2a",
+      "ign": "Tomo",
+      "page": "https://chaincc.lol/free/players/Tomo",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/tomo.webp",
+      "country": "United States",
+      "role": "Bot",
+      "team": "Winthrop University",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OEcd1123bc69",
+      "ign": "Keduii",
+      "page": "https://chaincc.lol/free/players/Keduii",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/keduii.webp",
+      "country": "Germany",
+      "role": "Bot",
+      "team": "Joblife",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OE5a1b4ab458",
+      "ign": "Kofte",
+      "page": "https://chaincc.lol/free/players/Kofte",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/kofte.webp",
+      "country": "Turkey",
+      "role": "Mid",
+      "team": "Joblife",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OE7a4704f51a",
+      "ign": "Mersa",
+      "page": "https://chaincc.lol/free/players/Mersa",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/mersa.webp",
+      "country": "Greece",
+      "role": "Support",
+      "team": "Joblife",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OE844484ffc1",
+      "ign": "Ragner",
+      "page": "https://chaincc.lol/free/players/Ragner",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/ragner.webp",
+      "country": "Turkey",
+      "role": "Top",
+      "team": "Joblife",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OE26ccf6d61d",
+      "ign": "Exofeng",
+      "page": "https://chaincc.lol/free/players/Exofeng",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/exofeng.webp",
+      "country": "Bulgaria",
+      "role": "Bot",
+      "team": "Skillcamp",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OE9f15cda1c1",
+      "ign": "Yakkey",
+      "page": "https://chaincc.lol/free/players/Yakkey",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/yakkey.webp",
+      "country": "Romania",
+      "role": "Bot",
+      "team": "Vitality.Bee",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OE8b13b44ff3",
+      "ign": "Aikawa",
+      "page": "https://chaincc.lol/free/players/Aikawa",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/aikawa.webp",
+      "country": "Brazil",
+      "role": "Bot",
+      "team": "7REX",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    },
+    {
+      "id": "OEe6e5ceefc4",
+      "ign": "Kog",
+      "page": "https://chaincc.lol/free/players/Kog",
+      "photo": "https://chaincc.lol/storage/leaguepedia/players/thumbs/kog.webp",
+      "country": "Brazil",
+      "role": "Bot",
+      "team": "Ei Nerd Esports",
+      "review": "Source IGN and role match; country matched where stored; current team matched for extended-roster IDs. Visual review confirms individual portrait."
+    }
+  ],
+  "playersDeferred": [
+    {
+      "id": "P26",
+      "ign": "sasi",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P185",
+      "ign": "KryRa",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P250",
+      "ign": "Shogun",
+      "reason": "Identity verification failed: Role mismatch: support != bottom"
+    },
+    {
+      "id": "P283",
+      "ign": "fNb",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P350",
+      "ign": "arbrio",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P351",
+      "ign": "Bio",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P352",
+      "ign": "Retrozing",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P353",
+      "ign": "Bazz",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P362",
+      "ign": "AoJune",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P365",
+      "ign": "Stray",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P368",
+      "ign": "Asilah",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P370",
+      "ign": "Keel",
+      "reason": "Identity verification failed: Role mismatch: jungle != support"
+    },
+    {
+      "id": "P378",
+      "ign": "Dec0y",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P381",
+      "ign": "Hub",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P382",
+      "ign": "Redemption",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P384",
+      "ign": "Crimson",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P388",
+      "ign": "MU Scary Jerry",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P390",
+      "ign": "Horder",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P391",
+      "ign": "Music",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P396",
+      "ign": "Wilson",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P397",
+      "ign": "Zach",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P416",
+      "ign": "Kaboom",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P418",
+      "ign": "Soldier",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P421",
+      "ign": "Shift",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P443",
+      "ign": "Vizzpers",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P445",
+      "ign": "Hiro",
+      "reason": "Identity verification failed: Role mismatch: bottom != top"
+    },
+    {
+      "id": "P446",
+      "ign": "Sleyer",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P456",
+      "ign": "Adizai",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P458",
+      "ign": "Chain1",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P459",
+      "ign": "GZA 0131",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P460",
+      "ign": "GZA PeanutCoco",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P461",
+      "ign": "Sorrymbggff",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P462",
+      "ign": "ORS ner4",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P463",
+      "ign": "ORS K B",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P464",
+      "ign": "ORS Micinb",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P465",
+      "ign": "ORS RedamnTion",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P467",
+      "ign": "Cedric",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P470",
+      "ign": "Ashlomailma",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P475",
+      "ign": "En",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P476",
+      "ign": "Zartheit1",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P477",
+      "ign": "Listo",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P479",
+      "ign": "MadDogg9",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P481",
+      "ign": "AIex",
+      "reason": "Identity verification failed: Role mismatch: jungle != support"
+    },
+    {
+      "id": "P483",
+      "ign": "Killer2",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P484",
+      "ign": "Cid",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P485",
+      "ign": "Dotmm",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P514",
+      "ign": "cRa",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P519",
+      "ign": "Forlin",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P543",
+      "ign": "shanji",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P557",
+      "ign": "Nia",
+      "reason": "Country/identity conflict"
+    },
+    {
+      "id": "P558",
+      "ign": "advance",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P562",
+      "ign": "Aki",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P573",
+      "ign": "UmTi",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P577",
+      "ign": "sorrow",
+      "reason": "Identity verification failed: Role mismatch: bottom != jungle"
+    },
+    {
+      "id": "P578",
+      "ign": "xiaohuangren",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P579",
+      "ign": "xqw",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P595",
+      "ign": "j1n5",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P601",
+      "ign": "Malrang",
+      "reason": "Identity verification failed: Role mismatch: support != jungle"
+    },
+    {
+      "id": "P602",
+      "ign": "Smiley",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P603",
+      "ign": "Spica",
+      "reason": "Identity verification failed: Role mismatch: support != jungle"
+    },
+    {
+      "id": "P605",
+      "ign": "MG",
+      "reason": "Country/identity conflict"
+    },
+    {
+      "id": "P618",
+      "ign": "rcg",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "OE3d6f183c6d",
+      "ign": "Revenge",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "OEb1dd7b0fca",
+      "ign": "Vincenzo",
+      "reason": "Identity verification failed: Role mismatch: jungle != bottom"
+    },
+    {
+      "id": "OE264ed7bcec",
+      "ign": "Eclipse",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "OEcb8e722e7a",
+      "ign": "Aeon Crystal",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "OEd3e3273a89",
+      "ign": "Niles",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "OEfc70aef7dd",
+      "ign": "XiaoChiao",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "OEf9a097d0f3",
+      "ign": "Elkinho",
+      "reason": "No photo URL in profile"
+    }
+  ],
+  "gala": {
+    "id": "msi-2021-gala",
+    "page": "https://ge.globo.com/esports/lol/noticia/msi-2021-campeao-gala-e-eleito-mvp-da-competicao.ghtml",
+    "review": "Article explicitly captions GALA, MSI 2021. Single-person photo replaces group photo."
+  },
+  "coachesAdded": [
+    {
+      "target": "1874",
+      "sourcePage": "https://chaincc.lol/free/players/1874",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/1874.webp",
+      "evidence": {
+        "name": "1874",
+        "country": "China",
+        "role": "Coach",
+        "team": "WanZhen Esports Club"
+      }
+    },
+    {
+      "target": "BigKoro",
+      "sourcePage": "https://chaincc.lol/free/players/BigKoro",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bigkoro.webp",
+      "evidence": {
+        "name": "Bigkoro",
+        "country": "Vietnam",
+        "role": "Coach",
+        "team": "Burst The Sky Esports"
+      }
+    },
+    {
+      "target": "Boby",
+      "sourcePage": "https://chaincc.lol/free/players/Boby",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/boby.webp",
+      "evidence": {
+        "name": "Boby",
+        "country": "Serbia",
+        "role": "Coach",
+        "team": "Lupus Esports"
+      }
+    },
+    {
+      "target": "Cheoni",
+      "sourcePage": "https://chaincc.lol/free/players/Cheoni",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/cheoni.webp",
+      "evidence": {
+        "name": "Cheoni",
+        "country": "South Korea",
+        "role": "Coach",
+        "team": "Team Aze"
+      }
+    },
+    {
+      "target": "CorGi",
+      "sourcePage": "https://chaincc.lol/free/players/CorGi",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/corgi.webp",
+      "evidence": {
+        "name": "CorGi",
+        "country": "Taiwan",
+        "role": "Coach",
+        "team": "Midnight Sun Esports"
+      }
+    },
+    {
+      "target": "Dionrray",
+      "sourcePage": "https://chaincc.lol/free/players/Dionrray",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/dionrray.webp",
+      "evidence": {
+        "name": "Dionrray",
+        "country": "Switzerland",
+        "role": "Coach",
+        "team": "Blue Otter"
+      }
+    },
+    {
+      "target": "DooTi",
+      "sourcePage": "https://chaincc.lol/free/players/DooTi",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/dooti.webp",
+      "evidence": {
+        "name": "DooTi",
+        "country": "South Korea",
+        "role": "Coach",
+        "team": "Team BattleComics"
+      }
+    },
+    {
+      "target": "Furyz",
+      "sourcePage": "https://chaincc.lol/free/players/Furyz",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/furyz.webp",
+      "evidence": {
+        "name": "furyz",
+        "country": "Brazil",
+        "role": "Coach",
+        "team": "Falkol"
+      }
+    },
+    {
+      "target": "Helper",
+      "sourcePage": "https://chaincc.lol/free/players/Helper",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/helper.webp",
+      "evidence": {
+        "name": "Helper",
+        "country": "South Korea",
+        "role": "Coach",
+        "team": "Dominus Esports Young"
+      }
+    },
+    {
+      "target": "Hidon",
+      "sourcePage": "https://chaincc.lol/free/players/Hidon",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hidon.webp",
+      "evidence": {
+        "name": "Hidon",
+        "country": "Denmark",
+        "role": "Coach",
+        "team": "Howling eSports"
+      }
+    },
+    {
+      "target": "Inero",
+      "sourcePage": "https://chaincc.lol/free/players/Inero",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/inero.webp",
+      "evidence": {
+        "name": "Inero",
+        "country": "United States",
+        "role": "Coach",
+        "team": "MOUZ NXT"
+      }
+    },
+    {
+      "target": "Niles",
+      "sourcePage": "https://chaincc.lol/free/players/Niles",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/niles-aiden-tidwell-.webp",
+      "evidence": {
+        "name": "Niles",
+        "country": "United States",
+        "role": "Coach",
+        "team": "Maryville University"
+      }
+    },
+    {
+      "target": "Poppy",
+      "sourcePage": "https://chaincc.lol/free/players/Poppy",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/poppy.webp",
+      "evidence": {
+        "name": "Poppy",
+        "country": "Taiwan",
+        "role": "Coach",
+        "team": "XGamers"
+      }
+    },
+    {
+      "target": "QingSi",
+      "sourcePage": "https://chaincc.lol/free/players/QingSi",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/qingsi.webp",
+      "evidence": {
+        "name": "QingSi",
+        "country": "China",
+        "role": "Coach",
+        "team": "SinoDragon Gaming"
+      }
+    },
+    {
+      "target": "Refra1n",
+      "sourcePage": "https://chaincc.lol/free/players/Refra1n",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/refra1n.webp",
+      "evidence": {
+        "name": "REFRA1N",
+        "country": "Taiwan",
+        "role": "Coach",
+        "team": "Flash Wolves"
+      }
+    },
+    {
+      "target": "Reignover",
+      "sourcePage": "https://chaincc.lol/free/players/Reignover",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/reignover.webp",
+      "evidence": {
+        "name": "Reignover",
+        "country": "South Korea",
+        "role": "Coach",
+        "team": "Counter Logic Gaming"
+      }
+    },
+    {
+      "target": "Reven",
+      "sourcePage": "https://chaincc.lol/free/players/Reven",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/reven.webp",
+      "evidence": {
+        "name": "Reven",
+        "country": "South Korea",
+        "role": "Coach",
+        "team": "Flamengo MDL"
+      }
+    },
+    {
+      "target": "Skywalk",
+      "sourcePage": "https://chaincc.lol/free/players/Skywalk",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/skywalk.webp",
+      "evidence": {
+        "name": "Skywalk",
+        "country": "Hong Kong",
+        "role": "Coach",
+        "team": "Cougar E-Sport"
+      }
+    },
+    {
+      "target": "Strix",
+      "sourcePage": "https://chaincc.lol/free/players/Strix",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/strix-douglas-assis-.webp",
+      "evidence": {
+        "name": "Strix",
+        "country": "Brazil",
+        "role": "Coach",
+        "team": "LOUD Academy"
+      }
+    },
+    {
+      "target": "Tabe",
+      "sourcePage": "https://chaincc.lol/free/players/Tabe",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/tabe.webp",
+      "evidence": {
+        "name": "Tabe",
+        "country": "Hong Kong",
+        "role": "Coach",
+        "team": "Invictus Gaming"
+      }
+    },
+    {
+      "target": "Thinkcard",
+      "sourcePage": "https://chaincc.lol/free/players/Thinkcard",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/thinkcard.webp",
+      "evidence": {
+        "name": "Thinkcard",
+        "country": "United States",
+        "role": "Coach",
+        "team": "CLG Black"
+      }
+    },
+    {
+      "target": "cvMax",
+      "sourcePage": "https://chaincc.lol/free/players/cvMax",
+      "source_photo_url": "https://chaincc.lol/storage/leaguepedia/players/thumbs/cvmax.webp",
+      "evidence": {
+        "name": "cvMax",
+        "country": "South Korea",
+        "role": "Coach",
+        "team": "Rebels Anarchy"
+      }
+    },
+    {
+      "target": "kkOma",
+      "sourcePage": "https://en.wikipedia.org/wiki/Kkoma",
+      "source_photo_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Kkoma_2025.jpg/250px-Kkoma_2025.jpg?utm_source=en.wikipedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail",
+      "evidence": {
+        "name": "kkOma",
+        "country": null,
+        "role": "coach",
+        "team": "T1"
+      }
+    }
+  ],
+  "coachesDeferred": [
+    {
+      "name": "Artemis",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Artemis"
+    },
+    {
+      "name": "Capivara",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Collamer",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Daeny",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Dopil",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Dopil"
+    },
+    {
+      "name": "Doran",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Doran"
+    },
+    {
+      "name": "Dylan Falco",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Edgar",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Edo",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Edo"
+    },
+    {
+      "name": "Endless",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Endless"
+    },
+    {
+      "name": "Guilhoto",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Hellombre",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Homme",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Ido",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Jerry",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Jerry"
+    },
+    {
+      "name": "JinJin",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Kaiba",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Kaiba"
+    },
+    {
+      "name": "Mafa",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Maizijian",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Medina",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Melzhet",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Moonblack",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Moonblack"
+    },
+    {
+      "name": "Naruterador",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "NoName",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/NoName"
+    },
+    {
+      "name": "Own3r",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Own3r"
+    },
+    {
+      "name": "Pad",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Patron",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Pockus",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Pockus"
+    },
+    {
+      "name": "Politico",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "RapidStar",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "SSONG",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Samyy",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "SeeEl",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Sensation",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Shine",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Shine"
+    },
+    {
+      "name": "Spark",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Spark"
+    },
+    {
+      "name": "Spawn",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Spawn"
+    },
+    {
+      "name": "Striker",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Striker"
+    },
+    {
+      "name": "TheRock7",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Tockers",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Tockers"
+    },
+    {
+      "name": "Viser1on",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "WarHorse",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Woong",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Woong"
+    },
+    {
+      "name": "XDDCC",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Yuzhang",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "boc",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "bonO",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "oDin",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    }
+  ]
+}

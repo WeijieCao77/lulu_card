@@ -49,6 +49,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
   const mythicBusy = useRef(false)
   const [inspect, setInspect] = useState<number | null>(null)
   const [layout, setLayout] = useState({ width: 120, columns: 3 })
+  const [scrollMode, setScrollMode] = useState(false)
   const stage = useRef<HTMLDivElement>(null)
   const previousFocus = useRef(document.activeElement as HTMLElement | null)
   const board = useRef<HTMLDivElement>(null)
@@ -78,21 +79,28 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
   useEffect(() => {
     if (phase !== 'cards' || !board.current) return
     const el = board.current
-    const resize = () => {
+    const updateLayout = () => {
       const { width, height } = el.getBoundingClientRect()
       const count = pulled.length
       const gap = parseFloat(getComputedStyle(el.querySelector('.ritual-spread')!).gap) || 12
+      const minCard = 72
       const candidates = count === 1 ? [1] : count <= 3 ? [1, 2, 3] : [2, 3, 5]
       const options = candidates.map(columns => {
         const rows = Math.ceil(count / columns)
-        const cardWidth = Math.min(184, (width - 24 - (columns - 1) * gap) / columns, (height - 24 - (rows - 1) * gap) / rows * 184 / 282)
-        return { columns, cardWidth }
-      })
-      const { columns, cardWidth } = options.sort((a, b) => b.cardWidth - a.cardWidth)[0]
-      setLayout({ width: cardWidth, columns })
+        const horizontalFit = (el.clientWidth - 24 - (columns - 1) * gap) / columns
+        const verticalFit = (height - 24 - (rows - 1) * gap) / rows * 184 / 282
+        return { columns, rows, horizontalFit, cardWidth: Math.min(184, horizontalFit, verticalFit) }
+      }).filter(option => option.horizontalFit >= minCard)
+      // First fit all cards; if that would make them unreadable, scroll a compact grid.
+      const fitting = options.filter(option => option.cardWidth >= minCard).sort((a, b) => b.cardWidth - a.cardWidth)
+      const best = fitting[0] ?? options.sort((a, b) => b.columns - a.columns)[0]
+      const columns = best?.columns ?? 1
+      const cardWidth = fitting.length ? fitting[0].cardWidth : Math.min(110, best?.horizontalFit ?? Math.max(1, width - 24))
+      setScrollMode(!fitting.length)
+      setLayout(old => old.width === cardWidth && old.columns === columns ? old : { width: cardWidth, columns })
     }
-    const observer = new ResizeObserver(resize)
-    observer.observe(el); resize()
+    const observer = new ResizeObserver(updateLayout)
+    observer.observe(el); updateLayout()
     return () => observer.disconnect()
   }, [phase, pulled.length])
 
@@ -149,6 +157,11 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
     const el = target instanceof Element ? target.closest<HTMLElement>('[data-pack-card]') : null
     return el && board.current?.contains(el) ? Number(el.dataset.packCard) : null
   }
+  const setPointerCaptureSafe = (target: EventTarget, pointerId: number) => {
+    try {
+      if (target instanceof Element) target.setPointerCapture(pointerId)
+    } catch { /* ignore */ }
+  }
 
   return createPortal(<div className={`ritual-stage phase-${phase}`} ref={stage} tabIndex={-1} role="dialog" aria-modal="true" aria-label={`${title}开包`} onKeyDown={e => {
     if (e.key === 'Escape') { e.stopPropagation(); mythics.length ? continueMythic() : inspect !== null ? closeDetail() : onDone() }
@@ -167,31 +180,47 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
       <button className="ritual-dismiss" onClick={onDone} aria-label="收下卡牌并关闭">✕</button>
     </header>
 
-    {phase !== 'cards' ? <PackAltar count={pulled.length} bursting={phase === 'burst'} onOpen={openPack} seal={<Seal />} /> : <div className={`ritual-board count-${pulled.length}`} ref={board} inert={inspect !== null || mythics.length > 0}
+    {phase !== 'cards' ? <PackAltar count={pulled.length} bursting={phase === 'burst'} onOpen={openPack} seal={<Seal />} /> : <div className={`ritual-board count-${pulled.length}${scrollMode ? ' is-scroll' : ''}`} ref={board} inert={inspect !== null || mythics.length > 0}
       style={{ '--card-width': `${layout.width}px`, '--card-scale': layout.width / 184, '--columns': layout.columns } as CSSProperties}
       onPointerDown={e => {
         if (mythicBusy.current) return
         if ((e.pointerType !== 'touch' && e.pointerType !== 'pen') || touch.current) return
         const index = cardAt(e.target); if (index === null) return
+        if (scrollMode) {
+          touch.current = { id: e.pointerId, x: e.clientX, y: e.clientY, index, wasOpen: revealedRef.current.has(index), moved: false }
+          return
+        }
         ignoreClickUntil.current = Date.now() + 700
         touch.current = { id: e.pointerId, x: e.clientX, y: e.clientY, index, wasOpen: revealedRef.current.has(index), moved: false }
-        try { e.currentTarget.setPointerCapture(e.pointerId) } catch { /* pointer remains usable inside the card table */ }
+        setPointerCaptureSafe(e.currentTarget, e.pointerId)
         reveal(index)
       }}
       onPointerMove={e => {
         const t = touch.current; if (mythicBusy.current || !t || t.id !== e.pointerId) return
         if (Math.hypot(e.clientX - t.x, e.clientY - t.y) < 10 && !t.moved) return
         t.moved = true
+        if (scrollMode) return
         const index = cardAt(document.elementFromPoint(e.clientX, e.clientY))
         if (index !== null) reveal(index)
       }}
       onPointerUp={e => {
         const t = touch.current; if (mythicBusy.current || !t || t.id !== e.pointerId) return
+        touch.current = null
+        if (scrollMode) {
+          ignoreClickUntil.current = Date.now() + 700
+          if (t.moved) return
+          const index = t.index
+          if (t.wasOpen) {
+            setInspect(index)
+          } else {
+            reveal(index)
+          }
+          return
+        }
         ignoreClickUntil.current = Date.now() + 700
         if (!t.moved && t.wasOpen) setInspect(t.index)
-        touch.current = null
       }}
-      onPointerCancel={() => { touch.current = null }}>
+      onPointerCancel={() => { touch.current = null; ignoreClickUntil.current = Date.now() + 700 }}>
       <div className="ritual-spread">
         {pulled.map((p, i) => {
           const up = revealed.has(i)
@@ -211,7 +240,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
     </div>}
 
     <footer className="ritual-footer" inert={inspect !== null || mythics.length > 0}>
-      <div className="ritual-progress" role="status">{phase === 'cards' ? <><b>{revealed.size}</b> / {pulled.length} 已翻开<span>{all ? '全部揭晓 · 点击卡牌放大查看' : <><span className="ritual-desktop-hint">点击任意卡背，按自己的顺序揭晓</span><span className="ritual-touch-hint">轻点翻面，也可滑过卡背连续翻牌</span></>}</span></> : <span>卡牌已存入收藏，随时可以收下</span>}</div>
+      <div className="ritual-progress" role="status">{phase === 'cards' ? <><b>{revealed.size}</b> / {pulled.length} 已翻开<span>{all ? '全部揭晓 · 点击卡牌放大查看' : <><span className="ritual-desktop-hint">点击任意卡背，按自己的顺序揭晓</span><span className="ritual-touch-hint">{scrollMode ? '轻点翻面，上下滑动浏览卡牌' : '轻点翻面，也可滑过卡背连续翻牌'}</span></>}</span></> : <span>卡牌已存入收藏，随时可以收下</span>}</div>
       <div className="ritual-actions">{phase !== 'cards' ? <button onClick={skip}>跳过动画</button> : <>
         {!all && <button onClick={revealAll}>全部翻开</button>}
         {all && dupes > 0 && <button onClick={onSellAll}>分解重复卡（{dupes}）</button>}

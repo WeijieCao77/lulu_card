@@ -514,7 +514,7 @@ check('without a database the route says so instead of throwing',
   const want = rel ? await readFile(join(root, rel)) : null
   check('puzzle route answers the picture', got.code === 200 && !!got.body && !!want && Buffer.compare(got.body!, want!) === 0)
   check('with a generic file name and no caching',
-    String(got.head['Content-Disposition']).includes('puzzle.webp') && got.head['Cache-Control'] === 'no-store')
+    String(got.head['Content-Disposition']).includes(`puzzle${rel?.slice(rel.lastIndexOf('.'))}`) && got.head['Cache-Control'] === 'no-store')
   check('and no player id anywhere in the headers',
     !JSON.stringify(got.head).match(/P\d{2,}/))
   await api3.route({ body: JSON.stringify({ id: 'nope' }), method: 'POST' } as never, res as never, '/api/card/puzzle', 'pz')

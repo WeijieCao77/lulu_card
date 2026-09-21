@@ -79,8 +79,8 @@ function Silhouette() {
 
 /** The photograph, with the silhouette behind it for the ones vlr has none of. */
 function Face({ src, alt }: { src: string | null; alt: string }) {
-  const [failed, setFailed] = useState(false)
-  if (src && !failed) {
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
+  if (src && src !== failedSrc) {
     return (
       <img
         className="cf-photo"
@@ -88,7 +88,7 @@ function Face({ src, alt }: { src: string | null; alt: string }) {
         alt={alt}
         loading="lazy"
         decoding="async"
-        onError={() => setFailed(true)}
+        onError={() => setFailedSrc(src)}
       />
     )
   }

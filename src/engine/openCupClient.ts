@@ -86,7 +86,7 @@ export interface OpenCupMatchDetail {
   mapsB: number
   a: (OpenCupWho & { five: OpenCupFive }) | null
   b: (OpenCupWho & { five: OpenCupFive }) | null
-  detail: { bo: 3 | 5; maps: { map: string; a: number; b: number }[]; a: OpenCupSideDetail; b: OpenCupSideDetail }
+  detail: import('./openCup').OpenCupMatchResult['detail']
 }
 
 async function post<T>(path: string, body: Record<string, unknown>): Promise<T | { ok: false; why?: string }> {

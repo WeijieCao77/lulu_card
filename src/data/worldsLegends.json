@@ -1204,11 +1204,12 @@
     },
     "art": {
       "accent": "#92e1d8",
-      "position": "77% 24%",
-      "credit": "Riot Games / LoL Esports",
-      "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+      "position": "69% 34%",
+      "credit": "Riot Games / ge.globo",
+      "source": "https://ge.globo.com/esports/lol/noticia/msi-2021-campeao-gala-e-eleito-mvp-da-competicao.ghtml",
       "serial": 6,
-      "total": 11
+      "total": 11,
+      "zoom": 1.15
     },
     "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
     "ratingTier": "msi-mvp"

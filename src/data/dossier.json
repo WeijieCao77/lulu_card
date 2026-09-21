@@ -2845,6 +2845,618 @@
       "v": "f0c75f40",
       "real": "Murilo Cocco Lopes",
       "source": "https://cdn.datalisk.io/players/112489397674155987.png"
+    },
+    "P13": {
+      "img": "portrait-P13.webp",
+      "v": "c08b99fc",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/angel-xiang-tao-.webp",
+      "page": "https://chaincc.lol/free/players/Angel"
+    },
+    "P41": {
+      "img": "portrait-P41.webp",
+      "v": "606836e1",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hery.webp",
+      "page": "https://chaincc.lol/free/players/Hery"
+    },
+    "P43": {
+      "img": "portrait-P43.webp",
+      "v": "43f5933d",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/juhan.webp",
+      "page": "https://chaincc.lol/free/players/Juhan"
+    },
+    "P44": {
+      "img": "portrait-P44.webp",
+      "v": "3e8eeabf",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/haichao.webp",
+      "page": "https://chaincc.lol/free/players/haichao"
+    },
+    "P55": {
+      "img": "portrait-P55.webp",
+      "v": "c090e4ba",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/ryan3.webp",
+      "page": "https://chaincc.lol/free/players/Ryan3"
+    },
+    "P58": {
+      "img": "portrait-P58.webp",
+      "v": "2d85a7e2",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/naiyou.webp",
+      "page": "https://chaincc.lol/free/players/naiyou"
+    },
+    "P62": {
+      "img": "portrait-P62.webp",
+      "v": "247fe06a",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/liangchen.webp",
+      "page": "https://chaincc.lol/free/players/Liangchen"
+    },
+    "P184": {
+      "img": "portrait-P184.webp",
+      "v": "4ca60dbe",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/castle-cho-hyeon-seong-.webp",
+      "page": "https://chaincc.lol/free/players/Castle"
+    },
+    "P237": {
+      "img": "portrait-P237.webp",
+      "v": "9e2a7f1e",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/aress.webp",
+      "page": "https://chaincc.lol/free/players/Aress"
+    },
+    "P243": {
+      "img": "portrait-P243.webp",
+      "v": "0c7ab5bb",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/shunn.webp",
+      "page": "https://chaincc.lol/free/players/Shunn"
+    },
+    "P248": {
+      "img": "portrait-P248.webp",
+      "v": "2671f042",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/kati.webp",
+      "page": "https://chaincc.lol/free/players/Kati"
+    },
+    "P268": {
+      "img": "portrait-P268.webp",
+      "v": "dd03c8d5",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/youngjae.webp",
+      "page": "https://chaincc.lol/free/players/YoungJae"
+    },
+    "P271": {
+      "img": "portrait-P271.webp",
+      "v": "1a8268ce",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bull.webp",
+      "page": "https://chaincc.lol/free/players/Bull"
+    },
+    "P272": {
+      "img": "portrait-P272.webp",
+      "v": "035fa50e",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/redbert.webp",
+      "page": "https://chaincc.lol/free/players/RedBert"
+    },
+    "P276": {
+      "img": "portrait-P276.webp",
+      "v": "aa6e85a2",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/ceo.webp",
+      "page": "https://chaincc.lol/free/players/ceo"
+    },
+    "P277": {
+      "img": "portrait-P277.webp",
+      "v": "9bcfff89",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/toplop.webp",
+      "page": "https://chaincc.lol/free/players/TopLop"
+    },
+    "P297": {
+      "img": "portrait-P297.webp",
+      "v": "f620232a",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/trigger-kim-eui-joo-.webp",
+      "page": "https://chaincc.lol/free/players/Trigger"
+    },
+    "P299": {
+      "img": "portrait-P299.webp",
+      "v": "ae76925e",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/kuri.webp",
+      "page": "https://chaincc.lol/free/players/Kuri"
+    },
+    "P354": {
+      "img": "portrait-P354.webp",
+      "v": "aa74e87f",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/protos.webp",
+      "page": "https://chaincc.lol/free/players/Protos"
+    },
+    "P355": {
+      "img": "portrait-P355.webp",
+      "v": "e9ba98cf",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/ariana.webp",
+      "page": "https://chaincc.lol/free/players/Ariana"
+    },
+    "P359": {
+      "img": "portrait-P359.webp",
+      "v": "99f45748",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/rovex.webp",
+      "page": "https://chaincc.lol/free/players/Rovex"
+    },
+    "P361": {
+      "img": "portrait-P361.webp",
+      "v": "0ca57532",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/dardoch.webp",
+      "page": "https://chaincc.lol/free/players/Dardoch"
+    },
+    "P377": {
+      "img": "portrait-P377.webp",
+      "v": "b84b3860",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bounty.webp",
+      "page": "https://chaincc.lol/free/players/Bounty"
+    },
+    "P383": {
+      "img": "portrait-P383.webp",
+      "v": "60f363dc",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/keii.webp",
+      "page": "https://chaincc.lol/free/players/Keii"
+    },
+    "P392": {
+      "img": "portrait-P392.webp",
+      "v": "a435ccf2",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/shochi.webp",
+      "page": "https://chaincc.lol/free/players/shochi"
+    },
+    "P393": {
+      "img": "portrait-P393.webp",
+      "v": "1d989247",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/levitate.webp",
+      "page": "https://chaincc.lol/free/players/Levitate"
+    },
+    "P394": {
+      "img": "portrait-P394.webp",
+      "v": "1110c0fa",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/zyko.webp",
+      "page": "https://chaincc.lol/free/players/Zyko"
+    },
+    "P400": {
+      "img": "portrait-P400.webp",
+      "v": "78dd61b1",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/leny.webp",
+      "page": "https://chaincc.lol/free/players/Leny"
+    },
+    "P401": {
+      "img": "portrait-P401.webp",
+      "v": "cb85bd2e",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/croniik.webp",
+      "page": "https://chaincc.lol/free/players/CRoNiiK"
+    },
+    "P406": {
+      "img": "portrait-P406.webp",
+      "v": "29db2b18",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/nattynatt.webp",
+      "page": "https://chaincc.lol/free/players/NattyNatt"
+    },
+    "P408": {
+      "img": "portrait-P408.webp",
+      "v": "2a344631",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/3xa.webp",
+      "page": "https://chaincc.lol/free/players/3XA"
+    },
+    "P412": {
+      "img": "portrait-P412.webp",
+      "v": "598b5647",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/omon.webp",
+      "page": "https://chaincc.lol/free/players/OMON"
+    },
+    "P423": {
+      "img": "portrait-P423.webp",
+      "v": "f92e12cb",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/comp.webp",
+      "page": "https://chaincc.lol/free/players/Comp"
+    },
+    "P431": {
+      "img": "portrait-P431.webp",
+      "v": "20a24016",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/zicssi.webp",
+      "page": "https://chaincc.lol/free/players/Zicssi"
+    },
+    "P434": {
+      "img": "portrait-P434.webp",
+      "v": "b580f8b9",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/piero-kim-jung-hun-.webp",
+      "page": "https://chaincc.lol/free/players/Piero"
+    },
+    "P439": {
+      "img": "portrait-P439.webp",
+      "v": "eb13523e",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/thomas.webp",
+      "page": "https://chaincc.lol/free/players/Thomas"
+    },
+    "P469": {
+      "img": "portrait-P469.webp",
+      "v": "7dbdbdba",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/prage.webp",
+      "page": "https://chaincc.lol/free/players/Prage"
+    },
+    "P471": {
+      "img": "portrait-P471.webp",
+      "v": "78bba633",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hasu7.webp",
+      "page": "https://chaincc.lol/free/players/Hasu7"
+    },
+    "P472": {
+      "img": "portrait-P472.webp",
+      "v": "c5e35f42",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/tianzhen.webp",
+      "page": "https://chaincc.lol/free/players/Tianzhen"
+    },
+    "P473": {
+      "img": "portrait-P473.webp",
+      "v": "fd7a3130",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/xzz.webp",
+      "page": "https://chaincc.lol/free/players/Xzz"
+    },
+    "P474": {
+      "img": "portrait-P474.webp",
+      "v": "74c28cd1",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hermes-lin-you-ju-.webp",
+      "page": "https://chaincc.lol/free/players/Hermes"
+    },
+    "P478": {
+      "img": "portrait-P478.webp",
+      "v": "aadc3035",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bulukaka.webp",
+      "page": "https://chaincc.lol/free/players/BuLuKaKa"
+    },
+    "P480": {
+      "img": "portrait-P480.webp",
+      "v": "3b8551e0",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/keres.webp",
+      "page": "https://chaincc.lol/free/players/Keres"
+    },
+    "P482": {
+      "img": "portrait-P482.webp",
+      "v": "8e198c21",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/rbow.webp",
+      "page": "https://chaincc.lol/free/players/Rbow"
+    },
+    "P486": {
+      "img": "portrait-P486.webp",
+      "v": "d9b0dc9c",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/tns.webp",
+      "page": "https://chaincc.lol/free/players/TNS"
+    },
+    "P487": {
+      "img": "portrait-P487.webp",
+      "v": "87623e44",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/feng55.webp",
+      "page": "https://chaincc.lol/free/players/Feng55"
+    },
+    "P491": {
+      "img": "portrait-P491.webp",
+      "v": "9aa930e8",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/beenie.webp",
+      "page": "https://chaincc.lol/free/players/Beenie"
+    },
+    "P494": {
+      "img": "portrait-P494.webp",
+      "v": "95415be7",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/dizin.webp",
+      "page": "https://chaincc.lol/free/players/Dizin"
+    },
+    "P498": {
+      "img": "portrait-P498.webp",
+      "v": "908c33d6",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/supercleber.webp",
+      "page": "https://chaincc.lol/free/players/SuperCleber"
+    },
+    "P504": {
+      "img": "portrait-P504.webp",
+      "v": "de3de508",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/eradan.webp",
+      "page": "https://chaincc.lol/free/players/Eradan"
+    },
+    "P507": {
+      "img": "portrait-P507.webp",
+      "v": "d5f21e26",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/scuro.webp",
+      "page": "https://chaincc.lol/free/players/scuro"
+    },
+    "P515": {
+      "img": "portrait-P515.webp",
+      "v": "157ded02",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/randal.webp",
+      "page": "https://chaincc.lol/free/players/Randal"
+    },
+    "P521": {
+      "img": "portrait-P521.webp",
+      "v": "7ce2a62b",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/aithusa.webp",
+      "page": "https://chaincc.lol/free/players/Aithusa"
+    },
+    "P522": {
+      "img": "portrait-P522.webp",
+      "v": "fe0ccfe8",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/dioge-diogenes-barbosa-.webp",
+      "page": "https://chaincc.lol/free/players/Dioge"
+    },
+    "P523": {
+      "img": "portrait-P523.webp",
+      "v": "83d1fc03",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/gru-pedro-nunes-.webp",
+      "page": "https://chaincc.lol/free/players/Gru"
+    },
+    "P524": {
+      "img": "portrait-P524.webp",
+      "v": "77c8067b",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bipi.webp",
+      "page": "https://chaincc.lol/free/players/bipi"
+    },
+    "P525": {
+      "img": "portrait-P525.webp",
+      "v": "68110fe0",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/cavalo.webp",
+      "page": "https://chaincc.lol/free/players/Cavalo"
+    },
+    "P528": {
+      "img": "portrait-P528.webp",
+      "v": "70876386",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/ale.webp",
+      "page": "https://chaincc.lol/free/players/Ale"
+    },
+    "P533": {
+      "img": "portrait-P533.webp",
+      "v": "101285ee",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hang.webp",
+      "page": "https://chaincc.lol/free/players/Hang"
+    },
+    "P534": {
+      "img": "portrait-P534.webp",
+      "v": "2e1fd6a5",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/light-wang-guang-yu-.webp",
+      "page": "https://chaincc.lol/free/players/Light"
+    },
+    "P538": {
+      "img": "portrait-P538.webp",
+      "v": "8098008c",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/milkyway.webp",
+      "page": "https://chaincc.lol/free/players/milkyway"
+    },
+    "P539": {
+      "img": "portrait-P539.webp",
+      "v": "47fcc24a",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/beichuan.webp",
+      "page": "https://chaincc.lol/free/players/Beichuan"
+    },
+    "P540": {
+      "img": "portrait-P540.webp",
+      "v": "ef6af206",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/ppgod.webp",
+      "page": "https://chaincc.lol/free/players/ppgod"
+    },
+    "P541": {
+      "img": "portrait-P541.webp",
+      "v": "f50a4007",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/wink.webp",
+      "page": "https://chaincc.lol/free/players/Wink"
+    },
+    "P546": {
+      "img": "portrait-P546.webp",
+      "v": "49e21560",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/solokill.webp",
+      "page": "https://chaincc.lol/free/players/Solokill"
+    },
+    "P548": {
+      "img": "portrait-P548.webp",
+      "v": "28f8ffff",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/fofo.webp",
+      "page": "https://chaincc.lol/free/players/FoFo"
+    },
+    "P551": {
+      "img": "portrait-P551.webp",
+      "v": "8e15d6ee",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/niket.webp",
+      "page": "https://chaincc.lol/free/players/Niket"
+    },
+    "P552": {
+      "img": "portrait-P552.webp",
+      "v": "587dbea8",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/climber.webp",
+      "page": "https://chaincc.lol/free/players/Climber"
+    },
+    "P555": {
+      "img": "portrait-P555.webp",
+      "v": "919e4ed3",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/lp.webp",
+      "page": "https://chaincc.lol/free/players/LP"
+    },
+    "P556": {
+      "img": "portrait-P556.webp",
+      "v": "49703f61",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/vital.webp",
+      "page": "https://chaincc.lol/free/players/vital"
+    },
+    "P561": {
+      "img": "portrait-P561.webp",
+      "v": "7d06bfdf",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/route.webp",
+      "page": "https://chaincc.lol/free/players/Route"
+    },
+    "P563": {
+      "img": "portrait-P563.webp",
+      "v": "8a71c113",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/baiye.webp",
+      "page": "https://chaincc.lol/free/players/Baiye"
+    },
+    "P568": {
+      "img": "portrait-P568.webp",
+      "v": "1be72d55",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/mihile.webp",
+      "page": "https://chaincc.lol/free/players/Mihile"
+    },
+    "P569": {
+      "img": "portrait-P569.webp",
+      "v": "99e88c3e",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/execute.webp",
+      "page": "https://chaincc.lol/free/players/Execute"
+    },
+    "P570": {
+      "img": "portrait-P570.webp",
+      "v": "ab351be4",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/azhi.webp",
+      "page": "https://chaincc.lol/free/players/Azhi"
+    },
+    "P575": {
+      "img": "portrait-P575.webp",
+      "v": "44d21277",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/linfeng.webp",
+      "page": "https://chaincc.lol/free/players/Linfeng"
+    },
+    "P580": {
+      "img": "portrait-P580.webp",
+      "v": "69131d70",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bat-gao-jun-.webp",
+      "page": "https://chaincc.lol/free/players/bat"
+    },
+    "P583": {
+      "img": "portrait-P583.webp",
+      "v": "3916d29e",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/envyy.webp",
+      "page": "https://chaincc.lol/free/players/Envyy"
+    },
+    "P587": {
+      "img": "portrait-P587.webp",
+      "v": "424996cc",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hiro02.webp",
+      "page": "https://chaincc.lol/free/players/Hiro02"
+    },
+    "P588": {
+      "img": "portrait-P588.webp",
+      "v": "daa5dd2d",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/wizer.webp",
+      "page": "https://chaincc.lol/free/players/Wizer"
+    },
+    "P589": {
+      "img": "portrait-P589.webp",
+      "v": "f61ff9c5",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/renard.webp",
+      "page": "https://chaincc.lol/free/players/Renard"
+    },
+    "P590": {
+      "img": "portrait-P590.webp",
+      "v": "888c2287",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/charlotte-xue-le-hui-.webp",
+      "page": "https://chaincc.lol/free/players/charlotte"
+    },
+    "P591": {
+      "img": "portrait-P591.webp",
+      "v": "00d13ed7",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/rosielove.webp",
+      "page": "https://chaincc.lol/free/players/Rosielove"
+    },
+    "P614": {
+      "img": "portrait-P614.webp",
+      "v": "954ee0c5",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/puddin.webp",
+      "page": "https://chaincc.lol/free/players/Puddin"
+    },
+    "P621": {
+      "img": "portrait-P621.webp",
+      "v": "d75ce7d7",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/zkai.webp",
+      "page": "https://chaincc.lol/free/players/Zkai"
+    },
+    "P622": {
+      "img": "portrait-P622.webp",
+      "v": "e9bcdb15",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/nern.webp",
+      "page": "https://chaincc.lol/free/players/Nern"
+    },
+    "P624": {
+      "img": "portrait-P624.webp",
+      "v": "bdbb37df",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/closer-can-elik-.webp",
+      "page": "https://chaincc.lol/free/players/Closer"
+    },
+    "OEfdbc55e737": {
+      "img": "portrait-OEfdbc55e737.webp",
+      "v": "973f7e90",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hype-byeon-jeong-hyeon-.webp",
+      "page": "https://chaincc.lol/free/players/Hype"
+    },
+    "OE0569953773": {
+      "img": "portrait-OE0569953773.webp",
+      "v": "dddfe3c0",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/shini.webp",
+      "page": "https://chaincc.lol/free/players/Shini"
+    },
+    "OEd1f2210b30": {
+      "img": "portrait-OEd1f2210b30.webp",
+      "v": "75d17b03",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/strensh.webp",
+      "page": "https://chaincc.lol/free/players/Strensh"
+    },
+    "OE5069decf74": {
+      "img": "portrait-OE5069decf74.webp",
+      "v": "860c3e38",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/jeskla.webp",
+      "page": "https://chaincc.lol/free/players/Jeskla"
+    },
+    "OEb37e9d1225": {
+      "img": "portrait-OEb37e9d1225.webp",
+      "v": "7cd84e06",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/pockus.webp",
+      "page": "https://chaincc.lol/free/players/Pockus"
+    },
+    "OEbec95c8f49": {
+      "img": "portrait-OEbec95c8f49.webp",
+      "v": "5c1abd42",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/minui.webp",
+      "page": "https://chaincc.lol/free/players/Minui"
+    },
+    "OE1abf5aef2a": {
+      "img": "portrait-OE1abf5aef2a.webp",
+      "v": "4bd249eb",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/tomo.webp",
+      "page": "https://chaincc.lol/free/players/Tomo"
+    },
+    "OEcd1123bc69": {
+      "img": "portrait-OEcd1123bc69.webp",
+      "v": "484bc786",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/keduii.webp",
+      "page": "https://chaincc.lol/free/players/Keduii"
+    },
+    "OE5a1b4ab458": {
+      "img": "portrait-OE5a1b4ab458.webp",
+      "v": "a01ee6ef",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/kofte.webp",
+      "page": "https://chaincc.lol/free/players/Kofte"
+    },
+    "OE7a4704f51a": {
+      "img": "portrait-OE7a4704f51a.webp",
+      "v": "492b3221",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/mersa.webp",
+      "page": "https://chaincc.lol/free/players/Mersa"
+    },
+    "OE844484ffc1": {
+      "img": "portrait-OE844484ffc1.webp",
+      "v": "46a2ebe1",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/ragner.webp",
+      "page": "https://chaincc.lol/free/players/Ragner"
+    },
+    "OE26ccf6d61d": {
+      "img": "portrait-OE26ccf6d61d.webp",
+      "v": "f6d13cec",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/exofeng.webp",
+      "page": "https://chaincc.lol/free/players/Exofeng"
+    },
+    "OE9f15cda1c1": {
+      "img": "portrait-OE9f15cda1c1.webp",
+      "v": "e85d4021",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/yakkey.webp",
+      "page": "https://chaincc.lol/free/players/Yakkey"
+    },
+    "OE8b13b44ff3": {
+      "img": "portrait-OE8b13b44ff3.webp",
+      "v": "1d2fdea8",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/aikawa.webp",
+      "page": "https://chaincc.lol/free/players/Aikawa"
+    },
+    "OEe6e5ceefc4": {
+      "img": "portrait-OEe6e5ceefc4.webp",
+      "v": "939e2834",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/kog.webp",
+      "page": "https://chaincc.lol/free/players/Kog"
     }
   },
   "coaches": {
@@ -3375,6 +3987,144 @@
       "v": "31ab238e",
       "real": "Matheus Trigo Nobrega",
       "source": "https://cdn.datalisk.io/players/103743620262608671.png"
+    },
+    "1874": {
+      "img": "coach-1874.webp",
+      "v": "c426da96",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/1874.webp",
+      "page": "https://chaincc.lol/free/players/1874"
+    },
+    "BigKoro": {
+      "img": "coach-bigkoro.webp",
+      "v": "2ffb428b",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bigkoro.webp",
+      "page": "https://chaincc.lol/free/players/BigKoro"
+    },
+    "Boby": {
+      "img": "coach-boby.webp",
+      "v": "b5ebcd1b",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/boby.webp",
+      "page": "https://chaincc.lol/free/players/Boby"
+    },
+    "Cheoni": {
+      "img": "coach-cheoni.webp",
+      "v": "0578e728",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/cheoni.webp",
+      "page": "https://chaincc.lol/free/players/Cheoni"
+    },
+    "CorGi": {
+      "img": "coach-corgi.webp",
+      "v": "2558a13b",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/corgi.webp",
+      "page": "https://chaincc.lol/free/players/CorGi"
+    },
+    "Dionrray": {
+      "img": "coach-dionrray.webp",
+      "v": "155e3ef8",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/dionrray.webp",
+      "page": "https://chaincc.lol/free/players/Dionrray"
+    },
+    "DooTi": {
+      "img": "coach-dooti.webp",
+      "v": "a288943b",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/dooti.webp",
+      "page": "https://chaincc.lol/free/players/DooTi"
+    },
+    "Furyz": {
+      "img": "coach-furyz.webp",
+      "v": "8bca519e",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/furyz.webp",
+      "page": "https://chaincc.lol/free/players/Furyz"
+    },
+    "Helper": {
+      "img": "coach-helper.webp",
+      "v": "b771ed3d",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/helper.webp",
+      "page": "https://chaincc.lol/free/players/Helper"
+    },
+    "Hidon": {
+      "img": "coach-hidon.webp",
+      "v": "f329b172",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hidon.webp",
+      "page": "https://chaincc.lol/free/players/Hidon"
+    },
+    "Inero": {
+      "img": "coach-inero.webp",
+      "v": "9e469914",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/inero.webp",
+      "page": "https://chaincc.lol/free/players/Inero"
+    },
+    "Niles": {
+      "img": "coach-niles.webp",
+      "v": "c21cf2fb",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/niles-aiden-tidwell-.webp",
+      "page": "https://chaincc.lol/free/players/Niles"
+    },
+    "Poppy": {
+      "img": "coach-poppy.webp",
+      "v": "49d0261f",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/poppy.webp",
+      "page": "https://chaincc.lol/free/players/Poppy"
+    },
+    "QingSi": {
+      "img": "coach-qingsi.webp",
+      "v": "6db5c4fc",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/qingsi.webp",
+      "page": "https://chaincc.lol/free/players/QingSi"
+    },
+    "Refra1n": {
+      "img": "coach-refra1n.webp",
+      "v": "2c8b5739",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/refra1n.webp",
+      "page": "https://chaincc.lol/free/players/Refra1n"
+    },
+    "Reignover": {
+      "img": "coach-reignover.webp",
+      "v": "4da7fe2b",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/reignover.webp",
+      "page": "https://chaincc.lol/free/players/Reignover"
+    },
+    "Reven": {
+      "img": "coach-reven.webp",
+      "v": "fed6f100",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/reven.webp",
+      "page": "https://chaincc.lol/free/players/Reven"
+    },
+    "Skywalk": {
+      "img": "coach-skywalk.webp",
+      "v": "1fec370e",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/skywalk.webp",
+      "page": "https://chaincc.lol/free/players/Skywalk"
+    },
+    "Strix": {
+      "img": "coach-strix.webp",
+      "v": "3a69263d",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/strix-douglas-assis-.webp",
+      "page": "https://chaincc.lol/free/players/Strix"
+    },
+    "Tabe": {
+      "img": "coach-tabe.webp",
+      "v": "700bbdad",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/tabe.webp",
+      "page": "https://chaincc.lol/free/players/Tabe"
+    },
+    "Thinkcard": {
+      "img": "coach-thinkcard.webp",
+      "v": "c4711c3d",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/thinkcard.webp",
+      "page": "https://chaincc.lol/free/players/Thinkcard"
+    },
+    "cvMax": {
+      "img": "coach-cvmax.webp",
+      "v": "1353ebd3",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/cvmax.webp",
+      "page": "https://chaincc.lol/free/players/cvMax"
+    },
+    "kkOma": {
+      "img": "coach-kkoma.webp",
+      "v": "0f8a299a",
+      "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Kkoma_2025.jpg/250px-Kkoma_2025.jpg?utm_source=en.wikipedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail",
+      "page": "https://en.wikipedia.org/wiki/Kkoma"
     }
   },
   "legends": {
@@ -3494,9 +4244,10 @@
       "page": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/"
     },
     "msi-2021-gala": {
-      "img": "msi-team-2021.jpg",
+      "img": "gala-msi-2021-solo.webp",
       "tier": "event",
-      "page": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/"
+      "page": "https://ge.globo.com/esports/lol/noticia/msi-2021-campeao-gala-e-eleito-mvp-da-competicao.ghtml",
+      "v": "e3457eda"
     },
     "msi-2022-wei": {
       "img": "msi-wei-poster.jpg",

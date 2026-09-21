@@ -178,7 +178,7 @@ export default function Packs() {
                 <span className="pack-own"> ×{g.packs.legend}</span>
               </h4>
               <p>{PACKS.legend.blurb}</p>
-              <div className="row" style={{ gap: 6 }}>
+              <div className="pack-shelf-actions">
                 <button className="primary sm" onClick={() => void open('legend', 'pack')} disabled={busy}>
                   打开（{g.packs.legend}）
                 </button>
@@ -196,7 +196,7 @@ export default function Packs() {
                   {own > 0 && <span className="pack-own"> ×{own}</span>}
                 </h4>
                 <p>{def.blurb}</p>
-                <div className="row" style={{ gap: 6 }}>
+                <div className="pack-shelf-actions">
                   <button className="primary sm" onClick={() => void open(kind, 'pack')} disabled={busy || own < 1}>
                     打开（{own}）
                   </button>
@@ -231,7 +231,7 @@ export default function Packs() {
                 <div key={kind} className="pack-box"><RiftPackArt kind={kind} />
                   <h4>{def.name}<span className="pack-own"> ×{own}</span></h4>
                   <p>{def.blurb}</p>
-                  <button className="primary sm" onClick={() => void open(kind, 'pack')} disabled={busy || own < 1}>打开（{own}）</button>
+                  <div className="pack-shelf-actions"><button className="primary sm" onClick={() => void open(kind, 'pack')} disabled={busy || own < 1}>打开（{own}）</button></div>
                 </div>
               )
             })}
@@ -306,12 +306,12 @@ export default function Packs() {
                     </button>
                   )}
                 </div>
-                <div className="row wrap" style={{ gap: 6 }}>
+                <div className="pack-shelf-actions">
                   <button className="primary sm" onClick={() => void open(s.pack, 'pack')} disabled={busy || own < 1}>
                     打开（{own}）
                   </button>
                   <button
-                    className="sm" style={{ whiteSpace: 'nowrap' }}
+                    className="sm"
                     onClick={() => void open(s.pack, 'coins')}
                     disabled={busy || g.coins < price}
                   >

@@ -236,17 +236,43 @@
 }
 
 .cardmode.rift-ui .pack-shelf {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   background: transparent;
   border: none;
   box-shadow: none;
 }
 
 .cardmode.rift-ui .pack-box {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
   background: var(--rift-panel-bg);
   border: 1px solid var(--rift-border);
   border-radius: 8px;
   transition: transform 0.2s, box-shadow 0.2s;
 }
+
+/* Descriptions can wrap freely; the action row stays on the shelf baseline. */
+.cardmode.rift-ui .pack-shelf-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 6px;
+  margin-top: auto;
+}
+.cardmode.rift-ui .pack-shelf-actions > button,
+.cardmode.rift-ui .pack-shelf-actions > span {
+  min-width: 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 8px 6px;
+  line-height: 1.4;
+  text-align: center;
+}
+.cardmode.rift-ui .pack-shelf-actions > button { white-space: normal; }
 
 .cardmode.rift-ui .pack-box:hover {
   transform: translateY(-2px);
@@ -437,3 +463,19 @@ html[data-theme='light'] .rift-pack-art,html[data-theme='cream'] .rift-pack-art 
 .inbox-filters { margin:18px 0 8px; gap:8px; }.inbox-page .mail-list { max-height:none; }
 .inbox-page .mail-item { padding:16px; border-radius:8px; overflow-wrap:anywhere; }
 @media(max-width:768px) { .rift-utilities { grid-column:1/-1; flex-direction:row; justify-content:space-between; align-items:center; margin:2px 0 0; padding:5px 8px; }.rift-utilities .mail-chip { min-height:30px; }.inbox-page { padding:15px; } }
+
+/* Mobile round 1: compact chrome and reliable touch controls. */
+@media(max-width:768px) {
+ .rift-nav .rift-utilities { display:none; } /* Top bar retains the same mailbox action. */
+ .rift-banner-content { padding:12px 14px; }
+ .rift-banner-title { font-size:21px; margin:4px 0 6px; }
+ .rift-banner-desc { margin-bottom:10px; max-width:100%; }
+ .cardmode.rift-ui input,.cardmode.rift-ui select,.cardmode.rift-ui textarea { font-size:16px; min-width:0; max-width:100%; }
+ .cardmode.rift-ui button { min-height:44px; }
+ .cardmode.rift-ui .topbar .mail-chip { padding:4px 8px; }
+}
+
+.lol-match-report .modal-head h2 { min-width: 0; overflow-wrap: anywhere; }
+.lol-match-report summary { cursor: pointer; padding: 10px 0; min-height: 44px; box-sizing: border-box; }
+.lol-match-report .table-wrap { min-width: 0; max-width: 100%; overflow-x: auto; }
+@media (max-width: 640px) { .lol-match-report .grid.c2 { grid-template-columns: minmax(0, 1fr); } .lol-match-report .modal-head h2 { font-size: 18px; } }

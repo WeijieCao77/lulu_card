@@ -693,6 +693,12 @@ export interface EdgeBreakdown {
 }
 
 export interface MapScore {
+  lol?: {
+    winner: 'A' | 'B'; durationSeconds: number
+    goldA: number; goldB: number; towersA: number; towersB: number
+    dragonsA: number; dragonsB: number; baronsA: number; baronsB: number
+    events: { minute: number; text: string }[]
+  }
   map: string
   scoreA: number
   scoreB: number
@@ -708,6 +714,8 @@ export interface MapScore {
 }
 
 export interface MapLine {
+  cs?: number
+  gold?: number
   kills: number
   deaths: number
   assists: number
@@ -720,6 +728,7 @@ export interface MapLine {
 }
 
 export interface MatchResult {
+  format?: 'lol-v1'
   mapsWonA: number
   mapsWonB: number
   maps: MapScore[]

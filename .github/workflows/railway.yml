@@ -25,3 +25,8 @@ jobs:
       - run: node scripts/check_admin_entry.mjs
       - run: node scripts/check_admin_metrics.mjs
       - run: npx tsx scripts/check_demo_market.ts
+      - run: npx tsx scripts/check_challenge_search.ts
+      - run: node scripts/check_puzzle_delivery.mjs
+      - run: npx tsx scripts/check_lol_match.ts
+      - run: npx tsx scripts/check_lol_modes.ts
+      - run: npx tsx scripts/check_cup_registration.ts
