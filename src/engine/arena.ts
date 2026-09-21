@@ -1,0 +1,604 @@
+/**
+ * Putting a collection of cards on a server against a real club.
+ *
+ * The card mode does not get its own match engine. It borrows the one the
+ * career mode uses — veto, economy, round-by-round, the lot — by assembling a
+ * throwaway `GameState` whose managed club is the five cards you picked. That
+ * is why a well-linked 78-rated five can beat a pile of 85s: composition,
+ * calling and cohesion are read by the same code that reads them in a VCT
+ * season.
+ */
+import { seoulArenaPlayer } from './seoul2024'
+import { createNewGame } from './world'
+import { WORLD_TEAMS } from './teams'
+import { cupTeam } from './cupTeams'
+import { runVeto, simulateMatch } from './match'
+import { NEUTRAL } from './bonds'
+import { Rng, clamp } from './rng'
+import { BALANCE_VERSION, cardStrengths } from './balance'
+import {
+  cardById, chemistry, coachLiftAt, growthOf, isCoachCard, isPlayerCard, personOf, SQUAD_SLOTS, squadPaper,
+} from './cards'
+import type { Squad } from './cards'
+import type { PlayerCard } from './cards'
+import type { GameState, MatchResult, Player, Role } from './types'
+import { defaultTactics } from './types'
+import { emptyStats } from './types'
+
+/**
+ * A 彩卡 whose man is not in the 2026 world (Legend.person): the match gets
+ * him from the card, the way a Seoul card is played. Built on the world's
+ * record of whoever holds the handle today, the 2021 zeek played as the
+ * Canadian at Nightblood Gaming — and with no record at all he would not
+ * have played.
+ */
+function legendArenaPlayer(card: PlayerCard): Player | undefined {
+  const own = card.legend?.person
+  if (!own) return undefined
+  return {
+    id: own.id, ign: card.ign, realName: own.realName, nat: own.nat,
+    teamId: card.clubId, region: own.region, role: card.role, roles: [...card.roles],
+    age: own.age, ageEstimated: false, isIgl: card.isIgl, attrs: { ...card.attrs }, overall: card.rating,
+    potential: card.rating, form: 76, morale: 84, fatigue: 0, salary: 0, value: 0, contractYears: 0,
+    loyalty: 70, ambition: 70, agentPool: [...own.agents],
+    season: emptyStats(), career: emptyStats(), injuredUntil: 0, xp: {},
+  }
+}
+
+export { BALANCE_VERSION, GAP_CURVES, cardStrengths } from './balance'
+
+export const ARENA_TEAM = 'ARENA'
+
+/**
+ * What chemistry is worth, in rating points per point of chemistry.
+ *
+ * Read this together with the two other places chemistry lands: the bond table
+ * below (worth about ±4.5 at the extremes, via squadHarmony) and the teamwork
+ * and communication lift (about ±0.5). Routed through those two alone it was
+ * worth a third of a rating point, which made the links decorative and "pick
+ * the biggest numbers" the correct answer, so this direct term carries most of
+ * it. Measured, not guessed: a same-club five four to six points below an
+ * all-star five wins the head-to-head; nine points below, it loses.
+ */
+const CHEM_RATING = 0.12
+/**
+ * How much of the gap between two cards the match actually sees.
+ *
+ * The card mode plays its matches on the manager's engine, which was tuned
+ * for clubs: a four-point gap in overall is a real gap between two real
+ * rosters and it decides most series. Between two five-card hands it decided
+ * nearly all of them — measured 2026-09-03, after the title credit: PRX's five
+ * (93) beat G2's five (89) in 92% of bo3s, and the three strongest full clubs
+ * beat the rest of the top twelve nine times in ten. A collection game whose
+ * strongest hand wins nine in ten has no contest left in it once somebody
+ * completes that hand. So every seated card is pulled toward the middle by
+ * this factor — ability and chemistry alike, so their balance is unchanged —
+ * and the same four points is a favourite, not a formality.
+ * scripts/check_club_balance.ts is the measurement.
+ */
+const SPREAD = 0.5
+/**
+ * Attributes are squeezed less than the overall. At 0.5 the whole five a level
+ * up was worth two points of win rate and the best coach against the worst
+ * under two (scripts/check_coach_effect.ts, 2026-09-06) — 「每一个小数值」did
+ * nothing a player could see. 0.6 on the attributes keeps the overall, which
+ * is what decides most of a map, at 0.5, and lets the individual numbers show
+ * in the scoreboard. check_club_balance is the guard that the contest is kept.
+ */
+const SPREAD_ATTR = 0.6
+const PIVOT_ATTR = 70
+const PIVOT_OVERALL = 80
+const squeeze = (x: number, pivot: number, spread = SPREAD) =>
+  clamp(Math.round(pivot + (x - pivot) * spread), 1, 99)
+
+// Coach attributes retain fractions, unlike the legacy base-player squeeze.
+const coachStat = (value: number, level: number): number =>
+  clamp(PIVOT_ATTR + (value + level - PIVOT_ATTR) * SPREAD_ATTR, 1, 99)
+
+export interface ArenaSquad extends Squad {
+  /** display name for the assembled club */
+  name?: string
+  /** three-letter tag shown on the scoreboard */
+  tag?: string
+}
+
+/**
+ * Turn a card into the player who walks onto the server.
+ *
+ * The numbers come from the CARD, not from world.json. That distinction was
+ * missing and it quietly made the whole彩卡 tier cosmetic: a 96-rated 2024
+ * 首尔 FMVP ZmjjKK played at ZmjjKK's ordinary 85, because the clone was built
+ * from the world player and never read the card it came from. Levels had the
+ * same problem in miniature.
+ */
+function levelled(
+  p: Player, card: PlayerCard, misfit: boolean,
+): Player {
+  // The card's own levels are NOT here: this is the +0 card. Levels go on
+  // after the squeeze (seatSquad), so nothing rounds or caps them away.
+  const attrs = { ...card.attrs }
+  for (const k of Object.keys(attrs) as (keyof typeof attrs)[]) {
+    attrs[k] = clamp(Math.round(attrs[k]), 1, 99)
+  }
+  return {
+    ...p,
+    attrs,
+    // A card standing in a role it does not cover is worse at it. The engine
+    // already punishes the resulting hole in the composition; this is the
+    // separate cost of the individual being out of position.
+    overall: clamp(card.rating - (misfit ? 5 : 0), 1, 99),
+    traits: p.traits ? [...p.traits] : p.traits,
+    // cards arrive rested and confident: the card mode has no season to tire
+    // anyone out, and form drift would make the same squad a different squad
+    // between two matches for no reason the player could see
+    form: 76, morale: 84, fatigue: 0, injuredUntil: 0,
+    season: { maps: 0, rounds: 0, kills: 0, deaths: 0, assists: 0, firstKills: 0, firstDeaths: 0, damage: 0, clutches: 0, mvps: 0 },
+    career: { maps: 0, rounds: 0, kills: 0, deaths: 0, assists: 0, firstKills: 0, firstDeaths: 0, damage: 0, clutches: 0, mvps: 0 },
+    xp: {},
+  }
+}
+
+export interface Arena {
+  state: GameState
+  /** arena player id -> the card it came from, for reading match lines back */
+  cardOf: Record<string, string>
+}
+
+/**
+ * Build the throwaway world a card match is played in.
+ *
+ * Cloned under fresh ids rather than reused: your Gen.G cards can be drawn
+ * against Gen.G, and one `Player` object on both sides of the server would
+ * have had t3xture fragging himself.
+ */
+export function buildArena(
+  squad: ArenaSquad, level: (cardId: string) => number, seed: number,
+): Arena {
+  const state = createNewGame(WORLD_TEAMS[0].id, '卡组', seed, undefined, { cards: true })
+  const cardOf: Record<string, string> = {}
+  seatSquad(state, squad, level, ARENA_TEAM, 'A', cardOf)
+  state.myTeam = ARENA_TEAM
+  return { state, cardOf }
+}
+
+/** The other side of a player-versus-player tie. */
+export const ARENA_RIVAL = 'ARENAB'
+
+/**
+ * Put a squad on the board as a club.
+ *
+ * Pulled out of buildArena so a second one can be seated beside the first.
+ * The player ids it writes are synthetic and prefixed — A0…A4 for one side,
+ * B0…B4 for the other — which is what lets the SAME professional appear on
+ * both sides of a tie: two people can own the same card, and a shared Player
+ * object would have had t3xture fragging himself.
+ */
+function seatSquad(
+  state: GameState, squad: ArenaSquad, level: (cardId: string) => number,
+  teamId: string, prefix: string, cardOf: Record<string, string>,
+): void {
+  const chem = chemistry(squad)
+  const roster: string[] = []
+  // The squad builder will not let you seat a man twice, but a save written
+  // before that rule — or edited by hand — can still hold the ordinary Derke
+  // and the 2023 FNATIC Derke in the same five. The engine is the last word,
+  // so the second copy is dropped here and the side plays short.
+  const seated = new Set<string>()
+  const coachCard = squad.coach ? cardById(squad.coach) : undefined
+  const coachLevel = isCoachCard(coachCard) ? growthOf(level(coachCard.id)) : 0
+  const coaching = isCoachCard(coachCard)
+    ? { lift: coachLiftAt(coachCard, coachLevel), nerve: (coachCard.motivation + coachLevel - 70) * 0.35 }
+    : { lift: 0, nerve: 0 }
+
+  squad.slots.forEach((cardId, i) => {
+    if (!cardId) return
+    const card = cardById(cardId)
+    if (!isPlayerCard(card)) return
+    if (seated.has(personOf(card))) return
+    seated.add(personOf(card))
+    const src = seoulArenaPlayer(card) ?? legendArenaPlayer(card) ?? state.players[card.playerId]
+    if (!src) return
+    const id = `${prefix}${i}`
+    const misfit = !card.roles.includes(SQUAD_SLOTS[i])
+    const clone = levelled(src, card, misfit)
+    // Chemistry lands in two places, and it has to land hard.
+    //
+    // Routed through teamwork and communication alone it was worth about a
+    // third of a rating point: a same-club five on 86 lost to five scattered
+    // 93s by five matches in three hundred, which makes the links decorative
+    // and "pick the biggest numbers" the correct answer. Centred on 50 and
+    // worth ±6 rating, the same five now wins that comparison — a four-point
+    // gap in ability is recoverable by a squad that has actually played
+    // together, a fifteen-point one is not.
+    const lift = Math.round((chem.score - 50) * 0.14)
+    clone.attrs = {
+      ...clone.attrs,
+      teamwork: clamp(clone.attrs.teamwork + lift, 1, 99),
+      communication: clamp(clone.attrs.communication + lift, 1, 99),
+    }
+    clone.overall = clamp(Math.round(clone.overall + (chem.score - 50) * CHEM_RATING), 1, 99)
+    // and then the whole thing, chemistry included, comes in toward the middle
+    for (const k of Object.keys(clone.attrs) as (keyof typeof clone.attrs)[]) {
+      clone.attrs[k] = squeeze(clone.attrs[k], PIVOT_ATTR, SPREAD_ATTR)
+    }
+    clone.overall = squeeze(clone.overall, PIVOT_OVERALL)
+    // The levels go on last, scaled like everything else but never rounded
+    // and never capped before the scale. Added before the squeeze, a level
+    // on a 97 was rounded away or cut at 99 — 12 cards had levels that
+    // changed nothing in a match (scripts/check_power_growth.ts) — and the
+    // +0 card came out different from the one every balance check was run
+    // on. This preserves the uncoached +0 state, and every level is
+    // worth the same half a point of overall and 0.6 of an attribute,
+    // whichever card carries it. 181,728 simulated matches behind the
+    // choice: analysis/power_balance_recheck.md.
+    const growth = growthOf(level(cardId))
+    if (growth > 0) {
+      for (const k of Object.keys(clone.attrs) as (keyof typeof clone.attrs)[]) {
+        clone.attrs[k] = clamp(clone.attrs[k] + growth * SPREAD_ATTR, 1, 99)
+      }
+      clone.overall = clamp(clone.overall + growth * SPREAD, 1, 99)
+    }
+    // Base coaching and coach levels use the same paper lift and land after
+    // every base-card rounding/cap. Each ability point now reaches even a 97.
+    if (isCoachCard(coachCard)) {
+      for (const k of Object.keys(clone.attrs) as (keyof typeof clone.attrs)[]) {
+        const nerve = k === 'clutch' ? coaching.nerve : 0
+        clone.attrs[k] = clamp(clone.attrs[k] + (coaching.lift + nerve) * SPREAD_ATTR, 1, 99)
+      }
+      clone.overall = clamp(clone.overall + coaching.lift * SPREAD, 1, 99)
+    }
+    state.players[id] = { ...clone, id, teamId }
+    cardOf[id] = cardId
+    roster.push(id)
+  })
+
+  // Somebody is always calling.
+  //
+  // The match engine docks a side with no caller four points flat, and every
+  // club in the game is spared that: world.ts appoints the best deputy the
+  // moment an AI club loses its IGL, because 「a real club promotes someone
+  // within the week」. The arena never appointed anyone, so a five holding no
+  // card flagged IGL played every map with literally nobody calling — a
+  // sentence no club can serve — while the squad screen priced it at three
+  // points (NO_IGL_PENALTY). Reported as 「卡很好但是打不过别人」: the top five
+  // cards in the game are stars, none of them called, and they lost to
+  // ordinary golds who happened to own one.
+  //
+  // The stand-in is the best 指挥 attribute on the five, and he is a worse
+  // caller than a real one, which is the cost the screen already names.
+  if (roster.length && !roster.some((id) => state.players[id].isIgl)) {
+    const best = roster.slice().sort((a, b) => state.players[b].attrs.igl - state.players[a].attrs.igl)[0]
+    state.players[best] = { ...state.players[best], isIgl: true, iglSource: 'inferred' }
+  }
+
+  const mapPrefs: Record<string, number> = {}
+  for (const m of Object.keys(state.teams[WORLD_TEAMS[0].id].mapPrefs)) mapPrefs[m] = 50
+
+  state.teams[teamId] = {
+    id: teamId,
+    name: squad.name ?? '我的卡组',
+    tag: squad.tag ?? 'MINE',
+    region: 'LCS',
+    tier: 1,
+    league: '噜噜卡',
+    rating: 70,
+    budget: 0,
+    reputation: 60,
+    roster,
+    coach: isCoachCard(coachCard)
+      ? {
+        name: coachCard.name,
+        // the coach comes in toward the middle like the players do, and his
+        // levels go on after, a point a level before the scale
+        tactics: coachStat(coachCard.tactics, coachLevel),
+        development: coachStat(coachCard.development, coachLevel),
+        motivation: coachStat(coachCard.motivation, coachLevel),
+      }
+      : null,
+    facilities: 60,
+    starters: roster.slice(0, 5),
+    tactics: defaultTactics(),
+    sponsors: [],
+    mapPrefs,
+    seasonPrize: 0,
+    champPoints: 0,
+  }
+
+  // The bonds table is what squadHarmony averages. Seeding it from chemistry
+  // is what makes a same-club five feel like a team that has practised
+  // together, rather than five names that happen to share a logo.
+  state.bonds ??= {}
+  const bond = Math.round(NEUTRAL + (chem.score - 50) * 0.5)
+  for (let i = 0; i < roster.length; i++) {
+    for (let j = i + 1; j < roster.length; j++) {
+      const a = roster[i]
+      const b = roster[j]
+      state.bonds[a < b ? `${a}|${b}` : `${b}|${a}`] = clamp(bond, -60, 70)
+    }
+  }
+}
+
+export interface ArenaLine {
+  cardId: string
+  kills: number
+  deaths: number
+  assists: number
+  acs: number
+  maps: number
+  /** the role stats the report reads against the card's numbers */
+  firstKills?: number
+  clutches?: number
+  rounds?: number
+}
+
+/**
+ * The other side, when the other side is somebody's cards.
+ *
+ * A club opponent has no cards to show — it has a roster, and the report names
+ * it. A real player's five does, and「既然天梯打的是真人对战，应该把对方卡组
+ * 和我的卡组都摆出来」is right: it is the only screen where you find out what
+ * the person who just beat you was actually holding.
+ */
+export interface ArenaOpponent {
+  name: string
+  tag: string
+  slots: (string | null)[]
+  coach: string | null
+  levels: Record<string, number>
+  lines: ArenaLine[]
+  mvpCard: string | null
+}
+
+export interface ArenaResult {
+  win: boolean
+  mapsWon: number
+  mapsLost: number
+  /** the series as it was played: first to two, or first to three */
+  bo?: 1 | 3 | 5
+  /** the score curve it was played on (BALANCE_VERSION); absent on matches that do not use one */
+  balance?: number
+  result: MatchResult
+  /** per-card scoreboard, best first */
+  lines: ArenaLine[]
+  mvpCard: string | null
+  /** present only when the opponent was another player's five */
+  opp?: ArenaOpponent
+}
+
+/**
+ * Every man on a side up (or down) by the same amount, attributes and overall
+ * alike, so the side stays recognisably itself — the 大师 sharpening, the
+ * metal ladders' handicap uses it for individual player stats.
+ */
+function sharpen(state: GameState, teamId: string, by: number): void {
+  const team = state.teams[teamId]
+  for (const pid of team?.roster ?? []) {
+    const p = state.players[pid]
+    if (!p) continue
+    const attrs = { ...p.attrs }
+    for (const k of Object.keys(attrs) as (keyof typeof attrs)[]) {
+      attrs[k] = clamp(attrs[k] + by, 1, 99)
+    }
+    state.players[pid] = { ...p, attrs, overall: clamp(p.overall + by, 1, 99) }
+  }
+  if (team) team.rating = clamp(team.rating + by, 1, 99)
+}
+
+/**
+ * Ranked/cup strength comes from the same unrounded score as the UI.
+ * The first three points stay close; beyond that every point counts fully.
+ * Store round strength separately so player attributes still drive scoreboards,
+ * and career-only IGL/chemistry/composition bonuses cannot count a second time.
+ */
+function honourGap(
+  state: GameState, a: string, b: string, scoreA: number, scoreB: number,
+  version: number = BALANCE_VERSION,
+): void {
+  const [sa, sb] = cardStrengths(scoreA, scoreB, version)
+  state.cardMatchStrength = { [a]: sa, [b]: sb }
+}
+
+/** Play one card-mode match against a real club and read the scoreboard back. */
+export function playArenaMatch(
+  squad: ArenaSquad, level: (cardId: string) => number, opponentId: string,
+  bo: 1 | 3 | 5, seed: number, oppBump = 0,
+  /** the score curve — see BALANCE_VERSION */
+  balance: number = BALANCE_VERSION,
+): ArenaResult {
+  const { state, cardOf } = buildArena(squad, level, seed)
+
+  // Past 大师 the ladder has no ceiling and the world's 78 clubs stop at 89,
+  // so the top sides are sharpened rather than replaced: every attribute up by
+  // the same amount, which keeps them recognisably themselves. A stopgap until
+  // the arena can put another player's saved five across the net.
+  //
+  // The same dial runs backwards for the metal ladders. The world's clubs
+  // start at 80 and a bronze five seats around 72, so an unscaled 铜卡赛 is a
+  // wall rather than a ladder; the club that turns up is the same club, a
+  // little further off its best. It used to ignore a negative number
+  // entirely, which quietly made every league play the open ladder.
+  if (oppBump !== 0) sharpen(state, opponentId, oppBump)
+  const opponent = WORLD_TEAMS.find(t => t.id === opponentId)
+  if (!opponent) throw new Error('天梯对手不存在')
+  honourGap(state, ARENA_TEAM, opponentId, squadPaper(squad, level).score, opponent.rating + oppBump, balance)
+
+  const rng = new Rng(seed ^ 0x1d0c)
+  const result = simulateMatch(state, ARENA_TEAM, opponentId, bo, rng)
+
+  return { ...readResult(result, cardOf), bo, balance, result }
+}
+
+/** Both sides of a cup use the same card seating and score curve as ranked PvP. */
+export function buildCupArena(
+  squad: ArenaSquad, level: (cardId: string) => number, opponentId: string, seed: number,
+  /** points the club plays below its paper — a rotation side, printed on the bracket (gacha.ts CUP_EASE_MAX) */
+  ease = 0,
+  balance: number = BALANCE_VERSION,
+): Arena {
+  const club = cupTeam(opponentId)
+  if (!club) throw new Error('杯赛对手不存在')
+  const arena = buildArena(squad, level, seed)
+  seatSquad(arena.state, { ...club.squad, name: club.name, tag: club.tag }, () => 0, opponentId, 'B', {})
+  honourGap(arena.state, ARENA_TEAM, opponentId, squadPaper(squad, level).score, squadPaper(club.squad).score - ease, balance)
+  return arena
+}
+
+/** Same score-based round strength as ranked card-vs-card play, on both sides. */
+export function playCupMatch(
+  squad: ArenaSquad, level: (cardId: string) => number, opponentId: string,
+  bo: 1 | 3 | 5, seed: number, ease = 0,
+  /** the curve this bracket was entered on; a bracket without one is version 1 */
+  balance: number = BALANCE_VERSION,
+): ArenaResult {
+  const { state, cardOf } = buildCupArena(squad, level, opponentId, seed, ease, balance)
+  const result = simulateMatch(state, ARENA_TEAM, opponentId, bo, new Rng(seed ^ 0x5b1d))
+  return { ...readResult(result, cardOf), bo, balance, result }
+}
+
+/**
+ * The scoreboard, from the engine's per-player lines back to cards.
+ *
+ * Only MY side's players are in `cardOf`, so the rival's rows fall out on
+ * their own — the report screen is about the five you picked.
+ */
+/** One side's scoreboard, summed across the maps and averaged where it should be. */
+function linesFor(
+  result: MatchResult, cardOf: Record<string, string>,
+): { lines: ArenaLine[]; mvpCard: string | null } {
+  const totals: Record<string, Omit<ArenaLine, 'cardId'>> = {}
+  for (const m of result.maps) {
+    for (const [pid, l] of Object.entries(m.lines)) {
+      const cardId = cardOf[pid]
+      if (!cardId) continue
+      const t = (totals[cardId] ??= {
+        kills: 0, deaths: 0, assists: 0, acs: 0, maps: 0, firstKills: 0, clutches: 0, rounds: 0,
+      })
+      t.kills += l.kills
+      t.deaths += l.deaths
+      t.assists += l.assists
+      t.acs += l.acs
+      t.maps++
+      t.firstKills! += l.firstKills
+      t.clutches! += l.clutches
+      t.rounds! += l.rounds
+    }
+  }
+  return {
+    lines: Object.entries(totals)
+      .map(([cardId, t]) => ({ cardId, ...t, acs: t.maps ? Math.round(t.acs / t.maps) : 0 }))
+      .sort((a, b) => b.acs - a.acs),
+    // the engine names one MVP for the whole match; it belongs to whichever
+    // side can resolve it, and the other side's block simply has none
+    mvpCard: result.mvp ? cardOf[result.mvp] ?? null : null,
+  }
+}
+
+function readResult(
+  result: MatchResult, cardOf: Record<string, string>,
+): Omit<ArenaResult, 'result' | 'opp'> {
+  return {
+    win: result.mapsWonA > result.mapsWonB,
+    mapsWon: result.mapsWonA,
+    mapsLost: result.mapsWonB,
+    ...linesFor(result, cardOf),
+  }
+}
+
+/**
+ * A real player's five, as the ladder puts it in front of you.
+ *
+ * Everything needed to rebuild their side and nothing that identifies them:
+ * card ids, which every client can resolve on its own, and the upgrade level
+ * each of those cards is at. No account id, no state, no way back to a
+ * password.
+ */
+export interface RivalSquad {
+  name: string
+  tag: string
+  slots: (string | null)[]
+  coach: string | null
+  /** upgrade level per card id, absent meaning zero */
+  levels: Record<string, number>
+  div: number
+  points: number
+}
+
+/**
+ * Two squads, one tie.
+ *
+ * The 78 real clubs stop at 89, so a ladder with no ceiling runs out of
+ * opposition in about a week — and sharpening the world's clubs to cover for
+ * it was always a stopgap. Other people's saved fives do not run out and do
+ * not need inventing: they are already on the server, they get better as the
+ * people who own them get better, and beating one is worth more than beating
+ * a club that was handed +7 to every attribute.
+ *
+ * Asynchronous by design. Nothing is live, nobody has to be online, and the
+ * result is a simulation of a snapshot — the same engine that plays every
+ * other match in this game.
+ */
+export function playRivalMatch(
+  mine: ArenaSquad, level: (cardId: string) => number,
+  rival: RivalSquad, bo: 1 | 3 | 5, seed: number,
+  /** a fixed map pool — 首尔征途 plays the seven maps of 2024; absent, today's pool */
+  pool?: string[],
+  /**
+   * use the displayed-score curve — the ladder, the friend room, the 全服杯;
+   * `true` is today's BALANCE_VERSION, a number is the version a tournament
+   * started on. 首尔征途 and the historical challenges pass nothing and keep
+   * their original rules.
+   */
+  widen: boolean | number = false,
+  /** Cup registration freezes the scored input; never read a later balance sheet. */
+  frozenScores?: readonly [number, number],
+): ArenaResult {
+  const state = createNewGame(WORLD_TEAMS[0].id, '卡组', seed, undefined, { cards: true })
+  const cardOf: Record<string, string> = {}
+  // theirs is kept too — it used to be thrown away, which is why the report
+  // could only ever show one of the two sides
+  const theirs: Record<string, string> = {}
+  seatSquad(state, mine, level, ARENA_TEAM, 'A', cardOf)
+  seatSquad(
+    state,
+    { slots: rival.slots, coach: rival.coach, name: rival.name, tag: rival.tag },
+    (id) => rival.levels[id] ?? 0,
+    ARENA_RIVAL, 'B', theirs,
+  )
+  state.myTeam = ARENA_TEAM
+  const balance = widen === true ? BALANCE_VERSION : widen || undefined
+  if (frozenScores && !frozenScores.every(Number.isFinite)) throw new Error('Invalid frozen cup scores')
+  if (balance) honourGap(state, ARENA_TEAM, ARENA_RIVAL,
+    frozenScores?.[0] ?? squadPaper(mine, level).score,
+    frozenScores?.[1] ?? squadPaper(rival, id => rival.levels[id] ?? 0).score, balance)
+
+  const rng = new Rng(seed ^ 0x5b1d)
+  if (pool) {
+    // vetoed on a stream of its own; the match then skips its own veto and plays these maps.
+    // Dealt in a fresh order each time: with every preference level, runVeto leans on list
+    // position, and the alphabetical 2024 pool sent Sunset to 7% of maps against Haven's 20%.
+    const vetoRng = new Rng(seed ^ 0x9e70)
+    const veto = runVeto(state, ARENA_TEAM, ARENA_RIVAL, bo, vetoRng.shuffle(pool.slice()), vetoRng)
+    state.vetoPlan = { fixtureId: 'pool', maps: veto.maps, log: veto.log }
+  }
+  const result = simulateMatch(state, ARENA_TEAM, ARENA_RIVAL, bo, rng)
+  return {
+    ...readResult(result, cardOf),
+    bo, balance,
+    result,
+    opp: {
+      name: rival.name, tag: rival.tag,
+      slots: rival.slots, coach: rival.coach, levels: rival.levels,
+      ...linesFor(result, theirs),
+    },
+  }
+}
+
+/** The roles a squad is still missing, for the builder's nudge line. */
+export function roleGaps(squad: Squad): Role[] {
+  const covered = new Set<Role>()
+  for (const id of squad.slots) {
+    const c = id ? cardById(id) : undefined
+    if (isPlayerCard(c)) for (const r of c.roles) covered.add(r)
+  }
+  return (['上单', '打野', '中单', '下路'] as Role[]).filter((r) => !covered.has(r))
+}

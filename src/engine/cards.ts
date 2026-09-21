@@ -1,0 +1,684 @@
+import { sameClubLineage } from './teamLineage'
+/**
+ * The card layer: the same real people, dealt as a collection instead of a
+ * roster.
+ *
+ * Nothing here invents anybody. A card IS a `Player` (or a `Coach`) out of
+ * world.json — the photograph, the flag, the numbers and the trophy cabinet
+ * all belong to a real professional, which is the whole premise of the game
+ * and the reason the pack opening is worth watching. See engine/gacha.ts for
+ * what happens once you own one.
+ */
+import type { SeoulEntry } from './seoul2024'
+import { natCountry } from './nat'
+import { WORLD_PLAYERS } from './world'
+import { WORLD_TEAMS, WORLD_ANALYSTS } from './teams'
+import { DOSSIER, coachDossier, faceUrl, legendPhoto } from './dossier'
+import { LEGENDS } from './legends'
+// which players each coach actually coached: a staff role at a club in months the
+// player was on it — scripts/build_coached.py, off vlr.gg careers and Liquipedia tenure
+import COACHED_JSON from '../data/coached.json'
+import type { Legend } from './legends'
+import { clamp } from './rng'
+import type { Attrs, Coach, Region, Role } from './types'
+
+export type Rarity = 'mythic' | 'gold' | 'silver' | 'bronze'
+
+export const RARITY_CN: Record<Rarity, string> = {
+  mythic: '彩卡', gold: '金卡', silver: '银卡', bronze: '铜卡',
+}
+
+/** worst to best, for anywhere that has to compare two metals */
+export const RARITY_ORDER: Rarity[] = ['bronze', 'silver', 'gold', 'mythic']
+export const rarityRank = (r: Rarity): number => RARITY_ORDER.indexOf(r)
+
+/**
+ * Where the three metals sit.
+ *
+ * Picked off the real distribution rather than off a round number: 84 puts 91
+ * of the 518 professionals in gold (17.6%), which is roughly "a starter at a
+ * VCT club having a good year". Move it to 86 and half the partnered league
+ * turns silver, which reads wrong to anyone who watches the games.
+ */
+export const GOLD_AT = 84
+export const SILVER_AT = 72
+
+/**
+ * The metal a rating earns. Never 彩卡 — that tier is not something a number
+ * can qualify for, it is awarded to a specific night by engine/legends.ts.
+ */
+export const rarityOf = (rating: number): Rarity =>
+  rating >= GOLD_AT ? 'gold' : rating >= SILVER_AT ? 'silver' : 'bronze'
+
+/** Head coaches rate lower than players across the board, so they get their own cut. */
+export const coachRarityOf = (rating: number): Rarity =>
+  rating >= 78 ? 'gold' : rating >= 68 ? 'silver' : 'bronze'
+
+export interface PlayerCard {
+  kind: 'player'
+  event?: 'seoul-2024'
+  seoul?: SeoulEntry
+  id: string
+  /** the world.json player id this card is a face of */
+  playerId: string
+  /**
+   * Set on a彩卡: the night this version of him is.
+   *
+   * A legend keeps the club he played it FOR, not the one he is at now, so the
+   * chemistry graph reads 2023 FNATIC rather than wherever he ended up.
+   */
+  legend?: Legend
+  ign: string
+  realName: string | null
+  /** two-letter country code, lowercased, from vlr.gg */
+  nat: string | null
+  /** photograph filename under /faces, when vlr.gg has one */
+  face: string | null
+  region: Region
+  /** the club they play for in the 2026 season; null for a free agent */
+  clubId: string | null
+  clubTag: string | null
+  role: Role
+  roles: Role[]
+  isIgl: boolean
+  age: number
+  ageEstimated?: boolean
+  ratingEstimated?: boolean
+  attrs: Attrs
+  rating: number
+  rarity: Rarity
+}
+
+export interface CoachCard {
+  kind: 'coach'
+  id: string
+  /** set on a彩卡: the night this version of him is — see PlayerCard.legend */
+  legend?: Legend
+  name: string
+  /** real name and nationality, from the club's staff listing on vlr.gg */
+  realName: string | null
+  nat: string | null
+  face: string | null
+  /** the club they coach, or the club an analyst was hired away from */
+  clubId: string | null
+  clubTag: string | null
+  region: Region | null
+  tactics: number
+  development: number
+  motivation: number
+  rating: number
+  rarity: Rarity
+  /** analysts are coaches with a speciality instead of a club */
+  spec?: string
+}
+
+export type Card = PlayerCard | CoachCard
+
+/**
+ * A coach's number.
+ *
+ * The same weighted ability drives the card face and the arena's team lift.
+ * Only the face is rounded; an attribute point must survive into a match.
+ */
+const coachAbility = (c: { tactics: number; development: number; motivation: number }): number =>
+  c.tactics * 0.45 + c.development * 0.3 + c.motivation * 0.25
+export const coachRating = (c: { tactics: number; development: number; motivation: number }): number =>
+  Math.round(coachAbility(c))
+
+const teamById = new Map(WORLD_TEAMS.map((t) => [t.id, t]))
+
+function buildPlayerCards(): PlayerCard[] {
+  return WORLD_PLAYERS.map((p) => {
+    const d = DOSSIER.players[p.id]
+    const club = p.teamId ? teamById.get(p.teamId) : undefined
+    return {
+      kind: 'player' as const,
+      id: `p:${p.id}`,
+      playerId: p.id,
+      ign: p.ign,
+      // the scrape fills in what world.json was missing: 178 players carried no
+      // nationality at all, and a card with no flag on it is half a card
+      realName: d?.real ?? p.realName ?? null,
+      nat: (d?.nat ?? p.nat) || null,
+      face: d?.img ? faceUrl(d.img, d.v) : null,
+      region: p.region as Region,
+      clubId: p.teamId ?? null,
+      clubTag: club?.tag ?? null,
+      role: p.role as Role,
+      roles: (p.roles as Role[] | undefined)?.length ? (p.roles as Role[]) : [p.role as Role],
+      isIgl: !!p.isIgl,
+      age: p.age,
+      ageEstimated: p.ageEstimated,
+      ratingEstimated: (p as typeof p & { ratingEstimated?: boolean }).ratingEstimated,
+      attrs: p.attrs,
+      rating: p.overall,
+      rarity: rarityOf(p.overall),
+    }
+  })
+}
+
+function buildCoachCards(): CoachCard[] {
+  const out: CoachCard[] = []
+  const seen = new Set<string>()
+  for (const t of WORLD_TEAMS) {
+    const c = t.coach as Coach | undefined
+    if (!c?.name || seen.has(c.name)) continue
+    seen.add(c.name)
+    const rating = coachRating(c)
+    const d = coachDossier(c.name)
+    out.push({
+      kind: 'coach', id: `c:${c.name}`, name: c.name,
+      realName: d?.real ?? null,
+      nat: d?.nat ?? null,
+      face: d?.img ? faceUrl(d.img, d.v) : null,
+      clubId: t.id, clubTag: t.tag, region: t.region as Region,
+      tactics: c.tactics, development: c.development, motivation: c.motivation,
+      rating, rarity: coachRarityOf(rating),
+    })
+  }
+  // the five real analysts are cards too — they coach a different way, and
+  // there are few enough of them to be worth chasing
+  for (const a of WORLD_ANALYSTS as { name: string; from: string; tactics: number; development: number; motivation: number; spec: string }[]) {
+    if (seen.has(a.name)) continue
+    seen.add(a.name)
+    const club = WORLD_TEAMS.find((t) => t.name === a.from || t.tag === a.from)
+    const rating = coachRating(a)
+    const d = coachDossier(a.name)
+    out.push({
+      kind: 'coach', id: `c:${a.name}`, name: a.name,
+      realName: d?.real ?? null,
+      nat: d?.nat ?? null,
+      face: d?.img ? faceUrl(d.img, d.v) : null,
+      clubId: club?.id ?? null, clubTag: club?.tag ?? a.from,
+      region: (club?.region as Region) ?? null,
+      tactics: a.tactics, development: a.development, motivation: a.motivation,
+      rating, rarity: coachRarityOf(rating), spec: a.spec,
+    })
+  }
+  return out
+}
+
+/**
+ * Where a legend's numbers come from.
+ *
+ * The rating is authored — it is a claim about a night, and Boaster's 62 in
+ * 2026 says nothing about the two majors he called in 2023. The attributes are
+ * not authored: they are his own, moved by the same amount the rating moved,
+ * so the shape of the player survives. A duelist stays a duelist.
+ */
+/** How far above his ordinary card a彩卡 of the same man always sits. */
+export const LEGEND_EDGE = 2
+
+function legendAttrs(base: Attrs, delta: number): Attrs {
+  const out = { ...base }
+  for (const k of Object.keys(out) as (keyof Attrs)[]) {
+    out[k] = clamp(Math.round(out[k] + delta), 1, 99)
+  }
+  return out
+}
+
+function buildLegendCards(players: PlayerCard[]): PlayerCard[] {
+  const byIgn = new Map(players.map((c) => [c.ign.toLowerCase(), c]))
+  // a legend may name him by the alias vlr prints (world.ts `handle`)
+  for (const p of WORLD_PLAYERS) {
+    const c = p.handle ? players.find((x) => x.playerId === p.id) : undefined
+    if (c && !byIgn.has(p.handle!.toLowerCase())) byIgn.set(p.handle!.toLowerCase(), c)
+  }
+  const out: PlayerCard[] = []
+  for (const l of LEGENDS) {
+    if (l.coach) continue                 // his card is a coach card, below
+    const photo = legendPhoto(l.id)
+    // the handle in world.json is another man: this card is built on his own record
+    const own = l.person
+    if (own) {
+      out.push({
+        kind: 'player', id: l.id, playerId: own.id, legend: l,
+        ign: l.ign, realName: own.realName, nat: own.nat,
+        face: photo ? faceUrl(photo.img, photo.v) : null,
+        region: own.region, clubId: l.clubId, clubTag: l.clubTag,
+        role: l.roles?.[0] ?? own.roles[0], roles: l.roles ?? own.roles,
+        isIgl: l.isIgl ?? false, age: own.age,
+        attrs: { ...legendAttrs(own.attrs, l.rating - own.overall), ...l.attrs },
+        rating: l.rating, rarity: 'mythic',
+      })
+      continue
+    }
+    const base = byIgn.get(l.ign.toLowerCase())
+    // A legend with no live player behind it would be a fabricated person,
+    // which this project does not have. Skipped loudly rather than invented.
+    if (!base) {
+      console.warn(`legend ${l.id}: no player called ${l.ign} in world.json`)
+      continue
+    }
+    // the picture from that night (above), where Liquipedia has one; otherwise
+    // the ordinary studio portrait rather than nothing
+    // A night is never worth less than the everyday card of the same man.
+    // The authored number was written against the ordinary rating of its
+    // day; ratings move (CHICHOO reached 94 on 2026-09-03 while his 2024
+    // Seoul card still said 93), so the彩卡 floors at the ordinary card
+    // plus two, and the authored number only ever lifts it further.
+    const rating = Math.min(99, Math.max(l.rating, base.rating + LEGEND_EDGE))
+    out.push({
+      ...base,
+      id: l.id,
+      legend: l,
+      clubId: l.clubId,
+      clubTag: l.clubTag,
+      face: photo ? faceUrl(photo.img, photo.v) : base.face,
+      // what he played that night, if it is not what he plays now
+      role: l.roles?.[0] ?? base.role,
+      roles: l.roles ?? base.roles,
+      isIgl: l.isIgl ?? base.isIgl,
+      // the shift keeps the shape of the player; the override says what the
+      // night is actually remembered for
+      attrs: { ...legendAttrs(base.attrs, rating - base.rating), ...l.attrs },
+      rating,
+      rarity: 'mythic',
+    })
+  }
+  return out
+}
+
+/**
+ * One card per real player, before the彩卡 versions are added.
+ *
+ * Anything listing PEOPLE wants this; anything listing CARDS wants
+ * PLAYER_CARDS. The dossier used the latter and so printed everyone with a
+ * legend twice — two Derkes, two Boasters — and counted 538 players out of 518.
+ */
+/**
+ * The彩卡 of people who were in the coaching booth that night.
+ *
+ * Same idea as a player legend and a different card type: three numbers rather
+ * than eight attributes, the club he did it FOR, and the photograph from the
+ * night. He does not need an ordinary card to exist first — only head coaches
+ * get one of those, and the man who won Champions 2024 is an assistant now.
+ */
+function buildLegendCoachCards(): CoachCard[] {
+  const out: CoachCard[] = []
+  for (const l of LEGENDS) {
+    if (!l.coach) continue
+    const d = coachDossier(l.ign)
+    const photo = legendPhoto(l.id)
+    const club = teamById.get(l.clubId)
+    out.push({
+      kind: 'coach', id: l.id, legend: l, name: l.ign,
+      realName: d?.real ?? null,
+      nat: d?.nat ?? null,
+      face: photo ? faceUrl(photo.img, photo.v) : (d?.img ? faceUrl(d.img, d.v) : null),
+      clubId: l.clubId, clubTag: l.clubTag,
+      region: (club?.region as Region) ?? null,
+      tactics: l.coach.tactics, development: l.coach.development, motivation: l.coach.motivation,
+      rating: Math.min(99, Math.max(l.rating, coachRating(l.coach))),
+      rarity: 'mythic',
+    })
+  }
+  return out
+}
+
+export const BASE_PLAYER_CARDS: PlayerCard[] = buildPlayerCards()
+export const LEGEND_CARDS: PlayerCard[] = buildLegendCards(BASE_PLAYER_CARDS)
+export const PLAYER_CARDS: PlayerCard[] = [...BASE_PLAYER_CARDS, ...LEGEND_CARDS]
+export const SEOUL_CARDS: PlayerCard[] = []
+export const LEGEND_COACH_CARDS: CoachCard[] = buildLegendCoachCards()
+export const COACH_CARDS: CoachCard[] = [...buildCoachCards(), ...LEGEND_COACH_CARDS]
+export const ALL_CARDS: Card[] = [...PLAYER_CARDS, ...SEOUL_CARDS, ...COACH_CARDS]
+
+const byId = new Map(ALL_CARDS.map((c) => [c.id, c]))
+const COACHED: Map<string, Set<string>> = new Map(
+  Object.entries(COACHED_JSON as Record<string, string[][]>).map(([coach, rows]) => [coach, new Set(rows.map((r) => r[0]))]),
+)
+export const cardById = (id: string): Card | undefined => byId.get(id)
+
+export const isPlayerCard = (c: Card | undefined): c is PlayerCard => c?.kind === 'player'
+/** The night a card is, whichever kind of card it is. */
+export const legendOf = (c: Card | undefined): Legend | undefined => c?.legend
+export const isCoachCard = (c: Card | undefined): c is CoachCard => c?.kind === 'coach'
+
+/** Display name, whichever kind of card it is. */
+export const cardName = (c: Card): string => (c.kind === 'player' ? c.ign : c.name)
+
+/**
+ * Who a card actually IS, as opposed to which card it is.
+ *
+ * A legend and the ordinary card share a person: "2023 双冠 FNATIC Derke" and
+ * "Derke, Team Vitality" are the same man, and a five containing both is a
+ * five of four people. Anything picking a squad compares this, not the id.
+ */
+export const personOf = (c: Card): string =>
+  c.kind === 'player' ? c.playerId : `c:${c.name}`
+
+// ---------------------------------------------------------------- levels
+
+/**
+ * What a duplicate is worth.
+ *
+ * Five levels, +1 rating each, so a bronze you keep pulling can climb into
+ * silver and a gold can reach 89 — enough for the card to be worth keeping,
+ * short of turning the collection into a treadmill. The cost curve is steep at
+ * the top so the last level is a decision, not a formality.
+ *
+ * Deliberately one currency and one pile of duplicates, not a third resource:
+ * a spare copy either goes into the card it belongs to or gets sold for coins,
+ * and those are the only two things it can ever do.
+ */
+export const MAX_LEVEL = 5
+export const DUPES_FOR = [1, 1, 2, 3, 5]
+export const COINS_FOR = [400, 900, 2000, 4200, 9000]
+
+/** What a spare copy sells for. */
+export const SALVAGE: Record<Rarity, number> = {
+  // a spare彩卡 is worth more than a pack of anything else, and still nobody
+  // sane sells one
+  mythic: 4000, gold: 700, silver: 200, bronze: 60,
+}
+
+/**
+ * The card's rating after its levels, in ability units — the number the
+ * rules read: squad rating, the cup draw, the auto-builder's ordering.
+ *
+ * Not capped at 99 any more (2026-09-13). It was, and a 97 levelled five
+ * times read 99 from +2 on, so the last three levels were paid for and
+ * thrown away: 12 of the 643 player cards had at least one level that did
+ * nothing at all in a match. The card FACE keeps showing the base rating
+ * with the level beside it — nothing a player sees says 102 — and what the
+ * levels are worth is shown as 战力 (cardPower) instead.
+ */
+export const ratingAt = (base: number, level: number): number =>
+  base + growthOf(level)
+
+/** the levels a card has actually earned, 0–MAX_LEVEL */
+export const growthOf = (level: number): number => Math.max(0, Math.min(MAX_LEVEL, level))
+
+/** one ability point is a hundred 战力 */
+export const POWER_PER_POINT = 100
+/** what a level adds to a player card's 战力 */
+export const POWER_PER_LEVEL = POWER_PER_POINT
+
+/**
+ *战力: the card's strength after levelling, as an integer the player can
+ * watch move. 100 × (base rating + levels), player or coach: a coach's
+ * levels reach the match too (COACH_LEVEL_LIFT), so the number moves with
+ * them the same way.
+ */
+export const cardPower = (card: Card, level: number): number =>
+  POWER_PER_POINT * (card.rating + growthOf(level))
+
+/** a full five's 阵容战力 per point of paper score: five cards at a hundred a point */
+export const POWER_PER_SQUAD_POINT = POWER_PER_POINT * 5
+
+/** Stable display rounding, shared by total power and its component labels. */
+export const squadPowerPoints = (score: number): number =>
+  // Weighted abilities can turn an exact x.5 into x.49999999999999. The
+  // tolerance is far below the smallest meaningful displayed increment.
+  Math.round(score * POWER_PER_SQUAD_POINT + 1e-8)
+
+// ---------------------------------------------------------------- squad
+
+export const SQUAD_SLOTS: Role[] = ['上单', '打野', '中单', '下路', '辅助']
+
+export interface Squad {
+  /** five player card ids, positionally matched to SQUAD_SLOTS */
+  slots: (string | null)[]
+  coach: string | null
+}
+
+export const emptySquad = (): Squad => ({ slots: [null, null, null, null, null], coach: null })
+
+export interface ChemLink {
+  a: number
+  b: number
+  /** why these two get on: same club beats same country beats same region */
+  why: 'club' | 'nat' | 'region'
+  inherited?: boolean
+  value: number
+}
+
+export interface ChemReport {
+  /** 0-100, what the squad screen shows and what the match engine is handed */
+  score: number
+  links: ChemLink[]
+  /** slots whose card does not cover the role it is standing in */
+  misfits: number[]
+  /** true when nobody in the five is a real in-game leader */
+  noIgl: boolean
+  coachBonus: number
+  /**
+   * The coach's side of the graph, one per player he adds anything for, with
+   * the strongest reason. Only the player pairs used to be listed, so a coach
+   * worth +3 to the 2023 EG Demon1 showed nothing at all next to Potter —
+   * 「Demon1彩卡和Potter没有默契」.
+   */
+  coachLinks: CoachLink[]
+  notes: string[]
+}
+
+export interface CoachLink {
+  slot: number
+  /** club: he coaches this club (or did, the night a彩卡 is); coached: he has
+   * coached this man before; region: the same region and nothing more */
+  why: 'club' | 'coached' | 'region'
+  value: number
+}
+
+const LINK_VALUE = { club: 3, nat: 2, region: 1 } as const
+
+/**
+ * How well a five would actually get along.
+ *
+ * The links are the real ones the sport has: people who play for the same
+ * club, people from the same country, people from the same region. It is the
+ * one system in the card mode that rewards knowing VALORANT rather than
+ * knowing which numbers are biggest — a 78-rated Gen.G five with a Korean
+ * coach beats a scattered pile of 85s, and that is the whole point.
+ */
+export function chemistry(squad: Squad): ChemReport {
+  const cards = squad.slots.map((id) => (id ? cardById(id) : undefined))
+  const links: ChemLink[] = []
+  const notes: string[] = []
+  let raw = 0
+
+  for (let i = 0; i < cards.length; i++) {
+    for (let j = i + 1; j < cards.length; j++) {
+      const a = cards[i]
+      const b = cards[j]
+      if (!isPlayerCard(a) || !isPlayerCard(b)) continue
+      let why: ChemLink['why'] | null = null
+      if (sameClubLineage(a, b)) why = 'club'
+      // by country, not by code: 中国台湾 / 中国香港 / 中国澳门 and the mainland
+      // are one nationality here, as they are everywhere else in the game —
+      // the group noticed a CN–TW pair was scored as strangers
+      else if (a.nat && natCountry(a.nat) === natCountry(b.nat)) why = 'nat'
+      else if (a.region === b.region) why = 'region'
+      if (!why) continue
+      const value = LINK_VALUE[why]
+      links.push({ a: i, b: j, why, value, inherited: why === 'club' && (a.clubId !== b.clubId || a.clubTag !== b.clubTag) })
+      raw += value
+    }
+  }
+
+  // A 彩卡 brings its own standing.
+  //
+  // The links are clubs, countries and regions, and the 25 legends are spread
+  // over fourteen clubs and fourteen passports — two or three of them are
+  // strangers by construction, and a card records the night, not the man's
+  // club now, so aspas' LOUD 2022 does not even meet his own MIBR side. The
+  // rarest thing an account can hold was therefore a downgrade to field:
+  // three legends and the best fillers money can buy came out at 默契 10 and
+  // lost to an ordinary same-club five of golds two games in three.
+  //
+  // Four a legend, measured against a same-club five of golds and the twelve
+  // clubs a 钻石 ladder draws from: three legends reach 默契 46 and win 82.9%
+  // where the club five wins 83.1%, and five of them — the deepest hand the
+  // game can deal — reach 66 and 84.0%. So the rarest cards in the game are
+  // worth fielding and are still not the ceiling. Six was tried first and put
+  // three legends level with the club five and five of them four points clear
+  // of it, which is the wrong way round: a legend plays with anybody, but five
+  // people who have actually practised together should still be better than a
+  // pile of names.
+  //
+  // Two since 2026-09-10 (the owner's call, after a second measurement in
+  // analysis/mythic_chem_summary.txt): four had five legends at 默契 66, over
+  // the club five, and a hand of legends was winning on names again. At two,
+  // five of them sit near 37 and three near 27 — fieldable, not finished.
+  const MYTHIC_CHEM = 2
+  raw += cards.filter((c) => isPlayerCard(c) && c.rarity === 'mythic').length * MYTHIC_CHEM
+
+  const coach = squad.coach ? cardById(squad.coach) : undefined
+  let coachBonus = 0
+  const coachLinks: CoachLink[] = []
+  if (isCoachCard(coach)) {
+    const players = cards.filter(isPlayerCard)
+    const sameClub = players.filter((p) => sameClubLineage(p, coach)).length
+    // Men this coach has actually coached before, somewhere: a staff role at a
+    // club in months the player was on it. Not everyone who has ever passed
+    // through a club he coaches — 「只有真的和那位教练同时期呆过的人才有默契
+    // 值，而不是在同一个俱乐部过就有」. Worth less than the men he coaches now,
+    // and a man he coaches now is never counted a second time here.
+    const coachedBefore = players.filter((p) => !(sameClubLineage(p, coach))
+      && !!COACHED.get(coach.name)?.has(p.playerId)).length
+    const sameRegion = players.filter((p) => p.region === coach.region).length
+    coachBonus = sameClub * 2 + coachedBefore + sameRegion
+    cards.forEach((p, slot) => {
+      if (!isPlayerCard(p)) return
+      const club = !!(sameClubLineage(p, coach))
+      const before = !club && !!COACHED.get(coach.name)?.has(p.playerId)
+      const region = p.region === coach.region
+      const value = (club ? 2 : 0) + (before ? 1 : 0) + (region ? 1 : 0)
+      if (value) coachLinks.push({ slot, why: club ? 'club' : before ? 'coached' : 'region', value })
+    })
+    if (sameClub >= 2) notes.push(`${coach.name} 与 ${sameClub} 名选手触发同队／队伍传承羁绊`)
+    if (coachedBefore > 0) notes.push(`${coach.name} 以前还带过其中 ${coachedBefore} 人`)
+  }
+
+  const misfits: number[] = []
+  cards.forEach((c, i) => {
+    if (!isPlayerCard(c)) return
+    if (!c.roles.includes(SQUAD_SLOTS[i])) misfits.push(i)
+  })
+
+  const noIgl = !cards.some((c) => isPlayerCard(c) && c.isIgl)
+
+  // 30 is a perfect ten links of the same club, which no real collection will
+  // reach; 11 is the coach ceiling. Normalising against the practical maximum
+  // instead would make an ordinary squad look finished.
+  let score = Math.round(((raw + coachBonus) / 41) * 100)
+  score = Math.max(0, Math.min(100, score))
+  const legends = cards.filter((c) => isPlayerCard(c) && c.rarity === 'mythic').length
+  if (legends) notes.push(`${legends} 张彩卡自带默契，跟谁都打得来`)
+  if (misfits.length) notes.push(`${misfits.length} 人不在熟悉的位置`)
+  if (noIgl) notes.push('没有人喊队长')
+
+  return { score, links, misfits, noIgl, coachBonus, coachLinks, notes }
+}
+
+/** A full five with nobody calling gives this much back. */
+export const NO_IGL_PENALTY = 3
+
+/**
+ * What a point of 默契 is worth on the squad screen, in rating points.
+ *
+ * The same number the server pays. It was 0.06 while the arena paid about
+ * 0.1 — chemistry lands there three times over, in the overall, in the
+ * bond table and in teamwork — so two fives four points apart on paper
+ * with 默契 40 apart were even on the server, and the one with the higher
+ * number could not see why it kept losing. Measured 2026-09-12: at equal
+ * ability, ninety points of 默契 wins three in four, which is what nine
+ * rating points win. scripts/check_gap_curve.ts.
+ */
+export const CHEM_PAPER = 0.1
+
+/**
+ * The coach's three abilities contribute continuously to the whole five.
+ * Ten weighted ability points above 50 are one player level on every seat.
+ * Previously only development's 80/90 thresholds counted on paper, so a
+ * 58-rated and an 85-rated coach could show exactly the same squad power.
+ * The arena adds this after its squeeze; no rounding or early cap eats it.
+ */
+export const coachLift = (coach: Pick<CoachCard, 'tactics' | 'development' | 'motivation'>): number =>
+  (coachAbility(coach) - 50) * 0.1
+
+/**
+ * What a coach's own levels add to every card he fields, in rating units
+ * before the squeeze: a fifth of a level each. Five coach levels are worth
+ * one player level on all five — 500 阵容战力, the same as levelling one
+ * player to +5 — which is the coach's +100 a level on the squad. Read by the
+ * arena (added after the squeeze, never rounded) and by the paper score, so
+ * the screen and the server agree. Until 2026-09-13 a coach's levels reached
+ * nothing at all: all 76 coach cards built the same match at +5 as at +0.
+ */
+export const COACH_LEVEL_LIFT = 0.2
+export const coachLiftAt = (coach: CoachCard, level: number): number =>
+  coachLift(coach) + COACH_LEVEL_LIFT * growthOf(level)
+
+/**
+ * The squad's headline number, after levels, role misfits, chemistry — and
+ * whether anyone calls.
+ *
+ * The builder had warned 「阵容里没有队长，中局决策会吃亏」 since the mode
+ * opened, and nothing behind the warning was true: the number ignored it,
+ * so the arena did too, and 自动组队 — which climbs on this number — would
+ * happily seat five who all wait to be told. A full five without an IGL is
+ * worth three less now, about what a role misfit costs half a man.
+ */
+export interface SquadPaper {
+  /** the five's mean rating after levels and misfits, in rating units */
+  mean: number
+  /** the part of `mean` that is card levels — already inside it, shown apart on the squad screen */
+  growth: number
+  /** the coach's weighted tactics, development, motivation and levels */
+  lift: number
+  /** 默契, centred on 50 */
+  chem: number
+  /** seats empty */
+  short: number
+  /** nobody calling */
+  uncalled: number
+  /** the sum, unrounded */
+  score: number
+  players: number
+  misfits: number
+}
+
+/** The terms of the squad's number, unrounded — one place for both scales. */
+export function squadPaper(squad: Squad, level: (id: string) => number = () => 0): SquadPaper {
+  const cards = squad.slots.map((id) => (id ? cardById(id) : undefined)).filter(isPlayerCard)
+  const chem = chemistry(squad)
+  const coach = squad.coach ? cardById(squad.coach) : undefined
+  const lift = isCoachCard(coach) ? coachLiftAt(coach, level(coach.id)) : 0
+  if (!cards.length) return { mean: 0, growth: 0, lift, chem: 0, short: 0, uncalled: 0, score: 0, players: 0, misfits: 0 }
+  let misfits = 0
+  const vals = cards.map((c, i) => {
+    const r = ratingAt(c.rating, level(c.id))
+    const idx = squad.slots.indexOf(c.id)
+    if (chem.misfits.includes(idx === -1 ? i : idx)) { misfits++; return r - 6 }
+    return r
+  })
+  const mean = vals.reduce((s, v) => s + v, 0) / cards.length
+  const growth = cards.reduce((s, c) => s + ratingAt(c.rating, level(c.id)) - c.rating, 0) / cards.length
+  // five people who have never met are worth less than the sum of their parts
+  const short = (5 - cards.length) * 9
+  const uncalled = cards.length === 5 && chem.noIgl ? NO_IGL_PENALTY : 0
+  const chemTerm = (chem.score - 50) * CHEM_PAPER
+  return {
+    mean, growth, lift, chem: chemTerm, short, uncalled, players: cards.length, misfits,
+    score: mean + lift + chemTerm - short - uncalled,
+  }
+}
+
+export function squadRating(squad: Squad, level: (id: string) => number = () => 0): number {
+  const p = squadPaper(squad, level)
+  return p.players ? Math.max(0, Math.round(p.score)) : 0
+}
+
+/**
+ * 阵容战力: the same terms at five hundred a point, from the unrounded
+ * score, so one card's level shows as +100 where the mean-then-round of
+ * 阵容分 hid it. Five cards' 战力 added up, 默契 ±50 a point around 50, the
+ * coach's weighted abilities +50 per point above 50 and +100 a card level, a misfit −600, nobody
+ * calling −1,500, an empty seat −4,500.
+ */
+export function squadPower(squad: Squad, level: (id: string) => number = () => 0): number {
+  const p = squadPaper(squad, level)
+  return p.players ? Math.max(0, squadPowerPoints(p.score)) : 0
+}

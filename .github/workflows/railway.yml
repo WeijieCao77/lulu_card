@@ -1,0 +1,26 @@
+name: Lulu Card demo checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx tsx scripts/check_worlds_cards.ts
+      - run: npx tsx scripts/check_team_lineage.ts
+      - run: npx tsx scripts/check_dashboard.ts
+      - run: npx tsx scripts/check_mailbox.ts
+      - run: node scripts/check_admin_entry.mjs
+      - run: node scripts/check_admin_metrics.mjs

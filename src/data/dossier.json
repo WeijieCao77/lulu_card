@@ -1,0 +1,3692 @@
+{
+  "meta": {
+    "sources": {
+      "队标": "破晓项目 data/logos + Riot 电竞接口战队表（小尺寸标识用途）",
+      "选手照片": "Riot 电竞接口战队表里的官方定妆照（static.lolesports.com）",
+      "Oracle’s Elixir": "Current roster and portraits: https://oe.datalisk.io and https://cdn.datalisk.io"
+    },
+    "players": 0,
+    "photos": 495,
+    "lpPhotos": 0,
+    "hjPhotos": 0,
+    "coaches": 0,
+    "coachPhotos": 0,
+    "events": 0
+  },
+  "players": {
+    "P1": {
+      "img": "oe-e4919388d7f506af.webp",
+      "v": "251778d9",
+      "real": "Li Xuan-Jun",
+      "source": "https://cdn.datalisk.io/players/99566404812254466.png"
+    },
+    "P2": {
+      "img": "oe-9cf443ea86b40df4.webp",
+      "v": "bc4cc403",
+      "real": "Lee Seung-yong",
+      "source": "https://cdn.datalisk.io/players/99871276342823057.png"
+    },
+    "P3": {
+      "img": "oe-3b9a76dde217b367.webp",
+      "v": "926a47de",
+      "real": "Cui Xiao-Jun",
+      "source": "https://cdn.datalisk.io/players/104287400430814502.png"
+    },
+    "P4": {
+      "img": "P4.webp",
+      "v": "58ac64c1"
+    },
+    "P5": {
+      "img": "oe-8e4776f3182e436d.webp",
+      "v": "e9148f23",
+      "real": "Kim Jin-hong",
+      "source": "https://cdn.datalisk.io/players/105530584812980593.png"
+    },
+    "P6": {
+      "img": "oe-40e4c5ad52103612.webp",
+      "v": "efcbdafb",
+      "real": "Chen Ze-Bin",
+      "source": "https://cdn.datalisk.io/players/103478281356330346.png"
+    },
+    "P7": {
+      "img": "oe-5931cc45b943ff04.webp",
+      "v": "57d0d4b2",
+      "real": "Peng Li-Xun",
+      "source": "https://cdn.datalisk.io/players/105516152837078491.png"
+    },
+    "P8": {
+      "img": "oe-4a8d4c5b74fd427d.webp",
+      "v": "5eb1d2c5",
+      "real": "Zhuo Ding",
+      "source": "https://cdn.datalisk.io/players/99566404803543690.png"
+    },
+    "P9": {
+      "img": "P9.webp",
+      "v": "be2a3732"
+    },
+    "P10": {
+      "img": "oe-3bd07b7e248e97f2.webp",
+      "v": "fd55a61d",
+      "real": "Luo Wen-Jun",
+      "source": "https://cdn.datalisk.io/players/110547957837987327.png"
+    },
+    "P11": {
+      "img": "oe-929cb3b4187a2eda.webp",
+      "v": "648c4874",
+      "real": "Zhu De-Zhang",
+      "source": "https://cdn.datalisk.io/players/103103555079018097.png"
+    },
+    "P12": {
+      "img": "oe-a99d410433815dfe.webp",
+      "v": "ce4df30e",
+      "real": "Peng Hao",
+      "source": "https://cdn.datalisk.io/players/107597411688435553.png"
+    },
+    "P14": {
+      "img": "P14.webp",
+      "v": "dc13bf4d"
+    },
+    "P15": {
+      "img": "oe-aa1907e118d8d817.webp",
+      "v": "6abaf5eb",
+      "real": "Wang Ping-Yang",
+      "source": "https://cdn.datalisk.io/players/114878673158515186.png"
+    },
+    "P16": {
+      "img": "oe-4501ce0fc10890f0.webp",
+      "v": "e8e31b8a",
+      "real": "Lim Seong-min",
+      "source": "https://cdn.datalisk.io/players/107492129389636107.png"
+    },
+    "P17": {
+      "img": "oe-d84da631d55e1da8.webp",
+      "v": "d66728d0",
+      "real": "Yan Yang-Wei",
+      "source": "https://cdn.datalisk.io/players/103461966880868232.png"
+    },
+    "P18": {
+      "img": "oe-83943143dbf4bf8d.webp",
+      "v": "97d88097",
+      "real": "Song Eui-jin",
+      "source": "https://cdn.datalisk.io/players/99566404811346612.png"
+    },
+    "P19": {
+      "img": "P19.webp",
+      "v": "03f6b580"
+    },
+    "P20": {
+      "img": "oe-4d8c14930ea36fbb.webp",
+      "v": "0c53978a",
+      "real": "Sun Jun-Wei",
+      "source": "https://cdn.datalisk.io/players/109784315829131585.png"
+    },
+    "P21": {
+      "img": "oe-3123e5581334625f.webp",
+      "v": "25a905fb",
+      "real": "Xu Xing-Zu",
+      "source": "https://cdn.datalisk.io/players/109784472606547975.png"
+    },
+    "P22": {
+      "img": "oe-61a3734f14402119.webp",
+      "v": "a3c3f1ef",
+      "real": "Yu Chun-Chia",
+      "source": "https://cdn.datalisk.io/players/101971954398227333.png"
+    },
+    "P23": {
+      "img": "oe-206f2632fda58e18.webp",
+      "v": "5eae28c9",
+      "real": "Tsai Ming-Hong",
+      "source": "https://cdn.datalisk.io/players/112772120821320830.png"
+    },
+    "P24": {
+      "img": "P24.webp",
+      "v": "ad2be2ad"
+    },
+    "P25": {
+      "img": "oe-cc84bd143e71a88f.webp",
+      "v": "8b0cb234",
+      "real": "Zhao Zhe-Can",
+      "source": "https://cdn.datalisk.io/players/111726305547204259.png"
+    },
+    "P27": {
+      "img": "oe-2c21fc6e9b851e48.webp",
+      "v": "1d900876",
+      "real": "Yang Cui-Heng",
+      "source": "https://cdn.datalisk.io/players/109784703569533478.png"
+    },
+    "P28": {
+      "img": "oe-f3e7ea42dba63a99.webp",
+      "v": "e6bdc658",
+      "real": "Lin Yu-Hong",
+      "source": "https://cdn.datalisk.io/players/109784590066548371.png"
+    },
+    "P29": {
+      "img": "P29.webp",
+      "v": "cb1b50f4"
+    },
+    "P30": {
+      "img": "oe-545f4117fea6549a.webp",
+      "v": "f7552a25",
+      "real": "Zhao Wen-Hao",
+      "source": "https://cdn.datalisk.io/players/113662612771288963.png"
+    },
+    "P31": {
+      "img": "oe-f617e10227645be4.webp",
+      "v": "5e36e366",
+      "real": "Xu Wen-Jie",
+      "source": "https://cdn.datalisk.io/players/111726460023550672.png"
+    },
+    "P32": {
+      "img": "P32.webp",
+      "v": "ab5b71f0"
+    },
+    "P33": {
+      "img": "oe-5d8e99b4899519bc.webp",
+      "v": "4734c4d8",
+      "real": "Lee Tae-young",
+      "source": "https://cdn.datalisk.io/players/106288134875041032.png"
+    },
+    "P34": {
+      "img": "P34.webp",
+      "v": "13458220"
+    },
+    "P35": {
+      "img": "oe-ba78f053bfccfae4.webp",
+      "v": "50f25e7a",
+      "real": "Lou Yun-Feng",
+      "source": "https://cdn.datalisk.io/players/100205573984889078.png"
+    },
+    "P36": {
+      "img": "P36.webp",
+      "v": "382277a2"
+    },
+    "P37": {
+      "img": "P37.webp",
+      "v": "ab63f300"
+    },
+    "P38": {
+      "img": "P38.webp",
+      "v": "589e812c"
+    },
+    "P39": {
+      "img": "P39.webp",
+      "v": "0a212308"
+    },
+    "P40": {
+      "img": "oe-2863ddb6977db6b8.webp",
+      "v": "f229a3f1",
+      "real": "Wang Xu-Zhuo",
+      "source": "https://cdn.datalisk.io/players/105516599464787723.png"
+    },
+    "P42": {
+      "img": "oe-71c97229adf72c83.webp",
+      "v": "77db57f7",
+      "real": "Xu Han-Yang",
+      "source": "https://cdn.datalisk.io/players/115728421202169788.png"
+    },
+    "P45": {
+      "img": "P45.webp",
+      "v": "69d07bc7"
+    },
+    "P46": {
+      "img": "oe-985d2d2f3ac63487.webp",
+      "v": "b0e1c7b6",
+      "real": "Jeong Jae-hun",
+      "source": "https://cdn.datalisk.io/players/107492044257978794.png"
+    },
+    "P47": {
+      "img": "oe-bdb084ed5af94fc2.webp",
+      "v": "cd569698",
+      "real": "Dai Yi",
+      "source": "https://cdn.datalisk.io/players/108477164506118803.png"
+    },
+    "P48": {
+      "img": "oe-84e31c25231aa0a7.webp",
+      "v": "02387b6a",
+      "real": "Wang Meng-Qi",
+      "source": "https://cdn.datalisk.io/players/110547903628049902.png"
+    },
+    "P49": {
+      "img": "oe-c782c9ff41a2efbf.webp",
+      "v": "4bd724b9",
+      "real": "Kim Hong-jo",
+      "source": "https://cdn.datalisk.io/players/105320683858945274.png"
+    },
+    "P50": {
+      "img": "P50.webp",
+      "v": "28052e71"
+    },
+    "P51": {
+      "img": "P51.webp",
+      "v": "6d822ad2"
+    },
+    "P52": {
+      "img": "P52.webp",
+      "v": "7a78e81f"
+    },
+    "P53": {
+      "img": "oe-e3d464ca6b3036fe.webp",
+      "v": "8b522217",
+      "real": "Luo Jun-Hao",
+      "source": "https://cdn.datalisk.io/players/113662768960485564.png"
+    },
+    "P54": {
+      "img": "oe-70e81917991ee9c1.webp",
+      "v": "ce105093",
+      "real": "Kim Min-seong",
+      "source": "https://cdn.datalisk.io/players/115887485373399750.png"
+    },
+    "P56": {
+      "img": "oe-92fc116fa64e439e.webp",
+      "v": "4c37ea4d",
+      "real": "Wang Tian-Ci-Fu",
+      "source": "https://cdn.datalisk.io/players/110547690694797001.png"
+    },
+    "P57": {
+      "img": "oe-f0c361a502d6fc2c.webp",
+      "v": "97b8de67",
+      "real": "Bai Jia-Hao",
+      "source": "https://cdn.datalisk.io/players/101388912796120370.png"
+    },
+    "P59": {
+      "img": "oe-b34d02112c2aaa7e.webp",
+      "v": "8ba81480",
+      "real": "Lin Jian",
+      "source": "https://cdn.datalisk.io/players/106368556422916908.png"
+    },
+    "P60": {
+      "img": "P60.webp",
+      "v": "e7f4a08d"
+    },
+    "P61": {
+      "img": "P61.webp",
+      "v": "f62d9baf"
+    },
+    "P64": {
+      "img": "oe-6376fbb812d2f96a.webp",
+      "v": "9758751c",
+      "real": "Song Dai-Lin",
+      "source": "https://cdn.datalisk.io/players/113662769042807097.png"
+    },
+    "P65": {
+      "img": "P65.webp",
+      "v": "9eead858"
+    },
+    "P66": {
+      "img": "oe-867192a08337755e.webp",
+      "v": "d4006763",
+      "real": "Xia Jing-Yao",
+      "source": "https://cdn.datalisk.io/players/108013461192555452.png"
+    },
+    "P67": {
+      "img": "oe-8e77e3bd830826ac.webp",
+      "v": "2c6c122e",
+      "real": "Tang Hua-Yu",
+      "source": "https://cdn.datalisk.io/players/108477153941144313.png"
+    },
+    "P68": {
+      "img": "oe-fbf0e7b31bfedf21.webp",
+      "v": "d35b0246",
+      "real": "Zhao Li-Jie",
+      "source": "https://cdn.datalisk.io/players/102191852281361066.png"
+    },
+    "P69": {
+      "img": "oe-071ffc60cece46b0.webp",
+      "v": "cfb16219",
+      "real": "Li Yuan-Hao",
+      "source": "https://cdn.datalisk.io/players/98767975914916595.png"
+    },
+    "P70": {
+      "img": "P70.webp",
+      "v": "09db0e79"
+    },
+    "P71": {
+      "img": "oe-4ca633009284671a.webp",
+      "v": "74ec5063",
+      "real": "Shi Xu-Ye",
+      "source": "https://cdn.datalisk.io/players/111726064836555178.png"
+    },
+    "P72": {
+      "img": "oe-321ad634c7e66d6f.webp",
+      "v": "d2a21082",
+      "real": "Song Hyeon-min",
+      "source": "https://cdn.datalisk.io/players/105501790021137688.png"
+    },
+    "P73": {
+      "img": "oe-e9c5a527a4d33b6a.webp",
+      "v": "80925721",
+      "real": "Jeon Eo-jin",
+      "source": "https://cdn.datalisk.io/players/107492130895812257.png"
+    },
+    "P74": {
+      "img": "oe-ef1663ea39afe5ed.webp",
+      "v": "7f3adacb",
+      "real": "Lee Dae-kwang",
+      "source": "https://cdn.datalisk.io/players/105501715923396261.png"
+    },
+    "P75": {
+      "img": "P75.webp",
+      "v": "0a162e2f"
+    },
+    "P76": {
+      "img": "oe-c3888c1f6ded2326.webp",
+      "v": "24a001fc",
+      "real": "Kim Hyeong-gyu",
+      "source": "https://cdn.datalisk.io/players/101388913291808185.png"
+    },
+    "P77": {
+      "img": "oe-5206ed0f77ad37a9.webp",
+      "v": "f5745837",
+      "real": "Lee Dong-ju",
+      "source": "https://cdn.datalisk.io/players/104266795407626462.png"
+    },
+    "P78": {
+      "img": "oe-6e2dc848bf4c1757.webp",
+      "v": "73c7d8c9",
+      "real": "Hong Chang-hyeon",
+      "source": "https://cdn.datalisk.io/players/103495716563691380.png"
+    },
+    "P79": {
+      "img": "oe-6d9fce4f28ecbe9e.webp",
+      "v": "7a7eefa6",
+      "real": "Lee Ju-hyeon",
+      "source": "https://cdn.datalisk.io/players/104284310661848687.png"
+    },
+    "P80": {
+      "img": "P80.webp",
+      "v": "b47b6277"
+    },
+    "P81": {
+      "img": "oe-8fef300db6d35148.webp",
+      "v": "f2fe3e50",
+      "real": "Jeong Yoon-su",
+      "source": "https://cdn.datalisk.io/players/106267619732229182.png"
+    },
+    "P82": {
+      "img": "oe-76daa5c48b896390.webp",
+      "v": "591638c6",
+      "real": "Kim Jeong-min",
+      "source": "https://cdn.datalisk.io/players/100205573444701958.png"
+    },
+    "P83": {
+      "img": "oe-ac1289e5171b9571.webp",
+      "v": "5d95fcf7",
+      "real": "Jeon Si-woo",
+      "source": "https://cdn.datalisk.io/players/111658292064356964.png"
+    },
+    "P84": {
+      "img": "oe-d44a0b7ebf42f139.webp",
+      "v": "8bcd0cf6",
+      "real": "Choi Yong-hyeok",
+      "source": "https://cdn.datalisk.io/players/106267599829820917.png"
+    },
+    "P85": {
+      "img": "oe-c306ae2e56813df9.webp",
+      "v": "7361702f",
+      "real": "Heo Su",
+      "source": "https://cdn.datalisk.io/players/100725844988653773.png"
+    },
+    "P86": {
+      "img": "P86.webp",
+      "v": "1fbbba21"
+    },
+    "P87": {
+      "img": "P87.webp",
+      "v": "69787c60"
+    },
+    "P88": {
+      "img": "oe-c2067f413beeb110.webp",
+      "v": "6baacf9c",
+      "real": "Kim Gi-in",
+      "source": "https://cdn.datalisk.io/players/99566404532924465.png"
+    },
+    "P89": {
+      "img": "oe-a417b014d393b542.webp",
+      "v": "93935f73",
+      "real": "Kim Geon-bu",
+      "source": "https://cdn.datalisk.io/players/100725844994345151.png"
+    },
+    "P90": {
+      "img": "oe-8486b38fe107a264.webp",
+      "v": "8b6434c4",
+      "real": "Jeong Ji-hoon",
+      "source": "https://cdn.datalisk.io/players/99871276342168416.png"
+    },
+    "P91": {
+      "img": "P91.webp",
+      "v": "25e099f9"
+    },
+    "P92": {
+      "img": "oe-18a74675116e4db6.webp",
+      "v": "9dc5d339",
+      "real": "Joo Min-kyu",
+      "source": "https://cdn.datalisk.io/players/107454956790371682.png"
+    },
+    "P93": {
+      "img": "oe-448ceff5cfae6a1a.webp",
+      "v": "774c5be0",
+      "real": "Shin Min-je",
+      "source": "https://cdn.datalisk.io/players/109549750903142546.png"
+    },
+    "P94": {
+      "img": "oe-5af4f3f5a97f7da7.webp",
+      "v": "beefcb83",
+      "real": "Kim Min-seong",
+      "source": "https://cdn.datalisk.io/players/105501713673270508.png"
+    },
+    "P95": {
+      "img": "oe-e0f8dbfe5b390ff5.webp",
+      "v": "27b93549",
+      "real": "Jo Woo-jin",
+      "source": "https://cdn.datalisk.io/players/105501858782308228.png"
+    },
+    "P96": {
+      "img": "P96.webp",
+      "v": "5b8ef182"
+    },
+    "P97": {
+      "img": "oe-3f4bee6dbddb8d02.webp",
+      "v": "5df87336",
+      "real": "Namgung Seong-hoon",
+      "source": "https://cdn.datalisk.io/players/111521549050142935.png"
+    },
+    "P98": {
+      "img": "oe-79c8cb50ffe5279a.webp",
+      "v": "4de2303b",
+      "real": "Choi Woo-je",
+      "source": "https://cdn.datalisk.io/players/105320680474347057.png"
+    },
+    "P99": {
+      "img": "oe-0eb67682962a6af9.webp",
+      "v": "e9420794",
+      "real": "Seo Jin-hyeok",
+      "source": "https://cdn.datalisk.io/players/101671284628761661.png"
+    },
+    "P100": {
+      "img": "oe-12977794a4c9e3b8.webp",
+      "v": "a89b7070",
+      "real": "Kim Geon-woo",
+      "source": "https://cdn.datalisk.io/players/103478281361900912.png"
+    },
+    "P101": {
+      "img": "P101.webp",
+      "v": "82447ae0"
+    },
+    "P102": {
+      "img": "oe-e7c94b0dbb87813d.webp",
+      "v": "e920ef00",
+      "real": "Yoo Hwan-joong",
+      "source": "https://cdn.datalisk.io/players/105501709748188393.png"
+    },
+    "P103": {
+      "img": "oe-82b804e423a7a023.webp",
+      "v": "66d69c55",
+      "real": "Lee Seung-min",
+      "source": "https://cdn.datalisk.io/players/107492121209956865.png"
+    },
+    "P104": {
+      "img": "oe-c8307aa07efce1e7.webp",
+      "v": "a5f086c9",
+      "real": "Moon Woo-chan",
+      "source": "https://cdn.datalisk.io/players/98767975940969117.png"
+    },
+    "P105": {
+      "img": "oe-520876d752005cfc.webp",
+      "v": "78f81359",
+      "real": "Gwak Bo-seong",
+      "source": "https://cdn.datalisk.io/players/98767975949926165.png"
+    },
+    "P106": {
+      "img": "P106.webp",
+      "v": "fd020717"
+    },
+    "P107": {
+      "img": "P107.webp",
+      "v": "f6050c6d"
+    },
+    "P108": {
+      "img": "oe-3709a15b8b5f7cc9.webp",
+      "v": "f6f34322",
+      "real": "Oh Dong-gyu",
+      "source": "https://cdn.datalisk.io/players/108284723448093299.png"
+    },
+    "P109": {
+      "img": "oe-41678a66b833f5dc.webp",
+      "v": "d5ba5f1e",
+      "real": "Lee Jae-won",
+      "source": "https://cdn.datalisk.io/players/102186438403674539.png"
+    },
+    "P110": {
+      "img": "oe-b8083dd4df66b1d1.webp",
+      "v": "3793d1ef",
+      "real": "Kim Jeong-hyeon",
+      "source": "https://cdn.datalisk.io/players/106267386230851795.png"
+    },
+    "P111": {
+      "img": "oe-dcfb1ff52748fbd6.webp",
+      "v": "95d662dd",
+      "real": "Son Woo-hyeon",
+      "source": "https://cdn.datalisk.io/players/99566404534366144.png"
+    },
+    "P112": {
+      "img": "P112.webp",
+      "v": "520dbdb6"
+    },
+    "P113": {
+      "img": "P113.webp",
+      "v": "0aa3bcbc"
+    },
+    "P114": {
+      "img": "oe-2ff148ef424fd475.webp",
+      "v": "960e1639",
+      "real": "Hwang Seong-hoon",
+      "source": "https://cdn.datalisk.io/players/100428088879195423.png"
+    },
+    "P115": {
+      "img": "oe-4bc4593009e36bce.webp",
+      "v": "0df3e984",
+      "real": "Bae Young-jun",
+      "source": "https://cdn.datalisk.io/players/108366332471078988.png"
+    },
+    "P116": {
+      "img": "oe-5cf7e3e319f4932e.webp",
+      "v": "0b7481dd",
+      "real": "Lee Ye-chan",
+      "source": "https://cdn.datalisk.io/players/98767975951139628.png"
+    },
+    "P117": {
+      "img": "P117.webp",
+      "v": "149d865e"
+    },
+    "P118": {
+      "img": "oe-4f1b65059c6a5e95.webp",
+      "v": "3870b992",
+      "real": "Son Si-woo",
+      "source": "https://cdn.datalisk.io/players/99871276332909841.png"
+    },
+    "P119": {
+      "img": "oe-7b64799d0edf45eb.webp",
+      "v": "30fd5861",
+      "real": "Choi Hyeon-joon",
+      "source": "https://cdn.datalisk.io/players/102186485482484390.png"
+    },
+    "P120": {
+      "img": "oe-f9283062284c4e77.webp",
+      "v": "97eb7aa1",
+      "real": "Mun Hyeon-jun",
+      "source": "https://cdn.datalisk.io/players/105320682452092471.png"
+    },
+    "P121": {
+      "img": "oe-673caccdfc4af832.webp",
+      "v": "51c3ec03",
+      "real": "Lee Sang-hyeok",
+      "source": "https://cdn.datalisk.io/players/98767991747728851.png"
+    },
+    "P122": {
+      "img": "P122.webp",
+      "v": "ed890fa4"
+    },
+    "P123": {
+      "img": "oe-6e49d93abc1f2ad5.webp",
+      "v": "814c3d2d",
+      "real": "Ryu Min-seok",
+      "source": "https://cdn.datalisk.io/players/103495716561790834.png"
+    },
+    "P124": {
+      "img": "oe-19c8e3262f6c4dc8.webp",
+      "v": "88186682",
+      "real": "Panagiotis Tantis",
+      "source": "https://cdn.datalisk.io/players/109705412728201213.png"
+    },
+    "P125": {
+      "img": "oe-53b96413b22aad34.webp",
+      "v": "19aebe52",
+      "real": "Iván Martín Díaz",
+      "source": "https://cdn.datalisk.io/players/100238780551262852.png"
+    },
+    "P126": {
+      "img": "oe-ea427d489b4ac338.webp",
+      "v": "cd33f793",
+      "real": "Vladimiros Kourtidis",
+      "source": "https://cdn.datalisk.io/players/107045034481599547.png"
+    },
+    "P127": {
+      "img": "P127.webp",
+      "v": "12222368"
+    },
+    "P128": {
+      "img": "oe-71daeac97846b59c.webp",
+      "v": "c2229b48",
+      "real": "Park Joon-hyeong",
+      "source": "https://cdn.datalisk.io/players/107492067202132417.png"
+    },
+    "P129": {
+      "img": "P129.webp",
+      "v": "728b4005"
+    },
+    "P130": {
+      "img": "oe-f2f5cd69146a6ea5.webp",
+      "v": "c242fe74",
+      "real": "Rudy Semaan",
+      "source": "https://cdn.datalisk.io/players/107128052280762804.png"
+    },
+    "P131": {
+      "img": "oe-791991f635b2e0ac.webp",
+      "v": "8fcbff4c",
+      "real": "Rasmus Borregaard Winther",
+      "source": "https://cdn.datalisk.io/players/98767975968177297.png"
+    },
+    "P132": {
+      "img": "P132.webp",
+      "v": "e5f1d565"
+    },
+    "P133": {
+      "img": "oe-ac9a1bc78a5826dd.webp",
+      "v": "0d3e2b35",
+      "real": "Lampros Papoutsakis",
+      "source": "https://cdn.datalisk.io/players/102787200059605684.png"
+    },
+    "P134": {
+      "img": "oe-cb3ba0d32bb79b5e.webp",
+      "v": "34dccf0d",
+      "real": "Eren Yıldız",
+      "source": "https://cdn.datalisk.io/players/103495716738607011.png"
+    },
+    "P135": {
+      "img": "oe-e74e4f49c8fe3d3c.webp",
+      "v": "e2acdb10",
+      "real": "Ismaïl Boualem",
+      "source": "https://cdn.datalisk.io/players/107464179845128878.png"
+    },
+    "P136": {
+      "img": "P136.webp",
+      "v": "545264a1"
+    },
+    "P137": {
+      "img": "P137.webp",
+      "v": "b74a3988"
+    },
+    "P138": {
+      "img": "oe-bf1b13607d294819.webp",
+      "v": "769a093e",
+      "real": "Yoon Se-joon",
+      "source": "https://cdn.datalisk.io/players/105501802535116331.png"
+    },
+    "P139": {
+      "img": "oe-002bf9a0a66540d6.webp",
+      "v": "cc789711",
+      "real": "Kim Chang-dong",
+      "source": "https://cdn.datalisk.io/players/103495716771322725.png"
+    },
+    "P140": {
+      "img": "oe-4b67c3b7d7229116.webp",
+      "v": "5ffbf472",
+      "real": "Martin Sundelin",
+      "source": "https://cdn.datalisk.io/players/105537190986692036.png"
+    },
+    "P141": {
+      "img": "oe-63fe4a4fddaa93bc.webp",
+      "v": "3233a830",
+      "real": "Kang Ye-hoo",
+      "source": "https://cdn.datalisk.io/players/108205130709313212.png"
+    },
+    "P142": {
+      "img": "P142.webp",
+      "v": "41fe20ce"
+    },
+    "P143": {
+      "img": "oe-fe0e72ea77d2df64.webp",
+      "v": "4019e60e",
+      "real": "Alan Cwalina",
+      "source": "https://cdn.datalisk.io/players/106625308523122120.png"
+    },
+    "P144": {
+      "img": "oe-74529fda04f788b5.webp",
+      "v": "e19f3c55",
+      "real": "Alex Pastor Villarejo",
+      "source": "https://cdn.datalisk.io/players/110350224593953686.png"
+    },
+    "P145": {
+      "img": "oe-990320dd02de05db.webp",
+      "v": "8efaf342",
+      "real": "Javier Prades Batalla",
+      "source": "https://cdn.datalisk.io/players/103877629120745120.png"
+    },
+    "P146": {
+      "img": "oe-284aaa0661321206.webp",
+      "v": "df423313",
+      "real": "Joseph Joon Pyun",
+      "source": "https://cdn.datalisk.io/players/105504920899018806.png"
+    },
+    "P147": {
+      "img": "P147.webp",
+      "v": "094d63d8"
+    },
+    "P148": {
+      "img": "P148.webp",
+      "v": "c4f9e9ca"
+    },
+    "P149": {
+      "img": "oe-3e9b424afcd213d2.webp",
+      "v": "3fc24be3",
+      "real": "Volodymyr Sorokin",
+      "source": "https://cdn.datalisk.io/players/105700869624784693.png"
+    },
+    "P150": {
+      "img": "oe-77ea25db7f5b7dc9.webp",
+      "v": "d770942f",
+      "real": "Enes Uçan",
+      "source": "https://cdn.datalisk.io/players/105548731617719496.png"
+    },
+    "P151": {
+      "img": "oe-00e200473170de88.webp",
+      "v": "5cf61ac2",
+      "real": "Yoon Sung-won",
+      "source": "https://cdn.datalisk.io/players/107840393299826151.png"
+    },
+    "P152": {
+      "img": "P152.webp",
+      "v": "184a1258"
+    },
+    "P153": {
+      "img": "oe-1a8e201f4eefb6e5.webp",
+      "v": "771f9d1b",
+      "real": "Polat Furkan Çiçek",
+      "source": "https://cdn.datalisk.io/players/103805069759346933.png"
+    },
+    "P154": {
+      "img": "oe-8ce59c685935d9b6.webp",
+      "v": "5ddc061d",
+      "real": "Martin Nordahl Hansen",
+      "source": "https://cdn.datalisk.io/players/99322214618656216.png"
+    },
+    "P155": {
+      "img": "oe-a5e2ba610756abea.webp",
+      "v": "90f4b094",
+      "real": "Duncan Marquet",
+      "source": "https://cdn.datalisk.io/players/101389808348806587.png"
+    },
+    "P156": {
+      "img": "oe-aee16c7cf746a58e.webp",
+      "v": "a2b73dff",
+      "real": "Adam Ilyasov",
+      "source": "https://cdn.datalisk.io/players/103889902476986558.png"
+    },
+    "P157": {
+      "img": "P157.webp",
+      "v": "9a44b509"
+    },
+    "P158": {
+      "img": "oe-db17a35d4f9d9108.webp",
+      "v": "4d32b305",
+      "real": "Mihael Mehle",
+      "source": "https://cdn.datalisk.io/players/99322214629661297.png"
+    },
+    "P159": {
+      "img": "oe-4d5fcf2a58f659d3.webp",
+      "v": "771ed766",
+      "real": "Shin Yun-hwan",
+      "source": "https://cdn.datalisk.io/players/107767810249714879.png"
+    },
+    "P160": {
+      "img": "oe-194b66d7440fcad8.webp",
+      "v": "b5c89e6b",
+      "real": "Mehdi Lahlou",
+      "source": "https://cdn.datalisk.io/players/105515296576479523.png"
+    },
+    "P161": {
+      "img": "P161.webp",
+      "v": "47fb4ae4"
+    },
+    "P162": {
+      "img": "P162.webp",
+      "v": "a82243b0"
+    },
+    "P163": {
+      "img": "oe-bb28249599d75aa1.webp",
+      "v": "677c6a5a",
+      "real": "Adrian Trybus",
+      "source": "https://cdn.datalisk.io/players/102181528883745160.png"
+    },
+    "P164": {
+      "img": "oe-da9c855844c9f050.webp",
+      "v": "49641f21",
+      "real": "Sebastian Wojtoń",
+      "source": "https://cdn.datalisk.io/players/107156544177574787.png"
+    },
+    "P165": {
+      "img": "oe-bc6060342f7fc169.webp",
+      "v": "78e86bbe",
+      "real": "Théo Borile",
+      "source": "https://cdn.datalisk.io/players/105830645287286396.png"
+    },
+    "P166": {
+      "img": "oe-a6733daecb7b3446.webp",
+      "v": "eb77b286",
+      "real": "Tolga Ölmez",
+      "source": "https://cdn.datalisk.io/players/102174699705191142.png"
+    },
+    "P167": {
+      "img": "P167.webp",
+      "v": "9044459c"
+    },
+    "P168": {
+      "img": "oe-246c1f86c5aba9d1.webp",
+      "v": "95c7bfce",
+      "real": "Paul Lardin",
+      "source": "https://cdn.datalisk.io/players/107462755349678558.png"
+    },
+    "P169": {
+      "img": "oe-d4a9105b60ed7acb.webp",
+      "v": "df5f0a52",
+      "real": "Kaan Okan",
+      "source": "https://cdn.datalisk.io/players/107605411481021064.png"
+    },
+    "P170": {
+      "img": "oe-df63e34f76074ff4.webp",
+      "v": "d73ae0a7",
+      "real": "Linas Nauncikas",
+      "source": "https://cdn.datalisk.io/players/105503548109547493.png"
+    },
+    "P171": {
+      "img": "P171.webp",
+      "v": "2746b338"
+    },
+    "P172": {
+      "img": "P172.webp",
+      "v": "56e4e674"
+    },
+    "P173": {
+      "img": "oe-39e0d21cb422011c.webp",
+      "v": "69b22e03",
+      "real": "Kadir Kemiksiz",
+      "source": "https://cdn.datalisk.io/players/107605583684952312.png"
+    },
+    "P174": {
+      "img": "oe-5df13e7bac93c351.webp",
+      "v": "a75fab1b",
+      "real": "Park Seung-gyu",
+      "source": "https://cdn.datalisk.io/players/105501816646382923.png"
+    },
+    "P175": {
+      "img": "oe-1365827667b3f2fe.webp",
+      "v": "4d84c313",
+      "real": "Robert Huang",
+      "source": "https://cdn.datalisk.io/players/99101098218071815.png"
+    },
+    "P176": {
+      "img": "oe-aa4324f2c5ba76b0.webp",
+      "v": "c314281c",
+      "real": "Eain Stearns",
+      "source": "https://cdn.datalisk.io/players/105957619949286329.png"
+    },
+    "P177": {
+      "img": "P177.webp",
+      "v": "4d07de65"
+    },
+    "P178": {
+      "img": "oe-002828be0df62a9a.webp",
+      "v": "ae9ef67a",
+      "real": "Philippe Laflamme",
+      "source": "https://cdn.datalisk.io/players/99101098208825497.png"
+    },
+    "P179": {
+      "img": "P179.webp",
+      "v": "e1d22512"
+    },
+    "P180": {
+      "img": "P180.webp",
+      "v": "11befa0f"
+    },
+    "P181": {
+      "img": "P181.webp",
+      "v": "4f33a455"
+    },
+    "P182": {
+      "img": "P182.webp",
+      "v": "9a504a3f"
+    },
+    "P183": {
+      "img": "P183.webp",
+      "v": "b2c0c9fa"
+    },
+    "P186": {
+      "img": "P186.webp",
+      "v": "ed8d21b0"
+    },
+    "P187": {
+      "img": "oe-fcf5bb7568b07f6a.webp",
+      "v": "9b2c4def",
+      "real": "Oh Ji-hoon",
+      "source": "https://cdn.datalisk.io/players/108205130200366557.png"
+    },
+    "P188": {
+      "img": "P188.webp",
+      "v": "a692a88e"
+    },
+    "P189": {
+      "img": "oe-c5b89f1c97ad7eb6.webp",
+      "v": "6ec26fb4",
+      "real": "Pedro Luis Peralta",
+      "source": "https://cdn.datalisk.io/players/107583616307712318.png"
+    },
+    "P190": {
+      "img": "oe-69e0cf319cf7eb1d.webp",
+      "v": "f74cb3fb",
+      "real": "İbrahim Samet Bulut",
+      "source": "https://cdn.datalisk.io/players/111686531260879329.png"
+    },
+    "P191": {
+      "img": "oe-444a3e6043aea1a1.webp",
+      "v": "fda09267",
+      "real": "Johnson Le",
+      "source": "https://cdn.datalisk.io/players/107577675767857598.png"
+    },
+    "P192": {
+      "img": "oe-319764adc0767b0b.webp",
+      "v": "a5bc23ee",
+      "real": "Song Su-hyeong",
+      "source": "https://cdn.datalisk.io/players/110219103969081067.png"
+    },
+    "P193": {
+      "img": "P193.webp",
+      "v": "feb631fd"
+    },
+    "P194": {
+      "img": "oe-f6e4a8bfd95e981d.webp",
+      "v": "3be8023b",
+      "real": "Michael Luu",
+      "source": "https://cdn.datalisk.io/players/110535834235603720.png"
+    },
+    "P195": {
+      "img": "P195.webp",
+      "v": "f93b1112"
+    },
+    "P196": {
+      "img": "P196.webp",
+      "v": "3a6301a0"
+    },
+    "P197": {
+      "img": "oe-b7bb65daedadc526.webp",
+      "v": "1ff1a213",
+      "real": "Kang Seong-in",
+      "source": "https://cdn.datalisk.io/players/107492059066783320.png"
+    },
+    "P198": {
+      "img": "P198.webp",
+      "v": "cf0fcd72"
+    },
+    "P199": {
+      "img": "P199.webp",
+      "v": "7a7ce4c5"
+    },
+    "P200": {
+      "img": "oe-534d6c8c900c9e3e.webp",
+      "v": "b4ef97e5",
+      "real": "Jeong Eon-young",
+      "source": "https://cdn.datalisk.io/players/98767991746528652.png"
+    },
+    "P201": {
+      "img": "oe-c2189df472367853.webp",
+      "v": "52e13d20",
+      "real": "Ham Yoo-jin",
+      "source": "https://cdn.datalisk.io/players/107454953423394142.png"
+    },
+    "P202": {
+      "img": "oe-91d99fd9b20b0942.webp",
+      "v": "b5c6c4cd",
+      "real": "Isaac Chou",
+      "source": "https://cdn.datalisk.io/players/105913330212838498.png"
+    },
+    "P203": {
+      "img": "P203.webp",
+      "v": "43c7afb1"
+    },
+    "P204": {
+      "img": "oe-1b0607037cf6d320.webp",
+      "v": "13f5cf81",
+      "real": "Choi Jae-hyun",
+      "source": "https://cdn.datalisk.io/players/98926509793730393.png"
+    },
+    "P205": {
+      "img": "oe-6fa182837e74892a.webp",
+      "v": "225a7ed3",
+      "real": "Ibrahim Allami",
+      "source": "https://cdn.datalisk.io/players/102206337829139149.png"
+    },
+    "P206": {
+      "img": "oe-a6d75c8caf1cb8a5.webp",
+      "v": "a0f065f1",
+      "real": "Juan Arturo Garcia",
+      "source": "https://cdn.datalisk.io/players/98767975969375854.png"
+    },
+    "P207": {
+      "img": "oe-313fe7d4928d1730.webp",
+      "v": "831a3040",
+      "real": "Yoo Baek-jin",
+      "source": "https://cdn.datalisk.io/players/111658293765148243.png"
+    },
+    "P208": {
+      "img": "P208.webp",
+      "v": "d870b1a5"
+    },
+    "P209": {
+      "img": "oe-f1fb0805c935c288.webp",
+      "v": "2c4134e6",
+      "real": "Denilson Oliveira Gonçalves",
+      "source": "https://cdn.datalisk.io/players/101383793153915529.png"
+    },
+    "P210": {
+      "img": "oe-cb3ce6049f4bf347.webp",
+      "v": "738e31cc",
+      "real": "Park Ru-han",
+      "source": "https://cdn.datalisk.io/players/103103696693473944.png"
+    },
+    "P211": {
+      "img": "oe-b6d57b6072b4cfb9.webp",
+      "v": "c2f129bc",
+      "real": "Brandon Joel Villegas",
+      "source": "https://cdn.datalisk.io/players/99566408350815597.png"
+    },
+    "P212": {
+      "img": "oe-2432ac0d35f44af5.webp",
+      "v": "13068f73",
+      "real": "Lim Hyeon-seung",
+      "source": "https://cdn.datalisk.io/players/107492071007218117.png"
+    },
+    "P213": {
+      "img": "P213.webp",
+      "v": "961fd000"
+    },
+    "P214": {
+      "img": "oe-fbd8cac2943d2411.webp",
+      "v": "2e6b1f62",
+      "real": "Jo Yong-in",
+      "source": "https://cdn.datalisk.io/players/98767991789638893.png"
+    },
+    "P215": {
+      "img": "oe-abcd6db323c5470c.webp",
+      "v": "32e6d12e",
+      "real": "Hsu Shih-Chieh",
+      "source": "https://cdn.datalisk.io/players/99566406483009320.png"
+    },
+    "P216": {
+      "img": "oe-e3ce022ad4ddf6a4.webp",
+      "v": "1e32e55f",
+      "real": "Zhao Zhi-Qiang",
+      "source": "https://cdn.datalisk.io/players/102808727762706248.png"
+    },
+    "P217": {
+      "img": "oe-4f96d84c8b0ba9e9.webp",
+      "v": "722244d2",
+      "real": "Lee Jong-hyuk",
+      "source": "https://cdn.datalisk.io/players/111521549237485643.png"
+    },
+    "P218": {
+      "img": "P218.webp",
+      "v": "dd59ab8b"
+    },
+    "P219": {
+      "img": "P219.webp",
+      "v": "612de14a"
+    },
+    "P220": {
+      "img": "oe-afd66ba5209663da.webp",
+      "v": "2c631eb1",
+      "real": "Lo Chak Kin",
+      "source": "https://cdn.datalisk.io/players/113956475907503780.png"
+    },
+    "P221": {
+      "img": "oe-7d84d72ced7100ea.webp",
+      "v": "1ef252df",
+      "real": "Wu Yi-Han",
+      "source": "https://cdn.datalisk.io/players/115841984162908587.png"
+    },
+    "P222": {
+      "img": "oe-8afdf9d562b9e733.webp",
+      "v": "d0180512",
+      "real": "Guo Bei-Yi",
+      "source": "https://cdn.datalisk.io/players/106470350672813985.png"
+    },
+    "P223": {
+      "img": "P223.webp",
+      "v": "0ee28016"
+    },
+    "P224": {
+      "img": "oe-f86248e6b81d1e1a.webp",
+      "v": "68d86491",
+      "real": "Liu Chia-Hao",
+      "source": "https://cdn.datalisk.io/players/99566406485280528.png"
+    },
+    "P225": {
+      "img": "P225.webp",
+      "v": "69ea9f1c"
+    },
+    "P226": {
+      "img": "oe-1a12a3bc77c9937d.webp",
+      "v": "7de8c2ee",
+      "real": "Byeon Ji-woong",
+      "source": "https://cdn.datalisk.io/players/106288133167060072.png"
+    },
+    "P227": {
+      "img": "oe-b036719e86061c91.webp",
+      "v": "d6f14ddd",
+      "real": "Kim Joon-cheol",
+      "source": "https://cdn.datalisk.io/players/103619615096612421.png"
+    },
+    "P228": {
+      "img": "P228.webp",
+      "v": "24fdeb1d"
+    },
+    "P229": {
+      "img": "P229.webp",
+      "v": "57fbeb6f"
+    },
+    "P230": {
+      "img": "P230.webp",
+      "v": "9ffa575d"
+    },
+    "P231": {
+      "img": "oe-1e2352f9bb4369aa.webp",
+      "v": "bd23c95d",
+      "real": "Kim Seung-hoo",
+      "source": "https://cdn.datalisk.io/players/114533301242660910.png"
+    },
+    "P232": {
+      "img": "oe-c08fba9c0c262151.webp",
+      "v": "3a3894b6",
+      "real": "Lee Ga-eul",
+      "source": "https://cdn.datalisk.io/players/103535282076301190.png"
+    },
+    "P233": {
+      "img": "P233.webp",
+      "v": "0ee278ea"
+    },
+    "P234": {
+      "img": "oe-5610dd93ef3fef55.webp",
+      "v": "59a0c7aa",
+      "real": "Oh Hyo-seong",
+      "source": "https://cdn.datalisk.io/players/103495716560217968.png"
+    },
+    "P235": {
+      "img": "oe-9b95939245ebdc1d.webp",
+      "v": "f7a3f1ac",
+      "real": "Trần Duy Sang",
+      "source": "https://cdn.datalisk.io/players/107330029738468255.png"
+    },
+    "P236": {
+      "img": "P236.webp",
+      "v": "62e3e142"
+    },
+    "P238": {
+      "img": "P238.webp",
+      "v": "1cc65aa7"
+    },
+    "P239": {
+      "img": "P239.webp",
+      "v": "17b2d11f"
+    },
+    "P240": {
+      "img": "oe-24cd51935babf784.webp",
+      "v": "33fc0835",
+      "real": "Chen Yi-Chin",
+      "source": "https://cdn.datalisk.io/players/111760351183343187.png"
+    },
+    "P241": {
+      "img": "oe-59fd3a2474680680.webp",
+      "v": "03b232be",
+      "real": "Huang Tzu-Wei",
+      "source": "https://cdn.datalisk.io/players/106470320886575308.png"
+    },
+    "P242": {
+      "img": "P242.webp",
+      "v": "0386a646"
+    },
+    "P244": {
+      "img": "P244.webp",
+      "v": "36cfe60e"
+    },
+    "P245": {
+      "img": "P245.webp",
+      "v": "6d8dcef5"
+    },
+    "P246": {
+      "img": "oe-c8ccb1c9e2e114e6.webp",
+      "v": "04814cdf",
+      "real": "Lương Hải Long",
+      "source": "https://cdn.datalisk.io/players/109828289393968653.png"
+    },
+    "P249": {
+      "img": "P249.webp",
+      "v": "74a14013"
+    },
+    "P251": {
+      "img": "P251.webp",
+      "v": "15f6b650"
+    },
+    "P252": {
+      "img": "oe-89e9ed648ca30a07.webp",
+      "v": "41e763f7",
+      "real": "Nguyễn Đăng Khoa",
+      "source": "https://cdn.datalisk.io/players/107251636998679351.png"
+    },
+    "P253": {
+      "img": "oe-1ea1b60cadcaea57.webp",
+      "v": "1ac36892",
+      "real": "Lê Văn Hoàng Hải",
+      "source": "https://cdn.datalisk.io/players/113662600335177587.png"
+    },
+    "P254": {
+      "img": "oe-2f9b6deb81c8f46a.webp",
+      "v": "23e8e11a",
+      "real": "Trần Duy Đức",
+      "source": "https://cdn.datalisk.io/players/113661875306288886.png"
+    },
+    "P255": {
+      "img": "P255.webp",
+      "v": "d0720605"
+    },
+    "P256": {
+      "img": "oe-a5bcccf1c3b63f37.webp",
+      "v": "3450fdd0",
+      "real": "Trần Đức Hiếu",
+      "source": "https://cdn.datalisk.io/players/107251574398720447.png"
+    },
+    "P257": {
+      "img": "oe-36ee0a8b3496192e.webp",
+      "v": "cc751e33",
+      "real": "Guilherme Araújo Ruiz",
+      "source": "https://cdn.datalisk.io/players/100131733430915231.png"
+    },
+    "P258": {
+      "img": "P258.webp",
+      "v": "36979dbf"
+    },
+    "P259": {
+      "img": "oe-aa12b72cd0cd77c0.webp",
+      "v": "d4723f48",
+      "real": "Arthur Peixoto Machado",
+      "source": "https://cdn.datalisk.io/players/103478281329357326.png"
+    },
+    "P260": {
+      "img": "P260.webp",
+      "v": "86aa51a4"
+    },
+    "P261": {
+      "img": "oe-c6a842a6d5d38ad0.webp",
+      "v": "6ae89267",
+      "real": "Gabriel Dzelme de Oliveira",
+      "source": "https://cdn.datalisk.io/players/99566408211536727.png"
+    },
+    "P262": {
+      "img": "oe-b21878198d4a60cd.webp",
+      "v": "287b1837",
+      "real": "Pedro Henrique Brum Silveira Curty",
+      "source": "https://cdn.datalisk.io/players/111734812721889388.png"
+    },
+    "P263": {
+      "img": "oe-b8651de8bc16e0ae.webp",
+      "v": "5afbcc9d",
+      "real": "Lee Min-gyu",
+      "source": "https://cdn.datalisk.io/players/105501794903516897.png"
+    },
+    "P264": {
+      "img": "oe-f07e2d51bc5edbae.webp",
+      "v": "b415bcae",
+      "real": "Bruno Augusto Felberge Ferreira",
+      "source": "https://cdn.datalisk.io/players/100131567589299245.png"
+    },
+    "P265": {
+      "img": "P265.webp",
+      "v": "2bd57748"
+    },
+    "P266": {
+      "img": "oe-7f732628a2c5f81a.webp",
+      "v": "4fe2aab2",
+      "real": "Fábio Luis Bezerra Marques",
+      "source": "https://cdn.datalisk.io/players/103478281332503056.png"
+    },
+    "P267": {
+      "img": "oe-1f31828116a7dca0.webp",
+      "v": "6686116c",
+      "real": "Carlos Felipe Ferreira",
+      "source": "https://cdn.datalisk.io/players/110434225307697321.png"
+    },
+    "P269": {
+      "img": "P269.webp",
+      "v": "26b64ea9"
+    },
+    "P270": {
+      "img": "oe-6e856ff9979d5398.webp",
+      "v": "2ff524c4",
+      "real": "Bruno Farias",
+      "source": "https://cdn.datalisk.io/players/99566407784212776.png"
+    },
+    "P273": {
+      "img": "oe-d346c20b8d3ba1fe.webp",
+      "v": "928568f0",
+      "real": "Julian Santiago Orozco Chaves",
+      "source": "https://cdn.datalisk.io/players/114194564351011213.png"
+    },
+    "P274": {
+      "img": "oe-27f42c855b2bf29d.webp",
+      "v": "07e501e1",
+      "real": "Piero Aldo Medina Herrera",
+      "source": "https://cdn.datalisk.io/players/114194572740209046.png"
+    },
+    "P275": {
+      "img": "oe-4ea06f9376913b61.webp",
+      "v": "40aa87cf",
+      "real": "Eneas Tomas Protti",
+      "source": "https://cdn.datalisk.io/players/104843445932165305.png"
+    },
+    "P278": {
+      "img": "oe-58e7736102de0fd4.webp",
+      "v": "6c20b2fa",
+      "real": "Kim Dong-min",
+      "source": "https://cdn.datalisk.io/players/107492099069012459.png"
+    },
+    "P279": {
+      "img": "P279.webp",
+      "v": "973f4ac6"
+    },
+    "P280": {
+      "img": "oe-11d975150b65f243.webp",
+      "v": "34f58c37",
+      "real": "Jeong Seong-hoon",
+      "source": "https://cdn.datalisk.io/players/107492030596737445.png"
+    },
+    "P281": {
+      "img": "P281.webp",
+      "v": "fb3ce6b9"
+    },
+    "P282": {
+      "img": "oe-74234579b827ed06.webp",
+      "v": "df87c5b4",
+      "real": "Gabriel Agustin Aparicio",
+      "source": "https://cdn.datalisk.io/players/105506922297942200.png"
+    },
+    "P284": {
+      "img": "P284.webp",
+      "v": "656e4f90"
+    },
+    "P285": {
+      "img": "oe-88236aea1db1bd49.webp",
+      "v": "d118f40c",
+      "real": "Lucas Sebastian Fé",
+      "source": "https://cdn.datalisk.io/players/109656280616610105.png"
+    },
+    "P286": {
+      "img": "P286.webp",
+      "v": "a9009023"
+    },
+    "P287": {
+      "img": "oe-b0ee90434d58dd50.webp",
+      "v": "aa1fd2cf",
+      "real": "José Eduardo Leal Pacheco",
+      "source": "https://cdn.datalisk.io/players/108395422235497387.png"
+    },
+    "P288": {
+      "img": "oe-2a2d063d0796e50d.webp",
+      "v": "295ed81c",
+      "real": "Felipe Boal",
+      "source": "https://cdn.datalisk.io/players/107559111166843860.png"
+    },
+    "P289": {
+      "img": "oe-99267d071a8bd5ea.webp",
+      "v": "0d354264",
+      "real": "Pedro Arthur Gonçalves",
+      "source": "https://cdn.datalisk.io/players/105397234464043531.png"
+    },
+    "P290": {
+      "img": "oe-478f6f195252c8c6.webp",
+      "v": "35b87501",
+      "real": "Jeong Jo-bin",
+      "source": "https://cdn.datalisk.io/players/104266800049354578.png"
+    },
+    "P291": {
+      "img": "P291.webp",
+      "v": "783ccb38"
+    },
+    "P292": {
+      "img": "P292.webp",
+      "v": "a0647e56"
+    },
+    "P293": {
+      "img": "oe-8aff46be7faae3e9.webp",
+      "v": "7b1d0493",
+      "real": "Ling Kai Wing",
+      "source": "https://cdn.datalisk.io/players/98767975956663486.png"
+    },
+    "P294": {
+      "img": "P294.webp",
+      "v": "5b462761"
+    },
+    "P295": {
+      "img": "oe-cb0f854c98869205.webp",
+      "v": "9be695d5",
+      "real": "Marcos Santos de Oliveira Junior",
+      "source": "https://cdn.datalisk.io/players/100205576295412145.png"
+    },
+    "P296": {
+      "img": "P296.webp",
+      "v": "506399b7"
+    },
+    "P298": {
+      "img": "P298.webp",
+      "v": "158d5cb8"
+    },
+    "P300": {
+      "img": "oe-7ff366e8ec61fd60.webp",
+      "v": "73d2c581",
+      "real": "Choi Gang-in",
+      "source": "https://cdn.datalisk.io/players/110660139298018837.png"
+    },
+    "P301": {
+      "img": "oe-52d75eb3a5b1dbad.webp",
+      "v": "9c2b48b3",
+      "real": "Hwang Hyeok-su",
+      "source": "https://cdn.datalisk.io/players/112489761307532435.png"
+    },
+    "P302": {
+      "img": "oe-aa4822853c83c9d1.webp",
+      "v": "1a8a2582",
+      "real": "An Hyeon-seo",
+      "source": "https://cdn.datalisk.io/players/105501850450507181.png"
+    },
+    "P303": {
+      "img": "P303.webp",
+      "v": "c69f2246"
+    },
+    "P304": {
+      "img": "oe-26a144466177a44f.webp",
+      "v": "1a107456",
+      "real": "Lee Hyun-ho",
+      "source": "https://cdn.datalisk.io/players/112518918607721192.png"
+    },
+    "P305": {
+      "img": "oe-ed851770c239a54c.webp",
+      "v": "e253ac17",
+      "real": "Han Jeong-heum",
+      "source": "https://cdn.datalisk.io/players/108205130029559792.png"
+    },
+    "P306": {
+      "img": "oe-5fa8bb33d03ceb84.webp",
+      "v": "eb6cfc98",
+      "real": "Bang Moon-yeong",
+      "source": "https://cdn.datalisk.io/players/109619813466553788.png"
+    },
+    "P307": {
+      "img": "P307.webp",
+      "v": "99265350"
+    },
+    "P308": {
+      "img": "P308.webp",
+      "v": "39c4ba32"
+    },
+    "P309": {
+      "img": "P309.webp",
+      "v": "13cb4f36"
+    },
+    "P310": {
+      "img": "oe-435b30083aac05de.webp",
+      "v": "65fd4027",
+      "real": "Kwon Jae-hyuk",
+      "source": "https://cdn.datalisk.io/players/113543956179181753.png"
+    },
+    "P312": {
+      "img": "oe-cbf894e73d75ed66.webp",
+      "v": "9c4bbc2a",
+      "real": "Seol Jeong-won",
+      "source": "https://cdn.datalisk.io/players/112822770322732675.png"
+    },
+    "P313": {
+      "img": "P313.webp",
+      "v": "f78461e0"
+    },
+    "P314": {
+      "img": "oe-c03da9256faed95b.webp",
+      "v": "3bde5aba",
+      "real": "Kim Dong-hyeon",
+      "source": "https://cdn.datalisk.io/players/107492028745476512.png"
+    },
+    "P315": {
+      "img": "oe-e6ca0572e8e3c162.webp",
+      "v": "cbae11dc",
+      "real": "Byeon Jong-min",
+      "source": "https://cdn.datalisk.io/players/115740909072304963.png"
+    },
+    "P316": {
+      "img": "oe-865504abe38e4308.webp",
+      "v": "186ae2d9",
+      "real": "Jeon Hyeon-min",
+      "source": "https://cdn.datalisk.io/players/108366460978884097.png"
+    },
+    "P317": {
+      "img": "oe-739104f009c61cf8.webp",
+      "v": "3f4214b2",
+      "real": "Kim Si-hun",
+      "source": "https://cdn.datalisk.io/players/113560610683314243.png"
+    },
+    "P318": {
+      "img": "P318.webp",
+      "v": "a55aa679"
+    },
+    "P319": {
+      "img": "oe-29e3c07ca0394f08.webp",
+      "v": "28f0d2a1",
+      "real": "Kim Jae-min",
+      "source": "https://cdn.datalisk.io/players/115740899326939236.png"
+    },
+    "P320": {
+      "img": "oe-0e1e902301edc2b6.webp",
+      "v": "6478291f",
+      "real": "An Min-hyuk",
+      "source": "https://cdn.datalisk.io/players/108205131563823136.png"
+    },
+    "P321": {
+      "img": "P321.webp",
+      "v": "c09c895b"
+    },
+    "P322": {
+      "img": "oe-4363c198731c51c2.webp",
+      "v": "8d72d737",
+      "real": "Oh Yeong-woong",
+      "source": "https://cdn.datalisk.io/players/108284732073917232.png"
+    },
+    "P323": {
+      "img": "P323.webp",
+      "v": "20353aea"
+    },
+    "P324": {
+      "img": "oe-cd689c10bf664071.webp",
+      "v": "8b31d4be",
+      "real": "Hong Jun-seok",
+      "source": "https://cdn.datalisk.io/players/109523135464568456.png"
+    },
+    "P325": {
+      "img": "oe-747e05dcfa08d702.webp",
+      "v": "951e6256",
+      "real": "Park Ji-ho",
+      "source": "https://cdn.datalisk.io/players/115807595873361833.png"
+    },
+    "P326": {
+      "img": "P326.webp",
+      "v": "66cb14ac"
+    },
+    "P327": {
+      "img": "oe-cc7a8a54b705f30f.webp",
+      "v": "3c97e5a0",
+      "real": "Lee Jeong-wook",
+      "source": "https://cdn.datalisk.io/players/115740899104327635.png"
+    },
+    "P328": {
+      "img": "P328.webp",
+      "v": "c9939993"
+    },
+    "P329": {
+      "img": "oe-557ef6cfb2afc51e.webp",
+      "v": "21ae4e12",
+      "real": "Park Gyu-yong",
+      "source": "https://cdn.datalisk.io/players/113740952132760566.png"
+    },
+    "P330": {
+      "img": "oe-ecb64b99bd5928bc.webp",
+      "v": "1c150427",
+      "real": "An Hyo-chan",
+      "source": "https://cdn.datalisk.io/players/113740958697763850.png"
+    },
+    "P331": {
+      "img": "oe-975547717b06d3b4.webp",
+      "v": "8bc65470",
+      "real": "Lee Seung-bok",
+      "source": "https://cdn.datalisk.io/players/105501846040405864.png"
+    },
+    "P332": {
+      "img": "oe-bdfb89644e75f32b.webp",
+      "v": "4a046b09",
+      "real": "Jeong Hwi-chan",
+      "source": "https://cdn.datalisk.io/players/115609835379287175.png"
+    },
+    "P333": {
+      "img": "P333.webp",
+      "v": "db9e54a7"
+    },
+    "P334": {
+      "img": "oe-8614f58effb7a5fe.webp",
+      "v": "cc9edfec",
+      "real": "Lee Sang-ho",
+      "source": "https://cdn.datalisk.io/players/99566404535234175.png"
+    },
+    "P335": {
+      "img": "oe-d975a8e310c1301a.webp",
+      "v": "da755b62",
+      "real": "Lee Min-hoi",
+      "source": "https://cdn.datalisk.io/players/108205130568869560.png"
+    },
+    "P336": {
+      "img": "oe-cf6b59d169a24e25.webp",
+      "v": "6afbe435",
+      "real": "Woo Joo-sung",
+      "source": "https://cdn.datalisk.io/players/107492072900515430.png"
+    },
+    "P337": {
+      "img": "oe-839869efe910f53c.webp",
+      "v": "3d66cd46",
+      "real": "Choi Soo-hyuk",
+      "source": "https://cdn.datalisk.io/players/114850386783533462.png"
+    },
+    "P338": {
+      "img": "P338.webp",
+      "v": "74cdd945"
+    },
+    "P339": {
+      "img": "oe-818e56e7901075e4.webp",
+      "v": "c58fdd59",
+      "real": "Kang Min-woo",
+      "source": "https://cdn.datalisk.io/players/108205129853202408.png"
+    },
+    "P340": {
+      "img": "P340.webp",
+      "v": "abee405e"
+    },
+    "P341": {
+      "img": "oe-c8500cc308deeeab.webp",
+      "v": "b7851212",
+      "real": "Kim Joo-hyeong",
+      "source": "https://cdn.datalisk.io/players/114973639474141631.png"
+    },
+    "P342": {
+      "img": "oe-574b9cb1a281117d.webp",
+      "v": "afdacfb0",
+      "real": "Song Kyeong-jin",
+      "source": "https://cdn.datalisk.io/players/107492116585043595.png"
+    },
+    "P343": {
+      "img": "P343.webp",
+      "v": "132f1251"
+    },
+    "P344": {
+      "img": "P344.webp",
+      "v": "1dffe6bd"
+    },
+    "P345": {
+      "img": "oe-06792f400197b42b.webp",
+      "v": "23154825",
+      "real": "Sim Su-hyeon",
+      "source": "https://cdn.datalisk.io/players/113560604011392262.png"
+    },
+    "P346": {
+      "img": "oe-b0ece2441155c786.webp",
+      "v": "94e8bb0e",
+      "real": "Kim Eun-hoo",
+      "source": "https://cdn.datalisk.io/players/115643633228772231.png"
+    },
+    "P347": {
+      "img": "P347.webp",
+      "v": "2666324e"
+    },
+    "P348": {
+      "img": "P348.webp",
+      "v": "2be7ad6f"
+    },
+    "P349": {
+      "img": "P349.webp",
+      "v": "2821e1d4"
+    },
+    "P358": {
+      "img": "P358.webp",
+      "v": "2baf4552"
+    },
+    "P363": {
+      "img": "P363.webp",
+      "v": "50afe308"
+    },
+    "P364": {
+      "img": "oe-6d91a7216e0e813e.webp",
+      "v": "dd54aa06",
+      "real": "Mehmet Emin Aydın",
+      "source": "https://cdn.datalisk.io/players/99591620723806690.png"
+    },
+    "P366": {
+      "img": "P366.webp",
+      "v": "3e2a38d6"
+    },
+    "P367": {
+      "img": "P367.webp",
+      "v": "2ff90440"
+    },
+    "P369": {
+      "img": "P369.webp",
+      "v": "4a4c1cfb"
+    },
+    "P371": {
+      "img": "oe-2bc625a8633aea66.webp",
+      "v": "6713c209",
+      "real": "Rayan Shoura",
+      "source": "https://cdn.datalisk.io/players/107569568015156338.png"
+    },
+    "P372": {
+      "img": "oe-af88af111ba0a347.webp",
+      "v": "d44dd355",
+      "real": "Tomio Phanlith Chan",
+      "source": "https://cdn.datalisk.io/players/105913341225643811.png"
+    },
+    "P373": {
+      "img": "oe-a5783cbfde49d683.webp",
+      "v": "66010b26",
+      "real": "David Challe",
+      "source": "https://cdn.datalisk.io/players/98926509877984406.png"
+    },
+    "P374": {
+      "img": "P374.webp",
+      "v": "5ff8b2df"
+    },
+    "P375": {
+      "img": "P375.webp",
+      "v": "b79e4b05"
+    },
+    "P376": {
+      "img": "P376.webp",
+      "v": "bf5fc1ff"
+    },
+    "P385": {
+      "img": "oe-b2e3130aae2d44fe.webp",
+      "v": "863bc99c",
+      "real": "Ganbat Ulziidelger",
+      "source": "https://cdn.datalisk.io/players/107424990007380124.png"
+    },
+    "P386": {
+      "img": "P386.webp",
+      "v": "06920b96"
+    },
+    "P387": {
+      "img": "P387.webp",
+      "v": "2553f03a"
+    },
+    "P389": {
+      "img": "oe-8c50aa361b76d7d9.webp",
+      "v": "f75b150e",
+      "real": "Guilherme Jose Fernandes Morais Sousa Da Cruz",
+      "source": "https://cdn.datalisk.io/players/105589339880506016.png"
+    },
+    "P398": {
+      "img": "P398.webp",
+      "v": "070f7137"
+    },
+    "P399": {
+      "img": "oe-1b62990949ce9dd1.webp",
+      "v": "8c1126f5",
+      "real": "Ethan Song",
+      "source": "https://cdn.datalisk.io/players/107577679924578125.png"
+    },
+    "P402": {
+      "img": "oe-f839c676ecde24ca.webp",
+      "v": "d5412931",
+      "real": "Serkan Atılgan",
+      "source": "https://cdn.datalisk.io/players/102174841248991980.png"
+    },
+    "P403": {
+      "img": "P403.webp",
+      "v": "7023e97a"
+    },
+    "P404": {
+      "img": "P404.webp",
+      "v": "44266b5b"
+    },
+    "P405": {
+      "img": "oe-e9110ae74d0417c8.webp",
+      "v": "bd01623e",
+      "real": "Adam Maanane",
+      "source": "https://cdn.datalisk.io/players/105515229738531937.png"
+    },
+    "P407": {
+      "img": "oe-3bb2feeaff477405.webp",
+      "v": "77ca4887",
+      "real": "Lucas Fayard",
+      "source": "https://cdn.datalisk.io/players/101389808357457357.png"
+    },
+    "P409": {
+      "img": "P409.webp",
+      "v": "843aad99"
+    },
+    "P410": {
+      "img": "oe-b2942d8e1c26b2d9.webp",
+      "v": "5b269a65",
+      "real": "Carl Ulsted Carlsen",
+      "source": "https://cdn.datalisk.io/players/105646098955896397.png"
+    },
+    "P411": {
+      "img": "oe-3528f8e0d2f660b6.webp",
+      "v": "4fa5c8ee",
+      "real": "Francisco Mazo Sánchez",
+      "source": "https://cdn.datalisk.io/players/108531184775091361.png"
+    },
+    "P413": {
+      "img": "P413.webp",
+      "v": "cb6273a2"
+    },
+    "P414": {
+      "img": "oe-cc2e08d732a40f69.webp",
+      "v": "891b24c1",
+      "real": "Théo Le Scornec",
+      "source": "https://cdn.datalisk.io/players/105830677772400941.png"
+    },
+    "P415": {
+      "img": "oe-70490a4499a4baab.webp",
+      "v": "62cb8f41",
+      "real": "Lucas Piochaud",
+      "source": "https://cdn.datalisk.io/players/105830668094241053.png"
+    },
+    "P417": {
+      "img": "oe-03994405f72d3180.webp",
+      "v": "6d5fbfea",
+      "real": "Oliver Ryppa",
+      "source": "https://cdn.datalisk.io/players/106589406313640231.png"
+    },
+    "P419": {
+      "img": "oe-02e6d381e74fcd0d.webp",
+      "v": "33cfbfc8",
+      "real": "Alexandru Kolozsvari",
+      "source": "https://cdn.datalisk.io/players/103935363652349248.png"
+    },
+    "P420": {
+      "img": "P420.webp",
+      "v": "d1169102"
+    },
+    "P422": {
+      "img": "P422.webp",
+      "v": "06bd816a"
+    },
+    "P424": {
+      "img": "P424.webp",
+      "v": "cd8ae5c4"
+    },
+    "P426": {
+      "img": "oe-da9b8058ed6a35e3.webp",
+      "v": "45cd7643",
+      "real": "Miroslav Gochev",
+      "source": "https://cdn.datalisk.io/players/102418332506104195.png"
+    },
+    "P427": {
+      "img": "P427.webp",
+      "v": "cd8ae5c4"
+    },
+    "P428": {
+      "img": "P428.webp",
+      "v": "cfb63d1a"
+    },
+    "P429": {
+      "img": "oe-681e280d0ffacf11.webp",
+      "v": "1faf5d9c",
+      "real": "Pierre Medjaldi",
+      "source": "https://cdn.datalisk.io/players/99322214611627957.png"
+    },
+    "P430": {
+      "img": "oe-6a7d3d3b79ef6125.webp",
+      "v": "a2cffd28",
+      "real": "Felix Hellström",
+      "source": "https://cdn.datalisk.io/players/102787200003726479.png"
+    },
+    "P432": {
+      "img": "oe-e91754e78f9a2929.webp",
+      "v": "e8ecfb9b",
+      "real": "Kang Dong-su",
+      "source": "https://cdn.datalisk.io/players/104016422094844578.png"
+    },
+    "P433": {
+      "img": "P433.webp",
+      "v": "6208ec53"
+    },
+    "P436": {
+      "img": "oe-26a27b72d0f20640.webp",
+      "v": "7f612958",
+      "real": "Stefan Nikolić",
+      "source": "https://cdn.datalisk.io/players/100205576934475691.png"
+    },
+    "P437": {
+      "img": "P437.webp",
+      "v": "cd8ae5c4"
+    },
+    "P438": {
+      "img": "P438.webp",
+      "v": "cd8ae5c4"
+    },
+    "P442": {
+      "img": "oe-2d12db3c30387b42.webp",
+      "v": "8cdb513a",
+      "real": "Mateusz Czajka",
+      "source": "https://cdn.datalisk.io/players/102808840668792975.png"
+    },
+    "P444": {
+      "img": "oe-88d580cbc8fcdf15.webp",
+      "v": "f60f5c99",
+      "real": "Waleed Mohammed Ismail",
+      "source": "https://cdn.datalisk.io/players/107044962045759151.png"
+    },
+    "P447": {
+      "img": "oe-46d2150ec8fb68ed.webp",
+      "v": "e7a932b0",
+      "real": "Stéphane Dimier",
+      "source": "https://cdn.datalisk.io/players/105515253867707529.png"
+    },
+    "P448": {
+      "img": "P448.webp",
+      "v": "0f9de8bf"
+    },
+    "P449": {
+      "img": "P449.webp",
+      "v": "05b56cea"
+    },
+    "P451": {
+      "img": "oe-1fc8be42f07b1b15.webp",
+      "v": "3d1fe859",
+      "real": "Chau Shu Tak",
+      "source": "https://cdn.datalisk.io/players/108547753406304556.png"
+    },
+    "P452": {
+      "img": "oe-93dbad75fce1ca0b.webp",
+      "v": "3cabe6ef",
+      "real": "Tsang Tak Lam",
+      "source": "https://cdn.datalisk.io/players/104573231995499518.png"
+    },
+    "P453": {
+      "img": "oe-c081ebceac0d5cef.webp",
+      "v": "26c5eb33",
+      "real": "Ng Cheuk Lun Jason",
+      "source": "https://cdn.datalisk.io/players/107705431058397645.png"
+    },
+    "P454": {
+      "img": "P454.webp",
+      "v": "95a0ef35"
+    },
+    "P457": {
+      "img": "P457.webp",
+      "v": "67f2bd12"
+    },
+    "P466": {
+      "img": "P466.webp",
+      "v": "cd8ae5c4"
+    },
+    "P468": {
+      "img": "oe-a9988004b4868a6b.webp",
+      "v": "cc213af0",
+      "real": "Chien Mao-An",
+      "source": "https://cdn.datalisk.io/players/109642949457528702.png"
+    },
+    "P488": {
+      "img": "oe-502d25b192a3cff3.webp",
+      "v": "8d7d58cd",
+      "real": "Eron Rodrigues",
+      "source": "https://cdn.datalisk.io/players/111986481187841424.png"
+    },
+    "P489": {
+      "img": "oe-5e99c2bd6f420843.webp",
+      "v": "76ec0597",
+      "real": "Otávio Augusto Moura Ribeiro",
+      "source": "https://cdn.datalisk.io/players/111734785295350533.png"
+    },
+    "P490": {
+      "img": "oe-8fb80e7f82d04f9d.webp",
+      "v": "aa83dcf6",
+      "real": "Lorenzo Mariano Almeida Cortes Felix",
+      "source": "https://cdn.datalisk.io/players/111734538835730170.png"
+    },
+    "P493": {
+      "img": "oe-7371f98e6cedeabc.webp",
+      "v": "0ae6b74a",
+      "real": "Gabriel Nemeth Ramos",
+      "source": "https://cdn.datalisk.io/players/107560059495150409.png"
+    },
+    "P495": {
+      "img": "P495.webp",
+      "v": "d44c59a3"
+    },
+    "P496": {
+      "img": "P496.webp",
+      "v": "43241cec"
+    },
+    "P497": {
+      "img": "P497.webp",
+      "v": "d18d60bf"
+    },
+    "P499": {
+      "img": "oe-8829da4d18cf39f0.webp",
+      "v": "4ec71bac",
+      "real": "Enzo Candido Ferreira",
+      "source": "https://cdn.datalisk.io/players/116287401640559707.png"
+    },
+    "P500": {
+      "img": "oe-e4da31a5804170bd.webp",
+      "v": "ead65dd0",
+      "real": "Ronald Van Bao Vo",
+      "source": "https://cdn.datalisk.io/players/105709404500072628.png"
+    },
+    "P501": {
+      "img": "P501.webp",
+      "v": "3fbd50a7"
+    },
+    "P502": {
+      "img": "oe-25b4dcdd50a5e128.webp",
+      "v": "b4314422",
+      "real": "Luis Gustavo de Lima Drumond",
+      "source": "https://cdn.datalisk.io/players/106276191141062603.png"
+    },
+    "P503": {
+      "img": "oe-0f2e2367071584db.webp",
+      "v": "18918c6c",
+      "real": "Thiago Luiz Campos",
+      "source": "https://cdn.datalisk.io/players/104275744442588539.png"
+    },
+    "P506": {
+      "img": "P506.webp",
+      "v": "16d72f3e"
+    },
+    "P508": {
+      "img": "oe-ec5f51e1e3dcebb6.webp",
+      "v": "4acd51c3",
+      "real": "Ighor Treiss",
+      "source": "https://cdn.datalisk.io/players/111734812658909287.png"
+    },
+    "P509": {
+      "img": "oe-28ced14aa84366bf.webp",
+      "v": "9466222c",
+      "real": "Yuri Gabriel Petermann",
+      "source": "https://cdn.datalisk.io/players/104241655502826222.png"
+    },
+    "P510": {
+      "img": "oe-847019546df458da.webp",
+      "v": "a6c7c869",
+      "real": "Artur Queiroz Scalabrini",
+      "source": "https://cdn.datalisk.io/players/105397130782159175.png"
+    },
+    "P511": {
+      "img": "oe-c3a4bcb268939c84.webp",
+      "v": "da91c249",
+      "real": "Daniel Xavier Ferreira",
+      "source": "https://cdn.datalisk.io/players/103743619023893329.png"
+    },
+    "P512": {
+      "img": "P512.webp",
+      "v": "f7d75f28"
+    },
+    "P513": {
+      "img": "oe-835e5dd2f93876aa.webp",
+      "v": "36b713ba",
+      "real": "Guilherme Soares da Silva",
+      "source": "https://cdn.datalisk.io/players/106276251959912540.png"
+    },
+    "P516": {
+      "img": "oe-1d57fb79380d090c.webp",
+      "v": "6400362d",
+      "real": "Matheus Lessa",
+      "source": "https://cdn.datalisk.io/players/102135534311497703.png"
+    },
+    "P517": {
+      "img": "P517.webp",
+      "v": "f7a34a6d"
+    },
+    "P518": {
+      "img": "P518.webp",
+      "v": "b0e7c3cd"
+    },
+    "P520": {
+      "img": "P520.webp",
+      "v": "179aa4b1"
+    },
+    "P526": {
+      "img": "oe-b6e4af55edc20a14.webp",
+      "v": "bbbb6833",
+      "real": "Tian Ye",
+      "source": "https://cdn.datalisk.io/players/98767991785832912.png"
+    },
+    "P527": {
+      "img": "P527.webp",
+      "v": "1eccb901"
+    },
+    "P529": {
+      "img": "oe-e779ceaef7ae3a83.webp",
+      "v": "86e74348",
+      "real": "Gao Tian-Liang",
+      "source": "https://cdn.datalisk.io/players/99566404820654675.png"
+    },
+    "P530": {
+      "img": "P530.webp",
+      "v": "ffd80cbd"
+    },
+    "P531": {
+      "img": "oe-f95b59b483026f7e.webp",
+      "v": "ea48e680",
+      "real": "Chen Chen",
+      "source": "https://cdn.datalisk.io/players/105516622825169657.png"
+    },
+    "P532": {
+      "img": "oe-53a1d03dda535440.webp",
+      "v": "4c12a71a",
+      "real": "Noh Tae-yoon",
+      "source": "https://cdn.datalisk.io/players/105705431649727017.png"
+    },
+    "P535": {
+      "img": "oe-422c1fe15da0fc2f.webp",
+      "v": "926006f6",
+      "real": "Liu Qing-Song",
+      "source": "https://cdn.datalisk.io/players/99566404817393644.png"
+    },
+    "P536": {
+      "img": "P536.webp",
+      "v": "357e99b9"
+    },
+    "P537": {
+      "img": "oe-a24be31717303f81.webp",
+      "v": "95af1691",
+      "real": "Cheng Zi-Hao",
+      "source": "https://cdn.datalisk.io/players/112540645110902751.png"
+    },
+    "P542": {
+      "img": "P542.webp",
+      "v": "252f304a"
+    },
+    "P544": {
+      "img": "oe-55e4bd69d29f79af.webp",
+      "v": "a068a350",
+      "real": "Wei Bo-Han",
+      "source": "https://cdn.datalisk.io/players/102192147302633932.png"
+    },
+    "P545": {
+      "img": "oe-5c32dd358257a824.webp",
+      "v": "7691b2e9",
+      "real": "Kang Seung-lok",
+      "source": "https://cdn.datalisk.io/players/99566404810113891.png"
+    },
+    "P547": {
+      "img": "oe-260e160bdef43198.webp",
+      "v": "e037a4ad",
+      "real": "Fang Zhe-Yu",
+      "source": "https://cdn.datalisk.io/players/111726354998441726.png"
+    },
+    "P549": {
+      "img": "P549.webp",
+      "v": "e6312ac9"
+    },
+    "P550": {
+      "img": "P550.webp",
+      "v": "34fff3a2"
+    },
+    "P553": {
+      "img": "P553.webp",
+      "v": "1a069a6a"
+    },
+    "P554": {
+      "img": "oe-4846ee202767cca1.webp",
+      "v": "f8549da1",
+      "real": "Gabriël Rau",
+      "source": "https://cdn.datalisk.io/players/99322214662601038.png"
+    },
+    "P560": {
+      "img": "P560.webp",
+      "v": "4c37966b"
+    },
+    "P564": {
+      "img": "P564.webp",
+      "v": "21ba667e"
+    },
+    "P565": {
+      "img": "oe-3dcc65dc900711a5.webp",
+      "v": "81386eff",
+      "real": "Óscar Muñoz Jiménez",
+      "source": "https://cdn.datalisk.io/players/103536968829352943.png"
+    },
+    "P566": {
+      "img": "oe-e7de0ec14363d296.webp",
+      "v": "f1248b6c",
+      "real": "Emil Larsson",
+      "source": "https://cdn.datalisk.io/players/100482247959137902.png"
+    },
+    "P567": {
+      "img": "P567.webp",
+      "v": "93b7b5cb"
+    },
+    "P571": {
+      "img": "P571.webp",
+      "v": "cd8ae5c4"
+    },
+    "P572": {
+      "img": "P572.webp",
+      "v": "c6ffa55f"
+    },
+    "P574": {
+      "img": "P574.webp",
+      "v": "45a61906"
+    },
+    "P576": {
+      "img": "P576.webp",
+      "v": "287bc1c8"
+    },
+    "P581": {
+      "img": "P581.webp",
+      "v": "f4d6e3bc"
+    },
+    "P582": {
+      "img": "oe-a3c61b2446d9ceef.webp",
+      "v": "94e2212f",
+      "real": "Ha Seung-min",
+      "source": "https://cdn.datalisk.io/players/108205131858552538.png"
+    },
+    "P584": {
+      "img": "oe-c581ae27eb952088.webp",
+      "v": "9532089b",
+      "real": "Cristian Sebastián Quispe Yampara",
+      "source": "https://cdn.datalisk.io/players/102825747663199158.png"
+    },
+    "P585": {
+      "img": "P585.webp",
+      "v": "e97adadb"
+    },
+    "P586": {
+      "img": "P586.webp",
+      "v": "748d9723"
+    },
+    "P592": {
+      "img": "P592.webp",
+      "v": "ff5aac41"
+    },
+    "P593": {
+      "img": "P593.webp",
+      "v": "0f3f0fe7"
+    },
+    "P594": {
+      "img": "P594.webp",
+      "v": "8e9f135d"
+    },
+    "P596": {
+      "img": "P596.webp",
+      "v": "6e8a58e3"
+    },
+    "P597": {
+      "img": "P597.webp",
+      "v": "cd3e5cdc"
+    },
+    "P598": {
+      "img": "P598.webp",
+      "v": "6a47f0b5"
+    },
+    "P599": {
+      "img": "oe-a9894cd8773789f8.webp",
+      "v": "01b148a7",
+      "real": "Lin Yu-En",
+      "source": "https://cdn.datalisk.io/players/99566406444168246.png"
+    },
+    "P600": {
+      "img": "P600.webp",
+      "v": "82c21388"
+    },
+    "P606": {
+      "img": "P606.webp",
+      "v": "bd1fb618"
+    },
+    "P607": {
+      "img": "P607.webp",
+      "v": "2191ea97"
+    },
+    "P609": {
+      "img": "oe-3554a176537e3850.webp",
+      "v": "a9a9430e",
+      "real": "Han In-woong",
+      "source": "https://cdn.datalisk.io/players/108443043135317375.png"
+    },
+    "P610": {
+      "img": "P610.webp",
+      "v": "743a5ca7"
+    },
+    "P611": {
+      "img": "oe-799269aedeb3b803.webp",
+      "v": "a947ab0b",
+      "real": "Shen Tsung-Hua",
+      "source": "https://cdn.datalisk.io/players/104573247991198730.png"
+    },
+    "P612": {
+      "img": "P612.webp",
+      "v": "321cf3e7"
+    },
+    "P615": {
+      "img": "P615.webp",
+      "v": "eb0c79a1"
+    },
+    "P616": {
+      "img": "P616.webp",
+      "v": "9aa760d9"
+    },
+    "P617": {
+      "img": "P617.webp",
+      "v": "72e8e75e"
+    },
+    "P619": {
+      "img": "oe-d5354fe19902410f.webp",
+      "v": "6d84e9ab",
+      "real": "Chen Chang-Chu",
+      "source": "https://cdn.datalisk.io/players/99566406481429847.png"
+    },
+    "P620": {
+      "img": "oe-3eff522516343d1c.webp",
+      "v": "2f93bb43",
+      "real": "Matheus Ferreira",
+      "source": "https://cdn.datalisk.io/players/111734539087870444.png"
+    },
+    "P623": {
+      "img": "P623.webp",
+      "v": "c99349b1"
+    },
+    "P625": {
+      "img": "P625.webp",
+      "v": "b2608d5a"
+    },
+    "Y999690": {
+      "img": "Y999690.webp",
+      "v": "324e5d3c"
+    },
+    "Y0D2C03": {
+      "img": "Y0D2C03.webp",
+      "v": "b85c83b4"
+    },
+    "YDF1E65": {
+      "img": "YDF1E65.webp",
+      "v": "b7d48682"
+    },
+    "YE4A386": {
+      "img": "YE4A386.webp",
+      "v": "ec362e73"
+    },
+    "Y26AAE3": {
+      "img": "Y26AAE3.webp",
+      "v": "483be347"
+    },
+    "YC2FD19": {
+      "img": "YC2FD19.webp",
+      "v": "0e47998f"
+    },
+    "Y01A498": {
+      "img": "Y01A498.webp",
+      "v": "505f1457"
+    },
+    "Y2E1CA6": {
+      "img": "Y2E1CA6.webp",
+      "v": "216d021a"
+    },
+    "YF7A64A": {
+      "img": "YF7A64A.webp",
+      "v": "21b0c002"
+    },
+    "Y76592C": {
+      "img": "Y76592C.webp",
+      "v": "da2070f8"
+    },
+    "Y751011": {
+      "img": "Y751011.webp",
+      "v": "4475c864"
+    },
+    "YA41DFA": {
+      "img": "YA41DFA.webp",
+      "v": "51d79097"
+    },
+    "Y692F51": {
+      "img": "Y692F51.webp",
+      "v": "0bc7a5fe"
+    },
+    "Y2D71B5": {
+      "img": "Y2D71B5.webp",
+      "v": "ee109d94"
+    },
+    "YFEA46D": {
+      "img": "YFEA46D.webp",
+      "v": "c24aec81"
+    },
+    "Y9CD8CA": {
+      "img": "Y9CD8CA.webp",
+      "v": "e2190fa4"
+    },
+    "Y783CC3": {
+      "img": "Y783CC3.webp",
+      "v": "429f9843"
+    },
+    "Y5C0C2C": {
+      "img": "Y5C0C2C.webp",
+      "v": "d32e1c2c"
+    },
+    "YA8D6B1": {
+      "img": "YA8D6B1.webp",
+      "v": "9beb3ff5"
+    },
+    "Y8ACA31": {
+      "img": "Y8ACA31.webp",
+      "v": "41680e82"
+    },
+    "YCF3855": {
+      "img": "YCF3855.webp",
+      "v": "aefd2aea"
+    },
+    "Y67ADD3": {
+      "img": "Y67ADD3.webp",
+      "v": "9ecfd8dc"
+    },
+    "Y27DBA8": {
+      "img": "Y27DBA8.webp",
+      "v": "3b66d0e1"
+    },
+    "YCC38A5": {
+      "img": "YCC38A5.webp",
+      "v": "5aa092d1"
+    },
+    "Y9179E6": {
+      "img": "Y9179E6.webp",
+      "v": "f8f53ee0"
+    },
+    "YB3E8E5": {
+      "img": "YB3E8E5.webp",
+      "v": "864ee4a0"
+    },
+    "YB07122": {
+      "img": "YB07122.webp",
+      "v": "92b4db9e"
+    },
+    "YB6FDFF": {
+      "img": "YB6FDFF.webp",
+      "v": "cd8ae5c4"
+    },
+    "Y48202E": {
+      "img": "Y48202E.webp",
+      "v": "6409ca57"
+    },
+    "Y21F72E": {
+      "img": "Y21F72E.webp",
+      "v": "8706cf07"
+    },
+    "Y61AD2E": {
+      "img": "Y61AD2E.webp",
+      "v": "6208ec53"
+    },
+    "YC03B1F": {
+      "img": "YC03B1F.webp",
+      "v": "6208ec53"
+    },
+    "Y7DF811": {
+      "img": "Y7DF811.webp",
+      "v": "ff064d05"
+    },
+    "YD4993F": {
+      "img": "YD4993F.webp",
+      "v": "166cda88"
+    },
+    "Y899C15": {
+      "img": "Y899C15.webp",
+      "v": "be2f4768"
+    },
+    "YF79C39": {
+      "img": "YF79C39.webp",
+      "v": "3e537173"
+    },
+    "Y1D25FB": {
+      "img": "Y1D25FB.webp",
+      "v": "f18c4d91"
+    },
+    "YBF934A": {
+      "img": "YBF934A.webp",
+      "v": "cc913b08"
+    },
+    "Y15B04A": {
+      "img": "Y15B04A.webp",
+      "v": "91c3e8b9"
+    },
+    "YC05796": {
+      "img": "YC05796.webp",
+      "v": "d35c121f"
+    },
+    "P604": {
+      "img": "oe-2e87367ad9b78171.webp",
+      "v": "f0c75f40",
+      "real": "Peng Jun-Bin",
+      "source": "https://cdn.datalisk.io/players/116447604862313609.png"
+    },
+    "P311": {
+      "img": "oe-4b43cd23b9d84148.webp",
+      "v": "4c12ad67",
+      "real": "Kim Dan-woo",
+      "source": "https://cdn.datalisk.io/players/111658291900451423.png"
+    },
+    "P559": {
+      "img": "oe-e5644ddfe5432069.webp",
+      "v": "22aa1e9b",
+      "real": "Lee Sang-min",
+      "source": "https://cdn.datalisk.io/players/108567314915334762.png"
+    },
+    "P395": {
+      "img": "oe-27daec2fa35f1597.webp",
+      "v": "556db6d5",
+      "real": "Noah Erikson",
+      "source": "https://cdn.datalisk.io/players/108577048167390593.png"
+    },
+    "P613": {
+      "img": "oe-af8b10e7b56054b1.webp",
+      "v": "f0c75f40",
+      "real": "Lê Ngọc Vinh",
+      "source": "https://cdn.datalisk.io/players/107255594187103787.png"
+    },
+    "P247": {
+      "img": "oe-4726072043478ba8.webp",
+      "v": "7600aa49",
+      "real": "Lê Quang Duy",
+      "source": "https://cdn.datalisk.io/players/99566404826019424.png"
+    },
+    "P63": {
+      "img": "oe-df3d3a3d1c778bde.webp",
+      "v": "051f4c5e",
+      "real": "Jo Seung-hoon",
+      "source": "https://cdn.datalisk.io/players/109523141015834041.png"
+    },
+    "P608": {
+      "img": "oe-ad4aa80a49f2783a.webp",
+      "v": "38bef906",
+      "real": "Oh Jae-seung",
+      "source": "https://cdn.datalisk.io/players/108205131230834705.png"
+    },
+    "P356": {
+      "img": "oe-431c76b6267eb46e.webp",
+      "v": "556db6d5",
+      "real": "Janan Chen",
+      "source": "https://cdn.datalisk.io/players/107828129618884487.png"
+    },
+    "P360": {
+      "img": "oe-e0b74620819c8a21.webp",
+      "v": "f0c75f40",
+      "real": "James Thomas Carlisle",
+      "source": "https://cdn.datalisk.io/players/114854763809366482.png"
+    },
+    "P380": {
+      "img": "oe-63d4650110d6d69d.webp",
+      "v": "f0c75f40",
+      "real": "Aadam Durgahed",
+      "source": "https://cdn.datalisk.io/players/114203481716634470.png"
+    },
+    "P379": {
+      "img": "oe-76fb1954d5522e67.webp",
+      "v": "f0c75f40",
+      "real": "Ben Okun",
+      "source": "https://cdn.datalisk.io/players/114187979938709921.png"
+    },
+    "P357": {
+      "img": "oe-828c10f79820a385.webp",
+      "v": "f0c75f40",
+      "real": "Samrith Loeung",
+      "source": "https://cdn.datalisk.io/players/112551579800765777.png"
+    },
+    "P425": {
+      "img": "oe-18a199783d1814ee.webp",
+      "v": "556db6d5",
+      "real": "Szymon Wójcicki",
+      "source": "https://cdn.datalisk.io/players/108353513683792949.png"
+    },
+    "P435": {
+      "img": "oe-c5f2ebb6f9e8cf96.webp",
+      "v": "556db6d5",
+      "real": "Muhanad Maitham Sharad",
+      "source": "https://cdn.datalisk.io/players/108403323724987346.png"
+    },
+    "P440": {
+      "img": "oe-af111a2574804964.webp",
+      "v": "f0c75f40",
+      "real": "Mehdi Ahmed Bouchaffra",
+      "source": "https://cdn.datalisk.io/players/112438134055072580.png"
+    },
+    "P455": {
+      "img": "oe-8de894f6633bef45.webp",
+      "v": "f0c75f40",
+      "real": "Mak Chun Pan",
+      "source": "https://cdn.datalisk.io/players/116432312762615094.png"
+    },
+    "P441": {
+      "img": "oe-04b73ad982a5b5ce.webp",
+      "v": "f0c75f40",
+      "real": "Dawid Drzyzga",
+      "source": "https://cdn.datalisk.io/players/111686070373598724.png"
+    },
+    "P450": {
+      "img": "oe-cb9364d1e845df78.webp",
+      "v": "f0c75f40",
+      "real": "Arnaud Mesmin",
+      "source": "https://cdn.datalisk.io/players/115879729924854654.png"
+    },
+    "P492": {
+      "img": "oe-e1d2d55d7039f80a.webp",
+      "v": "f0c75f40",
+      "real": "Lucas Adriel",
+      "source": "https://cdn.datalisk.io/players/114148988325728367.png"
+    },
+    "P505": {
+      "img": "oe-9b575d1c71f6d168.webp",
+      "v": "f0c75f40",
+      "real": "Vinicius Dias",
+      "source": "https://cdn.datalisk.io/players/107559327426244686.png"
+    },
+    "OE4534c50e37": {
+      "img": "oe-754be3c7d8867a75.webp",
+      "v": "5aa6958a",
+      "real": "Seo Ye-bit",
+      "source": "https://cdn.datalisk.io/players/106302003665923326.png"
+    },
+    "OEe53c1baa9b": {
+      "img": "oe-d463c5c50473fc0d.webp",
+      "v": "04c8f7dd",
+      "real": "Han Gil",
+      "source": "https://cdn.datalisk.io/players/107492119089043087.png"
+    },
+    "OE4d6ec07e8e": {
+      "img": "oe-7d9a1c591c4b44a9.webp",
+      "v": "80441033",
+      "real": "Kacper Dagiel",
+      "source": "https://cdn.datalisk.io/players/107621095379170267.png"
+    },
+    "OEb77b8fe38f": {
+      "img": "oe-1748059fb92aed17.webp",
+      "v": "e72033e4",
+      "real": "Jett Michael Joye",
+      "source": "https://cdn.datalisk.io/players/105913339633194822.png"
+    },
+    "OE06c0cc514d": {
+      "img": "oe-6c5586336d5a8f01.webp",
+      "v": "72c29962",
+      "real": "Lee Jeong-tae",
+      "source": "https://cdn.datalisk.io/players/108511159661913839.png"
+    },
+    "OE6e16ea985b": {
+      "img": "oe-c54ba3835f53eeda.webp",
+      "v": "3bb08b58",
+      "real": "Chu Wu Hsin-Jung",
+      "source": "https://cdn.datalisk.io/players/100668757020706361.png"
+    },
+    "OEfb98598a1a": {
+      "img": "oe-33c81580bd515d13.webp",
+      "v": "ed5c3f48",
+      "real": "Võ Lê Nhân",
+      "source": "https://cdn.datalisk.io/players/113628612585554951.png"
+    },
+    "OEcdcf522c99": {
+      "img": "oe-b318ef900168122f.webp",
+      "v": "ca29076a",
+      "real": "Tristan Stidam",
+      "source": "https://cdn.datalisk.io/players/98926509843809391.png"
+    },
+    "OEef60290790": {
+      "img": "oe-89d77db4122ca338.webp",
+      "v": "585a20c4",
+      "real": "Nguyễn Hoàng Lam",
+      "source": "https://cdn.datalisk.io/players/112834609700454416.png"
+    },
+    "OE72fc7782af": {
+      "img": "oe-70b68bc90e01193e.webp",
+      "v": "0bffd83d",
+      "real": "Gabriel Sousa",
+      "source": "https://cdn.datalisk.io/players/109519064896337328.png"
+    },
+    "OE55eb390e50": {
+      "img": "oe-90de7bca4ae4fd9c.webp",
+      "v": "5cfa5bdd",
+      "real": "Cristóbal Arróspide",
+      "source": "https://cdn.datalisk.io/players/105516185566739968.png"
+    },
+    "OE68e4a5a877": {
+      "img": "oe-b75d85ff55d74fba.webp",
+      "v": "b866fb8a",
+      "real": "Carlo Andre Carrion Zapata",
+      "source": "https://cdn.datalisk.io/players/109716554374057462.png"
+    },
+    "OE5cd28ed9f6": {
+      "img": "oe-98acecfa8a5140c9.webp",
+      "v": "14ebda52",
+      "real": "Gabriel Toshio Furuuti",
+      "source": "https://cdn.datalisk.io/players/107559338252333149.png"
+    },
+    "OEa268697e55": {
+      "img": "oe-227b438fcdb83c96.webp",
+      "v": "3fa736a2",
+      "real": "Matheus Emanuel Silva",
+      "source": "https://cdn.datalisk.io/players/111734845200890741.png"
+    },
+    "OE8f6b0419b0": {
+      "img": "oe-bec4b1be4966a1f7.webp",
+      "v": "891ebc13",
+      "real": "Pedro Lemos Soares Maximiniano",
+      "source": "https://cdn.datalisk.io/players/103743593842085398.png"
+    },
+    "OEaf26513bc7": {
+      "img": "oe-75fb199efd387be5.webp",
+      "v": "b6234afd",
+      "real": "César Berteli França",
+      "source": "https://cdn.datalisk.io/players/112489397428558238.png"
+    },
+    "OEf0b61e6dca": {
+      "img": "oe-efc0d1f2e8e0fe1f.webp",
+      "v": "64ad4757",
+      "real": "Daniel Lisboa Tonelli",
+      "source": "https://cdn.datalisk.io/players/111734539296970340.png"
+    },
+    "OE3b7ab9da44": {
+      "img": "oe-f86cdc10042ffd7e.webp",
+      "v": "f0c75f40",
+      "real": "Nam Hyeon-seo",
+      "source": "https://cdn.datalisk.io/players/116907472040667554.png"
+    },
+    "OE94c4014157": {
+      "img": "oe-a9f9793fda48f11d.webp",
+      "v": "f0c75f40",
+      "real": "Philip Zeng",
+      "source": "https://cdn.datalisk.io/players/114854730289406368.png"
+    },
+    "OE9455a757b7": {
+      "img": "oe-70031d5923f596a6.webp",
+      "v": "023da5f7",
+      "real": "Young Ho Choi",
+      "source": "https://cdn.datalisk.io/players/106857864117137093.png"
+    },
+    "OE5d0945ebd8": {
+      "img": "oe-5933325fccc8cc70.webp",
+      "v": "37c6ef7d",
+      "real": "Francisco Rubén Jara Barragán",
+      "source": "https://cdn.datalisk.io/players/99566408537963625.png"
+    },
+    "OE86d01cccba": {
+      "img": "oe-9e35e7fb2664f534.webp",
+      "v": "f0c75f40",
+      "real": "Yutthapichai Yeangyutthapichai",
+      "source": "https://cdn.datalisk.io/players/116877699738897961.png"
+    },
+    "OEaa926cd86b": {
+      "img": "oe-3b9ecb169c77e69e.webp",
+      "v": "f0c75f40",
+      "real": "Erik Kim",
+      "source": "https://cdn.datalisk.io/players/107577679630942805.png"
+    },
+    "OEc7746f81d0": {
+      "img": "oe-73d034076691d92b.webp",
+      "v": "f0c75f40",
+      "real": "Li Lai-Him",
+      "source": "https://cdn.datalisk.io/players/116432345241292434.png"
+    },
+    "OE963e06de70": {
+      "img": "oe-4d778271009914a1.webp",
+      "v": "f0c75f40",
+      "real": "Lai Chen-You",
+      "source": "https://cdn.datalisk.io/players/116988724073764274.png"
+    },
+    "OEf2dada509d": {
+      "img": "oe-8275555e968b7819.webp",
+      "v": "f0c75f40",
+      "real": "Chuang Shao-Fu",
+      "source": "https://cdn.datalisk.io/players/116447771535894130.png"
+    },
+    "OE0a7d3af0b1": {
+      "img": "oe-7ffa58c7f0c25aae.webp",
+      "v": "f0c75f40",
+      "real": "Caio Henrique Araujo Cordeiro",
+      "source": "https://cdn.datalisk.io/players/116915009185282553.png"
+    },
+    "OE238880bb94": {
+      "img": "oe-0a44ad37e7f75ae4.webp",
+      "v": "1fc3b7d2",
+      "real": "Sebastián Alonso Niño Zavaleta",
+      "source": "https://cdn.datalisk.io/players/98767975971974446.png"
+    },
+    "OE056a46241f": {
+      "img": "oe-818a761f57c9f0b8.webp",
+      "v": "edd45403",
+      "real": "Leonardo Borré dos Santos",
+      "source": "https://cdn.datalisk.io/players/103743600803050303.png"
+    },
+    "OE5506b39ea3": {
+      "img": "oe-3e14133faeca4cf8.webp",
+      "v": "f0c75f40",
+      "real": "Murilo Cocco Lopes",
+      "source": "https://cdn.datalisk.io/players/112489397674155987.png"
+    }
+  },
+  "coaches": {
+    "Ben": {
+      "img": "oe-f035b1187fa9fb57.webp",
+      "v": "5689396b",
+      "real": "Nam Dong-hyun",
+      "source": "https://cdn.datalisk.io/players/98767975914205119.png"
+    },
+    "Mni": {
+      "img": "oe-dc4924806f232427.webp",
+      "v": "45cd7643",
+      "real": "Peng Fang",
+      "source": "https://cdn.datalisk.io/players/101388912804771138.png"
+    },
+    "Despa1r": {
+      "img": "oe-a5dd4b0c17516be7.webp",
+      "v": "dd6a46ab",
+      "real": "Zhou Li-Peng",
+      "source": "https://cdn.datalisk.io/players/100205574021125350.png"
+    },
+    "Teacherma": {
+      "img": "oe-e405613b7d7baeb8.webp",
+      "v": "84d4e0ed",
+      "real": "Jiang Chen",
+      "source": "https://cdn.datalisk.io/players/103478281365374324.png"
+    },
+    "Fury": {
+      "img": "oe-179cc95e579871ec.webp",
+      "v": "b3d1bcb2",
+      "real": "Lee Jin-yong",
+      "source": "https://cdn.datalisk.io/players/99566404823074833.png"
+    },
+    "Xiaobai": {
+      "img": "oe-a6f58d40c8dd6fbf.webp",
+      "v": "517e33a6",
+      "real": "Yang Zhong-He",
+      "source": "https://cdn.datalisk.io/players/103461966883424140.png"
+    },
+    "Zoom": {
+      "img": "oe-bab50f2d04c34fd3.webp",
+      "v": "c1ccb83f",
+      "real": "Zhang Xing-Ran",
+      "source": "https://cdn.datalisk.io/players/99566404797667829.png"
+    },
+    "LvMao": {
+      "img": "oe-72dc9e8c0a282f47.webp",
+      "v": "44654d88",
+      "real": "Zuo Ming-Hao",
+      "source": "https://cdn.datalisk.io/players/99566404813905681.png"
+    },
+    "694": {
+      "img": "oe-6b5df9da13f8af23.webp",
+      "v": "45cd7643",
+      "real": "He Xin",
+      "source": "https://cdn.datalisk.io/players/100205573986140422.png"
+    },
+    "Benny": {
+      "img": "oe-819e77cd7d42c4c8.webp",
+      "v": "b5d25784",
+      "real": "Lien Hsiu-Chi",
+      "source": "https://cdn.datalisk.io/players/99566406469528884.png"
+    },
+    "Clearlove": {
+      "img": "oe-9b756a26f4340936.webp",
+      "v": "0900606f",
+      "real": "Ming Kai",
+      "source": "https://cdn.datalisk.io/players/98767991779035656.png"
+    },
+    "Lira": {
+      "img": "oe-3435ba2460e1f4c4.webp",
+      "v": "c96957ae",
+      "real": "Nam Tae-yoo",
+      "source": "https://cdn.datalisk.io/players/98926509799307954.png"
+    },
+    "Rather": {
+      "img": "oe-da9d9bf65d91f520.webp",
+      "v": "d6a976c5",
+      "real": "Shin Hyeong-seop",
+      "source": "https://cdn.datalisk.io/players/99871276341445944.png"
+    },
+    "Minit": {
+      "img": "oe-83d021e5f65ae6fe.webp",
+      "v": "502c7bb0",
+      "real": "Yang Hyeon-min",
+      "source": "https://cdn.datalisk.io/players/101909007425097486.png"
+    },
+    "Duke": {
+      "img": "oe-4cc0abada8d4c018.webp",
+      "v": "90fc1ce4",
+      "real": "Lee Ho-seong",
+      "source": "https://cdn.datalisk.io/players/99566404799997552.png"
+    },
+    "Nova": {
+      "img": "oe-e380821101a0a46e.webp",
+      "v": "701fdb51",
+      "real": "Park Chan-ho",
+      "source": "https://cdn.datalisk.io/players/100205573447578812.png"
+    },
+    "Ryu": {
+      "img": "oe-5a68d4a17aab1fe8.webp",
+      "v": "c04ef5f7",
+      "real": "Ryu Sang-wook",
+      "source": "https://cdn.datalisk.io/players/98926509782092600.png"
+    },
+    "Mowgli": {
+      "img": "oe-b49612b29d3bf8e2.webp",
+      "v": "fc20b8de",
+      "real": "Lee Jae-ha",
+      "source": "https://cdn.datalisk.io/players/99566404527577071.png"
+    },
+    "Score": {
+      "img": "oe-f2217eaee9f3e464.webp",
+      "v": "a098afee",
+      "real": "Go Dong-bin",
+      "source": "https://cdn.datalisk.io/players/99566404546534573.png"
+    },
+    "Easyhoon": {
+      "img": "oe-84d631c0026510fd.webp",
+      "v": "0f532bfc",
+      "real": "Lee Ji-hoon",
+      "source": "https://cdn.datalisk.io/players/99566404804821192.png"
+    },
+    "Mata": {
+      "img": "oe-c1854f2a8f3ef3fc.webp",
+      "v": "dfd30701",
+      "real": "Cho Se-hyeong",
+      "source": "https://cdn.datalisk.io/players/99566404529717522.png"
+    },
+    "Joker": {
+      "img": "oe-aa369d85f7f05db4.webp",
+      "v": "33b71bdf",
+      "real": "Cho Jae-eup",
+      "source": "https://cdn.datalisk.io/players/100725844999523250.png"
+    },
+    "Naehyun": {
+      "img": "oe-e1efe5909d45b0a6.webp",
+      "v": "fc9de590",
+      "real": "Yoo Nae-hyun",
+      "source": "https://cdn.datalisk.io/players/99566405655227893.png"
+    },
+    "Saroo": {
+      "img": "oe-364b5e72f8e93785.webp",
+      "v": "60a0f7ad",
+      "real": "Lee Jong-won",
+      "source": "https://cdn.datalisk.io/players/106331927566605780.png"
+    },
+    "Crazy": {
+      "img": "oe-f4b1e9fbf8af2e2f.webp",
+      "v": "93b32b9d",
+      "real": "Kim Jae-hee",
+      "source": "https://cdn.datalisk.io/players/99566404562013167.png"
+    },
+    "DanDy": {
+      "img": "oe-a314f9b404553917.webp",
+      "v": "c86e6edb",
+      "real": "Choi In-kyu",
+      "source": "https://cdn.datalisk.io/players/98926509747330897.png"
+    },
+    "Reapered": {
+      "img": "oe-26cbeb126ae36943.webp",
+      "v": "b41bb1c7",
+      "real": "Bok Han-gyu",
+      "source": "https://cdn.datalisk.io/players/106977047189764758.png"
+    },
+    "Zeph": {
+      "img": "oe-e5c53e14faf416f1.webp",
+      "v": "5242172d",
+      "real": "Quentin Viguié",
+      "source": "https://cdn.datalisk.io/players/109710393379147572.png"
+    },
+    "Memento": {
+      "img": "oe-a2135f312e5c1ea9.webp",
+      "v": "b396c9eb",
+      "real": "Jonas Elmarghichi",
+      "source": "https://cdn.datalisk.io/players/99322214645983134.png"
+    },
+    "Perkz": {
+      "img": "oe-49d2fc40da5d12ba.webp",
+      "v": "f77bf1e3",
+      "real": "Luka Perković",
+      "source": "https://cdn.datalisk.io/players/98767975948505333.png"
+    },
+    "Maxlore": {
+      "img": "oe-1b0ab8db59323fec.webp",
+      "v": "b6f07ca8",
+      "real": "Nubar Sarafian",
+      "source": "https://cdn.datalisk.io/players/98767975905644361.png"
+    },
+    "Rhuckz": {
+      "img": "oe-23f1f2bca4db31dc.webp",
+      "v": "94fe927b",
+      "real": "Rúben Alexandre Barbosa Neves",
+      "source": "https://cdn.datalisk.io/players/103877631532044730.png"
+    },
+    "Gaax": {
+      "img": "oe-9f913c4b9bf64a9c.webp",
+      "v": "5242172d",
+      "real": "Pablo Vegas Pérez",
+      "source": "https://cdn.datalisk.io/players/106302725705264727.png"
+    },
+    "GrabbZ": {
+      "img": "oe-0a75ace2ce89f165.webp",
+      "v": "b72b587e",
+      "real": "Fabian Lohmann",
+      "source": "https://cdn.datalisk.io/players/105549518509757383.png"
+    },
+    "Odoamne": {
+      "img": "oe-2f679c1c2364ad42.webp",
+      "v": "45715064",
+      "real": "Andrei Pascu",
+      "source": "https://cdn.datalisk.io/players/99322214598412197.png"
+    },
+    "Alphari": {
+      "img": "oe-79538f87f47256cd.webp",
+      "v": "2387ecc6",
+      "real": "Barney Morris",
+      "source": "https://cdn.datalisk.io/players/98767975908541399.png"
+    },
+    "Cabochard": {
+      "img": "oe-11cd208fcc2ace49.webp",
+      "v": "f9f131b7",
+      "real": "Lucas Simon-Meslet",
+      "source": "https://cdn.datalisk.io/players/99322214580759173.png"
+    },
+    "Hansen": {
+      "img": "oe-d14830a3d0e28217.webp",
+      "v": "478e5a7d",
+      "real": "Bjørn-Vegar Skauvold Hansen",
+      "source": "https://cdn.datalisk.io/players/105543531198527423.png"
+    },
+    "Mac": {
+      "img": "oe-519245d4c70abcab.webp",
+      "v": "951ba232",
+      "real": "James MacCormack",
+      "source": "https://cdn.datalisk.io/players/105554344219195587.png"
+    },
+    "Mithy": {
+      "img": "oe-3c4edbc894b08bb3.webp",
+      "v": "a9ed8f57",
+      "real": "Alfonso Aguirre Rodríguez",
+      "source": "https://cdn.datalisk.io/players/98767991802971822.png"
+    },
+    "Nukeduck": {
+      "img": "oe-36530693c6ef712a.webp",
+      "v": "d63dc28a",
+      "real": "Erlend Våtevik Holm",
+      "source": "https://cdn.datalisk.io/players/99322214616775017.png"
+    },
+    "sOAZ": {
+      "img": "oe-e0db992a42905c3f.webp",
+      "v": "d6f0226a",
+      "real": "Paul Boyer",
+      "source": "https://cdn.datalisk.io/players/98767991760367216.png"
+    },
+    "Arrow": {
+      "img": "oe-53069876127c34d2.webp",
+      "v": "5242172d",
+      "real": "Noh Dong-hyeon",
+      "source": "https://cdn.datalisk.io/players/98926509788722983.png"
+    },
+    "Veigar v2": {
+      "img": "oe-d1ecbd2b4b149d3c.webp",
+      "v": "f0c75f40",
+      "real": "Marius Aune",
+      "source": "https://cdn.datalisk.io/players/115881230833151676.png"
+    },
+    "Apollo": {
+      "img": "oe-0f93df3be791f1c1.webp",
+      "v": "0140c00e",
+      "real": "Apollo Price",
+      "source": "https://cdn.datalisk.io/players/98926509773296197.png"
+    },
+    "Swiffer": {
+      "img": "oe-998f6786e571e625.webp",
+      "v": "16f4d9e4",
+      "real": "Simon Papamarkos",
+      "source": "https://cdn.datalisk.io/players/99566406282340408.png"
+    },
+    "Brandini": {
+      "img": "oe-c3200c3bf77eb310.webp",
+      "v": "a2e89abb",
+      "real": "Brandon Chen",
+      "source": "https://cdn.datalisk.io/players/98926509832738485.png"
+    },
+    "Goldenglue": {
+      "img": "oe-633f838578760d9a.webp",
+      "v": "eb17f2c6",
+      "real": "Greyson Gregory Gilmer",
+      "source": "https://cdn.datalisk.io/players/98926509774348209.png"
+    },
+    "Damonte": {
+      "img": "oe-97266ca416326c77.webp",
+      "v": "7e074771",
+      "real": "Tanner Damonte",
+      "source": "https://cdn.datalisk.io/players/98926509814242904.png"
+    },
+    "Nulu": {
+      "img": "oe-94f1aa6f8d702499.webp",
+      "v": "f0c75f40",
+      "real": "Marcin Wolski",
+      "source": "https://cdn.datalisk.io/players/111719425965039816.png"
+    },
+    "Spookz": {
+      "img": "oe-9ab3e319aa0898da.webp",
+      "v": "81d4d1f0",
+      "real": "Samuel Broadley",
+      "source": "https://cdn.datalisk.io/players/99566406281070925.png"
+    },
+    "Chawy": {
+      "img": "oe-4bf3fecccd0b5e0a.webp",
+      "v": "0cec81fa",
+      "real": "Wong Xing Lei",
+      "source": "https://cdn.datalisk.io/players/98767991780885336.png"
+    },
+    "Gismo": {
+      "img": "oe-03db047a60af5dd8.webp",
+      "v": "45cd7643",
+      "real": "Haruhiko Aoki",
+      "source": "https://cdn.datalisk.io/players/102856147421694822.png"
+    },
+    "Paz": {
+      "img": "oe-9f68798034d56646.webp",
+      "v": "97633a16",
+      "real": "Shirou Sasaki",
+      "source": "https://cdn.datalisk.io/players/100205572901889771.png"
+    },
+    "TaNa": {
+      "img": "oe-2ae80eea4baeed49.webp",
+      "v": "649b4aae",
+      "real": "Lee Sang-wook",
+      "source": "https://cdn.datalisk.io/players/101388913286565299.png"
+    },
+    "Kite": {
+      "img": "oe-397fd12581a7cab8.webp",
+      "v": "f0c75f40",
+      "real": "Kim Yong-yeon",
+      "source": "https://cdn.datalisk.io/players/107444032225136979.png"
+    },
+    "Naul": {
+      "img": "oe-ab4b5546398163ef.webp",
+      "v": "c9f3a73f",
+      "real": "Võ Thành Luân",
+      "source": "https://cdn.datalisk.io/players/98767975951461782.png"
+    },
+    "Bigkoro": {
+      "img": "oe-5ca36c6a026290eb.webp",
+      "v": "39fa4d04",
+      "real": "Đặng Ngọc Tài",
+      "source": "https://cdn.datalisk.io/players/98767975952787615.png"
+    },
+    "Luuukz": {
+      "img": "oe-8e54d49366065f76.webp",
+      "v": "c78bfa11",
+      "real": "Lucas Yudi Higashi",
+      "source": "https://cdn.datalisk.io/players/107781331811886924.png"
+    },
+    "Nothing": {
+      "img": "oe-c1b3a8928c1b08e5.webp",
+      "v": "e44dbfac",
+      "real": "Brandon Merlo",
+      "source": "https://cdn.datalisk.io/players/99566408329067987.png"
+    },
+    "Raise": {
+      "img": "oe-e913a5763e17cb85.webp",
+      "v": "e7c65489",
+      "real": "Oh Ji-hwan",
+      "source": "https://cdn.datalisk.io/players/99566404567892815.png"
+    },
+    "Sephis": {
+      "img": "oe-490987ea54381b6d.webp",
+      "v": "d52646a6",
+      "real": "Diego Alejandro de Alencar Jara",
+      "source": "https://cdn.datalisk.io/players/100131567588515623.png"
+    },
+    "Kouke": {
+      "img": "oe-d8d84331ea23d6e6.webp",
+      "v": "f0c75f40",
+      "real": "Jorge Eduardo Bravo González",
+      "source": "https://cdn.datalisk.io/players/114911254619382480.png"
+    },
+    "Vinicin": {
+      "img": "oe-8f498ae82c4d3d58.webp",
+      "v": "8d7d58cd",
+      "real": "Vinicius Garcia",
+      "source": "https://cdn.datalisk.io/players/111743200748470171.png"
+    },
+    "Enatron": {
+      "img": "oe-0b855b27018abe83.webp",
+      "v": "2cab0a66",
+      "real": "Ilias Theodorou",
+      "source": "https://cdn.datalisk.io/players/105543604300648567.png"
+    },
+    "Benvi": {
+      "img": "oe-144aef472f13116b.webp",
+      "v": "c4655d65",
+      "real": "Ben Moore",
+      "source": "https://cdn.datalisk.io/players/108604890149067024.png"
+    },
+    "bieLzera": {
+      "img": "oe-47c71e24db6fd41e.webp",
+      "v": "e559a76a",
+      "real": "Gabriel Aparecido Cardoso de Mattos",
+      "source": "https://cdn.datalisk.io/players/111734861025058911.png"
+    },
+    "kksh": {
+      "img": "oe-dd980d0570b9a78b.webp",
+      "v": "55aab012",
+      "real": "Otavio Maciel Alves",
+      "source": "https://cdn.datalisk.io/players/106619546344608600.png"
+    },
+    "Smiley": {
+      "img": "oe-5272a7df4aea3f1c.webp",
+      "v": "5d8b12dd",
+      "real": "Ludvig Erik Hugo Granquist",
+      "source": "https://cdn.datalisk.io/players/103935319202548658.png"
+    },
+    "Sarkis": {
+      "img": "oe-332e7e5eb656b87e.webp",
+      "v": "5242172d",
+      "real": "Matheus Guimarães Sarquis",
+      "source": "https://cdn.datalisk.io/players/100205576278457162.png"
+    },
+    "Von": {
+      "img": "oe-b7925338059c4edd.webp",
+      "v": "1493118e",
+      "real": "Gabriel Barbosa",
+      "source": "https://cdn.datalisk.io/players/105680007964241214.png"
+    },
+    "Key": {
+      "img": "oe-7791845d0cd8b4e8.webp",
+      "v": "a12edd35",
+      "real": "Kim Han-gi",
+      "source": "https://cdn.datalisk.io/players/99566404563587814.png"
+    },
+    "Sungmin": {
+      "img": "oe-66b907f04f5f4ba5.webp",
+      "v": "1e9589b4",
+      "real": "Ko Sung-min",
+      "source": "https://cdn.datalisk.io/players/113543976865509565.png"
+    },
+    "Ssumday": {
+      "img": "oe-6047da04da4a1823.webp",
+      "v": "27fd29a8",
+      "real": "Kim Chan-ho",
+      "source": "https://cdn.datalisk.io/players/98926509785257793.png"
+    },
+    "Catch": {
+      "img": "oe-0f4dbe69644c24cb.webp",
+      "v": "45cd7643",
+      "real": "Yun Sang-ho",
+      "source": "https://cdn.datalisk.io/players/100285330135648353.png"
+    },
+    "Frozen": {
+      "img": "oe-538d9fb4f983564b.webp",
+      "v": "d797c9a1",
+      "real": "Kim Tae-il",
+      "source": "https://cdn.datalisk.io/players/98767975924122553.png"
+    },
+    "Nagne": {
+      "img": "oe-ada79938fbb9c1df.webp",
+      "v": "661c651c",
+      "real": "Kim Sang-moon",
+      "source": "https://cdn.datalisk.io/players/101422616404868380.png"
+    },
+    "Autoboost": {
+      "img": "oe-b451783ef37d3609.webp",
+      "v": "c36c54bb",
+      "real": "Orlando Coronado",
+      "source": "https://cdn.datalisk.io/players/103658484592381698.png"
+    },
+    "Mash": {
+      "img": "oe-fc71a19951c43872.webp",
+      "v": "52a82479",
+      "real": "Brandon Phan",
+      "source": "https://cdn.datalisk.io/players/98926509772289831.png"
+    },
+    "xani": {
+      "img": "oe-26a438ebb05f8969.webp",
+      "v": "45cd7643",
+      "real": "Nikola Zrinjski",
+      "source": "https://cdn.datalisk.io/players/102181670382522783.png"
+    },
+    "Eika": {
+      "img": "oe-42f201d54273efff.webp",
+      "v": "f92571fa",
+      "real": "Jérémy Valdenaire",
+      "source": "https://cdn.datalisk.io/players/102787200038371957.png"
+    },
+    "Dan Dan": {
+      "img": "oe-78c3443c07bc37a7.webp",
+      "v": "e7a932b0",
+      "real": "Danny Le Comte",
+      "source": "https://cdn.datalisk.io/players/101389666794130913.png"
+    },
+    "Djoko": {
+      "img": "oe-b8ed1de4ebf027fa.webp",
+      "v": "a63c5d57",
+      "real": "Charly Guillard",
+      "source": "https://cdn.datalisk.io/players/99322214634684385.png"
+    },
+    "Nahovsky": {
+      "img": "oe-f343341cb632cd4c.webp",
+      "v": "f0c75f40",
+      "real": "Kacper Merski",
+      "source": "https://cdn.datalisk.io/players/111704240037844154.png"
+    },
+    "Nisqy": {
+      "img": "oe-f576e84314291f67.webp",
+      "v": "0414eaf0",
+      "real": "Yasin Dinçer",
+      "source": "https://cdn.datalisk.io/players/98926509846377469.png"
+    },
+    "Damage": {
+      "img": "oe-cff68f3f85b3f5ff.webp",
+      "v": "3b40d8b2",
+      "real": "Yan Sales Neves",
+      "source": "https://cdn.datalisk.io/players/100205576297917527.png"
+    },
+    "Snok": {
+      "img": "oe-345b9ea2718812e7.webp",
+      "v": "21dedd8c",
+      "real": "Roberto Coello",
+      "source": "https://cdn.datalisk.io/players/106977120557171934.png"
+    },
+    "Trigo": {
+      "img": "oe-ca7f2e7eb33a5460.webp",
+      "v": "31ab238e",
+      "real": "Matheus Trigo Nobrega",
+      "source": "https://cdn.datalisk.io/players/103743620262608671.png"
+    }
+  },
+  "legends": {
+    "worlds-2013-faker": {
+      "img": "worlds-faker13.jpg",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/9769958191/"
+    },
+    "worlds-2014-mata": {
+      "img": "worlds-mata2.jpg",
+      "tier": "trophy",
+      "page": "https://wap.gamersky.com/news/Content-479674.html"
+    },
+    "worlds-2015-marin": {
+      "img": "worlds-marin-victory.jpg",
+      "tier": "event",
+      "page": "https://m.wanplus.cn/article/72142.html"
+    },
+    "worlds-2016-faker": {
+      "img": "worlds-faker16.jpg",
+      "tier": "trophy",
+      "page": "https://www.invenglobal.com/articles/314/faker-with-his-trophy"
+    },
+    "worlds-2017-ruler": {
+      "img": "worlds-ruler.jpg",
+      "tier": "trophy",
+      "page": "https://www.flickr.com/photos/lolesports/24307603738/"
+    },
+    "worlds-2018-ning": {
+      "img": "worlds-ning.jpg",
+      "tier": "trophy",
+      "page": "https://sports.news.nate.com/view/20181103n12928"
+    },
+    "worlds-2019-tian": {
+      "img": "worlds-tian.jpg",
+      "tier": "event",
+      "page": "https://m.bjnews.com.cn/detail/157342912915039.html"
+    },
+    "worlds-2020-canyon": {
+      "img": "worlds-canyon3.png",
+      "tier": "trophy",
+      "page": "https://www.invenglobal.com/articles/12616/worlds-2020-dwg-canyon-wins-finals-mvp-we-worked-harder-than-any-other-team"
+    },
+    "worlds-2021-scout": {
+      "img": "worlds-scout2.jpg",
+      "tier": "trophy",
+      "page": "https://www.oneesports.vn/lmht/scout-gianh-duoc-mvp-tai-cktg-2021/"
+    },
+    "worlds-2022-kingen": {
+      "img": "worlds-kingen.jpg",
+      "tier": "trophy",
+      "page": "https://www.theloadout.com/league-of-legends/worlds-2022-mvp-drx-kingen-interview"
+    },
+    "worlds-2023-zeus": {
+      "img": "worlds-zeus.jpg",
+      "tier": "trophy",
+      "page": "https://www.flickr.com/photos/lolesports/53342210205/"
+    },
+    "worlds-2024-faker": {
+      "img": "worlds-faker24.jpg",
+      "tier": "trophy",
+      "page": "https://www.flickr.com/photos/lolesports/54112850518/"
+    },
+    "worlds-2025-gumayusi": {
+      "img": "worlds-gumayusi.jpg",
+      "tier": "trophy",
+      "page": "https://www.flickr.com/photos/lolesports/54913231729/"
+    },
+    "worlds-2018-theshy": {
+      "img": "ig-45288924111.jpg",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/45288924111/"
+    },
+    "worlds-2018-duke": {
+      "img": "ig-30308844677.jpg",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/30308844677/"
+    },
+    "worlds-2018-rookie": {
+      "img": "ig-30308845207.jpg",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/30308845207/"
+    },
+    "worlds-2018-jackeylove": {
+      "img": "ig-44722115754.jpg",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/44722115754/"
+    },
+    "worlds-2018-baolan": {
+      "img": "ig-43761693940.jpg",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/43761693940/"
+    },
+    "msi-2015-clearlove": {
+      "img": "msi-clearlove.jpg",
+      "tier": "event",
+      "page": "https://dj.sina.com.cn/article/avxeafs7290181.shtml"
+    },
+    "msi-2016-faker": {
+      "img": "msi-team-2016.jpg",
+      "tier": "event",
+      "page": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/"
+    },
+    "msi-2017-wolf": {
+      "img": "msi-wolf.jpg",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/34767877316/"
+    },
+    "msi-2018-uzi": {
+      "img": "msi-uzi.jpg",
+      "tier": "event",
+      "page": "https://www.wanplus.cn/article/141135.html"
+    },
+    "msi-2019-caps": {
+      "img": "msi-team-2019.jpg",
+      "tier": "event",
+      "page": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/"
+    },
+    "msi-2021-gala": {
+      "img": "msi-team-2021.jpg",
+      "tier": "event",
+      "page": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/"
+    },
+    "msi-2022-wei": {
+      "img": "msi-wei-poster.jpg",
+      "tier": "event",
+      "page": "https://www.ithome.com/0/621/170.htm"
+    },
+    "msi-2023-knight": {
+      "img": "msi-knight.jpg",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/52933620591/"
+    },
+    "msi-2024-lehends": {
+      "img": "msi-53731467916.jpg",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/53731467916/"
+    },
+    "msi-2025-chovy": {
+      "img": "msi-54651506160.jpg",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/54651506160/"
+    },
+    "msi-2026-zeus": {
+      "img": "msi-55388758698.jpg",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/55388758698/"
+    },
+    "career-doublelift": {
+      "img": "hall-45362081761.jpg",
+      "v": "69aace48",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/45362081761/"
+    },
+    "career-bjergsen": {
+      "img": "hall-34534936641.jpg",
+      "v": "3739e82e",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/34534936641/"
+    },
+    "career-perkz": {
+      "img": "hall-perkz-2018-45394582152.jpg",
+      "v": "86c3123b",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/45394582152/"
+    },
+    "career-rekkles": {
+      "img": "hall-49535032058.jpg",
+      "v": "3d2ffcd3",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/49535032058/"
+    },
+    "career-sneaky": {
+      "img": "hall-44552739215.jpg",
+      "v": "cfe4c617",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/44552739215/"
+    },
+    "career-jensen": {
+      "img": "hall-43777953440.jpg",
+      "v": "7c33cfbe",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/43777953440/"
+    },
+    "career-xmithie": {
+      "img": "hall-32024763187.jpg",
+      "v": "4d50d3cc",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/32024763187/"
+    },
+    "career-aphromoo": {
+      "img": "hall-33632246026.jpg",
+      "v": "2c258397",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/33632246026/"
+    },
+    "career-froggen": {
+      "img": "hall-33495004012.jpg",
+      "v": "b34284e5",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/33495004012/"
+    },
+    "career-diamondprox": {
+      "img": "hall-44353653404.jpg",
+      "v": "7ddf9866",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/44353653404/"
+    },
+    "career-soaz": {
+      "img": "hall-36900104933.jpg",
+      "v": "c597075c",
+      "tier": "event",
+      "page": "https://www.flickr.com/photos/lolesports/36900104933/"
+    }
+  },
+  "logos": {
+    "T1": "c380446a",
+    "T2": "4b9f2b2e",
+    "T3": "f129a94d",
+    "T4": "686cec1d",
+    "T5": "c3ff4bd3",
+    "T6": "0f21c281",
+    "T7": "84f71156",
+    "T9": "de60556b",
+    "T10": "9cd9ca7a",
+    "T11": "33fb9ca0",
+    "T12": "f3f9a1e6",
+    "T13": "c14e04d8",
+    "T14": "845b587e",
+    "T16": "ef5ed3ae",
+    "T17": "eb0cbf2e",
+    "T18": "4297ef98",
+    "T19": "454b456f",
+    "T20": "1dfba965",
+    "T21": "55aca3a5",
+    "T22": "b3802ac9",
+    "T23": "bab156c7",
+    "T24": "0aad82f2",
+    "T25": "72817148",
+    "T26": "6ebccd75",
+    "T31": "4c350def",
+    "T34": "f88b1278",
+    "T35": "28c4ec51",
+    "T36": "e77d34c0",
+    "T38": "2cbbf1b1",
+    "T42": "48271e19",
+    "T43": "7379c96f",
+    "T44": "bf8fd941",
+    "T45": "e4a1f167",
+    "T46": "5d28dadb",
+    "T47": "76d3977b",
+    "T51": "e16f0c97",
+    "T53": "eb80722e",
+    "T56": "777daf89",
+    "T58": "29561d90",
+    "T97": "d9a21b14",
+    "T8": "bc406456",
+    "T15": "bcb1edb2",
+    "T27": "056e29f4",
+    "T28": "571a5b17",
+    "T29": "dfb359f7",
+    "T30": "1a5a4913",
+    "T32": "be4367dd",
+    "T33": "170d7203",
+    "T37": "ea8e20fd",
+    "T39": "e706b963",
+    "T40": "5800e031",
+    "T41": "ce65a427",
+    "T48": "df3a1cbe",
+    "T49": "c7ec7a91",
+    "T50": "945f64bc",
+    "T52": "ea5bf2a4",
+    "T57": "e37a7ed0",
+    "T59": "bcb1edb2",
+    "T62": "59aeadf8",
+    "T68": "fe838217",
+    "T69": "33dcf539",
+    "T70": "14e3157e",
+    "T71": "e15d77b1",
+    "T72": "6100df5a",
+    "T73": "d0a5aa7b",
+    "T74": "65aa184b",
+    "T75": "2c1f0839",
+    "T76": "766b3bb8",
+    "T77": "6713a072",
+    "T79": "3d99fdde",
+    "T80": "525c367c",
+    "T82": "290cd782",
+    "T83": "ed2ca786",
+    "T84": "5a1a6f9e",
+    "T85": "17df09f9",
+    "T86": "75eb83e2",
+    "T88": "cb2967e1",
+    "T90": "2adf9d35",
+    "T91": "51fd3f37",
+    "T92": "db1271f2",
+    "T93": "3997207f",
+    "T94": "34e51c10",
+    "T96": "84d1a85d",
+    "T98": "c3b41343",
+    "T100": "dc5e9efe",
+    "T101": "a6f74349",
+    "T54": "231c88ee",
+    "T55": "c380f182",
+    "T78": "801d60cc",
+    "T60": "ef5ed3ae",
+    "T61": "eb0cbf2e",
+    "T63": "454b456f",
+    "T64": "1dfba965",
+    "T65": "55aca3a5",
+    "T66": "b3802ac9",
+    "T67": "bab156c7",
+    "T89": "df3a1cbe"
+  }
+}

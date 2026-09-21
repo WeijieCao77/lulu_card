@@ -1,0 +1,35 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vite
+*.log
+
+# never commit API keys
+.env
+.env.local
+
+# python bytecode
+__pycache__/
+*.pyc
+
+# scrape caches: raw vlr/liquipedia responses, rebuildable
+scripts/cache/
+
+# local experiments, not the game's build
+dist-minitool/
+val-manager-minitool.zip
+
+# the server-side engine bundle, built by `npm run build:server`
+dist-server
+.local-data/
+
+.env.*
+!.env.example
+*.tsbuildinfo
+*.pem
+*.key
+*api_key*
+*admin-token*
+audit-results/

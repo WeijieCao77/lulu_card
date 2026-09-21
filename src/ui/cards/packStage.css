@@ -1,0 +1,137 @@
+/* The pack table is an original Lulu Cards ceremony, independent of the shop theme. */
+.ritual-stage{position:fixed;inset:0;z-index:60;isolation:isolate;display:flex;flex-direction:column;box-sizing:border-box;padding:max(24px,env(safe-area-inset-top)) max(28px,env(safe-area-inset-right)) max(22px,env(safe-area-inset-bottom)) max(28px,env(safe-area-inset-left));overflow:hidden;color:#eee4cf;color-scheme:dark;background:radial-gradient(ellipse at 50% 43%,#15393e 0%,#122225 32%,#11191c 55%,#090d10 90%);font-family:inherit;overscroll-behavior:contain;--ritual-gold:#d6b477;--text:#eee4cf;--muted:#aaa28f;--panel:#142025;--line:#65583d}
+.ritual-stage button{font-family:inherit;color:#e7d9b9;border:1px solid #776447;background:linear-gradient(#293036,#172126);box-shadow:0 3px 10px #0005;border-radius:5px;cursor:pointer;min-height:42px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.ritual-stage button:focus-visible{outline:2px solid #8ce4e5;outline-offset:5px}
+.ritual-stage button:hover{border-color:#e2c28b}
+.ritual-scenery{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background:repeating-linear-gradient(0deg,transparent 0 3px,#0000000c 4px 5px)}
+.ritual-scenery:before{content:"";position:absolute;inset:12px;border:1px solid #b3955838;box-shadow:inset 0 0 100px #0009;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,0 80%,.2% 80%,.2% 99.8%,99.8% 99.8%,99.8% .2%,.2% .2%,.2% 20%,0 20%)}
+.ritual-orbit{position:absolute;left:50%;top:47%;width:min(82vw,680px);aspect-ratio:1;transform:translate(-50%,-50%) rotate(30deg);border:1px solid #c9b27b29;border-radius:50%;box-shadow:0 0 0 18px #081c1b55,0 0 0 19px #c9b27b12,0 0 0 65px #13242544;opacity:.8}
+.ritual-orbit:before,.ritual-orbit:after{content:"";position:absolute;inset:14%;border:1px solid #b6a47b22;transform:rotate(45deg)}
+.ritual-orbit:after{transform:rotate(0)}
+.ritual-orbit.inner{width:min(54vw,400px);border-style:dashed;opacity:.5;animation:ritual-orbit 95s linear infinite}
+.ritual-header{display:flex;justify-content:space-between;align-items:center;flex-shrink:0;z-index:2;gap:16px}
+.ritual-eyebrow{display:block;font-size:10px;font-weight:600;letter-spacing:.24em;color:#bdaa84}
+.ritual-header h2{font-size:23px;letter-spacing:.12em;font-weight:500;margin:8px 0 0;color:#f2e2bd;text-shadow:0 2px 8px #000}
+.ritual-stage .ritual-dismiss{width:42px;min-height:42px;font-size:18px;background:#0b121777;border-color:#ad956a44;color:#b6a88d}
+.ritual-opening{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;perspective:1100px}
+.ritual-stage .ritual-pack{position:relative;display:block;width:min(230px,48vw,33vh);aspect-ratio:.69;border:0;min-height:0;background:transparent;padding:0;box-shadow:none;transform:translateY(-14px) rotate(-7deg);animation:ritual-pack-hover 4s ease-in-out infinite;filter:drop-shadow(0 25px 20px #0009);isolation:isolate;transition:filter .25s}
+.ritual-stage .ritual-pack:hover{filter:drop-shadow(0 0 22px #a9e4cc55) drop-shadow(0 25px 20px #0009)}
+.ritual-pack-half{position:absolute;inset:0;border-radius:12px;background:linear-gradient(135deg,#789781,#263f37 13%,#182f2b 37%,#264838 65%,#152621);border:3px solid #bca276;box-shadow:inset 0 0 0 4px #171a18,inset 0 0 0 5px #92774f,inset 0 0 30px #040e0b;overflow:hidden}
+.ritual-pack-half:before{content:"";position:absolute;inset:14px;border:1px solid #d9b56977;border-radius:3px;background:repeating-conic-gradient(from 45deg at 50% 45%,#adb8900d 0deg 10deg,transparent 10deg 20deg);box-shadow:inset 0 0 30px #101d17}
+.ritual-pack-half:after{content:"";position:absolute;left:-25%;right:-25%;height:30%;top:34%;border-block:2px solid #bc9c6970;background:linear-gradient(90deg,#685438,#ae9260,#5e4b31);transform:rotate(-45deg);opacity:.35}
+.ritual-pack-half.left{clip-path:polygon(0 0,55% 0,45% 24%,55% 39%,47% 60%,55% 80%,46% 100%,0 100%)}
+.ritual-pack-half.right{clip-path:polygon(54.8% 0,100% 0,100% 100%,45.8% 100%,54.8% 80%,46.8% 60%,54.8% 39%,44.8% 24%)}
+.ritual-pack-seal{position:absolute;top:23%;left:20%;width:60%;color:#e8d49a;filter:drop-shadow(0 3px 0 #524128) drop-shadow(0 0 12px #fcdf9955)}
+.ritual-pack-seal svg{display:block;width:100%}
+.ritual-pack-title{position:absolute;bottom:20%;left:0;width:100%;font-family:Georgia,serif;font-weight:bold;font-size:clamp(14px,3vw,23px);letter-spacing:.18em;color:#f4dba3;text-shadow:0 2px #29251a}
+.ritual-pack-count{position:absolute;bottom:11%;left:0;width:100%;font-size:10px;letter-spacing:.15em;color:#c4b18a}
+.ritual-altar{position:absolute;left:50%;top:50%;width:min(390px,74vw);aspect-ratio:1;transform:translate(-50%,-35%) rotateX(64deg);border-radius:50%;background:radial-gradient(#a3e8d32e,transparent 62%);box-shadow:0 0 70px #63dfc81a}
+.ritual-altar i{position:absolute;inset:0;border-radius:50%;border:2px solid #a3bea265;box-shadow:0 0 18px #acd6b033,inset 0 0 18px #acd6b022}
+.ritual-altar i:nth-child(2){inset:10%;border-style:dashed;animation:ritual-ring 30s linear infinite}.ritual-altar i:nth-child(3){inset:23%;border-color:#e8c78477}
+.ritual-open-hint{position:absolute;bottom:2%;left:0;width:100%;text-align:center;display:flex;flex-direction:column;gap:9px;pointer-events:none}
+.ritual-open-hint b{font-size:16px;letter-spacing:.13em;font-weight:500;color:#e8d7b6}.ritual-open-hint span{font-size:11px;letter-spacing:.06em;color:#89968e}
+.ritual-burst{position:absolute;left:50%;top:47%;width:1px;height:1px;pointer-events:none}
+.ritual-burst:before{content:"";position:absolute;inset:-110px;border-radius:50%;background:radial-gradient(#fff5cb,#8be6d85c 30%,transparent 68%);opacity:0}
+.ritual-burst i{position:absolute;width:5px;height:20px;left:-2px;top:-10px;background:#dfcba0;opacity:0;box-shadow:0 0 12px #eedcac;--angle:calc(var(--i)*22.5deg)}
+.phase-burst .ritual-pack{animation:ritual-pack-impact .26s ease-in forwards}
+.phase-burst .ritual-pack-half.left{animation:ritual-split-left .75s .22s ease-in both}.phase-burst .ritual-pack-half.right{animation:ritual-split-right .75s .22s ease-in both}
+.phase-burst .ritual-pack-seal,.phase-burst .ritual-pack-title,.phase-burst .ritual-pack-count{animation:ritual-seal-release .45s .2s both}
+.phase-burst .ritual-burst:before{animation:ritual-burst-light .85s .16s both}.phase-burst .ritual-burst i{animation:ritual-fragment .85s .22s ease-out both}
+.ritual-dust i{position:absolute;left:calc(6% + var(--i)*5.1%);bottom:-10px;width:2px;height:2px;border-radius:50%;background:#edd4a5;box-shadow:0 0 5px #e6c277;animation:ritual-dust calc(7s + var(--i)*.27s) calc(var(--i)*-.6s) linear infinite;opacity:0}
+.ritual-board{position:relative;flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none;-webkit-user-select:none;padding:0;margin:8px 0;perspective:1400px}
+.ritual-spread{display:grid;grid-template-columns:repeat(var(--columns),var(--card-width));gap:24px;align-items:center;justify-content:center}
+.ritual-deal{width:var(--card-width);height:calc(var(--card-width)*282/184);animation:ritual-deal .65s calc(var(--order)*65ms) cubic-bezier(.16,.7,.25,1) both;perspective:1100px}
+.ritual-stage .ritual-card{display:block;position:relative;width:100%;height:100%;min-height:0;padding:0;border:0;border-radius:9px;background:transparent;box-shadow:none;--card-glow:#b08758;transition:filter .2s;perspective:1100px;touch-action:none}
+.ritual-card.rarity-silver{--card-glow:#c8e7ef}.ritual-card.rarity-gold{--card-glow:#ffcb64}.ritual-card.rarity-mythic{--card-glow:#c291ff}
+.ritual-flipper{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.2,.7,.2,1);transform:rotateY(0)}
+.is-revealed .ritual-flipper{transform:rotateY(180deg)}
+.ritual-card-back,.ritual-card-front{position:absolute;inset:0;border-radius:8px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 12px 22px #0009}
+.ritual-card-back{transform:translateZ(1px)}.ritual-card-front{transform:rotateY(180deg) translateZ(1px);overflow:hidden;background:#18232d}
+.ritual-face-scale{width:184px;height:282px;transform:scale(var(--card-scale));transform-origin:0 0;pointer-events:none}
+.ritual-face-scale .cardface{width:184px!important;height:282px!important;min-height:282px!important;box-sizing:border-box;margin:0}
+.ritual-face-scale .wc-window{height:100%;min-height:0;aspect-ratio:auto}
+.ritual-card-light{position:absolute;inset:-5px;border-radius:12px;opacity:.06;background:var(--card-glow);filter:blur(10px);transition:opacity .2s;pointer-events:none}
+.ritual-card:hover .ritual-card-light,.ritual-card:focus-visible .ritual-card-light,.ritual-card:active .ritual-card-light{opacity:.7}
+.ritual-card.is-revealed .ritual-card-light{opacity:.23}
+.ritual-card.rarity-mythic.is-revealed .ritual-card-light{background:conic-gradient(#7ae5ff,#c896ff,#ffdea4,#7ae5ff);opacity:.55}
+.ritual-back{position:absolute;inset:0;box-sizing:border-box;border:2px solid #9a8355;border-radius:8px;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#315552,#183536 40%,#101e25 80%);box-shadow:inset 0 0 0 3px #0b1a20,inset 0 0 0 4px #b99c635c,inset 0 0 20px #0009;color:#d0b77f;container-type:inline-size}
+.ritual-back:before{content:"";position:absolute;inset:8%;border:1px solid #c3ab6966;background:repeating-conic-gradient(from 0deg at 50% 46%,#abb49c0b 0 15deg,transparent 15deg 30deg);border-radius:45% 45% 8% 8%}
+.ritual-back:after{content:"";position:absolute;inset:4%;border:1px solid #c3ab693b;border-radius:5px}
+.ritual-back-ring{position:absolute;left:15%;top:24%;width:70%;filter:drop-shadow(0 2px 2px #0009)}.ritual-back-ring svg{display:block;width:100%}
+.ritual-back-brand{position:absolute;top:74%;width:100%;left:0;text-align:center;font:600 12cqw/1.2 Georgia,serif;letter-spacing:.24em;text-indent:.24em}
+.ritual-back-edition{position:absolute;bottom:8%;width:100%;left:0;text-align:center;font-size:5.5cqw;letter-spacing:.12em;color:#a3987d}
+.ritual-back-corner{position:absolute;width:18%;aspect-ratio:1;transform:rotate(45deg);border:1px solid #baa26d;opacity:.7}.ritual-back-corner.tl{top:-10%;left:-10%}.ritual-back-corner.br{bottom:-10%;right:-10%}
+.ritual-flip-sparks{position:absolute;inset:0;pointer-events:none}.ritual-flip-sparks i{position:absolute;left:50%;top:50%;width:3px;height:5px;background:var(--card-glow);box-shadow:0 0 9px var(--card-glow);--angle:calc(var(--i)*45deg);animation:ritual-card-spark .85s .23s ease-out both}
+.ritual-footer{position:relative;z-index:2;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px;padding-top:10px;text-align:center}
+.ritual-progress{font-size:12px;line-height:1.4;color:#c8b891;min-height:37px}.ritual-progress>b{font-size:18px;color:#f0dcad}.ritual-progress>span{display:block;margin-top:5px;font-size:11px;color:#909d96;letter-spacing:.03em}
+.ritual-touch-hint{display:none}.ritual-actions{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.ritual-actions button{padding:10px 22px;min-width:120px;font-size:12px;letter-spacing:.08em}
+.ritual-actions .ritual-collect{background:linear-gradient(#a88b50,#69522e);border-color:#dec895;color:#fff0d3;box-shadow:inset 0 1px 0 #ead49d66,0 4px 20px #0005}
+.ritual-detail{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:28px;background:#060b10e8;backdrop-filter:blur(9px);touch-action:pan-y}
+.ritual-detail-card{display:flex;flex-direction:column;align-items:center;gap:16px;max-width:100%;margin:auto;animation:ritual-detail-in .25s ease-out}
+.ritual-detail-card>.cardface{width:min(280px,65vw)!important;flex-shrink:0;box-shadow:0 0 55px #dfbd5430}
+.ritual-detail-card p{font-size:14px;color:#e7d5b2;text-align:center;margin:0;max-width:320px}
+.ritual-detail-card>button{min-width:150px;padding:11px 22px}
+@keyframes ritual-pack-hover{0%,100%{transform:translateY(-14px) rotate(-7deg)}50%{transform:translateY(-23px) rotate(-4deg)}}
+@keyframes ritual-pack-impact{0%{transform:translateY(-14px) rotate(-7deg)}55%{transform:translateY(-8px) rotate(3deg) scale(.95)}100%{transform:translateY(-14px) rotate(0) scale(1.06)}}
+@keyframes ritual-split-left{0%{transform:translateX(0);opacity:1}100%{transform:translate(-150%,-15%) rotate(-50deg);opacity:0}}
+@keyframes ritual-split-right{0%{transform:translateX(0);opacity:1}100%{transform:translate(150%,10%) rotate(55deg);opacity:0}}
+@keyframes ritual-seal-release{to{transform:scale(1.7);opacity:0}}
+@keyframes ritual-burst-light{0%{transform:scale(.2);opacity:0}20%{opacity:.85}100%{transform:scale(3);opacity:0}}
+@keyframes ritual-fragment{0%{transform:rotate(var(--angle)) translateY(0);opacity:0}10%{opacity:1}100%{transform:rotate(var(--angle)) translateY(-280px) rotate(120deg);opacity:0}}
+@keyframes ritual-ring{to{transform:rotate(360deg)}}
+@keyframes ritual-orbit{to{transform:translate(-50%,-50%) rotate(390deg)}}
+@keyframes ritual-dust{0%{transform:translateY(0);opacity:0}15%{opacity:.5}80%{opacity:.25}100%{transform:translate(20px,-90vh);opacity:0}}
+@keyframes ritual-deal{from{opacity:0;transform:translateY(65px) scale(.48) rotate(var(--fan))}to{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
+@keyframes ritual-card-spark{0%{opacity:0;transform:rotate(var(--angle)) translateY(0)}10%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateY(calc(var(--card-width)*.86))}}
+@keyframes ritual-detail-in{from{opacity:0;transform:translateY(10px) scale(.94)}to{opacity:1;transform:none}}
+@media(max-width:650px){.ritual-stage{padding:max(20px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}.ritual-header h2{font-size:19px}.ritual-eyebrow{font-size:9px;letter-spacing:.18em}.ritual-spread{gap:12px}.ritual-board{margin:4px 0}.ritual-actions button{padding:10px 16px;min-width:110px}.ritual-open-hint b{font-size:14px}.ritual-scenery:before{inset:7px}.ritual-footer{gap:9px}.ritual-detail-card{gap:12px}}
+@media(pointer:coarse){.ritual-touch-hint{display:inline}.ritual-desktop-hint{display:none}.ritual-stage button{min-height:44px}.ritual-stage .ritual-card,.ritual-stage .ritual-pack{min-height:0}}
+@media(max-height:500px) and (min-width:600px){.ritual-stage{padding:12px 24px}.ritual-header h2{font-size:16px;margin-top:3px}.ritual-footer{flex-direction:row;justify-content:center;gap:30px;padding-top:0}.ritual-progress{min-height:0}.ritual-detail{padding:12px}.ritual-detail-card{flex-direction:row;flex-wrap:wrap;justify-content:center}.ritual-detail-card>.cardface{width:160px!important}.ritual-detail-card>.ritual-eyebrow{display:none}.ritual-open-hint{bottom:0}}
+/* A real drop target: the unopened pack begins off the altar. */
+.altar-opening{--altar-x:66%;--altar-y:43%;--source-x:23%;--source-y:51%;--altar-size:min(290px,35vw,55vh);--pack-size:min(165px,22vw,28vh);touch-action:none}
+.altar-dropzone,.altar-drop-burst{position:absolute;left:var(--altar-x);top:var(--altar-y);width:var(--altar-size);aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none}
+.altar-drop-rings{position:absolute;inset:0;border-radius:50%;background:radial-gradient(#639f9b22,transparent 68%);transition:filter .25s,background .25s}
+.altar-drop-rings i{position:absolute;inset:0;border-radius:50%;border:2px solid #9bbeb375;box-shadow:0 0 16px #83dccc1c,inset 0 0 16px #83dccc1c}
+.altar-drop-rings i:nth-child(2){inset:9%;border-style:dashed;animation:ritual-ring 45s linear infinite}.altar-drop-rings i:nth-child(3){inset:20%;border-color:#cbb57e66;transform:rotate(45deg);border-radius:20%}
+.altar-drop-rings>span{position:absolute;inset:0;display:grid;place-items:center;font-size:46px;color:#b2d2bc88;text-shadow:0 0 20px #99ffe5}
+.altar-drop-label{position:absolute;top:108%;width:100%;text-align:center;color:#b6caba;font-size:12px;letter-spacing:.1em}
+.is-over .altar-drop-rings{filter:drop-shadow(0 0 22px #a4f5cc);background:radial-gradient(#7ecea46b,transparent 70%)}.is-over .altar-drop-label{color:#f2dfad}
+.altar-pack-source{position:absolute;left:var(--source-x);top:var(--source-y);width:var(--pack-size);aspect-ratio:.69;transform:translate(-50%,-50%)}
+.altar-pack-carrier{width:100%;height:100%;transform:translate(var(--drag-x),var(--drag-y));transition:transform .38s cubic-bezier(.2,.8,.2,1)}
+.is-dragging .altar-pack-carrier{transition:none}
+.ritual-stage .altar-opening .ritual-pack{width:100%;height:100%;animation:none;transform:rotate(-9deg);transition:transform .25s;touch-action:none;user-select:none;cursor:grab}
+.ritual-stage .altar-opening.is-dragging .ritual-pack{transform:rotate(3deg) scale(1.07);cursor:grabbing;filter:drop-shadow(0 20px 20px #0009) drop-shadow(0 0 14px #88efcf44)}
+.ritual-stage .altar-opening.is-placed .ritual-pack{transform:rotate(0deg);transition:transform .3s}
+.altar-drag-path{position:absolute;left:41%;top:49%;color:#b6c7a584;display:flex;gap:18px;font-size:27px;pointer-events:none}.altar-drag-path b{transform:rotate(90deg);font-weight:400}
+.is-dragging .altar-drag-path,.is-placed .altar-drag-path{opacity:0}.is-placed .altar-drop-label{opacity:0}
+.altar-drop-burst .ritual-burst{top:50%}
+.phase-burst .altar-opening .ritual-pack-half.left{animation-delay:.65s}.phase-burst .altar-opening .ritual-pack-half.right{animation-delay:.65s}
+.phase-burst .altar-opening .ritual-pack-seal,.phase-burst .altar-opening .ritual-pack-title,.phase-burst .altar-opening .ritual-pack-count{animation-delay:.62s}
+.phase-burst .altar-opening .ritual-burst:before{animation-delay:.6s}.phase-burst .altar-opening .ritual-burst i{animation-delay:.65s}
+/* Mythic-only scene, mounted once for each newly flipped mythic card. */
+.mythic-entrance{position:absolute;inset:0;z-index:20;isolation:isolate;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#080716f5;color:#f4e5ff}
+.mythic-cosmos{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 50% 47%,#42306399,transparent 63%)}
+.mythic-rays{position:absolute;left:50%;top:47%;width:150vmax;aspect-ratio:1;background:repeating-conic-gradient(from 10deg,#98dff000 0deg 12deg,#a8cafd18 14deg 16deg,#da97ef08 18deg 24deg);transform:translate(-50%,-50%);animation:mythic-rays 38s linear infinite}
+.mythic-halo{position:absolute;width:min(550px,95vw);aspect-ratio:1;left:50%;top:45%;border:2px solid #ecc1ff99;border-radius:50%;box-shadow:0 0 45px #c17fff55,inset 0 0 45px #b887ff33;transform:translate(-50%,-50%);animation:mythic-halo 1.2s ease-out both}
+.mythic-halo:before,.mythic-halo:after{content:"";position:absolute;inset:7%;border:1px dashed #ffe5ab66;border-radius:50%}.mythic-halo:after{inset:14%;border-style:solid;border-color:#a5e9f555}
+.mythic-pillar{position:absolute;top:0;bottom:0;left:calc(50% - 30px);width:60px;background:linear-gradient(90deg,transparent,#d4c3ffbb,transparent);filter:blur(14px);animation:mythic-pillar 1.4s both}
+.mythic-shockwave{position:absolute;left:50%;top:45%;width:80px;height:80px;border:5px solid #f3dfff;border-radius:50%;box-shadow:0 0 40px #c5b1ff;animation:mythic-shockwave 1.3s .2s both}
+.mythic-cosmos>i{position:absolute;left:50%;top:45%;width:3px;height:10px;background:#f3d2ff;box-shadow:0 0 10px #c6f5ff;--angle:calc(var(--i)*15deg);animation:mythic-particle 2s calc(.3s + var(--i)*.018s) both}
+.mythic-spotlight{position:relative;display:flex;flex-direction:column;align-items:center;gap:13px;text-align:center;padding:24px;max-height:100%;box-sizing:border-box;overflow-y:auto}
+.mythic-announcement{animation:mythic-word .8s .45s both}.mythic-announcement>span{font-size:9px;letter-spacing:.46em;color:#bfc6f1}.mythic-announcement h2{font-size:25px;margin:6px 0;color:#f3e2ff;text-shadow:0 0 25px #bb8dff;letter-spacing:.15em}.mythic-announcement i{display:block;width:130px;height:1px;margin:auto;background:linear-gradient(90deg,transparent,#f1ce90,transparent)}
+.mythic-hero-card{width:min(245px,58vw,32vh);flex-shrink:0;animation:mythic-card-arrive 1.35s cubic-bezier(.15,.8,.2,1) both;filter:drop-shadow(0 0 18px #c390f455)}
+.mythic-hero-card>.cardface{width:100%!important;box-shadow:0 0 2px 2px #efdaaa,0 0 35px #c888ff88,0 20px 55px #000b}
+.mythic-identity{display:flex;flex-direction:column;gap:5px;animation:mythic-word .6s .9s both}.mythic-identity strong{font:600 25px/1.1 Georgia,serif;letter-spacing:.08em}.mythic-identity span{font-size:12px;letter-spacing:.08em;color:#cab6d9}
+.ritual-stage .mythic-continue{padding:10px 24px;min-width:170px;border-color:#c5a2ec;background:linear-gradient(#674c82,#302640);box-shadow:0 0 22px #ae74d833;color:#f1dfff}.mythic-continue:disabled{opacity:.55;cursor:default}
+.ritual-stage .mythic-skip{position:absolute;right:max(18px,env(safe-area-inset-right));top:max(18px,env(safe-area-inset-top));padding:7px 12px;min-height:38px;font-size:11px;background:#100d20aa;border-color:#79678b55;color:#b3a3c1;z-index:2}
+@keyframes mythic-rays{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes mythic-halo{from{opacity:0;transform:translate(-50%,-50%) scale(.35) rotate(-40deg)}to{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}}
+@keyframes mythic-pillar{0%{opacity:0;transform:scaleX(.1)}30%{opacity:.85;transform:scaleX(2.5)}100%{opacity:0;transform:scaleX(4)}}
+@keyframes mythic-shockwave{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}15%{opacity:.7}100%{opacity:0;transform:translate(-50%,-50%) scale(12)}}
+@keyframes mythic-particle{0%{opacity:0;transform:rotate(var(--angle)) translateY(40px)}15%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateY(440px) rotate(100deg)}}
+@keyframes mythic-card-arrive{0%{opacity:0;transform:scale(.25) rotateY(120deg) translateY(40px)}30%{opacity:0;transform:scale(.45) rotateY(95deg)}65%{opacity:1;transform:scale(1.07) rotateY(-7deg)}100%{opacity:1;transform:scale(1) rotateY(0)}}
+@keyframes mythic-word{from{opacity:0;transform:translateY(15px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+@media(max-width:650px){.altar-opening{--altar-x:50%;--altar-y:27%;--source-x:50%;--source-y:70%;--altar-size:min(210px,49vw,29vh);--pack-size:min(128px,29vw,21vh)}.altar-drag-path{left:calc(50% - 7px);top:48%;flex-direction:column;gap:1px;font-size:17px}.altar-drag-path span{display:none}.altar-drag-path b{transform:none}.altar-drop-label{font-size:10px}.altar-opening .ritual-open-hint{bottom:0}.mythic-spotlight{gap:12px;padding:50px 16px 20px}.mythic-announcement h2{font-size:23px}.mythic-hero-card{width:min(230px,57vw,31vh)}}
+@media(max-height:500px) and (min-width:600px){.mythic-spotlight{display:grid;grid-template-columns:180px 220px;gap:16px 24px;overflow:visible;padding:14px}.mythic-hero-card{grid-column:1;grid-row:1/4;width:min(180px,47vh)}.mythic-announcement,.mythic-identity,.mythic-continue{grid-column:2}.altar-opening{--pack-size:25vh;--altar-size:42vh}}
+@media(prefers-reduced-motion:reduce){.ritual-stage *,.ritual-stage *:before,.ritual-stage *:after{animation:none!important;transition:none!important}.ritual-dust,.ritual-burst,.ritual-flip-sparks,.mythic-pillar,.mythic-shockwave,.mythic-cosmos>i{display:none}.ritual-flipper{transform:none!important}.ritual-card-front{transform:none}.ritual-card:not(.is-revealed) .ritual-card-front{visibility:hidden}.ritual-card.is-revealed .ritual-card-back{visibility:hidden}}

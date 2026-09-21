@@ -1,0 +1,268 @@
+/* FeedbackBoard.css */
+.feedback-board {
+  color: var(--text);
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.feedback-board .feedback-header h2 {
+  margin: 0 0 0.5rem;
+}
+
+.feedback-board .feedback-header .note {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 0.75rem;
+}
+
+.feedback-board .tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.feedback-board .tabs button {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.feedback-board .tabs button.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.feedback-board .feedback-compose {
+  margin-bottom: 1rem;
+}
+
+.feedback-board .feedback-compose textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  resize: vertical;
+  border-radius: 4px;
+}
+
+.feedback-board .feedback-compose textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.feedback-board .compose-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.feedback-board .char-count {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.feedback-board .feedback-compose button, .feedback-board .feedback-actions button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.feedback-board .feedback-compose button:disabled, .feedback-board .feedback-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.feedback-board .notice, .feedback-board .error {
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.feedback-board .notice {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+}
+
+.feedback-board .error {
+  background: color-mix(in srgb, #f44336 10%, transparent);
+  color: #f44336;
+}
+
+.feedback-board .feedback-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.feedback-board .loading, .feedback-board .empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 1rem;
+}
+
+.feedback-board .feedback-item {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.75rem;
+  position: relative;
+}
+
+.feedback-board .feedback-item.pinned {
+  border-color: var(--accent);
+}
+
+.feedback-board .pin-badge {
+  position: absolute;
+  top: -0.5rem;
+  right: 0.5rem;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+}
+
+.feedback-board .item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.feedback-board .time {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.feedback-board .status {
+  font-size: 0.8rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--muted) 20%, transparent);
+}
+
+.feedback-board .status-shown {
+  background: color-mix(in srgb, #4caf50 20%, transparent);
+  color: #4caf50;
+}
+
+.feedback-board .status-taken {
+  background: color-mix(in srgb, #ff9800 20%, transparent);
+  color: #ff9800;
+}
+
+.feedback-board .status-fixed {
+  background: color-mix(in srgb, #2196f3 20%, transparent);
+  color: #2196f3;
+}
+
+.feedback-board .status-merged {
+  background: color-mix(in srgb, #9e9e9e 20%, transparent);
+  color: #9e9e9e;
+}
+
+.feedback-board .status-pending, .feedback-board .status-hidden {
+  background: color-mix(in srgb, var(--muted) 20%, transparent);
+  color: var(--muted);
+}
+
+.feedback-board .item-text {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.feedback-board .merge-box {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-left: 3px solid var(--line);
+  font-size: 0.9rem;
+}
+
+.feedback-board .merge-public {
+  border-left-color: #4caf50;
+}
+
+.feedback-board .merge-private, .feedback-board .merge-missing {
+  border-left-color: var(--muted);
+}
+
+.feedback-board .merge-target-text {
+  font-style: italic;
+  margin-bottom: 0.25rem;
+}
+
+.feedback-board .merge-target-state {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.feedback-board .item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.feedback-board .vote-button {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.feedback-board .vote-button.voted {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.feedback-board .vote-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.feedback-board .mine-badge {
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 10px;
+}
+
+.feedback-board .feedback-actions {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Responsive for 320px */
+@media (max-width: 400px) {
+  .feedback-board {
+    padding: 0.5rem;
+  }
+  .feedback-board .tabs button {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.9rem;
+  }
+  .feedback-board .feedback-compose textarea {
+    font-size: 0.9rem;
+  }
+  .feedback-board .item-header {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+.feedback-board { background:var(--panel); border:1px solid var(--line); border-radius:12px; margin:0; width:100%; max-width:none; }
+.feedback-board button.active,.feedback-board .vote-button.voted,.feedback-board .mine-badge { color:var(--bg); }

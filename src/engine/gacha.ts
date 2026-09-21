@@ -1,0 +1,2597 @@
+/**
+ * The card mode: pull real professionals, build a five, and take it out.
+ *
+ * Kept entirely separate from the career save. A career is a club you manage
+ * over seasons; this is a collection you own across sessions, tied to an
+ * account id rather than to one browser — see engine/account.ts. The two never
+ * share state, and nothing here writes into a career.
+ */
+import { BALANCE_VERSION } from './balance'
+import { Rng, clamp, hashStr } from './rng'
+import { WORLD_TEAMS } from './teams'
+import { CUP_TEAMS } from './cupTeams'
+import { REGION_CN } from './types'
+import type { Role } from './types'
+import { cleanPredictions } from './predict'
+import type { Picks } from './predict'
+import type { SeoulRouteState } from './seoulRoute'
+import {
+  ALL_CARDS, SEOUL_CARDS, COACH_CARDS, COINS_FOR, DUPES_FOR, LEGEND_CARDS, LEGEND_COACH_CARDS, MAX_LEVEL, RARITY_CN, cardName, PLAYER_CARDS,
+  SALVAGE, SQUAD_SLOTS, cardById, cardPower, emptySquad, isPlayerCard, personOf, rarityRank, ratingAt,
+  squadRating, squadPower,
+} from './cards'
+import type { Card, PlayerCard, Rarity, Squad } from './cards'
+import { newChallenge } from './challenge'
+import { MINI_CN, MINI_COINS, MINI_PAYS_PACK, newMinigame } from './minigame'
+import type { MiniGame, MinigameState, Tier } from './minigame'
+import type { ChallengeState } from './challenge'
+
+export const GACHA_VERSION = 1
+
+// ---------------------------------------------------------------- packs
+
+/**
+ * The four series, and the pack that only deals from one of them.
+ *
+ * A single 607-card pile is a number, not a collection: 「还差多少」 has no
+ * answer a person can hold, and no pull ever moves you visibly closer to
+ * anything. Cut by the thing this sport is actually organised by — the four
+ * regions — it becomes four collections you can finish, and a pack that deals
+ * only from one of them is a way to chase the half you are missing rather
+ * than the whole world at once.
+ *
+ * The regions come off the cards themselves; nothing here is invented.
+ */
+export const SERIES = ['LPL', 'LCK', 'LEC', 'LCS', 'LCP', 'CBLOL'] as const
+export type Series = (typeof SERIES)[number]
+
+export type PackKind =
+  | 'scout' | 'elite' | 'ten' | 'coach' | 'seoul2024'
+  // one 彩卡, nothing else — the reward for a full 图鉴; never sold
+  | 'legend'
+  // one per series — same three cards, drawn only from that region
+  | 'cn' | 'pac' | 'ame' | 'emea' | 'lcp' | 'cblol'
+  // one per position — a single card that plays it; paid by the 位置小游戏, never sold
+  | 'duelist' | 'initiator' | 'controller' | 'sentinel'
+
+/** the positions a pack can be dealt from; 辅助 is not a pool, it is the absence of one */
+export type PackPosition = Extract<Role, '上单' | '打野' | '中单' | '下路'>
+
+export interface PackDef {
+  kind: PackKind
+  name: string
+  blurb: string
+  cost: number
+  draws: number
+  /**
+   * Chance of a彩卡 on each individual draw.
+   *
+   * Deliberately a lottery: twenty cards, and at five pulls a day it is months
+   * between them. MYTHIC_FLOOR is the only thing that makes it a certainty.
+   */
+  mythic: number
+  /** chance of a gold on each individual draw */
+  gold: number
+  silver: number
+  /** the pack promises at least one card of this metal */
+  floor?: Rarity
+  /**
+   * Whether coins can buy it at all.
+   *
+   * The ten-pull cannot. Capping the shop at two packs a day did nothing while
+   * both of them could be ten-pulls — twenty cards is not a slower day than
+   * twenty cards. It is now earned only: a promotion, a cup title, or a
+   * seven-day streak. That also gives it something to be, which "the expensive
+   * one" never was.
+   */
+  shop?: boolean
+  /** coach packs deal from a different deck; a series deals from one region; a position from its players; 'legend' is every 彩卡 */
+  pool: 'player' | 'coach' | 'seoul2024' | 'legend' | Series | PackPosition
+}
+
+/**
+ * Prices, set from what a day actually earns rather than from feel.
+ *
+ * scripts/economy_check.ts measures E(coins) per match from the simulation —
+ * the reward table alone cannot, because it does not know the win rate. At
+ * 大师 with the meter played out that is about 2,250 coins a day, so 750 buys
+ * three 试训包 or banks most of a 选拔包, and choosing between those is the
+ * decision the old two-a-day counter took away.
+ */
+export const PACKS: Record<PackKind, PackDef> = {
+  seoul2024: {
+    kind: 'seoul2024', name: '首尔 2024 冠军赛包', pool: 'seoul2024',
+    blurb: '16 支战队 · 80 位登场选手。三张首尔赛事卡，至少一张银卡，不出彩卡。',
+    // 23 golds after the caller and initiator credit; at 8% a full set cost 314
+    // packs against 228 before, 12% brings it back (analyze_seoul_rarity.mjs)
+    cost: 3000, draws: 3, mythic: 0, gold: .12, silver: .38, floor: 'silver', shop: true,
+  },
+  scout: {
+    kind: 'scout', name: '试训包', pool: 'player',
+    blurb: '一张选手卡。多是铜卡，也出金卡。',
+    cost: 750, draws: 1, mythic: 0.0001, gold: 0.03, silver: 0.26, shop: true,
+  },
+  elite: {
+    kind: 'elite', name: '选拔包', pool: 'player',
+    blurb: '三张选手卡，至少一张银卡起。',
+    cost: 2400, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
+  },
+  ten: {
+    kind: 'ten', name: '十连包', pool: 'player',
+    blurb: '十张选手卡，必出金卡。不卖，通过升段、夺冠、连签和挑战等奖励获得。',
+    // 0.0012 a draw made the floor beside the point here: ten draws a pack put
+    // a彩卡 in 1.19% of them, three quarters of the tier arrived on the natural
+    // roll, and 1200 was a number almost nobody reached — the floor is what is
+    // supposed to decide how rare a legend is (see MYTHIC_FLOOR). At 0.0006 it
+    // is roughly half and half: 1/852 draws measured against 1/636 before, and
+    // the progress bar means something. The odds screen measures the engine
+    // rather than reading this number, so it followed on its own.
+    cost: 5000, draws: 10, mythic: 0.0006, gold: 0.06, silver: 0.34, floor: 'gold', shop: false,
+  },
+  // The series packs: same three cards as a 选拔包 and the same odds, priced a
+  // little above it. What you are buying is not volume, it is aim — a 中国包
+  // cannot hand you an LEC bronze you already own twice, which is the whole
+  // complaint about a 607-card pile answered in one line.
+  cn: {
+    kind: 'cn', name: 'LPL 包', pool: 'LPL',
+    blurb: '只出中国赛区的选手卡。三张，至少一张银卡起。',
+    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
+  },
+  pac: {
+    kind: 'pac', name: 'LCK 包', pool: 'LCK',
+    blurb: '只出韩国赛区的选手卡。三张，至少一张银卡起。',
+    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
+  },
+  ame: {
+    kind: 'ame', name: 'LCS 包', pool: 'LCS',
+    blurb: '只出北美赛区的选手卡。三张，至少一张银卡起。',
+    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
+  },
+  emea: {
+    kind: 'emea', name: 'LEC 包', pool: 'LEC',
+    blurb: '只出欧非中东赛区的选手卡。三张，至少一张银卡起。',
+    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
+  },
+  lcp: { kind: 'lcp', name: 'LCP 包', pool: 'LCP', blurb: '亚太赛区选手，三张卡，至少一张银卡。', cost: 2600, draws: 3, mythic: 0, gold: .08, silver: .38, floor: 'silver', shop: true },
+  cblol: { kind: 'cblol', name: 'CBLOL 包', pool: 'CBLOL', blurb: '巴西赛区选手，三张卡，至少一张银卡。', cost: 2600, draws: 3, mythic: 0, gold: .08, silver: .38, floor: 'silver', shop: true },
+  // The 彩卡包. One card, always a 彩卡, dealt from every legend in the game
+  // — players and the booth alike. It is what finishing the whole 图鉴 pays
+  // (see FULL_SET below), and the desk can hand one out. A certainty, so it
+  // stands outside the pity system: it neither spends nor moves the floor.
+  legend: {
+    kind: 'legend', name: '彩卡包', pool: 'legend',
+    blurb: '一张彩卡，只出彩卡。收齐全图鉴的奖励，不卖。',
+    cost: 0, draws: 1, mythic: 1, gold: 0, silver: 0, shop: false,
+  },
+  coach: {
+    kind: 'coach', name: '教练包', pool: 'coach',
+    blurb: '一名真实教练。带过阵容里的人，默契更高。',
+    // A彩卡 used to be a night somebody PLAYED, so this pack had none. Muggle
+    // did not play a map of the 2024 final and is one of the reasons it was
+    // won, and a booth is where that card belongs.
+    cost: 1200, draws: 1, mythic: 0, gold: 0.12, silver: 0.42, shop: true,
+  },
+  // The position packs. One card that plays the position, a little kinder
+  // than a 试训包 because it was earned in a game rather than bought, and no
+  // 彩卡: five of these a day is the ceiling and a legend behind a reaction
+  // test would be the wrong kind of lottery. Never in the shop.
+  duelist: {
+    kind: 'duelist', name: '上单包', pool: '上单',
+    blurb: '一张能打上单的选手卡。小游戏「一血」打出来的。',
+    cost: 0, draws: 1, mythic: 0, gold: 0.05, silver: 0.32, shop: false,
+  },
+  initiator: {
+    kind: 'initiator', name: '打野包', pool: '打野',
+    blurb: '一张能打打野的选手卡。侦察报点打出来的。',
+    cost: 0, draws: 1, mythic: 0, gold: 0.05, silver: 0.32, shop: false,
+  },
+  controller: {
+    kind: 'controller', name: '中单包', pool: '中单',
+    blurb: '一张能打中单的选手卡。中单小游戏还没上线。',
+    cost: 0, draws: 1, mythic: 0, gold: 0.05, silver: 0.32, shop: false,
+  },
+  sentinel: {
+    kind: 'sentinel', name: '下路包', pool: '下路',
+    blurb: '一张能打下路的选手卡。舒尔特方格打出来的。',
+    cost: 0, draws: 1, mythic: 0, gold: 0.05, silver: 0.32, shop: false,
+  },
+}
+
+/** the position packs, in the order the screens show them */
+export const POSITION_PACK_KINDS: readonly PackKind[] = ['duelist', 'initiator', 'controller', 'sentinel']
+export const packPosition = (kind: PackKind): PackPosition | null => {
+  const pool = PACKS[kind].pool
+  return pool === '上单' || pool === '打野' || pool === '中单' || pool === '下路' ? pool : null
+}
+/** which pack each 位置小游戏 pays */
+export const MINI_PACK: Record<MiniGame, PackKind> = { aim: 'duelist', recon: 'initiator', schulte: 'sentinel' }
+
+/**
+ * Which series a pack belongs to, for the collection screen.
+ */
+export const seriesOfPack = (kind: PackKind): Series | null =>
+  kind === 'cn' ? 'LPL'
+    : kind === 'pac' ? 'LCK'
+      : kind === 'ame' ? 'LCS'
+        : kind === 'emea' ? 'LEC' : kind === 'lcp' ? 'LCP' : kind === 'cblol' ? 'CBLOL' : null
+
+export const PACK_ORDER: PackKind[] = [
+  'scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'ame', 'emea', 'lcp', 'cblol',
+]
+
+/**
+ * How long a dry run is allowed to get.
+ *
+ * Pure 4% means one player in fifty opens twenty-five packs without a gold and
+ * concludes the game is broken — which, from where they are sitting, it is.
+ * Odds climb from the 25th pull and the 45th is a certainty.
+ */
+export const SOFT_PITY = 25
+export const HARD_PITY = 45
+
+/**
+ * How long a彩卡 drought is allowed to run.
+ *
+ * The odds alone are months between cards, which is the point — but "never" is
+ * not a feeling a collection should be able to produce.
+ *
+ * This number, not the `mythic` rates above, is what decides how rare a legend
+ * actually is. At one draw a pack the floor alone pays 1/500, while the
+ * natural roll paid 0.03% — measured, the 试训包 handed out a彩卡 every 458
+ * packs and seven eighths of them came from here. Lowering the published rate
+ * without moving this would have changed almost nothing.
+ */
+export const MYTHIC_FLOOR = 1200
+
+// ---------------------------------------------------------------- the day
+
+/**
+ * Why the mode has a daily budget at all.
+ *
+ * It did not, and the whole thing collapsed into one sitting: the ladder and
+ * the cup could be played forever, forever meant unlimited coins, and unlimited
+ * coins meant unlimited packs. A collection you can finish in an afternoon is
+ * not a collection, and there was no reason to ever come back tomorrow.
+ *
+ * Two taps, closed in the two places that were open. Matches cost 体力, which
+ * refills once a day; and coins can only buy a couple of packs a day however
+ * many coins you have. Packs you were GIVEN — the check-in, the quest board, a
+ * promotion, a cup title — are not capped, because those are already once-a-day
+ * things and taking them away twice would just be mean.
+ */
+export const STAMINA_MAX = 30
+/**
+ * The ladder pays in packs as well as coins: a 试训包 every fifth win, a 选拔包
+ * every twentieth (2026-09-10, with the cap at 30 — 「很多人觉得资源太少了，
+ * 所以才开很多小号」: the shortage was the reason for the alts, and a phone
+ * number now stands between a player and a second account, so the game can
+ * afford to be more generous). Promotion packs come on top.
+ */
+export const LADDER_WIN_PACK_EVERY = 5
+export const LADDER_WIN_PACK_BIG_EVERY = 20
+/**
+ * A ladder match, the cup's ticket — one payment for the whole bracket — and
+ * a card swap with a friend, charged to each side when they act.
+ */
+export const STAMINA_COST = { ladder: 2, cup: 5, swap: 1 } as const
+/**
+ * Every ladder series is first to three maps (2026-09-18) — every league, a
+ * real five or a club across the net. One series is still one match: the 体力,
+ * the star, the coins and the win count are settled once, not per map.
+ */
+export const LADDER_BO = 5 as const
+export type PlayKind = keyof typeof STAMINA_COST
+
+/**
+ * How long one point takes to come back.
+ *
+ * It used to be a single refill at midnight, which produced exactly the shape
+ * you would expect: burn the lot in one sitting, then nothing to do until
+ * tomorrow. A trickle lets the same daily allowance be spent in two or three
+ * visits instead of one.
+ *
+ * One every 30 minutes, cap 30 (2026-09-10, the owner's call; 20 from
+ * 2026-09-06): a ladder match every hour sustained, fifteen in a row from a
+ * full meter or six cups, 15 hours to fill it, and 48 points a day if you
+ * check in through the day.
+ *
+ * Before that, one every 50 minutes with a cap of 15: a match every 100
+ * minutes, seven from a full meter, 12.5 hours to fill, 28.8 points a day.
+ *
+ * It was one every two hours, chosen to hold the daily ceiling at six matches.
+ * That reasoning ignored that nobody is awake for 24 hours — eight of those
+ * hours are spent asleep, and with a 20-hour fill time the meter was still
+ * only part full on waking. Two hours between matches is already a long wait
+ * for a browser game. The pacing moved to where it belongs instead: the price
+ * of a pack, which throttles without ever telling anyone they may not play.
+ *
+ * Then it was one an hour, which was tidy and slightly wrong: an hourly meter
+ * hands out exactly 24 points a day, so a player who visits at the same two
+ * times every day is forever one point short of the eighth match and the
+ * remainder is always zero. Fifty minutes breaks that alignment — 28.8 points
+ * a day — and the whole of the surplus lands on people who come back more
+ * than once, which is the behaviour worth paying for. The wait a player
+ * actually feels, one ladder match, goes from two hours to 1h40m.
+ */
+export const STAMINA_REGEN_MS = 30 * 60 * 1000
+
+/**
+ * "50 分钟" / "1 小时" — the interval in the largest whole unit that fits it.
+ *
+ * Exported with an argument because the balance scripts label their comparison
+ * rows with it too. The interval has been retuned three times now and the
+ * first two times a hardcoded "每 2 小时" survived in three separate strings,
+ * so the game told players something that was no longer true.
+ */
+export const staminaEvery = (ms: number = STAMINA_REGEN_MS): string => {
+  const min = Math.round(ms / 60_000)
+  return min % 60 === 0 ? `${min / 60} 小时` : `${min} 分钟`
+}
+
+/** "每 50 分钟回 1 点" — written from the constant, never typed out. */
+export const staminaRate = (): string => {
+  const every = staminaEvery()
+  return every === '1 小时' ? '每小时回 1 点' : `每 ${every}回 1 点`
+}
+
+/**
+ * How long a full meter takes to build from empty, in hours.
+ *
+ * One decimal, because the interval no longer divides an hour: rounding 12.5
+ * to 13 would put a number on screen that the meter itself contradicts.
+ */
+export const staminaFillHours = (): number =>
+  Math.round((STAMINA_MAX * STAMINA_REGEN_MS) / 360_000) / 10
+
+/**
+ * There is no daily purchase limit, deliberately.
+ *
+ * There was one, and it was the wrong tool: opening packs is what the mode IS,
+ * and a counter that says "no more today" with coins still in your pocket is a
+ * closed door on the front of the game. It also barely bound — at the old
+ * prices a day's play only ever bought two packs anyway, so the cap was mostly
+ * decoration with an occasional insult attached. Prices do the pacing now.
+ */
+
+const goldChance = (base: number, pity: number): number => {
+  if (pity >= HARD_PITY - 1) return 1
+  if (pity < SOFT_PITY) return base
+  return Math.min(1, base + (pity - SOFT_PITY + 1) * 0.055)
+}
+
+// ---------------------------------------------------------------- state
+
+export interface OwnedCard {
+  id: string
+  /** 0-5; each level is +1 rating */
+  level: number
+  /** spare copies, spent on levelling or sold */
+  dupes: number
+  /**
+   * Upgraded copies kept beside the card, by level, lowest first. A second
+   * copy arriving with a level of its own (bought, swapped) used to be
+   * flattened into one duplicate; it waits here and can be taken apart
+   * (engine/dismantle.ts).
+   */
+  spares?: number[]
+  /** total copies ever pulled, for the collection stats */
+  seen: number
+  /** ISO date of the first copy */
+  got: string
+}
+
+// Old rows can contain numeric strings; invalid values must never become NaN,
+// fractional levels or string concatenation when an upgrade adds one.
+const wholeCount = (raw: unknown): number => {
+  const n = typeof raw === 'number' || typeof raw === 'string' ? Number(raw) : 0
+  return Number.isFinite(n) ? Math.max(0, Math.min(Number.MAX_SAFE_INTEGER, Math.trunc(n))) : 0
+}
+const ownedLevel = (raw: unknown): number => Math.min(MAX_LEVEL, wholeCount(raw))
+
+function cleanOwnedCards(raw: unknown): Record<string, OwnedCard> {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {}
+  const out: Record<string, OwnedCard> = {}
+  for (const [id, value] of Object.entries(raw)) {
+    if (Object.prototype.hasOwnProperty.call(Object.prototype, id)
+      || !value || typeof value !== 'object' || Array.isArray(value)) continue
+    const row = value as OwnedCard
+    // Keep structurally valid historical IDs even if today's catalog no longer
+    // contains them. The key is authoritative; a mismatched inner ID isn't.
+    const owned = { ...row, id, level: ownedLevel(row.level), dupes: wholeCount(row.dupes), seen: Math.max(1, wholeCount(row.seen)) }
+    const spares = (Array.isArray(row.spares) ? row.spares : [])
+      .map(x => wholeCount(x)).filter(x => x >= 1 && x <= MAX_LEVEL).sort((a, b) => a - b).slice(0, 99)
+    if (spares.length) owned.spares = spares
+    else delete owned.spares
+    out[id] = owned
+  }
+  return out
+}
+
+export const DIVISIONS = ['青铜', '白银', '黄金', '铂金', '钻石', '大师'] as const
+
+/**
+ * The rungs inside a division, and what each is worth.
+ *
+ * Six divisions was too coarse to feel like progress — 「一直打那个星也不会
+ * 长」 — so each one is cut into numbered rungs the way every ladder in this
+ * genre does it: 青铜 III → 青铜 II → 青铜 I → 白银 III. 钻石 gets four,
+ * because the last stretch before 大师 should be the long one.
+ *
+ * Deliberately the SAME number of stars per division as before (3/3/6/6/8
+ * against the old 3/4/5/6/8, 26 either way): this is more frequent feedback on
+ * the same climb, not a longer climb. Nothing about an existing save changes
+ * except how it is drawn.
+ */
+export const TIERS_PER_DIV = [3, 3, 3, 3, 4, 1] as const
+const STARS_PER_TIER = [1, 1, 2, 2, 2, 0] as const
+
+/** Roman numerals, biggest number at the bottom of the division. */
+const TIER_CN = ['I', 'II', 'III', 'IV'] as const
+
+export const starsFor = (div: number): number => {
+  const d = clamp(div, 0, DIVISIONS.length - 1)
+  return TIERS_PER_DIV[d] * STARS_PER_TIER[d]
+}
+
+/** Which rung of its division a star count sits on, counted from the bottom. */
+export const tierOf = (div: number, stars: number): number => {
+  const d = clamp(div, 0, DIVISIONS.length - 1)
+  const per = STARS_PER_TIER[d]
+  if (per <= 0) return 0
+  return clamp(Math.floor(stars / per), 0, TIERS_PER_DIV[d] - 1)
+}
+
+/** Stars showing on the rung currently being climbed. */
+export const starsOnTier = (div: number, stars: number): number => {
+  const d = clamp(div, 0, DIVISIONS.length - 1)
+  const per = STARS_PER_TIER[d]
+  return per <= 0 ? 0 : stars % per
+}
+
+export const tierStars = (div: number): number =>
+  STARS_PER_TIER[clamp(div, 0, DIVISIONS.length - 1)]
+
+/**
+ * 大师 and the two ranks past it.
+ *
+ * Above 大师 the ladder stops counting stars and starts counting points, with
+ * no ceiling — the whole complaint was that the climb ended. The names are
+ * VALORANT's own top ranks rather than invented ones.
+ */
+/**
+ * The ladders, and what each one lets you field.
+ *
+ * One open ladder meant one answer to 「我该练哪张卡」: the biggest numbers you
+ * own. A bronze card was a salvage price and nothing else, and a silver was a
+ * step on the way to a gold — which is a strange thing to say about four
+ * fifths of a collection. Each metal gets a ladder of its own, and it may be
+ * played with that metal and everything below it: a silver five may bring
+ * bronzes, a bronze five may not bring silvers.
+ *
+ * 名人堂 is the other end. It is the only place a legend counts for anything
+ * beyond its rating, and it asks for two of them, so the deepest collection
+ * has somewhere of its own to go.
+ *
+ * The open ladder is unchanged and is still where the leaderboard is ranked;
+ * an account that never opens the new ones sees exactly what it saw before.
+ */
+// Keep legacy record keys readable; only open remains an active ladder.
+export const LEAGUES = ['open', 'gold', 'silver', 'bronze', 'hof'] as const
+export const CUP_LEAGUES = ['gold', 'silver', 'bronze', 'hof'] as const
+export type CupLeague = (typeof CUP_LEAGUES)[number]
+export const isCupLeague = (k: unknown): k is CupLeague =>
+  typeof k === 'string' && (CUP_LEAGUES as readonly string[]).includes(k)
+export type LeagueKind = (typeof LEAGUES)[number] | 'hof'
+
+export interface LeagueRule {
+  name: string
+  blurb: string
+  /** the best metal the five may hold; null for no ceiling */
+  ceiling: Rarity | null
+  /** how many 彩卡 the five must hold to enter */
+  needMythic: number
+  /**
+   * How much weaker the clubs on the other side are.
+   *
+   * A bronze five seats around 72 and the world's clubs start at 80, so an
+   * unscaled bronze ladder is a wall, not a ladder. Every opponent attribute
+   * comes down by this much — the same dial that sharpens them above 大师,
+   * pointed the other way (see playArenaMatch).
+   */
+  oppBump: number
+}
+
+/**
+ * The handicaps are measured, not guessed. The open ladder's own shape is the
+ * target: a middling collection of the metal wins about 63% of its 钻石
+ * matches and stalls near 大师, which is what a gold five does on the open
+ * ladder today. Each number below is the one that reproduces that curve for
+ * its own metal (scripts/check_leagues.ts holds the measurement).
+ */
+export const LEAGUE_RULES: Record<LeagueKind, LeagueRule> = {
+  open:   { name: '天梯', blurb: '任何卡都能上。', ceiling: null, needMythic: 0, oppBump: 0 },
+  gold:   { name: '金卡赛', blurb: '金卡、银卡、铜卡都能上。', ceiling: 'gold', needMythic: 0, oppBump: -3 },
+  silver: { name: '银卡赛', blurb: '只能上银卡和铜卡。', ceiling: 'silver', needMythic: 0, oppBump: -7 },
+  bronze: { name: '铜卡赛', blurb: '只能上铜卡。', ceiling: 'bronze', needMythic: 0, oppBump: -13 },
+  hof:    { name: '名人堂赛', blurb: '至少两张彩卡才能入场，其余卡牌不限。', ceiling: null, needMythic: 2, oppBump: 2 },
+}
+
+export const isLeague = (k: unknown): k is LeagueKind =>
+  typeof k === 'string' && (LEAGUES as readonly string[]).includes(k)
+
+/** A fresh rung at the bottom, for a ladder nobody has played yet. */
+export const newLadder = (): LadderState =>
+  ({ div: 0, stars: 0, best: 0, wins: 0, losses: 0, streak: 0 })
+
+/**
+ * The record for one ladder.
+ *
+ * `open` is the original `g.ladder` and stays exactly where it was, so every
+ * save, leaderboard row and achievement written before the other four existed
+ * still reads correctly.
+ */
+export function ladderOf(g: GachaState, league: LeagueKind = 'open'): LadderState {
+  if (league === 'open') return g.ladder
+  // Reading does not start a ladder. The screen calls this to draw a tab, and
+  // creating the record there turned 未开始 into 青铜 · 0–0 the moment you
+  // looked at it. The copy handed back is a throwaway; `ladderSlot` below is
+  // what a match writes to.
+  return g.leagues?.[league] ?? newLadder()
+}
+
+/** The stored record, created on first use — for the paths that write. */
+export function ladderSlot(g: GachaState, league: LeagueKind = 'open'): LadderState {
+  if (league === 'open') return g.ladder
+  g.leagues ??= {}
+  g.leagues[league] ??= newLadder()
+  return g.leagues[league]!
+}
+
+/** Does this five meet the league's terms? A reason when it does not. */
+export function leagueEntry(squad: Squad, league: LeagueKind): { ok: true } | { ok: false; why: string } {
+  const rule = LEAGUE_RULES[league]
+  const cards = squad.slots.map((id) => (id ? cardById(id) : undefined)).filter(isPlayerCard)
+  if (rule.ceiling) {
+    const cap = rarityRank(rule.ceiling)
+    // the coach walks in with them, so he is held to the same line
+    const coach = squad.coach ? cardById(squad.coach) : undefined
+    const over = [...cards, ...(coach ? [coach] : [])].filter((c) => rarityRank(c.rarity) > cap)
+    if (over.length) {
+      return { ok: false, why: `${rule.name}只能上${RARITY_CN[rule.ceiling]}以下：`
+        + `${over.map((c) => `${cardName(c)}（${RARITY_CN[c.rarity]}）`).join('、')}进不去。` }
+    }
+  }
+  if (rule.needMythic) {
+    const have = cards.filter((c) => c.rarity === 'mythic').length
+    if (have < rule.needMythic) {
+      return { ok: false, why: `${rule.name}要至少 ${rule.needMythic} 张彩卡，现在只有 ${have} 张。` }
+    }
+  }
+  return { ok: true }
+}
+
+export const MASTER_DIV = DIVISIONS.length - 1
+export const MASTER_TITLES = [
+  { at: 2500, name: '辐能' },
+  { at: 1000, name: '不朽' },
+  { at: 0, name: '大师' },
+] as const
+
+export const masterTitle = (points: number): string =>
+  MASTER_TITLES.find((t) => points >= t.at)?.name ?? '大师'
+
+/** What the badge says, at any point on the ladder. */
+export function rankName(div: number, stars: number, points = 0): string {
+  if (div >= MASTER_DIV) return `${masterTitle(points)} ${points}`
+  return `${DIVISIONS[div]} ${TIER_CN[TIERS_PER_DIV[div] - 1 - tierOf(div, stars)]}`
+}
+
+export interface LadderState {
+  div: number
+  stars: number
+  best: number
+  wins: number
+  losses: number
+  streak: number
+  /** 大师 and above only: the uncapped score the leaderboard ranks on */
+  points?: number
+  /** the highest that score has ever been, which is what a career is judged on */
+  bestPoints?: number
+  /**
+   * The opponent already drawn for the match you have not played yet.
+   *
+   * Without this the ladder re-drew every time the screen mounted, so leaving
+   * the tab and coming back dealt a different opponent — and a player who saw
+   * somebody strong could simply flick away and back until the ladder offered
+   * somebody weak. The draw belongs to the MATCH, not to the visit: it is
+   * stamped with the match number and only replaced once that match is played.
+   */
+  pending?: PendingOpponent
+}
+
+/**
+ * Structurally a RivalSquad, declared here rather than imported.
+ *
+ * gacha.ts is upstream of arena.ts and importing the type back would close a
+ * cycle; the shapes are identical, so assignment works in both directions and
+ * the compiler still checks it.
+ */
+export interface PendingOpponent {
+  /** wins + losses at the moment it was drawn */
+  at: number
+  /**
+   * The world club drawn for this match.
+   *
+   * Pinned for the same reason the real five is. ladderOpponent() is seeded
+   * from the account's rng, and that seed moves every time a pack is opened —
+   * so without this, opening a pack re-dealt the club too.
+   */
+  club?: string
+  /** a real player's five, when the ladder had one to offer */
+  rival?: {
+    name: string
+    tag: string
+    slots: (string | null)[]
+    coach: string | null
+    levels: Record<string, number>
+    div: number
+    points: number
+  }
+}
+
+export interface CupLeg {
+  opponent: string
+  win: boolean
+  mapsWon: number
+  mapsLost: number
+  /** which round of the bracket this was — absent on legs played before 双败 */
+  round?: number
+  /** played in the 败者组 */
+  lower?: boolean
+}
+
+export interface CupState {
+  /** the three clubs standing between you and the trophy */
+  path: string[]
+  round: number
+  legs: CupLeg[]
+  done: boolean
+  won: boolean
+  /** what the entry fee was, so the payout table can be read against it */
+  entry: number
+  /** Server-owned registration; inventory can change without changing this cup. */
+  registration?: CupRegistration
+  /**
+   * 双败 (2026-09-17): the first loss drops the five into the 败者组 instead
+   * of out of the cup. Absent on a bracket drawn before it, which plays out
+   * as the single elimination it was sold as.
+   */
+  double?: boolean
+  /** the one loss this five is allowed has been taken */
+  dropped?: boolean
+  /** the 败者组 club in front of the five right now */
+  lower?: string | null
+  /** points every club in this bracket plays below its paper — see CUP_EASE_MAX */
+  ease?: number
+  /**
+   * The score curve this bracket was entered on (engine/balance.ts). A bracket
+   * without one was entered before 2026-09-18 and plays out on version 1.
+   */
+  balance?: number
+}
+
+export interface CupRegistration {
+  squad: Squad
+  levels: Record<string, number>
+}
+
+/** Copy the validated five and their current levels; never retain save references. */
+export function registerCupSquad(squad: Squad, level: (id: string) => number): CupRegistration {
+  const registered = { slots: squad.slots.slice(0, 5), coach: squad.coach }
+  const ids = [...registered.slots, registered.coach].filter((id): id is string => !!id)
+  return { squad: registered, levels: Object.fromEntries(ids.map(id => [id, ownedLevel(level(id))])) }
+}
+
+export type QuestKey = 'play3' | 'win2' | 'open2' | 'upgrade1' | 'cup1'
+
+export interface Quest {
+  key: QuestKey
+  label: string
+  target: number
+  reward: number
+}
+
+export const CHECKIN_COINS = 375
+export const DAILY_CLEAR_PACKS = 2
+
+export const QUESTS: Record<QuestKey, Quest> = {
+  play3: { key: 'play3', label: '打 3 场天梯', target: 3, reward: 300 },
+  win2: { key: 'win2', label: '赢 2 场天梯', target: 2, reward: 400 },
+  open2: { key: 'open2', label: '开 2 个卡包', target: 2, reward: 250 },
+  upgrade1: { key: 'upgrade1', label: '升级 1 张卡', target: 1, reward: 325 },
+  cup1: { key: 'cup1', label: '打 1 轮杯赛', target: 1, reward: 375 },
+}
+
+export interface DailyState {
+  /** server date of the last check-in, YYYY-MM-DD */
+  claimed: string | null
+  streak: number
+  /** the day the current quest set belongs to */
+  questDay: string | null
+  picked: QuestKey[]
+  progress: Partial<Record<QuestKey, number>>
+  taken: QuestKey[]
+  /** 体力 banked at `staminaAt`, and the moment it was banked (epoch ms) */
+  stamina: number
+  staminaAt: number
+}
+
+export interface LogEntry {
+  at: string
+  text: string
+}
+
+/**
+ * One thing the inbox delivered, kept so it can be read again.
+ *
+ * The server hands mail over exactly once and marks it taken, so the only
+ * place it can be shown afterwards is the save. The changelog promised a
+ * 信箱 and the group went looking for one; what existed was a toast that
+ * lasted three seconds. This is the list behind the button.
+ */
+export interface MailEntry {
+  /** ms since epoch, when it was collected */
+  at: number
+  kind: string
+  text: string
+  /** the note an official grant came with */
+  note?: string
+  seen?: boolean
+}
+
+/** Enough to scroll back through a busy week on the trading post. */
+export const MAIL_MAX = 40
+
+export interface GachaState {
+  version: number
+  /** the account id this collection belongs to; the whole of identity */
+  id: string
+  name: string
+  createdAt: string
+  coins: number
+  cards: Record<string, OwnedCard>
+  packs: Partial<Record<PackKind, number>>
+  squad: Squad
+  /** pulls since the last gold */
+  pity: number
+  /** pulls since the last彩卡 — see MYTHIC_FLOOR */
+  mythicDry: number
+  pulls: number
+  ladder: LadderState
+  /** the metal ladders and 名人堂; `ladder` above is the open one */
+  leagues?: Partial<Record<LeagueKind, LadderState>>
+  cup: CupState | null
+  daily: DailyState
+  /** 每日挑战 — see engine/challenge.ts */
+  challenge?: ChallengeState
+  /** 位置小游戏 — see engine/minigame.ts */
+  minigame?: MinigameState
+  /** how many series milestones have been collected, per region */
+  series?: Partial<Record<Series, number>>
+  /** 1 once the 全图鉴 reward has been collected — see FULL_SET */
+  fullSet?: number
+  /** 好友对战房 — see FriendRec */
+  friends?: FriendRec[]
+  /** saved squad presets — see SQUAD_PRESETS */
+  presets?: (SquadPreset | null)[]
+  /** what the inbox has delivered, newest first — see MailEntry */
+  mail?: MailEntry[]
+  /** 赛事预测 — picks per event and group, see engine/predict.ts */
+  predict?: Record<string, Record<string, { picks: Picks; at: number; claimedAt?: number }>>
+  log: LogEntry[]
+  /** rolling seed, so a reload cannot reroll the same pack */
+  seed: number
+  /** 首尔征途 — see engine/seoulRoute.ts; absent until the first road */
+  seoulRoute?: SeoulRouteState
+}
+
+/**
+ * Somebody you have played, and the running score between you.
+ *
+ * Kept on your own save rather than the server, and that is the honest shape
+ * of it: a friendly costs nothing, pays nothing, and moves no ladder, so there
+ * is nothing here worth defending against a determined liar. Two accounts
+ * trading wins would be farming a number that buys nothing, which is exactly
+ * why the friendlies pay nothing.
+ *
+ * It also means the two sides keep their own tallies. They will agree as long
+ * as both people play their matches; they are not one shared record, and the
+ * screen says so.
+ */
+export interface FriendRec {
+  /** eight characters of their id's hash — never their id */
+  code: string
+  name: string
+  tag: string
+  wins: number
+  losses: number
+  /** last played, as a date */
+  at: string
+}
+
+export const FRIEND_MAX = 24
+
+/** File the result of a friendly, newest friend first. */
+export function recordFriend(
+  g: GachaState,
+  who: { code: string; name: string; tag: string },
+  win: boolean,
+  today: string,
+): FriendRec {
+  const list = (g.friends ?? []).filter((f) => f.code !== who.code)
+  const old = (g.friends ?? []).find((f) => f.code === who.code)
+  const rec: FriendRec = {
+    code: who.code,
+    // the name is theirs and can change; keep the latest one they saved
+    name: who.name, tag: who.tag,
+    wins: (old?.wins ?? 0) + (win ? 1 : 0),
+    losses: (old?.losses ?? 0) + (win ? 0 : 1),
+    at: today,
+  }
+  g.friends = [rec, ...list].slice(0, FRIEND_MAX)
+  return rec
+}
+
+/**
+ * A squad you can come back to.
+ *
+ * Three slots, because the reason people asked for this is that they keep two
+ * or three fives on the go — an all-LEC one, an all-LCK one, and the one
+ * with their favourites in it — and rebuilding a five card by card to try the
+ * other one is the kind of chore that stops people trying it at all.
+ *
+ * A preset stores card ids, not cards. Sell or salvage a card and the slot it
+ * was in simply comes back empty when the preset is loaded, which is the
+ * honest outcome — the alternative is a five that silently plays short.
+ */
+export interface SquadPreset {
+  name: string
+  squad: Squad
+}
+
+export const SQUAD_PRESETS = 5
+
+/** Read the presets as a fixed-length list, whatever the save holds. */
+export const presetsOf = (g: GachaState): (SquadPreset | null)[] =>
+  Array.from({ length: SQUAD_PRESETS }, (_, i) => g.presets?.[i] ?? null)
+
+/** Copy the five on the table into a slot. */
+export function savePreset(g: GachaState, slot: number, name?: string): SquadPreset {
+  const list = presetsOf(g)
+  const rec: SquadPreset = {
+    name: (name ?? list[slot]?.name ?? `配置 ${slot + 1}`).slice(0, 12),
+    squad: { slots: [...g.squad.slots], coach: g.squad.coach },
+  }
+  list[slot] = rec
+  g.presets = list
+  note(g, `保存了卡组配置「${rec.name}」`)
+  return rec
+}
+
+/**
+ * Put a saved five back on the table.
+ *
+ * Anything no longer in the collection is dropped rather than restored, and
+ * the count of what was dropped is returned so the screen can say so. A preset
+ * quietly loading four men is worse than one that tells you it lost a card.
+ */
+export function loadPreset(g: GachaState, slot: number): { ok: boolean; missing: number } {
+  const rec = presetsOf(g)[slot]
+  if (!rec) return { ok: false, missing: 0 }
+  let missing = 0
+  const have = (id: string | null) => {
+    if (!id) return null
+    if (g.cards[id]) return id
+    missing++
+    return null
+  }
+  const slots = rec.squad.slots.slice(0, 5).map(have)
+  while (slots.length < 5) slots.push(null)
+  // the same person cannot occupy two seats — the ordinary card and his 彩卡
+  // are two ids and one man
+  const seen: string[] = []
+  for (let i = 0; i < slots.length; i++) {
+    const id = slots[i]
+    if (!id) continue
+    const who = (cid: string) => { const c = cardById(cid); return c ? personOf(c) : cid }
+    if (seen.some((x) => who(x) === who(id))) { slots[i] = null; missing++ }
+    else seen.push(id)
+  }
+  g.squad = { slots, coach: have(rec.squad.coach) }
+  return { ok: true, missing }
+}
+
+export function renamePreset(g: GachaState, slot: number, name: string): void {
+  const list = presetsOf(g)
+  if (!list[slot]) return
+  list[slot] = { ...list[slot]!, name: name.slice(0, 12) || `配置 ${slot + 1}` }
+  g.presets = list
+}
+
+export function clearPreset(g: GachaState, slot: number): void {
+  const list = presetsOf(g)
+  list[slot] = null
+  g.presets = list.some(Boolean) ? list : undefined
+}
+
+/** Take a card somebody sent. A card you already have arrives as a spare. */
+export function receiveCard(g: GachaState, cardId: string, from: string): boolean {
+  const card = cardById(cardId)
+  if (!card) return false
+  const had = g.cards[cardId]
+  if (had) { had.dupes++; had.seen++ } else {
+    g.cards[cardId] = {
+      id: cardId, level: 0, dupes: 0, seen: 1, got: new Date().toISOString().slice(0, 10),
+    }
+  }
+  note(g, `收到 ${from} 送的${isPlayerCard(card) ? card.ign : card.name}`)
+  return true
+}
+
+export const STARTER_COINS = 3000
+
+export function newGacha(id: string, name: string, today: string): GachaState {
+  return {
+    version: GACHA_VERSION,
+    id,
+    name,
+    createdAt: today,
+    coins: STARTER_COINS,
+    cards: {},
+    // enough to field a five on the first visit without spending anything
+    packs: { scout: 3, elite: 1, coach: 1 },
+    squad: emptySquad(),
+    pity: 0,
+    mythicDry: 0,
+    pulls: 0,
+    ladder: { div: 0, stars: 0, best: 0, wins: 0, losses: 0, streak: 0 },
+    challenge: newChallenge(),
+    minigame: newMinigame(),
+    cup: null,
+    daily: {
+      claimed: null, streak: 0, questDay: null, picked: [], progress: {}, taken: [],
+      stamina: STAMINA_MAX, staminaAt: 0,
+    },
+    log: [],
+    seed: hashStr(id + today) >>> 0,
+  }
+}
+
+/** Advance and return the account's own rng, so nothing is re-rollable. */
+/**
+ * The account's own rng, advanced so nothing is re-rollable.
+ *
+ * The stored seed used to be written back after a SINGLE burn, before the
+ * caller had drawn anything — so the next pack started one step behind where
+ * this one started and replayed almost the same sequence. Measured: two
+ * consecutive 十连包 shared 7.2 of their 20 cards, which is what the group
+ * meant by 「开了两个十连卡包好像有九张卡都一样」. Within one pack it was
+ * fine, which is why it looked like bad luck rather than a bug.
+ *
+ * `done` is what actually fixes it: the seed is written back past everything
+ * the pack consumed. The burn stays, so a tab that dies mid-pack still cannot
+ * reload and re-roll the same one.
+ */
+function roll(g: GachaState): { rng: Rng; done: () => void } {
+  const rng = new Rng(g.seed)
+  rng.next()
+  g.seed = rng.state
+  return { rng, done: () => { g.seed = rng.state } }
+}
+
+export const note = (g: GachaState, text: string) => {
+  g.log.unshift({ at: new Date().toISOString(), text })
+  if (g.log.length > 60) g.log.length = 60
+}
+
+export const levelOf = (g: GachaState, cardId: string): number => ownedLevel(g.cards[cardId]?.level)
+export const owns = (g: GachaState, cardId: string): boolean => !!g.cards[cardId]
+
+// ---------------------------------------------------------------- pulling
+
+const bySeries = <T extends { region?: string }>(list: readonly T[], region: Series) =>
+  list.filter((c) => c.region === region)
+
+const seriesPool = (region: Series) => ({
+  mythic: bySeries(LEGEND_CARDS, region),
+  gold: bySeries(PLAYER_CARDS.filter((c) => c.rarity === 'gold'), region),
+  silver: bySeries(PLAYER_CARDS.filter((c) => c.rarity === 'silver'), region),
+  bronze: bySeries(PLAYER_CARDS.filter((c) => c.rarity === 'bronze'), region),
+})
+
+const rolePool = (role: PackPosition) => ({
+  // no legends: see the position packs above
+  mythic: [] as PlayerCard[],
+  gold: PLAYER_CARDS.filter((c) => c.rarity === 'gold' && c.roles.includes(role)),
+  silver: PLAYER_CARDS.filter((c) => c.rarity === 'silver' && c.roles.includes(role)),
+  bronze: PLAYER_CARDS.filter((c) => c.rarity === 'bronze' && c.roles.includes(role)),
+})
+
+const POOLS = {
+  seoul2024: {
+    mythic: [] as PlayerCard[],
+    gold: SEOUL_CARDS.filter(c => c.rarity === 'gold'),
+    silver: SEOUL_CARDS.filter(c => c.rarity === 'silver'),
+    bronze: SEOUL_CARDS.filter(c => c.rarity === 'bronze'),
+  },
+  上单: rolePool('上单'),
+  打野: rolePool('打野'),
+  中单: rolePool('中单'),
+  下路: rolePool('下路'),
+  player: {
+    mythic: LEGEND_CARDS,
+    gold: PLAYER_CARDS.filter((c) => c.rarity === 'gold'),
+    silver: PLAYER_CARDS.filter((c) => c.rarity === 'silver'),
+    bronze: PLAYER_CARDS.filter((c) => c.rarity === 'bronze'),
+  },
+  LPL: seriesPool('LPL'),
+  LCK: seriesPool('LCK'),
+  LCS: seriesPool('LCS'),
+  LEC: seriesPool('LEC'),
+  LCP: seriesPool('LCP'),
+  CBLOL: seriesPool('CBLOL'),
+  legend: {
+    mythic: [...LEGEND_CARDS, ...LEGEND_COACH_CARDS] as Card[],
+    gold: [] as Card[], silver: [] as Card[], bronze: [] as Card[],
+  },
+  coach: {
+    mythic: LEGEND_COACH_CARDS,
+    gold: COACH_CARDS.filter((c) => c.rarity === 'gold'),
+    silver: COACH_CARDS.filter((c) => c.rarity === 'silver'),
+    bronze: COACH_CARDS.filter((c) => c.rarity === 'bronze'),
+  },
+} as const
+
+/**
+ * What a finished 位置小游戏 pays: the position's pack on 金 and 银, coins on
+ * top of it on 金, a few coins in place of it on 铜. Called by the server's
+ * minigame_finish once the transcript has been judged — see engine/minigame.ts.
+ */
+export function awardMinigame(g: GachaState, game: MiniGame, tier: Tier): { pack: PackKind | null; coins: number } {
+  const pack = MINI_PAYS_PACK[tier] ? MINI_PACK[game] : null
+  const coins = MINI_COINS[tier]
+  if (pack) {
+    g.packs[pack] = (g.packs[pack] ?? 0) + 1
+    g.minigame ??= newMinigame()
+    g.minigame.won = (g.minigame.won ?? 0) + 1
+  }
+  if (coins) g.coins += coins
+  note(g, `${MINI_CN[game]} ${tier}档${pack ? `，${PACKS[pack].name} +1` : ''}${coins ? `，+${coins} 金币` : ''}`)
+  return { pack, coins }
+}
+
+export interface Pulled {
+  card: Card
+  /** already owned, so this copy stacks as a duplicate */
+  dupe: boolean
+  /** what a spare copy would sell for, shown on the reveal */
+  salvage: number
+}
+
+/**
+ * Deal one pack.
+ *
+ * Mutates the account: spends the pack (or the coins), advances pity, and
+ * files what came out. Returns a shuffled reveal order, independent of rarity.
+ */
+export function openPack(
+  g: GachaState, kind: PackKind, payWith: 'pack' | 'coins', today?: string,
+): Pulled[] {
+  if (!isPackKind(kind) || kind === 'seoul2024') throw new Error('没有这种卡包')
+  const def = PACKS[kind]
+  if (payWith === 'pack') {
+    if ((g.packs[kind] ?? 0) < 1) throw new Error('没有这种卡包')
+    g.packs[kind] = (g.packs[kind] ?? 0) - 1
+  } else {
+    if (def.shop === false) throw new Error(`${def.name}买不到，只能从玩法奖励获得`)
+    const price = packCost(kind, today)
+    if (g.coins < price) throw new Error('金币不够')
+    g.coins -= price
+  }
+
+  const { rng, done } = roll(g)
+  const pool = POOLS[def.pool]
+  // a pack that promises a 彩卡 every time is not a lottery, and the pity
+  // counters belong to the lotteries: it neither resets them nor counts
+  const certain = def.mythic >= 1
+  const metals: Rarity[] = []
+  for (let i = 0; i < def.draws; i++) {
+    const r = rng.next()
+    let metal: Rarity
+    // the彩卡 roll happens first and on its own budget, so raising the gold
+    // rate never quietly changes how rare a legend is
+    const owed = def.mythic > 0 && g.mythicDry >= MYTHIC_FLOOR
+    if (certain) {
+      metal = 'mythic'
+    } else if (owed || r < def.mythic) {
+      metal = 'mythic'
+    } else {
+      const gc = goldChance(def.gold, g.pity)
+      // re-roll inside the remaining probability so the metals still sum to 1
+      const rest = (r - def.mythic) / Math.max(1e-9, 1 - def.mythic)
+      if (rest < gc) metal = 'gold'
+      else if (rest < gc + def.silver) metal = 'silver'
+      else metal = 'bronze'
+    }
+    if (certain) { /* outside the pity system */ } else if (metal === 'mythic') { g.mythicDry = 0; g.pity = 0 } else {
+      // a pack with no彩卡 in it must not count toward the floor either —
+      // otherwise the guarantee could be spent on a deck it can never be paid
+      // out of. The coach pack has one now, so it does count.
+      if (def.mythic > 0) g.mythicDry = (g.mythicDry ?? 0) + 1
+      if (metal === 'gold') g.pity = 0
+      else g.pity++
+    }
+    metals.push(metal)
+  }
+  // Honour the pack's guarantee before shuffling the reveal order.
+  if (def.floor) {
+    const bestAt = metals.reduce(
+      (b, m, i) => (rarityRank(m) > rarityRank(metals[b]) ? i : b), 0)
+    if (rarityRank(metals[bestAt]) < rarityRank(def.floor)) {
+      metals[bestAt] = def.floor
+      if (def.floor === 'gold') g.pity = 0
+    }
+  }
+  const out: Pulled[] = []
+  // Pity is settled in roll order above. Fisher–Yates only changes reveal order,
+  // including the slot occupied by a guaranteed card; the seed advances below.
+  for (const metal of rng.shuffle(metals)) {
+    const list: readonly Card[] = pool[metal].length ? pool[metal] : pool.bronze
+    const card = rng.pick(list)
+    const had = g.cards[card.id]
+    if (had) {
+      had.dupes++
+      had.seen++
+    } else {
+      g.cards[card.id] = {
+        id: card.id, level: 0, dupes: 0, seen: 1, got: new Date().toISOString().slice(0, 10),
+      }
+    }
+    out.push({ card, dupe: !!had, salvage: SALVAGE[card.rarity] })
+  }
+  g.pulls += def.draws
+  bumpQuest(g, 'open2', 1)
+  // past everything this pack drew, so the next one does not replay it
+  done()
+
+  const name = (c: Card) => (c.kind === 'player' ? c.ign : c.name)
+  const mythics = out.filter((p) => p.card.rarity === 'mythic')
+  const golds = out.filter((p) => p.card.rarity === 'gold')
+  note(g, mythics.length
+    ? `${def.name}：★ 彩卡 ${mythics.map((p) => (isPlayerCard(p.card) && p.card.legend ? p.card.legend.title : name(p.card))).join('、')}`
+    : golds.length
+      ? `${def.name}：抽到 ${golds.map((p) => name(p.card)).join('、')}（金卡）`
+      : `${def.name}：${def.draws} 张，没有金卡`)
+  return out
+}
+
+export const isPackKind = (kind: unknown): kind is PackKind =>
+  typeof kind === 'string' && Object.prototype.hasOwnProperty.call(PACKS, kind)
+
+// ---------------------------------------------------------------- collection
+
+/** Sell spare copies of a card. Never touches the copy in the collection. */
+export function salvage(g: GachaState, cardId: string, count: number): number {
+  const owned = g.cards[cardId]
+  const card = cardById(cardId)
+  if (!owned || !card) return 0
+  const n = Math.max(0, Math.min(count, owned.dupes))
+  if (!n) return 0
+  owned.dupes -= n
+  const coins = SALVAGE[card.rarity] * n
+  g.coins += coins
+  return coins
+}
+
+/**
+ * A bulk salvage as a list rather than an act: which cards give up how many
+ * spares, and what that pays.
+ *
+ * The same function runs on both sides — the client to put a number on the
+ * button before it is pressed, the server to decide what actually happens —
+ * so what the button promises and what the account does cannot drift. Note
+ * what is NOT in the request: how many. A sweep names a pile; the collection
+ * the server holds says what is in it.
+ */
+export interface SalvagePick {
+  /** every spare of every card of these rarities */
+  rarities?: readonly Rarity[]
+  /** and the spares of exactly these cards */
+  cardIds?: readonly string[]
+  /** leave behind what the next upgrade would need */
+  keepForUpgrade?: boolean
+}
+
+export interface SalvageLine { cardId: string; count: number; coins: number }
+
+/**
+ * What a sweep may pick up.
+ *
+ * A彩卡 is not on the list. A spare one is worth more than a pack of anything
+ * else, it is the rarest thing an account holds, and 「分解全部金卡」 with a
+ * mis-set filter behind it is how somebody loses one to a single click. Named
+ * card by card it still goes — that is a decision, not a sweep.
+ */
+export const SWEEPABLE: readonly Rarity[] = ['bronze', 'silver', 'gold']
+
+export function salvagePlan(g: GachaState, pick: SalvagePick): SalvageLine[] {
+  const sweep = new Set((pick.rarities ?? []).filter((r) => SWEEPABLE.includes(r)))
+  const named = pick.cardIds?.length ? new Set(pick.cardIds) : null
+  if (!sweep.size && !named) return []
+  const out: SalvageLine[] = []
+  for (const owned of Object.values(g.cards)) {
+    if (owned.dupes <= 0) continue
+    const card = cardById(owned.id)
+    if (!card) continue
+    if (!named?.has(owned.id) && !sweep.has(card.rarity)) continue
+    // the spares the next upgrade is going to want, left where they are
+    // a row written by an early client may have no level at all, and
+    // DUPES_FOR[undefined] would reserve NaN spares
+    const level = Math.max(0, Math.trunc(Number(owned.level) || 0))
+    const keep = pick.keepForUpgrade && level < MAX_LEVEL ? DUPES_FOR[level] : 0
+    const count = owned.dupes - keep
+    if (count <= 0) continue
+    out.push({ cardId: owned.id, count, coins: SALVAGE[card.rarity] * count })
+  }
+  return out
+}
+
+/** Sell every spare the plan names. The card itself is never touched. */
+export function salvageBulk(g: GachaState, pick: SalvagePick): { coins: number; dupes: number; cards: number } {
+  let coins = 0
+  let dupes = 0
+  let cards = 0
+  for (const line of salvagePlan(g, pick)) {
+    const paid = salvage(g, line.cardId, line.count)
+    if (!paid) continue
+    coins += paid
+    dupes += line.count
+    cards++
+  }
+  return { coins, dupes, cards }
+}
+
+export interface UpgradeCost {
+  dupes: number
+  coins: number
+  /** null when the card is already at the ceiling */
+  to: number | null
+  can: boolean
+  why?: string
+}
+
+export function upgradeCost(g: GachaState, cardId: string): UpgradeCost {
+  const owned = g.cards[cardId]
+  if (!owned || typeof owned !== 'object' || Array.isArray(owned) || !cardById(cardId)) return { dupes: 0, coins: 0, to: null, can: false, why: '还没有这张卡' }
+  const level = levelOf(g, cardId)
+  if (level >= MAX_LEVEL) return { dupes: 0, coins: 0, to: null, can: false, why: '已经满级' }
+  const dupes = DUPES_FOR[level]
+  const coins = COINS_FOR[level]
+  const held = wholeCount(owned.dupes)
+  const can = held >= dupes && Number.isFinite(g.coins) && g.coins >= coins
+  return {
+    dupes,
+    coins,
+    to: level + 1,
+    can,
+    why: can ? undefined : held < dupes ? `还差 ${dupes - held} 张重复卡` : '金币不够',
+  }
+}
+
+export function upgrade(g: GachaState, cardId: string): boolean {
+  const cost = upgradeCost(g, cardId)
+  if (!cost.can || cost.to == null) return false
+  const owned = g.cards[cardId]
+  owned.dupes = wholeCount(owned.dupes) - cost.dupes
+  g.coins -= cost.coins
+  owned.level = cost.to
+  const card = cardById(cardId)
+  if (card) {
+    note(g, `${card.kind === 'player' ? card.ign : card.name} 升到 +${owned.level}`
+      + (card.kind === 'player' ? `（战力 ${cardPower(card, owned.level)}）` : ''))
+  }
+  bumpQuest(g, 'upgrade1', 1)
+  return true
+}
+
+/** Everything owned, with the card behind it, ready for the collection grid. */
+export function collection(g: GachaState): { card: Card; owned: OwnedCard; rating: number }[] {
+  return Object.entries(g.cards)
+    .map(([id, owned]) => {
+      if (!owned || typeof owned !== 'object' || Array.isArray(owned)) return null
+      const card = cardById(id)
+      return card ? { card, owned, rating: ratingAt(card.rating, levelOf(g, id)) } : null
+    })
+    .filter((x): x is { card: Card; owned: OwnedCard; rating: number } => !!x)
+    .sort((a, b) => b.rating - a.rating)
+}
+
+export const collectionProgress = (g: GachaState) => ({
+  owned: Object.keys(g.cards).length,
+  total: ALL_CARDS.length,
+})
+
+/**
+ * The four series, and how far into each one you are.
+ *
+ * 「607 张里有 9 张」 is a number nobody can act on. 「中国 9/143」 is four
+ * collections that can each be finished, and it says which pack to open next.
+ * Counted off the cards, so a legend of a Chinese player counts toward LPL
+ * exactly as his ordinary card does.
+ */
+/**
+ * 全队收藏: one line per club, how many of its player cards you hold.
+ *
+ * The set is every ordinary player card the club has in the pool (five to
+ * seven — the彩卡 are the same men on a different night and do not count
+ * twice), so 「集齐 NRG」 means the five NRG cards, and a club with seven on
+ * the books asks for seven. Derived from the collection on every call
+ * rather than kept as state: there is nothing to award yet, so there is
+ * nothing to get out of sync.
+ */
+export interface ClubSet {
+  clubId: string
+  tag: string
+  name: string
+  region: string
+  tier: number
+  total: number
+  owned: number
+  done: boolean
+  /** the cards still missing, strongest first, for the「还缺」line */
+  missing: string[]
+}
+
+const CLUB_CARDS: Map<string, PlayerCard[]> = (() => {
+  const by = new Map<string, PlayerCard[]>()
+  for (const c of ALL_CARDS) {
+    if (!isPlayerCard(c) || c.rarity === 'mythic' || c.event || !c.clubId) continue
+    const list = by.get(c.clubId) ?? []
+    list.push(c)
+    by.set(c.clubId, list)
+  }
+  for (const list of by.values()) list.sort((a, b) => b.rating - a.rating)
+  return by
+})()
+
+export function clubSets(g: GachaState): ClubSet[] {
+  const out: ClubSet[] = []
+  for (const t of WORLD_TEAMS) {
+    const cards = CLUB_CARDS.get(t.id)
+    if (!cards || cards.length < 5) continue
+    const missing = cards.filter((c) => !g.cards[c.id]).map((c) => c.ign)
+    out.push({
+      clubId: t.id, tag: t.tag, name: t.name, region: t.region, tier: t.tier,
+      total: cards.length, owned: cards.length - missing.length, done: missing.length === 0, missing,
+    })
+  }
+  // the ones you have finished first, then the nearest to finished
+  return out.sort((a, b) => Number(b.done) - Number(a.done)
+    || (b.owned / b.total) - (a.owned / a.total) || a.tier - b.tier || a.tag.localeCompare(b.tag))
+}
+
+export interface SeriesProgress {
+  region: Series
+  owned: number
+  total: number
+  /** the pack that only deals from this series; 彩卡 counted apart */
+  pack: PackKind
+  legends: number
+  legendsTotal: number
+  /** milestones reached but not yet collected */
+  ready: SeriesReward[]
+  /** the next one, and how many more cards it wants */
+  next: (SeriesReward & { need: number }) | null
+}
+
+/**
+ * What a series pays out on the way through.
+ *
+ * A collection with no landmarks is a number that goes up, and a number that
+ * goes up is not a reason to open another pack. Four marks per region, the
+ * last one paying a 十连包 — the pack that cannot be bought — so finishing a
+ * region is worth something you cannot simply buy your way to.
+ */
+export interface SeriesReward {
+  /** share of the series, as a fraction */
+  at: number
+  coins: number
+  /** 'self' means the series' own pack */
+  pack?: PackKind | 'self'
+  count?: number
+  label: string
+}
+
+/**
+ * Measured, not guessed: 25% of a region costs about 15 packs, 50% about 45,
+ * 75% about 90, and the last card some three hundred more. The marks sit where
+ * the curve bends, and the 90% one pays in the region's own packs because that
+ * is the stretch where an ordinary pack has almost nothing left to give you.
+ *
+ * The whole ladder returns roughly 3% of what a region costs to finish. It is
+ * meant to be a landmark, not an income — a series that paid for itself would
+ * make every other pack on the shelf pointless.
+ */
+export const SERIES_REWARDS: SeriesReward[] = [
+  { at: 0.25, coins: 1500, label: '+1500 金币' },
+  { at: 0.5, coins: 1500, pack: 'elite', label: '选拔包 ×1，+1500 金币' },
+  { at: 0.75, coins: 5000, label: '+5000 金币' },
+  { at: 0.9, coins: 0, pack: 'self', count: 2, label: '本赛区包 ×2' },
+  { at: 1, coins: 15000, pack: 'ten', label: '十连包 ×1，+15000 金币' },
+]
+
+/**
+ * Built from the pack's own pool, not from every card that carries a region.
+ *
+ * Coaches have a region too, and a 中国包 cannot deal one — count them and the
+ * bar stops at 122/136 with no pack on the shelf that can finish it, which
+ * reads as a bug. The denominator is exactly what the pack can hand you.
+ *
+ * 彩卡 are the exception, and are counted separately below. Measured: a region
+ * has two to seven legends, they arrive about once in three hundred draws, and
+ * the last one of five takes some three thousand — so a 100% mark that needed
+ * them would be a milestone almost nobody could reach, advertising a十连包 that
+ * is never paid. The bar is the 选手卡; the legends are the trophy on top.
+ */
+const SERIES_CARDS = Object.fromEntries(SERIES.map((r) => {
+  const pool = POOLS[r]
+  return [r, new Set([...pool.gold, ...pool.silver, ...pool.bronze].map((c) => c.id))]
+})) as Record<Series, Set<string>>
+
+const SERIES_LEGENDS = Object.fromEntries(SERIES.map((r) =>
+  [r, new Set(POOLS[r].mythic.map((c) => c.id))],
+)) as Record<Series, Set<string>>
+
+const SERIES_PACK: Record<Series, PackKind> = {
+  LPL: 'cn', LCK: 'pac', LCS: 'ame', LEC: 'emea', LCP: 'lcp', CBLOL: 'cblol',
+}
+
+/**
+ * The week's featured region, and what it costs while it is featured.
+ *
+ * The 限定 half of 「分赛区限定包」. Nothing is ever taken away — all four packs
+ * are on the shelf all the time — but one of them is cheaper for seven days,
+ * which is a reason to come back on a Monday rather than a reason to hurry.
+ * Derived from the date, so it is the same for everybody and needs no state,
+ * and cycles through all four before repeating.
+ */
+export const FEATURE_OFF = 0.2
+
+export function featuredSeries(today: string): Series {
+  // whole days since a fixed Monday, floored to weeks; the epoch is a Monday
+  // so the discount turns over at the same moment the week does
+  const days = Math.floor(Date.parse(`${today}T00:00:00Z`) / 86_400_000)
+  const week = Math.floor((days - 4) / 7) // 1970-01-01 was a Thursday
+  return SERIES[((week % SERIES.length) + SERIES.length) % SERIES.length]
+}
+
+/** What a pack costs today — the featured series is off by a fifth. */
+export function packCost(kind: PackKind, today?: string): number {
+  const base = PACKS[kind].cost
+  if (!today) return base
+  const region = seriesOfPack(kind)
+  if (!region || region !== featuredSeries(today)) return base
+  return Math.round(base * (1 - FEATURE_OFF))
+}
+
+/** How many cards of a series a milestone asks for. */
+const milestoneAt = (reward: SeriesReward, total: number) => Math.ceil(reward.at * total)
+
+export function seriesProgress(g: GachaState): SeriesProgress[] {
+  const mine = Object.keys(g.cards)
+  return SERIES.map((region) => {
+    const total = SERIES_CARDS[region].size
+    const owned = mine.filter((id) => SERIES_CARDS[region].has(id)).length
+    const claimed = g.series?.[region] ?? 0
+    const ready = SERIES_REWARDS.filter((r, i) => i >= claimed && owned >= milestoneAt(r, total))
+    const nextIdx = SERIES_REWARDS.findIndex((r) => owned < milestoneAt(r, total))
+    const next = nextIdx < 0 ? null : {
+      ...SERIES_REWARDS[nextIdx],
+      need: milestoneAt(SERIES_REWARDS[nextIdx], total) - owned,
+    }
+    return {
+      region, owned, total, pack: SERIES_PACK[region], ready, next,
+      legends: mine.filter((id) => SERIES_LEGENDS[region].has(id)).length,
+      legendsTotal: SERIES_LEGENDS[region].size,
+    }
+  })
+}
+
+/**
+ * Collect everything a series owes.
+ *
+ * Pays every unclaimed milestone at once rather than one per press: a player
+ * who comes back after a long absence has no interest in pressing a button
+ * four times to be told four things.
+ */
+export function claimSeries(g: GachaState, region: Series): string | null {
+  const prog = seriesProgress(g).find((p) => p.region === region)
+  if (!prog || !prog.ready.length) return null
+  let coins = 0
+  const packs: string[] = []
+  for (const r of prog.ready) {
+    coins += r.coins
+    if (r.pack) {
+      const kind = r.pack === 'self' ? prog.pack : r.pack
+      const n = r.count ?? 1
+      g.packs[kind] = (g.packs[kind] ?? 0) + n
+      packs.push(`${PACKS[kind].name} ×${n}`)
+    }
+  }
+  g.coins += coins
+  g.series = { ...(g.series ?? {}) }
+  g.series[region] = (g.series[region] ?? 0) + prog.ready.length
+  const parts = [packs.join('、'), coins ? `+${coins} 金币` : '']
+    .filter(Boolean)
+  note(g, `${REGION_CN[region]}系列进度奖励：${parts.join('，')}`)
+  return parts.join('，')
+}
+
+/**
+ * 全图鉴: every card the ordinary packs can deal, held at once.
+ *
+ * Every 选手卡, every coach and every 首尔 card — the 彩卡 are the one thing
+ * left out, because they are what it pays: a 彩卡包, the only pack that
+ * deals nothing else. Like the series ladder this is a landmark rather than
+ * an income; the four regions alone cost some four hundred packs each to
+ * finish, and a prize at the end of that should be the rarest thing the
+ * game has. Once, ever — the card the pack deals goes to the level of the
+ * one you hold if you hold it already.
+ */
+export const FULL_SET_CARDS: ReadonlySet<string> = new Set(
+  ALL_CARDS.filter((c) => c.rarity !== 'mythic').map((c) => c.id),
+)
+export const FULL_SET_REWARD = { pack: 'legend' as PackKind, count: 1 }
+
+export interface FullSetProgress {
+  owned: number
+  total: number
+  /** the reward is waiting to be collected */
+  ready: boolean
+  /** it has been collected */
+  claimed: boolean
+}
+
+export function fullSetProgress(g: GachaState): FullSetProgress {
+  let owned = 0
+  for (const id of Object.keys(g.cards)) if (FULL_SET_CARDS.has(id)) owned++
+  const total = FULL_SET_CARDS.size
+  const claimed = (g.fullSet ?? 0) >= 1
+  return { owned, total, ready: LEGEND_CARDS.length > 0 && !claimed && owned >= total, claimed }
+}
+
+export function claimFullSet(g: GachaState): string | null {
+  const prog = fullSetProgress(g)
+  if (!prog.ready) return null
+  const { pack, count } = FULL_SET_REWARD
+  g.packs[pack] = (g.packs[pack] ?? 0) + count
+  g.fullSet = 1
+  const got = `${PACKS[pack].name} ×${count}`
+  note(g, `全图鉴集齐：${got}`)
+  return got
+}
+
+// ---------------------------------------------------------------- ladder
+
+/**
+ * Who the ladder puts in front of you.
+ *
+ * The 78 real clubs, sorted by strength and sliced by division, so climbing
+ * actually means meeting better opponents — bronze is Challengers clubs and
+ * 大师 is the teams that win Masters.
+ */
+export function ladderPool(div: number): string[] {
+  const sorted = WORLD_TEAMS.filter(t => CUP_TEAMS.some(c => c.id === t.id)).sort((a, b) => a.rating - b.rating)
+  const span = sorted.length / DIVISIONS.length
+  const lo = Math.floor(div * span)
+  const hi = Math.min(sorted.length, Math.ceil((div + 1) * span) + 4)
+  return sorted.slice(lo, hi).map((t) => t.id)
+}
+
+/** The match this opponent was drawn for; a new one means a new draw. */
+export const matchNo = (g: GachaState): number => g.ladder.wins + g.ladder.losses
+
+/** The opponent already drawn for the match in front of you, if it still applies. */
+export const matchNoIn = (L: LadderState): number => L.wins + L.losses
+
+export const pendingOpponent = (g: GachaState, league: LeagueKind = 'open'): PendingOpponent | null => {
+  const L = ladderOf(g, league)
+  return L.pending && L.pending.at === matchNoIn(L) ? L.pending : null
+}
+
+/**
+ * Pin an opponent to this match.
+ *
+ * Called once, after the ladder has actually heard back about who is available
+ * — a network failure must not pin 「nobody」, or a blip would quietly put you
+ * back on the world's clubs for that match.
+ */
+export function drawOpponent(
+  g: GachaState, rival?: PendingOpponent['rival'], league: LeagueKind = 'open',
+): PendingOpponent {
+  const L = ladderSlot(g, league)
+  const rec: PendingOpponent = { at: matchNoIn(L), rival, club: ladderOpponent(g, league) }
+  L.pending = rec
+  return rec
+}
+
+export function ladderOpponent(g: GachaState, league: LeagueKind = 'open'): string {
+  const L = ladderOf(g, league)
+  const pool = ladderPool(L.div)
+  return new Rng((g.seed ^ hashStr(`lad${league}${L.wins}${L.losses}`)) >>> 0).pick(pool)
+}
+
+export interface LadderOutcome {
+  win: boolean
+  starsBefore: number
+  divBefore: number
+  promoted: boolean
+  demoted: boolean
+  coins: number
+  pack?: PackKind
+  /** the pack every fifth win brings, and which win it was */
+  milestone?: PackKind
+  milestoneWins?: number
+  /** lost to a rival well above this five: no star taken, or half the 大师 points */
+  spared?: boolean
+  /** 大师 only: how the score moved, and what it is called now */
+  points?: number
+  pointsDelta?: number
+  title?: string
+}
+
+/**
+ * What a 大师 result is worth in points.
+ *
+ * Above 大师 there are no more stars to collect, so the ladder switches to a
+ * score with no ceiling — the complaint was that the climb simply ended, and
+ * 「大师」 with a number after it is a climb that cannot. Beating a stronger
+ * club pays more, a run pays a little more, and a loss costs a flat amount so
+ * that a bad night is a setback rather than a wipe.
+ *
+ * Positive at anything above a 43% win rate, which is deliberate: at this
+ * level the ladder is a leaderboard, and a leaderboard people fall off is a
+ * leaderboard nobody plays.
+ */
+export const MASTER_WIN = 20
+export const MASTER_LOSS = 15
+export function masterPoints(win: boolean, oppRating: number, streak: number): number {
+  if (!win) return -MASTER_LOSS
+  return MASTER_WIN + Math.max(0, Math.round(oppRating) - 84) * 3 + (streak >= 3 ? 8 : 0)
+}
+
+/**
+ * How much stronger the opposition gets past 大师.
+ *
+ * The 78 real clubs top out at 89, so a points ladder with no ceiling would
+ * run out of opponents about a week in. Until the arena can put another
+ * player's saved five in front of you, the top clubs are simply sharpened:
+ * +1 to every attribute per 250 points, capped, which keeps a 辐能 run
+ * genuinely hard without inventing a club that does not exist.
+ */
+export const oppBumpFor = (points: number): number =>
+  clamp(Math.floor(Math.max(0, points) / 250), 0, 10)
+
+/**
+ * A rival this far above you on paper is a match you were never meant to win:
+ * losing it costs no star, and half the 大师 points. The server looks for a
+ * five within a few points first (cards-api.js pickRival), so this is the
+ * cushion for the evenings when nobody near you is in the pool.
+ */
+export const RIVAL_MERCY_GAP = 6
+
+/**
+ * Apply a ladder result.
+ *
+ * A star a win, two on a hot streak, one back on a loss. The bottom three
+ * divisions have a floor — losing your way out of 青铜 teaches nothing — and
+ * above that you can genuinely fall.
+ */
+export function recordLadder(
+  g: GachaState, win: boolean, oppRating = 80, league: LeagueKind = 'open',
+  /** the rival was well above this five on paper: a loss costs no star and half the points */
+  mercy = false,
+): LadderOutcome {
+  const L = ladderSlot(g, league)
+  // 大师 is where the stars run out and the score takes over
+  const master = L.div >= MASTER_DIV
+  const pointsBefore = L.points ?? 0
+  const out: LadderOutcome = {
+    win, starsBefore: L.stars, divBefore: L.div, promoted: false, demoted: false, coins: 0,
+  }
+  if (win) {
+    L.wins++
+    L.streak = Math.max(1, L.streak + 1)
+    // Lowered with the daily budget. The shop's two-a-day cap was binding on
+    // 55 days out of 60, which means coins were never a decision — you always
+    // had enough for both. Now a day's play buys two 试训包 or most of a
+    // 选拔包, and which one is the question.
+    out.coins = 110 + L.div * 45
+    if (master) {
+      L.points = Math.max(0, pointsBefore + masterPoints(true, oppRating, L.streak))
+    } else {
+      // a streak is worth an extra star, but only while there is still a
+      // ladder above you to climb
+      L.stars += L.streak >= 3 && L.div < MASTER_DIV - 1 ? 2 : 1
+      while (L.stars >= starsFor(L.div) && L.div < MASTER_DIV) {
+        L.stars -= starsFor(L.div)
+        L.div++
+        out.promoted = true
+        // arriving in 大师 is where stars stop and the score starts
+        if (L.div === MASTER_DIV) { L.stars = 0; L.points ??= 0 }
+      }
+    }
+    if (L.div > L.best) {
+      L.best = L.div
+      // a promotion is the moment to hand over something worth opening
+      out.pack = L.div >= 4 ? 'ten' : L.div >= 2 ? 'elite' : 'scout'
+      g.packs[out.pack] = (g.packs[out.pack] ?? 0) + 1
+    }
+    // every fifth win a 试训包, every twentieth a 选拔包 instead — the ladder
+    // is where the hours go, and it should hand back cards, not only coins
+    if (L.wins % LADDER_WIN_PACK_EVERY === 0) {
+      out.milestone = L.wins % LADDER_WIN_PACK_BIG_EVERY === 0 ? 'elite' : 'scout'
+      out.milestoneWins = L.wins
+      g.packs[out.milestone] = (g.packs[out.milestone] ?? 0) + 1
+    }
+    bumpQuest(g, 'win2', 1)
+  } else {
+    L.losses++
+    L.streak = Math.min(0, L.streak - 1)
+    out.coins = 30
+    if (master) {
+      // A 大师 never falls out of it. Points can go all the way back to zero,
+      // which is punishment enough for a bad run — dropping somebody back to
+      // 钻石 after the climb they made to get here is how a ladder loses the
+      // people who play it most.
+      if (mercy) out.spared = true
+      L.points = Math.max(0, pointsBefore + (mercy ? -Math.ceil(MASTER_LOSS / 2) : masterPoints(false, oppRating, 0)))
+    } else if (mercy) {
+      out.spared = true
+    } else {
+      L.stars -= 1
+      if (L.stars < 0) {
+        if (L.div >= 3) {
+          L.div--
+          L.stars = Math.max(0, starsFor(L.div) - 2)
+          out.demoted = true
+        } else {
+          L.stars = 0
+        }
+      }
+    }
+  }
+
+  if (L.div >= MASTER_DIV) {
+    out.points = L.points ?? 0
+    out.pointsDelta = (L.points ?? 0) - pointsBefore
+    out.title = masterTitle(L.points ?? 0)
+    // A new title is the 大师 ladder's version of a promotion, and gets the
+    // same thing a promotion gets — once, the first time it is reached.
+    //
+    // "First time" is a fact about the BEST score, so that is what is
+    // compared: the title of the best before this match against the title of
+    // the best after it. It used to compare the title held NOW with the title
+    // of the best ever, and an account that had been to 不朽 and slipped back
+    // under it holds 「大师」 against a best of 「不朽」 — different — so every
+    // win down there paid a 十连包 (2026-09-19: 「赢一把就给一个十连包，今天已经
+    // 开了 12 个」; in the code since 08-31, waiting for people to reach 不朽 and
+    // fall back). scripts/check_title_pack.ts.
+    const bestBefore = L.bestPoints ?? 0
+    L.bestPoints = Math.max(bestBefore, L.points ?? 0)
+    if (L.bestPoints > bestBefore && masterTitle(L.bestPoints) !== masterTitle(bestBefore)) {
+      out.pack = 'ten'
+      g.packs.ten = (g.packs.ten ?? 0) + 1
+      out.promoted = true
+    }
+  }
+
+  g.coins += out.coins
+  bumpQuest(g, 'play3', 1)
+  note(g, `天梯 ${rankName(out.divBefore, out.starsBefore, pointsBefore)}：`
+    + `${win ? '胜' : '负'}，${win ? '+' : ''}${out.coins} 金币`
+    + (out.pointsDelta != null
+      ? `，${out.pointsDelta >= 0 ? '+' : ''}${out.pointsDelta} 分（${out.title} ${out.points}）`
+      : out.promoted ? `，升到${rankName(L.div, L.stars, L.points ?? 0)}`
+        : out.demoted ? `，掉到${rankName(L.div, L.stars, 0)}` : '')
+    + (out.milestone ? `，第 ${out.milestoneWins} 胜，${PACKS[out.milestone].name} +1` : ''))
+  return out
+}
+
+// ---------------------------------------------------------------- cup
+
+/**
+ * What a cup is, and what it is worth.
+ *
+ * A ticket, not a tab. It used to cost 800 coins to enter and three 体力 a
+ * round, which made every round a separate purchase and the bracket a thing
+ * you could stop halfway through to save the meter. Now the ticket is five
+ * 体力 at the door — two and a half ladder matches — and after that nothing
+ * is charged: you play until you lose or lift it, and how far that is depends
+ * on the five you brought. The bracket is three, four or five rounds deep,
+ * drawn with the opponents; every round is a step up from where YOU are, so
+ * the final is always the hardest club the draw could find, and the final is
+ * a best of five.
+ *
+ * The purse is shaped for that: a little for going out early, more for
+ * every round survived, and a title worth more the longer the road was. Per
+ * point of 体力 it lands near the ladder for a five that goes out in the
+ * first round and above it for one that goes deep, which is the point — the
+ * cup is where a strong five gets paid for being strong.
+ */
+export const CUP_ENTRY = 0
+export const CUP_MIN_ROUNDS = 3
+export const CUP_MAX_ROUNDS = 5
+/** a bracket's depth, drawn with it: most cups are four rounds */
+const CUP_ROUND_ODDS: [number, number][] = [[3, 0.35], [4, 0.4], [5, 0.25]]
+
+/** What going out after `won` rounds pays. */
+export const cupExitPrize = (won: number): number => 100 + 150 * won
+/** What the title pays, for a bracket `rounds` deep — plus a 选拔包. */
+export const cupTitlePrize = (rounds: number): number => 600 + 300 * rounds
+/** 「32强」…「决赛」, for round `i` of a bracket `rounds` deep. */
+export const cupRoundName = (rounds: number, i: number): string =>
+  i >= rounds - 1 ? '决赛' : `${2 ** (rounds - i)}强`
+/** The final is a best of five; everything before it, and the whole 败者组, a best of three. */
+export const cupBo = (cup: CupState): 3 | 5 => (!cup.lower && cup.round >= cup.path.length - 1 ? 5 : 3)
+/**
+ * The climb, in points of 综合分 relative to the five that entered: the first
+ * round nine under it, the final three over. It was twelve under to level
+ * while one loss was the end; with a second life that bracket was lifted 43%
+ * of the time by a middling five and paid half as much again, so the road got
+ * steeper as the cup got more forgiving. Measured at these numbers
+ * (scripts/measure_cup_experience.ts, 400 cups a five): a title in about
+ * three entries in ten instead of two, a ticket that ends without a win one
+ * time in twenty-five instead of one in seven, four matches a ticket
+ * instead of under three.
+ */
+export const CUP_CLIMB_FROM = 9
+export const CUP_CLIMB_TO = 3
+/**
+ * How far below its paper a whole bracket may be asked to play.
+ *
+ * The draw climbs from well under the five to just over it, and the weakest
+ * club there is sits at 62 — so a new account's 65 met clubs level with it
+ * in the FIRST round and well above it in the final, and went out without
+ * a win 58% of the time (scripts/measure_cup_experience.ts,
+ * 2026-09-17). Nobody weaker exists to be drawn, and nobody is invented:
+ * the clubs such a five draws send a rotation side instead, the same number
+ * of points down in every round, printed on the bracket. A five at 74 or
+ * above never sees it.
+ */
+export const CUP_EASE_MAX = 14
+export const CUP_SHARPEN_MAX = 4
+/**
+ * Where the table effectively starts: the mean of its six weakest clubs,
+ * because six is how many the draw picks a round from. Measured against the
+ * single weakest club, a 62 still opened against sides four points nearer to
+ * it than anybody else's first round, and lifted the cup 22% of the time to
+ * everybody else's 32%.
+ */
+export const cupFloor = (): number => {
+  const low = CUP_TEAMS.map((t) => t.rating).sort((a, b) => a - b).slice(0, 6)
+  return low.reduce((s, r) => s + r, 0) / low.length
+}
+export const cupEaseFor = (squadRating: number): number => {
+  const ratings = CUP_TEAMS.map((t) => t.rating)
+  const ease = clamp(Math.ceil(cupFloor() + CUP_CLIMB_FROM - squadRating), 0, CUP_EASE_MAX)
+  if (ease) return ease
+  // and the other end: the best club there is sits at 99, so a levelled 彩卡
+  // five never met its equal and a second life would have made its cup a
+  // formality. Those clubs turn up at full stretch, a capped number of
+  // points above their paper, printed the same way.
+  return -clamp(Math.floor(squadRating + CUP_CLIMB_TO - Math.max(...ratings)), 0, CUP_SHARPEN_MAX)
+}
+
+/** kept for saves written when a cup was priced in coins; nothing reads it */
+export const CUP_PRIZE = [100, 250, 400]
+export const CUP_WIN = cupTitlePrize(3)
+
+/**
+ * Draw a cup: three to five clubs, each harder than the last.
+ *
+ * Seeded off the account and the number of cups already played, so refreshing
+ * the page cannot re-draw an easier bracket. The ticket is paid here.
+ */
+export function enterCup(g: GachaState, squadRating: number, now: number, registration?: CupRegistration): CupState {
+  if (g.cup && !g.cup.done) return g.cup
+  if (!spendPlay(g, 'cup', now)) throw new Error(`体力不够，入场要 ${STAMINA_COST.cup} 点`)
+  const { rng, done } = roll(g)
+  const sorted = CUP_TEAMS.slice().sort((a, b) => a.rating - b.rating)
+  const ease = cupEaseFor(squadRating)
+  let rounds = CUP_MIN_ROUNDS
+  let dice = rng.next()
+  for (const [n, p] of CUP_ROUND_ODDS) {
+    rounds = n
+    if (dice < p) break
+    dice -= p
+  }
+  const path: string[] = []
+  const taken = new Set<string>()
+  for (let round = 0; round < rounds; round++) {
+    // Each round is a step up from where YOU are, not a step up the world
+    // rankings. Pinned to the absolute table instead, the final was the best
+    // club on earth whoever entered, so a new account went 0 for 100 and the
+    // cup was a tax on not having a finished collection. The climb runs from
+    // CUP_CLIMB_FROM below the five to CUP_CLIMB_TO above it on the shared card scale.
+    // The old +7 final used a raw club average; applying it to the new full
+    // squad score silently made the corrected cup much harder. A longer
+    // bracket is more matches, not a harder final.
+    //
+    // Drawn from the six clubs nearest the target, never from the whole
+    // table: the first version took "within five points" and, when nobody
+    // was, any club on earth — which is how a squad in the sixties drew LOUD
+    // in the quarters, Heretics in the semi, and a 66 in the final.
+    const target = squadRating - CUP_CLIMB_FROM + ((CUP_CLIMB_FROM + CUP_CLIMB_TO) / (rounds - 1)) * round + ease
+    const near = sorted
+      .filter((t) => !taken.has(t.id))
+      .sort((a, b) => Math.abs(a.rating - target) - Math.abs(b.rating - target))
+      .slice(0, 6)
+    const pick = rng.pick(near.length ? near : sorted)
+    taken.add(pick.id)
+    path.push(pick.id)
+  }
+  // whoever was drawn, the bracket climbs: the final is the strongest of them
+  const ratingOf = new Map(sorted.map((t) => [t.id, t.rating]))
+  path.sort((a, b) => (ratingOf.get(a) ?? 0) - (ratingOf.get(b) ?? 0))
+  g.cup = { path, round: 0, legs: [], done: false, won: false, entry: CUP_ENTRY, double: true, balance: BALANCE_VERSION }
+  if (ease) g.cup.ease = ease
+  if (registration) g.cup.registration = registerCupSquad(registration.squad, id => registration.levels[id] ?? 0)
+  done()
+  note(g, `报名了一场 ${rounds} 轮的双败杯赛（−${STAMINA_COST.cup} 体力）`)
+  return g.cup
+}
+
+export interface CupOutcome {
+  /** this loss was the first: the five is in the 败者组, not out */
+  dropped?: boolean
+  coins: number
+  /** the headline pack; `packs` has all of them */
+  pack?: PackKind
+  packs?: Partial<Record<PackKind, number>>
+  done: boolean
+  won: boolean
+}
+
+/**
+ * What a cup run is worth in packs (2026-09-10). Two rounds won and out:
+ * a 试训包. The title: a 选拔包 for three rounds, a 选拔包 and a 试训包 for
+ * four, a 十连包 for the five-round bracket — the deepest run the cup can
+ * ask for, paid with the pack that is otherwise only a promotion away.
+ */
+export const cupExitPacks = (won: number): Partial<Record<PackKind, number>> =>
+  won >= 2 ? { scout: 1 } : {}
+export const cupTitlePacks = (rounds: number): Partial<Record<PackKind, number>> =>
+  rounds >= 5 ? { ten: 1 } : rounds >= 4 ? { elite: 1, scout: 1 } : { elite: 1 }
+const givePacks = (g: GachaState, packs: Partial<Record<PackKind, number>>): string =>
+  (Object.entries(packs) as [PackKind, number][]).map(([k, n]) => {
+    g.packs[k] = (g.packs[k] ?? 0) + n
+    return `${PACKS[k].name} +${n}`
+  }).join('，')
+
+/**
+ * The club waiting in the 败者组: the nearest on paper to the one that just
+ * won, never one already in the bracket. Read off the table rather than
+ * rolled, so there is nothing to refresh for.
+ */
+function lowerClub(cup: CupState): string {
+  const rating = new Map(CUP_TEAMS.map((t) => [t.id, t.rating]))
+  const used = new Set([...cup.path, ...cup.legs.map((l) => l.opponent)])
+  const target = rating.get(cup.path[cup.round]) ?? 70
+  const pick = CUP_TEAMS
+    .filter((t) => !used.has(t.id))
+    .sort((a, b) => Math.abs(a.rating - target) - Math.abs(b.rating - target) || a.id.localeCompare(b.id))[0]
+  return (pick ?? CUP_TEAMS[0]).id
+}
+
+/**
+ * Apply a cup result.
+ *
+ * 双败 since 2026-09-17: 「输一轮就直接淘汰，五点体力浪费」 was the complaint,
+ * and measured it was one ticket in seven ending after a single match. The
+ * first loss now drops the five into the 败者组: one more best of three,
+ * against a club level with the one that beat it, and a win there puts it
+ * back in the next round as if it had never lost. Losing the FINAL is the
+ * real thing — 败者组决赛, then the final again. The second loss, wherever
+ * it comes, is the end. A bracket drawn before this has no `double` and
+ * ends on its first loss, as it was sold.
+ */
+export function recordCup(g: GachaState, leg: CupLeg): CupOutcome {
+  const cup = g.cup
+  if (!cup || cup.done) return { coins: 0, done: true, won: false }
+  const inLower = !!cup.double && !!cup.lower
+  const last = cup.path.length - 1
+  cup.legs.push({ ...leg, round: cup.round, ...(inLower ? { lower: true } : {}) })
+  bumpQuest(g, 'cup1', 1)
+  if (!leg.win) {
+    if (cup.double && !cup.dropped) {
+      cup.dropped = true
+      cup.lower = lowerClub(cup)
+      note(g, `杯赛${cupRoundName(cup.path.length, cup.round)}输了，掉入败者组`)
+      return { coins: 0, done: false, won: false, dropped: true }
+    }
+    cup.done = true
+    cup.lower = null
+    const coins = cupExitPrize(cup.round)
+    g.coins += coins
+    const packs = cupExitPacks(cup.round)
+    const given = givePacks(g, packs)
+    note(g, `杯赛止步${cupRoundName(cup.path.length, cup.round)}，奖金 ${coins}${given ? `，${given}` : ''}`)
+    return { coins, packs, pack: (Object.keys(packs) as PackKind[])[0], done: true, won: false }
+  }
+  if (inLower) {
+    cup.lower = null
+    // out of the 败者组 and into the next round; from the 败者组决赛, back
+    // into the final that was lost
+    if (cup.round < last) cup.round++
+    return { coins: 0, done: false, won: false }
+  }
+  cup.round++
+  if (cup.round >= cup.path.length) {
+    cup.done = true
+    cup.won = true
+    const coins = cupTitlePrize(cup.path.length)
+    g.coins += coins
+    const packs = cupTitlePacks(cup.path.length)
+    note(g, `杯赛冠军（${cup.path.length} 轮），奖金 ${coins}，${givePacks(g, packs)}`)
+    return { coins, packs, pack: (Object.keys(packs) as PackKind[])[0], done: true, won: true }
+  }
+  return { coins: 0, done: false, won: false }
+}
+
+export const cupOpponent = (g: GachaState): string | null =>
+  g.cup && !g.cup.done ? (g.cup.double && g.cup.lower) || (g.cup.path[g.cup.round] ?? null) : null
+
+/**
+ * A bracket drawn before a club left the world.
+ *
+ * Weibo Gaming went out of world.json on 2026-09-09 and every cup entered
+ * before that with WBG in it kept the id: the page showed 「?」 for the round,
+ * the server could not put a club it no longer knew across the net, and the
+ * cup — paid for, unfinished — could not be cleared either, so the account
+ * was stuck at that round for good. The club that stands in is the nearest
+ * by rating to the gap it left between its neighbours, never one already in
+ * the bracket, so the climb still climbs. Rounds already played keep their
+ * result whatever name is written on them now.
+ */
+export function repairCup(g: GachaState): void {
+  const cup = g.cup
+  if (!cup || !Array.isArray(cup.path)) return
+  const rating = new Map(CUP_TEAMS.map((t) => [t.id, t.rating]))
+  if (cup.path.every((id) => rating.has(id))) {
+    if (cup.lower && !rating.has(cup.lower) && !cup.done) cup.lower = lowerClub(cup)
+    return
+  }
+  const taken = new Set(cup.path.filter((id) => rating.has(id)))
+  cup.path = cup.path.map((id, i) => {
+    if (rating.has(id)) return id
+    const before = cup.path.slice(0, i).map((x) => rating.get(x)).filter((r): r is number => r !== undefined)
+    const after = cup.path.slice(i + 1).map((x) => rating.get(x)).filter((r): r is number => r !== undefined)
+    const lo = before.length ? Math.max(...before) : null
+    const hi = after.length ? Math.min(...after) : null
+    const target = lo !== null && hi !== null ? (lo + hi) / 2 : lo !== null ? lo + 2 : hi !== null ? hi - 2 : 60
+    const pick = CUP_TEAMS
+      .filter((t) => !taken.has(t.id))
+      .sort((a, b) => Math.abs(a.rating - target) - Math.abs(b.rating - target) || a.id.localeCompare(b.id))[0]
+    taken.add(pick.id)
+    return pick.id
+  })
+  if (cup.lower && !rating.has(cup.lower) && !cup.done) cup.lower = lowerClub(cup)
+}
+
+// ---------------------------------------------------------------- daily
+
+const QUEST_KEYS = Object.keys(QUESTS) as QuestKey[]
+
+/** Three quests a day, drawn from the day itself so everyone gets the same set. */
+export function questsFor(day: string, id: string): QuestKey[] {
+  const rng = new Rng(hashStr(day + id) >>> 0)
+  return rng.shuffle(QUEST_KEYS.slice()).slice(0, 3)
+}
+
+/**
+ * Roll the day over: new quests, full 体力, shop counter back to zero.
+ *
+ * `today` is the server's date, never the device's — the whole point of the
+ * account is that this line cannot be moved by changing a clock.
+ */
+export function refreshDaily(g: GachaState, today: string): void {
+  if (g.daily.questDay === today) return
+  g.daily.questDay = today
+  g.daily.picked = questsFor(today, g.id)
+  g.daily.progress = {}
+  g.daily.taken = []
+  // 体力 is NOT touched here — it accrues by the clock, so the day rolling
+  // over is about the quest board and nothing else
+}
+
+/**
+ * When the meter was last counted from.
+ *
+ * A save with no anchor — one written before 体力 accrued on a clock — used to
+ * be read as `staminaAt || now`, which is a trap: zero is falsy, so the anchor
+ * was "now" on every single read and not one second ever accumulated. An
+ * account that hit zero stayed at zero permanently. There is no honest way to
+ * date an unanchored save, so it is anchored the first time anybody asks, and
+ * `primeStamina` writes that back.
+ */
+const anchorOf = (g: GachaState, now: number): number => g.daily.staminaAt || now
+
+/**
+ * Give an unanchored save a starting point, once.
+ *
+ * Called when the mode opens. Separate from the readers because reading should
+ * not mutate, and because this is the one place that can also persist it.
+ */
+export function primeStamina(g: GachaState, now: number): boolean {
+  if (g.daily.staminaAt) return false
+  g.daily.staminaAt = now
+  return true
+}
+
+/**
+ * 体力 right now: what was banked, plus whatever the clock has added since.
+ *
+ * `now` is the server's clock carried over by engine/account.ts, never the
+ * device's — for the same reason the check-in date is the server's.
+ */
+export function staminaNow(g: GachaState, now: number): number {
+  const at = anchorOf(g, now)
+  const banked = Math.max(0, Math.min(STAMINA_MAX, g.daily.stamina ?? STAMINA_MAX))
+  const gained = Math.floor(Math.max(0, now - at) / STAMINA_REGEN_MS)
+  return Math.min(STAMINA_MAX, banked + gained)
+}
+
+/** ms until the next point lands, or 0 when the meter is already full. */
+export function staminaIn(g: GachaState, now: number): number {
+  if (staminaNow(g, now) >= STAMINA_MAX) return 0
+  const at = anchorOf(g, now)
+  const since = Math.max(0, now - at)
+  return STAMINA_REGEN_MS - (since % STAMINA_REGEN_MS)
+}
+
+/**
+ * Fold the accrued points into the bank.
+ *
+ * The clock is advanced to the last whole tick rather than to `now`, so the
+ * part-hour already served is not thrown away every time anything reads the
+ * meter — otherwise a player who checks the screen often would never regen.
+ */
+function settle(g: GachaState, now: number): void {
+  const at = anchorOf(g, now)
+  const ticks = Math.floor(Math.max(0, now - at) / STAMINA_REGEN_MS)
+  const banked = Math.max(0, Math.min(STAMINA_MAX, g.daily.stamina ?? STAMINA_MAX))
+  const next = Math.min(STAMINA_MAX, banked + ticks)
+  g.daily.stamina = next
+  g.daily.staminaAt = next >= STAMINA_MAX ? now : at + ticks * STAMINA_REGEN_MS
+}
+
+export const canPlay = (g: GachaState, kind: PlayKind, now: number): boolean =>
+  staminaNow(g, now) >= STAMINA_COST[kind]
+
+/** Pay for a match. Returns false — and spends nothing — when there is not enough. */
+export function spendPlay(g: GachaState, kind: PlayKind, now: number): boolean {
+  settle(g, now)
+  if (g.daily.stamina < STAMINA_COST[kind]) return false
+  // the meter was full, so the clock starts from this moment
+  if (g.daily.stamina >= STAMINA_MAX) g.daily.staminaAt = now
+  g.daily.stamina -= STAMINA_COST[kind]
+  return true
+}
+
+
+
+function bumpQuest(g: GachaState, key: QuestKey, by: number): void {
+  if (!g.daily.picked.includes(key)) return
+  g.daily.progress[key] = (g.daily.progress[key] ?? 0) + by
+}
+
+export function claimQuest(g: GachaState, key: QuestKey): number {
+  const q = QUESTS[key]
+  if (!g.daily.picked.includes(key) || g.daily.taken.includes(key)) return 0
+  if ((g.daily.progress[key] ?? 0) < q.target) return 0
+  g.daily.taken.push(key)
+  g.coins += q.reward
+  // clearing the board is worth a pack on its own
+  if (g.daily.taken.length === g.daily.picked.length) {
+    g.packs.scout = (g.packs.scout ?? 0) + DAILY_CLEAR_PACKS
+    note(g, `日常全部完成，+${DAILY_CLEAR_PACKS} 试训包`)
+  }
+  return q.reward
+}
+
+export interface CheckIn {
+  coins: number
+  packs: Partial<Record<PackKind, number>>
+  streak: number
+  /** already claimed today */
+  already: boolean
+}
+
+/**
+ * The daily check-in.
+ *
+ * `today` comes from the server, never from the device clock — otherwise
+ * changing the date in system settings is an unlimited supply of packs. The
+ * offline fallback in engine/account.ts is explicit about being unverified.
+ */
+export function checkIn(g: GachaState, today: string): CheckIn {
+  if (g.daily.claimed === today) {
+    return { coins: 0, packs: {}, streak: g.daily.streak, already: true }
+  }
+  const yesterday = new Date(`${today}T00:00:00Z`)
+  yesterday.setUTCDate(yesterday.getUTCDate() - 1)
+  const consecutive = g.daily.claimed === yesterday.toISOString().slice(0, 10)
+  g.daily.streak = consecutive ? g.daily.streak + 1 : 1
+  g.daily.claimed = today
+
+  const coins = CHECKIN_COINS
+  const packs: Partial<Record<PackKind, number>> = { scout: 1 }
+  // The strip on the screen is a cycle of SEVEN — it lights box 3 and box 6 of
+  // each cycle and promises a 选拔包 there. The rewards were read off the
+  // lifetime streak instead, and the two only agree for the first week: on the
+  // tenth day in a row the strip lit box 3 and the streak, 10, is not divisible
+  // by three, so the promised 选拔包 arrived as a 试训包. Reported as
+  // 「每日签到里有一个选拔包实际上发的是试训包」. Both now count the same day.
+  const dayInCycle = ((g.daily.streak - 1) % 7) + 1
+  // the seventh day in a row is the one worth coming back for
+  if (dayInCycle === 7) packs.ten = 1
+  else if (dayInCycle % 3 === 0) packs.elite = 1
+
+  g.coins += coins
+  for (const [k, n] of Object.entries(packs)) {
+    g.packs[k as PackKind] = (g.packs[k as PackKind] ?? 0) + (n ?? 0)
+  }
+  refreshDaily(g, today)
+  note(g, `签到第 ${g.daily.streak} 天：+${coins} 金币${packs.ten ? ' + 十连包' : packs.elite ? ' + 选拔包' : ' + 试训包'}`)
+  return { coins, packs, streak: g.daily.streak, already: false }
+}
+
+// ---------------------------------------------------------------- squad
+
+/**
+ * Put a card in a slot.
+ *
+ * Two rules. The same CARD moving in from another slot swaps with whatever was
+ * there. The same PERSON already on the squad under a different card — the
+ * ordinary Derke and the 2023 FNATIC Derke — is removed instead of swapped:
+ * you cannot field a man twice, and silently letting it happen would be the
+ * strongest squad in the game.
+ */
+export function setSlot(g: GachaState, index: number, cardId: string | null): void {
+  if (index < 0 || index >= g.squad.slots.length) return
+  if (cardId) {
+    const at = g.squad.slots.indexOf(cardId)
+    if (at >= 0) {
+      g.squad.slots[at] = g.squad.slots[index]
+    } else {
+      const who = cardById(cardId)
+      if (who) {
+        g.squad.slots.forEach((other, i) => {
+          if (i === index || !other) return
+          const c = cardById(other)
+          if (c && personOf(c) === personOf(who)) g.squad.slots[i] = null
+        })
+      }
+    }
+  }
+  g.squad.slots[index] = cardId
+}
+
+/** True when this card's person is already on the squad in another slot. */
+export function personTaken(g: GachaState, cardId: string, exceptSlot = -1): boolean {
+  const who = cardById(cardId)
+  if (!who) return false
+  return g.squad.slots.some((other, i) => {
+    if (i === exceptSlot || !other || other === cardId) return false
+    const c = cardById(other)
+    return !!c && personOf(c) === personOf(who)
+  })
+}
+
+/** Does anyone in these seats call? */
+const hasIgl = (squad: Squad): boolean =>
+  squad.slots.some((id) => { const c = id ? cardById(id) : undefined; return isPlayerCard(c) && c.isIgl })
+
+/**
+ * Is this card's person already in another seat of the five being built?
+ * personTaken asks the same of the account's saved squad, which is not the
+ * one the button is assembling.
+ */
+const personSeated = (squad: Squad, cardId: string, exceptSlot: number): boolean => {
+  const who = cardById(cardId)
+  if (!who) return false
+  return squad.slots.some((other, i) =>
+    i !== exceptSlot && !!other && other !== cardId && personOf(cardById(other)!) === personOf(who))
+}
+
+/**
+ * Best available five, for the 自动组队 button.
+ *
+ * Greedy by rating first, then hill-climbing on the squad number itself —
+ * which includes chemistry, so the pass will happily drop a 90 for an 86 who
+ * shares a club with three of the others. That is the same trade the mode asks
+ * the player to make by hand, so the button should not be making the naive one.
+ *
+ * And a caller, if you own one. The button used to fill five seats by
+ * rating and position and never look at who calls — the collection could
+ * hold three IGLs and the five it built had none, under a builder that
+ * warns about exactly that. The best IGL owned is seated after the greedy
+ * pass, where his position fits or in place of the weakest man, and the
+ * climb may not trade the last one away: a five without a caller is worth
+ * less (squadRating), but the climb is told outright, because a 92 who does
+ * not call would still beat an 86 who does on the number alone.
+ */
+export function autoSquad(g: GachaState): Squad {
+  const level = (id: string) => g.cards[id]?.level ?? 0
+  const mine = collection(g).filter((c) => isPlayerCard(c.card))
+  const squad = emptySquad()
+  // keyed on the person, not the card: the legend and the ordinary card are
+  // the same man and only one of them can be on the server
+  const used = new Set<string>()
+  SQUAD_SLOTS.forEach((role, i) => {
+    const free = (c: { card: Card }) => !used.has(personOf(c.card))
+    const fit = mine.find((c) => free(c) && isPlayerCard(c.card) && c.card.roles.includes(role))
+    const pick = fit ?? mine.find(free)
+    if (pick) {
+      used.add(personOf(pick.card))
+      squad.slots[i] = pick.card.id
+    }
+  })
+
+  // the best caller owned, into the seat his position fits — the weakest of
+  // those, or the weakest of all if none fits — unless one is seated already
+  const callers = mine.filter((c) => isPlayerCard(c.card) && c.card.isIgl)
+  const caller = callers.find((c) => !used.has(personOf(c.card)))
+  if (caller && isPlayerCard(caller.card) && !hasIgl(squad)) {
+    const roles = caller.card.roles
+    const seats = SQUAD_SLOTS.map((_, i) => i).filter((i) => !personSeated(squad, caller.card.id, i))
+    const fits = seats.filter((i) => roles.includes(SQUAD_SLOTS[i]))
+    const weakest = (idx: number[]) => idx.slice().sort((a, b) => {
+      const ra = squad.slots[a] ? ratingAt(cardById(squad.slots[a]!)?.rating ?? 0, level(squad.slots[a]!)) : -1
+      const rb = squad.slots[b] ? ratingAt(cardById(squad.slots[b]!)?.rating ?? 0, level(squad.slots[b]!)) : -1
+      return ra - rb
+    })[0]
+    const seat = fits.length ? weakest(fits) : weakest(seats)
+    if (seat !== undefined) squad.slots[seat] = caller.card.id
+  }
+
+  // only the plausible spares are worth trying: a bronze 55 will never improve
+  // a five that already has a gold in every seat — but every caller is, since
+  // the seat he takes is the one seat the climb cannot empty
+  const bench = [...new Set([...mine.slice(0, 60), ...callers].map((c) => c.card.id))]
+  const keepCaller = callers.length > 0
+  let best = squadRating(squad, level)
+  for (let pass = 0; pass < 3; pass++) {
+    let moved = false
+    for (let i = 0; i < squad.slots.length; i++) {
+      // `cur` has to track the slot's CURRENT occupant, not the one it started
+      // the pass with: restoring the original after every rejected candidate
+      // threw away improvements the same pass had just accepted, which is why
+      // the button once seated a 62 next to four golds.
+      let cur = squad.slots[i]
+      for (const id of bench) {
+        if (id === cur || squad.slots.includes(id)) continue
+        if (personSeated(squad, id, i)) continue
+        squad.slots[i] = id
+        if (keepCaller && !hasIgl(squad)) { squad.slots[i] = cur; continue }
+        const score = squadRating(squad, level)
+        if (score > best) { best = score; cur = id; moved = true } else squad.slots[i] = cur
+      }
+    }
+    if (!moved) break
+  }
+
+  // the coach that fits this five, not simply the highest rated one
+  const coaches = collection(g).filter((c) => c.card.kind === 'coach')
+  let bestCoach: string | null = null
+  // Compare the displayed power: rounded squadRating loses small coach gains.
+  let bestWith = squadPower(squad, level)
+  for (const c of coaches) {
+    squad.coach = c.card.id
+    const score = squadPower(squad, level)
+    if (score > bestWith) { bestCoach = c.card.id; bestWith = score }
+  }
+  squad.coach = bestCoach
+  return squad
+}
+
+export const clampState = (g: GachaState): GachaState => {
+  g.coins = Math.max(0, Math.round(g.coins))
+  for (const L of [g.ladder, ...Object.values(g.leagues ?? {})]) {
+    if (!L) continue
+    L.div = clamp(Math.round(L.div), 0, DIVISIONS.length - 1)
+    L.stars = clamp(Math.round(L.stars), 0, starsFor(L.div))
+    L.points = Math.max(0, Math.round(L.points ?? 0))
+    L.bestPoints = Math.max(L.bestPoints ?? 0, L.points)
+  }
+  g.ladder.div = clamp(Math.round(g.ladder.div), 0, DIVISIONS.length - 1)
+  g.ladder.stars = clamp(Math.round(g.ladder.stars), 0, starsFor(g.ladder.div))
+  // no ceiling on purpose — this is the part of the ladder that never ends
+  g.ladder.points = Math.max(0, Math.round(g.ladder.points ?? 0))
+  g.ladder.bestPoints = Math.max(g.ladder.bestPoints ?? 0, g.ladder.points)
+  return g
+}
+
+/**
+ * Bring an older save up to the current shape.
+ *
+ * In the engine rather than beside the fetch code, because the server runs it
+ * too now: every account it loads goes through here before an action touches
+ * it, so a row written by a client from any earlier week has every field the
+ * rules expect.
+ */
+export function migrateGacha(state: GachaState, id: string): GachaState {
+  const g = state as GachaState & { version?: number }
+  g.version = GACHA_VERSION
+  g.id = id
+  g.name = typeof g.name === 'string' ? g.name : '经理'
+  g.createdAt = typeof g.createdAt === 'string' ? g.createdAt : new Date().toISOString().slice(0, 10)
+  g.coins = typeof g.coins === 'number' && Number.isFinite(g.coins) ? g.coins : 0
+  g.cards = cleanOwnedCards(g.cards)
+  g.packs = g.packs && typeof g.packs === 'object' ? g.packs : {}
+  g.pity = typeof g.pity === 'number' ? g.pity : 0
+  g.mythicDry ??= 0
+  // the metal ladders arrived after 大师; an account from before them simply
+  // has none, and each one is created the first time it is played
+  if (g.leagues && typeof g.leagues === 'object') {
+    const clean: Partial<Record<LeagueKind, LadderState>> = {}
+    for (const k of LEAGUES) {
+      if (k === 'open') continue
+      const L = g.leagues[k]
+      if (!L || typeof L !== 'object') continue
+      clean[k] = {
+        div: clamp(Math.round(Number(L.div) || 0), 0, DIVISIONS.length - 1),
+        stars: Math.max(0, Math.round(Number(L.stars) || 0)),
+        best: Math.max(0, Math.trunc(Number(L.best) || 0)),
+        wins: Math.max(0, Math.trunc(Number(L.wins) || 0)),
+        losses: Math.max(0, Math.trunc(Number(L.losses) || 0)),
+        streak: Math.trunc(Number(L.streak) || 0),
+        points: Math.max(0, Math.round(Number(L.points) || 0)),
+        bestPoints: Math.max(0, Math.round(Number(L.bestPoints) || 0)),
+        pending: L.pending,
+      }
+    }
+    g.leagues = clean
+  } else delete g.leagues
+  g.pulls = typeof g.pulls === 'number' && Number.isFinite(g.pulls) ? g.pulls : 0
+  g.log = Array.isArray(g.log) ? g.log : []
+  g.squad ??= { slots: [null, null, null, null, null], coach: null }
+  g.squad.slots = Array.isArray(g.squad.slots) ? g.squad.slots.slice(0, 5) : []
+  while (g.squad.slots.length < 5) g.squad.slots.push(null)
+  g.squad.coach = typeof g.squad.coach === 'string' ? g.squad.coach : null
+  g.ladder ??= { div: 0, stars: 0, best: 0, wins: 0, losses: 0, streak: 0 }
+  g.ladder.wins = Math.max(0, Math.trunc(Number(g.ladder.wins) || 0))
+  g.ladder.losses = Math.max(0, Math.trunc(Number(g.ladder.losses) || 0))
+  g.ladder.streak = Math.trunc(Number(g.ladder.streak) || 0)
+  g.ladder.best = Math.max(0, Math.trunc(Number(g.ladder.best) || 0))
+  // 大师 changed from a shelf into a score; accounts that were already there
+  // start the new ladder at zero, which is the only fair place to start it
+  g.ladder.points ??= 0
+  g.ladder.bestPoints ??= g.ladder.points
+  g.daily ??= {
+    claimed: null, streak: 0, questDay: null, picked: [], progress: {}, taken: [],
+    stamina: STAMINA_MAX, staminaAt: 0,
+  }
+  g.daily.picked ??= []
+  g.daily.progress ??= {}
+  g.daily.taken ??= []
+  // accounts made before the daily budget existed start today with a full one
+  g.daily.stamina ??= STAMINA_MAX
+  g.daily.staminaAt ??= 0
+  // accounts made before the daily challenge existed have never played one
+  g.challenge ??= newChallenge()
+  // accounts made before the 位置小游戏 existed have a full day of plays
+  g.minigame ??= newMinigame()
+  // an existing collection already sits somewhere on the series ladder; nothing
+  // is marked claimed, so whatever it has already earned is waiting on the shelf
+  g.series ??= {}
+  // the 全图鉴 flag is 1 or absent; anything else a row carries is dropped
+  if (g.fullSet !== undefined) {
+    const raw: unknown = g.fullSet
+    if (raw === 1 || raw === true) g.fullSet = 1
+    else delete g.fullSet
+  }
+  g.friends ??= []
+  g.presets ??= undefined
+  // 赛事预测: only picks the rules allow, for events the game knows
+  const predict = cleanPredictions(g.predict)
+  if (predict) g.predict = predict
+  else delete g.predict
+  // a cup drawn against a club that has since left the world
+  repairCup(g)
+  g.seed = typeof g.seed === 'number' && Number.isFinite(g.seed) ? g.seed >>> 0 : hashStr(id + g.createdAt) >>> 0
+  return clampState(g)
+}
+
+/**
+ * The fields the server owns, and the fields the client may still write.
+ *
+ * Everything with value is on the first list. The second is what a client
+ * save is allowed to carry into the row: the player's name, which five he
+ * runs and the fives he keeps on the shelf, and the friendlies he has played
+ * — none of which is worth anything to anybody, which is the test for being
+ * on it. A client save arriving with a different `coins` is not refused, it
+ * is simply not read.
+ */
+export const SERVER_KEYS = [
+  'version', 'createdAt', 'coins', 'cards', 'packs', 'pity', 'mythicDry', 'pulls', 'ladder',
+  'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'predict', 'seoulRoute',
+] as const
+export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends'] as const
+
+/**
+ * The client's cosmetic fields laid over the server's copy.
+ *
+ * The squad is checked against the collection the SERVER holds: a seat naming
+ * a card this account does not own is emptied, and so is a second seat for
+ * the same person. Presets are lists of ids and are left as typed — they are
+ * checked again the moment they are loaded onto the table.
+ */
+export function mergeClientFields(server: GachaState, client: Partial<GachaState>): GachaState {
+  if (typeof client.name === 'string') server.name = client.name.slice(0, 40)
+  if (client.squad && typeof client.squad === 'object') {
+    const raw = Array.isArray(client.squad.slots) ? client.squad.slots.slice(0, 5) : []
+    const seen = new Set<string>()
+    const slots = raw.map((id) => {
+      if (typeof id !== 'string' || !server.cards[id]) return null
+      const c = cardById(id)
+      if (!c || !isPlayerCard(c)) return null
+      const who = personOf(c)
+      if (seen.has(who)) return null
+      seen.add(who)
+      return id
+    })
+    while (slots.length < 5) slots.push(null)
+    const coach = typeof client.squad.coach === 'string' && server.cards[client.squad.coach]
+      && cardById(client.squad.coach)?.kind === 'coach' ? client.squad.coach : null
+    server.squad = { slots, coach }
+  }
+  if (Array.isArray(client.presets)) {
+    server.presets = client.presets.slice(0, SQUAD_PRESETS).map((p) => {
+      if (!p || typeof p !== 'object' || !p.squad) return null
+      const slots = (Array.isArray(p.squad.slots) ? p.squad.slots.slice(0, 5) : [])
+        .map((x) => (typeof x === 'string' ? x.slice(0, 40) : null))
+      while (slots.length < 5) slots.push(null)
+      return {
+        name: String(p.name ?? '').slice(0, 12) || '配置',
+        squad: { slots, coach: typeof p.squad.coach === 'string' ? p.squad.coach.slice(0, 40) : null },
+      }
+    })
+    if (!server.presets.some(Boolean)) server.presets = undefined
+  }
+  if (Array.isArray(client.friends)) {
+    server.friends = client.friends.slice(0, FRIEND_MAX).filter((f) => f && typeof f === 'object').map((f) => ({
+      code: String(f.code ?? '').slice(0, 8), name: String(f.name ?? '').slice(0, 40),
+      tag: String(f.tag ?? '').slice(0, 8),
+      wins: Math.max(0, Math.trunc(Number(f.wins) || 0)),
+      losses: Math.max(0, Math.trunc(Number(f.losses) || 0)),
+      at: String(f.at ?? '').slice(0, 10),
+    }))
+  }
+  return server
+}
+
+/**
+ * Take the server's copy of everything it owns, keeping what this client is
+ * still allowed to hold locally. The other direction of mergeClientFields:
+ * this is what a client does with the state the server hands back.
+ */
+export function takeServerFields(mine: GachaState, server: GachaState): GachaState {
+  for (const k of SERVER_KEYS) {
+    (mine as unknown as Record<string, unknown>)[k] = (server as unknown as Record<string, unknown>)[k]
+  }
+  // the server's view of the five is the one that has been checked
+  if (server.squad) mine.squad = server.squad
+  return mine
+}

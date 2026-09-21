@@ -1,0 +1,44 @@
+/**
+ * What the server needs from the engine, in one place.
+ *
+ * Bundled by `npm run build:server` into dist-server/engine.mjs and imported
+ * by cards-api.js, which is plain JavaScript and cannot read TypeScript.
+ * Nothing here is new code — it is the same rules the client ran, exported so
+ * the server can run them instead. See engine/cardActions.ts for why.
+ */
+export { runAction, wantsRival, squadForPlay, ladderScore, ACTIONS } from './cardActions'
+export type { ActEnv, ActResult } from './cardActions'
+export {
+  newGacha, migrateGacha, mergeClientFields, takeServerFields, clampState, refreshDaily,
+  primeStamina, pendingOpponent, SERVER_KEYS, CLIENT_KEYS, STARTER_COINS, GACHA_VERSION,
+  masterPoints, oppBumpFor, canPlay, spendPlay, STAMINA_COST, STAMINA_MAX, STAMINA_REGEN_MS,
+} from './gacha'
+export type { GachaState } from './gacha'
+export { rankName, LEAGUES, LEAGUE_RULES, CUP_LEAGUES, isCupLeague, leagueEntry } from './gacha'
+export type { LeagueKind } from './gacha'
+export { applyMail, escrowCard, restoreCard, mailLine } from './inbox'
+export type { MailItem } from './inbox'
+export { cardById, isPlayerCard, squadRating, SALVAGE, ALL_CARDS, PLAYER_CARDS, COACH_CARDS, RARITY_CN } from './cards'
+// the shelf is filtered and sorted before it is paged, so the server needs the
+// same predicate the filter bar runs — see engine/cardFilter.ts
+export { matchesFilter, matchesQuery, readFilter, filterActive } from './cardFilter'
+export type { CardFilter } from './cardFilter'
+export {
+  openCupSlot, planOpenCup, planOpenCupFast, openCupRoundAt, pairOpenCupRound, playOpenCupMatch, openCupMatchSeed, openCupPurse,
+  OPEN_CUP_MIN, OPEN_CUP_MAX, OPEN_CUP_RANKED_MIN,
+} from './openCup'
+export { BALANCE_VERSION } from './balance'
+export * from './openCupSwiss'
+export * from './teamCup'
+export { squadPaper, chemistry, squadPower } from './cards'
+export { progressOf } from '../../progress.js'
+export { answerFor, kindFor, imgOf, challengeSig } from './challenge'
+
+// Profile merges prefer real unlocks over unknown historical keys when bounded.
+// Export only identifiers; the HTTP module reuses this already-loaded bundle.
+import { ENDINGS } from './endings'
+import { ACHIEVEMENTS } from './achievements'
+export const PROFILE_KEYS = {
+  endings: ENDINGS.map(({ key }) => key),
+  achievements: ACHIEVEMENTS.map(({ key }) => key),
+}

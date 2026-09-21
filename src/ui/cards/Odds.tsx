@@ -1,0 +1,127 @@
+/**
+ * The published rates.
+ *
+ * Every number on this page is measured, not typed: it opens thirty thousand
+ * of each pack with the same `openPack` the game uses and counts what comes
+ * out. Nothing here can drift out of step with the packs, because there is no
+ * second copy of the numbers to drift.
+ *
+ * It shows the base rates beside the measured ones on purpose. They differ —
+ * sometimes by a lot — and a disclosure that quietly published the smaller of
+ * the two would be the kind of thing a player works out for themselves and
+ * stops trusting you over. The mechanics that move them are named underneath.
+ *
+ * There is no page any more — the tab was the tenth on a phone, and nobody
+ * leaves a pack they just opened to go and read a table somewhere else. These
+ * two pieces are what the floating 概率 button shows, one tap from wherever
+ * the player is, which is the only moment anybody actually wants them.
+ */
+import { useEffect, useState } from 'react'
+import { measureOdds, type PackOdds } from '../../engine/odds'
+import { HARD_PITY, SOFT_PITY, MYTHIC_FLOOR } from '../../engine/gacha'
+
+const METALS = [
+  { key: 'mythic', label: '彩卡', cls: 'r-mythic' },
+  { key: 'gold', label: '金卡', cls: 'r-gold' },
+  { key: 'silver', label: '银卡', cls: 'r-silver' },
+  { key: 'bronze', label: '铜卡', cls: 'r-bronze' },
+] as const
+
+const pct = (n: number) => `${(n * 100).toFixed(n < 0.001 ? 3 : 2)}%`
+/** "about one in N packs", which is the form people actually think in */
+const oneIn = (n: number) => (n > 0 ? `约 ${Math.round(1 / n).toLocaleString()} 包一张` : '—')
+
+/** One pack's table. Thirty thousand packs are opened once, on mount. */
+export function OddsTables() {
+  const [rows, setRows] = useState<PackOdds[] | null>(null)
+
+  // A moment of work, off the first paint so the tab opens immediately.
+  useEffect(() => {
+    const t = setTimeout(() => setRows(measureOdds()), 30)
+    return () => clearTimeout(t)
+  }, [])
+
+  if (!rows) return <p className="small faint">正在开三万包…</p>
+
+  return (
+    <>
+      {rows.map((r) => (
+        <div key={r.kind} className="odds-pack">
+          <div className="odds-head">
+            <b>{r.name}</b>
+            <span className="tiny muted">
+              每包 {r.draws} 张 · {r.shop ? `${r.cost.toLocaleString()} 金币` : '非卖品：从玩法与活动奖励获得'}
+            </span>
+          </div>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>稀有度</th>
+                  <th className="num">每张卡的概率</th>
+                  <th className="num">每包至少一张</th>
+                  <th className="num">基础值</th>
+                </tr>
+              </thead>
+              <tbody>
+                {METALS.map((m) => {
+                  const per = r.perCard[m.key]
+                  const pack = r.perPack[m.key]
+                  const base = r.base[m.key]
+                  if (m.key === 'mythic' && base === 0) {
+                    return (
+                      <tr key={m.key}>
+                        <td><span className={`tag ${m.cls}`}>{m.label}</span></td>
+                        <td className="num faint" colSpan={3}>这种包不出彩卡</td>
+                      </tr>
+                    )
+                  }
+                  return (
+                    <tr key={m.key}>
+                      <td><span className={`tag ${m.cls}`}>{m.label}</span></td>
+                      <td className="num mono">{pct(per)}</td>
+                      <td className="num mono">
+                        {pct(pack)}
+                        {m.key !== 'bronze' && (
+                          <em className="tiny faint" style={{ marginLeft: 6, fontStyle: 'normal' }}>
+                            {oneIn(pack)}
+                          </em>
+                        )}
+                      </td>
+                      <td className="num mono faint">{pct(base)}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ))}
+    </>
+  )
+}
+
+/** Why the measured column is not the配置表 column. */
+export function OddsWhy() {
+  return (
+    <>
+      <ul className="odds-why">
+        <li>
+          <b>金卡保底</b>：连续 {SOFT_PITY} 抽没出金卡后概率递增，第 {HARD_PITY} 抽必出，所以实测金卡率高于基础值。
+        </li>
+        <li>
+          <b>彩卡保底</b>：试训、选拔、十连和 LPL / LCK 包共享 {MYTHIC_FLOOR} 抽保底。其他包不出本系列彩卡，不推进此保底。
+        </li>
+        <li>
+          <b>保底进度挂在账号上</b>，换一种包开不重置。
+        </li>
+        <li>
+          <b>选拔包保底银卡、十连包保底金卡</b>：一包里最好的一张不够档就补到该档。
+        </li>
+      </ul>
+      <p className="tiny faint" style={{ marginBottom: 0 }}>
+        对战按卡组阵容分结算，强化、位置和队伍搭配都会影响实力。
+      </p>
+    </>
+  )
+}

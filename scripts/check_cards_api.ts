@@ -1,0 +1,524 @@
+/**
+ * The card account endpoints, against a real Postgres.
+ *
+ * These four routes are the only place this game writes anything to a server
+ * on a player's behalf, and the id they take IS the password — so the parts
+ * worth getting wrong are exactly the parts worth testing: that a claim cannot
+ * silently take over somebody else's collection, that the raw id never reaches
+ * the table, that a mistyped id still resolves, and that a save dated in the
+ * future is refused rather than freezing that account's streak.
+ *
+ *   npx tsx scripts/check_cards_api.ts
+ */
+import { PGlite } from '@electric-sql/pglite'
+import { makeSql } from '../pglite-sql.js'
+import { createHash } from 'node:crypto'
+import { Readable } from 'node:stream'
+import {
+  CARD_SCHEMA, MAX_CLIENT, battleCode, makeCardApi, normalizeId, serverDay, vetClient,
+} from '../cards-api.js'
+// these accounts are never bound to a phone; the gate is tested on its own in check_phone.ts
+process.env.PHONE_GATE = '0'
+
+const db = new PGlite()
+const sql = makeSql(db)
+await db.exec(CARD_SCHEMA)
+
+let bad = 0
+const check = (name: string, ok: boolean, detail = '') => {
+  console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? '  — ' + detail : ''}`)
+  if (!ok) bad++
+}
+
+// ---- the harness the routes expect ------------------------------------
+
+const rateHits = new Map<string, number>()
+const rateLimited = (key: string, max = 60) => {
+  const n = (rateHits.get(key) ?? 0) + 1
+  rateHits.set(key, n)
+  return n > max
+}
+const readBody = (req: { body: string }, limit: number) =>
+  new Promise<string>((resolve, reject) => {
+    if (req.body.length > limit) { reject(new Error('too large')); return }
+    resolve(req.body)
+  })
+
+interface Res { code: number; body: Record<string, unknown> }
+const json = (res: Res, code: number, body: Record<string, unknown>) => {
+  res.code = code
+  res.body = body
+}
+
+const api = makeCardApi(sql, { rateLimited, readBody, json } as never)
+
+async function call(path: string, body: unknown, bucket = 'test'): Promise<Res> {
+  const res: Res = { code: 0, body: {} }
+  const req = { body: JSON.stringify(body), method: 'POST' }
+  await api.route(req as never, res as never, path, bucket)
+  return res
+}
+
+// ---- id handling ------------------------------------------------------
+
+const ID = 'VM-ABCD-EFGH-JKMN-PQRS-TVWX'
+check('id round-trips', normalizeId(ID) === ID)
+check('id accepts lowercase and spaces', normalizeId('vm abcd efgh jkmn pqrs tvwx') === ID)
+check('id accepts no separators', normalizeId('VMABCDEFGHJKMNPQRSTVWX') === ID)
+check('O/I/L/U read as 0/1/1/V',
+  normalizeId('VM-0O0O-1I1L-UUUU-2222-3333') === 'VM-0000-1111-VVVV-2222-3333')
+check('short id refused', normalizeId('VM-ABCD') === null)
+check('junk refused', normalizeId('') === null)
+
+// ---- claim / load / save ---------------------------------------------
+
+// the state a client sends with a claim is not read: the server builds the account
+const state = { version: 1, id: ID, coins: 999_999, cards: {}, daily: { claimed: null } }
+
+let r = await call('/api/card/claim', { id: ID, name: '点点', state })
+check('claim creates the account', r.code === 200 && r.body.ok === true, `code ${r.code}`)
+check('...built by the server, not from what was sent',
+  (r.body.state as { coins: number }).coins === 3000, `coins ${(r.body.state as { coins: number })?.coins}`)
+
+r = await call('/api/card/claim', { id: ID, name: 'someone else', state: { ...state, coins: 9 } })
+check('a second claim on the same id is refused, not an overwrite',
+  r.code === 409 && r.body.taken === true, `code ${r.code}`)
+
+r = await call('/api/card/load', { id: ID })
+check('load returns the account', r.body.ok === true && (r.body.state as { coins: number }).coins === 3000)
+check('load carries the server date', typeof r.body.today === 'string' && r.body.today === serverDay())
+
+// baseRev travels with every save: a client that has read the row says which
+// version it read. A save carries the cosmetic fields; `coins` in it is not read.
+r = await call('/api/card/save', { id: ID, baseRev: 1, name: '点点改', state: { ...state, coins: 4200 } })
+check('save bumps the revision', r.body.ok === true && r.body.rev === 2, `rev ${r.body.rev}`)
+check('...and the reply carries the account as the server holds it',
+  (r.body.state as { coins: number; name: string })?.coins === 3000 && (r.body.state as { name: string })?.name === '点点改')
+
+r = await call('/api/card/load', { id: 'vm abcd efgh jkmn pqrs tvwx' })
+check('a sloppily typed id still finds the account',
+  r.body.ok === true && (r.body.state as { name: string }).name === '点点改')
+check('the coins the save claimed never landed', (r.body.state as { coins: number }).coins === 3000)
+
+r = await call('/api/card/load', { id: 'VM-1111-1111-1111-1111-1111' })
+check('an unknown id is a miss, not an error', r.code === 200 && r.body.missing === true)
+
+r = await call('/api/card/load', { id: 'nonsense' })
+check('a malformed id is rejected', r.body.bad === true)
+
+// ---- what the table actually holds ------------------------------------
+
+const rows = await sql`select id_hash, rev, name from card_accounts`
+check('one row per account', rows.length === 1, `${rows.length} rows`)
+check('the id itself is never stored, only its hash',
+  (rows[0] as { id_hash: string }).id_hash === createHash('sha256').update(ID).digest('hex'))
+const dump = JSON.stringify(await sql`select * from card_accounts`)
+check('the raw id appears nowhere in the table', !dump.includes(ID))
+
+// ---- what a client may write ------------------------------------------
+
+check('only the cosmetic fields come out of a save',
+  JSON.stringify(Object.keys(vetClient({ coins: 1, name: 'a', squad: {}, pulls: 9 })).sort()) === '["name","squad"]')
+check('an oversized set of them is refused',
+  vetClient({ name: 'x'.repeat(MAX_CLIENT + 10) }) === null)
+check('a non-object is nothing', JSON.stringify(vetClient([1, 2, 3])) === '{}')
+
+// a check-in dated in the future used to have to be refused, or it froze the
+// streak; now the date is simply not the client's to write
+r = await call('/api/card/save', { id: ID, baseRev: 2, state: { daily: { claimed: '2099-01-01' } } })
+check('a future check-in is accepted as a save', r.body.ok === true, `code ${r.code}`)
+r = await call('/api/card/load', { id: ID })
+check('...and did not land', (r.body.state as { daily: { claimed: string | null } }).daily.claimed === null)
+check('the coins are still the server\'s', (r.body.state as { coins: number }).coins === 3000)
+
+// ---- two devices ------------------------------------------------------
+//
+// The case this exists for: a tab left open on a phone holds an hour-old
+// state, the browser thaws it, and its beacon posts that state over an
+// evening played on the desktop. Without a version check the server took it.
+
+const TWO = 'VM-2222-3333-4444-5555-6666'
+await call('/api/card/claim', { id: TWO, name: 'two' })
+let phone = await call('/api/card/load', { id: TWO })
+const phoneRev = phone.body.rev as number
+
+// the desktop loads the same account, renames and rearranges, and saves twice
+let desk = await call('/api/card/load', { id: TWO })
+let deskRev = desk.body.rev as number
+for (const name of ['桌一', '桌二']) {
+  const w = await call('/api/card/save', { id: TWO, baseRev: deskRev, client: { name } })
+  deskRev = w.body.rev as number
+}
+check('the desktop\'s saves land', deskRev === phoneRev + 2, `rev ${deskRev}`)
+
+// now the phone wakes up and beacons what it remembers
+const beacon = await call('/api/card/save', {
+  id: TWO, baseRev: phoneRev, client: { name: 'two' },
+})
+check('a save built on a stale revision is refused',
+  beacon.code === 409 && beacon.body.stale === true, `code ${beacon.code}`)
+check('the refusal hands back the newer state',
+  (beacon.body.state as { name: string })?.name === '桌二')
+
+const after = await call('/api/card/load', { id: TWO })
+check('the evening on the desktop survives',
+  (after.body.state as { name: string }).name === '桌二',
+  `name ${(after.body.state as { name: string }).name}`)
+
+// and a client that resyncs can then write
+const resync = await call('/api/card/save', {
+  id: TWO, baseRev: after.body.rev as number, client: { name: '桌三' },
+})
+check('after resyncing, the same client can save again', resync.body.ok === true)
+
+// A save with no baseRev has, by definition, not read what it is about to
+// destroy. It used to be let through so that a tab still running an older
+// bundle could write across a deploy; that allowance is how an evening
+// disappeared — 大师 48 分 and three friendlies wiped by a copy that had never
+// seen them. Every client this game has ever shipped sends a baseRev once it
+// has loaded, so the only thing refused here is a write that should be.
+{
+  const naked = await call('/api/card/save', {
+    id: TWO, client: { name: '裸存' },
+  })
+  check('a save with no baseRev cannot overwrite an existing account',
+    naked.code === 409 && naked.body.stale === true, `code ${naked.code}`)
+  const still = await call('/api/card/load', { id: TWO })
+  check('and the account it aimed at is untouched',
+    (still.body.state as { name: string }).name === '桌三',
+    `name ${(still.body.state as { name: string }).name}`)
+}
+
+// ---- value never comes from the client ---------------------------------
+//
+// The revision check catches a client writing over a copy it has not seen.
+// Everything with value is not written by a client at all: whatever the save
+// says about pulls, cards or the record, the row keeps its own.
+{
+  const P = 'VM-3333-3333-3333-3333-3333'
+  await call('/api/card/claim', { id: P, name: '进度' })
+  const at = await call('/api/card/load', { id: P })
+  const rev = at.body.rev as number
+  const back = await call('/api/card/save', {
+    id: P, baseRev: rev, state: { pulls: 300, cards: { a: 1 }, ladder: { wins: 100, losses: 0 }, coins: 0 },
+  })
+  check('存档正常接受', back.body.ok === true, `code ${back.code}`)
+  const now = (await call('/api/card/load', { id: P })).body.state as { pulls: number; coins: number; cards: object; ladder: { wins: number } }
+  check('抽数、卡、战绩、金币全都还是服务器的',
+    now.pulls === 0 && Object.keys(now.cards).length === 0 && now.ladder.wins === 0 && now.coins === 3000,
+    JSON.stringify({ pulls: now.pulls, coins: now.coins, wins: now.ladder.wins }))
+}
+
+// ---- brute force ------------------------------------------------------
+
+rateHits.clear()
+let limited = 0
+for (let i = 0; i < 60; i++) {
+  const g = await call('/api/card/load', { id: 'VM-2222-2222-2222-2222-2222' }, 'attacker')
+  if (g.code === 429) limited++
+}
+check('guessing gets rate limited', limited >= 15, `${limited}/60 refused`)
+
+// ---- 排行榜 -----------------------------------------------------------
+const hashOf = (id: string) => createHash('sha256').update(id).digest('hex')
+
+//
+// A public read off the accounts table. Three things it must get right: the
+// order, the caller's own row when they are nowhere near the top, and never
+// echoing an id — the id is the password, so only four characters of its hash
+// may appear.
+{
+  rateHits.clear()
+  await db.exec('delete from card_accounts')
+  const mk = async (id: string, name: string, div: number, points: number, wins: number) => {
+    await sql`insert into card_accounts (id_hash, name, state)
+      values (${hashOf(id)}, ${name},
+        ${JSON.stringify({ ladder: { div, points, stars: 0, wins, losses: 0 } })})`
+  }
+  await mk('VM-1111-1111-1111-1111-1111', '阿伟', 5, 1800, 90)
+  await mk('VM-2222-2222-2222-2222-2222', '傻逼', 5, 900, 40)
+  await mk('VM-3333-3333-3333-3333-3333', '阿伟', 3, 0, 12)
+  await mk('VM-4444-4444-4444-4444-4444', '', 0, 0, 1)
+
+  const r = await call('/api/card/top', {}, 'board')
+  const rows = r.body.rows as { rank: number; name: string; tag: string; hidden: boolean; me: boolean; points: number }[]
+  check('排行榜读得出来', r.code === 200 && Array.isArray(rows), JSON.stringify(r.body).slice(0, 120))
+  check('按段位和大师分排', rows[0].name === '阿伟' && rows[0].points === 1800,
+    rows.map((x) => `${x.rank}.${x.name}(${x.points})`).join(' '))
+  check('名字里有脏字的显示「已隐藏」，但还在榜上',
+    rows[1].hidden && rows[1].name === '已隐藏', JSON.stringify(rows[1]))
+  check('没起名字的有默认名', rows.some((x) => x.name === '无名经理'))
+  const weis = rows.filter((x) => x.name === '阿伟')
+  check('同名的两个人靠识别码分开', weis.length === 2 && weis[0].tag !== weis[1].tag,
+    weis.map((x) => `#${x.tag}`).join(' '))
+  const tagOf = (id: string) => hashOf(id).slice(0, 4).toUpperCase()
+  check('识别码就是各自哈希的前四位，和 ID 本身无关',
+    weis[0].tag === tagOf('VM-1111-1111-1111-1111-1111')
+    && weis[1].tag === tagOf('VM-3333-3333-3333-3333-3333'),
+    `${weis.map((x) => x.tag).join(' ')} vs ${tagOf('VM-1111-1111-1111-1111-1111')} ${tagOf('VM-3333-3333-3333-3333-3333')}`)
+
+  const mine = await call('/api/card/top', { id: 'VM-4444-4444-4444-4444-4444' }, 'board2')
+  const mineRows = mine.body.rows as { me: boolean; name: string }[]
+  check('带上自己的 ID 就能看到自己那一行', mineRows.some((x) => x.me),
+    mineRows.filter((x) => x.me).map((x) => x.name).join(''))
+  check('不带 ID 时没有任何一行标成「我」', !rows.some((x) => x.me))
+  check('返回里不含任何 ID', !JSON.stringify(r.body).includes('VM-'))
+
+  // found live, an hour after the board went up: rank 24 had pasted their
+  // account id into the name box, and the board was publishing their password
+  await mk('VM-5555-5555-5555-5555-5555', 'VM-9DJ0-X6C7-8EP', 5, 1500, 50)
+  api.invalidate()   // the board is cached for twenty seconds; this reseeded it
+  const after = await call('/api/card/top', {}, 'board3')
+  const rows2 = after.body.rows as { name: string; hidden: boolean; why?: string; points: number }[]
+  const leaked = rows2.find((x) => x.points === 1500)!
+  check('把账号 ID 当昵称的人，ID 不会被公开', leaked.hidden && leaked.name === '已隐藏',
+    JSON.stringify(leaked))
+  check('而且知道是哪一种隐藏，好告诉他去改', leaked.why === 'id')
+  check('整个返回里还是找不到 ID 的影子', !JSON.stringify(after.body).includes('9DJ0'))
+
+  // ---- 每个天梯有自己的榜 (2026-09-09) -----------------------------------
+  //
+  // Reported: 「银卡赛显示的排行榜也是公开赛的」. The board read state.ladder
+  // whichever tab you were on, so climbing the silver ladder put you nowhere
+  // — which is most of the reason to climb one.
+  {
+    await db.exec('delete from card_accounts')
+    const league = async (id: string, name: string, open: number, silver: number) => {
+      await sql`insert into card_accounts (id_hash, name, state)
+        values (${hashOf(id)}, ${name}, ${JSON.stringify({
+          ladder: { div: 5, points: open, stars: 0, wins: 10, losses: 0 },
+          leagues: silver >= 0
+            ? { silver: { div: 5, points: silver, stars: 0, wins: 5, losses: 1 } }
+            : {},
+        })})`
+    }
+    await league('VM-6666-6666-6666-6666-6666', '公开赛第一', 9000, 100)
+    await league('VM-7777-7777-7777-7777-7777', '银卡赛第一', 10, 9000)
+    await league('VM-8888-8888-8888-8888-8888', '只打公开赛', 5000, -1)
+    api.invalidate()
+
+    const nameOf = (b: { rows?: { name: string }[] }) => (b.rows ?? []).map((x) => x.name)
+    const open = await call('/api/card/top', { league: 'open' }, 'lb1')
+    check('公开赛榜还是按公开赛的分排',
+      nameOf(open.body)[0] === '公开赛第一', nameOf(open.body).join(' > '))
+
+    const silver = await call('/api/card/top', { league: 'silver' }, 'lb2')
+    check('银卡赛榜按银卡赛的分排',
+      nameOf(silver.body)[0] === '银卡赛第一', nameOf(silver.body).join(' > '))
+    check('没打过银卡赛的不占位置',
+      !nameOf(silver.body).includes('只打公开赛'), nameOf(silver.body).join(' > '))
+    const rec = (silver.body.rows as { name: string; wins: number; losses: number }[])[0]
+    check('战绩也是那个天梯的', rec.wins === 5 && rec.losses === 1, `${rec.wins}-${rec.losses}`)
+
+    const hof = await call('/api/card/top', { league: 'hof' }, 'lb3')
+    check('没人打过的天梯是空榜，不是报错',
+      hof.code === 200 && (hof.body.rows as unknown[]).length === 0, JSON.stringify(hof.body).slice(0, 90))
+
+    // the name goes into a jsonb path, so it may only ever be one of ours
+    const junk = await call('/api/card/top', { league: "open'--" }, 'lb4')
+    check('编出来的赛事名当成公开赛，不是崩',
+      junk.code === 200 && nameOf(junk.body)[0] === '公开赛第一', JSON.stringify(junk.body).slice(0, 90))
+    const inject = await call('/api/card/top', { league: { toString: () => 'silver' } }, 'lb5')
+    check('非字符串的赛事名也当成公开赛',
+      inject.code === 200 && nameOf(inject.body)[0] === '公开赛第一', nameOf(inject.body).join(' > '))
+    check('不带赛事名就是公开赛，和以前一样',
+      nameOf((await call('/api/card/top', {}, 'lb6')).body)[0] === '公开赛第一')
+  }
+}
+
+// ---- 真人卡组当对手 ---------------------------------------------------
+//
+// The 78 real clubs stop at 89, so a ladder with no ceiling runs out of
+// opposition. Other people's saved fives do not — and handing one out must
+// never hand out anything that identifies its owner.
+{
+  rateHits.clear()
+  await db.exec('delete from card_accounts')
+  api.invalidate()
+  const squadOf = (ids: string[]) => ({ slots: ids, coach: 'C-bonkar' })
+  const withCards = (ids: string[]) =>
+    // the same shape the game actually saves — OwnedCard, with `level`. The
+    // first version of this fixture said `lv`, which is what the endpoint was
+    // reading, so the test agreed with the bug instead of catching it
+    Object.fromEntries(ids.map((id, i) => [id, { id, level: i, dupes: 0, seen: 1, got: '2026-09-01' }]))
+  const mkRival = async (id: string, name: string, div: number, points: number, ids: string[]) => {
+    await sql`insert into card_accounts (id_hash, name, state) values (
+      ${hashOf(id)}, ${name},
+      ${JSON.stringify({
+        ladder: { div, points, stars: 0, wins: 1, losses: 0 },
+        squad: squadOf(ids), cards: withCards([...ids, 'C-bonkar']),
+      })})`
+  }
+  const five = (n: string) => [`${n}a`, `${n}b`, `${n}c`, `${n}d`, `${n}e`]
+  await mkRival('VM-1111-1111-1111-1111-1111', '阿伟', 5, 1800, five('x'))
+  await mkRival('VM-2222-2222-2222-2222-2222', '傻逼', 5, 400, five('y'))
+  await mkRival('VM-3333-3333-3333-3333-3333', '新手', 0, 0, five('z'))
+  // a five with an empty seat is not an opponent
+  await sql`insert into card_accounts (id_hash, name, state) values (
+    ${hashOf('VM-4444-4444-4444-4444-4444')}, '缺人',
+    ${JSON.stringify({ ladder: { div: 5, points: 999 }, squad: { slots: ['a', null, 'c', 'd', 'e'], coach: null }, cards: {} })})`
+
+  const r = await call('/api/card/rivals', { div: 5, id: 'VM-1111-1111-1111-1111-1111' }, 'riv')
+  const list = r.body.rivals as { name: string; slots: string[]; levels: Record<string, number>; div: number; coach: string | null }[]
+  check('对手列表读得出来', r.code === 200 && Array.isArray(list), JSON.stringify(r.body).slice(0, 120))
+  check('不会把自己发给自己', !list.some((x) => x.name === '阿伟'), list.map((x) => x.name).join(' '))
+  check('缺人的阵容不算对手', !list.some((x) => x.name === '缺人'))
+  check('五个位置都是满的', list.every((x) => x.slots.filter(Boolean).length === 5))
+  check('带着每张卡的强化等级', list.some((x) => Object.keys(x.levels).length > 0),
+    JSON.stringify(list[0]?.levels))
+  check('教练也一起给', list.every((x) => x.coach === 'C-bonkar'))
+  check('名字同样过滤，脏字不会跑到别人屏幕上',
+    !list.some((x) => x.name === '傻逼'), list.map((x) => x.name).join(' '))
+  check('返回里没有任何账号信息',
+    !JSON.stringify(r.body).includes('VM-') && !JSON.stringify(r.body).includes('id_hash'))
+  check('优先给同段位的', list[0].div === 5, `第一个是 ${list[0].div} 段`)
+}
+
+// ---- 好友对战房 -------------------------------------------------------
+//
+// The battle code is eight characters of the account's hash. Two things have
+// to hold and neither is negotiable: the code must not be the id (the id is
+// the whole login, and somebody已经 published theirs once), and looking one up
+// must hand back a five and nothing else.
+{
+  rateHits.clear()
+  await db.exec('delete from card_accounts')
+  const FRIEND = 'VM-5555-5555-5555-5555-5555'
+  const hisHash = hashOf(FRIEND)
+  const hisCode = battleCode(hisHash)
+  await sql`insert into card_accounts (id_hash, name, state) values (
+    ${hisHash}, '老王',
+    ${JSON.stringify({
+      ladder: { div: 4, points: 0, stars: 2, wins: 9, losses: 3 },
+      squad: { slots: ['fa', 'fb', 'fc', 'fd', 'fe'], coach: 'C-bonkar' },
+      cards: Object.fromEntries(['fa', 'fb', 'fc', 'fd', 'fe', 'C-bonkar']
+        .map((id, i) => [id, { id, level: i, dupes: 0, seen: 1, got: '2026-09-01' }])),
+    })})`
+
+  check('对战码是 8 位十六进制', /^[0-9A-F]{8}$/.test(hisCode), hisCode)
+  check('对战码不是账号 ID，也推不回去',
+    !hisCode.includes('5555') && !FRIEND.includes(hisCode), `${hisCode} vs ${FRIEND}`)
+  check('对战码和排行榜的 #四位是同一串', hisHash.slice(0, 4).toUpperCase() === hisCode.slice(0, 4))
+
+  let f = await call('/api/card/friend', { code: hisCode }, 'fr')
+  const who = f.body.friend as {
+    name: string; tag: string; slots: string[]; coach: string | null
+    levels: Record<string, number>; div: number; code: string
+  }
+  check('按对战码找得到人', f.code === 200 && f.body.ok === true, JSON.stringify(f.body).slice(0, 120))
+  check('拿到的是他存下来的五个人', who?.slots?.filter(Boolean).length === 5, JSON.stringify(who?.slots))
+  check('强化等级一起给', Object.keys(who.levels).length > 0, JSON.stringify(who.levels))
+  check('教练也给', who.coach === 'C-bonkar')
+  check('段位也给', who.div === 4)
+  check('返回里没有账号 ID，也没有存档',
+    !JSON.stringify(f.body).includes('VM-') && !JSON.stringify(f.body).includes('coins')
+    && !JSON.stringify(f.body).includes('id_hash'))
+
+  check('大小写和空格都认',
+    ((await call('/api/card/friend', { code: ` ${hisCode.toLowerCase()} ` }, 'fr')).body.ok) === true)
+  check('码不对就说不对',
+    ((await call('/api/card/friend', { code: 'ZZZZ' }, 'fr')).body.bad) === true)
+  check('没人用过的码是 missing，不是报错',
+    ((await call('/api/card/friend', { code: '00000000' }, 'fr')).body.missing) === true)
+  check('空 body 不会炸', (await call('/api/card/friend', null, 'fr')).body.ok !== true)
+
+  // a five with a hole in it cannot be played, and saying so beats a crash
+  await sql`insert into card_accounts (id_hash, name, state) values (
+    ${hashOf('VM-6666-6666-6666-6666-6666')}, '缺人',
+    ${JSON.stringify({ squad: { slots: ['a', null, 'c', 'd', 'e'], coach: null }, cards: {} })})`
+  f = await call('/api/card/friend', { code: battleCode(hashOf('VM-6666-6666-6666-6666-6666')) }, 'fr')
+  check('对方阵容缺人时说清楚，而不是发一个打不了的队', f.body.empty === true, JSON.stringify(f.body))
+
+  // the name goes through the same filter as everywhere else it lands on
+  // somebody else's screen
+  await sql`insert into card_accounts (id_hash, name, state) values (
+    ${hashOf('VM-7777-7777-7777-7777-7777')}, 'VM-9DJ0-X6C7-8EP0-1234-5678',
+    ${JSON.stringify({
+      squad: { slots: ['a', 'b', 'c', 'd', 'e'], coach: null },
+      cards: {},
+    })})`
+  f = await call('/api/card/friend', { code: battleCode(hashOf('VM-7777-7777-7777-7777-7777')) }, 'fr')
+  check('把 ID 当昵称的人，在好友房里也是隐藏的',
+    (f.body.friend as { name: string }).name === '已隐藏'
+    && !JSON.stringify(f.body).includes('9DJ0'), JSON.stringify(f.body.friend))
+}
+
+// ---- 送卡功能已移除，但在途的礼物还要送到 -------------------------------
+//
+// A free card transfer with no cost at all is an alt-account funnel, so it was
+// removed. The CLAIM path stays: there may be gifts sent and not yet collected,
+// and deleting the door they arrive through would quietly eat somebody's card.
+{
+  rateHits.clear()
+  await db.exec('delete from card_accounts')
+  await db.exec('delete from card_gifts')
+  const A = 'VM-AAAA-AAAA-AAAA-AAAA-AAAA'
+  const B = 'VM-BBBB-BBBB-BBBB-BBBB-BBBB'
+  await sql`insert into card_accounts (id_hash, name, state) values (${hashOf(A)}, '送的人',
+    ${JSON.stringify({ cards: { 'p:P1': { id: 'p:P1', dupes: 2 } } })})`
+  await sql`insert into card_accounts (id_hash, name, state) values (${hashOf(B)}, '收的人',
+    ${JSON.stringify({ cards: {} })})`
+
+  // the route no longer exists: it is not handled at all, which the real
+  // server turns into a 404 (see the `if (!handled)` in server.js)
+  const gone = await call('/api/card/gift',
+    { id: A, code: battleCode(hashOf(B)).toLowerCase(), cardId: 'p:P1' }, 'gf')
+  check('送卡的接口已经没有了', gone.code === 0 && !gone.body.ok, `code ${gone.code}`)
+  const before = await sql`select count(*)::int as n from card_gifts`
+  check('而且什么礼物都没生成', before[0].n === 0, String(before[0].n))
+
+  // one that was already in flight when the feature went away
+  await sql`insert into card_gifts (from_h, to_h, card_id) values (${hashOf(A)}, ${hashOf(B)}, 'p:P1')`
+  const waiting = await call('/api/card/gifts', { id: B }, 'gf')
+  check('在途的礼物还看得到', waiting.body.waiting === 1, JSON.stringify(waiting.body))
+  const claim = await call('/api/card/gifts', { id: B, claim: true }, 'gf')
+  check('而且还领得到——功能下线不该吃掉别人的卡',
+    (claim.body.gifts as { cardId: string }[])?.[0]?.cardId === 'p:P1',
+    JSON.stringify(claim.body.gifts))
+}
+
+// ---- no database ------------------------------------------------------
+
+const offlineApi = makeCardApi(null, { rateLimited, readBody, json } as never)
+const res: Res = { code: 0, body: {} }
+await offlineApi.route({ body: '{}', method: 'POST' } as never, res as never, '/api/card/load', 'x')
+check('without a database the route says so instead of throwing',
+  res.body.offline === true && typeof res.body.today === 'string')
+
+
+// ---- the puzzle picture names nothing ---------------------------------
+//
+// Dragging the challenge's <img> to the desktop used to hand over the answer
+// as a file name. The picture now comes from a POST that knows the account,
+// carries a generic name, and must not be cached.
+{
+  const { readFile } = await import('node:fs/promises')
+  const { join } = await import('node:path')
+  const { fileURLToPath } = await import('node:url')
+  const engine = await import('../src/engine/server.ts')
+  const root = join(fileURLToPath(new URL('.', import.meta.url)), '..', 'public')
+  const api2 = makeCardApi(sql, { rateLimited, readBody, json, staticRoot: root } as never)
+  const got: { code: number; head: Record<string, unknown>; body: Buffer | null; json: unknown } =
+    { code: 0, head: {}, body: null, json: null }
+  const res = {
+    writeHead(code: number, head: Record<string, unknown>) { got.code = code; got.head = head },
+    end(b: Buffer) { got.body = b },
+  }
+  const jsonRes = (r: typeof res, code: number, body: unknown) => { got.code = code; got.json = body }
+  const api3 = makeCardApi(sql, { rateLimited, readBody, json: jsonRes, staticRoot: root } as never)
+  void api2
+  await api3.route({ body: JSON.stringify({ id: ID }), method: 'POST' } as never, res as never, '/api/card/puzzle', 'pz')
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' }).format(new Date())
+  const rel = engine.imgOf(engine.kindFor(today, ID), engine.answerFor(today, ID))
+  const want = rel ? await readFile(join(root, rel)) : null
+  check('puzzle route answers the picture', got.code === 200 && !!got.body && !!want && Buffer.compare(got.body!, want!) === 0)
+  check('with a generic file name and no caching',
+    String(got.head['Content-Disposition']).includes('puzzle.webp') && got.head['Cache-Control'] === 'no-store')
+  check('and no player id anywhere in the headers',
+    !JSON.stringify(got.head).match(/P\d{2,}/))
+  await api3.route({ body: JSON.stringify({ id: 'nope' }), method: 'POST' } as never, res as never, '/api/card/puzzle', 'pz')
+  check('a bad id is 400, not a picture', got.code === 400)
+}
+
+console.log(bad ? `\n${bad} FAILED` : '\nall good')
+process.exit(bad ? 1 : 0)

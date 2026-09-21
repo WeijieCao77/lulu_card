@@ -1,0 +1,142 @@
+[
+  {
+    "id": "t1",
+    "region": "LCK",
+    "label": "SKT → T1",
+    "aliases": [
+      "SKT",
+      "SKT T1",
+      "SK Telecom T1",
+      "T1"
+    ],
+    "source": "https://corporate.comcast.com/press/releases/sk-telecom-and-comcast-spectacor-announce-global-esports-joint-venture"
+  },
+  {
+    "id": "dk",
+    "region": "LCK",
+    "label": "DWG → DWG KIA → Dplus KIA",
+    "aliases": [
+      "DWG",
+      "DAMWON",
+      "DAMWON Gaming",
+      "DWG KIA",
+      "DK",
+      "Dplus Kia"
+    ],
+    "source": "https://esportsinsider.com/2023/01/damwon-gaming-kia-dplus-kia"
+  },
+  {
+    "id": "gen",
+    "region": "LCK",
+    "label": "SSG → KSV → Gen.G",
+    "aliases": [
+      "SSG",
+      "Samsung Galaxy",
+      "KSV",
+      "KSV Esports",
+      "GEN",
+      "Gen.G"
+    ],
+    "source": "https://www.prnewswire.com/news-releases/ksv-acquires-samsung-galaxy-the-winner-of-the-2017-league-of-legends-world-championship-series-300564018.html"
+  },
+  {
+    "id": "drx",
+    "region": "LCK",
+    "label": "Longzhu → Kingzone → DRX → Kiwoom DRX",
+    "aliases": [
+      "LZ",
+      "Longzhu Gaming",
+      "KZ",
+      "Kingzone DragonX",
+      "DragonX",
+      "DRX",
+      "KRX",
+      "Kiwoom DRX"
+    ],
+    "source": "https://lol.fandom.com/wiki/Kingzone_DragonX"
+  },
+  {
+    "id": "hle",
+    "region": "LCK",
+    "label": "KOO / ROX Tigers → HLE",
+    "aliases": [
+      "KOO",
+      "KOO Tigers",
+      "ROX",
+      "ROX Tigers",
+      "HLE",
+      "Hanwha Life Esports"
+    ],
+    "source": "https://hle.kr/news"
+  },
+  {
+    "id": "freecs",
+    "region": "LCK",
+    "label": "Afreeca → Kwangdong → DN Freecs → DN SOOPers",
+    "aliases": [
+      "AF",
+      "AFS",
+      "Afreeca Freecs",
+      "KDF",
+      "Kwangdong Freecs",
+      "DNF",
+      "DN Freecs",
+      "DNS",
+      "DN SOOPers"
+    ],
+    "source": "https://lol.fandom.com/wiki/DN_SOOPers"
+  },
+  {
+    "id": "fearx",
+    "region": "LCK",
+    "label": "SANDBOX → Liiv SANDBOX → FEARX",
+    "aliases": [
+      "SB",
+      "SANDBOX Gaming",
+      "LSB",
+      "Liiv SANDBOX",
+      "FOX",
+      "FEARX",
+      "BFX",
+      "BNK FEARX"
+    ],
+    "source": "https://esportsinsider.com/2023/12/liiv-sandbox-rebrands-to-fearx-ahead-of-the-2024-season"
+  },
+  {
+    "id": "nip",
+    "region": "LPL",
+    "label": "V5 → NIP",
+    "aliases": [
+      "V5",
+      "Victory Five",
+      "NIP",
+      "Ninjas in Pyjamas"
+    ],
+    "source": "https://nip.gl/pages/nip-group-a-new-era"
+  },
+  {
+    "id": "wbg",
+    "region": "LPL",
+    "label": "Suning → Weibo Gaming",
+    "aliases": [
+      "SNG",
+      "SN",
+      "Suning",
+      "WBG",
+      "Weibo Gaming"
+    ],
+    "source": "https://liquipedia.net/leagueoflegends/Suning"
+  },
+  {
+    "id": "tes",
+    "region": "LPL",
+    "label": "TOP → TES",
+    "aliases": [
+      "TOP",
+      "Topsports Gaming",
+      "TES",
+      "Top Esports"
+    ],
+    "source": "https://lol.fandom.com/wiki/Topsports_Gaming_(Organization)"
+  }
+]

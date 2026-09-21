@@ -1,0 +1,376 @@
+/**
+ * Every dashboard query, run against a real Postgres.
+ *
+ * Three of these were invalid SQL when they shipped — `date > integer`,
+ * round() on a double, an outer select reaching for a column that only existed
+ * inside its own subquery — and none of it showed up until an adversarial
+ * review ran them. A query nobody has executed is a guess.
+ *
+ * Uses an in-process Postgres so this runs anywhere, including CI, with no
+ * database to provision.
+ */
+import { PGlite } from '@electric-sql/pglite'
+import { makeSql } from '../pglite-sql.js'
+import { EVENTS, SCHEMA } from '../analytics.js'
+import { CARD_SCHEMA } from '../cards-api.js'
+import { overview, prune, storage } from '../stats.js'
+
+const db = new PGlite()
+
+/** The tagged-template shape stats.js expects, backed by a real engine. */
+const sql = makeSql(db)
+
+let bad = 0
+const check = (name: string, ok: boolean, detail = '') => {
+  console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? '  — ' + detail : ''}`)
+  if (!ok) bad++
+}
+
+await db.exec(SCHEMA.replace(/^-- .*$/gm, ''))
+// The card panels read the card mode's own saves, which live in a table this
+// file used to know nothing about — a query against a table PGlite has never
+// heard of fails the same way a syntax error does.
+await db.exec(CARD_SCHEMA.replace(/^-- .*$/gm, ''))
+
+// a small but realistic population: two people over three days, one of whom
+// came back, plus the hostile row that used to poison every numeric cast
+const rows: [string, string, number, string, string, unknown][] = [
+  ['v1', 's1', 1, 'session_start', '-2 days', { new_id: true, had_save: false }],
+  ['v1', 's1', 2, 'career_start', '-2 days', { club: 'TYL', tier: 'VCT', region: 'LPL' }],
+  ['v1', 's1', 3, 'turn', '-2 days', { day: 7 }],
+  ['v1', 's1', 4, 'screen', '-2 days', { to: 'squad' }],
+  ['v1', 's1', 5, 'session_end', '-2 days', { active_s: 640, reason: 'pagehide' }],
+  ['v1', 's2', 1, 'session_start', '-1 days', { new_id: false, had_save: true }],
+  ['v1', 's2', 2, 'turn', '-1 days', { day: 34 }],
+  ['v1', 's2', 3, 'match_watched', '-1 days', { day: 34, bo: 3, won: true }],
+  ['v1', 's2', 4, 'stage_done', '-1 days', { place: 3 }],
+  ['v1', 's2', 5, 'session_ping', '-1 days', { active_s: 900 }],
+  // The rollup shape, alongside the old row-per-turn shape above. Both are
+  // read, and a re-delivered beacon repeats the same running total — which is
+  // the case that has to stay harmless.
+  ['v1', 's2', 20, 'turns', '-1 days', { turns: 9, fast: 2, quiet: 3, day: 90, year: 2026, sim_ms: 410 }],
+  ['v1', 's2', 21, 'turns', '-1 days', { turns: 11, fast: 2, quiet: 4, day: 96, year: 2026, sim_ms: 410 }],
+  ['v1', 's2', 22, 'turns', '-1 days', { turns: 11, fast: 2, quiet: 4, day: 96, year: 2026, sim_ms: 410 }],
+  ['v1', 's2', 23, 'screens', '-1 days', { to: 'squad', hits: 4 }],
+  ['v1', 's2', 24, 'screens', '-1 days', { to: 'squad', hits: 7 }],
+  ['v1', 's2', 25, 'screens', '-1 days', { to: 'squad', hits: 7 }],
+  ['v1', 's2', 26, 'screens', '-1 days', { to: 'transfers', hits: 2 }],
+  ['v2', 's3', 1, 'session_start', '-1 days', { new_id: true, had_save: false }],
+  ['v2', 's3', 2, 'session_end', '-1 days', { active_s: 12, reason: 'hidden' }],
+  // Every shape an anonymous POST can take that used to kill the dashboard.
+  // A type check alone did not stop the last two: 1.5 is a number and
+  // '1.5'::bigint throws; 1e20 is a number and overflows bigint.
+  ['v3', 's4', 1, 'session_ping', '0 days', { active_s: 'nope' }],
+  ['v3', 's4', 2, 'turn', '0 days', { day: 'nope' }],
+  ['v3', 's4', 3, 'turn', '0 days', { day: 1.5 }],
+  ['v3', 's4', 4, 'turn', '0 days', { day: 1e20 }],
+  ['v3', 's4', 20, 'turns', '0 days', { day: 1.5, turns: 'lots' }],
+  ['v3', 's4', 21, 'screens', '0 days', { to: 'squad', hits: 'many' }],
+  ['v3', 's4', 5, 'session_ping', '0 days', { active_s: 1e308 }],
+  ['v3', 's4', 6, 'session_ping', '0 days', { active_s: -900 }],
+  ['v3', 's4', 9, 'error', '0 days', { msg: 'autosave: QuotaExceededError', kb: 2100, day: 250 }],
+  ['v1', 's2', 16, 'save_size', '-1 days', { kb: 900, day: 34, year: 2026 }],
+  ['v2', 's3', 8, 'save_size', '-1 days', { kb: 1700, day: 220, year: 2026 }],
+  // the rescue: refused, stripped, written. A success, and it must not land
+  // in the error list — that is where it was first reported from, and a
+  // player who saw it there asked what had broken.
+  ['v2', 's3', 9, 'save_size', '-1 days', { kb: 1100, day: 240, year: 2026, shrunk: 1 }],
+  // ---- the front page and the things it now leads to
+  ['v1', 's2', 6, 'home_go', '-1 days', { go: 'career' }],
+  ['v1', 's2', 7, 'home_go', '-1 days', { go: 'cards' }],
+  ['v2', 's3', 3, 'home_go', '-1 days', { go: 'cards' }],
+  ['v1', 's2', 8, 'game_over', '-1 days',
+    { finished: 1, seasons: 11, honours: 20, dynasty: 'golden', story: 'homegrown' }],
+  ['v2', 's3', 4, 'game_over', '-1 days',
+    { finished: 0, seasons: 4, honours: 2, dynasty: 'nothing', story: 'shortStay' }],
+  ['v1', 's2', 9, 'unlock', '-1 days', { kind: 'end', key: 'golden', name: '黄金之路' }],
+  ['v1', 's2', 10, 'unlock', '-1 days', { kind: 'ach', key: 'firstTitle', name: '开张' }],
+  ['v2', 's3', 5, 'unlock', '-1 days', { kind: 'ach', key: 'firstTitle', name: '开张' }],
+  ['v1', 's2', 11, 'account', '-1 days', { act: 'new' }],
+  ['v2', 's3', 6, 'account', '-1 days', { act: 'restore' }],
+  // ---- the five-year settlement, whose answers were dropped at the door
+  // until 'mid_review' was added to the allowlist
+  ['v1', 's2', 12, 'mid_review', '-1 days', { settle: 0, honours: 12 }],
+  ['v2', 's3', 7, 'mid_review', '-1 days', { settle: 1, honours: 3 }],
+  // ---- 撸撸卡. v1 goes all the way through and comes back the next day; v2
+  // taps it on the front page and never opens a thing, which is the whole
+  // point of counting the first step separately from the second.
+  ['v1', 's1', 6, 'card_start', '-2 days', { fresh: true, cloud: true, owned: 0 }],
+  ['v1', 's1', 7, 'card_pull', '-2 days', { kind: 'scout', paid: 'coins', gold: 1, dupes: 0 }],
+  ['v1', 's1', 8, 'card_pull', '-2 days', { kind: 'elite', paid: 'pack', gold: 0, dupes: 2 }],
+  ['v1', 's2', 13, 'card_match', '-1 days', { mode: 'ladder', won: true, div: 2, rating: 71 }],
+  ['v1', 's2', 14, 'card_match', '-1 days', { mode: 'cup', won: false, round: 1, rating: 71 }],
+  ['v1', 's2', 15, 'card_signin', '-1 days', { streak: 2 }],
+  ['v1', 's2', 17, 'card_challenge', '-1 days', { kind: 'player', solved: 1, tries: 3, streak: 2 }],
+  ['v2', 's3', 10, 'card_challenge', '-1 days', { kind: 'player', solved: 0, tries: 6, streak: 0 }],
+  ['v2', 's3', 11, 'card_challenge', '-1 days', { kind: 'map', solved: 1, tries: 1, streak: 1 }],
+  // and the hostile shapes, for the casts the card panels now do
+  ['v3', 's4', 10, 'card_pull', '0 days', { kind: 'scout', paid: 'coins', gold: 'nope', dupes: 1e20 }],
+]
+for (const [vid, sid, n, name, ago, props] of rows) {
+  await db.query(
+    `insert into events (ts, n, visitor_id, session_id, seq, device, name, props)
+     values (now() + $1::interval, $2, $3, $4, 1, 'phone', $5, $6)`,
+    [ago, n, vid, sid, name, JSON.stringify(props)],
+  )
+}
+
+// The card mode's saves, which the collection panel reads directly. The third
+// is deliberately malformed in every way a hand-edited or half-written row
+// could be: it must be skipped, not throw.
+for (const [idh, ago, state, name] of [
+  ['h1', '-60 days', { cards: { a: 1, b: 1, c: 1 }, pulls: 12, ladder: { div: 3 }, daily: { streak: 4 } }],
+  ['h2', '-1 days', { cards: { a: 1 }, pulls: 2, ladder: { div: 0 }, daily: { streak: 1 } }],
+  ['h3', '-1 days', { cards: 'nope', pulls: 'lots', ladder: 7, daily: null }],
+  // a day-old account claiming 121 matches: 体力 allows about 14 a day, so
+  // this one cannot have played what it says it played
+  ['h4', '-1 days', {
+    cards: { a: 1 }, pulls: 3,
+    ladder: { div: 5, wins: 109, losses: 12 }, daily: { streak: 1 },
+  }, '牛逼王'],
+  // a year-old account with the same record, which is entirely possible
+  ['h5', '-300 days', {
+    cards: { a: 1 }, pulls: 3,
+    ladder: { div: 5, wins: 109, losses: 12 }, daily: { streak: 1 },
+  }],
+] as [string, string, unknown, string?][]) {
+  await db.query(
+    `insert into card_accounts (id_hash, created, seen, saved, state, name)
+     values ($1, now() + $2::interval, now(), now(), $3, $4)`,
+    [idh, ago, JSON.stringify(state), name ?? null],
+  )
+}
+
+// A fixture may only contain events the app can actually produce. The
+// 看过比赛 funnel step passed review for weeks on the strength of a
+// match_watched row that no call site emitted — the test was the only thing
+// keeping the column alive.
+{
+  // The two rollups replaced three per-action events, and rows in those old
+  // shapes are still in the table and still queried — so the fixtures keep
+  // them on purpose, and this guard has to know that "no longer emitted" is
+  // not the same as "never existed".
+  const RETIRED = new Set(['screen', 'turn', 'turn_done'])
+  const emitted = new Set(rows.map((r) => r[3]).filter((n) => !RETIRED.has(n as string)))
+  // Scan the source for every whitelisted name that appears in quotes. A regex
+  // over `track('x')` misses the ternary in MatchLive — track(watched ?
+  // 'match_watched' : 'match_skipped') — which is exactly the shape that hid
+  // the missing instrumentation in the first place.
+  const { execSync } = await import('node:child_process')
+  const cwd = new URL('..', import.meta.url).pathname
+  const source = execSync("find src -name '*.ts' -o -name '*.tsx' | xargs cat",
+    { cwd, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 })
+  const known = new Set(
+    [...EVENTS].filter((e) => source.includes(`'${e}'`)),
+  )
+  const invented = [...emitted].filter((e) => !known.has(e as string))
+  check('the fixture only contains events the game actually emits',
+    invented.length === 0, invented.join(' '))
+}
+
+let out: Awaited<ReturnType<typeof overview>> | null = null
+try {
+  out = await overview(sql as never, 30)
+  check('every dashboard query executes', true)
+} catch (err) {
+  check('every dashboard query executes', false, (err as Error).message)
+}
+
+if (out) {
+  check('the headline counts people, not rows',
+    out.headline.visitors === 3, `visitors=${out.headline.visitors}`)
+  check('a returning visitor is recognised',
+    out.headline.returned === 1 && out.headline.return_pct === 33,
+    `returned=${out.headline.returned} pct=${out.headline.return_pct}`)
+  check('playtime takes the largest figure a session reported, not its last',
+    Number(out.sessions.median_min) > 0 && out.sessions.n === 3,
+    `n=${out.sessions.n} median=${out.sessions.median_min}min`)
+  check('a poisoned numeric prop is ignored, not fatal',
+    out.sessions.n === 3, 'the active_s:"nope" row must not appear or throw')
+  check('the funnel is monotonically non-increasing',
+    out.funnel.arrived >= out.funnel.started &&
+    out.funnel.started >= out.funnel.advanced,
+    JSON.stringify(out.funnel))
+  // 96 comes from the rollup rows, 34 from the old row-per-turn ones, and the
+  // junk (1.5, 1e20, 'nope', 'lots') from neither
+  check('game depth reads both shapes and ignores the junk',
+    out.depth.max_game_day === 96, `max=${out.depth.max_game_day}`)
+  // v1 = 1 (old s1) + 1 (old s2) + 11 (s2's rollup) = 13, and v3 = 1 from the
+  // one junk row whose day was merely fractional rather than out of range.
+  // The number worth watching is the 11: the session reported 9, then 11, then
+  // 11 again, and a sum would have made it 31. A running total read as a max
+  // is what makes a re-delivered beacon cost nothing.
+  //
+  // A real session only ever carries one of the two shapes — a client is
+  // running one bundle or the other — so s2 having both is a fixture that
+  // exercises the union, not a case production produces.
+  check('一个会话重复上报的总数只算一次，不会累加',
+    Number(out.depth.avg_turns) === 7, `avg=${out.depth.avg_turns}（累加的话是 17）`)
+  const squad = out.screens.find((r) => r.screen === 'squad')
+  check('页面次数把两种格式加在一起',
+    squad?.n === 8, JSON.stringify(out.screens))
+  check('the daily series has a row per active day', out.daily.length >= 2, `${out.daily.length} days`)
+  check('cohorts come back', Array.isArray(out.retention), `${out.retention.length} cohorts`)
+  check('errors surface', out.errors.length === 1, JSON.stringify(out.errors[0]?.msg))
+  check('报错按人数排，一个人刷一万条不会看起来像一万个人',
+    out.errors[0]?.visitors === 1, JSON.stringify(out.errors[0]))
+  check('clubs are counted', out.clubs.length === 1, JSON.stringify(out.clubs))
+
+  // ---- the panels added for the two-game front page
+  check('首页去向按人算，不按点击算',
+    out.home.career === 1 && out.home.cards === 2 && out.home.both === 1,
+    JSON.stringify(out.home))
+  check('没点进任何一个游戏的人也被算进来',
+    out.home.neither === (out.home.visitors - 2), JSON.stringify(out.home))
+  check('走完十年和中途下课分得开',
+    out.careers.finished === 1 && out.careers.sacked === 1, JSON.stringify(out.careers))
+  check('生涯长度和冠军数是平均值，不是总和',
+    out.careers.avg_seasons === 8 && out.careers.avg_honours === 11,
+    JSON.stringify(out.careers))
+  check('解锁按人去重，同一条被两个人拿到算 2',
+    out.unlocks.find((r) => r.key === 'firstTitle')?.visitors === 2,
+    JSON.stringify(out.unlocks))
+  check('解锁带着游戏里的名字，面板不用自己维护一份',
+    out.unlocks.find((r) => r.key === 'golden')?.name === '黄金之路',
+    JSON.stringify(out.unlocks.find((r) => r.key === 'golden')))
+  // ---- 存档体积，包括写不进去的那些（它们也带着 kb）
+  check('存档体积按人取最大值，不是按事件',
+    out.saveSize.careers === 3, JSON.stringify(out.saveSize))
+  check('中位数和 90 分位分得开',
+    out.saveSize.p50 === 1700 && out.saveSize.max_kb === 2100, JSON.stringify(out.saveSize))
+  check('超标的份数被单独数出来',
+    out.saveSize.over_1500 === 2, JSON.stringify(out.saveSize))
+  check('被迫精简过的存档单独数，而且不算报错',
+    out.saveSize.shrunk === 1 && !out.errors.some((e) => e.msg.includes('shrunk')),
+    JSON.stringify({ shrunk: out.saveSize.shrunk, errors: out.errors.map((e) => e.msg) }))
+
+  check('账号的创建与找回分开统计',
+    out.accounts.made === 1 && out.accounts.restored === 1, JSON.stringify(out.accounts))
+
+  // ---- 域名：只有这次改动之后写下的行才带 host
+  check('没有 host 的老行有自己的名字，不会消失',
+    out.hosts.some((r) => r.host === '(这次改动之前)'), JSON.stringify(out.hosts))
+
+  // ---- 五年之约
+  check('五年之约的两种答复分得开',
+    out.midReview.continued === 1 && out.midReview.settled === 1, JSON.stringify(out.midReview))
+
+  // ---- 撸撸卡
+  const c = out.cards
+  check('撸撸卡漏斗每一步都包含后面的步骤',
+    c.funnel.touched >= c.funnel.entered && c.funnel.entered >= c.funnel.pulled
+    && c.funnel.pulled >= c.funnel.fought, JSON.stringify(c.funnel))
+  check('点了首页但没进去的人算在第一步里',
+    c.funnel.touched === 3 && c.funnel.entered === 2, JSON.stringify(c.funnel))
+  check('隔天还开包的人被认出来', c.funnel.came_back === 1, JSON.stringify(c.funnel))
+  check('卡包按种类分开算', (c.packs.find((r) => r.kind === 'scout')?.opens ?? 0) === 2,
+    JSON.stringify(c.packs))
+  check('金卡数不会被一个坏值毁掉',
+    Number(c.packs.find((r) => r.kind === 'scout')?.gold) === 1, JSON.stringify(c.packs))
+  check('用金币买的和用卡包开的分得开',
+    Number(c.packs.find((r) => r.kind === 'elite')?.bought) === 0, JSON.stringify(c.packs))
+  check('每日挑战按题型分开，解开率算得出来',
+    (c.challenge.find((r) => r.kind === 'player')?.solved ?? 0) === 1
+    && (c.challenge.find((r) => r.kind === 'player')?.played ?? 0) === 2,
+    JSON.stringify(c.challenge))
+  check('平均次数只算解开的那些',
+    Number(c.challenge.find((r) => r.kind === 'player')?.avg_tries) === 3,
+    JSON.stringify(c.challenge.find((r) => r.kind === 'player')))
+
+  check('天梯和杯赛分开，胜负分开',
+    (c.matches.find((r) => r.mode === 'ladder')?.wins ?? 0) === 1
+    && (c.matches.find((r) => r.mode === 'cup')?.wins ?? 0) === 0, JSON.stringify(c.matches))
+  check('收藏统计跳过坏掉的存档而不是崩掉',
+    c.accounts.accounts === 4 && c.accounts.avg_owned === 2, JSON.stringify(c.accounts))
+  check('最高段位和最长连签读的是存档本身',
+    c.accounts.max_div === 5 && c.accounts.max_streak === 4, JSON.stringify(c.accounts))
+  check('窗口外建的账号仍然计入总数，但不算新增',
+    c.accounts.accounts === 4 && c.accounts.fresh === 2, JSON.stringify(c.accounts))
+
+  // 「这个人能打这么多场是不是开挂了」 is arithmetic, and the arithmetic has
+  // to be right in both directions: the one-day-old account with 121 matches
+  // is flagged, the year-old one with the identical record is not.
+  const over = c.overplayed || []
+  check('一天建的号打了 121 场会被标出来',
+    over.some((r) => r.id_hash === 'h4'), JSON.stringify(over.map((r) => r.id_hash)))
+  check('同样战绩但号很老的不会被标',
+    !over.some((r) => r.id_hash === 'h5'), JSON.stringify(over.map((r) => r.id_hash)))
+  check('正常号不会被标',
+    !over.some((r) => r.id_hash === 'h1' || r.id_hash === 'h2'))
+  const flagged = over.find((r) => r.id_hash === 'h4')
+  check('算得出超出多少', !!flagged && flagged.played === 121 && flagged.ceiling < 40,
+    JSON.stringify(flagged))
+  check('名字也带出来，好认人', flagged?.name === '牛逼王', String(flagged?.name))
+}
+
+// every window the dashboard offers must work, not just the default
+for (const d of [7, 30, 90, 365]) {
+  try {
+    await overview(sql as never, d)
+    check(`the ${d}-day window runs`, true)
+  } catch (err) {
+    check(`the ${d}-day window runs`, false, (err as Error).message)
+  }
+}
+
+try {
+  await prune(sql as never, 180)
+  check('pruning runs', true)
+} catch (err) {
+  check('pruning runs', false, (err as Error).message)
+}
+
+// ---- 清理必须会停，而且只删该删的
+//
+// 它没有停过。旧的循环拿 pg_total_relation_size 和预算比，而 DELETE 之后文件
+// 大小根本不变（只有 VACUUM FULL 会缩，那要锁表），所以一旦超预算，退出条件
+// 永远不成立：每次启动跑满 20 轮、删掉 400 万行，不管实际超了多少。一天八次
+// 部署就把三十天的历史删成了一天。按体积删行这条规则本身就不成立——删行根本
+// 释放不了磁盘，所以现在只按「过期」和「行数上限」删，两者都收敛。
+{
+  await db.exec('delete from events')
+  const rows = 5000
+  const values = Array.from({ length: rows }, (_, i) =>
+    `(now() - interval '${i} minutes', ${i}, 'v${i % 50}', 's${i % 50}', 1, 'phone', 'turn', '{"day":${i % 300}}')`)
+  for (let i = 0; i < values.length; i += 500) {
+    await db.exec(`insert into events (ts, n, visitor_id, session_id, seq, device, name, props)
+      values ${values.slice(i, i + 500).join(',')}`)
+  }
+  await db.exec('vacuum (analyze) events')
+  const count = async () => Number((await db.query('select count(*)::int as n from events'))
+    .rows[0]!.n)
+  check('先塞满 5000 行', await count() === rows, `${await count()}`)
+
+  // well inside every budget: a healthy table must lose nothing, however many
+  // times the process restarts
+  for (let boot = 0; boot < 5; boot++) await prune(sql as never, 180, 9_999_999)
+  check('没超上限时，重启五次也一行不删', await count() === rows, `剩 ${await count()}`)
+
+  // over the row ceiling: cut to exactly the ceiling, and no further
+  const first = await prune(sql as never, 180, 3000)
+  check('超了行数上限就删到上限为止', await count() === 3000, `删了 ${first}，剩 ${await count()}`)
+  const second = await prune(sql as never, 180, 3000)
+  check('再跑一次不会继续删（这就是当初丢数据的地方）', second === 0,
+    `第二次又删了 ${second} 行，剩 ${await count()}`)
+
+  // and the ceiling addresses by position, so id gaps cannot drag it in
+  await db.exec('update events set id = id * 3')
+  await prune(sql as never, 180, 100)
+  check('行数上限按位置算，id 有空洞也不会误删', await count() === 100, `剩 ${await count()}`)
+
+  // the newest rows are the ones kept
+  const kept = await db.query('select min(ts) as oldest, max(ts) as newest from events')
+  check('留下的是最新的那些', !!kept.rows[0],
+    `${String((kept.rows[0] as { oldest: unknown }).oldest).slice(4, 21)} 起`)
+}
+
+// ---- 存储状态要能被看见
+{
+  const st = await storage(sql as never)
+  check('存储面板知道有多少行、多久的历史',
+    st.rows > 0 && !!st.oldest && st.bytes > 0,
+    `${st.rows} 行，最早 ${String(st.oldest).slice(0, 10)}，${(st.bytes / 1e6).toFixed(1)} MB`)
+}
+
+await db.close()
+process.exit(bad ? 1 : 0)

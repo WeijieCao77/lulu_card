@@ -1,0 +1,42 @@
+.cardface.worlds-card{container-type:inline-size;position:relative;display:block;isolation:isolate;aspect-ratio:.69;height:auto;min-height:0;padding:3px;border:0;border-radius:12px;background:linear-gradient(135deg,#ffe5a8 0%,#a6edf1 17%,#9c89ce 32%,#f8e7af 49%,#faf3de 54%,#986d35 65%,#ecacda 80%,#a6e4e1 95%);box-shadow:0 15px 35px #0006,0 0 0 1px #fff2;overflow:hidden;color:#fff;transition:transform .25s ease,box-shadow .25s ease;text-align:left}
+.cardface.worlds-card.s-sm{width:96px;padding:3px}.cardface.worlds-card.s-md{width:132px;padding:3px}.cardface.worlds-card.s-lg{width:184px;padding:3px}
+.worlds-gallery .cardface.worlds-card{width:100%}
+.worlds-card .wc-window{position:relative;width:100%;height:100%;min-height:100%;aspect-ratio:.69;border-radius:9px;overflow:hidden;background:#080c15;box-shadow:inset 0 0 0 1px #f7deaa66}
+.worlds-card .wc-photo{position:absolute;inset:0;width:100%;height:80%;object-fit:cover;object-position:var(--wc-position);transform:scale(var(--wc-zoom,1));transform-origin:54% 60%;filter:saturate(.87) contrast(1.07)}
+.worlds-card .wc-shade{position:absolute;inset:0;background:linear-gradient(180deg,#070b13aa 0%,transparent 22%,transparent 40%,#06091265 51%,#060912ed 65%,#060912 85%),linear-gradient(90deg,#05091088,transparent 35%,transparent 80%,#05091088)}
+.worlds-card .wc-window:after{content:"";position:absolute;inset:3.2%;border:1px solid #f0dba73b;border-radius:4px;pointer-events:none;z-index:3;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,0 86%,1% 86%,1% 99%,99% 99%,99% 1%,1% 1%,1% 30%,0 30%)}
+.wc-top{position:absolute;top:5.3%;left:7%;right:7%;display:flex;align-items:center;justify-content:space-between;gap:5%;font:600 3.2cqw/1.2 'Segoe UI',sans-serif;letter-spacing:.2em;color:#eee2c7}
+.wc-top b{font-size:4.1cqw;letter-spacing:.04em;color:#fff}
+.wc-rating{position:absolute;top:12%;left:7%;display:flex;flex-direction:column;align-items:center;text-shadow:0 2px 10px #000b;color:#f8e8bb}
+.wc-rating strong{font:600 16cqw/.95 Georgia,serif;letter-spacing:-.07em}.wc-rating span{font-size:4cqw;margin-top:1.5cqw;letter-spacing:.2em}.wc-rating i{font-size:4cqw;font-style:normal}
+.wc-side{position:absolute;right:5.2%;top:16%;writing-mode:vertical-rl;font-size:2.4cqw;letter-spacing:.27em;color:#fff9}
+.wc-engraving{position:absolute;right:6%;top:38%;font:italic 600 27cqw/1 Georgia,serif;color:transparent;-webkit-text-stroke:1px #fff2;letter-spacing:-.07em;opacity:.7}
+.wc-copy{position:absolute;left:8%;right:8%;bottom:6%;z-index:2;text-align:center}
+.wc-award{display:flex;align-items:center;justify-content:center;gap:3cqw;font:600 3.8cqw/1.5 'Segoe UI',sans-serif;letter-spacing:.22em;color:var(--wc-accent)}
+.wc-award span{font-size:3cqw}.wc-name{font:800 17cqw/1.05 'Arial Narrow',Impact,'Segoe UI',sans-serif;letter-spacing:-.045em;text-transform:uppercase;color:#fff9e9;margin-top:2cqw;text-shadow:0 3px 15px #0008}
+.wc-title{font-size:5.7cqw;font-weight:600;letter-spacing:.4em;padding-left:.4em;color:#e7d9bb;margin-top:2cqw}
+.wc-rule{height:1px;background:linear-gradient(90deg,transparent,var(--wc-accent),transparent);opacity:.6;margin:4cqw 0 3cqw}
+.wc-stats{display:flex;justify-content:center;gap:11cqw}.wc-stats span{display:flex;gap:1cqw;flex-direction:column}.wc-stats b{font:500 6.5cqw/1 Georgia,serif;color:#f6e7cc}.wc-stats small{font-size:3cqw;color:#aaa9ae;letter-spacing:.15em}
+.wc-bottom{display:flex;justify-content:space-between;align-items:baseline;margin-top:4cqw;font-size:3cqw;letter-spacing:.07em;color:#aea38e}.wc-bottom b{color:var(--wc-accent);font-size:4cqw}.wc-bottom span{max-width:72%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.wc-foil{pointer-events:none;position:absolute;inset:0;z-index:4;background:linear-gradient(120deg,transparent 10%,#b0e4ff13 28%,#f4b4ff18 32%,#ffe8ac0c 38%,transparent 47%,#affffb10 67%,transparent 80%);background-size:250% 100%;mix-blend-mode:screen;opacity:.6;transition:background-position .6s,opacity .6s}
+.worlds-card:hover .wc-foil,.worlds-card:focus-visible .wc-foil{background-position:95% 50%;opacity:1}.cardface.worlds-card.tap:hover{transform:translateY(-5px) rotate(-.8deg);box-shadow:0 20px 42px #0009,0 0 22px color-mix(in srgb,var(--wc-accent) 23%,transparent)}
+.cardface.worlds-card.sel,.cardface.worlds-card:focus-visible{outline:2px solid #f4d694;outline-offset:4px}.cardface.worlds-card.dim{opacity:.4}
+.worlds-gallery{--wg-gold:#dccaa2;color:var(--text);max-width:1240px;margin:auto}.worlds-hero{display:grid;grid-template-columns:1fr 260px;gap:36px;padding:40px 46px;border:1px solid #c9ae7838;border-radius:16px;background:radial-gradient(ellipse at 85% 50%,#6b456b2b,transparent 60%),linear-gradient(120deg,#111820,#17171f 75%);color:#eee6d5;overflow:hidden;align-items:center}
+.worlds-eyebrow{font:600 11px/1.5 'Segoe UI',sans-serif;letter-spacing:.24em;color:var(--wg-gold)}
+.worlds-hero h1{font-size:clamp(32px,4vw,52px);letter-spacing:.1em;margin:14px 0 12px;font-weight:650;color:#f1e8d4;line-height:1.2}.worlds-hero p{max-width:560px;color:#a9abb6;line-height:1.9;font-size:14px}.worlds-hero-summary{display:flex;gap:30px;margin-top:28px}.worlds-hero-summary span{display:flex;flex-direction:column;gap:7px;font-size:11px;color:#a9a6a3}.worlds-hero-summary b{font:500 26px/1 Georgia,serif;color:#e6d3ac}
+.worlds-feature{padding:12px;perspective:1000px}.worlds-feature .worlds-card{width:100%;transform:rotate(6deg);box-shadow:0 25px 60px #0009}
+.worlds-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:28px 0 20px}.worlds-toolbar h2{margin:0;font-size:18px}.worlds-toggle{display:flex;gap:7px;flex-wrap:wrap}
+.worlds-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 24px}.worlds-item{min-width:0}.worlds-item>.worlds-card{width:100%}.worlds-item-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin:12px 2px;color:var(--muted)}.worlds-item-label strong{color:var(--text);font-weight:500}.worlds-item-label span{font-size:11px}
+.worlds-note{font-size:12px;line-height:1.9;color:var(--muted);border-top:1px solid var(--line);margin-top:22px;padding-top:18px}.worlds-detail{display:grid;grid-template-columns:minmax(180px,300px) 1fr;gap:30px;align-items:center}.worlds-detail>.worlds-card{width:100%}.worlds-detail h3{font-size:26px;margin:12px 0}.worlds-detail p{line-height:1.9}.worlds-detail dl{display:grid;grid-template-columns:repeat(4,1fr);gap:15px 10px}.worlds-detail dt{font-size:11px;color:var(--muted)}.worlds-detail dd{margin:4px 0;font:500 24px/1.2 Georgia,serif}.worlds-credit{font-size:11px;color:var(--muted);line-height:1.9}.worlds-credit a{color:inherit;text-decoration:underline}.worlds-modal{max-width:850px!important}
+@media(max-width:900px){.worlds-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 18px}.worlds-hero{padding:28px;grid-template-columns:1fr 210px;gap:20px}}
+@media(max-width:600px){.worlds-hero{grid-template-columns:1fr;padding:26px 22px}.worlds-feature{display:none}.worlds-hero h1{font-size:34px}.worlds-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px}.worlds-detail{grid-template-columns:1fr}.worlds-detail>.worlds-card{max-width:280px;justify-self:center}.worlds-hero-summary{gap:24px}.worlds-item-label{gap:4px;font-size:11px}.worlds-item-label span{font-size:10px}.worlds-toolbar h2{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.worlds-card,.wc-foil{transition:none!important}.cardface.worlds-card.tap:hover{transform:none}}
+
+.cardface.worlds-card.hall-card{background:linear-gradient(135deg,#c5e5ff,#bf8ce7 23%,#efd8fa 46%,#776ec1 70%,#80e7e3);box-shadow:0 15px 35px #0006,0 0 18px #b892ff22}
+.cardface.worlds-card.msi-card{background:linear-gradient(135deg,#c5f8ee,#65bfbf 23%,#e8fffd 46%,#587584 70%,#a6eece)}
+.cardface.worlds-card.ig-card{background:linear-gradient(135deg,#fffdf4,#baa77d 23%,#fff7da 46%,#65656c 70%,#e7dec5)}
+.hall-card .wc-title{color:#d8c3fa}.msi-card .wc-title{color:#ade4d9}
+.worlds-search{display:flex;align-items:center;gap:14px;width:100%;font-size:12px;color:var(--muted)}.worlds-search input{width:min(100%,440px);min-width:0;font-size:13px;padding:10px 12px}
+.worlds-tier{font-size:12px;border-left:2px solid #c4a0ec;padding-left:12px;color:var(--muted)}
+
+.worlds-search{white-space:nowrap}.worlds-search input{white-space:normal;flex:1}

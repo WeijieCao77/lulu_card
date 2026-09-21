@@ -1,0 +1,2027 @@
+[
+  {
+    "id": "worlds-2013-faker",
+    "ign": "Faker",
+    "title": "S3 · 初代王朝",
+    "short": "初代王朝",
+    "year": 2013,
+    "kind": "icon",
+    "clubId": "T24",
+    "clubTag": "SKT",
+    "rating": 96,
+    "note": "2013 年，SKT 3:0 战胜 Royal Club，Faker 首次登上世界之巅。本卡为冠军纪念卡；当届没有官方 MVP 奖项。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "P121",
+      "realName": "이상혁",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 17,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 99,
+        "reaction": 99,
+        "awareness": 92,
+        "utility": 97,
+        "clutch": 99,
+        "teamwork": 92,
+        "communication": 85,
+        "igl": 94
+      },
+      "overall": 96,
+      "agents": [
+        "Zed",
+        "Ahri",
+        "Gragas"
+      ]
+    },
+    "art": {
+      "accent": "#f6bd79",
+      "position": "48% 30%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/9769958191/",
+      "serial": 1
+    },
+    "source": "https://www.flickr.com/photos/lolesports/9769958191/",
+    "ratingTier": "special"
+  },
+  {
+    "id": "worlds-2014-mata",
+    "ign": "Mata",
+    "title": "S4 · 白色王朝",
+    "short": "白色王朝",
+    "year": 2014,
+    "kind": "mvp",
+    "clubId": "H:SSW",
+    "clubTag": "SSW",
+    "rating": 95,
+    "note": "2014 年，Samsung White 3:1 战胜 Star Horn Royal Club。Mata 以视野、游走与团战掌控获得赛事 MVP。",
+    "roles": [
+      "辅助"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "H:Mata",
+      "realName": "Cho Se-hyeong",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 20,
+      "roles": [
+        "辅助"
+      ],
+      "attrs": {
+        "aim": 89,
+        "reaction": 89,
+        "awareness": 99,
+        "utility": 73,
+        "clutch": 93,
+        "teamwork": 99,
+        "communication": 99,
+        "igl": 99
+      },
+      "overall": 95,
+      "agents": [
+        "Thresh",
+        "Janna",
+        "Nami"
+      ]
+    },
+    "art": {
+      "accent": "#9bd8fa",
+      "position": "42% 24%",
+      "credit": "Riot Games · 游民星空",
+      "source": "https://wap.gamersky.com/news/Content-479674.html",
+      "serial": 2
+    },
+    "source": "https://nexus.leagueoflegends.com/en-us/2018/10/the-2018-finals-mvp-award/",
+    "ratingTier": "worlds-mvp"
+  },
+  {
+    "id": "worlds-2015-marin",
+    "ign": "MaRin",
+    "title": "S5 · 上路之巅",
+    "short": "上路之巅",
+    "year": 2015,
+    "kind": "mvp",
+    "clubId": "T24",
+    "clubTag": "SKT",
+    "rating": 96,
+    "note": "2015 年，SKT 3:1 战胜 KOO Tigers，以 15 胜 1 负结束赛事。MaRin 获得赛事 MVP。",
+    "roles": [
+      "上单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "H:MaRin",
+      "realName": "Jang Gyeong-hwan",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 24,
+      "roles": [
+        "上单"
+      ],
+      "attrs": {
+        "aim": 99,
+        "reaction": 99,
+        "awareness": 90,
+        "utility": 97,
+        "clutch": 95,
+        "teamwork": 95,
+        "communication": 88,
+        "igl": 93
+      },
+      "overall": 96,
+      "agents": [
+        "Rumble",
+        "Fiora",
+        "Gnar"
+      ]
+    },
+    "art": {
+      "accent": "#ee8e64",
+      "position": "55% 24%",
+      "credit": "Riot Games / LoL Esports · 玩加电竞",
+      "source": "https://m.wanplus.cn/article/72142.html",
+      "serial": 3
+    },
+    "source": "https://nexus.leagueoflegends.com/en-us/2018/10/the-2018-finals-mvp-award/",
+    "ratingTier": "worlds-mvp"
+  },
+  {
+    "id": "worlds-2016-faker",
+    "ign": "Faker",
+    "title": "S6 · 不灭王朝",
+    "short": "不灭王朝",
+    "year": 2016,
+    "kind": "mvp",
+    "clubId": "T24",
+    "clubTag": "SKT",
+    "rating": 97,
+    "note": "2016 年，SKT 3:2 战胜 Samsung Galaxy，Faker 随队拿下第三冠并获得 Worlds MVP。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "P121",
+      "realName": "이상혁",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 20,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 98,
+        "reaction": 98,
+        "awareness": 98,
+        "utility": 96,
+        "clutch": 98,
+        "teamwork": 96,
+        "communication": 93,
+        "igl": 98
+      },
+      "overall": 97,
+      "agents": [
+        "Syndra",
+        "Ryze",
+        "Orianna"
+      ]
+    },
+    "art": {
+      "accent": "#dd8bfc",
+      "position": "60% 24%",
+      "credit": "Inven Global",
+      "source": "https://www.invenglobal.com/articles/314/faker-with-his-trophy",
+      "serial": 4
+    },
+    "source": "https://nexus.leagueoflegends.com/en-us/2018/10/the-2018-finals-mvp-award/",
+    "ratingTier": "worlds-mvp"
+  },
+  {
+    "id": "worlds-2017-ruler",
+    "ign": "Ruler",
+    "title": "S7 · 一箭定乾坤",
+    "short": "一箭定乾坤",
+    "year": 2017,
+    "kind": "fmvp",
+    "clubId": "H:SSG",
+    "clubTag": "SSG",
+    "rating": 95,
+    "note": "2017 年，Samsung Galaxy 3:0 战胜 SKT。Ruler 的韦鲁斯关键开团为冠军收官，并获得决赛 MVP。",
+    "roles": [
+      "下路"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P91",
+      "realName": "박재혁",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 18,
+      "roles": [
+        "下路"
+      ],
+      "attrs": {
+        "aim": 97,
+        "reaction": 92,
+        "awareness": 88,
+        "utility": 97,
+        "clutch": 99,
+        "teamwork": 97,
+        "communication": 83,
+        "igl": 88
+      },
+      "overall": 95,
+      "agents": [
+        "Varus",
+        "Xayah",
+        "Tristana"
+      ]
+    },
+    "art": {
+      "accent": "#75cfff",
+      "position": "65% 24%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/24307603738/",
+      "serial": 5
+    },
+    "source": "https://nexus.leagueoflegends.com/en-us/2018/10/the-2018-finals-mvp-award/",
+    "ratingTier": "worlds-mvp"
+  },
+  {
+    "id": "worlds-2018-ning",
+    "ign": "Ning",
+    "title": "S8 · 破晓之刃",
+    "short": "破晓之刃",
+    "year": 2018,
+    "kind": "fmvp",
+    "clubId": "T4",
+    "clubTag": "IG",
+    "rating": 96,
+    "note": "2018 年，IG 3:0 战胜 Fnatic，拿下 LPL 首座世界冠军。Ning 以主动进攻和团战节奏获得决赛 MVP。",
+    "roles": [
+      "打野"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "H:Ning",
+      "realName": "高振宁",
+      "nat": "cn",
+      "region": "LPL",
+      "age": 20,
+      "roles": [
+        "打野"
+      ],
+      "attrs": {
+        "aim": 97,
+        "reaction": 88,
+        "awareness": 97,
+        "utility": 91,
+        "clutch": 99,
+        "teamwork": 99,
+        "communication": 95,
+        "igl": 95
+      },
+      "overall": 96,
+      "agents": [
+        "Camille",
+        "Gragas",
+        "Lee Sin"
+      ]
+    },
+    "art": {
+      "accent": "#e5d5ab",
+      "position": "50% 20%",
+      "credit": "Park Woon-sung / Daily Esports",
+      "source": "https://sports.news.nate.com/view/20181103n12928",
+      "serial": 6
+    },
+    "source": "https://sports.news.nate.com/view/20181103n12928",
+    "ratingTier": "worlds-mvp"
+  },
+  {
+    "id": "worlds-2019-tian",
+    "ign": "Tian",
+    "title": "S9 · 凤凰天降",
+    "short": "凤凰天降",
+    "year": 2019,
+    "kind": "fmvp",
+    "clubId": "H:FPX",
+    "clubTag": "FPX",
+    "rating": 96,
+    "note": "2019 年，FPX 3:0 战胜 G2。Tian 的盲僧与中野联动贯穿决赛，获得决赛 MVP。",
+    "roles": [
+      "打野"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P529",
+      "realName": "高天亮",
+      "nat": "cn",
+      "region": "LPL",
+      "age": 19,
+      "roles": [
+        "打野"
+      ],
+      "attrs": {
+        "aim": 99,
+        "reaction": 88,
+        "awareness": 99,
+        "utility": 93,
+        "clutch": 99,
+        "teamwork": 98,
+        "communication": 91,
+        "igl": 95
+      },
+      "overall": 96,
+      "agents": [
+        "Lee Sin",
+        "Qiyana",
+        "Gragas"
+      ]
+    },
+    "art": {
+      "accent": "#f3a071",
+      "position": "35% 26%",
+      "credit": "新京报赛事报道",
+      "source": "https://m.bjnews.com.cn/detail/157342912915039.html",
+      "serial": 7
+    },
+    "source": "https://m.bjnews.com.cn/detail/157342912915039.html",
+    "ratingTier": "worlds-mvp"
+  },
+  {
+    "id": "worlds-2020-canyon",
+    "ign": "Canyon",
+    "title": "S10 · 峡谷主宰",
+    "short": "峡谷主宰",
+    "year": 2020,
+    "kind": "fmvp",
+    "clubId": "T17",
+    "clubTag": "DWG",
+    "rating": 97,
+    "note": "2020 年，DWG 3:1 战胜 Suning。Canyon 以野区统治力和决胜局千珏的发挥获得决赛 MVP。",
+    "roles": [
+      "打野"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P89",
+      "realName": "김건부",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 19,
+      "roles": [
+        "打野"
+      ],
+      "attrs": {
+        "aim": 99,
+        "reaction": 91,
+        "awareness": 99,
+        "utility": 99,
+        "clutch": 99,
+        "teamwork": 98,
+        "communication": 91,
+        "igl": 99
+      },
+      "overall": 97,
+      "agents": [
+        "Graves",
+        "Nidalee",
+        "Kindred"
+      ]
+    },
+    "art": {
+      "accent": "#77e5d2",
+      "position": "85% 25%",
+      "credit": "Riot Games · Inven Global",
+      "source": "https://www.invenglobal.com/articles/12616/worlds-2020-dwg-canyon-wins-finals-mvp-we-worked-harder-than-any-other-team",
+      "serial": 8
+    },
+    "source": "https://www.invenglobal.com/articles/12616/worlds-2020-dwg-canyon-wins-finals-mvp-we-worked-harder-than-any-other-team",
+    "ratingTier": "worlds-mvp"
+  },
+  {
+    "id": "worlds-2021-scout",
+    "ign": "Scout",
+    "title": "S11 · 破晓星辰",
+    "short": "破晓星辰",
+    "year": 2021,
+    "kind": "fmvp",
+    "clubId": "T3",
+    "clubTag": "EDG",
+    "rating": 94,
+    "note": "2021 年，EDG 3:2 战胜 DK，拿下队史首座世界冠军。Scout 获得决赛 MVP。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P116",
+      "realName": "이예찬",
+      "nat": "kr",
+      "region": "LPL",
+      "age": 23,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 96,
+        "reaction": 96,
+        "awareness": 91,
+        "utility": 93,
+        "clutch": 98,
+        "teamwork": 93,
+        "communication": 84,
+        "igl": 89
+      },
+      "overall": 94,
+      "agents": [
+        "Zoe",
+        "Ryze",
+        "LeBlanc"
+      ]
+    },
+    "art": {
+      "accent": "#e4abb5",
+      "position": "67% 23%",
+      "credit": "Riot Games · ONE Esports",
+      "source": "https://www.oneesports.vn/lmht/scout-gianh-duoc-mvp-tai-cktg-2021/",
+      "serial": 9
+    },
+    "source": "https://www.oneesports.vn/lmht/scout-gianh-duoc-mvp-tai-cktg-2021/",
+    "ratingTier": "worlds-mvp"
+  },
+  {
+    "id": "worlds-2022-kingen",
+    "ign": "Kingen",
+    "title": "S12 · 逆命登神",
+    "short": "逆命登神",
+    "year": 2022,
+    "kind": "fmvp",
+    "clubId": "H:DRX",
+    "clubTag": "DRX",
+    "rating": 94,
+    "note": "2022 年，DRX 3:2 战胜 T1。Kingen 在生死局的剑魔表现助力黑马登顶，获得决赛 MVP。",
+    "roles": [
+      "上单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P114",
+      "realName": "황성훈",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 22,
+      "roles": [
+        "上单"
+      ],
+      "attrs": {
+        "aim": 96,
+        "reaction": 96,
+        "awareness": 87,
+        "utility": 92,
+        "clutch": 99,
+        "teamwork": 99,
+        "communication": 82,
+        "igl": 85
+      },
+      "overall": 94,
+      "agents": [
+        "Aatrox",
+        "Camille",
+        "Ornn"
+      ]
+    },
+    "art": {
+      "accent": "#a6b7ff",
+      "position": "63% 25%",
+      "credit": "Colin Young-Wolff / Riot Games",
+      "source": "https://www.theloadout.com/league-of-legends/worlds-2022-mvp-drx-kingen-interview",
+      "serial": 10
+    },
+    "source": "https://www.theloadout.com/league-of-legends/worlds-2022-mvp-drx-kingen-interview",
+    "ratingTier": "worlds-mvp"
+  },
+  {
+    "id": "worlds-2023-zeus",
+    "ign": "Zeus",
+    "title": "S13 · 雷霆加冕",
+    "short": "雷霆加冕",
+    "year": 2023,
+    "kind": "fmvp",
+    "clubId": "T24",
+    "clubTag": "T1",
+    "rating": 96,
+    "note": "2023 年，T1 3:0 战胜 WBG。Zeus 以强势上路表现获得决赛 MVP。",
+    "roles": [
+      "上单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P98",
+      "realName": "최우제",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 19,
+      "roles": [
+        "上单"
+      ],
+      "attrs": {
+        "aim": 99,
+        "reaction": 99,
+        "awareness": 92,
+        "utility": 96,
+        "clutch": 99,
+        "teamwork": 96,
+        "communication": 85,
+        "igl": 89
+      },
+      "overall": 96,
+      "agents": [
+        "Aatrox",
+        "Yone",
+        "Jayce"
+      ]
+    },
+    "art": {
+      "accent": "#beb4ff",
+      "position": "43% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/53342210205/",
+      "serial": 11
+    },
+    "source": "https://www.flickr.com/photos/lolesports/53342210205/",
+    "ratingTier": "worlds-mvp"
+  },
+  {
+    "id": "worlds-2024-faker",
+    "ign": "Faker",
+    "title": "S14 · 五冠不朽",
+    "short": "五冠不朽",
+    "year": 2024,
+    "kind": "fmvp",
+    "clubId": "T24",
+    "clubTag": "T1",
+    "rating": 97,
+    "note": "2024 年，T1 3:2 战胜 BLG。Faker 在关键局扭转战局，拿下第五冠和决赛 MVP。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "P121",
+      "realName": "이상혁",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 28,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 99,
+        "reaction": 94,
+        "awareness": 99,
+        "utility": 92,
+        "clutch": 99,
+        "teamwork": 99,
+        "communication": 99,
+        "igl": 99
+      },
+      "overall": 97,
+      "agents": [
+        "Sylas",
+        "Galio",
+        "Ahri"
+      ]
+    },
+    "art": {
+      "accent": "#f1c588",
+      "position": "59% 25%",
+      "credit": "Colin Young-Wolff / Riot Games",
+      "source": "https://www.flickr.com/photos/lolesports/54112850518/",
+      "serial": 12
+    },
+    "source": "https://www.flickr.com/photos/lolesports/54112850518/",
+    "ratingTier": "worlds-mvp"
+  },
+  {
+    "id": "worlds-2025-gumayusi",
+    "ign": "Gumayusi",
+    "title": "S15 · 三连冠之矢",
+    "short": "三连冠之矢",
+    "year": 2025,
+    "kind": "fmvp",
+    "clubId": "T24",
+    "clubTag": "T1",
+    "rating": 95,
+    "note": "2025 年，T1 3:2 战胜 KT。Gumayusi 获得决赛 MVP，随队完成世界赛三连冠。",
+    "roles": [
+      "下路"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P101",
+      "realName": "이민형",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 23,
+      "roles": [
+        "下路"
+      ],
+      "attrs": {
+        "aim": 97,
+        "reaction": 95,
+        "awareness": 90,
+        "utility": 97,
+        "clutch": 97,
+        "teamwork": 95,
+        "communication": 88,
+        "igl": 88
+      },
+      "overall": 95,
+      "agents": [
+        "Yunara",
+        "Miss Fortune",
+        "Varus"
+      ]
+    },
+    "art": {
+      "accent": "#f4b9d0",
+      "position": "51% 22%",
+      "credit": "Yicun Liu / Riot Games",
+      "source": "https://www.flickr.com/photos/lolesports/54913231729/",
+      "serial": 13
+    },
+    "source": "https://www.flickr.com/photos/lolesports/54913231729/",
+    "ratingTier": "worlds-mvp"
+  },
+  {
+    "id": "worlds-2018-theshy",
+    "ign": "TheShy",
+    "title": "S8 · 天神下凡",
+    "short": "天神下凡",
+    "year": 2018,
+    "kind": "icon",
+    "competition": "Worlds",
+    "collection": "ig-2018",
+    "clubId": "T4",
+    "clubTag": "IG",
+    "rating": 94,
+    "note": "2018 年，IG 3:0 战胜 Fnatic，拿下 LPL 首座全球总决赛冠军。TheShy 是当届冠军阵容成员。本卡为冠军纪念卡，决赛 MVP 属于 Ning。",
+    "roles": [
+      "上单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P545",
+      "realName": "강승록",
+      "nat": "kr",
+      "region": "LPL",
+      "age": 18,
+      "roles": [
+        "上单"
+      ],
+      "attrs": {
+        "aim": 99,
+        "reaction": 99,
+        "awareness": 87,
+        "utility": 97,
+        "clutch": 99,
+        "teamwork": 90,
+        "communication": 78,
+        "igl": 83
+      },
+      "overall": 94,
+      "agents": []
+    },
+    "art": {
+      "accent": "#dccda7",
+      "position": "32% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/45288924111/",
+      "serial": 1,
+      "total": 6
+    },
+    "source": "https://www.flickr.com/photos/lolesports/30757965927/",
+    "ratingTier": "champion"
+  },
+  {
+    "id": "worlds-2018-duke",
+    "ign": "Duke",
+    "title": "S8 · 双冠磐石",
+    "short": "双冠磐石",
+    "year": 2018,
+    "kind": "icon",
+    "competition": "Worlds",
+    "collection": "ig-2018",
+    "clubId": "T4",
+    "clubTag": "IG",
+    "rating": 91,
+    "note": "2018 年，IG 3:0 战胜 Fnatic，拿下 LPL 首座全球总决赛冠军。Duke 作为当届出场的轮换上单随队夺冠，本卡纪念完整冠军阵容。",
+    "roles": [
+      "上单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "H:Duke",
+      "realName": "Lee Ho-seong",
+      "nat": "kr",
+      "region": "LPL",
+      "age": 23,
+      "roles": [
+        "上单"
+      ],
+      "attrs": {
+        "aim": 91,
+        "reaction": 91,
+        "awareness": 91,
+        "utility": 87,
+        "clutch": 94,
+        "teamwork": 94,
+        "communication": 87,
+        "igl": 89
+      },
+      "overall": 91,
+      "agents": []
+    },
+    "art": {
+      "accent": "#dccda7",
+      "position": "62% 22%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/30308844677/",
+      "serial": 2,
+      "total": 6
+    },
+    "source": "https://www.flickr.com/photos/lolesports/30757965927/",
+    "ratingTier": "champion"
+  },
+  {
+    "id": "worlds-2018-rookie",
+    "ign": "Rookie",
+    "title": "S8 · 登峰造极",
+    "short": "登峰造极",
+    "year": 2018,
+    "kind": "icon",
+    "competition": "Worlds",
+    "collection": "ig-2018",
+    "clubId": "T4",
+    "clubTag": "IG",
+    "rating": 94,
+    "note": "2018 年，IG 3:0 战胜 Fnatic，拿下 LPL 首座全球总决赛冠军。Rookie 是当届冠军阵容成员。本卡为冠军纪念卡，决赛 MVP 属于 Ning。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "P18",
+      "realName": "송의진",
+      "nat": "kr",
+      "region": "LPL",
+      "age": 21,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 96,
+        "reaction": 96,
+        "awareness": 91,
+        "utility": 93,
+        "clutch": 93,
+        "teamwork": 93,
+        "communication": 91,
+        "igl": 91
+      },
+      "overall": 94,
+      "agents": []
+    },
+    "art": {
+      "accent": "#dccda7",
+      "position": "59% 22%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/30308845207/",
+      "serial": 3,
+      "total": 6
+    },
+    "source": "https://www.flickr.com/photos/lolesports/30757965927/",
+    "ratingTier": "champion"
+  },
+  {
+    "id": "worlds-2018-jackeylove",
+    "ign": "JackeyLove",
+    "title": "S8 · 少年无畏",
+    "short": "少年无畏",
+    "year": 2018,
+    "kind": "icon",
+    "competition": "Worlds",
+    "collection": "ig-2018",
+    "clubId": "T4",
+    "clubTag": "IG",
+    "rating": 93,
+    "note": "2018 年，IG 3:0 战胜 Fnatic，拿下 LPL 首座全球总决赛冠军。JackeyLove 是当届冠军阵容成员。本卡为冠军纪念卡，决赛 MVP 属于 Ning。",
+    "roles": [
+      "下路"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P530",
+      "realName": "喻文波",
+      "nat": "cn",
+      "region": "LPL",
+      "age": 17,
+      "roles": [
+        "下路"
+      ],
+      "attrs": {
+        "aim": 95,
+        "reaction": 93,
+        "awareness": 86,
+        "utility": 95,
+        "clutch": 97,
+        "teamwork": 93,
+        "communication": 83,
+        "igl": 86
+      },
+      "overall": 93,
+      "agents": []
+    },
+    "art": {
+      "accent": "#dccda7",
+      "position": "34% 22%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/44722115754/",
+      "serial": 4,
+      "total": 6
+    },
+    "source": "https://www.flickr.com/photos/lolesports/30757965927/",
+    "ratingTier": "champion"
+  },
+  {
+    "id": "worlds-2018-baolan",
+    "ign": "Baolan",
+    "title": "S8 · 惊鸿之羽",
+    "short": "惊鸿之羽",
+    "year": 2018,
+    "kind": "icon",
+    "competition": "Worlds",
+    "collection": "ig-2018",
+    "clubId": "T4",
+    "clubTag": "IG",
+    "rating": 90,
+    "note": "2018 年，IG 3:0 战胜 Fnatic，拿下 LPL 首座全球总决赛冠军。Baolan 是当届冠军阵容成员。本卡为冠军纪念卡，决赛 MVP 属于 Ning。",
+    "roles": [
+      "辅助"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "H:Baolan",
+      "realName": "王柳羿",
+      "nat": "cn",
+      "region": "LPL",
+      "age": 19,
+      "roles": [
+        "辅助"
+      ],
+      "attrs": {
+        "aim": 84,
+        "reaction": 86,
+        "awareness": 93,
+        "utility": 79,
+        "clutch": 91,
+        "teamwork": 95,
+        "communication": 91,
+        "igl": 88
+      },
+      "overall": 90,
+      "agents": []
+    },
+    "art": {
+      "accent": "#dccda7",
+      "position": "34% 22%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/43761693940/",
+      "serial": 5,
+      "total": 6
+    },
+    "source": "https://www.flickr.com/photos/lolesports/30757965927/",
+    "ratingTier": "champion"
+  },
+  {
+    "id": "msi-2015-clearlove",
+    "ign": "Clearlove",
+    "title": "MSI 2015 · 暗夜破王",
+    "short": "暗夜破王",
+    "year": 2015,
+    "kind": "mvp",
+    "competition": "MSI",
+    "collection": "msi-mvp",
+    "clubId": "T3",
+    "clubTag": "EDG",
+    "rating": 94,
+    "note": "2015 年 MSI，EDG 3:2 战胜 SKT 夺冠。Clearlove 获得赛事 MVP。首届 MSI 按整届赛事评选。",
+    "roles": [
+      "打野"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "H:Clearlove",
+      "realName": "明凯",
+      "nat": "cn",
+      "region": "LPL",
+      "age": 21,
+      "roles": [
+        "打野"
+      ],
+      "attrs": {
+        "aim": 92,
+        "reaction": 86,
+        "awareness": 97,
+        "utility": 90,
+        "clutch": 95,
+        "teamwork": 97,
+        "communication": 95,
+        "igl": 95
+      },
+      "overall": 94,
+      "agents": []
+    },
+    "art": {
+      "accent": "#92e1d8",
+      "position": "50% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://dj.sina.com.cn/article/avxeafs7290181.shtml",
+      "serial": 1,
+      "total": 11
+    },
+    "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+    "ratingTier": "msi-mvp"
+  },
+  {
+    "id": "msi-2016-faker",
+    "ign": "Faker",
+    "title": "MSI 2016 · 王朝征服",
+    "short": "王朝征服",
+    "year": 2016,
+    "kind": "fmvp",
+    "competition": "MSI",
+    "collection": "msi-mvp",
+    "clubId": "T24",
+    "clubTag": "SKT",
+    "rating": 95,
+    "note": "2016 年 MSI，SKT 3:0 战胜 CLG 夺冠。Faker 获得决赛 MVP。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "P121",
+      "realName": "이상혁",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 20,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 96,
+        "reaction": 96,
+        "awareness": 94,
+        "utility": 92,
+        "clutch": 96,
+        "teamwork": 94,
+        "communication": 92,
+        "igl": 94
+      },
+      "overall": 95,
+      "agents": []
+    },
+    "art": {
+      "accent": "#92e1d8",
+      "position": "56% 24%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+      "serial": 2,
+      "total": 11
+    },
+    "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+    "ratingTier": "msi-mvp"
+  },
+  {
+    "id": "msi-2017-wolf",
+    "ign": "Wolf",
+    "title": "MSI 2017 · 王朝守望",
+    "short": "王朝守望",
+    "year": 2017,
+    "kind": "fmvp",
+    "competition": "MSI",
+    "collection": "msi-mvp",
+    "clubId": "T24",
+    "clubTag": "SKT",
+    "rating": 93,
+    "note": "2017 年 MSI，SKT 3:1 战胜 G2 夺冠。Wolf 获得决赛 MVP。",
+    "roles": [
+      "辅助"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "H:Wolf",
+      "realName": "Lee Jae-wan",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 20,
+      "roles": [
+        "辅助"
+      ],
+      "attrs": {
+        "aim": 83,
+        "reaction": 86,
+        "awareness": 97,
+        "utility": 81,
+        "clutch": 95,
+        "teamwork": 97,
+        "communication": 95,
+        "igl": 95
+      },
+      "overall": 93,
+      "agents": []
+    },
+    "art": {
+      "accent": "#92e1d8",
+      "position": "50% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/34767877316/",
+      "serial": 3,
+      "total": 11
+    },
+    "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+    "ratingTier": "msi-mvp"
+  },
+  {
+    "id": "msi-2018-uzi",
+    "ign": "Uzi",
+    "title": "MSI 2018 · 一往无前",
+    "short": "一往无前",
+    "year": 2018,
+    "kind": "fmvp",
+    "competition": "MSI",
+    "collection": "msi-mvp",
+    "clubId": "H:RNG",
+    "clubTag": "RNG",
+    "rating": 95,
+    "note": "2018 年 MSI，RNG 3:1 战胜 KZ 夺冠。Uzi 获得决赛 MVP。",
+    "roles": [
+      "下路"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "H:Uzi",
+      "realName": "简自豪",
+      "nat": "cn",
+      "region": "LPL",
+      "age": 21,
+      "roles": [
+        "下路"
+      ],
+      "attrs": {
+        "aim": 97,
+        "reaction": 97,
+        "awareness": 88,
+        "utility": 97,
+        "clutch": 97,
+        "teamwork": 92,
+        "communication": 88,
+        "igl": 86
+      },
+      "overall": 95,
+      "agents": []
+    },
+    "art": {
+      "accent": "#92e1d8",
+      "position": "50% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.wanplus.cn/article/141135.html",
+      "serial": 4,
+      "total": 11
+    },
+    "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+    "ratingTier": "msi-mvp"
+  },
+  {
+    "id": "msi-2019-caps",
+    "ign": "Caps",
+    "title": "MSI 2019 · 欧洲之巅",
+    "short": "欧洲之巅",
+    "year": 2019,
+    "kind": "fmvp",
+    "competition": "MSI",
+    "collection": "msi-mvp",
+    "clubId": "T26",
+    "clubTag": "G2",
+    "rating": 94,
+    "note": "2019 年 MSI，G2 3:0 战胜 TL 夺冠。Caps 获得决赛 MVP。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P131",
+      "realName": "Rasmus Borregaard Winther",
+      "nat": "dk",
+      "region": "LEC",
+      "age": 19,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 95,
+        "reaction": 95,
+        "awareness": 90,
+        "utility": 95,
+        "clutch": 95,
+        "teamwork": 95,
+        "communication": 90,
+        "igl": 90
+      },
+      "overall": 94,
+      "agents": []
+    },
+    "art": {
+      "accent": "#92e1d8",
+      "position": "54% 42%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+      "serial": 5,
+      "total": 11,
+      "zoom": 2.25
+    },
+    "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+    "ratingTier": "msi-mvp"
+  },
+  {
+    "id": "msi-2021-gala",
+    "ign": "GALA",
+    "title": "MSI 2021 · 虚空猎手",
+    "short": "虚空猎手",
+    "year": 2021,
+    "kind": "fmvp",
+    "competition": "MSI",
+    "collection": "msi-mvp",
+    "clubId": "H:RNG",
+    "clubTag": "RNG",
+    "rating": 94,
+    "note": "2021 年 MSI，RNG 3:2 战胜 DK 夺冠。GALA 获得决赛 MVP。",
+    "roles": [
+      "下路"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P24",
+      "realName": "陈伟",
+      "nat": "cn",
+      "region": "LPL",
+      "age": 20,
+      "roles": [
+        "下路"
+      ],
+      "attrs": {
+        "aim": 96,
+        "reaction": 93,
+        "awareness": 89,
+        "utility": 96,
+        "clutch": 98,
+        "teamwork": 93,
+        "communication": 84,
+        "igl": 84
+      },
+      "overall": 94,
+      "agents": []
+    },
+    "art": {
+      "accent": "#92e1d8",
+      "position": "77% 24%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+      "serial": 6,
+      "total": 11
+    },
+    "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+    "ratingTier": "msi-mvp"
+  },
+  {
+    "id": "msi-2022-wei",
+    "ign": "Wei",
+    "title": "MSI 2022 · 破局之威",
+    "short": "破局之威",
+    "year": 2022,
+    "kind": "fmvp",
+    "competition": "MSI",
+    "collection": "msi-mvp",
+    "clubId": "H:RNG",
+    "clubTag": "RNG",
+    "rating": 93,
+    "note": "2022 年 MSI，RNG 3:2 战胜 T1 夺冠。Wei 获得决赛 MVP。",
+    "roles": [
+      "打野"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P17",
+      "realName": "闫扬威",
+      "nat": "cn",
+      "region": "LPL",
+      "age": 19,
+      "roles": [
+        "打野"
+      ],
+      "attrs": {
+        "aim": 93,
+        "reaction": 88,
+        "awareness": 97,
+        "utility": 93,
+        "clutch": 95,
+        "teamwork": 95,
+        "communication": 88,
+        "igl": 90
+      },
+      "overall": 93,
+      "agents": []
+    },
+    "art": {
+      "accent": "#92e1d8",
+      "position": "50% 0%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.ithome.com/0/621/170.htm",
+      "serial": 7,
+      "total": 11
+    },
+    "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+    "ratingTier": "msi-mvp"
+  },
+  {
+    "id": "msi-2023-knight",
+    "ign": "knight",
+    "title": "MSI 2023 · 黄金左手",
+    "short": "黄金左手",
+    "year": 2023,
+    "kind": "fmvp",
+    "competition": "MSI",
+    "collection": "msi-mvp",
+    "clubId": "T5",
+    "clubTag": "JDG",
+    "rating": 95,
+    "note": "2023 年 MSI，JDG 3:1 战胜 BLG 夺冠。knight 获得决赛 MVP。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P8",
+      "realName": "卓定",
+      "nat": "cn",
+      "region": "LPL",
+      "age": 23,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 97,
+        "reaction": 97,
+        "awareness": 93,
+        "utility": 95,
+        "clutch": 97,
+        "teamwork": 93,
+        "communication": 88,
+        "igl": 88
+      },
+      "overall": 95,
+      "agents": []
+    },
+    "art": {
+      "accent": "#92e1d8",
+      "position": "28% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/52933620591/",
+      "serial": 8,
+      "total": 11
+    },
+    "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+    "ratingTier": "msi-mvp"
+  },
+  {
+    "id": "msi-2024-lehends",
+    "ign": "Lehends",
+    "title": "MSI 2024 · 奇招制胜",
+    "short": "奇招制胜",
+    "year": 2024,
+    "kind": "fmvp",
+    "competition": "MSI",
+    "collection": "msi-mvp",
+    "clubId": "T18",
+    "clubTag": "GEN",
+    "rating": 94,
+    "note": "2024 年 MSI，GEN 3:1 战胜 BLG 夺冠。Lehends 获得决赛 MVP。",
+    "roles": [
+      "辅助"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "P118",
+      "realName": "손시우",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 25,
+      "roles": [
+        "辅助"
+      ],
+      "attrs": {
+        "aim": 86,
+        "reaction": 88,
+        "awareness": 97,
+        "utility": 83,
+        "clutch": 95,
+        "teamwork": 97,
+        "communication": 97,
+        "igl": 95
+      },
+      "overall": 94,
+      "agents": []
+    },
+    "art": {
+      "accent": "#92e1d8",
+      "position": "26% 18%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/53731467916/",
+      "serial": 9,
+      "total": 11
+    },
+    "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+    "ratingTier": "msi-mvp"
+  },
+  {
+    "id": "msi-2025-chovy",
+    "ign": "Chovy",
+    "title": "MSI 2025 · 无畏领域",
+    "short": "无畏领域",
+    "year": 2025,
+    "kind": "fmvp",
+    "competition": "MSI",
+    "collection": "msi-mvp",
+    "clubId": "T18",
+    "clubTag": "GEN",
+    "rating": 95,
+    "note": "2025 年 MSI，GEN 3:2 战胜 T1 夺冠。Chovy 获得决赛 MVP。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P90",
+      "realName": "정지훈",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 24,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 96,
+        "reaction": 96,
+        "awareness": 94,
+        "utility": 96,
+        "clutch": 94,
+        "teamwork": 94,
+        "communication": 89,
+        "igl": 92
+      },
+      "overall": 95,
+      "agents": []
+    },
+    "art": {
+      "accent": "#92e1d8",
+      "position": "51% 24%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/54651506160/",
+      "serial": 10,
+      "total": 11
+    },
+    "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+    "ratingTier": "msi-mvp"
+  },
+  {
+    "id": "msi-2026-zeus",
+    "ign": "Zeus",
+    "title": "MSI 2026 · 雷霆再临",
+    "short": "雷霆再临",
+    "year": 2026,
+    "kind": "fmvp",
+    "competition": "MSI",
+    "collection": "msi-mvp",
+    "clubId": "T20",
+    "clubTag": "HLE",
+    "rating": 95,
+    "note": "2026 年 MSI，HLE 3:2 战胜 BLG 夺冠。Zeus 获得决赛 MVP。",
+    "roles": [
+      "上单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P98",
+      "realName": "최우제",
+      "nat": "kr",
+      "region": "LCK",
+      "age": 22,
+      "roles": [
+        "上单"
+      ],
+      "attrs": {
+        "aim": 98,
+        "reaction": 95,
+        "awareness": 93,
+        "utility": 95,
+        "clutch": 98,
+        "teamwork": 95,
+        "communication": 86,
+        "igl": 91
+      },
+      "overall": 95,
+      "agents": []
+    },
+    "art": {
+      "accent": "#92e1d8",
+      "position": "57% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/55388758698/",
+      "serial": 11,
+      "total": 11
+    },
+    "source": "https://www.strafe.com/articles/read/league-of-legends-msi-winners-list/",
+    "ratingTier": "msi-mvp"
+  },
+  {
+    "id": "career-doublelift",
+    "ign": "Doublelift",
+    "title": "知名选手 · 大师兄",
+    "short": "大师兄",
+    "year": 2018,
+    "kind": "hall",
+    "competition": "Career",
+    "collection": "hall-of-fame",
+    "ratingTier": "hall",
+    "clubId": "T42",
+    "clubTag": "TL",
+    "rating": 92,
+    "note": "从 CLG、TSM 到 TL，Doublelift 的锋芒与自信陪伴了北美赛区的多个时代。生涯纪念卡。",
+    "roles": [
+      "下路"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "H:Doublelift",
+      "realName": "Yiliang Peng",
+      "nat": "us",
+      "region": "LCS",
+      "age": 25,
+      "roles": [
+        "下路"
+      ],
+      "attrs": {
+        "aim": 94,
+        "reaction": 93,
+        "awareness": 88,
+        "utility": 94,
+        "clutch": 91,
+        "teamwork": 92,
+        "communication": 87,
+        "igl": 86
+      },
+      "overall": 92,
+      "agents": []
+    },
+    "art": {
+      "accent": "#79d7ef",
+      "position": "50% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/45362081761/",
+      "year": 2018,
+      "serial": 1,
+      "total": 11
+    },
+    "source": "https://www.flickr.com/photos/lolesports/45362081761/"
+  },
+  {
+    "id": "career-bjergsen",
+    "ign": "Bjergsen",
+    "title": "知名选手 · 北美法王",
+    "short": "北美法王",
+    "year": 2017,
+    "kind": "hall",
+    "competition": "Career",
+    "collection": "hall-of-fame",
+    "ratingTier": "hall",
+    "clubId": "H:TSM",
+    "clubTag": "TSM",
+    "rating": 92,
+    "note": "比尔森以中路压制与稳定的赛场表现，成为 TSM 时代的代表人物。生涯纪念卡。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "H:Bjergsen",
+      "realName": "Søren Bjerg",
+      "nat": "dk",
+      "region": "LCS",
+      "age": 21,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 94,
+        "reaction": 94,
+        "awareness": 92,
+        "utility": 91,
+        "clutch": 93,
+        "teamwork": 89,
+        "communication": 90,
+        "igl": 91
+      },
+      "overall": 92,
+      "agents": []
+    },
+    "art": {
+      "accent": "#b2c5ff",
+      "position": "50% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/34534936641/",
+      "year": 2017,
+      "serial": 2,
+      "total": 11
+    },
+    "source": "https://www.flickr.com/photos/lolesports/34534936641/"
+  },
+  {
+    "id": "career-perkz",
+    "ign": "Perkz",
+    "title": "知名选手 · 欧洲锋芒",
+    "short": "欧洲锋芒",
+    "year": 2018,
+    "kind": "hall",
+    "competition": "Career",
+    "collection": "hall-of-fame",
+    "ratingTier": "hall",
+    "clubId": "T26",
+    "clubTag": "G2",
+    "rating": 92,
+    "note": "从中路到下路，再回到中路，Perkz 用敢打敢拼的风格留下欧洲赛区的经典时刻。本卡纪念他身披 G2 战袍的中路岁月。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "H:Perkz",
+      "realName": "Luka Perković",
+      "nat": "hr",
+      "region": "LEC",
+      "age": 20,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 94,
+        "reaction": 93,
+        "awareness": 90,
+        "utility": 90,
+        "clutch": 95,
+        "teamwork": 91,
+        "communication": 90,
+        "igl": 91
+      },
+      "overall": 92,
+      "agents": []
+    },
+    "art": {
+      "accent": "#d5b6f6",
+      "position": "69% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/45394582152/",
+      "year": 2018,
+      "serial": 3,
+      "total": 11
+    },
+    "source": "https://www.flickr.com/photos/lolesports/45394582152/"
+  },
+  {
+    "id": "career-rekkles",
+    "ign": "Rekkles",
+    "title": "知名选手 · 北境之弓",
+    "short": "北境之弓",
+    "year": 2020,
+    "kind": "hall",
+    "competition": "Career",
+    "collection": "hall-of-fame",
+    "ratingTier": "hall",
+    "clubId": "T25",
+    "clubTag": "FNC",
+    "rating": 92,
+    "note": "Rekkles 的精准走位与后期输出，是 Fnatic 时代的一道鲜明印记。本卡选取下路选手时期。",
+    "roles": [
+      "下路"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "P542",
+      "realName": "Carl Martin Erik Larsson",
+      "nat": "se",
+      "region": "LEC",
+      "age": 23,
+      "roles": [
+        "下路"
+      ],
+      "attrs": {
+        "aim": 92,
+        "reaction": 91,
+        "awareness": 92,
+        "utility": 96,
+        "clutch": 91,
+        "teamwork": 92,
+        "communication": 86,
+        "igl": 85
+      },
+      "overall": 92,
+      "agents": []
+    },
+    "art": {
+      "accent": "#efc78b",
+      "position": "50% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/49535032058/",
+      "year": 2020,
+      "serial": 4,
+      "total": 11
+    },
+    "source": "https://www.flickr.com/photos/lolesports/49535032058/"
+  },
+  {
+    "id": "career-sneaky",
+    "ign": "Sneaky",
+    "title": "知名选手 · 云端射手",
+    "short": "云端射手",
+    "year": 2018,
+    "kind": "hall",
+    "competition": "Career",
+    "collection": "hall-of-fame",
+    "ratingTier": "hall",
+    "clubId": "T35",
+    "clubTag": "C9",
+    "rating": 91,
+    "note": "Sneaky 长期镇守 Cloud9 下路，用团战输出与稳定发挥留下北美赛区的高光。生涯纪念卡。",
+    "roles": [
+      "下路"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "H:Sneaky",
+      "realName": "Zachary Scuderi",
+      "nat": "us",
+      "region": "LCS",
+      "age": 24,
+      "roles": [
+        "下路"
+      ],
+      "attrs": {
+        "aim": 91,
+        "reaction": 89,
+        "awareness": 89,
+        "utility": 91,
+        "clutch": 92,
+        "teamwork": 93,
+        "communication": 86,
+        "igl": 84
+      },
+      "overall": 91,
+      "agents": []
+    },
+    "art": {
+      "accent": "#79d7ef",
+      "position": "50% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/44552739215/",
+      "year": 2018,
+      "serial": 5,
+      "total": 11
+    },
+    "source": "https://www.flickr.com/photos/lolesports/44552739215/"
+  },
+  {
+    "id": "career-jensen",
+    "ign": "Jensen",
+    "title": "知名选手 · 中路破局者",
+    "short": "中路破局者",
+    "year": 2018,
+    "kind": "hall",
+    "competition": "Career",
+    "collection": "hall-of-fame",
+    "ratingTier": "hall",
+    "clubId": "T35",
+    "clubTag": "C9",
+    "rating": 91,
+    "note": "Jensen 在 Cloud9 的中路舞台上展现操作与进攻性。本卡纪念他的北美职业生涯。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "H:Jensen",
+      "realName": "Nicolaj Jensen",
+      "nat": "dk",
+      "region": "LCS",
+      "age": 23,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 94,
+        "reaction": 93,
+        "awareness": 88,
+        "utility": 92,
+        "clutch": 94,
+        "teamwork": 89,
+        "communication": 84,
+        "igl": 86
+      },
+      "overall": 91,
+      "agents": []
+    },
+    "art": {
+      "accent": "#b2c5ff",
+      "position": "50% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/43777953440/",
+      "year": 2018,
+      "serial": 6,
+      "total": 11
+    },
+    "source": "https://www.flickr.com/photos/lolesports/43777953440/"
+  },
+  {
+    "id": "career-xmithie",
+    "ign": "Xmithie",
+    "title": "知名选手 · 野区定盘星",
+    "short": "野区定盘星",
+    "year": 2019,
+    "kind": "hall",
+    "competition": "Career",
+    "collection": "hall-of-fame",
+    "ratingTier": "hall",
+    "clubId": "T42",
+    "clubTag": "TL",
+    "rating": 90,
+    "note": "Xmithie 以路线规划、目标控制和团队配合见长，是北美赛区的代表性打野之一。",
+    "roles": [
+      "打野"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "H:Xmithie",
+      "realName": "Jake Puchero",
+      "nat": "us",
+      "region": "LCS",
+      "age": 27,
+      "roles": [
+        "打野"
+      ],
+      "attrs": {
+        "aim": 84,
+        "reaction": 84,
+        "awareness": 95,
+        "utility": 85,
+        "clutch": 88,
+        "teamwork": 92,
+        "communication": 92,
+        "igl": 94
+      },
+      "overall": 90,
+      "agents": []
+    },
+    "art": {
+      "accent": "#d5b6f6",
+      "position": "82% 24%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/32024763187/",
+      "year": 2019,
+      "serial": 7,
+      "total": 11
+    },
+    "source": "https://www.flickr.com/photos/lolesports/32024763187/"
+  },
+  {
+    "id": "career-aphromoo",
+    "ign": "Aphromoo",
+    "title": "知名选手 · 节奏领航",
+    "short": "节奏领航",
+    "year": 2017,
+    "kind": "hall",
+    "competition": "Career",
+    "collection": "hall-of-fame",
+    "ratingTier": "hall",
+    "clubId": "H:CLG",
+    "clubTag": "CLG",
+    "rating": 90,
+    "note": "Aphromoo 的游走、开团与指挥，承载了北美老牌辅助的赛场记忆。生涯纪念卡。",
+    "roles": [
+      "辅助"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "H:Aphromoo",
+      "realName": "Zaqueri Black",
+      "nat": "us",
+      "region": "LCS",
+      "age": 24,
+      "roles": [
+        "辅助"
+      ],
+      "attrs": {
+        "aim": 84,
+        "reaction": 85,
+        "awareness": 93,
+        "utility": 83,
+        "clutch": 89,
+        "teamwork": 92,
+        "communication": 95,
+        "igl": 90
+      },
+      "overall": 90,
+      "agents": []
+    },
+    "art": {
+      "accent": "#efc78b",
+      "position": "50% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/33632246026/",
+      "year": 2017,
+      "serial": 8,
+      "total": 11
+    },
+    "source": "https://www.flickr.com/photos/lolesports/33632246026/"
+  },
+  {
+    "id": "career-froggen",
+    "ign": "Froggen",
+    "title": "知名选手 · 冰鸟之魂",
+    "short": "冰鸟之魂",
+    "year": 2014,
+    "kind": "hall",
+    "competition": "Career",
+    "collection": "hall-of-fame",
+    "ratingTier": "hall",
+    "clubId": "H:ALL",
+    "clubTag": "ALL",
+    "rating": 91,
+    "note": "从欧洲赛场走向北美，Froggen 的冰鸟与扎实发育留下鲜明印记。本卡以欧洲时期为生涯代表版本。",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "H:Froggen",
+      "realName": "Henrik Hansen",
+      "nat": "dk",
+      "region": "LEC",
+      "age": 20,
+      "roles": [
+        "中单"
+      ],
+      "attrs": {
+        "aim": 92,
+        "reaction": 91,
+        "awareness": 93,
+        "utility": 95,
+        "clutch": 89,
+        "teamwork": 87,
+        "communication": 85,
+        "igl": 86
+      },
+      "overall": 91,
+      "agents": []
+    },
+    "art": {
+      "accent": "#79d7ef",
+      "position": "50% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/33495004012/",
+      "year": 2017,
+      "serial": 9,
+      "total": 11
+    },
+    "source": "https://www.flickr.com/photos/lolesports/33495004012/"
+  },
+  {
+    "id": "career-diamondprox",
+    "ign": "Diamondprox",
+    "title": "知名选手 · 野区先驱",
+    "short": "野区先驱",
+    "year": 2013,
+    "kind": "hall",
+    "competition": "Career",
+    "collection": "hall-of-fame",
+    "ratingTier": "hall",
+    "clubId": "H:GMB",
+    "clubTag": "GMB",
+    "rating": 91,
+    "note": "Diamondprox 是欧洲早期赛场的代表性打野，本卡纪念 Gambit 时期的反野与进攻节奏。",
+    "roles": [
+      "打野"
+    ],
+    "isIgl": true,
+    "person": {
+      "id": "H:Diamondprox",
+      "realName": "Danil Reshetnikov",
+      "nat": "ru",
+      "region": "LEC",
+      "age": 20,
+      "roles": [
+        "打野"
+      ],
+      "attrs": {
+        "aim": 92,
+        "reaction": 88,
+        "awareness": 96,
+        "utility": 90,
+        "clutch": 91,
+        "teamwork": 89,
+        "communication": 87,
+        "igl": 95
+      },
+      "overall": 91,
+      "agents": []
+    },
+    "art": {
+      "accent": "#b2c5ff",
+      "position": "50% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/44353653404/",
+      "year": 2018,
+      "serial": 10,
+      "total": 11
+    },
+    "source": "https://www.flickr.com/photos/lolesports/44353653404/"
+  },
+  {
+    "id": "career-soaz",
+    "ign": "sOAZ",
+    "title": "知名选手 · 上路常青树",
+    "short": "上路常青树",
+    "year": 2017,
+    "kind": "hall",
+    "competition": "Career",
+    "collection": "hall-of-fame",
+    "ratingTier": "hall",
+    "clubId": "T25",
+    "clubTag": "FNC",
+    "rating": 90,
+    "note": "sOAZ 在欧洲上路征战多年，以经验、单带和团队适应力留下自己的印记。生涯纪念卡。",
+    "roles": [
+      "上单"
+    ],
+    "isIgl": false,
+    "person": {
+      "id": "H:sOAZ",
+      "realName": "Paul Boyer",
+      "nat": "fr",
+      "region": "LEC",
+      "age": 23,
+      "roles": [
+        "上单"
+      ],
+      "attrs": {
+        "aim": 88,
+        "reaction": 89,
+        "awareness": 93,
+        "utility": 88,
+        "clutch": 90,
+        "teamwork": 92,
+        "communication": 88,
+        "igl": 89
+      },
+      "overall": 90,
+      "agents": []
+    },
+    "art": {
+      "accent": "#d5b6f6",
+      "position": "50% 25%",
+      "credit": "Riot Games / LoL Esports",
+      "source": "https://www.flickr.com/photos/lolesports/36900104933/",
+      "year": 2017,
+      "serial": 11,
+      "total": 11
+    },
+    "source": "https://www.flickr.com/photos/lolesports/36900104933/"
+  }
+]

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#121c27" />
+    <!-- The ground the page is drawn on, read before anything paints so a
+         light page never flashes dark on its way in. Same key ui/theme.ts
+         owns; this is only the first read. -->
+    <script>
+      try {
+        var t = localStorage.getItem('lolcards.theme');
+        if (t === 'light' || t === 'cream') {
+          document.documentElement.dataset.theme = t;
+          document.querySelector('meta[name="theme-color"]')
+            .setAttribute('content', t === 'light' ? '#e6eaf0' : '#e9e1d0');
+        }
+      } catch (e) {}
+    </script>
+    <title>噜噜卡 · 猪之家出品</title>
+    <meta name="description" content="噜噜卡，猪之家出品的 LoL 选手卡牌收藏游戏。收集金银铜卡与名人堂彩卡，组建阵容，参与天梯、杯赛与交易市场。" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
