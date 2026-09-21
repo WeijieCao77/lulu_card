@@ -34,9 +34,12 @@ npm run local
 node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
 ```
 
-4. 部署后在 Networking 生成域名。游戏路径 `/`，后台路径 `/admin`。
+4. 在游戏服务 Settings 设置 Builder 为 **Dockerfile**（路径 `/Dockerfile`）、Start Command 为 `npm start`、Healthcheck Path 为 `/readyz`、超时 300 秒；重启策略选 On Failure。设置 `PORT=8080`，Networking 域名的 Target Port 也设为 `8080`。
+5. 部署后在 Networking 生成域名。游戏路径 `/`，后台路径 `/admin`。确认 `/readyz` 返回 HTTP 200 后再试玩。
 
-`railway.json` 已配置 Docker 构建、`npm start` 和 `/readyz` 就绪检查。端口由 Railway 注入，无需设置 `HOST`，也不要使用本地的 `npm run local` 作为线上启动命令。生产使用 PostgreSQL 保存数据，无需给游戏容器挂本地数据库卷。首次启动自动创建表。
+仓库的 `railway.json` 保留原版部署设置供对照。Railway 已弃用 Config as Code，新服务不能启用此文件，所以新部署务必按上一步在服务 Settings 配置，不能假设文件自动生效；参见 [Railway 官方说明](https://docs.railway.com/config-as-code)。无需设置 `HOST`，也不要使用本地的 `npm run local` 作为线上启动命令。生产使用 PostgreSQL 保存数据，无需给游戏容器挂本地数据库卷。首次启动自动创建表。
+
+如果域名返回 502，先查看运行日志。`Production phone secrets missing or weak` 表示没有配置稳定的 `PHONE_KEY` / `PHONE_SALT`，即使 Demo 的 `PHONE_GATE=0` 也必须配置。没有 `DATABASE_URL` 时同样无法完成就绪检查。添加数据库后需手动添加游戏服务的引用变量，不会自动连上。
 
 密钥首次配置后保持稳定；已有账号时不要随意更换 `PHONE_KEY` / `PHONE_SALT`。开启手机验证需要另外配置短信服务，参考 `docs/phone-key-rotation.md` 和 `phone-config.js`。GitHub Actions 只进行构建和测试，部署由你连接的 Railway 服务负责，不会触碰原 VAL 项目。
 
