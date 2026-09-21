@@ -34,7 +34,7 @@ export const CHANGELOG: ChangeEntry[] = [{
   ],
 }, {
   date: '2026-09-21', title: '峡谷典藏 · 四十张彩卡', changes: [
-    { kind: '新增', text: '峡谷信箱支持给作者提建议、点赞和查看处理进度，奖励与交易通知单独查看；导航新增后台看板入口。' },
+    { kind: '新增', text: '峡谷信箱支持给作者提建议、点赞和查看处理进度，奖励与交易通知单独查看。' },
     { kind: '新增', text: '新增 Doublelift、Bjergsen、Perkz 等十一位知名选手，彩卡池共四十张；LCS 包可抽取北美彩卡。' },
     { kind: '新增', text: '队伍羁绊支持历史沿革，SKT / T1、SSG / Gen.G、DWG / DK 等可继承同队默契，卡组页可查看映射。' },
     { kind: '调整', text: '全新海克斯蓝金界面与猪之家纹章；Caps 卡面聚焦本人。' },

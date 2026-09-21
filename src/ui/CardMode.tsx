@@ -396,7 +396,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
           <ThemeToggle compact />
         </header>
 
-        <RiftNavigation utilities={<><MailButton onClick={() => setTab('mail')} active={tab === 'mail'} /><a href="/admin" target="_blank" rel="noopener noreferrer">后台看板 ↗</a></>} tabs={TABS} active={tab} onSelect={key => { setTab(key); if (key !== 'dossier') setDossierId(null) }} />
+        <RiftNavigation utilities={<MailButton onClick={() => setTab('mail')} active={tab === 'mail'} />} tabs={TABS} active={tab} onSelect={key => { setTab(key); if (key !== 'dossier') setDossierId(null) }} />
 
         <div className="cm-body" id="main" ref={mainRef}>
           <RiftBanner page={tab} owned={ALL_CARDS.filter(c => g.cards[c.id]).length} total={ALL_CARDS.length} />
