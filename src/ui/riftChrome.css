@@ -370,6 +370,9 @@ html[data-theme='cream'] .cardmode.rift-ui {
 .cardmode.rift-ui { --accent:#65d8cf; --accent-hot:#92efe4; --accent-wash:#65d8cf12; --accent-wash-2:#65d8cf22; --accent-line:#65d8cf55; --rift-bg:#08151c; --rift-navy:#0c2029; --rift-navy-light:#14303b; --rift-panel-bg:linear-gradient(135deg,#122932,#0e222b); --rift-border:#29434b; --rift-cyan:#75d8d0; --rift-cyan-glow:#b0f8e9; --rift-gold:#d7bc83; --rift-text-muted:#9eb8bf; --rift-shadow:0 8px 30px #0002; }
 .cardmode.rift-ui .cm-body { min-width:0; padding:22px 28px 50px; background:radial-gradient(ellipse at 90% 0,#1c4b4228,transparent 65%),var(--rift-bg); }
 .cardmode.rift-ui .topbar { min-height:60px; box-shadow:none; }
+.cardmode.rift-ui .topbar .brand-home { min-height:44px; padding:0; border:0; border-radius:3px; background:transparent; cursor:pointer; }
+.cardmode.rift-ui .topbar .brand-home:hover { filter:brightness(1.18); }
+.cardmode.rift-ui .topbar .brand-home:focus-visible { outline:2px solid var(--rift-cyan); outline-offset:4px; }
 .cardmode.rift-ui .topbar .brand { font-size:24px; font-weight:850; letter-spacing:2px; }
 .cardmode.rift-ui .panel,.cardmode.rift-ui .pack-box { border-radius:12px; }
 .cardmode.rift-ui .panel-head { background:transparent; }

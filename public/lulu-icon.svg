@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>噜噜卡 · 猪之家</title>
+  <rect width="64" height="64" rx="14" fill="#0b1c2b"/>
+  <path d="M21 8 58 15 50 59 13 52Z" fill="#153d4a" stroke="#70cdd5" stroke-width="2.5"/>
+  <rect x="6" y="5" width="45" height="53" rx="5" fill="#102936" stroke="#e2bf78" stroke-width="3"/>
+  <path d="m14 23-2-12 15 8m11 4 7-12-17 8" fill="#e2bf78" stroke="#e2bf78" stroke-linejoin="round" stroke-width="2"/>
+  <ellipse cx="29" cy="31" rx="18" ry="16" fill="#e2bf78"/>
+  <circle cx="22" cy="27" r="2.2" fill="#102936"/>
+  <circle cx="36" cy="27" r="2.2" fill="#102936"/>
+  <ellipse cx="29" cy="36" rx="10" ry="7" fill="#da92a4" stroke="#102936" stroke-width="2"/>
+  <path d="M25 35v3m8-3v3" stroke="#102936" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M21 51h16" stroke="#e2bf78" stroke-width="2" stroke-linecap="round"/>
+  <path d="m53 4 3 5 5 3-5 3-3 5-3-5-5-3 5-3Z" fill="#9be6e5" stroke="#0b1c2b" stroke-width="1.5"/>
+</svg>

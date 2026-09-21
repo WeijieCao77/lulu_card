@@ -26,6 +26,11 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-09-21', title: '猪之家标识 · 首页入口', changes: [
+    { kind: '新增', text: '点击游玩界面左上角噜噜卡标识即可返回首页；账号仍保留，点击“继续游玩”即可回到当前进度。' },
+    { kind: '新增', text: '浏览器标签页使用专属蓝金卡牌与猪之家小猪图标。' },
+  ],
+}, {
   date: '2026-09-21', title: '收藏之旅 · 内测补给', changes: [
     { kind: '调整', text: '全新蓝金建档与登录界面，使用猪之家纹章及典藏卡框；建档后可复制保存账号 ID。' },
     { kind: '新增', text: '新账号获得 100,000 金币，试训包、选拔包、十连包各 10 个，另保留 1 个教练包。' },

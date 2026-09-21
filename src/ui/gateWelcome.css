@@ -836,6 +836,10 @@
 .lulu-gate .gate-submit:disabled { color: #c4cbd4; opacity: .65; }
 .lulu-gate .gate-receipt .gate-intro { margin-inline: auto; }
 .lulu-gate .gate-account-note { line-height: 1.8; }
+.lulu-gate .gate-resume { width:calc(100% - 40px); max-width:1124px; margin:20px auto 0; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; border:1px solid var(--lulu-edge); background:var(--lulu-panel); color:var(--lulu-muted); font-size:13px; }
+.lulu-gate .gate-resume > span { min-width:0; overflow-wrap:anywhere; }
+.lulu-gate .gate-resume strong { color:var(--lulu-gold-bright); }
+.lulu-gate .gate-resume button { flex-shrink:0; min-height:44px; }
 @media (max-width: 760px) {
   .lulu-gate .gate-art, .lulu-gate .gate-features { display: none; }
   .lulu-gate .gate-intro { margin-bottom: 0; font-size: 13px; }

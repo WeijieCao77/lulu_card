@@ -114,6 +114,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
   const gRef = useRef<GachaState | null>(null)
   const [version, bump] = useReducer((x: number) => x + 1, 0)
   const [tab, setTab] = useState('packs')
+  const [atHome, setAtHome] = useState(false)
 
   const [cloud, setCloud] = useState(false)
   // 「太多人开小号了」: until the server says a phone has answered for this
@@ -305,12 +306,14 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
   }
 
   const g = gRef.current
-  if (!g) {
+  if (!g || atHome) {
     return (
       <>
       <Gate
         onExit={onExit}
+        resume={g ? { name: g.name, onResume: () => setAtHome(false) } : undefined}
         onReady={(state, isNew, isCloud, day, isVerified, last4) => {
+          setAtHome(false)
           gRef.current = state
           setCloud(isCloud)
           setVerified(isVerified)
@@ -377,10 +380,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
       <div className="app cardmode rift-ui">
         <a className="skip-link" href="#main">跳到主内容</a>
         <header className="topbar">
-          {/* 开 in the accent, 瓦包 in the gold this mode uses — the same
-              two-tone split the career's mark has. The English keeps the .by
-              line it inherited, which is where the career puts its credit. */}
-          <div className="brand">噜<span>噜卡</span><em className="by">猪之家出品</em></div>
+          <button className="brand brand-home" type="button" title="返回首页" aria-label="噜噜卡，返回首页" onClick={() => { flushAccount(g); setAtHome(true) }}>噜<span>噜卡</span><em className="by">猪之家出品</em></button>
           <div className="chip" title="金币">🪙 <b>{g.coins.toLocaleString('en-US')}</b></div>
           <StaminaChip g={g} onTick={() => setNow(serverNow())} />
           <div className="chip" title="段位">
@@ -435,9 +435,11 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
 /** The door: make an account, or come back to one. */
 function Gate({
   onReady,
+  resume,
 }: {
   onReady: (state: GachaState, isNew: boolean, cloud: boolean, today: string, verified: boolean, phone: string | null) => void
   onExit: () => void
+  resume?: { name: string; onResume: () => void }
 }) {
   const [name, setName] = useState('')
   const [id, setId] = useState('')
@@ -541,6 +543,7 @@ function Gate({
   return (
     <div className="lulu-gate">
       <GateBrand />
+      {resume && <div className="gate-resume"><span>当前账号 · <strong>{resume.name}</strong></span><button className="gate-secondary" type="button" onClick={resume.onResume}>继续游玩 →</button></div>}
       <main className="gate-layout">
         <GateStory />
         <section className="gate-console" aria-label="收藏档案">
