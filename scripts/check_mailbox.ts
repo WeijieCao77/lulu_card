@@ -31,6 +31,7 @@ const check = (name: string, ok: boolean, detail = '') => {
 
 const g = newGacha('VM-TEST-MAIL-0000-0000-0000', '审计', '2026-09-02')
 const coins0 = g.coins
+const elite0 = g.packs.elite ?? 0
 const item = (x: Partial<MailItem>): MailItem => ({
   kind: 'sold', cardId: null, level: 0, coins: 0, pack: null, count: 1, body: {}, at: 1_700_000_000_000, ...x,
 })
@@ -45,7 +46,7 @@ applyMail(g, [
   item({ kind: 'grant', coins: 500, pack: 'elite', count: 2, body: { note: '群活动补偿' }, at: 1_700_000_100_000 }),
 ])
 check('金币到账', g.coins === coins0 + 1200, `${coins0} → ${g.coins}`)
-check('卡包到账', (g.packs.elite ?? 0) === 1 + 2, `elite ${g.packs.elite}`)
+check('卡包到账', (g.packs.elite ?? 0) === elite0 + 2, `elite ${g.packs.elite}`)
 check('两条都记下了', (g.mail ?? []).length === 2)
 check('最新的在最上面', g.mail?.[0].kind === 'grant', g.mail?.[0].kind)
 check('官方发放带着附言', g.mail?.[0].note === '群活动补偿', g.mail?.[0].note)

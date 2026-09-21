@@ -1,4 +1,4 @@
-import { STARTER_COINS } from '../src/engine/gacha'
+import { STARTER_COINS, STARTER_PACKS } from '../src/engine/gacha'
 /** Invalid pack requests and damaged legacy inventory must not destroy value. */
 import assert from 'node:assert/strict'
 import { ALL_CARDS, COINS_FOR, DUPES_FOR, MAX_LEVEL, isPlayerCard } from '../src/engine/cards'
@@ -25,7 +25,7 @@ for (const kind of ['constructor', 'toString', '__proto__', 'hasOwnProperty', 'v
 for (const kind of Object.keys(PACKS)) assert(isPackKind(kind), `Real pack ${kind}`)
 const valid = fresh()
 assert.equal(runAction(valid, 'open', { kind: 'scout', payWith: 'pack' }, env).ok, true)
-assert.equal(valid.packs.scout, 2)
+assert.equal(valid.packs.scout, STARTER_PACKS.scout - 1)
 assert.equal(valid.pulls, 1)
 assert.equal(valid.coins, STARTER_COINS)
 console.log('ok prototype/invalid packs refused without asset or seed changes; ordinary opening works')

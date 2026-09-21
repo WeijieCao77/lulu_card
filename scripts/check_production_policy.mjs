@@ -9,6 +9,7 @@ const failures = []
 const check = (ok, label) => { console.log(`${ok ? 'PASS' : 'BLOCK'} ${label}`); if (!ok) failures.push(label) }
 check(RELEASE_STAGE === 'production', 'Release stage is production (demo must not be published as the formal release)')
 check(RELEASE_POLICY.starterCoins === 3000, 'Starter coins restored to 3,000')
+check(RELEASE_POLICY.starterPacks.scout === 3 && RELEASE_POLICY.starterPacks.elite === 1 && RELEASE_POLICY.starterPacks.ten === 0 && RELEASE_POLICY.starterPacks.coach === 1, 'Starter packs restored: 3 scout, 1 elite, 0 ten, 1 coach')
 check(TRADE_DAYS >= 3 && TRADE_PULLS >= 50, 'Effective market gates: at least 3 days and 50 pulls')
 check(PROTECT_SEC >= 60, 'Effective buyout protection: at least 60 seconds')
 check(RELEASE_POLICY.phoneEnabled && process.env.PHONE_GATE !== '0', 'Phone verification enabled')
@@ -22,7 +23,9 @@ const keys = ['ANALYTICS_TOKEN', 'PHONE_KEY', 'PHONE_SALT'].map(k => process.env
 check(keys.every(k => k && k.length >= 24) && new Set(keys).size === 3, 'Three independent stable administration/phone secrets')
 try {
   const engine = await import('../dist-server/engine.mjs')
-  check(engine.newGacha('release-check', 'check', '2026-01-01').coins === 3000, 'Built server engine uses production starter coins')
+  const fresh = engine.newGacha('release-check', 'check', '2026-01-01')
+  check(fresh.coins === 3000, 'Built server engine uses production starter coins')
+  check(fresh.packs.scout === 3 && fresh.packs.elite === 1 && !fresh.packs.ten && fresh.packs.coach === 1, 'Built server engine uses production starter packs')
 } catch { check(false, 'Build the server before running the production check') }
 console.log('Also complete docs/production-release-checklist.md: configuration checks do not replace abuse tests or SMS delivery verification.')
 process.exitCode = failures.length ? 1 : 0

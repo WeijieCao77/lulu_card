@@ -1,0 +1,868 @@
+.lulu-gate {
+  --lulu-void: #0a0f1c;
+  --lulu-abyss: #0d1628;
+  --lulu-panel: #111d33;
+  --lulu-panel-2: #16253f;
+  --lulu-edge: #1e3150;
+  --lulu-cyan: #6fd4e8;
+  --lulu-cyan-dim: #3a8ba0;
+  --lulu-gold: #c8a24a;
+  --lulu-gold-bright: #e8c878;
+  --lulu-gold-dim: #8a6d2f;
+  --lulu-text: #e8e6da;
+  --lulu-muted: #9aa3b5;
+  --lulu-disabled: #4a5568;
+  --lulu-error: #e06060;
+  --lulu-ok: #6fbf8f;
+  --lulu-radius: 6px;
+  --lulu-radius-lg: 10px;
+  --lulu-font: "Goudy Old Style", "Palatino Linotype", "Book Antiqua", "Noto Serif SC", "Songti SC", serif;
+  --lulu-sans: "Avenir Next", "Segoe UI", "Noto Sans SC", "PingFang SC", sans-serif;
+
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(111, 212, 232, 0.04), transparent 70%),
+    radial-gradient(ellipse 60% 45% at 85% 90%, rgba(200, 162, 74, 0.05), transparent 70%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.008) 0 1px, transparent 1px 46px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.008) 0 1px, transparent 1px 46px),
+    linear-gradient(160deg, var(--lulu-void) 0%, var(--lulu-abyss) 55%, #0b1220 100%);
+  color: var(--lulu-text);
+  font-family: var(--lulu-sans);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.lulu-gate *,
+.lulu-gate *::before,
+.lulu-gate *::after {
+  box-sizing: border-box;
+}
+
+.lulu-gate button,
+.lulu-gate input {
+  font-family: var(--lulu-sans);
+}
+
+/* header */
+.lulu-gate .gate-brand {
+  width: 100%;
+  max-width: 1180px;
+  padding: 24px 28px 14px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--lulu-edge);
+  background: linear-gradient(180deg, rgba(17, 29, 51, 0.6) 0%, transparent 100%);
+}
+
+.lulu-gate .gate-brand svg {
+  width: 48px;
+  height: 48px;
+  filter: drop-shadow(0 0 6px rgba(200, 162, 74, 0.3));
+  flex-shrink: 0;
+}
+
+.lulu-gate .gate-brand > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.lulu-gate .gate-brand strong {
+  font-family: var(--lulu-font);
+  font-size: 1.25rem;
+  letter-spacing: 0.06em;
+  color: var(--lulu-text);
+  font-weight: 700;
+}
+
+.lulu-gate .gate-brand span {
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--lulu-gold-dim);
+}
+
+.lulu-gate .gate-beta {
+  margin-left: auto;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border: 1px solid var(--lulu-cyan-dim);
+  color: var(--lulu-cyan);
+  background: rgba(111, 212, 232, 0.06);
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+/* layout */
+.lulu-gate .gate-layout {
+  width: 100%;
+  max-width: 1180px;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 48px;
+  padding: 40px 28px 60px;
+  flex: 1;
+}
+
+.lulu-gate .gate-story {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.lulu-gate .gate-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--lulu-cyan-dim);
+  margin: 0 0 12px;
+  border-left: 2px solid var(--lulu-gold);
+  padding-left: 12px;
+}
+
+.lulu-gate h1 {
+  font-family: var(--lulu-font);
+  font-size: 3.25rem;
+  line-height: 1.15;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: var(--lulu-text);
+  letter-spacing: 0.02em;
+}
+
+.lulu-gate h1 em {
+  font-style: normal;
+  color: var(--lulu-gold-bright);
+  text-shadow: 0 0 24px rgba(200, 162, 74, 0.25);
+}
+
+.lulu-gate .gate-intro {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--lulu-muted);
+  margin: 0 0 32px;
+  max-width: 46ch;
+}
+
+/* art */
+.lulu-gate .gate-art {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  height: 300px;
+  margin: 0 auto 16px;
+  border-radius: var(--lulu-radius-lg);
+  background:
+    radial-gradient(circle at 50% 60%, rgba(111, 212, 232, 0.08) 0%, transparent 55%),
+    radial-gradient(circle at 18% 20%, rgba(200, 162, 74, 0.1) 0%, transparent 40%),
+    linear-gradient(145deg, var(--lulu-panel) 0%, var(--lulu-abyss) 100%);
+  border: 1px solid var(--lulu-edge);
+  overflow: visible;
+}
+
+.lulu-gate .gate-orbit {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--lulu-radius-lg);
+  background:
+    repeating-conic-gradient(from 0deg at 50% 60%, rgba(200, 162, 74, 0.03) 0deg 15deg, transparent 15deg 45deg),
+    radial-gradient(circle at 50% 60%, transparent 30%, rgba(10, 15, 28, 0.5) 100%);
+  pointer-events: none;
+}
+
+.lulu-gate .gate-card {
+  position: absolute;
+  background: linear-gradient(165deg, var(--lulu-panel-2) 30%, var(--lulu-abyss) 100%);
+  border: 1px solid var(--lulu-edge);
+  border-radius: 4px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: transform 0.2s ease;
+}
+
+.lulu-gate .gate-card:hover {
+  transform: translateY(-4px);
+}
+
+.lulu-gate .gate-card span {
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lulu-cyan-dim);
+}
+
+.lulu-gate .gate-card b {
+  font-family: var(--lulu-font);
+  font-size: 1.1rem;
+  color: var(--lulu-gold);
+  font-weight: 600;
+}
+
+.lulu-gate .gate-card small {
+  font-size: 0.68rem;
+  color: var(--lulu-muted);
+  letter-spacing: 0.04em;
+}
+
+.lulu-gate .gate-card-left {
+  width: 130px;
+  height: 170px;
+  left: 8%;
+  top: 18%;
+  transform: rotate(-6deg);
+  z-index: 1;
+}
+
+.lulu-gate .gate-card-right {
+  width: 130px;
+  height: 170px;
+  right: 8%;
+  top: 22%;
+  transform: rotate(7deg);
+  z-index: 1;
+}
+
+.lulu-gate .gate-card-main {
+  width: 180px;
+  height: 230px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -52%);
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-color: var(--lulu-gold-dim);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 24px rgba(200, 162, 74, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.lulu-gate .gate-card-main svg {
+  width: 64px;
+  height: 64px;
+  filter: drop-shadow(0 0 12px rgba(200, 162, 74, 0.4));
+  margin-bottom: 8px;
+}
+
+.lulu-gate .gate-art-caption {
+  text-align: center;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--lulu-gold-dim);
+  margin: 8px 0 24px;
+}
+
+.lulu-gate .gate-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-top: auto;
+  border-top: 1px solid var(--lulu-edge);
+  padding-top: 20px;
+}
+
+.lulu-gate .gate-features span {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--lulu-muted);
+  padding: 8px 14px;
+  border: 1px solid var(--lulu-edge);
+  border-radius: 2px;
+  background: rgba(17, 29, 51, 0.5);
+  text-transform: uppercase;
+}
+
+/* console */
+.lulu-gate .gate-console {
+  background: linear-gradient(170deg, var(--lulu-panel) 0%, var(--lulu-abyss) 100%);
+  border: 1px solid var(--lulu-edge);
+  border-radius: var(--lulu-radius-lg);
+  padding: 28px 30px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  align-self: start;
+}
+
+.lulu-gate .gate-console-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lulu-muted);
+  border-bottom: 1px solid var(--lulu-edge);
+  padding-bottom: 14px;
+}
+
+.lulu-gate .gate-console-top span:last-child {
+  color: var(--lulu-cyan-dim);
+}
+
+.lulu-gate .gate-modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.lulu-gate .gate-modes button {
+  min-height: 44px;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lulu-muted);
+  background: transparent;
+  border: 1px solid var(--lulu-edge);
+  border-radius: var(--lulu-radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lulu-gate .gate-modes button:hover {
+  border-color: var(--lulu-cyan-dim);
+  color: var(--lulu-text);
+}
+
+.lulu-gate .gate-modes button[aria-pressed="true"] {
+  background: rgba(111, 212, 232, 0.08);
+  border-color: var(--lulu-cyan);
+  color: var(--lulu-cyan);
+  box-shadow: inset 0 0 12px rgba(111, 212, 232, 0.06);
+}
+
+.lulu-gate .gate-form-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lulu-gate .gate-step {
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--lulu-gold-dim);
+}
+
+.lulu-gate .gate-form-heading h2 {
+  font-family: var(--lulu-font);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--lulu-text);
+  margin: 0;
+}
+
+.lulu-gate .gate-form-heading p {
+  font-size: 0.85rem;
+  color: var(--lulu-muted);
+  margin: 0;
+}
+
+.lulu-gate .gate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lulu-gate .gate-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lulu-muted);
+}
+
+.lulu-gate .gate-form input {
+  min-height: 44px;
+  padding: 10px 14px;
+  font-size: 1rem;
+  font-family: var(--lulu-sans);
+  background: var(--lulu-void);
+  border: 1px solid var(--lulu-edge);
+  border-radius: var(--lulu-radius);
+  color: var(--lulu-text);
+  letter-spacing: 0.04em;
+  outline: none;
+  transition: border-color 0.2s ease;
+  width: 100%;
+  overflow-x: auto;
+  text-overflow: ellipsis;
+}
+
+.lulu-gate .gate-form input:focus-visible {
+  border-color: var(--lulu-cyan);
+  box-shadow: 0 0 0 3px rgba(111, 212, 232, 0.12);
+}
+
+.lulu-gate .gate-form input:disabled {
+  background: var(--lulu-panel);
+  color: var(--lulu-disabled);
+  border-color: var(--lulu-edge);
+  cursor: not-allowed;
+  -webkit-text-fill-color: var(--lulu-disabled);
+}
+
+.lulu-gate .gate-field-note {
+  font-size: 0.72rem;
+  color: var(--lulu-gold-dim);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.lulu-gate .gate-gift {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-top: 1px solid var(--lulu-edge);
+  border-bottom: 1px solid var(--lulu-edge);
+  gap: 12px;
+}
+
+.lulu-gate .gate-gift span {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lulu-muted);
+}
+
+.lulu-gate .gate-gift strong {
+  font-family: var(--lulu-font);
+  font-size: 1.1rem;
+  color: var(--lulu-gold);
+}
+
+.lulu-gate .gate-gift small {
+  font-size: 0.6rem;
+  color: var(--lulu-cyan-dim);
+  letter-spacing: 0.1em;
+}
+
+.lulu-gate .gate-error {
+  font-size: 0.8rem;
+  color: var(--lulu-error);
+  padding: 10px 12px;
+  border: 1px solid rgba(224, 96, 96, 0.35);
+  border-radius: var(--lulu-radius);
+  background: rgba(224, 96, 96, 0.06);
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+.lulu-gate .gate-submit {
+  min-height: 48px;
+  padding: 12px 24px;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lulu-void);
+  background: linear-gradient(140deg, var(--lulu-gold-bright) 0%, var(--lulu-gold) 60%, var(--lulu-gold-dim) 100%);
+  border: 1px solid var(--lulu-gold-bright);
+  border-radius: var(--lulu-radius);
+  cursor: pointer;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(200, 162, 74, 0.2);
+  width: 100%;
+}
+
+.lulu-gate .gate-submit:hover {
+  background: linear-gradient(140deg, var(--lulu-gold-bright) 0%, #dbb458 60%, var(--lulu-gold) 100%);
+  box-shadow: 0 6px 24px rgba(200, 162, 74, 0.3);
+}
+
+.lulu-gate .gate-submit:focus-visible {
+  outline: 2px solid var(--lulu-cyan);
+  outline-offset: 2px;
+}
+
+.lulu-gate .gate-submit:disabled {
+  background: var(--lulu-disabled);
+  border-color: var(--lulu-disabled);
+  color: var(--lulu-void);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.lulu-gate .gate-submit span {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.lulu-gate .gate-account-note {
+  font-size: 0.78rem;
+  color: var(--lulu-muted);
+  text-align: center;
+  margin: 4px 0 0;
+  letter-spacing: 0.05em;
+}
+
+/* secondary button */
+.lulu-gate .gate-secondary {
+  min-height: 48px;
+  padding: 12px 24px;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lulu-muted);
+  background: transparent;
+  border: 1px solid var(--lulu-edge);
+  border-radius: var(--lulu-radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lulu-gate .gate-secondary:hover {
+  border-color: var(--lulu-cyan-dim);
+  color: var(--lulu-cyan);
+}
+
+.lulu-gate .gate-secondary:focus-visible {
+  outline: 2px solid var(--lulu-cyan);
+  outline-offset: 2px;
+}
+
+/* footer */
+.lulu-gate .gate-footer {
+  width: 100%;
+  max-width: 1180px;
+  padding: 16px 28px 20px;
+  border-top: 1px solid var(--lulu-edge);
+  display: flex;
+  justify-content: center;
+}
+
+.lulu-gate .credit {
+  display: flex;
+  gap: 16px;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--lulu-disabled);
+}
+
+.lulu-gate .credit span + span::before {
+  content: "·";
+  margin-right: 16px;
+  color: var(--lulu-gold-dim);
+}
+
+/* receipt screen */
+.lulu-gate .gate-receipt {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 60px 28px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+}
+
+.lulu-gate .gate-receipt-mark {
+  font-size: 3.5rem;
+  color: var(--lulu-gold);
+  text-shadow: 0 0 40px rgba(200, 162, 74, 0.35);
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.lulu-gate .gate-receipt .gate-eyebrow {
+  border-left: none;
+  padding-left: 0;
+  text-align: center;
+}
+
+.lulu-gate .gate-receipt h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.lulu-gate .gate-receipt .gate-intro {
+  text-align: center;
+  margin: 0 auto 28px;
+  max-width: 48ch;
+}
+
+.lulu-gate .gate-id-label {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 520px;
+  min-height: 56px;
+  padding: 14px 20px;
+  background: var(--lulu-void);
+  border: 1px solid var(--lulu-gold-dim);
+  border-radius: var(--lulu-radius);
+  margin-bottom: 24px;
+  box-shadow: 0 0 24px rgba(200, 162, 74, 0.12), inset 0 0 16px rgba(200, 162, 74, 0.04);
+}
+
+.lulu-gate .gate-id {
+  font-family: "SF Mono", "Cascadia Code", "Fira Code", "Consolas", monospace;
+  font-size: 0.92rem;
+  letter-spacing: 0.12em;
+  color: var(--lulu-gold-bright);
+  word-break: break-all;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+.lulu-gate .gate-receipt-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.lulu-gate .gate-receipt-actions .gate-submit,
+.lulu-gate .gate-receipt-actions .gate-secondary {
+  min-width: 180px;
+  width: auto;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .lulu-gate .gate-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 28px 20px 40px;
+  }
+
+  .lulu-gate .gate-console {
+    padding: 24px 20px 28px;
+  }
+
+  .lulu-gate h1 {
+    font-size: 2.2rem;
+  }
+
+  .lulu-gate .gate-art {
+    max-width: 340px;
+    height: 220px;
+  }
+
+  .lulu-gate .gate-card-main {
+    width: 140px;
+    height: 180px;
+  }
+
+  .lulu-gate .gate-card-main svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .lulu-gate .gate-card-left,
+  .lulu-gate .gate-card-right {
+    width: 100px;
+    height: 136px;
+    padding: 10px;
+  }
+
+  .lulu-gate .gate-brand {
+    padding: 18px 20px 12px;
+  }
+
+  .lulu-gate .gate-footer {
+    padding: 12px 20px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lulu-gate .gate-brand {
+    gap: 10px;
+  }
+
+  .lulu-gate .gate-brand svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .lulu-gate .gate-brand strong {
+    font-size: 1rem;
+  }
+
+  .lulu-gate .gate-brand span {
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+  }
+
+  .lulu-gate .gate-beta {
+    font-size: 0.55rem;
+    padding: 4px 8px;
+    letter-spacing: 0.14em;
+  }
+
+  .lulu-gate .gate-layout {
+    padding: 20px 14px 30px;
+    gap: 24px;
+  }
+
+  .lulu-gate h1 {
+    font-size: 1.8rem;
+  }
+
+  .lulu-gate .gate-art {
+    height: 140px;
+    border-radius: var(--lulu-radius);
+  }
+
+  .lulu-gate .gate-card-left,
+  .lulu-gate .gate-card-right {
+    width: 70px;
+    height: 96px;
+    padding: 6px;
+    gap: 2px;
+  }
+
+  .lulu-gate .gate-card-left span,
+  .lulu-gate .gate-card-right span,
+  .lulu-gate .gate-card-left small,
+  .lulu-gate .gate-card-right small {
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+  }
+
+  .lulu-gate .gate-card-left b,
+  .lulu-gate .gate-card-right b {
+    font-size: 0.75rem;
+  }
+
+  .lulu-gate .gate-card-main {
+    width: 96px;
+    height: 126px;
+    padding: 8px;
+  }
+
+  .lulu-gate .gate-card-main svg {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 4px;
+  }
+
+  .lulu-gate .gate-card-main span {
+    font-size: 0.52rem;
+  }
+
+  .lulu-gate .gate-card-main strong {
+    font-family: var(--lulu-font);
+    font-size: 0.82rem;
+    color: var(--lulu-gold);
+  }
+
+  .lulu-gate .gate-features {
+    gap: 6px 10px;
+    padding-top: 14px;
+  }
+
+  .lulu-gate .gate-features span {
+    font-size: 0.6rem;
+    padding: 6px 10px;
+    letter-spacing: 0.06em;
+  }
+
+  .lulu-gate .gate-form input {
+    font-size: 1rem;
+    padding: 8px 12px;
+  }
+
+  .lulu-gate .gate-modes button {
+    font-size: 0.72rem;
+    min-height: 44px;
+  }
+
+  .lulu-gate .gate-receipt {
+    padding: 40px 16px 60px;
+  }
+
+  .lulu-gate .gate-receipt h1 {
+    font-size: 1.5rem;
+  }
+
+  .lulu-gate .gate-receipt-mark {
+    font-size: 2.4rem;
+  }
+
+  .lulu-gate .gate-id {
+    font-size: 0.78rem;
+  }
+
+  .lulu-gate .gate-receipt-actions .gate-submit,
+  .lulu-gate .gate-receipt-actions .gate-secondary {
+    min-width: 140px;
+    font-size: 0.7rem;
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+
+  .lulu-gate .gate-footer .credit {
+    font-size: 0.55rem;
+    gap: 8px;
+
+  }
+}
+/* Final integration: keep the artwork decorative and the entrance compact. */
+.lulu-gate .gate-art { pointer-events: none; }
+.lulu-gate .gate-art-caption { position: absolute; bottom: 8px; width: 100%; margin: 0; }
+.lulu-gate .gate-brand svg, .lulu-gate .gate-card-main svg { color: var(--lulu-gold-bright); }
+.lulu-gate .gate-console { min-width: 0; border-radius: 2px 22px 2px 22px; border-top-color: var(--lulu-gold-dim); }
+.lulu-gate .gate-pack-gift { font-size: 12px; line-height: 1.8; color: var(--lulu-gold-bright); margin: -6px 0 12px; }
+.lulu-gate .gate-eyebrow { color: var(--lulu-cyan); }
+.lulu-gate .gate-brand .gate-beta { white-space: nowrap; }
+.lulu-gate .gate-form input { min-width: 0; width: 100%; font-size: 16px; }
+.lulu-gate .gate-id { overflow-wrap: anywhere; user-select: all; }
+.lulu-gate .gate-submit:disabled { color: #c4cbd4; opacity: .65; }
+.lulu-gate .gate-receipt .gate-intro { margin-inline: auto; }
+.lulu-gate .gate-account-note { line-height: 1.8; }
+@media (max-width: 760px) {
+  .lulu-gate .gate-art, .lulu-gate .gate-features { display: none; }
+  .lulu-gate .gate-intro { margin-bottom: 0; font-size: 13px; }
+  .lulu-gate .gate-layout { gap: 24px; }
+  .lulu-gate .gate-console { gap: 16px; }
+  .lulu-gate .gate-form-heading h2 { font-size: 23px; }
+  .lulu-gate .gate-account-note, .lulu-gate .gate-field-note { font-size: 12px; }
+  .lulu-gate .gate-modes button { font-size: 14px; }
+  .lulu-gate .gate-receipt-actions { flex-direction: column; }
+  .lulu-gate .gate-receipt-actions button { width: 100%; font-size: 14px; }
+}
+.demo-welcome { width: min(560px, calc(100vw - 28px)); max-height: calc(100dvh - 40px); overflow-y: auto; margin: auto; padding: 30px; border: 1px solid #ad8b47; border-radius: 3px 22px 3px 22px; background: linear-gradient(145deg,#142a3a,#091624); color: #e6eced; box-shadow: 0 30px 100px #0009; }
+.demo-welcome::backdrop { background: #030c17ce; }
+.demo-welcome .demo-welcome-kicker { color: #7bcbd6; font-size: 12px; letter-spacing: .15em; }
+.demo-welcome h2 { font-size: 28px; color: #edce91; margin: 14px 0; }
+.demo-welcome p, .demo-welcome li { font-size: 14px; line-height: 1.8; color: #bed0da; }
+.demo-welcome .demo-welcome-reset { padding: 14px 16px; border-left: 2px solid #d9b36b; background: #d9b36b0d; margin: 20px 0; }
+.demo-welcome .demo-welcome-reset strong { color: #f0d49f; }
+.demo-welcome .demo-welcome-reset p { margin: 6px 0 0; }
+.demo-welcome ul { padding-left: 20px; margin: 20px 0; }
+.demo-welcome li { margin: 10px 0; }
+.demo-welcome li strong { color: #e3e9ec; }
+.demo-welcome .demo-welcome-gift { border: 1px solid #345666; padding: 14px 16px; margin-bottom: 20px; display: grid; gap: 8px; }
+.demo-welcome .demo-welcome-gift strong { font-size: 12px; color: #8fdbe0; }
+.demo-welcome .demo-welcome-gift span { font-size: 24px; font-weight: 700; color: #eacd87; }
+.demo-welcome .demo-welcome-gift p { margin: 0; font-size: 13px; }
+.demo-welcome button { width: 100%; min-height: 48px; background: #d6b477; border: 1px solid #f0d49f; color: #122334; font-weight: 700; }
+.demo-welcome button:hover { background: #efd097; }
+.demo-welcome button:focus-visible { outline: 2px solid #8fdbe0; outline-offset: 4px; }
+@media (max-width: 480px) { .demo-welcome { padding: 22px; } .demo-welcome h2 { font-size: 24px; } }

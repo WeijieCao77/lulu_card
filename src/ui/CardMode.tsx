@@ -1,4 +1,4 @@
-import { RELEASE_POLICY } from '../../release-policy.js'
+import { RELEASE_POLICY, RELEASE_STAGE } from '../../release-policy.js'
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import PhoneGate from './cards/PhoneGate'
 import type { ComponentType } from 'react'
@@ -24,6 +24,7 @@ import Credit from './Credit'
 import Changelog from './Changelog'
 import ThemeToggle from './ThemeToggle'
 import { RiftNavigation, RiftBanner } from './RiftChrome'
+import { DemoWelcome, GateBrand, GateStory } from './GateWelcome'
 import { ALL_CARDS } from '../engine/cards'
 import {
   act as actOnServer, createAccount, dayOf, flushAccount, fetchDay, loadAccount, refreshAccount, retryPending,
@@ -123,6 +124,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
   const [toastMsg, setToastMsg] = useState<string | null>(null)
   const [dossierId, setDossierId] = useState<string | null>(null)
   const [fresh, setFresh] = useState(false)
+  const [showDemoWelcome, setShowDemoWelcome] = useState(false)
   const [now, setNow] = useState(() => serverNow())
   // NOT a fetched string. The date is derived from the ticking server clock,
   // so a tab left open across midnight rolls over on its own instead of
@@ -317,6 +319,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
           refreshDaily(state, day)
           track('card_start', { fresh: isNew, cloud: isCloud, owned: Object.keys(state.cards).length })
           setFresh(isNew)
+          setShowDemoWelcome(isNew && RELEASE_STAGE === 'demo')
           setTab(isNew ? 'account' : 'packs')
           bump()
         }}
@@ -420,6 +423,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
         </div>
 
         {toastMsg && <div className="toast">{toastMsg}</div>}
+        {showDemoWelcome && <DemoWelcome onClose={() => setShowDemoWelcome(false)} />}
         <OddsFab />
         <Changelog />
         
@@ -445,8 +449,10 @@ function Gate({
   const [sure, setSure] = useState(false)
   // 「用手机号进入」 from the front door: the way back into an account whose id is gone
   const [byPhone, setByPhone] = useState(false)
+  const [entryMode, setEntryMode] = useState<'create' | 'login'>('create')
 
   const create = async () => {
+    if (busy) return
     setBusy(true)
     setErr(null)
     const r = await createAccount(name)
@@ -458,6 +464,7 @@ function Gate({
   }
 
   const signIn = async () => {
+    if (busy) return
     setBusy(true)
     setErr(null)
     const r = await loadAccount(id)
@@ -480,25 +487,30 @@ function Gate({
 
   if (made) {
     return (
-      <div className="wrap newgame">
-        <h1 className="display">记好这串 ID</h1>
-        <p className="muted" style={{ lineHeight: 1.9 }}>
-          这就是你的账号。<b style={{ color: 'var(--warn)' }}>没有密码和邮箱，丢了找不回来。</b>
-          <br />截图或复制保存。
+      <div className="lulu-gate">
+        <GateBrand />
+        <main className="gate-receipt">
+        <div className="gate-receipt-mark" aria-hidden="true">✦</div>
+        <p className="gate-eyebrow">档案已建立 · {made.state.name}</p>
+        <h1>你的收藏，从此开始。</h1>
+        <p className="gate-intro">
+          这串 ID 是你返回收藏的凭证，请复制保存或截图。
+          <br /><b>没有密码和邮箱，丢失 ID 将无法找回账号。</b>
         </p>
-        <div className="acct-id" style={{ maxWidth: 460 }}>{made.state.id}</div>
-        <div className="row" style={{ gap: 8, marginTop: 12 }}>
+        <div className="gate-id-label">专属账号 ID<code className="gate-id">{made.state.id}</code></div>
+        <div className="gate-receipt-actions">
           <button
-            className="primary"
+            className="gate-secondary"
             onClick={async () => {
               const ok = await copyText(made.state.id)
-              setCopied(true)
+              setCopied(ok)
               if (!ok) setErr('自动复制失败，请长按手动复制，或者截图。')
             }}
           >
             {copied ? '已复制 ✓' : '复制 ID'}
           </button>
           <button
+            className="gate-submit"
             // Never disabled, and never a confirm(). Clipboard access fails
             // outright in a few in-app browsers, and those same webviews —
             // WeChat and Xiaohongshu, which is most of this audience — can
@@ -515,73 +527,53 @@ function Gate({
           </button>
         </div>
         {sure && !copied && (
-          <p className="small warn" style={{ marginTop: 10, marginBottom: 0 }}>
+          <p className="gate-error" role="alert">
             还没复制 ID，丢了找不回来。再点一次直接进入。
           </p>
         )}
-        {err && <p className="small warn" style={{ marginTop: 10 }}>{err}</p>}
-
+        {err && <p className="gate-error" role="alert">{err}</p>}
+        </main>
+        <div className="gate-footer"><Credit /></div>
       </div>
     )
   }
 
   return (
-    <div className="wrap newgame">
-      <h1 className="display" style={{ marginBottom: 2 }}>噜噜卡</h1>
-      <p className="tiny faint" style={{ letterSpacing: '.34em', margin: '0 0 16px' }}>猪之家出品 · LoL 选手收藏</p>
-      <p className="muted" style={{ lineHeight: 1.9, maxWidth: 620 }}>
-        抽真实 LoL 选手做成的卡牌，金银铜三档，收集选手，强化卡牌，搭配五人阵容。
-        <b>同队、同国籍、同赛区</b>的选手一起上有默契加成。
-      </p>
-
-      <div className="grid c2" style={{ maxWidth: 720, marginTop: 20, alignItems: 'start' }}>
-        <div className="panel">
-          <div className="panel-head"><h2>第一次玩</h2></div>
-          <div className="panel-body">
-            <p className="small muted" style={{ marginTop: 0 }}>
-              取个名字，会生成一串 ID 作为账号，记得存好。
-            </p>
-            <input
-              placeholder="你的昵称"
-              value={name}
-              maxLength={20}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <button className="primary" style={{ marginTop: 10 }} onClick={create} disabled={busy}>
-              {busy ? '创建中…' : '创建账号'}
-            </button>
+    <div className="lulu-gate">
+      <GateBrand />
+      <main className="gate-layout">
+        <GateStory />
+        <section className="gate-console" aria-label="收藏档案">
+          <div className="gate-console-top"><span>COLLECTOR ACCESS</span><span aria-hidden="true">✦</span></div>
+          <div className="gate-modes" role="group" aria-label="账号入口">
+            <button type="button" aria-pressed={entryMode === 'create'} disabled={busy} onClick={() => { setEntryMode('create'); setErr(null) }}>初次建档</button>
+            <button type="button" aria-pressed={entryMode === 'login'} disabled={busy} onClick={() => { setEntryMode('login'); setErr(null) }}>返回收藏</button>
           </div>
-        </div>
-
-        <div className="panel">
-          <div className="panel-head"><h2>已经有 ID 了</h2></div>
-          <div className="panel-body">
-            <p className="small muted" style={{ marginTop: 0 }}>
-              填入之前保存的 ID。
-            </p>
-            <input
-              placeholder="VM-XXXX-XXXX-XXXX-XXXX-XXXX"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') void signIn() }}
-              style={{ fontFamily: 'var(--mono)' }}
-            />
-            <button style={{ marginTop: 10 }} onClick={signIn} disabled={busy || id.trim().length < 8}>
-              {busy ? '读取中…' : '登录'}
-            </button>
-            <p className="small muted" style={{ margin: '12px 0 0' }}>
-              {RELEASE_POLICY.phoneEnabled ? 'ID 找不到了？绑过手机的账号可以' : '内测期间暂不开放手机号功能，请保存好账号 ID。'}
-              {RELEASE_POLICY.phoneEnabled && <button className="ghost sm" style={{ marginLeft: 6 }} onClick={() => setByPhone(true)}>用手机号进入</button>}
-            </p>
-            {err && <p className="small" style={{ color: 'var(--loss)' }}>{err}</p>}
+          <div className="gate-form-heading">
+            <span className="gate-step">{entryMode === 'create' ? '01 / NEW JOURNEY' : '02 / WELCOME BACK'}</span>
+            <h2>{entryMode === 'create' ? '为你的收藏署名' : '欢迎回到你的藏卡室'}</h2>
+            <p>{entryMode === 'create' ? '取一个昵称，下一张传奇由你揭晓。' : '输入保存的账号 ID，继续你的收藏之旅。'}</p>
           </div>
-        </div>
-      </div>
-
-      <div className="row" style={{ marginTop: 22 }}>
-        
-      </div>
-      <div style={{ marginTop: 20 }}><Credit /></div>
+          <form className="gate-form" aria-busy={busy} onSubmit={e => { e.preventDefault(); if (!busy) void (entryMode === 'create' ? create() : signIn()) }}>
+            {entryMode === 'create' ? <>
+              <label htmlFor="collector-name">玩家昵称<input id="collector-name" autoComplete="nickname" placeholder="怎么称呼你？" value={name} maxLength={20} required disabled={busy} onChange={e => setName(e.target.value)} /></label>
+              <p className="gate-field-note">最多 20 个字符 · 昵称之后可以修改</p>
+              <div className="gate-gift"><span>开局补给</span><strong>{RELEASE_POLICY.starterCoins.toLocaleString('en-US')} <small>金币</small></strong></div>
+              <p className="gate-pack-gift">试训包 × {RELEASE_POLICY.starterPacks.scout} · 选拔包 × {RELEASE_POLICY.starterPacks.elite} · 十连包 × {RELEASE_POLICY.starterPacks.ten}</p>
+            </> : <>
+              <label htmlFor="collector-id">账号 ID<input id="collector-id" autoComplete="off" autoCapitalize="characters" spellCheck={false} placeholder="VM-XXXX-XXXX-XXXX-XXXX-XXXX" value={id} required disabled={busy} onChange={e => setId(e.target.value)} /></label>
+              <p className="gate-field-note">完整粘贴建档时保存的 ID，请勿分享给他人。</p>
+            </>}
+            {err && <p className="gate-error" role="alert">{err}</p>}
+            <button className="gate-submit" type="submit" disabled={busy || (entryMode === 'create' ? !name.trim() : id.trim().length < 8)}>
+              {busy ? (entryMode === 'create' ? '正在建立档案…' : '正在读取收藏…') : (entryMode === 'create' ? '创建我的档案' : '进入我的收藏')}<span aria-hidden="true">→</span>
+            </button>
+          </form>
+          <p className="gate-account-note">{entryMode === 'create' ? '建档后请保存专属账号 ID，以便下次登录。' : '内测期间暂不开放手机号功能，请妥善保存账号 ID。'}</p>
+          {RELEASE_POLICY.phoneEnabled && <button className="gate-secondary" onClick={() => setByPhone(true)}>用手机号进入</button>}
+        </section>
+      </main>
+      <div className="gate-footer"><Credit /></div>
     </div>
   )
 }

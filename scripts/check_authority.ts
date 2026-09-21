@@ -29,7 +29,7 @@ process.env.ENGINE_FROM_SOURCE = '1'
 import { PGlite } from '@electric-sql/pglite'
 import { makeSql } from '../pglite-sql.js'
 import { createHash } from 'node:crypto'
-import { STARTER_COINS, STAMINA_MAX, STAMINA_COST } from '../src/engine/gacha'
+import { STARTER_COINS, STARTER_PACKS, STAMINA_MAX, STAMINA_COST } from '../src/engine/gacha'
 import { CHALLENGE_COST, challengeSig } from '../src/engine/challenge'
 import { cardById, isPlayerCard, personOf } from '../src/engine/cards'
 import { migrateGacha, openPack } from '../src/engine/gacha'
@@ -90,7 +90,7 @@ console.log('建号：')
   const s = r.body.state as GachaState
   check('账号由服务器建，客户端带来的金币不算', r.body.ok === true && s.coins === STARTER_COINS, `coins ${s?.coins}`)
   check('带来的卡也不算', Object.keys(s.cards).length === 0)
-  check('带来的十连包也不算', !s.packs.ten && s.packs.scout === 3 && s.packs.elite === 1 && s.packs.coach === 1)
+  check('带来的十连包也不算', s.packs.ten === STARTER_PACKS.ten && s.packs.scout === STARTER_PACKS.scout && s.packs.elite === STARTER_PACKS.elite && s.packs.coach === STARTER_PACKS.coach)
   check('抽数从零起', s.pulls === 0)
   check('账号里没有存 id', !('id' in ((await stored(A)) as object)))
 }
@@ -115,7 +115,7 @@ console.log('\n存档：')
   check('金币没变', s.coins === STARTER_COINS, `${s.coins}`)
   check('抽数没变', s.pulls === 0)
   check('卡没变', Object.keys(s.cards).length === 0)
-  check('十连包没变', !s.packs.ten)
+  check('十连包没变', s.packs.ten === STARTER_PACKS.ten)
   check('体力没变', s.daily.stamina === STAMINA_MAX, `${s.daily.stamina}`)
   check('段位没变', s.ladder.div === 0 && (s.ladder.points ?? 0) === 0 && s.ladder.wins === 0)
   check('种子没变', s.seed === seedBefore && s.seed !== 1)
@@ -131,7 +131,7 @@ console.log('\n开包：')
   check('用送的试训包开一张', r.ok && pulled.length === 1, r.why)
   const s = await stored(A)
   check('卡在服务器的账号里', !!s.cards[pulled[0]?.cardId], pulled[0]?.cardId)
-  check('试训包少了一个', s.packs.scout === 2)
+  check('试训包少了一个', s.packs.scout === STARTER_PACKS.scout - 1)
   check('抽数 +1', s.pulls === 1)
   r = await act(A, 'open', { kind: 'ten', payWith: 'coins' })
   check('十连包买不到', !r.ok, r.why)
@@ -143,7 +143,7 @@ console.log('\n开包：')
   check('余额 600 买不起选拔包', !r.ok && (await stored(A)).coins === 600, r.why)
   await sql`update card_accounts set state = jsonb_set(state, '{coins}', ${String(STARTER_COINS - 2400)}::jsonb) where id_hash = ${hashOf(A)}`
   r = await act(A, 'open', { kind: 'scout', payWith: 'pack' }, { coins: 1_000_000, seed: 7, packs: { scout: 99 } })
-  check('随请求带来的金币和包不算', r.ok && (await stored(A)).packs.scout === 1 && (await stored(A)).coins === STARTER_COINS - 2400)
+  check('随请求带来的金币和包不算', r.ok && (await stored(A)).packs.scout === STARTER_PACKS.scout - 2 && (await stored(A)).coins === STARTER_COINS - 2400)
   r = await act(A, 'open', { kind: 'nope', payWith: 'pack' })
   check('不存在的包', !r.ok)
   r = await act(A, 'dance', {})
@@ -155,7 +155,7 @@ console.log('\n签到与任务：')
 {
   const c0 = (await stored(A)).coins
   let r = await act(A, 'checkin')
-  check('签到 +375 金币 +1 试训包', r.ok && (await stored(A)).coins === c0 + 375 && (await stored(A)).packs.scout === 2)
+  check('签到 +375 金币 +1 试训包', r.ok && (await stored(A)).coins === c0 + 375 && (await stored(A)).packs.scout === STARTER_PACKS.scout - 1)
   r = await act(A, 'checkin')
   check('今天再签一次不给', r.ok && (r.result as { already: boolean }).already === true && (await stored(A)).coins === c0 + 375)
   r = await act(A, 'quest', { key: 'play3' })

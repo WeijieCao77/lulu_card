@@ -940,6 +940,7 @@ export function receiveCard(g: GachaState, cardId: string, from: string): boolea
 }
 
 export const STARTER_COINS = RELEASE_POLICY.starterCoins
+export const STARTER_PACKS = RELEASE_POLICY.starterPacks
 
 export function newGacha(id: string, name: string, today: string): GachaState {
   return {
@@ -950,7 +951,7 @@ export function newGacha(id: string, name: string, today: string): GachaState {
     coins: STARTER_COINS,
     cards: {},
     // enough to field a five on the first visit without spending anything
-    packs: { scout: 3, elite: 1, coach: 1 },
+    packs: { ...STARTER_PACKS },
     squad: emptySquad(),
     pity: 0,
     mythicDry: 0,

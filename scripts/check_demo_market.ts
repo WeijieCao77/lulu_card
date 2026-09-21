@@ -23,6 +23,7 @@ try {
  for(const id of [seller,buyer]){
   const claim=await call('/api/card/claim',{id})
   assert(claim.ok && claim.state.coins===100000,JSON.stringify(claim))
+  assert.deepEqual(claim.state.packs,{scout:10,elite:10,ten:10,coach:1})
  }
  const g=engine.newGacha(seller,'本地测试','2026-09-21')
  g.coins=100000
@@ -49,6 +50,7 @@ try {
  assert.equal(after.coins,98500)
  const claim2=await call('/api/card/claim',{id:buyer})
  assert.equal((await state(buyer)).coins,98500,JSON.stringify(claim2))
+ assert.deepEqual((await state(buyer)).packs,after.packs,'Repeat claim must not award extra starter packs')
  const sg=await state(seller)
  sg.cards[c.id]={id:c.id,level:0,dupes:1,seen:2,got:'2026-09-21'}
  await sql`update card_accounts set state=${sql.json(sg)} where id_hash=${hash(seller)}`
@@ -63,5 +65,12 @@ try {
  const bid=await call('/api/market/offer',{id:buyer,listing:String(nl.id),price:1000})
  assert(bid.ok && !bid.bought,JSON.stringify(bid))
  assert.deepEqual((await state(buyer)).cards,ownedBeforeBid)
+ const opened=await call('/api/card/act',{id:buyer,action:'open',args:{kind:'ten',payWith:'pack'},client:{}})
+ assert(opened.ok,'Gifted ten-pack can be opened')
+ const used=await state(buyer)
+ assert.equal(used.packs.ten,9)
+ assert.equal(used.pulls,10)
+ await call('/api/card/claim',{id:buyer})
+ assert.deepEqual((await state(buyer)).packs,used.packs,'Reclaim must not refill used starter packs')
  console.log('PASS: demo market starter coins, immediate listing/buyout, mailbox settlement idempotency, auction retains card')
 }finally{await db.close()}
