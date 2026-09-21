@@ -1,0 +1,149 @@
+{
+  "environment": {
+    "node": "v24.14.0",
+    "platform": "win32",
+    "arch": "arm64",
+    "postgres": 18,
+    "thinkMs": 2000,
+    "durationMs": 60000,
+    "sharedIp": false,
+    "interactivePool": 4,
+    "backgroundPool": 1,
+    "statsPool": 2,
+    "rateLimits": true,
+    "network": "localhost HTTP",
+    "sourceEngine": true,
+    "reservedBegin": true,
+    "maxPipeline": "default",
+    "action": "checkin replay"
+  },
+  "waves": [
+    {
+      "concurrency": 100,
+      "memory": {
+        "startRssMB": 167,
+        "peakRssMB": 484,
+        "endRssMB": 475
+      },
+      "cpuMs": {
+        "user": 59500,
+        "system": 5156
+      },
+      "stages": {
+        "actions": {
+          "other": {
+            "n": 290,
+            "retried": 0,
+            "read": {
+              "p50": 0,
+              "p95": 1.2,
+              "max": 4.5
+            },
+            "rival": {
+              "p50": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "queue": {
+              "p50": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "compute": {
+              "p50": 0,
+              "p95": 0.1,
+              "max": 0.8
+            },
+            "write": {
+              "p50": 0,
+              "p95": 2.5,
+              "max": 14.9
+            },
+            "total": {
+              "p50": 1.4,
+              "p95": 3.8,
+              "max": 16
+            }
+          }
+        },
+        "matches": {
+          "done": 0,
+          "failed": 0,
+          "refused": 0,
+          "maxWaiting": 0,
+          "workers": 0,
+          "busy": 0,
+          "waiting": 0,
+          "limit": {
+            "workers": 2,
+            "queue": 200
+          }
+        },
+        "rivals": {
+          "at": null,
+          "rows": 0,
+          "ms": null
+        }
+      },
+      "durationSeconds": 63.07,
+      "metrics": {
+        "health": {
+          "n": 332,
+          "p50": 0.9,
+          "p95": 123.3,
+          "p99": 132.1,
+          "max": 132.4
+        },
+        "load": {
+          "n": 900,
+          "p50": 3.1,
+          "p95": 5.3,
+          "p99": 7.9,
+          "max": 193.4
+        },
+        "browse": {
+          "n": 1200,
+          "p50": 12.8,
+          "p95": 17.9,
+          "p99": 23.7,
+          "max": 131.2
+        },
+        "peek": {
+          "n": 300,
+          "p50": 2.8,
+          "p95": 4,
+          "p99": 5,
+          "max": 5.2
+        },
+        "act": {
+          "n": 290,
+          "p50": 3,
+          "p95": 5.1,
+          "p99": 12.3,
+          "max": 17.2
+        },
+        "transaction_wait": {
+          "n": 100,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.1,
+          "max": 0.1
+        },
+        "transaction_held": {
+          "n": 100,
+          "p50": 1.6,
+          "p95": 7.6,
+          "p99": 14.9,
+          "max": 14.9
+        }
+      },
+      "statuses": {
+        "200": 3022
+      },
+      "rejections": {},
+      "cupMatches": 895,
+      "eventLoopP99Ms": 24
+    }
+  ],
+  "errors": []
+}

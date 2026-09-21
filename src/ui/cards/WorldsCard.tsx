@@ -16,7 +16,7 @@ export default function WorldsCard({ card, size = 'md', level = 0, dupes = 0, se
     aria-label={`${legendEdition(l)} ${card.ign} ${LEGEND_KIND_CN[l.kind]} 彩卡 ${card.rating}${level ? `，强化 ${level}` : ''}`}
     onClick={onClick} onKeyDown={e => { if (onClick && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onClick() } }}>
     <div className="wc-window">
-      <img className="wc-photo" src={card.face!} alt={`${card.ign} · ${l.art.year ?? l.year} ${hall ? '职业' : msi ? 'MSI' : '世界赛'}影像`} loading="lazy" />
+      <img className="wc-photo" src={card.face!} alt={`${card.ign} · ${l.art.year ?? l.year} ${hall ? '职业' : msi ? 'MSI' : '世界赛'}影像`} loading="lazy" decoding="async" />
       <div className="wc-shade" />
       <div className="wc-engraving" aria-hidden="true">{l.year}</div>
       <div className="wc-top"><span>{hall ? 'HALL OF FAME' : msi ? 'MSI LEGACY' : l.collection === 'ig-2018' ? 'INVICTUS · 2018' : 'WORLDS ARCHIVE'}</span><b>{hall ? 'HOF' : msi ? l.year : `S${l.year - 2010}`}</b></div>

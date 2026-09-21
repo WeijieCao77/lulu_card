@@ -1,3 +1,4 @@
+import { RELEASE_POLICY } from './release-policy.js'
 /**
  * Scripts on the trading post.
  *
@@ -79,7 +80,8 @@
  * a script wins now starts when the minute ENDS, so 「quick」 runs to QUICK_SEC past that moment, and a
  * purchase in the two seconds after it is as inhuman as one in the two seconds after the listing.
  */
-export const PROTECT_SEC = 60
+const protectSecondsEnv = Number(process.env.MARKET_PROTECT_SEC)
+export const PROTECT_SEC = process.env.MARKET_PROTECT_SEC && Number.isInteger(protectSecondsEnv) && protectSecondsEnv >= 0 ? protectSecondsEnv : RELEASE_POLICY.protectSeconds
 
 export const GUARD = {
   ULTRA_SEC: 2, QUICK_SEC: PROTECT_SEC + 45, FRESH_SEC: 300,

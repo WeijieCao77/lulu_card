@@ -38,6 +38,7 @@ import { createHash, randomInt } from 'node:crypto'
 import { isVerified } from './phone-api.js'
 import { requestAction } from './cards-api.js'
 import { makeMarketGuard, PROTECT_SEC } from './market-guard.js'
+import { RELEASE_POLICY } from './release-policy.js'
 
 /** How long a listing takes bids before the top one wins — the seller's choice, within these. */
 export const AUCTION_HOURS = 24
@@ -103,48 +104,13 @@ export const IGNORE_LIMIT = 3
  */
 export const MAX_LISTINGS = 3
 
-/**
- * How much of the game an account has to have played before it can trade.
- *
- * The floor on the asking price stopped cards being handed between accounts
- * for nothing, but not the rest of it: an alt could still sell commons at
- * salvage, which is several times cheaper than pulling them. What kills that
- * economy is making the alt itself expensive.
- *
- * Measured, not guessed. A brand-new account is worth exactly ten pulls: the
- * starter packs are seven, and the 3000 opening coins buy one more 选拔包. From
- * there a check-in is a 试训包 a day plus 300 coins, with a 选拔包 every third
- * day and a 十连包 on the seventh — about thirty-five by the end of week one for
- * somebody who only signs in, sooner for anybody actually playing the ladder.
- *
- * So fifty is roughly a week of showing up. That is far more effort than the
- * handful of common cards a throwaway could then move, which is the whole
- * point; and it is short enough that a real new player is inside it before he
- * has anything worth selling anyway.
- *
- * Counted in pulls rather than days because pulls is the one number that only
- * ever goes up and that the server already trusts for exactly this reason —
- * see progress.js.
- */
-export const TRADE_PULLS = 50
+/** Demo/production defaults are centralized in release-policy.js.
+ * Production baseline: 50 pulls and 3 days, also applied to friend swaps. */
+const tradePullsEnv = Number(process.env.TRADE_PULLS)
+export const TRADE_PULLS = process.env.TRADE_PULLS && Number.isInteger(tradePullsEnv) && tradePullsEnv >= 0 ? tradePullsEnv : RELEASE_POLICY.tradePulls
 
-/**
- * And how old it has to be.
- *
- * Fifty pulls is a week of one person's effort, but one person can spend that
- * week on several accounts at once. On 2026-09-10 one account's 彩卡 had come
- * in from other accounts through buy-now listings, each paid back minutes
- * later by selling a 60-coin bronze to the same account for the same money.
- * Age is the one requirement that cannot be played faster: three days is three
- * days however many accounts share them, so an account made tonight is no use
- * for trading tonight. Measured on the database clock, not the client's.
- *
- * `TRADE_DAYS=0` in the environment turns it off, for a local server on an
- * in-process PGlite: its accounts cannot be backdated from outside, and a
- * browser walkthrough of the market would otherwise wait three real days.
- */
 const tradeDaysEnv = Number(process.env.TRADE_DAYS)
-export const TRADE_DAYS = process.env.TRADE_DAYS && Number.isFinite(tradeDaysEnv) && tradeDaysEnv >= 0 ? tradeDaysEnv : 3
+export const TRADE_DAYS = process.env.TRADE_DAYS && Number.isFinite(tradeDaysEnv) && tradeDaysEnv >= 0 ? tradeDaysEnv : RELEASE_POLICY.tradeDays
 export const MAX_ASK = 500_000
 
 /**
@@ -670,7 +636,7 @@ export function makeMarketApi(sql, {
     const pulls = Number(r[0]?.pulls ?? 0)
     // seconds until it is old enough; an account that is not there never is
     const wait = r.length ? Math.max(0, Number(r[0].wait) || 0) : TRADE_DAYS * 86_400
-    return pulls >= TRADE_PULLS && wait === 0
+    return r.length > 0 && pulls >= TRADE_PULLS && wait === 0
       ? null
       : { need: TRADE_PULLS, have: Math.max(0, Math.floor(pulls)), days: TRADE_DAYS, wait }
   }

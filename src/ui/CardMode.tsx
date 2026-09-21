@@ -1,3 +1,4 @@
+import { RELEASE_POLICY } from '../../release-policy.js'
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import PhoneGate from './cards/PhoneGate'
 import type { ComponentType } from 'react'
@@ -354,7 +355,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
     bump()
   }
 
-  if (!verified) {
+  if (RELEASE_POLICY.phoneEnabled && !verified) {
     return (
       <>
       <PhoneGate
@@ -473,7 +474,7 @@ function Gate({
     }
   }
 
-  if (byPhone) {
+  if (RELEASE_POLICY.phoneEnabled && byPhone) {
     return <PhoneGate onBound={() => {}} onSignOut={() => setByPhone(false)} backLabel="返回" />
   }
 
@@ -569,8 +570,8 @@ function Gate({
               {busy ? '读取中…' : '登录'}
             </button>
             <p className="small muted" style={{ margin: '12px 0 0' }}>
-              ID 找不到了？绑过手机的账号可以
-              <button className="ghost sm" style={{ marginLeft: 6 }} onClick={() => setByPhone(true)}>用手机号进入</button>
+              {RELEASE_POLICY.phoneEnabled ? 'ID 找不到了？绑过手机的账号可以' : '内测期间暂不开放手机号功能，请保存好账号 ID。'}
+              {RELEASE_POLICY.phoneEnabled && <button className="ghost sm" style={{ marginLeft: 6 }} onClick={() => setByPhone(true)}>用手机号进入</button>}
             </p>
             {err && <p className="small" style={{ color: 'var(--loss)' }}>{err}</p>}
           </div>

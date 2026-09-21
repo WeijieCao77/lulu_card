@@ -1,3 +1,4 @@
+import { RELEASE_POLICY } from '../../../release-policy.js'
 import { useState } from 'react'
 import { useCards } from './ctx'
 import { Panel } from '../common'
@@ -55,7 +56,7 @@ export default function Account({ onSignOut }: { onSignOut: () => void }) {
           {g.id}
         </div>
         <p className="small muted" style={{ margin: '8px 0 0' }}>
-          {phone ? <>已绑手机 尾号 <b>{phone}</b>。换设备可以在入口点「用手机号进入」，不用记 ID。</> : '还没绑手机。绑上以后换设备不用记 ID，用手机号就能进来。'}
+          {!RELEASE_POLICY.phoneEnabled ? '内测期间暂不开放手机号绑定，请妥善保存账号 ID。' : phone ? <>已绑手机 尾号 <b>{phone}</b>。换设备可以在入口点「用手机号进入」，不用记 ID。</> : '还没绑手机。绑上以后换设备不用记 ID，用手机号就能进来。'}
         </p>
         <div className="row" style={{ gap: 8, marginTop: 10 }}>
           <button className="sm" onClick={() => setReveal((v) => !v)}>
@@ -120,7 +121,7 @@ export default function Account({ onSignOut }: { onSignOut: () => void }) {
         )}
       </Panel>
 
-      {!phone && (
+      {RELEASE_POLICY.phoneEnabled && !phone && (
         <Panel title="绑定手机">
           <PhoneGate id={g.id} onBound={(last4) => { bound(last4); toast(`绑好了，尾号 ${last4}。`) }} onSignOut={() => {}} backLabel="" embedded />
         </Panel>

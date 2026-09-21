@@ -166,6 +166,7 @@ export default function Market() {
   const [inbound, setInbound] = useState<Offer[]>([])
   const [outbound, setOutbound] = useState<Offer[]>([])
   const [days, setDays] = useState(3)
+  const [protectSec, setProtectSec] = useState(0)
   // null once the account has played enough; until then it is how far off it is
   const [gate, setGate] = useState<Gate | null>(null)
   const [ban, setBan] = useState<{ until: number; why: string } | null>(null)
@@ -244,6 +245,7 @@ export default function Market() {
       setOwn(b.own ?? [])
       setNext(b.next ?? null)
       setGate(b.gate ?? null)
+      setProtectSec(b.protectSec ?? 0)
       setBan(b.ban ?? null)
       if (typeof b.total === 'number') setTotal(b.total)
       if (b.pool) setPool(b.pool)
@@ -738,7 +740,7 @@ export default function Market() {
         <p className="tiny faint" style={{ marginBottom: 0, lineHeight: 1.7 }}>
           <b>拍卖时长 {AUCTION_HOURS_CHOICES[0]} ~ {AUCTION_HOURS_CHOICES[AUCTION_HOURS_CHOICES.length - 1]} 小时自定，到时最高价成交</b>。
           流拍退回信箱；<b>有人出价后不能撤回</b>。
-          一口价可不填，填了则按此价立刻成交，至少为起拍价的 {BUYOUT_MIN} 倍。上架第一分钟是保护期：这时点一口价的人一起抽签，到点随机一人成交。
+          一口价可不填，填了则按此价立刻成交，至少为起拍价的 {BUYOUT_MIN} 倍。{protectSec > 0 ? `上架前 ${protectSec} 秒是保护期：一口价报名抽签，到点随机一人成交。` : '内测期间，一口价无需等待，直接成交。'}
           <b>最多同时挂 {MAX_LISTINGS} 张</b>。有重复先卖重复那张（+0），只有一张时连强化等级一起卖出。
         </p>
       </Panel>

@@ -19,7 +19,8 @@
     "audit:pg": "node scripts/pg/check_concurrency_pg.mjs",
     "audit:ci": "node scripts/run-audit.mjs",
     "test:ci": "node --test scripts/run-audit.test.mjs",
-    "local": "node scripts/start-local.mjs"
+    "local": "node scripts/start-local.mjs",
+    "check:production": "node scripts/check_production_policy.mjs"
   },
   "dependencies": {
     "postgres": "^3.4.9",

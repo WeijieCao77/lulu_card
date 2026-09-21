@@ -1,3 +1,4 @@
+import { RELEASE_POLICY } from '../../release-policy.js'
 /**
  * The card mode: pull real professionals, build a five, and take it out.
  *
@@ -938,7 +939,7 @@ export function receiveCard(g: GachaState, cardId: string, from: string): boolea
   return true
 }
 
-export const STARTER_COINS = 3000
+export const STARTER_COINS = RELEASE_POLICY.starterCoins
 
 export function newGacha(id: string, name: string, today: string): GachaState {
   return {

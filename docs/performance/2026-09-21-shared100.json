@@ -1,0 +1,76 @@
+{
+  "environment": {
+    "node": "v24.14.0",
+    "platform": "win32",
+    "arch": "arm64",
+    "postgres": 18,
+    "thinkMs": 0,
+    "durationMs": 15000,
+    "sharedIp": true,
+    "sharedLogin": true,
+    "interactivePool": 4,
+    "backgroundPool": 1,
+    "statsPool": 2,
+    "rateLimits": true,
+    "network": "localhost HTTP",
+    "sourceEngine": true,
+    "reservedBegin": true,
+    "maxPipeline": "default",
+    "action": "checkin replay"
+  },
+  "waves": [
+    {
+      "concurrency": 100,
+      "memory": {
+        "startRssMB": 172,
+        "peakRssMB": 172,
+        "endRssMB": 170
+      },
+      "cpuMs": {
+        "user": 172,
+        "system": 47
+      },
+      "stages": {
+        "actions": {},
+        "matches": {
+          "done": 0,
+          "failed": 0,
+          "refused": 0,
+          "maxWaiting": 0,
+          "workers": 0,
+          "busy": 0,
+          "waiting": 0,
+          "limit": {
+            "workers": 2,
+            "queue": 200
+          }
+        },
+        "rivals": {
+          "at": null,
+          "rows": 0,
+          "ms": null
+        }
+      },
+      "durationSeconds": 0.19,
+      "metrics": {
+        "load": {
+          "n": 100,
+          "p50": 65.4,
+          "p95": 101.8,
+          "p99": 181.8,
+          "max": 181.8
+        }
+      },
+      "statuses": {
+        "200": 40,
+        "429": 60
+      },
+      "rejections": {
+        "load:429:rate": 60
+      },
+      "cupMatches": 0,
+      "eventLoopP99Ms": 16.8
+    }
+  ],
+  "errors": []
+}

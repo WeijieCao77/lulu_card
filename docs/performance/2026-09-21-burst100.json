@@ -1,0 +1,203 @@
+{
+  "environment": {
+    "node": "v24.14.0",
+    "platform": "win32",
+    "arch": "arm64",
+    "postgres": 18,
+    "thinkMs": 0,
+    "durationMs": 15000,
+    "sharedIp": false,
+    "interactivePool": 4,
+    "backgroundPool": 1,
+    "statsPool": 2,
+    "rateLimits": false,
+    "network": "localhost HTTP",
+    "sourceEngine": true,
+    "reservedBegin": true,
+    "maxPipeline": "default",
+    "action": "real BO5 ladder (max 15/account)"
+  },
+  "waves": [
+    {
+      "concurrency": 100,
+      "memory": {
+        "startRssMB": 168,
+        "peakRssMB": 988,
+        "endRssMB": 413
+      },
+      "cpuMs": {
+        "user": 86438,
+        "system": 10203
+      },
+      "stages": {
+        "actions": {
+          "ladder": {
+            "n": 400,
+            "retried": 0,
+            "read": {
+              "p50": 0.4,
+              "p95": 1,
+              "max": 6.7
+            },
+            "rival": {
+              "p50": 0.1,
+              "p95": 0.1,
+              "max": 0.2
+            },
+            "queue": {
+              "p50": 2783.5,
+              "p95": 3559.5,
+              "max": 3622.1
+            },
+            "compute": {
+              "p50": 64,
+              "p95": 82,
+              "max": 129.7
+            },
+            "write": {
+              "p50": 3.3,
+              "p95": 5.4,
+              "max": 9.1
+            },
+            "total": {
+              "p50": 2846.1,
+              "p95": 3636.6,
+              "max": 3695.6
+            }
+          }
+        },
+        "matches": {
+          "done": 561,
+          "failed": 0,
+          "refused": 0,
+          "maxWaiting": 98,
+          "workers": 2,
+          "busy": 0,
+          "waiting": 0,
+          "limit": {
+            "workers": 2,
+            "queue": 200
+          }
+        },
+        "rivals": {
+          "at": 1790005855593,
+          "rows": 80,
+          "ms": 23
+        }
+      },
+      "ladder": {
+        "attempted": 561,
+        "completed": 561,
+        "human": 520,
+        "club": 41,
+        "bo": {
+          "5": 561
+        },
+        "maps": {
+          "3": 168,
+          "4": 194,
+          "5": 199
+        },
+        "persisted": {
+          "max_matches": 6,
+          "min_stamina": 18,
+          "total_matches": 561
+        }
+      },
+      "durationSeconds": 62.3,
+      "metrics": {
+        "health": {
+          "n": 563,
+          "p50": 0.4,
+          "p95": 118.6,
+          "p99": 132.1,
+          "max": 137.6
+        },
+        "load": {
+          "n": 1689,
+          "p50": 1.7,
+          "p95": 128.9,
+          "p99": 204.1,
+          "max": 364.9
+        },
+        "browse": {
+          "n": 2250,
+          "p50": 8.9,
+          "p95": 336.4,
+          "p99": 467,
+          "max": 644.7
+        },
+        "peek": {
+          "n": 561,
+          "p50": 1.5,
+          "p95": 29.5,
+          "p99": 137.7,
+          "max": 222.4
+        },
+        "browse_during_ladder": {
+          "n": 2084,
+          "p50": 8.7,
+          "p95": 262.1,
+          "p99": 446.5,
+          "max": 644.7
+        },
+        "peek_during_ladder": {
+          "n": 560,
+          "p50": 1.5,
+          "p95": 29.7,
+          "p99": 137.7,
+          "max": 222.4
+        },
+        "ladder": {
+          "n": 561,
+          "p50": 2793.5,
+          "p95": 3618.4,
+          "p99": 3679.1,
+          "max": 3697
+        },
+        "ladder_during_ladder": {
+          "n": 561,
+          "p50": 2793.5,
+          "p95": 3618.4,
+          "p99": 3679.1,
+          "max": 3697
+        },
+        "health_during_ladder": {
+          "n": 463,
+          "p50": 0.4,
+          "p95": 0.8,
+          "p99": 1,
+          "max": 5.6
+        },
+        "load_during_ladder": {
+          "n": 1389,
+          "p50": 1.5,
+          "p95": 2.6,
+          "p99": 3.5,
+          "max": 15.9
+        },
+        "transaction_wait": {
+          "n": 561,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.1,
+          "max": 9.6
+        },
+        "transaction_held": {
+          "n": 561,
+          "p50": 3.1,
+          "p95": 5.2,
+          "p99": 8.1,
+          "max": 16.8
+        }
+      },
+      "statuses": {
+        "200": 5624
+      },
+      "rejections": {},
+      "cupMatches": 895,
+      "eventLoopP99Ms": 23.8
+    }
+  ],
+  "errors": []
+}

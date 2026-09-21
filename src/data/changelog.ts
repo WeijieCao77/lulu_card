@@ -26,6 +26,13 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-09-21', title: '内测试玩规则', changes: [
+    { kind: '调整', text: '新账号开局获得 100,000 金币，已有账号余额不重置。' },
+    { kind: '调整', text: '内测交易市场取消注册天数、抽卡次数门槛及一口价等待，拍卖按原倒计时结算。' },
+    { kind: '调整', text: '内测暂不开放手机号绑定与手机号登录，请保存账号 ID。' },
+    { kind: '调整', text: '名人堂和收藏支持分页，减少同时加载的卡面；收藏可翻页查看全部卡牌。' },
+  ],
+}, {
   date: '2026-09-21', title: '峡谷典藏 · 四十张彩卡', changes: [
     { kind: '新增', text: '峡谷信箱支持给作者提建议、点赞和查看处理进度，奖励与交易通知单独查看；导航新增后台看板入口。' },
     { kind: '新增', text: '新增 Doublelift、Bjergsen、Perkz 等十一位知名选手，彩卡池共四十张；LCS 包可抽取北美彩卡。' },

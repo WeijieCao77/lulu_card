@@ -47,6 +47,8 @@ export default function WorldsGallery() {
   const { g } = useCards()
   const [filter, setFilter] = useState('全部')
   const [query, setQuery] = useState('')
+  const [page, setPage] = useState(0)
+  useEffect(() => setPage(0), [filter, query])
   const [open, setOpen] = useState<PlayerCard | null>(null)
   const owned = LEGEND_CARDS.filter(c => g.cards[c.id]).length
   const ig = (c: PlayerCard) => c.legend?.year === 2018 && c.clubTag === 'IG'
@@ -55,6 +57,8 @@ export default function WorldsGallery() {
   const filtered = LEGEND_CARDS.filter(matches)
   const cards = filtered.filter(c => `${c.ign} ${c.realName} ${c.clubTag} ${c.legend?.short}`.toLowerCase().includes(query.trim().toLowerCase())).sort((a,b) => priority(a) - priority(b))
   const feature = LEGEND_CARDS.find(c => filter === 'S8 IG' ? ig(c) && c.ign === 'TheShy' : filter === 'MSI' ? c.legend?.competition === 'MSI' && c.legend.year === 2026 : filter === '知名选手' ? c.legend?.collection === 'hall-of-fame' : c.id === 'worlds-2024-faker') ?? LEGEND_CARDS[0]
+  const pageCount = Math.max(1, Math.ceil(cards.length / 12))
+  const safePage = Math.min(page, pageCount - 1)
   const total = LEGEND_CARDS.length
   return <section className="worlds-gallery">
     <header className={`worlds-hero ${filter === 'S8 IG' ? 'ig-hero' : ''}`}>
@@ -69,7 +73,7 @@ export default function WorldsGallery() {
       <div className="worlds-toggle">{['全部','知名选手','S赛历届','S8 IG','MSI','LCK','LPL','LEC','LCS','已拥有'].map(f => <button key={f} className={`sm ${filter === f ? 'primary' : 'ghost'}`} aria-pressed={filter === f} onClick={() => { setFilter(f); setQuery('') }}>{f}</button>)}</div>
       <label className="worlds-search">搜索选手<input value={query} onChange={e => setQuery(e.target.value)} placeholder="搜索选手、战队或称号" /></label>
     </div>
-    <div className="worlds-grid">{cards.map(c => <article key={c.id} className="worlds-item">
+    <div className="worlds-grid">{cards.slice(safePage * 12, (safePage + 1) * 12).map(c => <article key={c.id} className="worlds-item">
       <CardFace card={c} size="lg" onClick={() => setOpen(c)} />
       <div className="worlds-item-label"><strong>{legendEdition(c.legend!)} · {c.ign}</strong><span>{g.cards[c.id] ? '已收藏 ✦' : '尚未收藏'}</span></div>
     </article>)}</div>
@@ -78,6 +82,7 @@ export default function WorldsGallery() {
     <p className="worlds-note">S3 为 Faker「初代王朝」冠军纪念卡，当届没有官方 MVP；S4—S6 标注赛事 MVP，S7—S15 标注决赛 MVP。<br />
       IG 新增五张冠军纪念卡，与已有 Ning FMVP 卡组成六人收藏；MSI 共 11 张，2015 为赛事 MVP，2020 停办，其余为决赛 MVP。<br />
       试训包、选拔包、十连包及 LPL / LCK / LEC / LCS 包可出彩卡，共享彩卡保底：累计 1200 抽未出后，下一抽必出；其他赛区包、教练包和位置包不出本系列彩卡。收齐基础全图鉴可领取彩卡包。完整概率见右下角“概率”。</p>
+    {pageCount > 1 && <nav className="row" aria-label="名人堂分页" style={{ justifyContent: 'center', gap: 16, marginTop: 20 }}><button disabled={safePage === 0} onClick={() => setPage(safePage - 1)}>上一页</button><span>{safePage + 1} / {pageCount}</span><button disabled={safePage + 1 === pageCount} onClick={() => setPage(safePage + 1)}>下一页</button></nav>}
     {open && <Detail card={open} close={() => setOpen(null)} />}
   </section>
 }

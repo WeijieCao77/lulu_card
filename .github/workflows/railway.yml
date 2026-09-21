@@ -24,3 +24,4 @@ jobs:
       - run: npx tsx scripts/check_mailbox.ts
       - run: node scripts/check_admin_entry.mjs
       - run: node scripts/check_admin_metrics.mjs
+      - run: npx tsx scripts/check_demo_market.ts

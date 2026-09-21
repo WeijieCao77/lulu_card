@@ -221,6 +221,7 @@ export interface ShelfPage {
    *  many — what the filter menus are built from, so they cascade over the
    *  whole market rather than over the page you happen to be looking at */
   pool?: [string, number][]
+  protectSec?: number
   hours?: number; step?: number; snipe?: number; buyoutMin?: number; now?: number; page?: number
 }
 

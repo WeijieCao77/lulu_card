@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useCards } from './ctx'
 import CardFace, { Flag, natName } from '../Card'
 import { Panel } from '../common'
@@ -43,6 +43,8 @@ export default function Collection() {
     ? ALL_CARDS.filter((c) => !g.cards[c.id])
     : mine.map((x) => x.card)), [missing, mine, g.cards, version])
 
+  const [page, setPage] = useState(0)
+  useEffect(() => setPage(0), [q, filter, missing, dupesOnly, bulk])
   const rows = useMemo(() => {
     const text = q.trim().toLowerCase()
     const match = (c: Card) => {
@@ -59,6 +61,9 @@ export default function Collection() {
       .filter(({ card, owned }) => (!dupesOnly || owned.dupes > 0) && (!bulk || owned.dupes > 0)
         && match(card) && matchesFilter(card, filter))
   }, [mine, pool, filter, dupesOnly, q, missing, bulk])
+
+  const pageCount = Math.max(1, Math.ceil(rows.length / 48))
+  const safePage = Math.min(page, pageCount - 1)
 
   // What each sweep would take, and what the hand-picked ones would. The same
   // function the server runs, so the number on the button is the number.
@@ -268,11 +273,12 @@ export default function Collection() {
           </div>
         )}
 
+        {pageCount > 1 && <nav className="row" aria-label="收藏分页" style={{ justifyContent: 'center', gap: 16, marginBottom: 12 }}><button disabled={safePage === 0} onClick={() => setPage(safePage - 1)}>上一页</button><span>{safePage + 1} / {pageCount}</span><button disabled={safePage + 1 === pageCount} onClick={() => setPage(safePage + 1)}>下一页</button></nav>}
         {rows.length === 0 ? (
           <p className="empty">{bulk ? '没有可分解的重复卡。' : '没有符合条件的卡。'}</p>
         ) : (
           <div className="cm-grid">
-            {rows.slice(0, 240).map(({ card, owned: o, rating }) => (
+            {rows.slice(safePage * 48, (safePage + 1) * 48).map(({ card, owned: o, rating }) => (
               <CardFace
                 key={card.id}
                 card={card}
@@ -288,8 +294,8 @@ export default function Collection() {
             ))}
           </div>
         )}
-        {rows.length > 240 && (
-          <p className="tiny faint" style={{ marginTop: 10 }}>只显示前 240 张，可搜索缩小范围。</p>
+        {rows.length > 48 && (
+          <p className="tiny faint" style={{ marginTop: 10 }}>共 {rows.length} 张，每页 48 张，可翻页或搜索。</p>
         )}
       </Panel>
 

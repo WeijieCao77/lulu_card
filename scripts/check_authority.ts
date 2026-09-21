@@ -137,8 +137,11 @@ console.log('\n开包：')
   check('十连包买不到', !r.ok, r.why)
   r = await act(A, 'open', { kind: 'elite', payWith: 'coins' })
   check('花 2400 买一个选拔包', r.ok && (await stored(A)).coins === STARTER_COINS - 2400)
+  // Exercise insufficient funds independently of the active release's starter reward.
+  await sql`update card_accounts set state = jsonb_set(state, '{coins}', '600') where id_hash = ${hashOf(A)}`
   r = await act(A, 'open', { kind: 'elite', payWith: 'coins' })
-  check('剩 600 买不起第二个', !r.ok && (await stored(A)).coins === STARTER_COINS - 2400, r.why)
+  check('余额 600 买不起选拔包', !r.ok && (await stored(A)).coins === 600, r.why)
+  await sql`update card_accounts set state = jsonb_set(state, '{coins}', ${String(STARTER_COINS - 2400)}::jsonb) where id_hash = ${hashOf(A)}`
   r = await act(A, 'open', { kind: 'scout', payWith: 'pack' }, { coins: 1_000_000, seed: 7, packs: { scout: 99 } })
   check('随请求带来的金币和包不算', r.ok && (await stored(A)).packs.scout === 1 && (await stored(A)).coins === STARTER_COINS - 2400)
   r = await act(A, 'open', { kind: 'nope', payWith: 'pack' })

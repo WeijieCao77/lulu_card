@@ -55,6 +55,11 @@ try {
   const overview = await fetch(base + '/api/admin/overview?days=7', { headers: auth })
   assert.equal(overview.status, 200)
   assert.equal((await overview.json()).today.active_visitors, 0)
+  for (const action of ['send', 'bind', 'login']) {
+    const response = await fetch(base + '/api/card/phone/' + action, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
+    assert.equal(response.status, 403)
+    assert.equal((await response.json()).disabled, true, 'Demo must not send SMS or accept phone credentials')
+  }
   const id = 'VM-2222-2222-2222-2222-2222'
   const account = await post('/api/card/claim', { id, name: '信箱集成测试' })
   assert(account.ok)

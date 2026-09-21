@@ -1,3 +1,4 @@
+import { STARTER_COINS } from '../src/engine/gacha'
 /**
  * The card account endpoints, against a real Postgres.
  *
@@ -78,14 +79,14 @@ const state = { version: 1, id: ID, coins: 999_999, cards: {}, daily: { claimed:
 let r = await call('/api/card/claim', { id: ID, name: '点点', state })
 check('claim creates the account', r.code === 200 && r.body.ok === true, `code ${r.code}`)
 check('...built by the server, not from what was sent',
-  (r.body.state as { coins: number }).coins === 3000, `coins ${(r.body.state as { coins: number })?.coins}`)
+  (r.body.state as { coins: number }).coins === STARTER_COINS, `coins ${(r.body.state as { coins: number })?.coins}`)
 
 r = await call('/api/card/claim', { id: ID, name: 'someone else', state: { ...state, coins: 9 } })
 check('a second claim on the same id is refused, not an overwrite',
   r.code === 409 && r.body.taken === true, `code ${r.code}`)
 
 r = await call('/api/card/load', { id: ID })
-check('load returns the account', r.body.ok === true && (r.body.state as { coins: number }).coins === 3000)
+check('load returns the account', r.body.ok === true && (r.body.state as { coins: number }).coins === STARTER_COINS)
 check('load carries the server date', typeof r.body.today === 'string' && r.body.today === serverDay())
 
 // baseRev travels with every save: a client that has read the row says which
@@ -93,12 +94,12 @@ check('load carries the server date', typeof r.body.today === 'string' && r.body
 r = await call('/api/card/save', { id: ID, baseRev: 1, name: '点点改', state: { ...state, coins: 4200 } })
 check('save bumps the revision', r.body.ok === true && r.body.rev === 2, `rev ${r.body.rev}`)
 check('...and the reply carries the account as the server holds it',
-  (r.body.state as { coins: number; name: string })?.coins === 3000 && (r.body.state as { name: string })?.name === '点点改')
+  (r.body.state as { coins: number; name: string })?.coins === STARTER_COINS && (r.body.state as { name: string })?.name === '点点改')
 
 r = await call('/api/card/load', { id: 'vm abcd efgh jkmn pqrs tvwx' })
 check('a sloppily typed id still finds the account',
   r.body.ok === true && (r.body.state as { name: string }).name === '点点改')
-check('the coins the save claimed never landed', (r.body.state as { coins: number }).coins === 3000)
+check('the coins the save claimed never landed', (r.body.state as { coins: number }).coins === STARTER_COINS)
 
 r = await call('/api/card/load', { id: 'VM-1111-1111-1111-1111-1111' })
 check('an unknown id is a miss, not an error', r.code === 200 && r.body.missing === true)
@@ -129,7 +130,7 @@ r = await call('/api/card/save', { id: ID, baseRev: 2, state: { daily: { claimed
 check('a future check-in is accepted as a save', r.body.ok === true, `code ${r.code}`)
 r = await call('/api/card/load', { id: ID })
 check('...and did not land', (r.body.state as { daily: { claimed: string | null } }).daily.claimed === null)
-check('the coins are still the server\'s', (r.body.state as { coins: number }).coins === 3000)
+check('the coins are still the server\'s', (r.body.state as { coins: number }).coins === STARTER_COINS)
 
 // ---- two devices ------------------------------------------------------
 //
@@ -205,7 +206,7 @@ check('after resyncing, the same client can save again', resync.body.ok === true
   check('存档正常接受', back.body.ok === true, `code ${back.code}`)
   const now = (await call('/api/card/load', { id: P })).body.state as { pulls: number; coins: number; cards: object; ladder: { wins: number } }
   check('抽数、卡、战绩、金币全都还是服务器的',
-    now.pulls === 0 && Object.keys(now.cards).length === 0 && now.ladder.wins === 0 && now.coins === 3000,
+    now.pulls === 0 && Object.keys(now.cards).length === 0 && now.ladder.wins === 0 && now.coins === STARTER_COINS,
     JSON.stringify({ pulls: now.pulls, coins: now.coins, wins: now.ladder.wins }))
 }
 
@@ -303,16 +304,16 @@ const hashOf = (id: string) => createHash('sha256').update(id).digest('hex')
       nameOf(open.body)[0] === '公开赛第一', nameOf(open.body).join(' > '))
 
     const silver = await call('/api/card/top', { league: 'silver' }, 'lb2')
-    check('银卡赛榜按银卡赛的分排',
-      nameOf(silver.body)[0] === '银卡赛第一', nameOf(silver.body).join(' > '))
-    check('没打过银卡赛的不占位置',
-      !nameOf(silver.body).includes('只打公开赛'), nameOf(silver.body).join(' > '))
+    check('旧银卡赛参数归入统一天梯',
+      JSON.stringify(silver.body.rows) === JSON.stringify(open.body.rows), nameOf(silver.body).join(' > '))
+    check('统一天梯保留只打公开赛的玩家',
+      nameOf(silver.body).includes('只打公开赛'), nameOf(silver.body).join(' > '))
     const rec = (silver.body.rows as { name: string; wins: number; losses: number }[])[0]
-    check('战绩也是那个天梯的', rec.wins === 5 && rec.losses === 1, `${rec.wins}-${rec.losses}`)
+    check('战绩来自统一天梯', rec.wins === 10 && rec.losses === 0, `${rec.wins}-${rec.losses}`)
 
     const hof = await call('/api/card/top', { league: 'hof' }, 'lb3')
-    check('没人打过的天梯是空榜，不是报错',
-      hof.code === 200 && (hof.body.rows as unknown[]).length === 0, JSON.stringify(hof.body).slice(0, 90))
+    check('旧名人堂参数也归入统一天梯',
+      hof.code === 200 && JSON.stringify(hof.body.rows) === JSON.stringify(open.body.rows), JSON.stringify(hof.body).slice(0, 90))
 
     // the name goes into a jsonb path, so it may only ever be one of ours
     const junk = await call('/api/card/top', { league: "open'--" }, 'lb4')

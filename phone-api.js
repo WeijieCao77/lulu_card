@@ -1,3 +1,4 @@
+import { RELEASE_POLICY } from './release-policy.js'
 /**
  * A phone number behind every card account.
  *
@@ -390,6 +391,9 @@ export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, ha
 
   return {
     async route(req, res, path, bucket, url) {
+      if (!RELEASE_POLICY.phoneEnabled && ['/api/card/phone/send', '/api/card/phone/bind', '/api/card/phone/login'].includes(path)) {
+        json(res, 403, { ok: false, disabled: true, why: '内测期间暂不开放手机号功能，请使用账号 ID 登录。' }); return true
+      }
       if (path === '/api/card/phone/send') { if (req.method !== 'POST') { json(res, 405, { ok: false }); return true } await sendCode(req, res, bucket); return true }
       if (path === '/api/card/phone/bind') { if (req.method !== 'POST') { json(res, 405, { ok: false }); return true } await bind(req, res, bucket); return true }
       if (path === '/api/card/phone/login') { if (req.method !== 'POST') { json(res, 405, { ok: false }); return true } await login(req, res, bucket); return true }
@@ -402,7 +406,7 @@ export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, ha
 }
 
 /** Is this account allowed to play? On unless PHONE_GATE=0 (the test harnesses). */
-export const phoneGate = () => process.env.PHONE_GATE !== '0'
+export const phoneGate = () => RELEASE_POLICY.phoneEnabled && process.env.PHONE_GATE !== '0'
 
 export async function isVerified(sql, idHash) {
   if (!phoneGate()) return true

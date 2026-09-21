@@ -56,6 +56,10 @@ Railway 官方文档：[GitHub / Node 部署](https://docs.railway.com/guides/ex
 
 ## 卡池与玩法
 
+当前内测：新账号开局 100,000 金币；市场无注册天数/抽卡次数门槛，一口价立即成交，拍卖倒计时保留。临时规则集中在 `release-policy.js`；已有账号余额不会重置。正式发布前必须完成 [临时修改台账及上线检查](docs/production-release-checklist.md)，恢复正式配置并执行 `npm run check:production`。
+
+内测暂不开放手机号绑定及手机号登录，前端隐藏入口、服务端拒绝相关请求；请保存账号 ID。名人堂每页 12 张、收藏每页 48 张，减少同时渲染的卡面。[性能检查记录](docs/performance-audit-2026-09-21.md) 包含本地 100/200 人测试及已知限制，尚不能据此保证 Railway 百人同时比赛流畅。
+
 677 位普通选手、114 张教练卡，覆盖 LPL、LCK、LEC、LCS、LCP、CBLOL。40 张彩卡包含 S3–S15 年度卡、S8 IG 六人冠军阵容（Ning FMVP 不重复）、MSI MVP 与 11 张知名选手卡。全部可在名人堂查看。
 
 知名选手：Doublelift、Bjergsen、Perkz、Rekkles、Sneaky、Jensen、Xmithie、Aphromoo、Froggen、Diamondprox、sOAZ。已有 MVP 版本的人不再重复制作生涯版。S3 Faker 为冠军纪念卡；S4–S6 标注赛事 MVP，之后为决赛 MVP。
