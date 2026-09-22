@@ -7,12 +7,12 @@ DeepSeek 实际调用 deepseek-v4-pro 两轮。首稿分布估计与算法不符
 | 游戏区 | 原金/银/铜 | 现行金/银/铜 | 源金/银阈值 |
 |---|---|---|---|
 | LPL | 80/22/1 | 25/35/43 | 78/75 |
-| LCK | 52/54/16 | 23/42/57 | 80/70 |
+| LCK | 52/54/16 | 35/30/57 | 77/70 |
 | WEST | 31/169/252 | 42/125/285 | 71/66 |
 
-总计 163/245/269 → 90/202/385。固定赛区源锚点三段线性：铜[min,S−1]→[50,71]；银[S,G−1]→[72,83]；金[G,max]→[84,top]。LPL min63/max85/top90，LCK min55/max93/top90，WEST min50/max77/top88。属性每项严格加新旧评分差并截断到1—99。世界原数据不动，ID/等级/数量/头像不动；40彩卡均有独立person，不受影响。
+总计 163/245/269 → 102/190/385。固定赛区源锚点三段线性：铜[min,S−1]→[50,71]；银[S,G−1]→[72,83]；金[G,max]→[84,top]。LPL min63/max85/top90，LCK min55/max93/top90，WEST min50/max77/top88。属性每项严格加新旧评分差并截断到1—99。世界原数据不动，ID/等级/数量/头像不动；40彩卡均有独立person，不受影响。
 
-代价：不同游戏赛区的同源分可能映射不同；同一区同源不拆、全局同显示分必同色。Faker旧85来自源76，现行79银；源模型给他运营95，但对中单运营总评权重仅3%。不因历史名气单独保金。主线程已核准该游戏内分档口径。
+代价：不同游戏赛区的同源分可能映射不同；同一区同源不拆、全局同显示分必同色。Faker旧85来自源76，现行83银（上一版79银）；源模型给他运营95，但对中单运营总评权重仅3%。不因历史名气单独保金。主线程已核准该游戏内分档口径。
 
 ## 全部金卡（旧→新）
 
@@ -20,9 +20,9 @@ DeepSeek 实际调用 deepseek-v4-pro 两轮。首稿分布估计与算法不符
 
 Flandre: 86→85, Tarzan: 87→87, Shanks: 86→84, Hope: 86→85, Kael: 86→86, Bin: 87→87, Knight: 88→90, Viper: 87→88, ON: 86→84, Angel: 86→86, Leave: 86→84, Rookie: 86→85, GALA: 86→85, Croco: 86→84, 1xn: 86→86, Zhuo: 86→85, 369: 86→85, Creme: 86→86, Zika: 86→84, Jiejie: 86→84, Elk: 87→87, Meiko: 86→85, Ale: 86→84, Tian: 86→84, JackeyLove: 86→84
 
-### LCK (23)
+### LCK (35)
 
-Kellin: 87→85, DuDu: 87→85, Lucid: 86→84, ShowMaker: 86→84, Kiin: 88→87, Canyon: 87→85, Chovy: 90→90, Ruler: 88→87, Duro: 87→84, Teddy: 86→84, Zeus: 87→86, Kanavi: 87→84, Zeka: 87→86, Gumayusi: 87→84, Delight: 87→86, Cuzz: 87→85, Bdd: 87→85, Aiming: 88→87, Kingen: 86→84, Doran: 86→84, Oner: 86→84, Peyz: 88→86, Keria: 88→86
+Raptor: 85→84, VicLa: 85→84, Diable: 86→85, Kellin: 87→86, DuDu: 87→86, Pyosik: 85→84, Clozer: 86→84, Peter: 86→84, Lucid: 86→85, ShowMaker: 86→85, Smash: 86→85, Career: 85→84, Kiin: 88→88, Canyon: 87→86, Chovy: 90→90, Ruler: 88→87, Duro: 87→86, GIDEON: 85→84, Teddy: 86→85, Zeus: 87→87, Kanavi: 87→86, Zeka: 87→87, Gumayusi: 87→86, Delight: 87→87, Cuzz: 87→86, Bdd: 87→86, Aiming: 88→87, Ucal: 86→84, Kingen: 86→85, Scout: 86→84, Doran: 86→85, Oner: 86→85, Peyz: 88→87, Keria: 88→87, BeryL: 86→84
 
 ### WEST (42)
 
@@ -39,9 +39,9 @@ Hena: 84→85, Razork: 82→84, Upset: 85→87, BrokenBlade: 82→84, SkewMond: 
 
 ## 竞技场与资产联动
 
-- 普通卡世界数据原样保留，cardRarity.ts 在卡构造阶段转换；CARD_BALANCE_VERSION=4 仅标识该数据方案，胜率曲线 BALANCE_VERSION=3 不变。
+- 普通卡世界数据原样保留，cardRarity.ts 在卡构造阶段转换；CARD_BALANCE_VERSION=5 仅标识该数据方案，胜率曲线 BALANCE_VERSION=3 不变。
 - 101 个电脑对手复用玩家 seatSquad 完整流程，含新卡属性、默契、教练与数值压缩；原队员 ID、实际临时替补标签不变。arenaOpponentRating 返回当前真实5卡与教练的 squadPaper，用于比赛、奖励与界面；替补相近强度选择也使用新普通卡平均值。
-- 杯赛 CUP_TEAMS 自动读取新卡数据。天梯分段使用新 CUP_TEAMS 评分排序，各段实际 arenaOpponentRating 均分单调上升：约67.16/72.98/77.15/81.08/86.04/90.94。
+- 杯赛 CUP_TEAMS 自动读取新卡数据。天梯分段使用新 CUP_TEAMS 评分排序，各段实际 arenaOpponentRating 均分通过单调上升回归。
 - 资产保存的 ID、level、dupes 不改。旧市场交换稀有度与全服杯报名快照由主线程/交易模块负责迁移；本子任务不改数据库。
 
 ## 已完成验证
@@ -52,3 +52,22 @@ Hena: 84→85, Razork: 82→84, Upset: 85→87, BrokenBlade: 82→84, SkewMond: 
 - scripts/check_arena_rosters.ts：101队实际开赛、97杯赛、旧UP pending和旧cup修复通过。
 - scripts/check_worlds_cards.ts：40彩卡真实身份/图片/保证抽取/区域池/彩卡阵容实赛，更新已合并的欧美包以及新金银铜数量后通过。
 - npm run typecheck 通过。
+
+
+## v5：LCK 金卡比例高于 LPL（2026-09-22）
+
+用户明确要求普通金卡比例为 LCK > LPL > 欧美。DeepSeek 实际完成候选统计脚本及最小规则/测试补丁，审核者执行并修正脚本铜段50起点与冗余测试写法。DeepSeek纯文案把源76的Faker错误列入升金名单且估算人数错误，该文字已拒绝；以下仅使用真实数据脚本结果。
+
+| LCK源金线 | 金/银/铜 | 金占比 |
+|---|---|---|
+| 80（v4） | 23/42/57 | 18.85% |
+| 79 | 25/40/57 | 20.49% |
+| 78 | 30/35/57 | 24.59% |
+| 77（采用） | 35/30/57 | 28.69% |
+| 76 | 40/25/57 | 32.79% |
+
+现行金比例：LCK 35/122=28.69% > LPL 25/103=24.27% > 欧美42/452=9.29%。77方案留出明确差距，银卡30、铜卡57仍覆盖五位置。只改LCK源金线80→77以及卡数据版本4→5；共同显示金84、银72不动。LCK金/银段随原有插值公式重算属性，铜段不动；Faker源76为83银，无姓名特判。
+
+新增12金：Diable、Smash（83→85）；Clozer、Peter、Ucal、Scout、BeryL（82→84）；Raptor、VicLa、Pyosik、Career、GIDEON（81→84）。
+
+验证：从HEAD隔离导入旧cards/cardRarity构造并逐字段deepEqual，555张非LCK普通卡、114教练、40彩卡、57张LCK铜卡全部原样（包括undefined属性）。新版与既有彩卡fixture完整快照相等；精确总数/锚点/三大区金比例不等式/五位置各色池通过；101队玩家/电脑同尺度、旧UP与杯赛回归，以及typecheck通过。没有改原始世界数据、资产ID、等级、重复数、头像或任何照片。

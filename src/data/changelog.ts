@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-09-22', title: '赛区金卡比例校准', changes: [
+    { kind: '调整', text: '普通选手金卡占各自赛区卡池的比例调整为 LCK 28.7% > LPL 24.3% > 欧美 9.3%。LCK 现有 35 金、30 银、57 铜；卡包出金概率与保底规则不变。' },
+  ],
+}, {
   date: '2026-09-22', title: '三大区收集', changes: [
     { kind: '调整', text: '游戏赛区归类为 LPL、LCK、欧美三大区。欧美包含 LEC、LCS、LCP、CBLOL 四个联赛；人物资料仍保留所属的真实联赛。' },
     { kind: '调整', text: '原 LEC、LCS、LCP、CBLOL 四个地区的卡包合并为欧美包，原库存合并保留；周选优惠赛区同步改为三大区。' },

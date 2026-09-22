@@ -3,7 +3,7 @@ import { gameRegionOf } from './gameRegions'
 import { clamp } from './rng'
 
 /** Card data version; independent of the match win-probability curve. */
-export const CARD_BALANCE_VERSION = 4
+export const CARD_BALANCE_VERSION = 5
 
 interface RegionParams {
   min: number
@@ -15,7 +15,7 @@ interface RegionParams {
 
 const REGION_PARAMS: Record<string, RegionParams> = {
   LPL: { min: 63, silver: 75, gold: 78, max: 85, top: 90 },
-  LCK: { min: 55, silver: 70, gold: 80, max: 93, top: 90 },
+  LCK: { min: 55, silver: 70, gold: 77, max: 93, top: 90 },
   WEST: { min: 50, silver: 66, gold: 71, max: 77, top: 88 }
 }
 

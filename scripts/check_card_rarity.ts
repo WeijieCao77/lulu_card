@@ -94,7 +94,7 @@ function testPlayerCountsAndCardStats() {
 
   const expectedCounts: Record<string, Record<string, number>> = {
     'LPL': { 'gold': 25, 'silver': 35, 'bronze': 43 },
-    'LCK': { 'gold': 23, 'silver': 42, 'bronze': 57 },
+    'LCK': { 'gold': 35, 'silver': 30, 'bronze': 57 },
     'WEST': { 'gold': 42, 'silver': 125, 'bronze': 285 }
   };
   for (const [group, rarityMap] of byGroup) {
@@ -176,7 +176,7 @@ function testRoleCoverageForAllSlots() {
 function testOrdinaryRatingAnchors() {
   const anchors: Record<string, Record<number, number>> = {
     'LPL': { 75: 72, 76: 78, 77: 83, 78: 84, 85: 90 },
-    'LCK': { 70: 72, 76: 79, 79: 83, 80: 84, 93: 90 },
+    'LCK': { 70: 72, 76: 83, 77: 84, 79: 85, 80: 85, 93: 90 },
     'WEST': { 66: 72, 70: 83, 71: 84, 75: 87, 77: 88 }
   };
   for (const [region, anchorMap] of Object.entries(anchors)) {
@@ -237,8 +237,19 @@ function testGlobalRarityColorConsistency() {
 assert.equal(BASE_PLAYER_CARDS.length, 677);
 assert.equal(LEGEND_CARDS.length, 40);
 assert.equal(COACH_CARDS.length, 114);
-assert.equal(CARD_BALANCE_VERSION, 4);
+assert.equal(CARD_BALANCE_VERSION, 5);
 testPlayerCountsAndCardStats();
+
+const goldFraction = (group: string): number => {
+  const cards = BASE_PLAYER_CARDS.filter(c => gameRegionOf(c.region) === group);
+  assert.ok(cards.length > 0, `Missing region ${group}`);
+  return cards.filter(c => c.rarity === 'gold').length / cards.length;
+};
+const lckFraction = goldFraction('LCK');
+const lplFraction = goldFraction('LPL');
+const westFraction = goldFraction('WEST');
+assert.ok(lckFraction > lplFraction && lplFraction > westFraction, 'Gold fraction must be LCK > LPL > WEST');
+assert.ok(lckFraction >= 0.28 && lckFraction <= 0.32, 'LCK gold fraction must be 28–32%');
 testCoachCountsAndConsistency();
 testLegendCardsSnapshot();
 testRoleCoverageForAllSlots();
