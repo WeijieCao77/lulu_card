@@ -86,6 +86,7 @@
 @keyframes ritual-dust{0%{transform:translateY(0);opacity:0}15%{opacity:.5}80%{opacity:.25}100%{transform:translate(20px,-90vh);opacity:0}}
 @keyframes ritual-deal{from{opacity:0;transform:translateY(65px) scale(.48) rotate(var(--fan))}to{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
 @keyframes ritual-card-spark{0%{opacity:0;transform:rotate(var(--angle)) translateY(0)}10%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateY(calc(var(--card-width)*.86))}}
+.ritual-flip-sparks i{opacity:0;animation-fill-mode:backwards}
 @keyframes ritual-detail-in{from{opacity:0;transform:translateY(10px) scale(.94)}to{opacity:1;transform:none}}
 @media(max-width:650px){.ritual-stage{padding:max(20px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}.ritual-header h2{font-size:19px}.ritual-eyebrow{font-size:9px;letter-spacing:.18em}.ritual-spread{gap:12px}.ritual-board{margin:4px 0}.ritual-actions button{padding:10px 16px;min-width:110px}.ritual-open-hint b{font-size:14px}.ritual-scenery:before{inset:7px}.ritual-footer{gap:9px}.ritual-detail-card{gap:12px}}
 @media(pointer:coarse){.ritual-touch-hint{display:inline}.ritual-desktop-hint{display:none}.ritual-stage button{min-height:44px}.ritual-stage .ritual-card,.ritual-stage .ritual-pack{min-height:0}}

@@ -34,8 +34,10 @@ const assetBase = (): string =>
 export default function Challenge() {
   const { g, today, act, toast } = useCards()
   const [query, setQuery] = useState('')
+  const formRef = useRef<HTMLFormElement | null>(null)
   const composing = useRef(false)
   const [busy, setBusy] = useState(false)
+  const [searchFocused, setSearchFocused] = useState(false)
 
   const { kind, answer, state, rows } = challengeToday(g, today)
   const choices = useMemo(() => allChoices(), [])
@@ -154,6 +156,17 @@ export default function Challenge() {
     return () => { observer?.disconnect(); window.removeEventListener('resize', schedule); cancelAnimationFrame(raf) }
   }, [pic, zoom, cells, shift])
 
+  const searchActive = !state.done && (searchFocused || matches.length > 0)
+
+  useEffect(() => {
+    if (!searchActive) return
+    const form = formRef.current
+    const host = form?.closest('.cardmode.rift-ui')
+    if (!host) return
+    host.setAttribute('data-challenge-search-active', '')
+    return () => host.removeAttribute('data-challenge-search-active')
+  }, [searchActive])
+
   const inputDisabled = !!block || stale || busy || !ready
   const guessDisabled = inputDisabled || !matches[0]
 
@@ -228,7 +241,12 @@ export default function Challenge() {
         {/* picker */}
         {!state.done && (
           <form
+            ref={formRef}
             style={{ position: 'relative', marginBottom: 10 }}
+            onFocusCapture={() => setSearchFocused(true)}
+            onBlurCapture={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setSearchFocused(false)
+            }}
             onSubmit={(e) => { e.preventDefault(); if (!composing.current && matches[0] && !guessDisabled) void submit(matches[0].id) }}
           >
             <div className="row" style={{ gap: 8 }}>

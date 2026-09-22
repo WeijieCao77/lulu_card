@@ -19,6 +19,7 @@ import { LEGENDS } from './legends'
 // player was on it — scripts/build_coached.py, off vlr.gg careers and Liquipedia tenure
 import COACHED_JSON from '../data/coached.json'
 import type { Legend } from './legends'
+import { decodeDisplayName } from './displayText'
 import { clamp } from './rng'
 import type { Attrs, Coach, Region, Role } from './types'
 
@@ -138,7 +139,7 @@ function buildPlayerCards(): PlayerCard[] {
       ign: p.ign,
       // the scrape fills in what world.json was missing: 178 players carried no
       // nationality at all, and a card with no flag on it is half a card
-      realName: d?.real ?? p.realName ?? null,
+      realName: decodeDisplayName(d?.real ?? p.realName ?? null),
       nat: (d?.nat ?? p.nat) || null,
       face: d?.img ? faceUrl(d.img, d.v) : null,
       region: p.region as Region,
@@ -168,7 +169,7 @@ function buildCoachCards(): CoachCard[] {
     const d = coachDossier(c.name)
     out.push({
       kind: 'coach', id: `c:${c.name}`, name: c.name,
-      realName: d?.real ?? null,
+      realName: decodeDisplayName(d?.real ?? null),
       nat: d?.nat ?? null,
       face: d?.img ? faceUrl(d.img, d.v) : null,
       clubId: t.id, clubTag: t.tag, region: t.region as Region,
@@ -186,7 +187,7 @@ function buildCoachCards(): CoachCard[] {
     const d = coachDossier(a.name)
     out.push({
       kind: 'coach', id: `c:${a.name}`, name: a.name,
-      realName: d?.real ?? null,
+      realName: decodeDisplayName(d?.real ?? null),
       nat: d?.nat ?? null,
       face: d?.img ? faceUrl(d.img, d.v) : null,
       clubId: club?.id ?? null, clubTag: club?.tag ?? a.from,
@@ -303,7 +304,7 @@ function buildLegendCoachCards(): CoachCard[] {
     const club = teamById.get(l.clubId)
     out.push({
       kind: 'coach', id: l.id, legend: l, name: l.ign,
-      realName: d?.real ?? null,
+      realName: decodeDisplayName(d?.real ?? null),
       nat: d?.nat ?? null,
       face: photo ? faceUrl(photo.img, photo.v) : (d?.img ? faceUrl(d.img, d.v) : null),
       clubId: l.clubId, clubTag: l.clubTag,

@@ -701,5 +701,9 @@
   {
     "runtime": "tsx",
     "file": "scripts/check_arena_rosters.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_display_text.ts"
   }
 ]
