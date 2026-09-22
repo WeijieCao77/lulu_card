@@ -215,8 +215,9 @@ export async function act(
     return { ok: false, why: j.why ?? (status === 429 ? '操作太快了，等一下。' : '没成功，等会儿再试。') }
   }
   // The outcome is unknown when nothing came back, or the server broke on the
-  // way (5xx): the write may or may not have landed. 429 and 4xx are answers.
-  const unknown = (got: { status: number; j: ActReply | null } | null) => !got || got.status >= 500 || (!got.j && got.status !== 429)
+  // way (5xx), or a 2xx did not carry a decidable `ok`. 429 and 4xx are answers.
+  const unknown = (got: { status: number; j: ActReply | null } | null) =>
+    !got || got.status >= 500 || (got.status < 300 && (!got.j || typeof got.j.ok !== 'boolean'))
   let got: { status: number; j: ActReply | null } | null = null
   for (let attempt = 0; attempt < 2; attempt++) {
     if (attempt) await new Promise((r) => setTimeout(r, ACT_RETRY_MS))
@@ -224,7 +225,8 @@ export async function act(
     if (!unknown(got)) break
   }
   if (!got) return { ok: false, why: '连不上服务器，结果还不确定，请刷新后核对。', offline: true, unknown: true }
-  if (!got.j) return { ok: false, why: `服务器没有回应（${got.status}）`, unknown: got.status >= 500 }
+  if (unknown(got)) return { ok: false, why: `服务器没有明确回应（${got.status}）`, unknown: true }
+  if (!got.j) return { ok: false, why: got.status === 429 ? '操作太快了，等一下。' : `请求被拒绝（${got.status}），请稍后再试。` }
   return settle(got.status, got.j)
 }
 

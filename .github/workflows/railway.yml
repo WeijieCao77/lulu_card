@@ -30,3 +30,10 @@ jobs:
       - run: npx tsx scripts/check_lol_match.ts
       - run: npx tsx scripts/check_lol_modes.ts
       - run: npx tsx scripts/check_cup_registration.ts
+
+      - run: npx tsx scripts/check_mythic_floor.ts
+      - run: npx tsx scripts/check_weekly_series.ts
+      - run: npx tsx scripts/check_account_unknown.ts
+      - run: npx tsx scripts/check_minigame.ts
+      - run: npx tsx scripts/check_minigame_rewards.ts
+      - run: npx tsx scripts/check_arena_rosters.ts

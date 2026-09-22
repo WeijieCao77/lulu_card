@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react'
 import { useCards } from './ctx'
 import { Panel } from '../common'
-import { HARD_PITY, SOFT_PITY, MYTHIC_FLOOR } from '../../engine/gacha'
+import { HARD_PITY, SOFT_PITY, MYTHIC_FLOOR, MYTHIC_PACK_NAMES } from '../../engine/gacha'
 
 /**
  * The two guarantees, as two bars.
@@ -23,6 +23,7 @@ export default function Pity() {
   const gold = Math.min(HARD_PITY, g.pity ?? 0)
   const soft = gold >= SOFT_PITY
   const mythic = Math.min(MYTHIC_FLOOR, g.mythicDry ?? 0)
+  const mythicRemaining = Math.max(1, MYTHIC_FLOOR - mythic)
   return (
     <Panel
       title="保底进度"
@@ -30,9 +31,9 @@ export default function Pity() {
     >
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px 28px' }}>
         <div style={row}>
-          <div style={head}><b>彩卡</b><span className="tiny muted">{mythic}/{MYTHIC_FLOOR} · {mythic >= MYTHIC_FLOOR ? '下一抽必出' : `再 ${MYTHIC_FLOOR - mythic} 抽未出后触发保底`}</span></div>
+          <div style={head}><b>彩卡</b><span className="tiny muted">{mythic}/{MYTHIC_FLOOR} · {mythic >= MYTHIC_FLOOR ? '下一张必出' : `最多再 ${mythicRemaining} 张必出`}</span></div>
           <div className="bar" style={track}><i style={{ width: `${mythic / MYTHIC_FLOOR * 100}%`, background: 'linear-gradient(90deg,#86d9e9,#b89be3,#edc98d)' }} /></div>
-          <span className="tiny faint">仅试训、选拔、十连、LPL / LCK / LEC / LCS 包累计此进度。</span>
+          <span className="tiny faint">仅{ MYTHIC_PACK_NAMES }累计此进度。</span>
         </div>
         <div style={row}>
           <div style={head}>

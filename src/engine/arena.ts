@@ -8,7 +8,7 @@ import { NEUTRAL } from './bonds'
 import { Rng, clamp } from './rng'
 import { BALANCE_VERSION, cardStrengths } from './balance'
 import {
-  cardById, chemistry, coachLiftAt, growthOf, isCoachCard, isPlayerCard, personOf, SQUAD_SLOTS, squadPaper,
+  BASE_PLAYER_CARDS, cardById, chemistry, coachLiftAt, growthOf, isCoachCard, isPlayerCard, personOf, SQUAD_SLOTS, squadPaper,
 } from './cards'
 import type { Squad } from './cards'
 import type { PlayerCard } from './cards'
@@ -148,8 +148,96 @@ export function buildArena(
   const state = createNewGame(WORLD_TEAMS[0].id, '卡组', seed, undefined, { cards: true })
   const cardOf: Record<string, string> = {}
   seatSquad(state, squad, level, ARENA_TEAM, 'A', cardOf)
+  ensureArenaOpponents(state)
   state.myTeam = ARENA_TEAM
   return { state, cardOf }
+}
+
+// DeepSeek implementation; reviewed maximum local-role matching and stand-in ranking.
+const arenaOpponentCache = (() => {
+  const m = new Map<string, PlayerCard[]>()
+  for (const team of WORLD_TEAMS) {
+    const own = BASE_PLAYER_CARDS
+      .filter(c => c.clubId === team.id && team.roster.includes(c.playerId))
+      .sort((a, b) => a.id.localeCompare(b.id))
+    const used = new Set<string>()
+    const slots: (PlayerCard | undefined)[] = new Array(SQUAD_SLOTS.length).fill(undefined)
+
+    // Augmenting paths maximize native role coverage before borrowing anyone.
+    const assigned = new Map<string, number>()
+    const fitOwn = (slotIndex: number, seen: Set<string>): boolean => {
+      for (const card of own) {
+        const person = personOf(card)
+        if (seen.has(person) || !card.roles.includes(SQUAD_SLOTS[slotIndex])) continue
+        seen.add(person)
+        const previous = assigned.get(person)
+        if (previous === undefined || fitOwn(previous, seen)) {
+          slots[slotIndex] = card
+          assigned.set(person, slotIndex)
+          return true
+        }
+      }
+      return false
+    }
+    SQUAD_SLOTS.forEach((_, index) => fitOwn(index, new Set()))
+    for (const card of slots) if (card) used.add(personOf(card))
+
+    for (let i = 0; i < SQUAD_SLOTS.length; i++) {
+      if (slots[i] !== undefined) continue
+      const slot = SQUAD_SLOTS[i]
+      const candidates = BASE_PLAYER_CARDS
+        .filter(c => c.roles.includes(slot) && !used.has(personOf(c)))
+        .sort((a, b) => {
+          const priority = (c: PlayerCard) => (c.region === team.region ? 0 : 2) + (c.clubId == null ? 0 : 1)
+          const ta = priority(a), tb = priority(b)
+          if (ta !== tb) return ta - tb
+          const da = Math.abs(a.rating - team.rating)
+          const db = Math.abs(b.rating - team.rating)
+          if (da !== db) return da - db
+          return a.id.localeCompare(b.id)
+        })
+      const pick = candidates[0]
+      if (!pick) throw new Error(`无法为 ${team.id} 的 ${slot} 位找到替补`)
+      slots[i] = pick
+      used.add(personOf(pick))
+    }
+    m.set(team.id, slots as PlayerCard[])
+  }
+  return m
+})()
+
+function ensureArenaOpponents(state: GameState): void {
+  for (const team of WORLD_TEAMS) {
+    const cards = arenaOpponentCache.get(team.id)
+    if (!cards || cards.length !== 5) throw new Error(`${team.id} 缺少五名竞技场选手`)
+    const st = state.teams[team.id]
+    if (!st) continue
+    const starters: string[] = []
+    for (let i = 0; i < 5; i++) {
+      const card = cards[i]
+      const isOwn = card.clubId === team.id && team.roster.includes(card.playerId)
+      let pid: string
+      if (isOwn && state.players[card.playerId]) {
+        pid = card.playerId
+      } else {
+        const donor = state.players[card.playerId]
+        if (!donor) throw new Error(`${team.id} 替补 ${card.playerId} 不在世界中`)
+        pid = `AS:${team.id}:${card.playerId}`
+        if (!state.players[pid]) {
+          const clone = structuredClone(donor)
+          clone.id = pid
+          clone.teamId = team.id
+          clone.ign = `${clone.ign}（临时替补）`
+          clone.role = SQUAD_SLOTS[i]
+          state.players[pid] = clone
+        }
+      }
+      state.players[pid].role = SQUAD_SLOTS[i]
+      starters.push(pid)
+    }
+    st.starters = starters
+    st.roster = [...new Set([...starters, ...(st.roster ?? [])])]
+  }
 }
 
 /** The other side of a player-versus-player tie. */

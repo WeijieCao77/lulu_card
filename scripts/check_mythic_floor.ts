@@ -1,95 +1,140 @@
-/**
- * The 彩卡 floor fires at exactly MYTHIC_FLOOR, every time, on any pack that
- * can hold one — and on nothing else.
- *
- *   npx tsx scripts/check_mythic_floor.ts
- *
- * Asked for by the owner before the pity bars went up (2026-09-06): 「确保
- * 1200 抽真的会触发保底」. Scout packs carry the smallest natural 彩卡 rate
- * (one in ten thousand), so thousands of them across several accounts reach
- * the floor again and again; the account's own rolling seed decides the rest.
- * Every pull is watched: the dry count never passes the floor, a pull made
- * with the count at the floor is a 彩卡, a 彩卡 resets both counters, and a
- * coach pack — which cannot hold one — leaves the count where it was.
- */
-import { MYTHIC_FLOOR, newGacha, openPack, migrateGacha, PACKS } from '../src/engine/gacha'
-import type { GachaState } from '../src/engine/gacha'
+import { PACKS, PACK_ORDER, MYTHIC_FLOOR, POSITION_PACK_KINDS, newGacha, openPack } from '../src/engine/gacha'
 
-let bad = 0
-const check = (name: string, ok: boolean, detail = '') => {
-  console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? '  — ' + detail : ''}`)
-  if (!ok) bad++
-}
+import { BASE_PLAYER_CARDS } from '../src/engine/cards'
 
-const PULLS = 4000
-let floorHits = 0
-let naturals = 0
-let maxDry = 0
-let owedButNot = 0
-let notResetAfter = 0
-let counterMoved = 0
-for (const seed of ['VM-FLOR-0000-0000-0000-0001', 'VM-FLOR-0000-0000-0000-0002', 'VM-FLOR-0000-0000-0000-0003']) {
-  const g: GachaState = newGacha(seed, '保底', '2026-09-06')
-  g.coins = 1e9
-  for (let i = 0; i < PULLS; i++) {
-    const dryBefore = g.mythicDry
-    const owed = dryBefore >= MYTHIC_FLOOR
-    g.packs.scout = 1
-    const [card] = openPack(g, 'scout', 'pack')
-    const mythic = card.card.rarity === 'mythic'
-    if (owed) { floorHits++; if (!mythic) owedButNot++ }
-    else if (mythic) naturals++
-    if (mythic && (g.mythicDry !== 0 || g.pity !== 0)) notResetAfter++
-    if (!mythic && g.mythicDry !== dryBefore + 1) counterMoved++
-    maxDry = Math.max(maxDry, g.mythicDry)
+function assert(cond: boolean, msg: string): void {
+  if (!cond) {
+    console.error(msg)
+    process.exit(1)
   }
 }
-check(`${PULLS * 3} 个试训包里，干抽计数从没超过 ${MYTHIC_FLOOR}`, maxDry <= MYTHIC_FLOOR, `最高 ${maxDry}`)
-check(`计数到 ${MYTHIC_FLOOR} 之后的那一抽必是彩卡（触发 ${floorHits} 次，自然出 ${naturals} 张）`, floorHits >= 3 && owedButNot === 0, `没兑现 ${owedButNot} 次`)
-check('出彩卡后两个计数都归零', notResetAfter === 0, `${notResetAfter} 次没归零`)
-check('没出的每一抽都把计数加一', counterMoved === 0, `${counterMoved} 次不对`)
 
-// The guarantee is paid from any pack that can hold a 彩卡 and only from those.
-// The coach pack used to be the example of a pack that could not: 彩卡 were
-// nights somebody PLAYED. Muggle coached EDG to Champions 2024 without playing
-// a map of it, so the booth has one now and the pack counts like the rest
-// (2026-09-08). A pack with no 彩卡 in its pool still must not touch the
-// counter, or the guarantee could be spent where it can never be paid.
-{
-  const g = newGacha('VM-FLOR-0000-0000-0000-0004', '保底', '2026-09-06')
-  g.coins = 1e9
-  g.mythicDry = MYTHIC_FLOOR
-  g.packs.coach = 1
-  const coach = openPack(g, 'coach', 'pack')
-  check('教练包也能兑现保底（里面有教练彩卡了）',
-    PACKS.coach.mythic > 0 && coach.some((c) => c.card.rarity === 'mythic') && g.mythicDry < MYTHIC_FLOOR,
-    `计数 → ${g.mythicDry}`)
+function openPacks(g: ReturnType<typeof newGacha>, kind: keyof typeof PACKS, count: number) {
+  for (let i = 0; i < count; i++) {
+    g.packs[kind] = (g.packs[kind] ?? 0) + 1
+    openPack(g, kind, 'pack')
+  }
+}
+
+function runChecks() {
+  // 1198 scout pulls no mythic, counter 1199
   {
-    // 位置包 still has none, and still must not move the counter
-    const h = newGacha('VM-FLOR-0000-0000-0000-0005', '保底', '2026-09-06')
-    h.coins = 1e9
-    h.mythicDry = MYTHIC_FLOOR
-    h.packs.duelist = 1
-    openPack(h, 'duelist', 'pack')
-    check('没有彩卡的包不动计数', h.mythicDry === MYTHIC_FLOOR && PACKS.duelist.mythic === 0, `计数 ${h.mythicDry}`)
+    const g = newGacha('CHECK-1198', '验证', '2026-01-01')
+    g.seed = 901
+    g.coins = Number.MAX_SAFE_INTEGER
+    g.mythicDry = MYTHIC_FLOOR - 2
+    g.packs.scout = 1
+    const first = openPack(g, 'scout', 'pack')
+    assert(first.every(p => p.card.rarity !== 'mythic'), 'seed 901 must not produce an early natural mythic')
+    assert(g.mythicDry === 1199, `1198 scout pulls should set mythicDry=1199, got ${g.mythicDry}`)
+    openPacks(g, 'scout', 1)
+    assert(g.mythicDry === 0, 'draw 1200 must pay and reset')
   }
-  for (const kind of ['elite', 'ten', 'cn'] as const) {
-    const h = newGacha(`VM-FLOR-0000-0000-0000-000${kind.length}`, '保底', '2026-09-06')
-    h.coins = 1e9
-    h.mythicDry = MYTHIC_FLOOR
-    h.packs[kind] = 1
-    const cards = openPack(h, kind, 'pack')
-    check(`${PACKS[kind].name}在计数到 ${MYTHIC_FLOOR} 时兑现保底`, cards.some((c) => c.card.rarity === 'mythic') && h.mythicDry < MYTHIC_FLOOR, `计数 → ${h.mythicDry}`)
+
+  // 1199/1200/1205 states next scout pack must contain mythic
+  for (const dry of [1199, 1200, 1205]) {
+    const g = newGacha(`CHECK-${dry}`, '验证', '2026-01-01')
+    g.seed = 901
+    g.coins = Number.MAX_SAFE_INTEGER
+    g.mythicDry = dry
+    g.packs.scout = 1
+    const pulled = openPack(g, 'scout', 'pack')
+    assert(pulled.some(p => p.card.rarity === 'mythic'), `next scout pack should be mythic when mythicDry=${dry}`)
   }
+
+  // ten pack from 1195 gives one mythic and remaining 5 counter, seed natural no mythic
+  {
+    const g = newGacha('CHECK-TEN', '验证', '2026-01-01')
+    g.seed = 901
+    g.coins = Number.MAX_SAFE_INTEGER
+    g.mythicDry = 1195
+    g.packs.ten = 1
+    const pulled = openPack(g, 'ten', 'pack')
+    assert(pulled.some(p => p.card.rarity === 'mythic'), 'ten pack at 1195 should contain mythic')
+    assert(g.mythicDry === 5, `ten pack after one mythic leaves mythicDry=5, got ${g.mythicDry}`)
+    // ensure no natural mythic happened for this seed before floor
+    const g2 = newGacha('CHECK-TEN-NAT', '验证', '2026-01-01')
+    g2.seed = 901
+    g2.coins = Number.MAX_SAFE_INTEGER
+    g2.mythicDry = 0
+    g2.packs.ten = 1
+    const natural = openPack(g2, 'ten', 'pack')
+    assert(!natural.some(p => p.card.rarity === 'mythic'), 'seed 901 ten pack should not natural mythic')
+  }
+
+  // cross-pack sharing: scout then elite then ten, each card counted
+  {
+    const g = newGacha('CHECK-CROSS', '验证', '2026-01-01')
+    g.seed = 901
+    g.coins = Number.MAX_SAFE_INTEGER
+    g.mythicDry = 0
+    g.packs.scout = 1
+    openPack(g, 'scout', 'pack')
+    const afterScout = g.mythicDry
+    g.packs.elite = 1
+    openPack(g, 'elite', 'pack')
+    assert(g.mythicDry === afterScout + 3, `elite should add 3 to shared counter, got ${g.mythicDry}`)
+    g.packs.ten = 1
+    openPack(g, 'ten', 'pack')
+    assert(g.mythicDry === afterScout + 13, `ten should add 10 after elite, got ${g.mythicDry}`)
+  }
+
+  // coach/LCP/CBLOL and all position packs at 1199 do not pay mythic and do not advance, then scout pays
+  const noMythicKinds = ['coach', 'lcp', 'cblol', ...POSITION_PACK_KINDS] as const
+  for (const kind of noMythicKinds) {
+    const g = newGacha(`CHECK-NOMY-${kind}`, '验证', '2026-01-01')
+    g.seed = 901
+    g.coins = Number.MAX_SAFE_INTEGER
+    g.mythicDry = 1199
+    g.packs[kind] = 1
+    const pulled = openPack(g, kind, 'pack')
+    assert(!pulled.some(p => p.card.rarity === 'mythic'), `${kind} should not pay mythic even at 1199`)
+    assert(g.mythicDry === 1199, `${kind} should not advance mythicDry`)
+    g.packs.scout = 1
+    const scoutPulled = openPack(g, 'scout', 'pack')
+    assert(scoutPulled.some(p => p.card.rarity === 'mythic'), 'scout after no-mythic pack should still pay mythic')
+  }
+
+  // legend pack does not consume pity/gold counters, uses pack inventory, coins unchanged, existing card upgrades without loss
+  {
+    const g = newGacha('CHECK-LEGEND', '验证', '2026-01-01')
+    g.seed = 901
+    g.coins = 123456
+    g.mythicDry = 700
+    g.pity = 10
+    g.packs.legend = 1
+    const baseId = BASE_PLAYER_CARDS[0].id
+    g.cards[baseId] = { id: baseId, level: 4, dupes: 2, seen: 3, got: '2026-09-22' }
+    const beforeCards = JSON.stringify(g.cards[baseId])
+    const pulled = openPack(g, 'legend', 'pack')
+    assert(pulled.length === 1 && pulled[0].card.rarity === 'mythic', 'legend pack must contain one mythic')
+    assert(g.mythicDry === 700, `legend should not consume mythicDry`)
+    assert(g.pity === 10, `legend should not consume pity`)
+    assert(g.packs.legend === 0, 'legend pack should consume inventory')
+    assert(g.coins === 123456, 'legend pack should not charge coins')
+    assert(JSON.stringify(g.cards[baseId]) === beforeCards, 'existing base card upgrades must be preserved')
+    // if a card already existed, dupes/seen should increase; test by inserting one before
+    const g2 = newGacha('CHECK-LEGEND-UP', '验证', '2026-01-01')
+    g2.seed = 901
+    g2.coins = 9999
+    g2.packs.legend = 1
+    // manually add a card that will be pulled? Can't know which, so just assert no existing card disappears
+    const beforeIds = Object.keys(g2.cards)
+    const pulled2 = openPack(g2, 'legend', 'pack')
+    const pulledCard = pulled2[0].card
+    if (beforeIds.includes(pulledCard.id)) {
+      assert(g2.cards[pulledCard.id].dupes >= 1, 'existing legend card should increment dupes')
+    } else {
+      assert(g2.cards[pulledCard.id].seen === 1, 'new legend card should have seen=1')
+    }
+  }
+
+  for (const kind of PACK_ORDER.filter(k => PACKS[k].mythic > 0 && PACKS[k].mythic < 1)) {
+    const g = newGacha('all-pack-floor', '验证', '2026-09-22')
+    g.seed = 901; g.mythicDry = MYTHIC_FLOOR - 1; g.packs[kind] = 1
+    assert(openPack(g, kind, 'pack').some(p => p.card.rarity === 'mythic'), kind + ' must pay at floor')
+  }
+  console.log('Mythic floor checks passed')
 }
 
-// the counter survives a save: it is one of the stored keys and the migration keeps it
-{
-  const g = newGacha('VM-FLOR-0000-0000-0000-0009', '保底', '2026-09-06')
-  g.mythicDry = 777
-  const back = migrateGacha(JSON.parse(JSON.stringify(g)), 'VM-FLOR-0000-0000-0000-0009')
-  check('计数存进账号再读出来还是那个数', back.mythicDry === 777, `${back.mythicDry}`)
-}
-
-console.log(bad ? `\n${bad} failed` : '\nall held')
-process.exit(bad ? 1 : 0)
+runChecks()

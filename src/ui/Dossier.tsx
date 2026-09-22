@@ -1,233 +1,246 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { WORLD_PLAYERS } from '../engine/world'
 import { WORLD_TEAMS } from '../engine/teams'
-import { DOSSIER, dossierOf, honoursOf, loadRecords, placementsOf, recordsNow, tenuresOf, titleCount } from '../engine/dossier'
-import type { Records } from '../engine/dossier'
-import { BASE_PLAYER_CARDS, LEGEND_CARDS, RARITY_CN } from '../engine/cards'
-import type { PlayerCard } from '../engine/cards'
+import { coachDossier, dossierOf, titleCount } from '../engine/dossier'
+import { BASE_PLAYER_CARDS, COACH_CARDS, LEGEND_CARDS, RARITY_CN } from '../engine/cards'
+import type { CoachCard, PlayerCard } from '../engine/cards'
 import CardFace, { Flag, natName } from './Card'
-import { AgentIcon, Panel, Bar, moneyFull } from './common'
-import { agentCn } from '../engine/content'
+import { Panel, Bar } from './common'
 import { ATTR_CN, ATTR_KEYS, REGION_CN, REGIONS } from '../engine/types'
 import type { Region, Role } from '../engine/types'
+import raw from '../data/world.json'
+import './dossier.css'
+
+type Source = { id: string; sourceOverall: number; ageEstimated?: boolean; ratingEstimated?: boolean; latestTournament?: string; recentStats?: Record<string, unknown> }
+const source = new Map((raw.players as unknown as Source[]).map(p => [p.id, p]))
 
 const ROLES: Role[] = ['上单', '打野', '中单', '下路', '辅助']
+const playerCardOf = new Map(BASE_PLAYER_CARDS.map((c) => [c.playerId, c]))
+const coachCardOf = new Map(COACH_CARDS.map((c) => [c.id, c]))
+const teamOf = new Map(WORLD_TEAMS.map((t) => [t.id, t]))
 
-// the ordinary card, never the彩卡 version: this screen lists people
-const cardOf = new Map(BASE_PLAYER_CARDS.map((c) => [c.playerId, c]))
-
-/** playerId -> the彩卡 that exist of him, for the ★ in the list. */
 const legendsOf = new Map<string, typeof LEGEND_CARDS>()
 for (const c of LEGEND_CARDS) {
   const list = legendsOf.get(c.playerId) ?? []
   list.push(c)
   legendsOf.set(c.playerId, list)
 }
-const teamOf = new Map(WORLD_TEAMS.map((t) => [t.id, t]))
 
-/**
- * The reference half of the game: everyone in it, and what they have actually
- * done.
- *
- * Every line on this screen is a real record — clubs and dates from
- * Liquipedia, placements and prize money from vlr.gg. Nothing is generated,
- * and where a source has nothing the screen says so rather than filling it in.
- */
+type Page = 'players' | 'coaches'
+
 export default function Dossier({
   playerId, onOpen, onClose,
 }: {
-  /** when set, the screen opens straight onto this player */
   playerId?: string | null
   onOpen: (id: string | null) => void
-  /** shown as a back button when the dossier was reached from somewhere else */
   onClose?: () => void
 }) {
+  const [page, setPage] = useState<Page>('players')
+  const [coachId, setCoachId] = useState<string | null>(null)
   const [q, setQ] = useState('')
   const [region, setRegion] = useState<Region | 'all'>('all')
-  // a position, or 'igl' — the in-game callers, whatever they play
-  const [role, setRole] = useState<Role | 'all' | 'igl'>('all')
-  const [sort, setSort] = useState<'rating' | 'honours' | 'winnings' | 'age'>('rating')
+  const [rarity, setRarity] = useState<string>('all')
+  const [role, setRole] = useState<Role | 'all'>('all')
+  const [playerPage, setPlayerPage] = useState(0)
+  const [coachPage, setCoachPage] = useState(0)
+  const PER_PAGE = 50
 
-  const rows = useMemo(() => {
+  const playerRows = useMemo(() => {
     const text = q.trim().toLowerCase()
     return BASE_PLAYER_CARDS
       .filter((c) => {
         if (region !== 'all' && c.region !== region) return false
-        if (role === 'igl') { if (!c.isIgl) return false }
-        else if (role !== 'all' && !c.roles.includes(role)) return false
+        if (rarity !== 'all' && c.rarity !== rarity) return false
+        if (role !== 'all' && !c.roles.includes(role)) return false
         if (!text) return true
-        const hay = `${c.ign} ${c.realName ?? ''} ${c.clubTag ?? ''} ${natName(c.nat)} ${c.nat ?? ''}`
+        const team = c.clubId ? teamOf.get(c.clubId)?.name ?? '' : ''
+        const hay = `${c.id} ${c.playerId} ${c.ign} ${c.realName ?? ''} ${c.clubTag ?? ''} ${team} ${natName(c.nat)} ${c.nat ?? ''}`
         return hay.toLowerCase().includes(text)
       })
-      .map((c) => ({
-        card: c,
-        // counted at build time so the list can sort by silverware without
-        // pulling in the 850KB records file
-        titles: titleCount(c.playerId),
-        winnings: dossierOf(c.playerId)?.win ?? 0,
-      }))
-      .sort((a, b) => {
-        if (sort === 'honours') return b.titles - a.titles || b.card.rating - a.card.rating
-        if (sort === 'winnings') return b.winnings - a.winnings || b.card.rating - a.card.rating
-        if (sort === 'age') return a.card.age - b.card.age || b.card.rating - a.card.rating
-        return b.card.rating - a.card.rating
-      })
-  }, [q, region, role, sort])
+      .sort((a, b) => b.rating - a.rating)
+  }, [q, region, rarity, role])
 
-  const open = playerId ? cardOf.get(playerId) : null
-  if (open) return <Detail card={open} onBack={() => onOpen(null)} />
+  const coachRows = useMemo(() => {
+    const text = q.trim().toLowerCase()
+    return COACH_CARDS
+      .filter((c) => {
+        if (region !== 'all' && c.region !== region) return false
+        if (rarity !== 'all' && c.rarity !== rarity) return false
+        if (!text) return true
+        const team = c.clubId ? teamOf.get(c.clubId)?.name ?? '' : ''
+        const hay = `${c.id} ${c.name} ${c.realName ?? ''} ${c.clubTag ?? ''} ${team} ${natName(c.nat)} ${c.nat ?? ''}`
+        return hay.toLowerCase().includes(text)
+      })
+      .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
+  }, [q, region, rarity])
+
+  const open = playerId ? playerCardOf.get(playerId) : null
+  if (open) return <PlayerDetail card={open} onBack={() => { if (onClose) onClose(); else onOpen(null) }} />
+  if (coachId) {
+    const coach = coachCardOf.get(coachId)
+    if (coach) return <CoachDetail card={coach} onBack={() => setCoachId(null)} />
+  }
+
+  const rows = page === 'players' ? playerRows : coachRows
+  const currentPage = page === 'players' ? playerPage : coachPage
+  const setCurrentPage = page === 'players' ? setPlayerPage : setCoachPage
+  const totalPages = Math.max(1, Math.ceil(rows.length / PER_PAGE))
+  const safePage = Math.min(currentPage, totalPages - 1)
+  const pageRows = rows.slice(safePage * PER_PAGE, (safePage + 1) * PER_PAGE)
+
+  const clearFilters = () => {
+    setQ('')
+    setRegion('all')
+    setRarity('all')
+    setRole('all')
+    setPlayerPage(0)
+    setCoachPage(0)
+  }
 
   return (
     <Panel
-      title="选手资料库"
+      title="选手与教练图鉴"
+      className="dossier-library"
       actions={
         <div className="row" style={{ gap: 8 }}>
-          <span className="tiny muted mono">{rows.length} / {WORLD_PLAYERS.length}</span>
+          <span className="tiny muted mono">
+            {rows.length} / {page === 'players' ? BASE_PLAYER_CARDS.length : COACH_CARDS.length} 条
+          </span>
           {onClose && <button className="ghost sm" onClick={onClose}>返回</button>}
         </div>
       }
     >
       <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-        {DOSSIER.meta.players} 名选手的照片、国籍、生涯队伍、荣誉与赛事记录。
-        名次、奖金与 {DOSSIER.meta.photos + (DOSSIER.meta.histPhotos ?? 0) - (DOSSIER.meta.lpPhotos ?? 0) - (DOSSIER.meta.hjPhotos ?? 0) - (DOSSIER.meta.spikePhotos ?? 0)} 张照片取自 vlr.gg；
-        队伍履历与另外 {DOSSIER.meta.lpPhotos ?? 0} 张照片取自 Liquipedia（图片依 CC BY-SA 3.0 使用）；
-        {DOSSIER.meta.hjPhotos ?? 0} 张照片取自号角 HOJO（haojiao.cc）{(DOSSIER.meta.spikePhotos ?? 0) > 0 ? `，${DOSSIER.meta.spikePhotos} 张取自 THESPIKE.GG` : ''}。
-        共收录 {DOSSIER.meta.events} 项赛事。
+        选手与教练资料库。能力评分为游戏内评分，非官方评价。生涯数据暂未收录。
       </p>
 
       <div className="row wrap" style={{ gap: 8, margin: '12px 0' }}>
+        <div className="seg">
+          <button className={page === 'players' ? 'on' : ''} onClick={() => setPage('players')}>选手</button>
+          <button className={page === 'coaches' ? 'on' : ''} onClick={() => setPage('coaches')}>教练</button>
+        </div>
         <input
+          aria-label="搜索选手或教练"
           style={{ width: 200 }}
           placeholder="搜 ID / 真名 / 战队 / 国籍"
           value={q}
-          onChange={(e) => setQ(e.target.value)}
+          onChange={(e) => { setQ(e.target.value); setPlayerPage(0); setCoachPage(0) }}
         />
-        <select style={{ width: 'auto' }} value={region} onChange={(e) => setRegion(e.target.value as Region | 'all')}>
+        <select aria-label="图鉴赛区" style={{ width: 'auto' }} value={region} onChange={(e) => { setRegion(e.target.value as Region | 'all'); setPlayerPage(0); setCoachPage(0) }}>
           <option value="all">全部赛区</option>
           {REGIONS.map((r) => <option key={r} value={r}>{REGION_CN[r]}</option>)}
         </select>
-        <select style={{ width: 'auto' }} value={role} onChange={(e) => setRole(e.target.value as Role | 'all' | 'igl')}>
-          <option value="all">全部位置</option>
-          {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
-          <option value="igl">指挥（IGL）</option>
+        <select aria-label="图鉴稀有度" style={{ width: 'auto' }} value={rarity} onChange={(e) => { setRarity(e.target.value); setPlayerPage(0); setCoachPage(0) }}>
+          <option value="all">全部稀有度</option>
+          {Object.entries(RARITY_CN).map(([key, label]) => <option key={key} value={key}>{label}</option>)}
         </select>
-        <div className="seg">
-          <button className={sort === 'rating' ? 'on' : ''} onClick={() => setSort('rating')}>能力</button>
-          <button className={sort === 'honours' ? 'on' : ''} onClick={() => setSort('honours')}>冠军</button>
-          <button className={sort === 'winnings' ? 'on' : ''} onClick={() => setSort('winnings')}>奖金</button>
-          <button className={sort === 'age' ? 'on' : ''} onClick={() => setSort('age')}>年龄</button>
-        </div>
+        {page === 'players' && (
+          <select aria-label="图鉴位置" style={{ width: 'auto' }} value={role} onChange={(e) => { setRole(e.target.value as Role | 'all'); setPlayerPage(0) }}>
+            <option value="all">全部位置</option>
+            {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
+          </select>
+        )}
+        <button className="sm" onClick={clearFilters}>清除筛选</button>
       </div>
 
-      <div className="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>选手</th>
-              <th>真名</th>
-              <th>国籍</th>
-              <th>战队</th>
-              <th>位置</th>
-              <th className="right">能力</th>
-              <th className="right">冠军</th>
-              <th className="right">奖金</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.slice(0, 300).map(({ card, titles, winnings }) => (
-              <tr key={card.id} style={{ cursor: 'pointer' }} onClick={() => onOpen(card.playerId)}>
-                <td>
-                  <b>{card.ign}</b>
-                  {legendsOf.has(card.playerId) && (
-                    <span
-                      className="cf-star"
-                      style={{ position: 'static', marginLeft: 5, fontSize: 11 }}
-                      title={legendsOf.get(card.playerId)!.map((l) => l.legend!.title).join('、')}
-                    >
-                      ★
-                    </span>
-                  )}
-                  {card.isIgl && <span className="tag t2" style={{ marginLeft: 5 }}>IGL</span>}
-                </td>
-                <td className="muted small">{card.realName ?? '—'}</td>
-                <td className="small"><Flag nat={card.nat} /> {natName(card.nat)}</td>
-                <td>{card.clubTag ?? <span className="faint">辅助</span>}</td>
-                <td className="small">{card.roles.join('/')}</td>
-                <td className="right mono">{card.rating}</td>
-                <td className="right mono">{titles || <span className="faint">—</span>}</td>
-                <td className="right mono small">{winnings ? moneyFull(winnings) : <span className="faint">—</span>}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {rows.length > 300 && <p className="tiny faint" style={{ marginTop: 10 }}>只显示前 300 人，搜索可缩小范围。</p>}
+      {rows.length > PER_PAGE && (
+        <div className="row wrap" style={{ gap: 8, marginBottom: 8, alignItems: 'center' }}>
+          <span className="tiny faint">第 {safePage + 1} / {totalPages} 页 · 共 {rows.length} 条</span>
+          <div className="seg dossier-pages">
+            <button className="sm" disabled={safePage <= 0} onClick={() => setCurrentPage(0)}>第一页</button>
+            <button className="sm" disabled={safePage <= 0} onClick={() => setCurrentPage(Math.max(0, safePage - 1))}>上一页</button>
+            <button className="sm" disabled={safePage >= totalPages - 1} onClick={() => setCurrentPage(Math.min(totalPages - 1, safePage + 1))}>下一页</button>
+            <button className="sm" disabled={safePage >= totalPages - 1} onClick={() => setCurrentPage(totalPages - 1)}>最后一页</button>
+          </div>
+        </div>
+      )}
+
+      {pageRows.length === 0 ? (
+        <p className="empty">没有匹配的记录。试试清除筛选。</p>
+      ) : (
+        <div className="dossier-list">
+          {page === 'players'
+            ? playerRows.slice(safePage * PER_PAGE, (safePage + 1) * PER_PAGE).map((card) => (
+                <button
+                  key={card.id}
+                  className="dossier-card"
+                  onClick={() => onOpen(card.playerId)}
+                >
+                  <div className="dossier-card-face"><CardFace card={card} size="sm" /></div>
+                  <div className="dossier-card-info">
+                    <div className="dossier-card-title">
+                      <b>{card.ign}</b>
+                      {legendsOf.has(card.playerId) && <span className="cf-star" style={{ position: 'static', marginLeft: 5 }}>★</span>}
+                    </div>
+                    <div className="tiny faint">{card.realName ?? '—'}</div>
+                    <div className="tiny"><Flag nat={card.nat} /> {natName(card.nat)} · {REGION_CN[card.region]}</div>
+                    <div className="tiny">{card.clubTag ?? '暂无战队'} · {card.roles.join('/')}</div>
+                    <div className="tiny mono">能力 {card.rating}</div>
+                    {source.get(card.playerId)?.ratingEstimated && <span className="tiny warn">暂定评分</span>}
+                  </div>
+                </button>
+              ))
+            : coachRows.slice(safePage * PER_PAGE, (safePage + 1) * PER_PAGE).map((card) => (
+                <button
+                  key={card.id}
+                  className="dossier-card"
+                  onClick={() => setCoachId(card.id)}
+                >
+                  <div className="dossier-card-face"><CardFace card={card} size="sm" /></div>
+                  <div className="dossier-card-info">
+                    <div className="dossier-card-title">
+                      <b>{card.name}</b>
+                      {card.spec && <span className="tag t3" style={{ marginLeft: 5 }}>{card.spec}</span>}
+                    </div>
+                    <div className="tiny faint">{card.realName ?? '—'}</div>
+                    <div className="tiny"><Flag nat={card.nat} /> {natName(card.nat)}{card.region ? ` · ${REGION_CN[card.region]}` : ''}</div>
+                    <div className="tiny">{card.clubTag ?? '暂无战队'}</div>
+                    <div className="tiny mono">能力 {card.rating ?? '—'} · 战术 {card.tactics ?? '—'} · 培养 {card.development ?? '—'} · 激励 {card.motivation ?? '—'}</div>
+                  </div>
+                </button>
+              ))}
+        </div>
+      )}
     </Panel>
   )
 }
 
-function Detail({ card, onBack }: { card: PlayerCard; onBack: () => void }) {
-  const d = dossierOf(card.playerId)
+function PlayerDetail({ card, onBack }: { card: PlayerCard; onBack: () => void }) {
   const player = WORLD_PLAYERS.find((p) => p.id === card.playerId)
   const club = card.clubId ? teamOf.get(card.clubId) : null
-
-  // The club history and the tournament list live in a file that is only
-  // fetched when somebody actually opens a dossier. Everything above the fold
-  // renders immediately; these two panels say they are loading.
-  const [records, setRecords] = useState<Records | null>(recordsNow)
-  useEffect(() => {
-    if (records) return
-    let alive = true
-    void loadRecords().then((r) => { if (alive) setRecords(r) })
-    return () => { alive = false }
-  }, [records])
-
-  const honours = records ? honoursOf(records, card.playerId) : []
-  const placements = records ? placementsOf(records, card.playerId) : []
-  const tenures = records ? tenuresOf(records, card.playerId) : []
-
-  const byYear = useMemo(() => {
-    const m = new Map<number, typeof placements>()
-    for (const p of placements) {
-      const y = p.year ?? 0
-      const list = m.get(y) ?? []
-      list.push(p)
-      m.set(y, list)
-    }
-    return [...m.entries()].sort((a, b) => b[0] - a[0])
-  }, [placements])
+  const s = source.get(card.playerId)
+  const d = dossierOf(card.playerId) as unknown as Record<string, unknown> | undefined
+  const dossierSource = d && typeof d === 'object' && 'source' in d && typeof (d as Record<string, unknown>).source === 'string'
+    ? String((d as Record<string, unknown>).source)
+    : null
+  const validSource = dossierSource && /^https?:\/\//.test(dossierSource) ? dossierSource : null
 
   return (
     <>
       <div className="row" style={{ marginBottom: 12 }}>
-        <button className="ghost sm" onClick={onBack}>← 返回资料库</button>
+        <button className="ghost sm" onClick={onBack}>← 返回图鉴</button>
       </div>
-
       <Panel title={card.ign}>
         <div className="dossier-head">
           <CardFace card={card} size="lg" />
-          <div style={{ flex: 1, minWidth: 250 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 20, fontWeight: 700 }}>{card.realName ?? card.ign}</div>
             <div className="small muted" style={{ marginTop: 6, lineHeight: 1.9 }}>
               <Flag nat={card.nat} /> {natName(card.nat)} · {REGION_CN[card.region]}
               <br />
-              {card.age} 岁
-              {player?.birth ? `（${player.birth}）` : player?.ageEstimated ? '（年龄为估算）' : ''}
+              {s?.ageEstimated ? '生日资料待补充' : `${card.age} 岁`}
+              {!s?.ageEstimated && player?.birth ? `（${player.birth}）` : ''}
               {' · '}
-              {club ? club.name : '辅助'}
+              {club ? club.name : '暂无战队'}
               <br />
-              {card.roles.join(' / ')}{card.isIgl && ' · 队内指挥'}
+              {card.roles.join(' / ')}
               {' · '}{RARITY_CN[card.rarity]} {card.rating}
             </div>
+            <div className="tiny muted" style={{ marginTop: 6 }}>
+              {s?.latestTournament ? `最近核对赛事：${s.latestTournament}` : '2026 赛季资料库'}
+            </div>
             {!!legendsOf.get(card.playerId)?.length && (
-              <div
-                className="small"
-                style={{
-                  marginTop: 10, padding: '8px 11px', borderRadius: 4, lineHeight: 1.7,
-                  background: 'rgba(180,120,255,.10)',
-                  border: '1px solid rgba(180,120,255,.35)',
-                }}
-              >
+              <div className="small" style={{ marginTop: 10, padding: '8px 11px', borderRadius: 4, lineHeight: 1.7, background: 'rgba(180,120,255,.10)', border: '1px solid rgba(180,120,255,.35)' }}>
                 <b>★ 彩卡</b>
                 {legendsOf.get(card.playerId)!.map((l) => (
                   <div key={l.id} className="tiny" style={{ marginTop: 3 }}>
@@ -238,28 +251,16 @@ function Detail({ card, onBack }: { card: PlayerCard; onBack: () => void }) {
               </div>
             )}
             <div className="row wrap" style={{ gap: 6, marginTop: 10 }}>
-              {titleCount(card.playerId) > 0 && (
-                <span className="trait" data-good="y">{titleCount(card.playerId)} 座冠军</span>
+              {titleCount(card.playerId) > 0 && <span className="trait" data-good="y">{titleCount(card.playerId)} 座冠军</span>}
+              {validSource ? (
+                <a className="trait" data-good="y" href={validSource} target="_blank" rel="noreferrer noopener">肖像来源 ↗</a>
+              ) : (
+                <span className="trait">来源暂未收录</span>
               )}
-              {!!d?.win && <span className="trait" data-good="y">生涯奖金 {moneyFull(d.win)}</span>}
-              {placements.length > 0 && <span className="trait">{placements.length} 项赛事记录</span>}
-              {tenures.length > 0 && <span className="trait">{tenures.length} 段队伍经历</span>}
             </div>
-            {d?.vlr && (
-              <a
-                className="tiny"
-                style={{ display: 'inline-block', marginTop: 10 }}
-                href={`https://www.vlr.gg/player/${d.vlr}/`}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                vlr.gg 资料 ↗
-              </a>
-            )}
           </div>
         </div>
       </Panel>
-
       <div className="grid c2" style={{ alignItems: 'start' }}>
         <Panel title="能力">
           {ATTR_KEYS.map((k) => (
@@ -269,105 +270,93 @@ function Detail({ card, onBack }: { card: PlayerCard; onBack: () => void }) {
               <b className="mono tiny" style={{ width: 20, textAlign: 'right' }}>{card.attrs[k]}</b>
             </div>
           ))}
-          {player?.vlr?.rating != null && (
-            <p className="tiny faint" style={{ marginTop: 12, marginBottom: 0, lineHeight: 1.7 }}>
-              按 vlr.gg 数据换算：Rating {player.vlr.rating}
-              {player.vlr.acs != null && ` · ACS ${player.vlr.acs}`}
-              {player.vlr.rounds ? ` · ${player.vlr.rounds} 回合` : ''}。
-            </p>
-          )}
-          {!!player?.agentPool?.length && (
-            <div style={{ marginTop: 12 }}>
-              <div className="tiny faint" style={{ marginBottom: 5 }}>真实英雄池</div>
-              <div className="row wrap" style={{ gap: 4 }}>
-                {player.agentPool.map((a) => (
-                  <span key={a} className="chiplet row" style={{ gap: 4, alignItems: 'center' }}>
-                    <AgentIcon name={a} size={16} />{agentCn(a)}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+          <p className={`small ${s?.ratingEstimated ? 'warn' : 'muted'}`} style={{ lineHeight: 1.8 }}>
+            {s?.ratingEstimated ? '暂定评分：新补录选手的样本不完整，暂按同赛区同位置基准估算，后续再校准。' : '能力评分为游戏内评分，非官方评价。生涯数据尚未收录。'}
+          </p>
         </Panel>
-
-        <Panel title="荣誉">
-          {!records ? (
-            <p className="empty">读取中…</p>
-          ) : honours.length === 0 ? (
-            <p className="empty">还没有拿过冠军。</p>
-          ) : (
-            <div className="grid" style={{ gap: 6 }}>
-              {honours.map((h, i) => (
-                <div key={i} className={`trophy${h.major ? ' major' : ''}`}>
-                  <span>{h.major ? '🏆' : '🥇'}</span>
-                  <span className="small">{h.event}</span>
-                  <span className="yr mono">{h.year ?? ''}</span>
+        <Panel title="荣誉"><p className="empty">生涯补录中</p></Panel>
+      </div>
+      {s?.recentStats && (
+        <Panel title="最近赛事统计">
+          <div className="grid c3">
+            {['GP','KDA','KP','DPM','CSPM','GD10','WPM','WCPM']
+              .filter(k => s.recentStats?.[k] !== undefined)
+              .map(k => (
+                <div className="stat" key={k}>
+                  <span className="tiny muted">{k}</span>
+                  <b>{String(s.recentStats![k])}</b>
                 </div>
               ))}
+          </div>
+        </Panel>
+      )}
+      <div className="grid c2" style={{ alignItems: 'start' }}>
+        <Panel title="生涯队伍"><p className="empty">尚未收录。</p></Panel>
+        <Panel title="赛事记录"><p className="empty">尚未收录。</p></Panel>
+      </div>
+    </>
+  )
+}
+
+function CoachDetail({ card, onBack }: { card: CoachCard; onBack: () => void }) {
+  const club = card.clubId ? teamOf.get(card.clubId) : null
+  const d = coachDossier(card.name) as unknown as Record<string, unknown> | undefined
+  const source = d && typeof d === 'object' && 'source' in d && typeof (d as Record<string, unknown>).source === 'string'
+    ? String((d as Record<string, unknown>).source)
+    : null
+  const validSource = source && /^https?:\/\//.test(source) ? source : null
+
+  return (
+    <>
+      <div className="row" style={{ marginBottom: 12 }}>
+        <button className="ghost sm" onClick={onBack}>← 返回图鉴</button>
+      </div>
+      <Panel title={card.name}>
+        <div className="dossier-head">
+          <CardFace card={card} size="lg" />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 20, fontWeight: 700 }}>{card.realName ?? card.name}</div>
+            <div className="small muted" style={{ marginTop: 6, lineHeight: 1.9 }}>
+              <Flag nat={card.nat} /> {natName(card.nat)}
+              {card.region ? ` · ${REGION_CN[card.region]}` : ''}
+              <br />
+              {club ? club.name : '暂无战队'}
+              {card.clubTag ? `（${card.clubTag}）` : ''}
+              <br />
+              {card.spec ? `团队身份：${card.spec}` : '团队身份未标注'}
+              {' · '}{RARITY_CN[card.rarity]} {card.rating ?? '—'}
             </div>
-          )}
+            {card.legend && (
+              <div className="small" style={{ marginTop: 10, padding: '8px 11px', borderRadius: 4, lineHeight: 1.7, background: 'rgba(180,120,255,.10)', border: '1px solid rgba(180,120,255,.35)' }}>
+                <b>★ 彩卡</b>
+                <div className="tiny" style={{ marginTop: 3 }}>{card.legend.title}</div>
+              </div>
+            )}
+            <div className="row wrap" style={{ gap: 6, marginTop: 10 }}>
+              {validSource ? (
+                <a className="trait" data-good="y" href={validSource} target="_blank" rel="noreferrer noopener">肖像来源 ↗</a>
+              ) : (
+                <span className="trait">来源暂未收录</span>
+              )}
+            </div>
+          </div>
+        </div>
+      </Panel>
+      <div className="grid c2" style={{ alignItems: 'start' }}>
+        <Panel title="战术">
+          <div className="tiny">战术能力：<b>{card.tactics ?? '—'}</b></div>
+          <p className="tiny faint" style={{ marginTop: 12, marginBottom: 0 }}>能力评分为游戏内评分，非官方评价。生涯数据尚未收录。</p>
+        </Panel>
+        <Panel title="培养">
+          <div className="tiny">培养能力：<b>{card.development ?? '—'}</b></div>
         </Panel>
       </div>
-
       <div className="grid c2" style={{ alignItems: 'start' }}>
-        <Panel title="生涯队伍">
-          {!records ? (
-            <p className="empty">读取中…</p>
-          ) : tenures.length === 0 ? (
-            <p className="empty">Liquipedia 没有队伍履历。</p>
-          ) : (
-            <ul className="cv">
-              {tenures.map((t, i) => (
-                <li key={i} className={t.current ? 'now' : ''}>
-                  <div className="small">
-                    <b>{t.club}</b>
-                    {t.current && <span className="tag t1" style={{ marginLeft: 6 }}>现役</span>}
-                  </div>
-                  <div className="yrs">
-                    {t.from ?? '?'} → {t.to ?? '至今'}
-                    {t.months != null && t.months > 0 && ` · ${
-                      t.months >= 12 ? `${Math.floor(t.months / 12)} 年${t.months % 12 ? ` ${t.months % 12} 个月` : ''}` : `${t.months} 个月`
-                    }`}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+        <Panel title="激励">
+          <div className="tiny">激励能力：<b>{card.motivation ?? '—'}</b></div>
         </Panel>
-
-        <Panel title="赛事记录" actions={<span className="tiny muted">{records ? `${placements.length} 项` : ''}</span>}>
-          {!records ? (
-            <p className="empty">读取中…</p>
-          ) : placements.length === 0 ? (
-            <p className="empty">vlr.gg 没有参赛记录。</p>
-          ) : (
-            byYear.map(([year, list]) => (
-              <div key={year} style={{ marginBottom: 12 }}>
-                <div className="tiny faint" style={{ marginBottom: 4 }}>{year || '年份不明'}</div>
-                {list.map((p, i) => (
-                  <div
-                    key={i}
-                    className="row"
-                    style={{
-                      justifyContent: 'space-between', gap: 10,
-                      padding: '4px 0', borderBottom: '1px solid var(--line-soft)',
-                    }}
-                  >
-                    <span className="small" style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {p.won && '🥇 '}{p.event}
-                      {p.club && <span className="tiny faint"> · {p.club}</span>}
-                    </span>
-                    <span
-                      className="tiny mono"
-                      style={{ color: p.won ? 'var(--warn)' : p.podium ? 'var(--win)' : 'var(--muted)' }}
-                    >
-                      {p.place ?? p.stage ?? '—'}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            ))
-          )}
+        <Panel title="团队身份">
+          <div className="tiny">{card.spec ?? '团队身份未标注'}</div>
         </Panel>
       </div>
     </>

@@ -17,8 +17,8 @@
  * the player is, which is the only moment anybody actually wants them.
  */
 import { useEffect, useState } from 'react'
-import { measureOdds, type PackOdds } from '../../engine/odds'
-import { HARD_PITY, SOFT_PITY, MYTHIC_FLOOR } from '../../engine/gacha'
+import type { PackOdds } from '../../engine/odds'
+import { HARD_PITY, SOFT_PITY, MYTHIC_FLOOR, MYTHIC_PACK_NAMES } from '../../engine/gacha'
 
 const METALS = [
   { key: 'mythic', label: '彩卡', cls: 'r-mythic' },
@@ -32,16 +32,61 @@ const pct = (n: number) => `${(n * 100).toFixed(n < 0.001 ? 3 : 2)}%`
 const oneIn = (n: number) => (n > 0 ? `约 ${Math.round(1 / n).toLocaleString()} 包一张` : '—')
 
 /** One pack's table. Thirty thousand packs are opened once, on mount. */
+let cachedRows: PackOdds[] | null = null
+
 export function OddsTables() {
-  const [rows, setRows] = useState<PackOdds[] | null>(null)
+  const [rows, setRows] = useState<PackOdds[] | null>(cachedRows)
+  const [error, setError] = useState<string | null>(null)
+  const [retryKey, setRetryKey] = useState(0)
 
-  // A moment of work, off the first paint so the tab opens immediately.
   useEffect(() => {
-    const t = setTimeout(() => setRows(measureOdds()), 30)
-    return () => clearTimeout(t)
-  }, [])
+    if (cachedRows) return
+    let worker: Worker | null = null
+    let timeout: ReturnType<typeof setTimeout> | null = null
+    let finished = false
+    try {
+      worker = new Worker(new URL('./odds.worker.ts', import.meta.url), { type: 'module' })
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e))
+      return
+    }
+    const cleanup = () => {
+      if (timeout) clearTimeout(timeout)
+      if (worker) worker.terminate()
+      worker = null
+      finished = true
+    }
+    worker.onmessage = (e: MessageEvent<PackOdds[] | { error: string }>) => {
+      if (finished) return
+      cleanup()
+      if (Array.isArray(e.data)) {
+        cachedRows = e.data
+        setRows(e.data)
+      } else {
+        setError(e.data.error || '计算失败')
+      }
+    }
+    worker.onmessageerror = () => {
+      if (finished) return
+      cleanup()
+      setError('计算结果无法解析')
+    }
+    worker.onerror = (e) => {
+      if (finished) return
+      cleanup()
+      setError(e.message || '计算线程出错')
+    }
+    timeout = setTimeout(() => {
+      if (finished) return
+      cleanup()
+      setError('计算超时，请重试')
+    }, 30000)
+    worker.postMessage(30000)
+    return cleanup
+  }, [retryKey])
 
-  if (!rows) return <p className="small faint">正在开三万包…</p>
+  if (error) return <div className="small faint"><p>{error}</p><button className="sm" onClick={() => { setError(null); setRows(null); setRetryKey(k => k + 1) }}>重试</button></div>
+  if (!rows) return <p className="small faint">正在计算概率…</p>
 
   return (
     <>
@@ -53,13 +98,14 @@ export function OddsTables() {
               每包 {r.draws} 张 · {r.shop ? `${r.cost.toLocaleString()} 金币` : '非卖品：从玩法与活动奖励获得'}
             </span>
           </div>
+          <p className="tiny faint" style={{ margin: '4px 0 8px' }}>实测为抽样估计，包含保底，不代表下一张的即时概率。</p>
           <div className="table-wrap">
             <table>
               <thead>
                 <tr>
                   <th>稀有度</th>
-                  <th className="num">每张卡的概率</th>
-                  <th className="num">每包至少一张</th>
+                  <th className="num">每张卡的概率（抽样估计）</th>
+                  <th className="num">每包至少一张（抽样估计）</th>
                   <th className="num">基础值</th>
                 </tr>
               </thead>
@@ -110,7 +156,7 @@ export function OddsWhy() {
           <b>金卡保底</b>：连续 {SOFT_PITY} 抽没出金卡后概率递增，第 {HARD_PITY} 抽必出，所以实测金卡率高于基础值。
         </li>
         <li>
-          <b>彩卡保底</b>：试训、选拔、十连和 LPL / LCK 包共享 {MYTHIC_FLOOR} 抽保底。其他包不出本系列彩卡，不推进此保底。
+          <b>彩卡保底</b>：{MYTHIC_PACK_NAMES} 共享 {MYTHIC_FLOOR} 抽保底。其他包不出本系列彩卡，不推进此保底。
         </li>
         <li>
           <b>保底进度挂在账号上</b>，换一种包开不重置。

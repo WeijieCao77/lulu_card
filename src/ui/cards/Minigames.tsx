@@ -3,7 +3,7 @@ import { useCards } from './ctx'
 import { Panel } from '../common'
 import { track } from '../../engine/telemetry'
 import {
-  AIM_ROUND_MS, AIM_UP_MS, MINI_CN, MINI_GAMES, MINI_ROLE, MINIGAME_DAILY, RECON_GAP_MS, RECON_MAP_CN,
+  AIM_ROUND_MS, AIM_UP_MS, MINI_CN, MINI_COINS, MINI_GAMES, MINI_ROLE, MINIGAME_DAILY, RECON_GAP_MS, RECON_MAP_CN,
   RECON_N, RECON_SHOW_MS, SCHULTE_PENALTY_MS, aimSchedule, reconPuzzle, schulteOrder,
 } from '../../engine/minigame'
 import type { MiniGame, Tier } from '../../engine/minigame'
@@ -26,7 +26,7 @@ const assetBase = (): string => (typeof import.meta.env !== 'undefined' ? import
 interface Live { game: MiniGame; seed: number; startedAt: number }
 interface Finish {
   game: MiniGame; tier: Tier; score: number; summary: string; detail: Record<string, number>
-  reward: { pack: PackKind | null; coins: number }; playsLeft: number
+  reward: { pack: PackKind | null; coins: number; bonusPack?: 'elite' }; playsLeft: number
 }
 const ROLE_VAR: Record<MiniGame, string> = { aim: 'var(--duelist)', recon: 'var(--initiator)', schulte: 'var(--sentinel)' }
 const BLURB: Record<MiniGame, string> = {
@@ -55,6 +55,7 @@ export default function Minigames() {
   const m = g.minigame
   const playsUsed = m && m.day === today ? m.plays : 0
   const playsLeft = Math.max(0, MINIGAME_DAILY - playsUsed)
+  const bonusToday = m?.bonusDay !== today
   // a round the server still holds open that this screen is not playing:
   // the page was left mid-round; that play is spent, the next start replaces it
   const stale = !live && !!m?.live
@@ -100,8 +101,9 @@ export default function Minigames() {
         }
       >
         <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-          每个位置一个小游戏。金档、银档给位置包，金档另加金币；铜档只给少量金币。
+          每个位置一个小游戏。金档 +{MINI_COINS.金} 金币、银档 +{MINI_COINS.银} 金币，均给对应位置包；铜档 +{MINI_COINS.铜} 金币。
           每天共 {MINIGAME_DAILY} 次，任意分配。测试中，数值会调。
+          每日首次金/银达标额外送 1 个选拔包（每日最多 1 个，铜档不触发）。
         </p>
         <div className="row wrap" style={{ gap: 6, marginBottom: 12 }}>
           {MINI_GAMES.map((k) => (
@@ -122,6 +124,9 @@ export default function Minigames() {
           <>
             <p className="small muted" style={{ marginTop: 0, lineHeight: 1.75 }}>{BLURB[game]}</p>
             <p className="tiny faint" style={{ marginTop: 0 }}>{TIER_LINE[game]} 奖励：{PACKS[MINI_PACK_OF[game]].name}。</p>
+            <p className={`tiny ${bonusToday ? '' : 'faint'}`} style={{ marginTop: 0 }}>
+              {bonusToday ? '今日可领：首次金/银达标额外 +1 选拔包' : '今日已领：首次金/银达标额外 +1 选拔包'}
+            </p>
             {stale && <p className="tiny" style={{ color: 'var(--warn)' }}>上一局中途离开，那一次已用掉。</p>}
             <button className="primary" disabled={busy || playsLeft <= 0} onClick={() => void start(game)}>
               {playsLeft <= 0 ? '今天的次数用完了' : `开始（用 1 次，剩 ${playsLeft}）`}
@@ -150,7 +155,7 @@ export default function Minigames() {
             <div className="row wrap" style={{ gap: 8, marginTop: 10, alignItems: 'center' }}>
               {done.reward.pack ? (
                 <>
-                  <span className="small"><b>{PACKS[done.reward.pack].name} +1</b>{done.reward.coins ? `，+${done.reward.coins} 金币` : ''}</span>
+                  <span className="small"><b>{PACKS[done.reward.pack].name} +1</b>{done.reward.coins ? `，+${done.reward.coins} 金币` : ''}{done.reward.bonusPack ? `，另 +1 ${PACKS[done.reward.bonusPack].name}` : ''}</span>
                   <button className="sm primary" onClick={() => go('packs')}>去抽卡页打开</button>
                 </>
               ) : (

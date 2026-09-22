@@ -17,7 +17,7 @@
  * economy this size that cannot be walked back after it ships.
  */
 import {
-  FEATURE_OFF, PACKS, PACK_ORDER, SERIES, SERIES_REWARDS,
+  PACKS, PACK_ORDER, SERIES, SERIES_REWARDS,
   claimSeries, featuredSeries, newGacha, openPack, packCost, seriesProgress,
 } from '../src/engine/gacha'
 import type { Series } from '../src/engine/gacha'
@@ -116,8 +116,8 @@ check((g.packs[pack.pack] ?? 0) === 2, '90% 送的两个本赛区包到账', Str
 check(claimSeries(g, region) === null, '收齐之后再点领奖没有东西')
 check((g.series?.[region] ?? 0) === SERIES_REWARDS.length, '每一档都记为已领')
 
-// ---- the weekly feature
-console.log('\n本周主打：')
+// ---- the weekly feature recommendation display no longer discounts automatically
+console.log('\n本周主打推荐：')
 const seen = new Map<string, number>()
 let last = ''
 let flips = 0
@@ -126,7 +126,6 @@ for (let d = 0; d < 364; d++) {
   const r = featuredSeries(date)
   seen.set(r, (seen.get(r) ?? 0) + 1)
   if (r !== last) {
-    // a rotation that lands mid-week is a rotation nobody notices
     if (last) {
       flips++
       const dow = new Date(`${date}T00:00:00Z`).getUTCDay()
@@ -134,18 +133,15 @@ for (let d = 0; d < 364; d++) {
     }
     last = r
   }
-  // only the featured pack is discounted, and only the series packs at all
+  // the recommendation changes, but every pack remains at base price without a selection
   for (const kind of PACK_ORDER) {
     const price = packCost(kind, date)
-    const base = PACKS[kind].cost
-    const isHot = kind === seriesProgress(fresh0).find((p) => p.region === r)!.pack
-    check(price === (isHot ? Math.round(base * (1 - FEATURE_OFF)) : base),
-      '只有本周主打打折', `${date} ${kind} ${price} vs ${base}`)
+    check(price === PACKS[kind].cost, '无自选时全部原价', `${date} ${kind} ${price}`)
     check(price > 0, '价格是正数', `${kind} ${price}`)
   }
 }
 console.log(`  一年 ${flips} 次轮换 · ` + [...seen].map(([r, n]) => `${REGION_CN[r as Series]} ${n} 天`).join(' · '))
-check(seen.size === SERIES.length, '一年之内四个赛区都轮到过')
+check(seen.size === SERIES.length, '一年之内六个赛区都轮到过')
 check(Math.max(...seen.values()) - Math.min(...seen.values()) <= 7, '轮换是均匀的')
 // no date given means no discount — the engine默认按原价算
 for (const kind of PACK_ORDER) check(packCost(kind) === PACKS[kind].cost, '不传日期就是原价', kind)

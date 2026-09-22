@@ -10,7 +10,7 @@
  *   npx tsx scripts/card_check.ts
  */
 import {
-  ALL_CARDS, PLAYER_CARDS, COACH_CARDS, LEGEND_CARDS, GOLD_AT, SQUAD_SLOTS, cardById, chemistry,
+  ALL_CARDS, BASE_PLAYER_CARDS, PLAYER_CARDS, COACH_CARDS, LEGEND_CARDS, GOLD_AT, SQUAD_SLOTS, cardById, chemistry,
   isPlayerCard, personOf, squadRating, emptySquad, rarityRank,
 } from '../src/engine/cards'
 import type { PlayerCard, Squad } from '../src/engine/cards'
@@ -21,6 +21,8 @@ import {
   STAMINA_COST, STAMINA_REGEN_MS, staminaEvery,
 } from '../src/engine/gacha'
 import type { GachaState, PackKind } from '../src/engine/gacha'
+import assert from 'node:assert/strict'
+import { natCountry } from '../src/engine/nat'
 import { buildArena, playArenaMatch, ARENA_TEAM } from '../src/engine/arena'
 import { WORLD_TEAMS } from '../src/engine/teams'
 
@@ -78,6 +80,17 @@ console.log('\n=== 抽卡 1000 次「试训包」 ===')
 
 console.log('\n=== 各卡包保底 ===')
 for (const kind of Object.keys(PACKS) as PackKind[]) {
+  if (kind === 'seoul2024') {
+    const g = newGacha('VM-TEST-TEST-TEST-TEST-TES2', 'check', '2026-08-27')
+    g.coins = 1e9
+    g.packs[kind] = 1
+    for (const payWith of ['coins', 'pack'] as const) {
+      const before = structuredClone(g)
+      assert.throws(() => openPack(g, kind, payWith), /没有这种卡包/)
+      assert.deepEqual(g, before)
+    }
+    continue
+  }
   const g = newGacha('VM-TEST-TEST-TEST-TEST-TES2', 'check', '2026-08-27')
   g.coins = 1e9
   let floorHeld = 0
@@ -101,10 +114,13 @@ console.log('\n=== 默契 vs 纯数值 ===')
   // the best five from one real club, versus the five highest-rated cards in
   // the game regardless of who they play for
   const byClub = new Map<string, typeof PLAYER_CARDS>()
-  for (const c of PLAYER_CARDS) {
+  for (const c of BASE_PLAYER_CARDS) {
     if (!c.clubId) continue
     const list = byClub.get(c.clubId) ?? []
-    list.push(c)
+    // use BASE_PLAYER_CARDS, not the raw global list: 彩卡 and the普通卡 of
+    // one real player are the same person, and a club five must be five
+    // different people, not four plus a分身
+    if (!list.some((x) => personOf(x) === personOf(c))) list.push(c)
     byClub.set(c.clubId, list)
   }
   const bestClub = [...byClub.entries()]
@@ -114,6 +130,10 @@ console.log('\n=== 默契 vs 纯数值 ===')
     return l.slice(0, 5).reduce((s, c) => s + c.rating, 0)
   }
   const clubSquad: Squad = { slots: bestClub[1].slice(0, 5).map((c) => c.id), coach: null }
+  // a club five must be five different real people (彩卡/ordinary card
+  // sharing one personOf must not both make the five)
+  assert.equal(new Set(clubSquad.slots.filter(Boolean).map((id) => personOf(cardById(id) as PlayerCard))).size, 5)
+  console.log(`  同队五人：${clubSquad.slots.filter(Boolean).map((id) => (cardById(id) as PlayerCard).ign).join('、')}`)
   const stars = PLAYER_CARDS.slice().sort((a, b) => b.rating - a.rating)
   // deliberately scattered: no two from the same club, and never the same man
   // twice — the legend and the ordinary card of one player are one person
@@ -122,9 +142,9 @@ console.log('\n=== 默契 vs 纯数值 ===')
   const seenPerson = new Set<string>()
   for (const c of stars) {
     if (picked.length >= 5) break
-    if (seenClub.has(c.clubId ?? '') || seenPerson.has(c.playerId)) continue
+    if (seenClub.has(c.clubId ?? '') || seenPerson.has(personOf(c))) continue
     seenClub.add(c.clubId ?? '')
-    seenPerson.add(c.playerId)
+    seenPerson.add(personOf(c))
     picked.push(c.id)
   }
   const starSquad: Squad = { slots: picked, coach: null }
@@ -134,9 +154,9 @@ console.log('\n=== 默契 vs 纯数值 ===')
   const SLOTS = ['上单', '打野', '中单', '下路', '辅助'] as const
   const tidyPerson = new Set<string>()
   const tidy: (string | null)[] = SLOTS.map((role) => {
-    const c = stars.find((x) => !tidyPerson.has(x.playerId) && x.roles.includes(role as never))
-      ?? stars.find((x) => !tidyPerson.has(x.playerId))
-    if (c) { tidyPerson.add(c.playerId); return c.id }
+    const c = stars.find((x) => !tidyPerson.has(personOf(x)) && x.roles.includes(role as never))
+      ?? stars.find((x) => !tidyPerson.has(personOf(x)))
+    if (c) { tidyPerson.add(personOf(c)); return c.id }
     return null
   })
   const tidySquad: Squad = { slots: tidy, coach: null }
@@ -146,7 +166,7 @@ console.log('\n=== 默契 vs 纯数值 ===')
   // a彩卡 five that forgot to bring a voice is not the same experiment.
   const iglSquad: Squad = { slots: [...tidy], coach: null }
   if (!tidy.some((id) => PLAYER_CARDS.find((c) => c.id === id)?.isIgl)) {
-    const caller = stars.find((c) => c.isIgl && !tidyPerson.has(c.playerId))
+    const caller = stars.find((c) => c.isIgl && !tidyPerson.has(personOf(c)))
     if (caller) iglSquad.slots[4] = caller.id
   }
   const iglAvg = iglSquad.slots.filter(Boolean)
@@ -404,16 +424,22 @@ console.log('\n=== 彩卡 ===')
 console.log('\n=== 同一个人不能上两次 ===')
 {
   const g = newGacha('VM-DUPE-DUPE-DUPE-DUPE-DUPE', 'dupe', '2026-08-27')
-  const derke = PLAYER_CARDS.find((c) => c.ign === 'Derke' && !c.legend)!
-  const legend = LEGEND_CARDS.find((c) => c.ign === 'Derke')!
-  g.cards[derke.id] = { id: derke.id, level: 0, dupes: 0, seen: 1, got: '2026-08-27' }
+  // A real LoL ordinary/legend pair, selected by shared identity.
+  const legend = LEGEND_CARDS.find(c => c.ign === 'Faker')
+    ?? LEGEND_CARDS.find(c => BASE_PLAYER_CARDS.some(b => personOf(b) === personOf(c)))
+  assert(legend, '需要一张具有普通卡版本的真实选手彩卡')
+  const normal = BASE_PLAYER_CARDS.find(c => personOf(c) === personOf(legend))
+  assert(normal && normal.id !== legend.id, '同人普通卡和彩卡必须存在且ID不同')
+  g.cards[normal.id] = { id: normal.id, level: 0, dupes: 0, seen: 1, got: '2026-08-27' }
   g.cards[legend.id] = { id: legend.id, level: 0, dupes: 0, seen: 1, got: '2026-08-27' }
-  setSlot(g, 0, derke.id)
-  console.log(`  放入普通 Derke：${g.squad.slots.filter(Boolean).length} 人在场`)
+  setSlot(g, 0, normal.id)
+  console.log(`  放入普通 ${normal.ign}：${g.squad.slots.filter(Boolean).length} 人在场`)
   setSlot(g, 1, legend.id)
   const live = g.squad.slots.filter(Boolean)
-  console.log(`  再放入彩卡 Derke：${live.length} 人在场（应为 1，普通卡被顶替）`)
+  console.log(`  再放入${legend.ign}彩卡（同人）：${live.length} 人在场（应为 1，普通卡被顶替）`)
   console.log(`  ${live.length === 1 && g.squad.slots[1] === legend.id ? 'ok' : 'FAIL'} 同一个人只能上场一次`)
+  assert.equal(live.length, 1, '同人普通卡和彩卡不能同时上场')
+  assert.equal(g.squad.slots[1], legend.id, '彩卡应替换普通卡')
 }
 
 console.log('\n=== 自动组队 ===')
@@ -459,19 +485,44 @@ console.log('\n=== 阵容检查 ===')
   console.log(`  一人阵容分 ${squadRating(one)}（缺 4 人应大幅扣分）`)
 }
 
-console.log('\n=== 国籍默契：中国台湾 / 中国香港 / 中国澳门 与大陆算同一国籍 ===')
+console.log('\n=== 国籍归一化：中国台湾 / 中国香港 / 中国澳门 与大陆算同一国籍 ===')
 {
-  // one card from each code, none sharing a club — so the only link left to
-  // find between them is nationality, and it has to be found four times over
-  const pick = (code: string) => PLAYER_CARDS.find((c) => c.nat?.toLowerCase() === code)
-  const four = ['cn', 'tw', 'hk', 'mo'].map(pick)
-  const squad: Squad = { slots: [...four.map((c) => c?.id ?? null), null], coach: null }
-  const report = chemistry(squad)
-  const natLinks = report.links.filter((l) => l.why === 'nat' || l.why === 'club').length
-  const clubs = new Set(four.map((c) => c?.clubId))
-  console.log(`  ${four.map((c) => `${c?.ign}(${c?.nat})`).join(' / ')}，${clubs.size} 家俱乐部`)
-  console.log(`  同国籍连线 ${natLinks}/6  ${natLinks === 6 ? 'ok' : 'FAIL'} 四人两两都应算同一国籍`)
-  if (natLinks !== 6) process.exitCode = 1
+  // 卡池当前无 mo 实名选手。我们只断言 cn/tw/hk/mo 四个代码的
+  // 归一化规则，不虚构四个可组队的真实选手。
+  for (const code of ['cn', 'tw', 'hk', 'mo']) {
+    assert.equal(natCountry(code), 'cn', `natCountry(${code}) 应归一为 cn`)
+  }
+  console.log('  natCountry(cn/tw/hk/mo) 均归一为 cn：ok')
+
+  // 真实的集成检查用当前存在的 cn/tw/hk 三位不同真人，尽量不同 club。
+  const wanted = ['cn', 'tw', 'hk']
+  const picked: (PlayerCard | undefined)[] = []
+  const usedPersons = new Set<string>()
+  const usedClubs = new Set<string>()
+  for (const code of wanted) {
+    const c = BASE_PLAYER_CARDS
+      .filter((x) => x.nat?.toLowerCase() === code && !usedPersons.has(personOf(x)))
+      .sort((a, b) => (usedClubs.has(a.clubId ?? '') ? 1 : 0) - (usedClubs.has(b.clubId ?? '') ? 1 : 0))[0]
+        ?? BASE_PLAYER_CARDS.find((x) => x.nat?.toLowerCase() === code && !usedPersons.has(personOf(x)))
+    if (c) {
+      picked.push(c)
+      usedPersons.add(personOf(c))
+      usedClubs.add(c.clubId ?? '')
+    }
+  }
+  console.log(`  现有实名卡：${picked.map((c) => `${c?.ign}(${c?.nat})`).join(' / ')}`)
+  if (picked.length !== 3) {
+    console.log(`  FAIL 期望找到 cn/tw/hk 三位不同真人，实际 ${picked.length} 位`)
+    process.exitCode = 1
+  } else {
+    // 当前存在的 cn/tw/hk 三位不同真人，尽量不同俱乐部。
+    const squad: Squad = { slots: [...picked.map((c) => c!.id), null, null], coach: null }
+    const report = chemistry(squad)
+    const natLinks = report.links.filter((l) => l.why === 'nat' || l.why === 'club').length
+    console.log(`  同国籍连线 ${natLinks}/3  ${natLinks === 3 ? 'ok' : 'FAIL'} 三人两两都应算同一国籍`)
+    if (natLinks !== 3) process.exitCode = 1
+    console.log(`  mo 选手当前无实名卡，用 natCountry 规则断言覆盖；不声称四地域选手全存在`)
+  }
 }
 
 // ---- somebody is always calling ------------------------------------------

@@ -16,6 +16,8 @@ import type { Role } from './types'
 import { cleanPredictions } from './predict'
 import type { Picks } from './predict'
 import type { SeoulRouteState } from './seoulRoute'
+import type { WeeklySeriesPick } from './weeklySeries'
+import { cleanWeeklySeriesPick, selectedWeeklySeries } from './weeklySeries'
 import {
   ALL_CARDS, SEOUL_CARDS, COACH_CARDS, COINS_FOR, DUPES_FOR, LEGEND_CARDS, LEGEND_COACH_CARDS, MAX_LEVEL, RARITY_CN, cardName, PLAYER_CARDS,
   SALVAGE, SQUAD_SLOTS, cardById, cardPower, emptySquad, isPlayerCard, personOf, rarityRank, ratingAt,
@@ -242,6 +244,7 @@ export const HARD_PITY = 45
  * packs and seven eighths of them came from here. Lowering the published rate
  * without moving this would have changed almost nothing.
  */
+export const MYTHIC_PACK_NAMES = PACK_ORDER.filter(k => PACKS[k].mythic > 0 && PACKS[k].mythic < 1).map(k => PACKS[k].name).join('、')
 export const MYTHIC_FLOOR = 1200
 
 // ---------------------------------------------------------------- the day
@@ -794,6 +797,8 @@ export interface GachaState {
   seed: number
   /** 首尔征途 — see engine/seoulRoute.ts; absent until the first road */
   seoulRoute?: SeoulRouteState
+  /** weekly self-selected series discount — server-owned, see weeklySeries.ts */
+  weeklySeriesPick?: WeeklySeriesPick
 }
 
 /**
@@ -1056,20 +1061,34 @@ const POOLS = {
 
 /**
  * What a finished 位置小游戏 pays: the position's pack on 金 and 银, coins on
- * top of it on 金, a few coins in place of it on 铜. Called by the server's
+ * top of it on 金/银, a few coins in place of it on 铜. Called by the server's
  * minigame_finish once the transcript has been judged — see engine/minigame.ts.
+ *
+ * Daily bonus: first 金 or 银 finish of a server day also pays one 选拔包
+ * (elite). 铜/失败/退出/脚本/重复 finish never trigger it. The optional
+ * `today` parameter must be the server day (`env.today`); any value from a
+ * client request is ignored because runAction passes env.today explicitly.
+ * A cross-day finish still pays its normal pack and coins, but no bonus
+ * (m.day !== today), and the new day's first qualifying finish remains
+ * eligible.
  */
-export function awardMinigame(g: GachaState, game: MiniGame, tier: Tier): { pack: PackKind | null; coins: number } {
+export function awardMinigame(g: GachaState, game: MiniGame, tier: Tier, today?: string): { pack: PackKind | null; coins: number; bonusPack?: 'elite' } {
   const pack = MINI_PAYS_PACK[tier] ? MINI_PACK[game] : null
   const coins = MINI_COINS[tier]
+  const m = (g.minigame ??= newMinigame())
   if (pack) {
     g.packs[pack] = (g.packs[pack] ?? 0) + 1
-    g.minigame ??= newMinigame()
-    g.minigame.won = (g.minigame.won ?? 0) + 1
+    m.won = (m.won ?? 0) + 1
   }
   if (coins) g.coins += coins
-  note(g, `${MINI_CN[game]} ${tier}档${pack ? `，${PACKS[pack].name} +1` : ''}${coins ? `，+${coins} 金币` : ''}`)
-  return { pack, coins }
+  let bonusPack: 'elite' | undefined
+  if (today !== undefined && pack && tier !== '铜' && m.day === today && m.bonusDay !== today) {
+    g.packs.elite = (g.packs.elite ?? 0) + 1
+    m.bonusDay = today
+    bonusPack = 'elite'
+  }
+  note(g, `${MINI_CN[game]} ${tier}档${pack ? `，${PACKS[pack].name} +1` : ''}${coins ? `，+${coins} 金币` : ''}${bonusPack ? `，${PACKS.elite.name} +1` : ''}`)
+  return { pack, coins, ...(bonusPack ? { bonusPack } : {}) }
 }
 
 export interface Pulled {
@@ -1096,7 +1115,7 @@ export function openPack(
     g.packs[kind] = (g.packs[kind] ?? 0) - 1
   } else {
     if (def.shop === false) throw new Error(`${def.name}买不到，只能从玩法奖励获得`)
-    const price = packCost(kind, today)
+    const price = packCost(kind, today, g)
     if (g.coins < price) throw new Error('金币不够')
     g.coins -= price
   }
@@ -1112,7 +1131,7 @@ export function openPack(
     let metal: Rarity
     // the彩卡 roll happens first and on its own budget, so raising the gold
     // rate never quietly changes how rare a legend is
-    const owed = def.mythic > 0 && g.mythicDry >= MYTHIC_FLOOR
+    const owed = def.mythic > 0 && (g.mythicDry ?? 0) >= MYTHIC_FLOOR - 1
     if (certain) {
       metal = 'mythic'
     } else if (owed || r < def.mythic) {
@@ -1459,31 +1478,32 @@ const SERIES_PACK: Record<Series, PackKind> = {
 }
 
 /**
- * The week's featured region, and what it costs while it is featured.
+ * The week's recommended region. Discounts are chosen by each account.
  *
- * The 限定 half of 「分赛区限定包」. Nothing is ever taken away — all four packs
- * are on the shelf all the time — but one of them is cheaper for seven days,
- * which is a reason to come back on a Monday rather than a reason to hurry.
- * Derived from the date, so it is the same for everybody and needs no state,
- * and cycles through all four before repeating.
+ * All six regions remain available. The shared recommendation rotates on
+ * Monday; each account chooses its own discounted region in weeklySeries.ts.
  */
 export const FEATURE_OFF = 0.2
 
 export function featuredSeries(today: string): Series {
   // whole days since a fixed Monday, floored to weeks; the epoch is a Monday
-  // so the discount turns over at the same moment the week does
+  // so the recommendation turns over at the same moment the week does
   const days = Math.floor(Date.parse(`${today}T00:00:00Z`) / 86_400_000)
   const week = Math.floor((days - 4) / 7) // 1970-01-01 was a Thursday
   return SERIES[((week % SERIES.length) + SERIES.length) % SERIES.length]
 }
 
-/** What a pack costs today — the featured series is off by a fifth. */
-export function packCost(kind: PackKind, today?: string): number {
+/** Server-owned weekly selection gets 20% off; recommendations do not affect prices. */
+export function packCost(
+  kind: PackKind,
+  today?: string,
+  g?: Pick<GachaState, 'weeklySeriesPick'>,
+): number {
   const base = PACKS[kind].cost
-  if (!today) return base
+  if (!today || !g) return base
   const region = seriesOfPack(kind)
-  if (!region || region !== featuredSeries(today)) return base
-  return Math.round(base * (1 - FEATURE_OFF))
+  if (!region) return base
+  return selectedWeeklySeries(g, today) === region ? Math.round(base * (1 - FEATURE_OFF)) : base
 }
 
 /** How many cards of a series a milestone asks for. */
@@ -2513,6 +2533,9 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   // a cup drawn against a club that has since left the world
   repairCup(g)
   g.seed = typeof g.seed === 'number' && Number.isFinite(g.seed) ? g.seed >>> 0 : hashStr(id + g.createdAt) >>> 0
+  const cleanPick = cleanWeeklySeriesPick(g.weeklySeriesPick)
+  if (cleanPick) g.weeklySeriesPick = cleanPick
+  else delete g.weeklySeriesPick
   return clampState(g)
 }
 
@@ -2529,6 +2552,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
 export const SERVER_KEYS = [
   'version', 'createdAt', 'coins', 'cards', 'packs', 'pity', 'mythicDry', 'pulls', 'ladder',
   'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'predict', 'seoulRoute',
+  'weeklySeriesPick',
 ] as const
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends'] as const
 

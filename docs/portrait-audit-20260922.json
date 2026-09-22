@@ -1,0 +1,672 @@
+{
+  "source": "DeepSeek v4 Pro research and staging, independent identity and visual review",
+  "added": [
+    {
+      "kind": "player",
+      "id": "P250",
+      "name": "Shogun",
+      "image": "review-20260922-P250.webp",
+      "bytes": 8372,
+      "sha256": "67b64d39253a933758c774c2eeaf9e14cfac64964f95ed6b2b605b503d465004",
+      "sourcePage": "https://chaincc.lol/free/players/Shogun",
+      "sourcePhoto": "https://chaincc.lol/storage/leaguepedia/players/thumbs/shogun-nguy-n-v-n-huy-.webp",
+      "identityEvidence": "https://www.trackingthepros.com/player/Shogun",
+      "review": "Source identity reviewed; individual face visible; prior role changes do not imply a different person."
+    },
+    {
+      "kind": "player",
+      "id": "P283",
+      "name": "fNb",
+      "image": "review-20260922-P283.webp",
+      "bytes": 6872,
+      "sha256": "251bd93244c627f45471b4ab27af618b19961c73b30b8ebe009e037b83d06821",
+      "sourcePage": "https://chaincc.lol/free/players/fNb",
+      "sourcePhoto": "https://chaincc.lol/storage/leaguepedia/players/thumbs/fnb.webp",
+      "identityEvidence": "https://lol.fandom.com/wiki/FNb",
+      "review": "Source identity reviewed; individual face visible; prior role changes do not imply a different person."
+    },
+    {
+      "kind": "player",
+      "id": "P573",
+      "name": "UmTi",
+      "image": "review-20260922-P573.webp",
+      "bytes": 6590,
+      "sha256": "9f8db8deeaf95882c97739cc78a373307c8baedf1f1b11b0fe9e651b4883ac85",
+      "sourcePage": "https://chaincc.lol/free/players/UmTi",
+      "sourcePhoto": "https://chaincc.lol/storage/leaguepedia/players/thumbs/umti.webp",
+      "identityEvidence": "https://lol.fandom.com/wiki/UmTi",
+      "review": "Source identity reviewed; individual face visible; prior role changes do not imply a different person."
+    },
+    {
+      "kind": "player",
+      "id": "P601",
+      "name": "Malrang",
+      "image": "review-20260922-P601.webp",
+      "bytes": 8410,
+      "sha256": "1bf84d979dc7707aecd0c65d39cb7fa03145214c2aa28def1c95fb6a440c8d24",
+      "sourcePage": "https://chaincc.lol/free/players/Malrang",
+      "sourcePhoto": "https://chaincc.lol/storage/leaguepedia/players/thumbs/malrang.webp",
+      "identityEvidence": "https://lol.fandom.com/wiki/Malrang",
+      "review": "Source identity reviewed; individual face visible; prior role changes do not imply a different person."
+    },
+    {
+      "kind": "player",
+      "id": "P603",
+      "name": "Spica",
+      "image": "review-20260922-P603.webp",
+      "bytes": 6788,
+      "sha256": "507a79945dc314187b82e7bdecdb7baa72aa3fc14a4897675a3f6d89b3446f6d",
+      "sourcePage": "https://chaincc.lol/free/players/Spica",
+      "sourcePhoto": "https://chaincc.lol/storage/leaguepedia/players/thumbs/spica.webp",
+      "identityEvidence": "https://liquipedia.net/leagueoflegends/Spica",
+      "review": "Source identity reviewed; individual face visible; prior role changes do not imply a different person."
+    },
+    {
+      "kind": "player",
+      "id": "OEd3e3273a89",
+      "name": "Niles",
+      "image": "review-20260922-OEd3e3273a89.webp",
+      "bytes": 7032,
+      "sha256": "c21cf2fb52b9610d3ba1644f28cca6c80306fee0bd854cc5216b41a9f2f84706",
+      "sourcePage": "https://chaincc.lol/free/players/Niles",
+      "sourcePhoto": "https://chaincc.lol/storage/leaguepedia/players/thumbs/niles-aiden-tidwell-.webp",
+      "identityEvidence": "https://lol.fandom.com/wiki/Niles_(Aiden_Tidwell)",
+      "review": "Source identity reviewed; individual face visible; prior role changes do not imply a different person."
+    },
+    {
+      "kind": "coach",
+      "id": "Pockus",
+      "name": "Pockus",
+      "image": "review-20260922-Pockus.webp",
+      "bytes": 13228,
+      "sha256": "e42a420d5c31424246f61f54b4ffaaf92de0a2491d3e767cd7b0b3fe626ac85f",
+      "sourcePage": "https://chaincc.lol/free/players/Pockus",
+      "sourcePhoto": "https://chaincc.lol/storage/leaguepedia/players/thumbs/pockus.webp",
+      "identityEvidence": "https://lol.fandom.com/wiki/Pockus",
+      "review": "Source identity reviewed; individual face visible; prior role changes do not imply a different person."
+    },
+    {
+      "kind": "coach",
+      "id": "SSONG",
+      "name": "SSONG",
+      "image": "review-20260922-SSONG.webp",
+      "bytes": 16046,
+      "sha256": "2f06d9864ef98b8e4c1d0544d5fd405156509986939224ab82cf668ebfa7c09b",
+      "sourcePage": "https://www.invenglobal.com/articles/1194/coach-ssong-leaves-longzhu-gaming",
+      "sourcePhoto": "https://static.invenglobal.com/upload/image/2017/03/01/i1488357182721748.jpeg",
+      "identityEvidence": "https://www.invenglobal.com/articles/1194/coach-ssong-leaves-longzhu-gaming",
+      "review": "Source identity reviewed; individual face visible; prior role changes do not imply a different person."
+    },
+    {
+      "kind": "coach",
+      "id": "Homme",
+      "name": "Homme",
+      "image": "review-20260922-Homme.webp",
+      "bytes": 11682,
+      "sha256": "e89893cf1b854dd65eb49a37580bcfdf51a1468a397550a68cb37782c55f2240",
+      "sourcePage": "https://www.oneesports.gg/league-of-legends/jdg-coach-homme-worlds-2023/",
+      "sourcePhoto": "https://cdn.oneesports.gg/wp-content/uploads/2023/11/LeagueOfLegends_Worlds2023_Quarterfinals_JDGaming_Homme_Smiling-1024x576.jpg",
+      "identityEvidence": "https://www.oneesports.gg/league-of-legends/jdg-coach-homme-worlds-2023/",
+      "review": "Source identity reviewed; individual face visible; prior role changes do not imply a different person."
+    },
+    {
+      "kind": "coach",
+      "id": "Mafa",
+      "name": "Mafa",
+      "image": "review-20260922-Mafa.webp",
+      "bytes": 11126,
+      "sha256": "53a962dff5365a1ce9d8013b3a25076aea381048779e2072e837ddf0bab83910",
+      "sourcePage": "https://www.invenglobal.com/articles/6731/igs-2-coaches-becoming-legends-in-6-months-head-coach-kim-and-coach-mafa-on-rebuilding-the-team",
+      "sourcePhoto": "https://static.invenglobal.com/upload/image/2018/11/13/i1542175660713635.jpeg",
+      "identityEvidence": "https://www.invenglobal.com/articles/6731/igs-2-coaches-becoming-legends-in-6-months-head-coach-kim-and-coach-mafa-on-rebuilding-the-team",
+      "review": "Source identity reviewed; individual face visible; prior role changes do not imply a different person."
+    },
+    {
+      "kind": "coach",
+      "id": "WarHorse",
+      "name": "WarHorse",
+      "image": "review-20260922-WarHorse.webp",
+      "bytes": 6554,
+      "sha256": "6b71a54a221e2ce34d3d7ab90b114127e3d8f17c8654456fd76e1708a99e7b1a",
+      "sourcePage": "https://focustaiwan.tw/sports/202609140016",
+      "sourcePhoto": "https://imgcdn.cna.com.tw/Eng/WebEngPhotos/800/2026/20260914/1705x960_030616629402.jpg",
+      "identityEvidence": "https://focustaiwan.tw/sports/202609140016",
+      "review": "Source identity reviewed; individual face visible; prior role changes do not imply a different person."
+    }
+  ],
+  "remainingPlayers": [
+    {
+      "id": "P26",
+      "ign": "sasi",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P185",
+      "ign": "KryRa",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P350",
+      "ign": "arbrio",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P351",
+      "ign": "Bio",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P352",
+      "ign": "Retrozing",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P353",
+      "ign": "Bazz",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P362",
+      "ign": "AoJune",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P365",
+      "ign": "Stray",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P368",
+      "ign": "Asilah",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P370",
+      "ign": "Keel",
+      "reason": "Identity verification failed: Role mismatch: jungle != support"
+    },
+    {
+      "id": "P378",
+      "ign": "Dec0y",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P381",
+      "ign": "Hub",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P382",
+      "ign": "Redemption",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P384",
+      "ign": "Crimson",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P388",
+      "ign": "MU Scary Jerry",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P390",
+      "ign": "Horder",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P391",
+      "ign": "Music",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P396",
+      "ign": "Wilson",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P397",
+      "ign": "Zach",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P416",
+      "ign": "Kaboom",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P418",
+      "ign": "Soldier",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P421",
+      "ign": "Shift",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P443",
+      "ign": "Vizzpers",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P445",
+      "ign": "Hiro",
+      "reason": "Identity verification failed: Role mismatch: bottom != top"
+    },
+    {
+      "id": "P446",
+      "ign": "Sleyer",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P456",
+      "ign": "Adizai",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P458",
+      "ign": "Chain1",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P459",
+      "ign": "GZA 0131",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P460",
+      "ign": "GZA PeanutCoco",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P461",
+      "ign": "Sorrymbggff",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P462",
+      "ign": "ORS ner4",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P463",
+      "ign": "ORS K B",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P464",
+      "ign": "ORS Micinb",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P465",
+      "ign": "ORS RedamnTion",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P467",
+      "ign": "Cedric",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P470",
+      "ign": "Ashlomailma",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P475",
+      "ign": "En",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P476",
+      "ign": "Zartheit1",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P477",
+      "ign": "Listo",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P479",
+      "ign": "MadDogg9",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P481",
+      "ign": "AIex",
+      "reason": "Identity verification failed: Role mismatch: jungle != support"
+    },
+    {
+      "id": "P483",
+      "ign": "Killer2",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P484",
+      "ign": "Cid",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P485",
+      "ign": "Dotmm",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P514",
+      "ign": "cRa",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P519",
+      "ign": "Forlin",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P543",
+      "ign": "shanji",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P557",
+      "ign": "Nia",
+      "reason": "Country/identity conflict"
+    },
+    {
+      "id": "P558",
+      "ign": "advance",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P562",
+      "ign": "Aki",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P577",
+      "ign": "sorrow",
+      "reason": "Identity verification failed: Role mismatch: bottom != jungle"
+    },
+    {
+      "id": "P578",
+      "ign": "xiaohuangren",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P579",
+      "ign": "xqw",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P595",
+      "ign": "j1n5",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "P602",
+      "ign": "Smiley",
+      "reason": "Identity verification failed: Candidate has no role data"
+    },
+    {
+      "id": "P605",
+      "ign": "MG",
+      "reason": "Country/identity conflict"
+    },
+    {
+      "id": "P618",
+      "ign": "rcg",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "OE3d6f183c6d",
+      "ign": "Revenge",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "OEb1dd7b0fca",
+      "ign": "Vincenzo",
+      "reason": "Identity verification failed: Role mismatch: jungle != bottom"
+    },
+    {
+      "id": "OE264ed7bcec",
+      "ign": "Eclipse",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "OEcb8e722e7a",
+      "ign": "Aeon Crystal",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "OEfc70aef7dd",
+      "ign": "XiaoChiao",
+      "reason": "No photo URL in profile"
+    },
+    {
+      "id": "OEf9a097d0f3",
+      "ign": "Elkinho",
+      "reason": "No photo URL in profile"
+    }
+  ],
+  "remainingCoaches": [
+    {
+      "name": "Artemis",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Artemis"
+    },
+    {
+      "name": "Capivara",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Collamer",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Daeny",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Dopil",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Dopil"
+    },
+    {
+      "name": "Doran",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Doran"
+    },
+    {
+      "name": "Dylan Falco",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Edgar",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Edo",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Edo"
+    },
+    {
+      "name": "Endless",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Endless"
+    },
+    {
+      "name": "Guilhoto",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Hellombre",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Ido",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Jerry",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Jerry"
+    },
+    {
+      "name": "JinJin",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Kaiba",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Kaiba"
+    },
+    {
+      "name": "Maizijian",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Medina",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Melzhet",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Moonblack",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Moonblack"
+    },
+    {
+      "name": "Naruterador",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "NoName",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/NoName"
+    },
+    {
+      "name": "Own3r",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Own3r"
+    },
+    {
+      "name": "Pad",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Patron",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Politico",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "RapidStar",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Samyy",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "SeeEl",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Sensation",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Shine",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Shine"
+    },
+    {
+      "name": "Spark",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Spark"
+    },
+    {
+      "name": "Spawn",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Spawn"
+    },
+    {
+      "name": "Striker",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Striker"
+    },
+    {
+      "name": "TheRock7",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Tockers",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Tockers"
+    },
+    {
+      "name": "Viser1on",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Woong",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": "https://chaincc.lol/free/players/Woong"
+    },
+    {
+      "name": "XDDCC",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "Yuzhang",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "boc",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "bonO",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    },
+    {
+      "name": "oDin",
+      "reason": "No verified coach portrait; reject ambiguous player-only profile",
+      "candidate": null
+    }
+  ],
+  "excluded": "TBD cannot be assigned a real photograph; Daeny masked/far shot deferred; ambiguous names not applied."
+}

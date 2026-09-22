@@ -25,10 +25,11 @@
  */
 import {
   awardMinigame, canPlay, checkIn, claimFullSet, claimQuest, claimSeries, clampState, cupBo, cupOpponent, drawOpponent, enterCup,
-  levelOf, oppBumpFor, openPack, pendingOpponent, primeStamina, recordCup, recordLadder,
-  refreshDaily, salvage, salvageBulk, spendPlay, upgrade, ladderSlot, leagueEntry,
+  levelOf, oppBumpFor, openPack, packCost, pendingOpponent, primeStamina, recordCup, recordLadder,
+  refreshDaily, salvage, salvageBulk, seriesOfPack, spendPlay, upgrade, ladderSlot, leagueEntry,
   LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad,
 } from './gacha'
+import { selectWeeklySeries } from './weeklySeries'
 import {
   judgeMinigame, MINI_GAMES, MINIGAME_DAILY, MINIGAME_TTL_MS, newMinigame, refreshMinigame,
 } from './minigame'
@@ -67,6 +68,7 @@ export const ACTIONS = [
   'open', 'checkin', 'quest', 'series', 'fullset', 'salvage', 'salvage_dupes', 'salvage_bulk', 'upgrade',
   'ladder_draw', 'ladder', 'cup_enter', 'cup_play', 'cup_clear', 'challenge', 'mail_seen',
   'minigame_start', 'minigame_finish', 'dismantle', 'predict', 'predict_claim', 'seoul_start', 'seoul_play', 'seoul_quit',
+  'series_pick',
 ] as const
 export type ActionName = (typeof ACTIONS)[number]
 
@@ -130,6 +132,20 @@ function dispatch(
       const kind = a.kind
       if (!isPackKind(kind)) return { ok: false, why: '没有这种卡包' }
       const payWith = a.payWith === 'coins' ? 'coins' : 'pack'
+      // Coins buying a series pack must name the exact price the page showed
+      // before the purchase. The page could have been open since before the
+      // weekly pick changed, before a new week began, or before the prices
+      // were rebalanced — the server must not silently charge a different
+      // amount than the button the player clicked said it would.
+      if (payWith === 'coins' && seriesOfPack(kind)) {
+        const expected = a.expectedPrice
+        if (typeof expected !== 'number' || Number.isNaN(expected) || !Number.isFinite(expected)) {
+          return { ok: false, why: '页面版本已更新，请刷新后再购买赛区包。' }
+        }
+        if (expected !== packCost(kind, env.today, g)) {
+          return { ok: false, why: '赛区包价格已变化，请刷新页面确认后再购买。' }
+        }
+      }
       // A pack must not be knowable before it is bought. `seed` lives in the
       // account, the account is handed to the client with every reply, and
       // openPack is a pure function of it — so a player holding their own
@@ -323,6 +339,13 @@ function dispatch(
       markMailSeen(g)
       return { ok: true }
     }
+    case 'series_pick': {
+      const region = str(a.region) as Series
+      if (!(SERIES as readonly string[]).includes(region)) return { ok: false, why: '没有这个赛区' }
+      const r = selectWeeklySeries(g, env.today, region)
+      if (!r.ok) return r
+      return { ok: true, result: { region: r.region } }
+    }
     // ---- 位置小游戏: the server opens the round and judges it — engine/minigame.ts
     case 'minigame_start': {
       const game = str(a.game, 12) as MiniGame
@@ -346,7 +369,7 @@ function dispatch(
       if (elapsed > MINIGAME_TTL_MS) return { ok: false, why: '这局放太久了，已经作废' }
       const verdict = judgeMinigame(live.game, live.seed, a.transcript, elapsed)
       if (!verdict.ok) return { ok: false, why: verdict.why }
-      const reward = awardMinigame(g, live.game, verdict.tier)
+      const reward = awardMinigame(g, live.game, verdict.tier, env.today)
       m.best[live.game] = Math.max(m.best[live.game] ?? 0, verdict.score)
       return { ok: true, result: { game: live.game, tier: verdict.tier, score: verdict.score, summary: verdict.summary, detail: verdict.detail, reward, playsLeft: MINIGAME_DAILY - m.plays } }
     }

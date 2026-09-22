@@ -1,5 +1,5 @@
 import { RiftPackArt } from '../RiftChrome'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useCards } from './ctx'
 import { Panel } from '../common'
 import {
@@ -8,12 +8,14 @@ import {
   fullSetProgress, FULL_SET_REWARD,
 } from '../../engine/gacha'
 import type { CheckIn, PackKind, Pulled, QuestKey, Series } from '../../engine/gacha'
+import { selectedWeeklySeries } from '../../engine/weeklySeries'
 import { cardById } from '../../engine/cards'
 import { REGION_CN } from '../../engine/types'
 import { track } from '../../engine/telemetry'
 import PackStage from './PackStage'
 import SalvageConfirm from './SalvageConfirm'
 import type { SalvageAsk } from './SalvageConfirm'
+import { loadFastPack, saveFastPack } from './packPreferences'
 
 /** What the server says came out of a pack, resolved back to cards. */
 interface PulledWire { cardId: string; dupe: boolean; salvage: number }
@@ -22,52 +24,111 @@ export default function Packs() {
   const { g, today, act, toast } = useCards()
   const [opening, setOpening] = useState<Pulled[] | null>(null)
   const [openingKind, setOpeningKind] = useState<PackKind | null>(null)
+  const [revealSequence, setRevealSequence] = useState(0)
+  const [payWith, setPayWith] = useState<'pack' | 'coins'>('pack')
   const [busy, setBusy] = useState(false)
+  const [unknownError, setUnknownError] = useState(false)
   /** the reveal's 分解重复卡, waiting for the player to read the list */
   const [ask, setAsk] = useState<SalvageAsk | null>(null)
+  const [fastMode, setFastMode] = useState(() => loadFastPack())
+  const [candidate, setCandidate] = useState<Series | ''>('')
+  const [choosing, setChoosing] = useState(false)
+  const openLock = useRef(false)
+  const salvageLock = useRef(false)
+  const chooseLock = useRef(false)
+  const uncertain = useRef(false)
+  const markUnknown = () => { uncertain.current = true; setUnknownError(true) }
+
+  useEffect(() => {
+    saveFastPack(fastMode)
+  }, [fastMode])
 
   refreshDaily(g, today)
   const prog = collectionProgress(g)
   const series = seriesProgress(g)
   const featured = featuredSeries(today)
   const fullSet = fullSetProgress(g)
+  const selectedDiscount = selectedWeeklySeries(g, today)
 
   // The pack is rolled on the server and comes back already in the
   // collection; what happens here is the reveal.
   const open = async (kind: PackKind, payWith: 'pack' | 'coins') => {
-    if (busy) return
+    if (busy || openLock.current || salvageLock.current || uncertain.current || unknownError || ask) return
+    openLock.current = true
     setBusy(true)
-    const r = await act('open', { kind, payWith })
-    setBusy(false)
-    if (!r.ok) { toast(r.why); return }
-    const wire = ((r.result as { pulled?: PulledWire[] } | undefined)?.pulled ?? [])
-    const out: Pulled[] = wire
-      .map((p) => { const card = cardById(p.cardId); return card ? { card, dupe: p.dupe, salvage: p.salvage } : null })
-      .filter((x): x is Pulled => !!x)
-    if (!out.length) { toast('没读到开出的卡，刷新看看收藏。'); return }
-    // A card this page cannot name is a player added to the game after this
-    // page was loaded: the server rolled him, the account holds him, and the
-    // old bundle has no card to draw. 「十连包只有九张」「cn包只有两张」 — the
-    // day 14 CN players went in, a phone still on the previous build lost one
-    // card in a quarter of its ten-packs. Say so instead of drawing nine.
-    if (out.length < wire.length) {
-      toast(`这一包有 ${wire.length - out.length} 张是刚加进游戏的新选手，这个页面还是旧版本画不出来。卡已经在账号里，刷新后在收藏里能看到。`)
+    try {
+      const args: Record<string, unknown> = { kind, payWith }
+      if (payWith === 'coins' && seriesOfPack(kind)) {
+        args.expectedPrice = packCost(kind, today, g)
+      }
+      let r
+      try {
+        r = await act('open', args)
+      } catch (e) {
+        toast('连不上服务器，结果还不确定，请刷新后核对。')
+        markUnknown()
+        return
+      }
+      if (!r.ok) {
+        toast(r.why)
+        if (r.unknown) markUnknown()
+        return
+      }
+      const wire = ((r.result as { pulled?: PulledWire[] } | undefined)?.pulled ?? [])
+      const out: Pulled[] = wire
+        .map((p) => { const card = cardById(p.cardId); return card ? { card, dupe: p.dupe, salvage: p.salvage } : null })
+        .filter((x): x is Pulled => !!x)
+      if (!out.length) { toast('没读到开出的卡，请刷新存档核对收藏后继续。'); markUnknown(); return }
+      // A card this page cannot name is a player added to the game after this
+      // page was loaded: the server rolled him, the account holds him, and the
+      // old bundle has no card to draw. 「十连包只有九张」「cn包只有两张」 — the
+      // day 14 CN players went in, a phone still on the previous build lost one
+      // card in a quarter of its ten-packs. Say so instead of drawing nine.
+      if (out.length < wire.length) {
+        toast(`这一包有 ${wire.length - out.length} 张是刚加进游戏的新选手，这个页面还是旧版本画不出来。卡已经在账号里，刷新后在收藏里能看到。`)
+      }
+      track('card_pull', {
+        kind,
+        paid: payWith,
+        gold: out.filter((p) => p.card.rarity === 'gold').length,
+        dupes: out.filter((p) => p.dupe).length,
+        // which cards, so 「我抽到过他」 can be checked against something —
+        // the ten ids of a ten-pull are under a hundred bytes
+        cards: out.map((p) => p.card.id).join(','),
+      })
+      setOpening(out)
+      setOpeningKind(kind)
+      setPayWith(payWith)
+      setRevealSequence((s) => s + 1)
+    } finally {
+      setBusy(false)
+      openLock.current = false
     }
-    track('card_pull', {
-      kind,
-      paid: payWith,
-      gold: out.filter((p) => p.card.rarity === 'gold').length,
-      dupes: out.filter((p) => p.dupe).length,
-      // which cards, so 「我抽到过他」 can be checked against something —
-      // the ten ids of a ten-pull are under a hundred bytes
-      cards: out.map((p) => p.card.id).join(','),
-    })
-    setOpening(out)
-    setOpeningKind(kind)
   }
 
   const done = () => {
+    if (busy || openLock.current || salvageLock.current || ask) return
     setOpening(null)
+    setOpeningKind(null)
+    setAsk(null)
+  }
+
+  const continueNext = async () => {
+    if (busy || openLock.current || unknownError || ask) return
+    if (!openingKind) return
+    if (payWith === 'pack') {
+      if ((g.packs[openingKind] ?? 0) < 1) {
+        toast('卡包不足。')
+        return
+      }
+    } else {
+      const price = packCost(openingKind, today, g)
+      if (g.coins < price) {
+        toast('金币不足。')
+        return
+      }
+    }
+    await open(openingKind, payWith)
   }
 
   const check = async () => {
@@ -82,6 +143,26 @@ export default function Packs() {
     const r = await act('quest', { key })
     if (!r.ok) { toast(r.why); return }
     toast(`任务完成，+${(r.result as { coins: number }).coins} 金币。`)
+  }
+
+  const chooseWeekly = async () => {
+    if (!candidate || selectedDiscount || choosing || chooseLock.current) return
+    chooseLock.current = true
+    setChoosing(true)
+    try {
+      const r = await act('series_pick', { region: candidate })
+      if (!r.ok) {
+        toast(r.why)
+        return
+      }
+      toast(`本周赛区已锁定：${REGION_CN[candidate]}，八折优惠。北京时间周一 0 点后可重新选择。`)
+      setCandidate('')
+    } catch (e) {
+      toast('连不上服务器，结果还不确定，请刷新后核对。')
+    } finally {
+      setChoosing(false)
+      chooseLock.current = false
+    }
   }
 
   const takeSeries = async (region: Series) => {
@@ -100,6 +181,14 @@ export default function Packs() {
 
   return (
     <>
+      <div className="pack-preferences">
+        <label><input type="checkbox" checked={fastMode} onChange={e => setFastMode(e.target.checked)} /> 快速开包</label>
+        <span className="tiny faint">跳过祭坛、直接翻开普通卡，彩卡仍有独立特效。自动记住此设备的选择。</span>
+      </div>
+      {unknownError && <div role="alert" className="pack-sync-notice">
+        <span>上一笔操作结果尚未确认，已暂停开包。请刷新存档后核对卡包与收藏。</span>
+        <button onClick={() => window.location.reload()}>刷新存档</button>
+      </div>}
       <div className="grid c2" style={{ alignItems: 'start' }}>
         <Panel title="每日签到" actions={<span className="tiny muted">连续 {g.daily.streak} 天</span>}>
           <p className="small muted" style={{ marginTop: 0, lineHeight: 1.7 }}>
@@ -179,7 +268,7 @@ export default function Packs() {
               </h4>
               <p>{PACKS.legend.blurb}</p>
               <div className="pack-shelf-actions">
-                <button className="primary sm" onClick={() => void open('legend', 'pack')} disabled={busy}>
+                <button className="primary sm" onClick={() => void open('legend', 'pack')} disabled={busy || unknownError}>
                   打开（{g.packs.legend}）
                 </button>
                 <span className="tiny faint" style={{ alignSelf: 'center' }}>非卖品</span>
@@ -197,7 +286,7 @@ export default function Packs() {
                 </h4>
                 <p>{def.blurb}</p>
                 <div className="pack-shelf-actions">
-                  <button className="primary sm" onClick={() => void open(kind, 'pack')} disabled={busy || own < 1}>
+                  <button className="primary sm" onClick={() => void open(kind, 'pack')} disabled={busy || unknownError || own < 1}>
                     打开（{own}）
                   </button>
                   {def.shop === false ? (
@@ -206,7 +295,7 @@ export default function Packs() {
                     <button
                       className="sm"
                       onClick={() => void open(kind, 'coins')}
-                      disabled={busy || g.coins < def.cost}
+                      disabled={busy || unknownError || g.coins < def.cost}
                     >
                       花 {def.cost} 金币
                     </button>
@@ -231,7 +320,7 @@ export default function Packs() {
                 <div key={kind} className="pack-box"><RiftPackArt kind={kind} />
                   <h4>{def.name}<span className="pack-own"> ×{own}</span></h4>
                   <p>{def.blurb}</p>
-                  <div className="pack-shelf-actions"><button className="primary sm" onClick={() => void open(kind, 'pack')} disabled={busy || own < 1}>打开（{own}）</button></div>
+                  <div className="pack-shelf-actions"><button className="primary sm" onClick={() => void open(kind, 'pack')} disabled={busy || unknownError || own < 1}>打开（{own}）</button></div>
                 </div>
               )
             })}
@@ -244,17 +333,44 @@ export default function Packs() {
         actions={<span className="tiny muted">六大赛区，分开收集</span>}
       >
         <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-          赛区包只出该赛区的选手，出金率和选拔包相同，贵 200 金币。
+          赛区包只出该赛区的选手，出金率和选拔包相同；六大赛区全部常驻可买，收齐各赛区都有奖励。LCP、CBLOL 赛区不出彩卡，也不计入彩卡保底。
           {'　'}每个赛区收到 25% / 50% / 75% / 90% / 100% 各有一档奖励，收齐送十连包。
-          {'　'}每周轮一个主打赛区，本周是{REGION_CN[featured]}，便宜两成。
+          {'　'}每周可自选一个赛区享受八折优惠，本周选定后不可更改，北京时间周一 0 点开放重新选择；锁定前按原价购买。本周推荐是{REGION_CN[featured]}，仅作推荐展示。
         </p>
+        {!selectedDiscount ? (
+          <div className="row wrap" style={{ gap: 8, marginBottom: 10 }}>
+            <label htmlFor="weekly-series-choice" className="tiny faint" style={{ whiteSpace: 'nowrap' }}>选择优惠赛区</label>
+            <select
+              id="weekly-series-choice"
+              value={candidate}
+              onChange={(e) => setCandidate(e.target.value as Series | '')}
+              disabled={choosing}
+              style={{ maxWidth: '100%' }}
+            >
+              <option value="">请选择</option>
+              {series.map((s) => (
+                <option key={s.region} value={s.region}>{REGION_CN[s.region]}</option>
+              ))}
+            </select>
+            <button className="sm primary" onClick={() => void chooseWeekly()} disabled={!candidate || choosing}>
+              确认本周赛区（不可更改）
+            </button>
+          </div>
+        ) : (
+          <div className="row wrap" style={{ gap: 8, marginBottom: 10 }}>
+            <span className="tiny">已选优惠赛区：<b>{REGION_CN[selectedDiscount]}</b></span>
+            <span className="tiny faint">该赛区包 2080 金币</span>
+            <span className="tiny faint">北京时间周一 0 点重新选择</span>
+          </div>
+        )}
         <div className="pack-shelf">
           {series.map((s) => {
             const def = PACKS[s.pack]
             const own = g.packs[s.pack] ?? 0
             const pct = s.total ? Math.round((s.owned / s.total) * 100) : 0
             const hot = s.region === featured
-            const price = packCost(s.pack, today)
+            const discounted = s.region === selectedDiscount
+            const price = packCost(s.pack, today, g)
             return (
               <div
                 key={s.region}
@@ -263,7 +379,8 @@ export default function Packs() {
               >
                 <h4>
                   {REGION_CN[s.region]}
-                  {hot && <span className="tag warn" style={{ marginLeft: 6 }}>本周主打</span>}
+                  {hot && <span className="tag warn" style={{ marginLeft: 6 }}>本周推荐</span>}
+                  {discounted && <span className="tag warn" style={{ marginLeft: 6 }}>自选八折</span>}
                   {own > 0 && <span className="pack-own"> ×{own}</span>}
                 </h4>
                 <div className="tiny mono faint" style={{ margin: '2px 0 5px' }}>
@@ -307,16 +424,16 @@ export default function Packs() {
                   )}
                 </div>
                 <div className="pack-shelf-actions">
-                  <button className="primary sm" onClick={() => void open(s.pack, 'pack')} disabled={busy || own < 1}>
+                  <button className="primary sm" onClick={() => void open(s.pack, 'pack')} disabled={busy || unknownError || own < 1}>
                     打开（{own}）
                   </button>
                   <button
                     className="sm"
                     onClick={() => void open(s.pack, 'coins')}
-                    disabled={busy || g.coins < price}
+                    disabled={busy || unknownError || g.coins < price}
                   >
                     花 {price} 金币
-                    {hot && <s className="faint" style={{ marginLeft: 4 }}>{def.cost}</s>}
+                    {discounted && <s className="faint" style={{ marginLeft: 4 }}>{def.cost}</s>}
                   </button>
                 </div>
               </div>
@@ -368,11 +485,28 @@ export default function Packs() {
 
       {opening && (
         <PackStage
+          key={revealSequence}
           pulled={opening}
           packName={openingKind ? PACKS[openingKind].name : '选手卡包'}
           position={openingKind ? packPosition(openingKind) ?? undefined : undefined}
+          fast={fastMode}
+          busy={busy}
+          unknownError={unknownError}
+          onFastChange={setFastMode}
+          continueLabel={
+            payWith === 'pack'
+              ? `继续下一包（消耗 1 个${openingKind ? PACKS[openingKind].name : '卡包'}）`
+              : `继续下一包（消耗 ${openingKind ? packCost(openingKind, today, g) : 0} 金币）`
+          }
+          continueEnabled={!busy && !unknownError && !ask && openingKind !== null && (
+            payWith === 'pack'
+              ? (g.packs[openingKind] ?? 0) >= 1
+              : g.coins >= (openingKind ? packCost(openingKind, today, g) : 0)
+          )}
+          onContinue={() => void continueNext()}
           onDone={done}
           onSellAll={() => {
+            if (openLock.current || salvageLock.current || uncertain.current || busy || ask) return
             // one spare per card named, which is what salvage_dupes sells —
             // a pack holding the same dupe twice still lists it once
             const seen = new Set<string>()
@@ -383,20 +517,33 @@ export default function Packs() {
             setAsk({
               lines,
               onConfirm: async () => {
+                if (busy || openLock.current || salvageLock.current || uncertain.current || unknownError) return
+                salvageLock.current = true
                 setBusy(true)
-                const r = await act('salvage_dupes', { cardIds: lines.map((l) => l.cardId) })
-                setBusy(false)
-                setAsk(null)
-                if (!r.ok) { toast(r.why); return }
-                const coins = (r.result as { coins: number }).coins
-                toast(coins ? `重复卡已分解，+${coins} 金币。` : '这一包的重复卡已经分解过了。')
+                try {
+                  const r = await act('salvage_dupes', { cardIds: lines.map((l) => l.cardId) })
+                  setAsk(null)
+                  if (!r.ok) {
+                    toast(r.why)
+                    if (r.unknown) markUnknown()
+                    return
+                  }
+                  const coins = (r.result as { coins: number }).coins
+                  toast(coins ? `重复卡已分解，+${coins} 金币。` : '这一包的重复卡已经分解过了。')
+                } catch (e) {
+                  toast('连不上服务器，结果还不确定，请刷新后核对。')
+                  setAsk(null)
+                  markUnknown()
+                } finally {
+                  setBusy(false)
+                  salvageLock.current = false
+                }
               },
             })
           }}
         />
       )}
-      {ask && <SalvageConfirm ask={ask} busy={busy} onClose={() => { if (!busy) setAsk(null) }} />}
+      {ask && <SalvageConfirm ask={ask} busy={busy} onClose={() => { if (!busy && !salvageLock.current) setAsk(null) }} />}
     </>
   )
 }
-

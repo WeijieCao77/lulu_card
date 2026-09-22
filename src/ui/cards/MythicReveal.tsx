@@ -5,8 +5,8 @@ import CardFace from '../Card'
 import { playPackCue } from '../packAudio'
 
 /** One entrance per newly revealed mythic, including every mythic in reveal-all. */
-export default function MythicReveal({ pulled, remaining, onContinue }: { pulled: Pulled; remaining: number; onContinue: () => void }) {
-  const [ready, setReady] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+export default function MythicReveal({ pulled, remaining, fast = false, onContinue }: { pulled: Pulled; remaining: number; fast?: boolean; onContinue: () => void }) {
+  const [ready, setReady] = useState(() => fast || window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   const skip = useRef<HTMLButtonElement>(null)
   const played = useRef(false)
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function MythicReveal({ pulled, remaining, onContinue }: { pulled
     const t = window.setTimeout(() => setReady(true), 1500)
     return () => window.clearTimeout(t)
   }, [])
-  return <div className="mythic-entrance" role="dialog" aria-modal="true" aria-label={`彩卡降临：${cardName(pulled.card)}`}>
+  return <div className={`mythic-entrance${fast ? ' mythic-quick' : ''}`} role="dialog" aria-modal="true" aria-label={`彩卡降临：${cardName(pulled.card)}`}>
     <div className="mythic-cosmos" aria-hidden="true"><div className="mythic-rays" /><div className="mythic-halo" /><div className="mythic-shockwave" /><div className="mythic-pillar" />
       {Array.from({ length: 24 }, (_, i) => <i key={i} style={{ '--i': i } as CSSProperties} />)}
     </div>

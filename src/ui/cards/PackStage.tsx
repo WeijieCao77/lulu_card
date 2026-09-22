@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import CardFace from '../Card'
 import { cardName, RARITY_CN } from '../../engine/cards'
@@ -7,6 +7,7 @@ import type { PackPosition } from './positionPackDesign'
 import { POSITION_PACKS } from './positionPackDesign'
 import { playPackCue } from '../packAudio'
 import './packStage.css'
+import './packQuick.css'
 import PackAltar from './PackAltar'
 import MythicReveal from './MythicReveal'
 
@@ -36,17 +37,35 @@ export interface PackStageProps {
   pulled: Pulled[]
   packName?: string
   position?: PackPosition
+  fast?: boolean
+  busy?: boolean
+  unknownError?: boolean
+  onFastChange?: (enabled: boolean) => void
+  continueEnabled?: boolean
+  continueLabel?: string
+  onContinue?: () => void
   onDone: () => void
   onSellAll: () => void
 }
 
 /** Presentation only: the server already awarded these cards before this mounts. */
-export default function PackStage({ pulled, packName = '选手卡包', position, onDone, onSellAll }: PackStageProps) {
-  const [phase, setPhase] = useState<'sealed' | 'burst' | 'cards'>('sealed')
-  const [revealed, setRevealed] = useState<Set<number>>(() => new Set())
-  const revealedRef = useRef(new Set<number>())
-  const [mythics, setMythics] = useState<number[]>([])
-  const mythicBusy = useRef(false)
+export default function PackStage({ pulled, packName = '选手卡包', position, fast = false, busy = false, unknownError = false, onFastChange, continueEnabled = false, continueLabel = '继续下一包', onContinue, onDone, onSellAll }: PackStageProps) {
+  const fastFrozen = useRef(fast).current
+  const initialOpened = useMemo(() => {
+    if (!fastFrozen) return new Set<number>()
+    const set = new Set<number>()
+    pulled.forEach((_, i) => set.add(i))
+    return set
+  }, [fastFrozen, pulled])
+  const initialMythics = useMemo(() => {
+    if (!fastFrozen) return [] as number[]
+    return pulled.map((p, i) => p.card.rarity === 'mythic' ? i : -1).filter((i) => i >= 0)
+  }, [fastFrozen, pulled])
+  const [phase, setPhase] = useState<'sealed' | 'burst' | 'cards'>(fastFrozen ? 'cards' : 'sealed')
+  const [revealed, setRevealed] = useState<Set<number>>(initialOpened)
+  const revealedRef = useRef(new Set<number>(initialOpened))
+  const [mythics, setMythics] = useState<number[]>(initialMythics)
+  const mythicBusy = useRef(initialMythics.length > 0)
   const [inspect, setInspect] = useState<number | null>(null)
   const [layout, setLayout] = useState({ width: 120, columns: 3 })
   const [scrollMode, setScrollMode] = useState(false)
@@ -105,7 +124,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
   }, [phase, pulled.length])
 
   useEffect(() => {
-    if (phase === 'cards') board.current?.querySelector<HTMLButtonElement>('button')?.focus({ preventScroll: true })
+    if (phase === 'cards' && !mythicBusy.current) board.current?.querySelector<HTMLButtonElement>('button')?.focus({ preventScroll: true })
   }, [phase])
   useEffect(() => {
     if (inspect !== null) detailClose.current?.focus({ preventScroll: true })
@@ -164,10 +183,10 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
   }
 
   return createPortal(<div className={`ritual-stage phase-${phase}`} ref={stage} tabIndex={-1} role="dialog" aria-modal="true" aria-label={`${title}开包`} onKeyDown={e => {
-    if (e.key === 'Escape') { e.stopPropagation(); mythics.length ? continueMythic() : inspect !== null ? closeDetail() : onDone() }
+    if (e.key === 'Escape') { e.stopPropagation(); if (busy) return; mythics.length ? continueMythic() : inspect !== null ? closeDetail() : onDone() }
     if (e.key === 'Tab') {
       const scope = mythics.length ? stage.current?.querySelector('.mythic-entrance') : inspect === null ? stage.current : stage.current?.querySelector('.ritual-detail')
-      const buttons = Array.from(scope?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)') ?? []).filter(b => !b.closest('[inert]'))
+      const buttons = Array.from(scope?.querySelectorAll<HTMLElement>('button:not(:disabled),input:not(:disabled),select:not(:disabled),a[href]') ?? []).filter(b => !b.closest('[inert]'))
       const first = buttons[0], last = buttons[buttons.length - 1]
       if (!buttons.includes(document.activeElement as HTMLButtonElement)) { e.preventDefault(); first?.focus() }
       else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus() }
@@ -177,7 +196,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
     <div className="ritual-scenery" aria-hidden="true"><div className="ritual-orbit" /><div className="ritual-orbit inner" /><div className="ritual-dust">{Array.from({ length: 18 }, (_, i) => <i key={i} style={{ '--i': i } as CSSProperties} />)}</div></div>
     <header className="ritual-header" inert={inspect !== null || mythics.length > 0}>
       <div><span className="ritual-eyebrow">猪之家出品 · 噜噜卡</span><h2>{title}</h2></div>
-      <button className="ritual-dismiss" onClick={onDone} aria-label="收下卡牌并关闭">✕</button>
+      <button className="ritual-dismiss" onClick={onDone} disabled={busy} aria-label="收下卡牌并关闭">✕</button>
     </header>
 
     {phase !== 'cards' ? <PackAltar count={pulled.length} bursting={phase === 'burst'} onOpen={openPack} seal={<Seal />} /> : <div className={`ritual-board count-${pulled.length}${scrollMode ? ' is-scroll' : ''}`} ref={board} inert={inspect !== null || mythics.length > 0}
@@ -240,12 +259,30 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
     </div>}
 
     <footer className="ritual-footer" inert={inspect !== null || mythics.length > 0}>
-      <div className="ritual-progress" role="status">{phase === 'cards' ? <><b>{revealed.size}</b> / {pulled.length} 已翻开<span>{all ? '全部揭晓 · 点击卡牌放大查看' : <><span className="ritual-desktop-hint">点击任意卡背，按自己的顺序揭晓</span><span className="ritual-touch-hint">{scrollMode ? '轻点翻面，上下滑动浏览卡牌' : '轻点翻面，也可滑过卡背连续翻牌'}</span></>}</span></> : <span>卡牌已存入收藏，随时可以收下</span>}</div>
-      <div className="ritual-actions">{phase !== 'cards' ? <button onClick={skip}>跳过动画</button> : <>
-        {!all && <button onClick={revealAll}>全部翻开</button>}
-        {all && dupes > 0 && <button onClick={onSellAll}>分解重复卡（{dupes}）</button>}
-        <button className="ritual-collect" onClick={onDone}>{all ? '收下卡牌' : '收下并关闭'}</button>
-      </>}</div>
+      <div className="ritual-progress" role="status">
+        {phase === 'cards' ? <><b>{revealed.size}</b> / {pulled.length} 已翻开<span>{all ? '全部揭晓 · 点击卡牌放大查看' : <><span className="ritual-desktop-hint">点击任意卡背，按自己的顺序揭晓</span><span className="ritual-touch-hint">{scrollMode ? '轻点翻面，上下滑动浏览卡牌' : '轻点翻面，也可滑过卡背连续翻牌'}</span></>}</span></> : <span>卡牌已存入收藏，随时可以收下</span>}
+        {unknownError && <span className="tiny warn" style={{ display: 'block', marginTop: 6 }}>结果不确定，请刷新存档确认。</span>}
+      </div>
+      <div className="ritual-actions">
+        {unknownError && <button className="ghost sm" onClick={() => window.location.reload()}>刷新存档</button>}
+        {phase !== 'cards' ? <button onClick={skip}>跳过动画</button> : <>
+          {!all && <button onClick={revealAll}>全部翻开</button>}
+          {all && dupes > 0 && <button onClick={onSellAll} disabled={busy || unknownError}>分解重复卡（{dupes}）</button>}
+          {onContinue && all && <button onClick={onContinue} disabled={!continueEnabled || busy || unknownError}>{busy ? '结算中…' : continueLabel}</button>}
+          <button className="ritual-collect" onClick={onDone} disabled={busy}>{all ? '收下卡牌' : '收下并关闭'}</button>
+        </>}
+      </div>
+      {onFastChange && (
+        <label className="tiny faint" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 8 }}>
+          <input
+            type="checkbox"
+            checked={fast}
+            disabled={busy}
+            onChange={(e) => onFastChange(e.target.checked)}
+          />
+          快速模式（影响下一包）
+        </label>
+      )}
     </footer>
     {inspect !== null && <div className="ritual-detail" role="dialog" aria-modal="true" aria-label="卡牌详情" onClick={closeDetail}>
       <div className={`ritual-detail-card rarity-${pulled[inspect].card.rarity}`} onClick={e => e.stopPropagation()}>
@@ -255,6 +292,6 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
         <button ref={detailClose} onClick={closeDetail}>返回卡桌</button>
       </div>
     </div>}
-    {mythics.length > 0 && <MythicReveal key={mythics[0]} pulled={pulled[mythics[0]]} remaining={mythics.length} onContinue={continueMythic} />}
+    {mythics.length > 0 && <MythicReveal key={mythics[0]} pulled={pulled[mythics[0]]} remaining={mythics.length} fast={fastFrozen} onContinue={continueMythic} />}
   </div>, document.body)
 }

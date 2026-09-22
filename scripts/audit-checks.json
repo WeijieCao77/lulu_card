@@ -685,5 +685,21 @@
   {
     "runtime": "tsx",
     "file": "scripts/check_prediction_rewards.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_weekly_series.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_account_unknown.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_minigame_rewards.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_arena_rosters.ts"
   }
 ]

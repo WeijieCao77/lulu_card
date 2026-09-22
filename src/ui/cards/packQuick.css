@@ -1,0 +1,36 @@
+.pack-stage-quick {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pack-preferences{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding:10px 14px;border:1px solid var(--line);border-radius:8px}
+.pack-preferences label,.ritual-footer label{min-height:44px;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.pack-preferences input[type='checkbox'],.ritual-footer input[type='checkbox']{width:20px;height:20px;flex:none}
+.pack-sync-notice{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px;border:1px solid var(--warn);margin-bottom:14px;line-height:1.6}
+.ritual-stage .mythic-quick .mythic-hero-card,.ritual-stage .mythic-quick .mythic-announcement,.ritual-stage .mythic-quick .mythic-identity{animation:none}
+.ritual-stage .mythic-quick .mythic-cosmos>i,.ritual-stage .mythic-quick .mythic-pillar,.ritual-stage .mythic-quick .mythic-shockwave{display:none}
+.ritual-actions button{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:400px){.ritual-footer{gap:5px}.ritual-actions{gap:6px}.ritual-actions button{padding:8px 12px}.ritual-footer label{margin-top:0!important}}
+
+.pack-stage-quick .ritual-footer .ritual-actions {
+  flex-wrap: wrap;
+}
+
+.pack-stage-quick .ritual-footer .ritual-actions button {
+  min-height: 44px;
+}
+
+.pack-stage-quick .ritual-footer .ritual-actions input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.pack-stage-quick .ritual-footer .ritual-actions label {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}

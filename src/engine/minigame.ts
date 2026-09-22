@@ -38,8 +38,8 @@ export type Tier = '金' | '银' | '铜'
 export const MINIGAME_DAILY = 5
 /** a round left open this long is dead; the play it spent is not refunded */
 export const MINIGAME_TTL_MS = 10 * 60 * 1000
-/** coins alongside the pack (金), or instead of one (铜) */
-export const MINI_COINS: Record<Tier, number> = { 金: 200, 银: 0, 铜: 80 }
+/** coins alongside the position pack (金/银), or instead of one (铜) */
+export const MINI_COINS: Record<Tier, number> = { 金: 400, 银: 250, 铜: 100 }
 /** which tiers pay the position pack */
 export const MINI_PAYS_PACK: Record<Tier, boolean> = { 金: true, 银: true, 铜: false }
 /** no human presses twice this fast; a transcript that does is not a human's */
@@ -74,6 +74,8 @@ export interface MinigameState {
   won: number
   /** best score per game, for the screen */
   best: Partial<Record<MiniGame, number>>
+  /** server day the daily gold/silver bonus elite pack was claimed */
+  bonusDay?: string
 }
 export const newMinigame = (): MinigameState => ({ day: null, plays: 0, live: null, won: 0, best: {} })
 export function refreshMinigame(m: MinigameState, today: string): void {
