@@ -35,7 +35,7 @@ import {
 } from './minigame'
 import type { MiniGame } from './minigame'
 import type { GachaState, QuestKey, Series } from './gacha'
-import { playArenaMatch, playCupMatch, playRivalMatch } from './arena'
+import { arenaOpponentRating, playArenaMatch, playCupMatch, playRivalMatch } from './arena'
 import type { ArenaResult, RivalSquad } from './arena'
 import { challengeBlock, challengeSig, guessChallenge } from './challenge'
 import { hashStr } from './rng'
@@ -131,6 +131,9 @@ function dispatch(
     case 'open': {
       const kind = a.kind
       if (!isPackKind(kind)) return { ok: false, why: '没有这种卡包' }
+      if (kind === 'ame' || kind === 'emea' || kind === 'lcp' || kind === 'cblol') {
+        return { ok: false, why: '旧赛区包已下架，请刷新后选择新的欧美包。' }
+      }
       const payWith = a.payWith === 'coins' ? 'coins' : 'pack'
       // Coins buying a series pack must name the exact price the page showed
       // before the purchase. The page could have been open since before the
@@ -264,7 +267,6 @@ function dispatch(
       const pinned = pendingOpponent(g, league)!
       const rival = (pinned.rival ?? null) as RivalSquad | null
       const oppId = pinned.club ?? WORLD_TEAMS[0].id
-      const opp = WORLD_TEAMS.find((t) => t.id === oppId)
       const master = L.div >= MASTER_DIV
       // the league's own handicap, and above 大师 the sharpening on top
       const bump = LEAGUE_RULES[league].oppBump + (master ? oppBumpFor(L.points ?? 0) : 0)
@@ -276,7 +278,7 @@ function dispatch(
       // a real five is worth what its own ladder position says it is worth
       const strength = rival
         ? 84 + Math.min(10, Math.floor(rival.points / 250))
-        : (opp?.rating ?? 80) + bump
+        : (arenaOpponentRating(oppId) ?? 80) + bump
       const mercy = !!rival
         && squadRating(rival, (id) => rival.levels[id] ?? 0) - squadRating(five.squad, level) >= RIVAL_MERCY_GAP
       const out = recordLadder(g, res.win, strength, league, mercy)

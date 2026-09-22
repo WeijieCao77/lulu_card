@@ -80,13 +80,13 @@ console.log('\n=== 抽卡 1000 次「试训包」 ===')
 
 console.log('\n=== 各卡包保底 ===')
 for (const kind of Object.keys(PACKS) as PackKind[]) {
-  if (kind === 'seoul2024') {
+  if (kind === 'seoul2024' || ['ame', 'emea', 'lcp', 'cblol'].includes(kind)) {
     const g = newGacha('VM-TEST-TEST-TEST-TEST-TES2', 'check', '2026-08-27')
     g.coins = 1e9
     g.packs[kind] = 1
     for (const payWith of ['coins', 'pack'] as const) {
       const before = structuredClone(g)
-      assert.throws(() => openPack(g, kind, payWith), /没有这种卡包/)
+      assert.throws(() => openPack(g, kind, payWith), kind === 'seoul2024' ? /没有这种卡包/ : /已合并/)
       assert.deepEqual(g, before)
     }
     continue

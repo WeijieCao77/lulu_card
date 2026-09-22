@@ -17,6 +17,7 @@ import { isPlayerCard } from './cards'
 import type { Card, Rarity } from './cards'
 import type { Series } from './gacha'
 import type { Role } from './types'
+import { gameRegionOf } from './gameRegions'
 
 export interface CardFilter {
   rarity: 'all' | Rarity | 'coach'
@@ -34,7 +35,11 @@ export const filterActive = (f: CardFilter): boolean =>
 export function matchesFilter(card: Card, f: CardFilter): boolean {
   if (f.rarity === 'coach') { if (card.kind !== 'coach') return false }
   else if (f.rarity !== 'all' && card.rarity !== f.rarity) return false
-  if (f.region !== 'all' && card.region !== f.region) return false
+  if (f.region !== 'all') {
+    const mapped = gameRegionOf(f.region)
+    if (!mapped) return false
+    if (mapped !== gameRegionOf(card.region)) return false
+  }
   // a coach has no position; asking for one leaves coaches out
   if (f.role === 'igl') { if (!(isPlayerCard(card) && card.isIgl)) return false }
   else if (f.role !== 'all' && !(isPlayerCard(card) && card.roles.includes(f.role))) return false
@@ -57,9 +62,11 @@ export const matchesQuery = (c: Card, q: string): boolean => {
  */
 export function readFilter(b: Record<string, unknown> | null | undefined): CardFilter {
   const s = (v: unknown): string => (typeof v === 'string' ? v.slice(0, 40) : 'all')
+  const regionRaw = s(b?.region)
+  const regionMapped = regionRaw === 'all' ? 'all' : (gameRegionOf(regionRaw) ?? regionRaw)
   return {
     rarity: s(b?.rarity) as CardFilter['rarity'],
-    region: s(b?.region) as CardFilter['region'],
+    region: regionMapped as CardFilter['region'],
     role: s(b?.role) as CardFilter['role'],
     club: s(b?.club) as CardFilter['club'],
   }

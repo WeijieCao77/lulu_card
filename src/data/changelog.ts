@@ -26,6 +26,12 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-09-22', title: '三大区收集', changes: [
+    { kind: '调整', text: '游戏赛区归类为 LPL、LCK、欧美三大区。欧美包含 LEC、LCS、LCP、CBLOL 四个联赛；人物资料仍保留所属的真实联赛。' },
+    { kind: '调整', text: '原 LEC、LCS、LCP、CBLOL 四个地区的卡包合并为欧美包，原库存合并保留；周选优惠赛区同步改为三大区。' },
+    { kind: '调整', text: '普通选手基础评分按三大区统一口径校准，金银铜分层随之调整；40 张彩卡评分与荣誉不变。' },
+  ],
+}, {
   date: '2026-09-22', title: '开包提速·教练入册', changes: [
     { kind: '调整', text: '快速开包会记住设备偏好，普通卡直接揭晓，彩卡保留独立特效；全揭晓后继续下一包沿用原支付方式。' },
     { kind: '新增', text: '教练图鉴收录114张，可搜索名字、队伍或筛选赛区。' },

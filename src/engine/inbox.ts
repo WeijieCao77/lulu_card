@@ -10,6 +10,7 @@
 import { cardById, isPlayerCard, MAX_LEVEL } from './cards'
 import { MAIL_MAX, PACKS } from './gacha'
 import type { GachaState, PackKind } from './gacha'
+import { canonicalRegionPack } from './regionMigration'
 
 export interface MailItem {
   kind: string
@@ -156,21 +157,21 @@ export function mailLine(m: MailItem): string {
       const head = place === 1 ? '全服杯冠军' : place === 2 ? '全服杯亚军' : place === 4 ? '全服杯四强' : `全服杯赢了 ${Number(m.body?.wins) || 0} 场`
       const bits = []
       if (m.coins) bits.push(`${m.coins} 金币`)
-      if (m.pack) bits.push(`${PACKS[m.pack as PackKind]?.name ?? m.pack} ×${m.count}`)
+      if (m.pack) bits.push(`${PACKS[canonicalRegionPack(m.pack) as PackKind]?.name ?? m.pack} ×${m.count}`)
       return `${head}${label ? `（${label}）` : ''}：${bits.join('，')}`
     }
     case 'team_cup': {
       const place = Number(m.body?.place) || 0
       const head = place === 1 ? '组队杯冠军' : place === 2 ? '组队杯亚军' : place === 4 ? '组队杯四强' : place === 8 ? '组队杯八强' : '组队杯'
       const bits = []
-      if (m.pack) bits.push(`${PACKS[m.pack as PackKind]?.name ?? m.pack} ×${m.count}`)
+      if (m.pack) bits.push(`${PACKS[canonicalRegionPack(m.pack) as PackKind]?.name ?? m.pack} ×${m.count}`)
       if (m.coins) bits.push(`${m.coins} 金币`)
       const won = Number(m.body?.duelWins) || 0
       return `${head}：${bits.join('，')}${won ? `（单挑赢了 ${won} 场）` : ''}`
     }
     case 'grant': {
       const bits = []
-      if (m.pack) bits.push(`${PACKS[m.pack as PackKind]?.name ?? m.pack} ×${m.count}`)
+      if (m.pack) bits.push(`${PACKS[canonicalRegionPack(m.pack) as PackKind]?.name ?? m.pack} ×${m.count}`)
       if (m.coins) bits.push(`${m.coins} 金币`)
       if (m.cardId) bits.push(nameOf(m.cardId))
       const note = String(m.body?.note ?? '')
@@ -192,7 +193,7 @@ export function applyMail(g: GachaState, mail: MailItem[]): void {
     if (m.coins) g.coins += m.coins
     if (m.cardId) restoreCard(g, m.cardId, m.level)
     if (m.pack && m.pack in PACKS) {
-      const k = m.pack as PackKind
+      const k = canonicalRegionPack(m.pack) as PackKind
       g.packs[k] = (g.packs[k] ?? 0) + Math.max(1, m.count)
     }
     const note = m.kind === 'grant' ? String(m.body?.note ?? '') : ''

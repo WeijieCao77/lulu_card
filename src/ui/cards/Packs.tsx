@@ -10,7 +10,7 @@ import {
 import type { CheckIn, PackKind, Pulled, QuestKey, Series } from '../../engine/gacha'
 import { selectedWeeklySeries } from '../../engine/weeklySeries'
 import { cardById } from '../../engine/cards'
-import { REGION_CN } from '../../engine/types'
+import { GAME_REGION_CN } from '../../engine/gameRegions'
 import { track } from '../../engine/telemetry'
 import PackStage from './PackStage'
 import SalvageConfirm from './SalvageConfirm'
@@ -155,7 +155,7 @@ export default function Packs() {
         toast(r.why)
         return
       }
-      toast(`本周赛区已锁定：${REGION_CN[candidate]}，八折优惠。北京时间周一 0 点后可重新选择。`)
+      toast(`本周赛区已锁定：${GAME_REGION_CN[candidate]}，八折优惠。北京时间周一 0 点后可重新选择。`)
       setCandidate('')
     } catch (e) {
       toast('连不上服务器，结果还不确定，请刷新后核对。')
@@ -330,12 +330,12 @@ export default function Packs() {
 
       <Panel
         title="赛区系列"
-        actions={<span className="tiny muted">六大赛区，分开收集</span>}
+        actions={<span className="tiny muted">三大区，分开收集</span>}
       >
         <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-          赛区包只出该赛区的选手，出金率和选拔包相同；六大赛区全部常驻可买，收齐各赛区都有奖励。LCP、CBLOL 赛区不出彩卡，也不计入彩卡保底。
-          {'　'}每个赛区收到 25% / 50% / 75% / 90% / 100% 各有一档奖励，收齐送十连包。
-          {'　'}每周可自选一个赛区享受八折优惠，本周选定后不可更改，北京时间周一 0 点开放重新选择；锁定前按原价购买。本周推荐是{REGION_CN[featured]}，仅作推荐展示。
+          游戏内赛区包分为三大区：LPL、LCK、欧美（原 LEC、LCS、LCP、CBLOL 库存合并保留）。赛区包只出该大区的选手，出金率和选拔包相同；三个区包全部常驻可买，收齐各赛区都有奖励，并且全部可出彩卡、共享彩卡保底。
+          {'　'}每个大区收到 25% / 50% / 75% / 90% / 100% 各有一档奖励，收齐送十连包。
+          {'　'}每周可自选一个大区享受八折优惠，本周选定后不可更改，北京时间周一 0 点开放重新选择；锁定前按原价购买。本周推荐是{GAME_REGION_CN[featured]}，仅作推荐展示。
         </p>
         {!selectedDiscount ? (
           <div className="row wrap" style={{ gap: 8, marginBottom: 10 }}>
@@ -349,7 +349,7 @@ export default function Packs() {
             >
               <option value="">请选择</option>
               {series.map((s) => (
-                <option key={s.region} value={s.region}>{REGION_CN[s.region]}</option>
+                <option key={s.region} value={s.region}>{GAME_REGION_CN[s.region]}</option>
               ))}
             </select>
             <button className="sm primary" onClick={() => void chooseWeekly()} disabled={!candidate || choosing}>
@@ -358,7 +358,7 @@ export default function Packs() {
           </div>
         ) : (
           <div className="row wrap" style={{ gap: 8, marginBottom: 10 }}>
-            <span className="tiny">已选优惠赛区：<b>{REGION_CN[selectedDiscount]}</b></span>
+            <span className="tiny">已选优惠赛区：<b>{GAME_REGION_CN[selectedDiscount]}</b></span>
             <span className="tiny faint">该赛区包 2080 金币</span>
             <span className="tiny faint">北京时间周一 0 点重新选择</span>
           </div>
@@ -378,7 +378,7 @@ export default function Packs() {
                 style={hot ? { borderColor: 'var(--warn)' } : undefined}
               >
                 <h4>
-                  {REGION_CN[s.region]}
+                  {GAME_REGION_CN[s.region]}
                   {hot && <span className="tag warn" style={{ marginLeft: 6 }}>本周推荐</span>}
                   {discounted && <span className="tag warn" style={{ marginLeft: 6 }}>自选八折</span>}
                   {own > 0 && <span className="pack-own"> ×{own}</span>}

@@ -10,6 +10,7 @@ import {
 import { LADDER_BO, RIVAL_MERCY_GAP } from '../../engine/gacha'
 import type { LadderOutcome } from '../../engine/gacha'
 import type { ArenaResult, RivalSquad } from '../../engine/arena'
+import { arenaOpponentRating } from '../../engine/arena'
 import { chemistry, squadRating } from '../../engine/cards'
 import { WORLD_TEAMS } from '../../engine/teams'
 import { REGION_CN } from '../../engine/types'
@@ -160,7 +161,7 @@ export default function Ladder() {
                     ) : (
                       <>
                         {REGION_CN[opp.region as keyof typeof REGION_CN]} · {opp.league} · 评分{' '}
-                        {opp.rating + bump}
+                        {(arenaOpponentRating(opp.id) ?? opp.rating) + bump}
                         {masterBump > 0 && (
                           <span className="tag warn" style={{ marginLeft: 5 }}>
                             大师加强 +{masterBump}

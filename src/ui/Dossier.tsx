@@ -6,8 +6,10 @@ import { BASE_PLAYER_CARDS, COACH_CARDS, LEGEND_CARDS, RARITY_CN } from '../engi
 import type { CoachCard, PlayerCard } from '../engine/cards'
 import CardFace, { Flag, natName } from './Card'
 import { Panel, Bar } from './common'
-import { ATTR_CN, ATTR_KEYS, REGION_CN, REGIONS } from '../engine/types'
-import type { Region, Role } from '../engine/types'
+import { ATTR_CN, ATTR_KEYS, REGION_CN } from '../engine/types'
+import type { Role } from '../engine/types'
+import { gameRegionOf, GAME_REGIONS, GAME_REGION_CN } from '../engine/gameRegions'
+import type { GameRegion } from '../engine/gameRegions'
 import raw from '../data/world.json'
 import './dossier.css'
 
@@ -38,7 +40,7 @@ export default function Dossier({
   const [page, setPage] = useState<Page>('players')
   const [coachId, setCoachId] = useState<string | null>(null)
   const [q, setQ] = useState('')
-  const [region, setRegion] = useState<Region | 'all'>('all')
+  const [region, setRegion] = useState<GameRegion | 'all'>('all')
   const [rarity, setRarity] = useState<string>('all')
   const [role, setRole] = useState<Role | 'all'>('all')
   const [playerPage, setPlayerPage] = useState(0)
@@ -49,7 +51,7 @@ export default function Dossier({
     const text = q.trim().toLowerCase()
     return BASE_PLAYER_CARDS
       .filter((c) => {
-        if (region !== 'all' && c.region !== region) return false
+        if (region !== 'all' && gameRegionOf(c.region) !== region) return false
         if (rarity !== 'all' && c.rarity !== rarity) return false
         if (role !== 'all' && !c.roles.includes(role)) return false
         if (!text) return true
@@ -64,7 +66,7 @@ export default function Dossier({
     const text = q.trim().toLowerCase()
     return COACH_CARDS
       .filter((c) => {
-        if (region !== 'all' && c.region !== region) return false
+        if (region !== 'all' && gameRegionOf(c.region) !== region) return false
         if (rarity !== 'all' && c.rarity !== rarity) return false
         if (!text) return true
         const team = c.clubId ? teamOf.get(c.clubId)?.name ?? '' : ''
@@ -111,7 +113,7 @@ export default function Dossier({
       }
     >
       <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-        选手与教练资料库。能力评分为游戏内评分，非官方评价。生涯数据暂未收录。
+        选手与教练资料库。游戏分类为三大区：LPL、LCK、欧美；欧美包含 LEC、LCS、LCP、CBLOL 联赛。选手与教练资料中的联赛信息保留真实所属联赛。能力评分为游戏内评分，非官方评价。生涯数据暂未收录。
       </p>
 
       <div className="row wrap" style={{ gap: 8, margin: '12px 0' }}>
@@ -126,9 +128,9 @@ export default function Dossier({
           value={q}
           onChange={(e) => { setQ(e.target.value); setPlayerPage(0); setCoachPage(0) }}
         />
-        <select aria-label="图鉴赛区" style={{ width: 'auto' }} value={region} onChange={(e) => { setRegion(e.target.value as Region | 'all'); setPlayerPage(0); setCoachPage(0) }}>
+        <select aria-label="图鉴赛区" style={{ width: 'auto' }} value={region} onChange={(e) => { setRegion(e.target.value as GameRegion | 'all'); setPlayerPage(0); setCoachPage(0) }}>
           <option value="all">全部赛区</option>
-          {REGIONS.map((r) => <option key={r} value={r}>{REGION_CN[r]}</option>)}
+          {GAME_REGIONS.map((r) => <option key={r} value={r}>{GAME_REGION_CN[r]}</option>)}
         </select>
         <select aria-label="图鉴稀有度" style={{ width: 'auto' }} value={rarity} onChange={(e) => { setRarity(e.target.value); setPlayerPage(0); setCoachPage(0) }}>
           <option value="all">全部稀有度</option>

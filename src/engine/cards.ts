@@ -1,4 +1,5 @@
 import { sameClubLineage } from './teamLineage'
+import { ordinaryCardStats } from './cardRarity'
 /**
  * The card layer: the same real people, dealt as a collection instead of a
  * roster.
@@ -33,14 +34,7 @@ export const RARITY_CN: Record<Rarity, string> = {
 export const RARITY_ORDER: Rarity[] = ['bronze', 'silver', 'gold', 'mythic']
 export const rarityRank = (r: Rarity): number => RARITY_ORDER.indexOf(r)
 
-/**
- * Where the three metals sit.
- *
- * Picked off the real distribution rather than off a round number: 84 puts 91
- * of the 518 professionals in gold (17.6%), which is roughly "a starter at a
- * VCT club having a good year". Move it to 86 and half the partnered league
- * turns silver, which reads wrong to anyone who watches the games.
- */
+/** Ordinary player cards use one shared displayed-score boundary across all game regions. */
 export const GOLD_AT = 84
 export const SILVER_AT = 72
 
@@ -52,8 +46,10 @@ export const rarityOf = (rating: number): Rarity =>
   rating >= GOLD_AT ? 'gold' : rating >= SILVER_AT ? 'silver' : 'bronze'
 
 /** Head coaches rate lower than players across the board, so they get their own cut. */
+export const COACH_GOLD_AT = 78
+export const COACH_SILVER_AT = 72
 export const coachRarityOf = (rating: number): Rarity =>
-  rating >= 78 ? 'gold' : rating >= 68 ? 'silver' : 'bronze'
+  rating >= COACH_GOLD_AT ? 'gold' : rating >= COACH_SILVER_AT ? 'silver' : 'bronze'
 
 export interface PlayerCard {
   kind: 'player'
@@ -131,6 +127,7 @@ const teamById = new Map(WORLD_TEAMS.map((t) => [t.id, t]))
 function buildPlayerCards(): PlayerCard[] {
   return WORLD_PLAYERS.map((p) => {
     const d = DOSSIER.players[p.id]
+    const stats = ordinaryCardStats(p as typeof p & { sourceOverall?: number })
     const club = p.teamId ? teamById.get(p.teamId) : undefined
     return {
       kind: 'player' as const,
@@ -151,9 +148,9 @@ function buildPlayerCards(): PlayerCard[] {
       age: p.age,
       ageEstimated: p.ageEstimated,
       ratingEstimated: (p as typeof p & { ratingEstimated?: boolean }).ratingEstimated,
-      attrs: p.attrs,
-      rating: p.overall,
-      rarity: rarityOf(p.overall),
+      attrs: stats.attrs,
+      rating: stats.rating,
+      rarity: rarityOf(stats.rating),
     }
   })
 }

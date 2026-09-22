@@ -1,4 +1,4 @@
-import { PACKS, PACK_ORDER, MYTHIC_FLOOR, POSITION_PACK_KINDS, newGacha, openPack } from '../src/engine/gacha'
+import { PACKS, PACK_ORDER, MYTHIC_FLOOR, POSITION_PACK_KINDS, newGacha, openPack, migrateGacha } from '../src/engine/gacha'
 
 import { BASE_PLAYER_CARDS } from '../src/engine/cards'
 
@@ -79,8 +79,8 @@ function runChecks() {
     assert(g.mythicDry === afterScout + 13, `ten should add 10 after elite, got ${g.mythicDry}`)
   }
 
-  // coach/LCP/CBLOL and all position packs at 1199 do not pay mythic and do not advance, then scout pays
-  const noMythicKinds = ['coach', 'lcp', 'cblol', ...POSITION_PACK_KINDS] as const
+  // coach and all position packs at 1199 do not pay mythic and do not advance, then scout pays
+  const noMythicKinds = ['coach', ...POSITION_PACK_KINDS] as const
   for (const kind of noMythicKinds) {
     const g = newGacha(`CHECK-NOMY-${kind}`, '验证', '2026-01-01')
     g.seed = 901
@@ -93,6 +93,37 @@ function runChecks() {
     g.packs.scout = 1
     const scoutPulled = openPack(g, 'scout', 'pack')
     assert(scoutPulled.some(p => p.card.rarity === 'mythic'), 'scout after no-mythic pack should still pay mythic')
+  }
+
+  // lcp/cblol old packs migrate to west with 1 pack, mythicDry set to floor-1, dry preserved
+  for (const kind of ['lcp', 'cblol'] as const) {
+    const g = newGacha(`CHECK-MIG-${kind}`, '验证', '2026-01-01')
+    g.seed = 901
+    g.coins = 100
+    g.mythicDry = MYTHIC_FLOOR - 1
+    g.packs[kind] = 1
+
+    // before migration, openPack should throw and not consume
+    let threw = false
+    try {
+      openPack(g, kind, 'pack')
+    } catch {
+      threw = true
+    }
+    assert(threw, `${kind} should throw before migration`)
+    assert(g.packs[kind] === 1, `${kind} pack should not be consumed`)
+    assert(g.coins === 100, `${kind} should not consume coins`)
+
+    // migrate
+    migrateGacha(g, g.id)
+
+    assert(g.packs.west === 1, `${kind} should migrate to west=1`)
+    assert(!(kind in g.packs), `${kind} old key should be removed`)
+    assert(g.mythicDry === MYTHIC_FLOOR - 1, `${kind} migrated mythicDry should be floor-1, got ${g.mythicDry}`)
+
+    // after migration, opening west must give mythic
+    const pulled = openPack(g, 'west', 'pack')
+    assert(pulled.some(p => p.card.rarity === 'mythic'), `west pack after ${kind} migration must contain mythic`)
   }
 
   // legend pack does not consume pity/gold counters, uses pack inventory, coins unchanged, existing card upgrades without loss

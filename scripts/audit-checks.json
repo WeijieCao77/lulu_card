@@ -187,7 +187,7 @@
     "runtime": "tsx",
     "file": "scripts/check_series.ts",
     "args": [
-      "600"
+      "4000"
     ]
   },
   {
@@ -705,5 +705,21 @@
   {
     "runtime": "tsx",
     "file": "scripts/check_display_text.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_game_regions.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_swap_regrade.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_card_rarity.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_arena_card_scale.ts"
   }
 ]

@@ -1916,6 +1916,19 @@ export function makeMarketApi(sql, {
       const held = await db`
         select id from card_swaps where id = ${row.id} and status = 'open' for update`
       if (!held.length) return { gone: true }
+      // Re-check the current card definitions after locking the swap row.
+      // Refuse cards that no longer match in rarity, without
+      // touching either account. The proposer's card goes home, and the
+      // answerer pays nothing.
+      const give = engine.cardById(row.give_id)
+      const want = engine.cardById(row.want_id)
+      if (!give || !want || give.rarity !== want.rarity) {
+        const closed = await db`
+          update card_swaps set status = 'declined', settled = now()
+          where id = ${row.id} and status = 'open' returning id`
+        if (closed.length) await unwindSwap(row, '卡片稀有度已经变了', db)
+        return { ok: false, why: 'rarity' }
+      }
       let level = 0
       const r = await editAccount(me, id, (g) => {
         if (!engine.canPlay(g, 'swap', Date.now())) return 'stamina'

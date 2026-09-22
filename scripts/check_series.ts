@@ -21,7 +21,7 @@ import {
   claimSeries, featuredSeries, newGacha, openPack, packCost, seriesProgress,
 } from '../src/engine/gacha'
 import type { Series } from '../src/engine/gacha'
-import { REGION_CN } from '../src/engine/types'
+import { GAME_REGION_CN as REGION_CN, gameRegionOf } from '../src/engine/gameRegions'
 
 const store = new Map<string, string>()
 ;(globalThis as never as { localStorage: unknown }) = {
@@ -57,7 +57,7 @@ for (const region of SERIES) {
       else if (p.card.rarity === 'silver') silver++
       else if (p.card.rarity === 'mythic') mythic++
       // every card a region pack deals belongs to that region — the promise
-      check((p.card as { region?: string }).region === region,
+      check(gameRegionOf(p.card.region) === region,
         '赛区包只出本赛区的卡', `${region} 开出了 ${(p.card as { region?: string }).region}`)
     }
     if (!fullAt && seriesProgress(g).find((p) => p.region === region)!.owned >= pack.total) {
@@ -141,7 +141,7 @@ for (let d = 0; d < 364; d++) {
   }
 }
 console.log(`  一年 ${flips} 次轮换 · ` + [...seen].map(([r, n]) => `${REGION_CN[r as Series]} ${n} 天`).join(' · '))
-check(seen.size === SERIES.length, '一年之内六个赛区都轮到过')
+check(seen.size === SERIES.length, '一年之内三个游戏赛区都轮到过')
 check(Math.max(...seen.values()) - Math.min(...seen.values()) <= 7, '轮换是均匀的')
 // no date given means no discount — the engine默认按原价算
 for (const kind of PACK_ORDER) check(packCost(kind) === PACKS[kind].cost, '不传日期就是原价', kind)

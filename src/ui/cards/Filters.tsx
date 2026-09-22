@@ -19,7 +19,7 @@ import type { ReactNode } from 'react'
 import { RARITY_CN } from '../../engine/cards'
 import type { Card } from '../../engine/cards'
 import { SERIES } from '../../engine/gacha'
-import { REGION_CN } from '../../engine/types'
+import { GAME_REGION_CN } from '../../engine/gameRegions'
 import type { Role } from '../../engine/types'
 // The rule itself lives in the engine: the trading post's server runs it too,
 // and a filter that means one thing on each side of the wire is worse than no
@@ -83,7 +83,7 @@ export function CardFilters({
         <button className={value.region === 'all' ? 'on' : ''} onClick={() => set({ region: 'all' })}>全部赛区</button>
         {SERIES.map((r) => (
           <button key={r} className={value.region === r ? 'on' : ''} onClick={() => set({ region: r })}>
-            {REGION_CN[r]}
+            {GAME_REGION_CN[r]}
           </button>
         ))}
       </div>

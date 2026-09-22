@@ -1,5 +1,5 @@
 import type { GachaState, Series } from './gacha'
-import { REGIONS } from './types'
+import { GAME_REGIONS, gameRegionOf } from './gameRegions'
 
 /**
  * The week is keyed by its Monday, in the server's Asia/Shanghai calendar.
@@ -28,16 +28,15 @@ export interface WeeklySeriesPick {
 
 export function cleanWeeklySeriesPick(
   raw: unknown,
-  regions: readonly string[] = REGIONS,
+  regions: readonly string[] = GAME_REGIONS,
 ): WeeklySeriesPick | undefined {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return undefined
   const r = raw as Record<string, unknown>
   const week = typeof r.week === 'string' ? r.week : ''
   if (!/^\d{4}-\d{2}-\d{2}$/.test(week)) return undefined
   if (weekKey(week) !== week) return undefined // must be a real Monday
-  const region = typeof r.region === 'string' && regions.includes(r.region)
-    ? (r.region as Series)
-    : undefined
+  const mapped = gameRegionOf(r.region)
+  const region = mapped && regions.includes(mapped) ? mapped : undefined
   if (!region) return undefined
   return { week, region }
 }
@@ -50,7 +49,7 @@ export function cleanWeeklySeriesPick(
 export function selectedWeeklySeries(
   g: Pick<GachaState, 'weeklySeriesPick'>,
   today: string,
-  regions: readonly string[] = REGIONS,
+  regions: readonly string[] = GAME_REGIONS,
 ): Series | undefined {
   const pick = cleanWeeklySeriesPick(g.weeklySeriesPick, regions)
   if (!pick) return undefined
@@ -61,7 +60,7 @@ export function selectWeeklySeries(
   g: Pick<GachaState, 'weeklySeriesPick'> & { weeklySeriesPick?: WeeklySeriesPick },
   today: string,
   region: Series,
-  regions: readonly string[] = REGIONS,
+  regions: readonly string[] = GAME_REGIONS,
 ): { ok: true; region: Series } | { ok: false; why: string } {
   if (!regions.includes(region)) return { ok: false, why: '没有这个赛区' }
   const current = selectedWeeklySeries(g, today, regions)

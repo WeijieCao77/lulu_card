@@ -9,6 +9,7 @@ import { Rng, clamp } from './rng'
 import { BALANCE_VERSION, cardStrengths } from './balance'
 import {
   BASE_PLAYER_CARDS, cardById, chemistry, coachLiftAt, growthOf, isCoachCard, isPlayerCard, personOf, SQUAD_SLOTS, squadPaper,
+  COACH_CARDS,
 } from './cards'
 import type { Squad } from './cards'
 import type { PlayerCard } from './cards'
@@ -160,6 +161,7 @@ const arenaOpponentCache = (() => {
     const own = BASE_PLAYER_CARDS
       .filter(c => c.clubId === team.id && team.roster.includes(c.playerId))
       .sort((a, b) => a.id.localeCompare(b.id))
+    const nativeRating = own.length ? own.reduce((sum, c) => sum + c.rating, 0) / own.length : 70
     const used = new Set<string>()
     const slots: (PlayerCard | undefined)[] = new Array(SQUAD_SLOTS.length).fill(undefined)
 
@@ -191,8 +193,8 @@ const arenaOpponentCache = (() => {
           const priority = (c: PlayerCard) => (c.region === team.region ? 0 : 2) + (c.clubId == null ? 0 : 1)
           const ta = priority(a), tb = priority(b)
           if (ta !== tb) return ta - tb
-          const da = Math.abs(a.rating - team.rating)
-          const db = Math.abs(b.rating - team.rating)
+          const da = Math.abs(a.rating - nativeRating)
+          const db = Math.abs(b.rating - nativeRating)
           if (da !== db) return da - db
           return a.id.localeCompare(b.id)
         })
@@ -209,35 +211,45 @@ const arenaOpponentCache = (() => {
 function ensureArenaOpponents(state: GameState): void {
   for (const team of WORLD_TEAMS) {
     const cards = arenaOpponentCache.get(team.id)
-    if (!cards || cards.length !== 5) throw new Error(`${team.id} 缺少五名竞技场选手`)
-    const st = state.teams[team.id]
-    if (!st) continue
-    const starters: string[] = []
-    for (let i = 0; i < 5; i++) {
-      const card = cards[i]
-      const isOwn = card.clubId === team.id && team.roster.includes(card.playerId)
-      let pid: string
-      if (isOwn && state.players[card.playerId]) {
-        pid = card.playerId
-      } else {
-        const donor = state.players[card.playerId]
-        if (!donor) throw new Error(`${team.id} 替补 ${card.playerId} 不在世界中`)
-        pid = `AS:${team.id}:${card.playerId}`
-        if (!state.players[pid]) {
-          const clone = structuredClone(donor)
-          clone.id = pid
-          clone.teamId = team.id
-          clone.ign = `${clone.ign}（临时替补）`
-          clone.role = SQUAD_SLOTS[i]
-          state.players[pid] = clone
-        }
-      }
-      state.players[pid].role = SQUAD_SLOTS[i]
-      starters.push(pid)
+    const squad = arenaOpponentSquad(team.id)
+    if (!cards || cards.length !== 5 || !squad) throw new Error(`${team.id} 缺少五名竞技场选手`)
+    const oldTeam = state.teams[team.id]
+    if (!oldTeam) continue
+    const ids = cards.map(card => card.clubId === team.id && team.roster.includes(card.playerId)
+      ? card.playerId : `AS:${team.id}:${card.playerId}`)
+    // Reuse the user's entire seating pipeline, including card attributes,
+    // chemistry, coach lift and compression; never mix raw and card scales.
+    seatSquad(state, { ...squad, name: team.name, tag: team.tag }, () => 0, team.id, '', {}, ids)
+    const seated = state.teams[team.id]
+    seated.region = oldTeam.region
+    seated.tier = oldTeam.tier
+    seated.rating = arenaOpponentRating(team.id)!
+    for (let i = 0; i < ids.length; i++) {
+      const player = state.players[ids[i]]
+      player.role = SQUAD_SLOTS[i]
+      player.ign = cards[i].ign + (ids[i].startsWith('AS:') ? '（临时替补）' : '')
     }
-    st.starters = starters
-    st.roster = [...new Set([...starters, ...(st.roster ?? [])])]
   }
+}
+
+/**
+ * Turn a world team's ordinary cards into the squad the arena actually
+ * seats for it, using the same new-card scale as the user's squad and the
+ * same coach lookup.
+ */
+export function arenaOpponentSquad(id: string): Squad | undefined {
+  const team = WORLD_TEAMS.find(t => t.id === id)
+  if (!team) return undefined
+  const cards = arenaOpponentCache.get(id)
+  if (!cards || cards.length !== 5) return undefined
+  const coach = COACH_CARDS.find(c => c.clubId === id && c.name === team.coach?.name)?.id ?? null
+  return { slots: cards.map(c => c.id), coach }
+}
+
+/** The exact paper rating the arena opponent plays at, on the new card scale. */
+export function arenaOpponentRating(id: string): number | undefined {
+  const squad = arenaOpponentSquad(id)
+  return squad ? squadPaper(squad).score : undefined
 }
 
 /** The other side of a player-versus-player tie. */
@@ -255,6 +267,7 @@ export const ARENA_RIVAL = 'ARENAB'
 function seatSquad(
   state: GameState, squad: ArenaSquad, level: (cardId: string) => number,
   teamId: string, prefix: string, cardOf: Record<string, string>,
+  ids?: string[],
 ): void {
   const chem = chemistry(squad)
   const roster: string[] = []
@@ -277,7 +290,7 @@ function seatSquad(
     seated.add(personOf(card))
     const src = seoulArenaPlayer(card) ?? legendArenaPlayer(card) ?? state.players[card.playerId]
     if (!src) return
-    const id = `${prefix}${i}`
+    const id = ids?.[i] ?? `${prefix}${i}`
     const misfit = !card.roles.includes(SQUAD_SLOTS[i])
     const clone = levelled(src, card, misfit)
     // Chemistry lands in two places, and it has to land hard.
@@ -502,7 +515,9 @@ export function playArenaMatch(
   if (oppBump !== 0) sharpen(state, opponentId, oppBump)
   const opponent = WORLD_TEAMS.find(t => t.id === opponentId)
   if (!opponent) throw new Error('天梯对手不存在')
-  honourGap(state, ARENA_TEAM, opponentId, squadPaper(squad, level).score, opponent.rating + oppBump, balance)
+  const opponentPaper = arenaOpponentRating(opponentId)
+  if (opponentPaper === undefined) throw new Error(`${opponentId} 缺少竞技场评分`)
+  honourGap(state, ARENA_TEAM, opponentId, squadPaper(squad, level).score, opponentPaper + oppBump, balance)
 
   const rng = new Rng(seed ^ 0x1d0c)
   const result = simulateMatch(state, ARENA_TEAM, opponentId, bo, rng)

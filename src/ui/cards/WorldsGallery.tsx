@@ -4,6 +4,9 @@ import { LEGEND_CARDS } from '../../engine/cards'
 import type { PlayerCard } from '../../engine/cards'
 import { LEGEND_KIND_CN, LEGEND_TIER_CN, legendEdition } from '../../engine/legends'
 import { ATTR_CN, ATTR_KEYS } from '../../engine/types'
+import { GOLD_AT, SILVER_AT, COACH_GOLD_AT, COACH_SILVER_AT } from '../../engine/cards'
+import { gameRegionOf, GAME_REGIONS, GAME_REGION_CN } from '../../engine/gameRegions'
+import type { GameRegion } from '../../engine/gameRegions'
 import { useCards } from './ctx'
 import { MYTHIC_FLOOR, MYTHIC_PACK_NAMES } from '../../engine/gacha'
 import './worlds.css'
@@ -53,7 +56,7 @@ export default function WorldsGallery() {
   const [open, setOpen] = useState<PlayerCard | null>(null)
   const owned = LEGEND_CARDS.filter(c => g.cards[c.id]).length
   const ig = (c: PlayerCard) => c.legend?.year === 2018 && c.clubTag === 'IG'
-  const matches = (c: PlayerCard) => filter === '全部' || (filter === '已拥有' ? !!g.cards[c.id] : filter === '知名选手' ? c.legend?.collection === 'hall-of-fame' : filter === 'S8 IG' ? ig(c) : filter === 'MSI' ? c.legend?.competition === 'MSI' : filter === 'S赛历届' ? !c.legend?.collection : c.region === filter)
+  const matches = (c: PlayerCard) => filter === '全部' || (filter === '已拥有' ? !!g.cards[c.id] : filter === '知名选手' ? c.legend?.collection === 'hall-of-fame' : filter === 'S8 IG' ? ig(c) : filter === 'MSI' ? c.legend?.competition === 'MSI' : filter === 'S赛历届' ? !c.legend?.collection : gameRegionOf(c.region) === filter)
   const priority = (c: PlayerCard) => c.legend?.collection === 'hall-of-fame' ? 0 : ig(c) ? 1 : c.legend?.competition === 'MSI' ? 2 : 3
   const filtered = LEGEND_CARDS.filter(matches)
   const cards = filtered.filter(c => `${c.ign} ${c.realName} ${c.clubTag} ${c.legend?.short}`.toLowerCase().includes(query.trim().toLowerCase())).sort((a,b) => priority(a) - priority(b))
@@ -71,7 +74,7 @@ export default function WorldsGallery() {
       {feature && (filter !== '知名选手' || filtered.length > 0) && <div className="worlds-feature"><CardFace card={feature} size="lg" onClick={() => setOpen(feature)} /></div>}
     </header>
     <div className="worlds-toolbar"><h2>名人堂 <span className="tiny muted">/ 点击卡面查看</span></h2>
-      <div className="worlds-toggle">{['全部','知名选手','S赛历届','S8 IG','MSI','LCK','LPL','LEC','LCS','已拥有'].map(f => <button key={f} className={`sm ${filter === f ? 'primary' : 'ghost'}`} aria-pressed={filter === f} onClick={() => { setFilter(f); setQuery('') }}>{f}</button>)}</div>
+      <div className="worlds-toggle">{[ '全部','知名选手','S赛历届','S8 IG','MSI',...GAME_REGIONS, '已拥有'].map(f => <button key={f} className={`sm ${filter === f ? 'primary' : 'ghost'}`} aria-pressed={filter === f} onClick={() => { setFilter(f); setQuery('') }}>{GAME_REGION_CN[f as GameRegion] ?? f}</button>)}</div>
       <label className="worlds-search">搜索选手<input value={query} onChange={e => setQuery(e.target.value)} placeholder="搜索选手、战队或称号" /></label>
     </div>
     <div className="worlds-grid">{cards.slice(safePage * 12, (safePage + 1) * 12).map(c => <article key={c.id} className="worlds-item">
@@ -79,10 +82,10 @@ export default function WorldsGallery() {
       <div className="worlds-item-label"><strong>{legendEdition(c.legend!)} · {c.ign}</strong><span>{g.cards[c.id] ? '已收藏 ✦' : '尚未收藏'}</span></div>
     </article>)}</div>
     {!cards.length && <p className="muted">{query ? '没有匹配的选手，试试其他名字或切换到全部。' : filter === '已拥有' ? '还没有收藏彩卡，切换到全部可免费预览。' : filter === '知名选手' ? '知名选手暂未匹配到卡牌。' : '该分类暂无彩卡。'}</p>}
-    <p className="worlds-note">知名选手收录各赛区代表人物的生涯版本；已有 S 赛或 MSI MVP 彩卡的选手不重复收录。<br />普通选手金卡 84—90；知名选手 90—92；冠军成员 90—94；MSI MVP 93—95；S 赛 MVP 94—97。特别纪念卡单独评定。<br />同等级下，知名选手彩卡接近顶尖现役；强化每级 +1，最多 +5。总评是游戏能力估算，比赛还受位置、默契和教练影响。</p>
+    <p className="worlds-note">知名选手收录各赛区代表人物的生涯版本；已有 S 赛或 MSI MVP 彩卡的选手不重复收录。<br />普通选手卡基础评分：金卡 {GOLD_AT}—90，银卡 {SILVER_AT}—{GOLD_AT - 1}，铜卡低于 {SILVER_AT}；强化后可超过基础上限。教练基础评分：金卡 {COACH_GOLD_AT} 起，银卡 {COACH_SILVER_AT}—{COACH_GOLD_AT - 1}，铜卡低于 {COACH_SILVER_AT}。知名选手 90—92；冠军成员 90—94；MSI MVP 93—95；S 赛 MVP 94—97。特别纪念卡单独评定。<br />同等级下，知名选手彩卡接近顶尖现役；强化每级 +1，最多 +5。总评是游戏能力估算，比赛还受位置、默契和教练影响。</p>
     <p className="worlds-note">S3 为 Faker「初代王朝」冠军纪念卡，当届没有官方 MVP；S4—S6 标注赛事 MVP，S7—S15 标注决赛 MVP。<br />
       IG 新增五张冠军纪念卡，与已有 Ning FMVP 卡组成六人收藏；MSI 共 11 张，2015 为赛事 MVP，2020 停办，其余为决赛 MVP。<br />
-      {MYTHIC_PACK_NAMES}可出彩卡，共享彩卡保底：连续未出时，最迟第 {MYTHIC_FLOOR} 张必出彩卡。十连按 10 张计，换包进度不重置。其他赛区包、教练包和位置包不出本系列彩卡。收齐基础全图鉴可领取彩卡包。完整概率见右下角“概率”。</p>
+      {MYTHIC_PACK_NAMES}可出彩卡，共享彩卡保底：连续未出时，最迟第 {MYTHIC_FLOOR} 张必出彩卡。十连按 10 张计，换包进度不重置。LPL、LCK、欧美三个赛区包均可出本大区彩卡并共享同一彩卡保底；教练包和位置包不出本系列彩卡。收齐基础全图鉴可领取彩卡包。完整概率见右下角“概率”。</p>
     {pageCount > 1 && <nav className="row" aria-label="名人堂分页" style={{ justifyContent: 'center', gap: 16, marginTop: 20 }}><button disabled={safePage === 0} onClick={() => setPage(safePage - 1)}>上一页</button><span>{safePage + 1} / {pageCount}</span><button disabled={safePage + 1 === pageCount} onClick={() => setPage(safePage + 1)}>下一页</button></nav>}
     {open && <Detail card={open} close={() => setOpen(null)} />}
   </section>

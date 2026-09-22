@@ -5,6 +5,7 @@ import { LEGENDS } from '../src/engine/legends'
 import { newGacha, openPack, MYTHIC_FLOOR, PACKS, setSlot, personTaken, FULL_SET_CARDS, fullSetProgress, claimFullSet } from '../src/engine/gacha'
 import { buildArena, playArenaMatch, ARENA_TEAM } from '../src/engine/arena'
 import { CUP_TEAMS } from '../src/engine/cupTeams'
+import { gameRegionOf } from '../src/engine/gameRegions'
 
 const names = ['Faker','Mata','MaRin','Faker','Ruler','Ning','Tian','Canyon','Scout','Kingen','Zeus','Faker','Gumayusi']
 assert.deepEqual(LEGEND_CARDS.slice(0,13).map(c => c.ign), names)
@@ -19,14 +20,14 @@ for (const c of LEGEND_CARDS) {
   const base=BASE_PLAYER_CARDS.find(b=>b.ign===c.ign)
   if(base) assert.equal(personOf(c),personOf(base),'Same person must share duplicate identity')
 }
-for(const kind of ['scout','elite','ten','cn','pac','emea','ame'] as const) {
+for(const kind of ['scout','elite','ten','cn','pac','west'] as const) {
   const g=newGacha(kind,'test','2026-09-21');g.mythicDry=MYTHIC_FLOOR;g.packs[kind]=1
   const pulled=openPack(g,kind,'pack');assert(pulled.some(p=>p.card.rarity==='mythic'))
-  const regions: Record<string,string> = {cn:'LPL',pac:'LCK',emea:'LEC',ame:'LCS'}
-  if(regions[kind]) assert(pulled.every(p=>p.card.region===regions[kind]))
+  const regions: Record<string,string> = {cn:'LPL',pac:'LCK',west:'WEST'}
+  if(regions[kind]) assert(pulled.every(p=>gameRegionOf(p.card.region)===regions[kind]))
   assert(g.mythicDry<PACKS[kind].draws)
 }
-for(const kind of ['coach','lcp','cblol','duelist','initiator'] as const) {
+for(const kind of ['coach','duelist','initiator'] as const) {
   const g=newGacha(kind,'test','2026-09-21');g.mythicDry=MYTHIC_FLOOR;g.packs[kind]=1
   assert(openPack(g,kind,'pack').every(p=>p.card.rarity!=='mythic'));assert.equal(g.mythicDry,MYTHIC_FLOOR)
 }
@@ -84,9 +85,9 @@ assert.equal(Math.max(...BASE_PLAYER_CARDS.map(c=>c.rating)),90)
 const data=JSON.parse(readFileSync('src/data/world.json','utf8'))
 const ordered=data.players.slice().sort((a:any,b:any)=>a.sourceOverall-b.sourceOverall)
 for(let i=1;i<ordered.length;i++) assert(ordered[i].overall>=ordered[i-1].overall,'Base ranking must not invert')
-assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='gold').length,163)
-assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='silver').length,245)
-assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='bronze').length,269)
+assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='gold').length,90)
+assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='silver').length,202)
+assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='bronze').length,385)
 for(const name of ['Uzi','Clearlove','Caps']) {
   const versions=LEGEND_CARDS.filter(c=>c.ign===name)
   assert.equal(versions.length,1)
@@ -95,4 +96,4 @@ for(const name of ['Uzi','Clearlove','Caps']) {
 const igSquad={slots:['TheShy','Ning','Rookie','JackeyLove','Baolan'].map(n=>ig.find(c=>c.ign===n)!.id),coach:null}
 assert.equal(chemistry(igSquad).misfits.length,0)
 assert.equal(playArenaMatch(igSquad,()=>0,CUP_TEAMS[0].id,3,56).lines.length,5)
-console.log('PASS: rating bands, weighted attributes, unchanged basic rarity pools, all 40 playable, complete IG, no duplicate champion career editions, same-player exclusivity.')
+console.log('PASS: rating bands, weighted attributes, rebalanced basic rarity pools, all 40 playable, complete IG, no duplicate champion career editions, same-player exclusivity.')

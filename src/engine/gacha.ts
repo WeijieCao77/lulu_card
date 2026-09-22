@@ -11,13 +11,14 @@ import { BALANCE_VERSION } from './balance'
 import { Rng, clamp, hashStr } from './rng'
 import { WORLD_TEAMS } from './teams'
 import { CUP_TEAMS } from './cupTeams'
-import { REGION_CN } from './types'
-import type { Role } from './types'
+import type { Region, Role } from './types'
 import { cleanPredictions } from './predict'
 import type { Picks } from './predict'
 import type { SeoulRouteState } from './seoulRoute'
 import type { WeeklySeriesPick } from './weeklySeries'
 import { cleanWeeklySeriesPick, selectedWeeklySeries } from './weeklySeries'
+import { GAME_REGIONS, GAME_REGION_CN, gameRegionOf, type GameRegion } from './gameRegions'
+import { isLegacyRegionPack, migrateRegions } from './regionMigration'
 import {
   ALL_CARDS, SEOUL_CARDS, COACH_CARDS, COINS_FOR, DUPES_FOR, LEGEND_CARDS, LEGEND_COACH_CARDS, MAX_LEVEL, RARITY_CN, cardName, PLAYER_CARDS,
   SALVAGE, SQUAD_SLOTS, cardById, cardPower, emptySquad, isPlayerCard, personOf, rarityRank, ratingAt,
@@ -33,27 +34,16 @@ export const GACHA_VERSION = 1
 
 // ---------------------------------------------------------------- packs
 
-/**
- * The four series, and the pack that only deals from one of them.
- *
- * A single 607-card pile is a number, not a collection: 「还差多少」 has no
- * answer a person can hold, and no pull ever moves you visibly closer to
- * anything. Cut by the thing this sport is actually organised by — the four
- * regions — it becomes four collections you can finish, and a pack that deals
- * only from one of them is a way to chase the half you are missing rather
- * than the whole world at once.
- *
- * The regions come off the cards themselves; nothing here is invented.
- */
-export const SERIES = ['LPL', 'LCK', 'LEC', 'LCS', 'LCP', 'CBLOL'] as const
-export type Series = (typeof SERIES)[number]
+/** Three game collections; cards keep their original league metadata. */
+export const SERIES = GAME_REGIONS
+export type Series = GameRegion
 
 export type PackKind =
   | 'scout' | 'elite' | 'ten' | 'coach' | 'seoul2024'
   // one 彩卡, nothing else — the reward for a full 图鉴; never sold
   | 'legend'
-  // one per series — same three cards, drawn only from that region
-  | 'cn' | 'pac' | 'ame' | 'emea' | 'lcp' | 'cblol'
+  // one per series — same three cards, drawn only from that region; legacy ids retained for history
+  | 'cn' | 'pac' | 'west' | 'ame' | 'emea' | 'lcp' | 'cblol'
   // one per position — a single card that plays it; paid by the 位置小游戏, never sold
   | 'duelist' | 'initiator' | 'controller' | 'sentinel'
 
@@ -89,7 +79,7 @@ export interface PackDef {
    */
   shop?: boolean
   /** coach packs deal from a different deck; a series deals from one region; a position from its players; 'legend' is every 彩卡 */
-  pool: 'player' | 'coach' | 'seoul2024' | 'legend' | Series | PackPosition
+  pool: 'player' | 'coach' | 'seoul2024' | 'legend' | Series | Region | PackPosition
 }
 
 /**
@@ -143,6 +133,11 @@ export const PACKS: Record<PackKind, PackDef> = {
   pac: {
     kind: 'pac', name: 'LCK 包', pool: 'LCK',
     blurb: '只出韩国赛区的选手卡。三张，至少一张银卡起。',
+    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
+  },
+  west: {
+    kind: 'west', name: '欧美包', pool: 'WEST',
+    blurb: '包含 LEC、LCS、LCP、CBLOL 选手。三张，至少一张银卡起。',
     cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
   },
   ame: {
@@ -215,11 +210,11 @@ export const MINI_PACK: Record<MiniGame, PackKind> = { aim: 'duelist', recon: 'i
 export const seriesOfPack = (kind: PackKind): Series | null =>
   kind === 'cn' ? 'LPL'
     : kind === 'pac' ? 'LCK'
-      : kind === 'ame' ? 'LCS'
-        : kind === 'emea' ? 'LEC' : kind === 'lcp' ? 'LCP' : kind === 'cblol' ? 'CBLOL' : null
+      : kind === 'west' ? 'WEST'
+        : null
 
 export const PACK_ORDER: PackKind[] = [
-  'scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'ame', 'emea', 'lcp', 'cblol',
+  'scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'west',
 ]
 
 /**
@@ -1007,13 +1002,21 @@ export const owns = (g: GachaState, cardId: string): boolean => !!g.cards[cardId
 // ---------------------------------------------------------------- pulling
 
 const bySeries = <T extends { region?: string }>(list: readonly T[], region: Series) =>
-  list.filter((c) => c.region === region)
+  list.filter((c) => gameRegionOf(c.region) === region)
 
 const seriesPool = (region: Series) => ({
   mythic: bySeries(LEGEND_CARDS, region),
   gold: bySeries(PLAYER_CARDS.filter((c) => c.rarity === 'gold'), region),
   silver: bySeries(PLAYER_CARDS.filter((c) => c.rarity === 'silver'), region),
   bronze: bySeries(PLAYER_CARDS.filter((c) => c.rarity === 'bronze'), region),
+})
+
+// Historical pools stay identifiable, but their packs can no longer be opened.
+const legacySeriesPool = (region: Region) => ({
+  mythic: LEGEND_CARDS.filter(c => c.region === region),
+  gold: PLAYER_CARDS.filter(c => c.region === region && c.rarity === 'gold'),
+  silver: PLAYER_CARDS.filter(c => c.region === region && c.rarity === 'silver'),
+  bronze: PLAYER_CARDS.filter(c => c.region === region && c.rarity === 'bronze'),
 })
 
 const rolePool = (role: PackPosition) => ({
@@ -1043,10 +1046,11 @@ const POOLS = {
   },
   LPL: seriesPool('LPL'),
   LCK: seriesPool('LCK'),
-  LCS: seriesPool('LCS'),
-  LEC: seriesPool('LEC'),
-  LCP: seriesPool('LCP'),
-  CBLOL: seriesPool('CBLOL'),
+  WEST: seriesPool('WEST'),
+  LCS: legacySeriesPool('LCS'),
+  LEC: legacySeriesPool('LEC'),
+  LCP: legacySeriesPool('LCP'),
+  CBLOL: legacySeriesPool('CBLOL'),
   legend: {
     mythic: [...LEGEND_CARDS, ...LEGEND_COACH_CARDS] as Card[],
     gold: [] as Card[], silver: [] as Card[], bronze: [] as Card[],
@@ -1109,6 +1113,7 @@ export function openPack(
   g: GachaState, kind: PackKind, payWith: 'pack' | 'coins', today?: string,
 ): Pulled[] {
   if (!isPackKind(kind) || kind === 'seoul2024') throw new Error('没有这种卡包')
+  if (isLegacyRegionPack(kind)) throw new Error('赛区包已合并为欧美包，请刷新页面')
   const def = PACKS[kind]
   if (payWith === 'pack') {
     if ((g.packs[kind] ?? 0) < 1) throw new Error('没有这种卡包')
@@ -1343,7 +1348,7 @@ export const collectionProgress = (g: GachaState) => ({
 })
 
 /**
- * The four series, and how far into each one you are.
+ * The three game collections, and how far into each one you are.
  *
  * 「607 张里有 9 张」 is a number nobody can act on. 「中国 9/143」 is four
  * collections that can each be finished, and it says which pack to open next.
@@ -1474,13 +1479,13 @@ const SERIES_LEGENDS = Object.fromEntries(SERIES.map((r) =>
 )) as Record<Series, Set<string>>
 
 const SERIES_PACK: Record<Series, PackKind> = {
-  LPL: 'cn', LCK: 'pac', LCS: 'ame', LEC: 'emea', LCP: 'lcp', CBLOL: 'cblol',
+  LPL: 'cn', LCK: 'pac', WEST: 'west',
 }
 
 /**
  * The week's recommended region. Discounts are chosen by each account.
  *
- * All six regions remain available. The shared recommendation rotates on
+ * All three game regions remain available. The shared recommendation rotates on
  * Monday; each account chooses its own discounted region in weeklySeries.ts.
  */
 export const FEATURE_OFF = 0.2
@@ -1555,7 +1560,7 @@ export function claimSeries(g: GachaState, region: Series): string | null {
   g.series[region] = (g.series[region] ?? 0) + prog.ready.length
   const parts = [packs.join('、'), coins ? `+${coins} 金币` : '']
     .filter(Boolean)
-  note(g, `${REGION_CN[region]}系列进度奖励：${parts.join('，')}`)
+  note(g, `${GAME_REGION_CN[region]}系列进度奖励：${parts.join('，')}`)
   return parts.join('，')
 }
 
@@ -1613,7 +1618,8 @@ export function claimFullSet(g: GachaState): string | null {
  * 大师 is the teams that win Masters.
  */
 export function ladderPool(div: number): string[] {
-  const sorted = WORLD_TEAMS.filter(t => CUP_TEAMS.some(c => c.id === t.id)).sort((a, b) => a.rating - b.rating)
+  const rating = new Map(CUP_TEAMS.map(t => [t.id, t.rating]))
+  const sorted = WORLD_TEAMS.filter(t => rating.has(t.id)).sort((a, b) => rating.get(a.id)! - rating.get(b.id)! || a.id.localeCompare(b.id))
   const span = sorted.length / DIVISIONS.length
   const lo = Math.floor(div * span)
   const hi = Math.min(sorted.length, Math.ceil((div + 1) * span) + 4)
@@ -2518,6 +2524,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   // an existing collection already sits somewhere on the series ladder; nothing
   // is marked claimed, so whatever it has already earned is waiting on the shelf
   g.series ??= {}
+  migrateRegions(g, SERIES_REWARDS.length)
   // the 全图鉴 flag is 1 or absent; anything else a row carries is dropped
   if (g.fullSet !== undefined) {
     const raw: unknown = g.fullSet
