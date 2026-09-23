@@ -113,9 +113,21 @@ assert((await call(other, 'send', { phone: failedPhone })).ok)
 let failCheck = true
 const flaky = make({ checker: async () => { if (failCheck) throw new Error('injected checker failure'); return true } })
 assert.equal((await call(flaky, 'bind', { id: IDS[1], phone: failedPhone, code: '123456' })).ok, false)
+assert.equal((await sql`select tries from card_sms where phone_h = ${phoneHash(failedPhone)}`)[0].tries, 0)
 failCheck = false
 assert((await call(flaky, 'bind', { id: IDS[1], phone: failedPhone, code: '123456' })).ok)
 console.log('ok  供应商失败释放预留，不吞掉仍有效的验证码')
+
+// Broken recovery data cannot consume a valid code or return an unusable ID.
+const failedHash = phoneHash(failedPhone)
+const original = (await sql`select id_enc from card_phones where phone_h = ${failedHash}`)[0].id_enc
+await sql`update card_sms set code_h = '', tries = 0 where phone_h = ${failedHash}`
+await sql`update card_phones set id_enc = 'corrupt' where phone_h = ${failedHash}`
+assert.equal((await call(other, 'login', { phone: failedPhone, code: '123456' })).ok, false)
+assert.equal((await sql`select tries, code_h from card_sms where phone_h = ${failedHash}`)[0].tries, 0)
+await sql`update card_phones set id_enc = ${original} where phone_h = ${failedHash}`
+assert((await call(other, 'login', { phone: failedPhone, code: '123456' })).ok)
+console.log('ok  找回记录损坏不会消耗验证码，修复记录后可重试')
 
 // Two different numbers cannot race into the same account.
 const thirdId = 'VM-4444-4444-4444-4444-4444'

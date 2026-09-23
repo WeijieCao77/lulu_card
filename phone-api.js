@@ -105,7 +105,8 @@ export async function sendVerify(phone, env = process.env) {
 /** Aliyun checks the code the player typed. */
 export async function checkVerify(phone, code, env = process.env) {
   const d = await aliyunRpc('dypnsapi.aliyuncs.com', 'CheckSmsVerifyCode', { PhoneNumber: phone, VerifyCode: code }, env)
-  return d?.Code === 'OK' && d?.Model?.VerifyResult === 'PASS'
+  if (d?.Code !== 'OK') throw new Error(`aliyun ${d?.Code || '?'}: ${d?.Message || ''}`)
+  return d?.Model?.VerifyResult === 'PASS'
 }
 
 /**
@@ -211,8 +212,11 @@ export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, ha
       return { ok: true, previous: r.code_h }
     })
     if (!prepared.ok) return prepared
-    const restore = () => sql`update card_sms set code_h = ${prepared.previous}
-                              where phone_h = ${ph} and code_h = ${reservation}`
+    const restore = (refund = false) => refund
+      ? sql`update card_sms set code_h = ${prepared.previous}, tries = greatest(0, tries - 1)
+            where phone_h = ${ph} and code_h = ${reservation}`
+      : sql`update card_sms set code_h = ${prepared.previous}
+            where phone_h = ${ph} and code_h = ${reservation}`
     try {
       const typed = String(code ?? '').trim()
       let pass = false
@@ -232,7 +236,7 @@ export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, ha
         return finish(tx)
       })
     } catch (err) {
-      await restore()
+      await restore(true)
       console.warn('sms: check failed —', err.message)
       return { ok: false, why: '校验没连上，稍后再试。' }
     }
@@ -286,9 +290,13 @@ export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, ha
     const ph = phoneHash(phone)
     const held = await sql`select id_enc, last4 from card_phones where phone_h = ${ph}`
     if (!held.length) { json(res, 200, { ok: false, why: '这个手机号还没绑过账号。', none: true }); return }
-    const v = await verify(phone, ph, b.code, async () => {
-      try { return { ok: true, id: decryptId(held[0].id_enc), phone: held[0].last4 } }
-      catch { return { ok: false, why: '账号记录读不出来，请联系作者。' } }
+    const v = await verify(phone, ph, b.code, async (tx) => {
+      const current = await tx`select id_hash, id_enc, last4 from card_phones where phone_h = ${ph}`
+      if (!current.length) throw new Error('phone binding disappeared during login')
+      const id = decryptId(current[0].id_enc)
+      const account = await tx`select id_hash from card_accounts where id_hash = ${current[0].id_hash}`
+      if (!account.length || hash(id) !== current[0].id_hash) throw new Error('phone binding account is unavailable')
+      return { ok: true, id, phone: current[0].last4 }
     })
     json(res, 200, v)
   }

@@ -57,10 +57,15 @@ try {
     assert((await call(phones, '/api/card/phone/send', { phone: '13800138000', for: 'bind', id })).ok)
     assert((await call(phones, '/api/card/phone/bind', { id, phone: '13800138000', code: '424242' })).ok)
     assert.equal((await call(cards, '/api/card/load', { id })).verified, true)
+    await sql`update card_sms set sent = sent - interval '61 seconds'`
+    assert((await call(phones, '/api/card/phone/send', { phone: '13800138000', for: 'login' })).ok)
+    assert.equal((await call(phones, '/api/card/phone/login', { phone: '13800138000', code: '000000' })).ok, false)
+    assert.equal((await call(phones, '/api/card/phone/login', { phone: '13800138000', code: '424242' })).id, id)
+    assert.equal((await call(phones, '/api/card/phone/login', { phone: '13800138000', code: '424242' })).ok, false)
     const second = 'VM-2222-2222-2222-2222-2222'
     assert((await call(cards, '/api/card/claim', { id: second, name: '小号' })).ok)
     assert((await call(phones, '/api/card/phone/send', { phone: '13800138000', for: 'bind', id: second })).taken)
-    console.log('formal phone gate: unverified account blocked; verified account admitted; one number cannot fund a second account')
+    console.log('formal phone gate: unverified blocked; bind and phone recovery pass; code replay and second account blocked')
   } finally { await db.close() }
 } finally {
   for (const name of ['formal-cards-api.js', 'formal-phone-api.js']) await rm(join(dirname(temp), name), { force: true })

@@ -408,7 +408,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
               <div className="panel-body">
                 <b style={{ color: 'var(--accent)' }}>账号已创建，先把下面的 ID 存好。</b>
                 <p className="small muted" style={{ marginBottom: 0 }}>
-                  没有密码和邮箱，ID 丢了就找不回来。
+                  {RELEASE_POLICY.phoneEnabled ? '完成手机号验证后，可用手机号找回账号；验证前请保存 ID。' : '没有密码和邮箱，ID 丢了就找不回来。'}
                 </p>
                 <button className="primary sm" style={{ marginTop: 10 }} onClick={() => { setFresh(false); setTab('packs') }}>
                   存好了，去抽卡 →
@@ -497,7 +497,7 @@ function Gate({
         <h1>你的收藏，从此开始。</h1>
         <p className="gate-intro">
           这串 ID 是你返回收藏的凭证，请复制保存或截图。
-          <br /><b>没有密码和邮箱，丢失 ID 将无法找回账号。</b>
+          <br /><b>{RELEASE_POLICY.phoneEnabled ? '绑定手机号后可用手机号找回账号；绑定前请保存 ID。' : '没有密码和邮箱，丢失 ID 将无法找回账号。'}</b>
         </p>
         <div className="gate-id-label">专属账号 ID<code className="gate-id">{made.state.id}</code></div>
         <div className="gate-receipt-actions">
@@ -530,7 +530,7 @@ function Gate({
         </div>
         {sure && !copied && (
           <p className="gate-error" role="alert">
-            还没复制 ID，丢了找不回来。再点一次直接进入。
+            {RELEASE_POLICY.phoneEnabled ? '还没复制 ID，绑定手机号前请妥善保存。再点一次直接进入。' : '还没复制 ID，丢了找不回来。再点一次直接进入。'}
           </p>
         )}
         {err && <p className="gate-error" role="alert">{err}</p>}
@@ -572,7 +572,7 @@ function Gate({
               {busy ? (entryMode === 'create' ? '正在建立档案…' : '正在读取收藏…') : (entryMode === 'create' ? '创建我的档案' : '进入我的收藏')}<span aria-hidden="true">→</span>
             </button>
           </form>
-          <p className="gate-account-note">{entryMode === 'create' ? '建档后请保存专属账号 ID，以便下次登录。' : '内测期间暂不开放手机号功能，请妥善保存账号 ID。'}</p>
+          <p className="gate-account-note">{entryMode === 'create' ? '建档后请保存专属账号 ID，以便下次登录。' : RELEASE_POLICY.phoneEnabled ? '已绑定手机号可用手机号进入并找回账号。' : '内测期间暂不开放手机号功能，请妥善保存账号 ID。'}</p>
           {RELEASE_POLICY.phoneEnabled && <button className="gate-secondary" onClick={() => setByPhone(true)}>用手机号进入</button>}
         </section>
       </main>
