@@ -3,6 +3,8 @@ import { useMemo, useState } from 'react'
 import { useCards } from './ctx'
 import CardFace, { CardSlot } from '../Card'
 import { Panel } from '../common'
+import CardActionDialog from './CardActionDialog'
+import SquadUpgrade from './SquadUpgrade'
 import {
   SQUAD_PRESETS, autoSquad, clearPreset, collection, levelOf, loadPreset,
   personTaken, presetsOf, renamePreset, savePreset, setSlot,
@@ -28,6 +30,7 @@ export default function SquadScreen() {
   // Chinese sentinel you meant.
   const [filter, setFilter] = useState<CardFilter>(EMPTY_FILTER)
   const [sharing, setSharing] = useState(false)
+  const [clearIdx, setClearIdx] = useState<number | null>(null)
 
   const level = (id: string) => levelOf(g, id)
   const presets = presetsOf(g)
@@ -122,9 +125,10 @@ export default function SquadScreen() {
                 <div className="tiny faint mono">
                   {rec ? `${filledN}/5 人 · 战力 ${fmt(score)}` : '空'}
                 </div>
-                <div className="row" style={{ gap: 5, marginTop: 6 }}>
+                <div className="row wrap" style={{ gap: 5, marginTop: 6 }}>
                   <button
                     className="sm"
+                    style={{ minHeight: 44, minWidth: 44 }}
                     onClick={() => {
                       const r = savePreset(g, i)
                       commit(true)
@@ -135,6 +139,7 @@ export default function SquadScreen() {
                   </button>
                   <button
                     className="sm primary"
+                    style={{ minHeight: 44, minWidth: 44 }}
                     disabled={!rec}
                     onClick={() => {
                       const r = loadPreset(g, i)
@@ -149,10 +154,11 @@ export default function SquadScreen() {
                   {rec && (
                     <button
                       className="sm ghost"
+                      style={{ minHeight: 44, flexBasis: '100%', marginTop: 8 }}
                       title="清空这个位置"
-                      onClick={() => { clearPreset(g, i); commit(true) }}
+                      onClick={() => setClearIdx(i)}
                     >
-                      ✕
+                      删除
                     </button>
                   )}
                 </div>
@@ -201,23 +207,29 @@ export default function SquadScreen() {
           {SQUAD_SLOTS.map((role, i) => {
             const id = g.squad.slots[i]
             const card = id ? cardById(id) : null
-            return card ? (
-              <CardFace
-                key={i}
-                card={card}
-                level={level(card.id)}
-                selected={chem.misfits.includes(i)}
-                onClick={() => setPicking(i)}
-                footer={chem.misfits.includes(i) ? `不熟悉${role}`
-                  // he covers this position but it is not his first — say so
-                  // affirmatively, or a badge that disagrees with the column
-                  // reads as a misplacement
-                  : isPlayerCard(card) && !card.roles.includes(role)
-                    ? `${role} · 兼任`
-                    : role}
-              />
-            ) : (
-              <CardSlot key={i} label={role} onClick={() => setPicking(i)} />
+            return (
+              <div key={i} style={{ minWidth: 0, width: '100%', maxWidth: 150, margin: '0 auto' }}>
+                {card ? (
+                  <>
+                    <CardFace
+                      card={card}
+                      level={level(card.id)}
+                      selected={chem.misfits.includes(i)}
+                      onClick={() => setPicking(i)}
+                      footer={chem.misfits.includes(i) ? `不熟悉${role}`
+                        // he covers this position but it is not his first — say so
+                        // affirmatively, or a badge that disagrees with the column
+                        // reads as a misplacement
+                        : isPlayerCard(card) && !card.roles.includes(role)
+                          ? `${role} · 兼任`
+                          : role}
+                    />
+                    <SquadUpgrade key={card.id} cardId={card.id} />
+                  </>
+                ) : (
+                  <CardSlot label={role} onClick={() => setPicking(i)} />
+                )}
+              </div>
             )
           })}
         </div>
@@ -226,13 +238,14 @@ export default function SquadScreen() {
           <div style={{ minWidth: 150 }}>
             <div className="tiny faint">教练</div>
             {g.squad.coach && cardById(g.squad.coach) ? (
-              <div style={{ marginTop: 6 }}>
+              <div style={{ maxWidth: 150, margin: '6px auto 0' }}>
                 <CardFace
                   card={cardById(g.squad.coach)!}
                   level={level(g.squad.coach)}
                   size="sm"
                   onClick={() => setPicking('coach')}
                 />
+                <SquadUpgrade key={g.squad.coach} cardId={g.squad.coach} />
               </div>
             ) : (
               <div style={{ marginTop: 6 }}>
@@ -332,6 +345,28 @@ export default function SquadScreen() {
       </Panel>
 
       {sharing && <ShareSquad onClose={() => setSharing(false)} />}
+
+      {clearIdx !== null && (
+        <CardActionDialog
+          open={clearIdx !== null}
+          title="确认删除预设"
+          onClose={() => setClearIdx(null)}
+          confirmLabel={`删除「${presets[clearIdx]?.name ?? `配置 ${clearIdx + 1}`}」`}
+          tone="danger"
+          onConfirm={() => {
+            if (clearIdx === null) return
+            const name = presets[clearIdx]?.name ?? `配置 ${clearIdx + 1}`
+            clearPreset(g, clearIdx)
+            commit(true)
+            toast(`已清空「${name}」。`)
+            setClearIdx(null)
+          }}
+        >
+          <p style={{ margin: 0 }}>
+            确定要清空「{presets[clearIdx]?.name ?? `配置 ${clearIdx + 1}`}」吗？当前卡组不受影响。
+          </p>
+        </CardActionDialog>
+      )}
 
       {picking !== null && (
         <div className="modal-bg" onClick={() => setPicking(null)}>

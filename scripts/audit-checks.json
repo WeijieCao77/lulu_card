@@ -65,6 +65,18 @@
     "file": "scripts/check_market_history.ts"
   },
   {
+    "runtime": "tsx",
+    "file": "scripts/check_market_guidance.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_market_watchlist.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_market_watch_api.ts"
+  },
+  {
     "runtime": "node",
     "file": "scripts/check_request_maintenance.mjs"
   },
@@ -743,6 +755,10 @@
   {
     "runtime": "tsx",
     "file": "scripts/check_card_rarity.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_hall_peak_seasons.ts"
   },
   {
     "runtime": "tsx",

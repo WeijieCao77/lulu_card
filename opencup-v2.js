@@ -25,7 +25,7 @@ export function makeSwissCupRunner(sql, { engine, rivalOf, simulate }) {
     const rows = await entries(db, cup.id)
     const mail = []
     for (const e of rows) {
-      const place = [1, 2, 4].includes(e.place) ? e.place : null
+      const place = [1, 2, 4, 8].includes(e.place) ? e.place : null
       const p = engine.openCupPurse(cup.entrants, 0, place)
       p.coins += e.swiss_real_wins * 20 + e.playoff_wins * 40
       if (p.coins || p.pack) mail.push({ id_hash: e.id_hash, coins: p.coins, pack: p.pack ?? null,
@@ -128,7 +128,8 @@ export function makeSwissCupRunner(sql, { engine, rivalOf, simulate }) {
         rw: isSwiss && m.b ? 1 : 0, pw: !isSwiss && m.b ? 1 : 0, diff, opponent: loser, lost: false }]
       if (loser) updates.push({ id: loser, win: 0, sw: 0, sl: isSwiss ? 1 : 0, bye: 0, rw: 0, pw: 0, diff: -diff, opponent: winner, lost: true })
       const place = m.stage === 'playoff' && cup.playoff?.rounds - m.stage_round === 1 ? 2
-        : m.stage === 'playoff' && cup.playoff?.rounds - m.stage_round === 2 ? 4 : null
+        : m.stage === 'playoff' && cup.playoff?.rounds - m.stage_round === 2 ? 4
+          : m.stage === 'playoff' && cup.playoff?.rounds - m.stage_round === 3 ? 8 : null
       await db`update open_cup_entries e set wins = e.wins + x.win, swiss_wins = e.swiss_wins + x.sw, swiss_losses = e.swiss_losses + x.sl,
         byes = e.byes + x.bye, swiss_real_wins = e.swiss_real_wins + x.rw, playoff_wins = e.playoff_wins + x.pw,
         map_diff = e.map_diff + x.diff, met = case when x.opponent is null then e.met else e.met || jsonb_build_array(x.opponent) end,

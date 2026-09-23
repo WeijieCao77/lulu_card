@@ -1,3 +1,4 @@
+import { marketWatchIds } from './market-watch.js'
 /**
  * The trading post.
  *
@@ -1011,8 +1012,12 @@ export function makeMarketApi(sql, {
     // when none of them is set, which is the common case and skips the filter
     // in the query entirely.
     const narrowed = engine.filterActive(filter) || q.trim() !== ''
-    const ids = narrowed
-      ? engine.ALL_CARDS.filter((c) => engine.matchesFilter(c, filter) && engine.matchesQuery(c, q)).map((c) => c.id)
+    // Watch IDs are intersected before every SQL pagination path. An explicit
+    // empty/invalid list must stay [], never fall back to an unfiltered shelf.
+    const watchIds = marketWatchIds(b?.watchedIds, new Set(engine.ALL_CARDS.filter((c) => c.kind === 'player').map((c) => c.id)))
+    const watchSet = watchIds === null ? null : new Set(watchIds)
+    const ids = narrowed || watchSet !== null
+      ? engine.ALL_CARDS.filter((c) => (watchSet === null || watchSet.has(c.id)) && engine.matchesFilter(c, filter) && engine.matchesQuery(c, q)).map((c) => c.id)
       : null
     const held = unowned ? await heldBy(mine) : null
     const heldIds = held ? held.ids : null
@@ -1088,7 +1093,7 @@ export function makeMarketApi(sql, {
      * feeding: a club menu narrowed by the club you picked has one entry.
      */
     const menus = cursor ? null : await shelfMenus({ mine, priceMin, priceMax, heldIds, heldLevels, fast })
-    const pool = menus?.pool ?? null
+    const pool = menus ? (watchSet === null ? menus.pool : menus.pool.filter(([id]) => watchSet.has(id))) : null
     const total = menus?.total ?? null
     const names = await namesOf([...own, ...rows].map((r) => r.seller_h))
     const shape = (r) => ({

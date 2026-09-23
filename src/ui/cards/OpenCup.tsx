@@ -26,7 +26,7 @@ const roundLabel = (cup: Pick<OpenCupRow, 'format' | 'rounds' | 'playoffRounds'>
   cup.format === 2 && m.stage && m.stage !== 'knockout'
     ? swissRoundName(m.stage as 'swiss' | 'playin' | 'playoff', m.stageRound ?? 0, cup.playoffRounds ?? 0)
     : openCupRoundName(cup.rounds, m.round)
-const prizeText = (n: number, place: 1 | 2 | 4) => {
+const prizeText = (n: number, place: 1 | 2 | 4 | 8) => {
   const p = openCupPlacePrize(n, place)
   const bits = [p.coins ? `${p.coins} 金币` : '', p.pack ? PACKS[p.pack].name : ''].filter(Boolean)
   return bits.length ? bits.join(' + ') : '—'
@@ -194,7 +194,7 @@ function CupDivision({ league }: { league: CupLeague }) {
           <p className="tiny faint" style={{ margin: '8px 0 0', lineHeight: 1.7 }}>
             {st.next.signed < OPEN_CUP_MIN
               ? `满 ${OPEN_CUP_MIN} 人开赛。32 人以上冠军是${PACKS.ten.name}。`
-              : `按现在 ${st.next.signed} 人算：冠军 ${prizeText(st.next.signed, 1)}，亚军 ${prizeText(st.next.signed, 2)}，四强 ${prizeText(st.next.signed, 4)}。32 人以上冠军是${PACKS.ten.name}。`}
+              : `按现在 ${st.next.signed} 人算：冠军 ${prizeText(st.next.signed, 1)}，亚军 ${prizeText(st.next.signed, 2)}，四强 ${prizeText(st.next.signed, 4)}${st.next.signed >= 32 ? `，八强 ${prizeText(st.next.signed, 8)}` : ''}。32 人以上冠军是${PACKS.ten.name}。`}
           </p>
         )}
       </Panel>
@@ -326,6 +326,7 @@ function MyRun({ cup, me, onOpen }: { cup: OpenCupRow; me: OpenCupMine | null; o
     : me.place === 1 ? '🏆 冠军'
       : me.place === 2 ? '亚军'
         : me.place === 4 ? '四强'
+        : me.place === 8 ? '八强'
           : cup.format === 2 && cup.phase === 'swiss' && (me.swissWins ?? 0) >= 2 ? '已晋级，等待 Playoff'
           : cup.format === 2 && (me.swissLosses ?? 0) >= 2 ? '瑞士轮两败，已淘汰'
           : me.alive ? `还在 · 已赢 ${me.wins} 场`

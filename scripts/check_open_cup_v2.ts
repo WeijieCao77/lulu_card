@@ -71,11 +71,12 @@ try {
   assert.ok(ms.every((m:any)=>m.b ? Math.max(m.maps_a,m.maps_b)===(m.stage==='swiss'?2:3) : m.maps_a===null && m.maps_b===null && m.detail===null))
   const qualified = es.filter((e:any)=>e.swiss_wins===2)
   assert.equal(real.filter((m:any)=>m.stage!=='swiss').length,qualified.length-1)
+  if (n >= 32) assert.equal(es.filter((e:any)=>e.place===8).length,4)
   const mail = await sql`select * from card_mail where kind='open_cup' and body->>'cup'=${String(cup.id)}`
   assert.equal(new Set(mail.map((m:any)=>m.to_h)).size,mail.length)
   for (const m of mail) {
    const e = es.find((e:any)=>e.id_hash===m.to_h)
-   const p = engine.openCupPurse(n,0,[1,2,4].includes(e.place)?e.place:null)
+   const p = engine.openCupPurse(n,0,[1,2,4,8].includes(e.place)?e.place:null)
    assert.equal(m.coins,p.coins+20*e.swiss_real_wins+40*e.playoff_wins)
   }
   await Promise.all([api.advance(now),twin.advance(now)])

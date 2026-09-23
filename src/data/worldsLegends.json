@@ -1479,7 +1479,7 @@
     "clubId": "T42",
     "clubTag": "TL",
     "rating": 92,
-    "note": "从 CLG、TSM 到 TL，Doublelift 的锋芒与自信陪伴了北美赛区的多个时代。生涯纪念卡。",
+    "note": "2018 赛季在 Team Liquid 展现北美下路统治级表现，季后赛输出稳定性与终结能力突出。",
     "roles": [
       "下路"
     ],
@@ -1515,7 +1515,20 @@
       "serial": 1,
       "total": 11
     },
-    "source": "https://www.flickr.com/photos/lolesports/45362081761/"
+    "source": "https://nexus.leagueoflegends.com/en-us/2018/06/the-difference-between-a-contender-and-a-champion/",
+    "peakSeason": {
+      "year": 2018,
+      "team": "Team Liquid",
+      "role": "下路",
+      "basis": "2018 LCS 春季赛冠军，季后赛打出极强个人数据。",
+      "selection": "game-design",
+      "evidence": [
+        {
+          "url": "https://nexus.leagueoflegends.com/en-us/2018/06/the-difference-between-a-contender-and-a-champion/",
+          "claim": "Riot 2018-06-14: TL 2018 Spring champion; Doublelift playoff KDA 35.3."
+        }
+      ]
+    }
   },
   {
     "id": "career-bjergsen",
@@ -1530,7 +1543,7 @@
     "clubId": "H:TSM",
     "clubTag": "TSM",
     "rating": 92,
-    "note": "比尔森以中路压制与稳定的赛场表现，成为 TSM 时代的代表人物。生涯纪念卡。",
+    "note": "2017 赛季代表 TSM 拿下夏季赛 MVP，中路对线击杀与团战影响力处于北美顶尖。",
     "roles": [
       "中单"
     ],
@@ -1566,14 +1579,27 @@
       "serial": 2,
       "total": 11
     },
-    "source": "https://www.flickr.com/photos/lolesports/34534936641/"
+    "source": "https://www.youtube.com/watch?v=UAgeW7JKkMU",
+    "peakSeason": {
+      "year": 2017,
+      "team": "TSM",
+      "role": "中单",
+      "basis": "2017 LCS 夏季赛 MVP。",
+      "selection": "game-design",
+      "evidence": [
+        {
+          "url": "https://www.youtube.com/watch?v=UAgeW7JKkMU",
+          "claim": "Verified LoL Esports: TSM Bjergsen 2017 Summer split MVP best plays."
+        }
+      ]
+    }
   },
   {
     "id": "career-perkz",
     "ign": "Perkz",
     "title": "知名选手 · 欧洲锋芒",
     "short": "欧洲锋芒",
-    "year": 2018,
+    "year": 2019,
     "kind": "hall",
     "competition": "Career",
     "collection": "hall-of-fame",
@@ -1581,9 +1607,9 @@
     "clubId": "T26",
     "clubTag": "G2",
     "rating": 92,
-    "note": "从中路到下路，再回到中路，Perkz 用敢打敢拼的风格留下欧洲赛区的经典时刻。本卡纪念他身披 G2 战袍的中路岁月。",
+    "note": "2019 赛季转战 G2 下路，随队包揽 LEC 双冠与 MSI 冠军，在世界赛下路对抗中保持高压风格。",
     "roles": [
-      "中单"
+      "下路"
     ],
     "isIgl": true,
     "person": {
@@ -1591,40 +1617,58 @@
       "realName": "Luka Perković",
       "nat": "hr",
       "region": "LEC",
-      "age": 20,
+      "age": 21,
       "roles": [
-        "中单"
+        "下路"
       ],
       "attrs": {
-        "aim": 94,
-        "reaction": 93,
-        "awareness": 90,
-        "utility": 90,
+        "aim": 93,
+        "reaction": 91,
+        "awareness": 88,
+        "utility": 93,
         "clutch": 95,
-        "teamwork": 91,
-        "communication": 90,
-        "igl": 91
+        "teamwork": 92,
+        "communication": 88,
+        "igl": 86
       },
       "overall": 92,
       "agents": []
     },
     "art": {
       "accent": "#d5b6f6",
-      "position": "69% 25%",
-      "credit": "Riot Games / LoL Esports",
-      "source": "https://www.flickr.com/photos/lolesports/45394582152/",
-      "year": 2018,
+      "position": "79% 25%",
+      "credit": "Riot Games / ingame",
+      "source": "https://www.ingame.de/news/lol-worlds-finale-2019-paris-besten-teams-welt-g2-esports-fpx-funplus-phoenix-13201290.html",
+      "year": 2019,
       "serial": 3,
-      "total": 11
+      "total": 11,
+      "zoom": 1
     },
-    "source": "https://www.flickr.com/photos/lolesports/45394582152/"
+    "source": "https://g2esports.com/blogs/news/g2-finishes-second-in-worlds-2019",
+    "peakSeason": {
+      "year": 2019,
+      "team": "G2 Esports",
+      "role": "下路",
+      "basis": "2019 LEC 双冠、MSI 冠军、世界赛亚军。",
+      "selection": "game-design",
+      "evidence": [
+        {
+          "url": "https://g2esports.com/blogs/news/g2-finishes-second-in-worlds-2019",
+          "claim": "G2 official: 2019 two LEC titles, MSI champion, Worlds runner-up; Perkz vs Teddy bottomlane."
+        },
+        {
+          "url": "https://euw.leagueoflegends.com/en/featured/msi-2019-meet-the-teams",
+          "claim": "Riot 2019: Perkz explicitly swapped mid to ADC, Caps mid."
+        }
+      ]
+    }
   },
   {
     "id": "career-rekkles",
     "ign": "Rekkles",
     "title": "知名选手 · 北境之弓",
     "short": "北境之弓",
-    "year": 2020,
+    "year": 2018,
     "kind": "hall",
     "competition": "Career",
     "collection": "hall-of-fame",
@@ -1632,7 +1676,7 @@
     "clubId": "T25",
     "clubTag": "FNC",
     "rating": 92,
-    "note": "Rekkles 的精准走位与后期输出，是 Fnatic 时代的一道鲜明印记。本卡选取下路选手时期。",
+    "note": "2018 赛季代表 Fnatic 拿下 EULCS 春季赛 MVP，对线处理与团战走位是其当季标志。",
     "roles": [
       "下路"
     ],
@@ -1642,7 +1686,7 @@
       "realName": "Carl Martin Erik Larsson",
       "nat": "se",
       "region": "LEC",
-      "age": 23,
+      "age": 21,
       "roles": [
         "下路"
       ],
@@ -1668,7 +1712,20 @@
       "serial": 4,
       "total": 11
     },
-    "source": "https://www.flickr.com/photos/lolesports/49535032058/"
+    "source": "https://www.youtube.com/watch?v=YQIfRubgCEI",
+    "peakSeason": {
+      "year": 2018,
+      "team": "Fnatic",
+      "role": "下路",
+      "basis": "2018 EULCS 春季赛 MVP。",
+      "selection": "game-design",
+      "evidence": [
+        {
+          "url": "https://www.youtube.com/watch?v=YQIfRubgCEI",
+          "claim": "Verified LoL Esports Rekkles 2018 EULCS Spring MVP."
+        }
+      ]
+    }
   },
   {
     "id": "career-sneaky",
@@ -1683,7 +1740,7 @@
     "clubId": "T35",
     "clubTag": "C9",
     "rating": 91,
-    "note": "Sneaky 长期镇守 Cloud9 下路，用团战输出与稳定发挥留下北美赛区的高光。生涯纪念卡。",
+    "note": "2018 赛季随 Cloud9 打进世界赛四强，作为下路提供稳定输出与大场面经验。",
     "roles": [
       "下路"
     ],
@@ -1719,7 +1776,20 @@
       "serial": 5,
       "total": 11
     },
-    "source": "https://www.flickr.com/photos/lolesports/44552739215/"
+    "source": "https://nexus.leagueoflegends.com/en-us/2019/08/10-split-drought-cloud9/",
+    "peakSeason": {
+      "year": 2018,
+      "team": "Cloud9",
+      "role": "下路",
+      "basis": "2018 世界赛四强。",
+      "selection": "game-design",
+      "evidence": [
+        {
+          "url": "https://nexus.leagueoflegends.com/en-us/2019/08/10-split-drought-cloud9/",
+          "claim": "Riot retrospect: Sneaky and Jensen C9 2018 Worlds semifinal, lost to FNC."
+        }
+      ]
+    }
   },
   {
     "id": "career-jensen",
@@ -1734,7 +1804,7 @@
     "clubId": "T35",
     "clubTag": "C9",
     "rating": 91,
-    "note": "Jensen 在 Cloud9 的中路舞台上展现操作与进攻性。本卡纪念他的北美职业生涯。",
+    "note": "2018 赛季作为 Cloud9 中路核心随队进入世界赛四强，单点突破是队伍关键武器之一。",
     "roles": [
       "中单"
     ],
@@ -1770,7 +1840,20 @@
       "serial": 6,
       "total": 11
     },
-    "source": "https://www.flickr.com/photos/lolesports/43777953440/"
+    "source": "https://nexus.leagueoflegends.com/en-us/2019/08/10-split-drought-cloud9/",
+    "peakSeason": {
+      "year": 2018,
+      "team": "Cloud9",
+      "role": "中单",
+      "basis": "2018 世界赛四强。",
+      "selection": "game-design",
+      "evidence": [
+        {
+          "url": "https://nexus.leagueoflegends.com/en-us/2019/08/10-split-drought-cloud9/",
+          "claim": "Riot retrospect: Sneaky and Jensen C9 2018 Worlds semifinal, Jensen left after."
+        }
+      ]
+    }
   },
   {
     "id": "career-xmithie",
@@ -1785,7 +1868,7 @@
     "clubId": "T42",
     "clubTag": "TL",
     "rating": 90,
-    "note": "Xmithie 以路线规划、目标控制和团队配合见长，是北美赛区的代表性打野之一。",
+    "note": "2019 赛季作为 Team Liquid 打野帮助队伍完成 LCS 三连冠，路线规划与目标控制稳健。",
     "roles": [
       "打野"
     ],
@@ -1821,22 +1904,39 @@
       "serial": 7,
       "total": 11
     },
-    "source": "https://www.flickr.com/photos/lolesports/32024763187/"
+    "source": "https://teamliquid.com/news/2019/04/14/three-peat-complete",
+    "peakSeason": {
+      "year": 2019,
+      "team": "Team Liquid",
+      "role": "打野",
+      "basis": "2019 LCS 春季赛冠军并进入 MSI。",
+      "selection": "game-design",
+      "evidence": [
+        {
+          "url": "https://teamliquid.com/news/2019/04/14/three-peat-complete",
+          "claim": "Official TL: 2019 spring champion, Xmithie."
+        },
+        {
+          "url": "https://euw.leagueoflegends.com/en/featured/msi-2019-meet-the-teams",
+          "claim": "Riot 2019: TL 2019 Xmithie jungle."
+        }
+      ]
+    }
   },
   {
     "id": "career-aphromoo",
     "ign": "Aphromoo",
     "title": "知名选手 · 节奏领航",
     "short": "节奏领航",
-    "year": 2017,
+    "year": 2018,
     "kind": "hall",
     "competition": "Career",
     "collection": "hall-of-fame",
     "ratingTier": "hall",
-    "clubId": "H:CLG",
-    "clubTag": "CLG",
-    "rating": 90,
-    "note": "Aphromoo 的游走、开团与指挥，承载了北美老牌辅助的赛场记忆。生涯纪念卡。",
+    "clubId": "H:100T",
+    "clubTag": "100T",
+    "rating": 91,
+    "note": "2018 赛季在 100 Thieves 拿下 LCS 春季赛 MVP，团队节奏与视野控制是其当季核心价值。",
     "roles": [
       "辅助"
     ],
@@ -1846,33 +1946,47 @@
       "realName": "Zaqueri Black",
       "nat": "us",
       "region": "LCS",
-      "age": 24,
+      "age": 25,
       "roles": [
         "辅助"
       ],
       "attrs": {
         "aim": 84,
         "reaction": 85,
-        "awareness": 93,
-        "utility": 83,
+        "awareness": 94,
+        "utility": 84,
         "clutch": 89,
-        "teamwork": 92,
-        "communication": 95,
-        "igl": 90
+        "teamwork": 94,
+        "communication": 96,
+        "igl": 91
       },
-      "overall": 90,
+      "overall": 91,
       "agents": []
     },
     "art": {
       "accent": "#efc78b",
       "position": "50% 25%",
       "credit": "Riot Games / LoL Esports",
-      "source": "https://www.flickr.com/photos/lolesports/33632246026/",
-      "year": 2017,
+      "source": "https://www.flickr.com/photos/lolesports/42626335040/",
+      "year": 2018,
       "serial": 8,
-      "total": 11
+      "total": 11,
+      "zoom": 1
     },
-    "source": "https://www.flickr.com/photos/lolesports/33632246026/"
+    "source": "https://nexus.leagueoflegends.com/en-us/2018/06/the-difference-between-a-contender-and-a-champion/",
+    "peakSeason": {
+      "year": 2018,
+      "team": "100 Thieves",
+      "role": "辅助",
+      "basis": "2018 LCS 春季赛 MVP。",
+      "selection": "game-design",
+      "evidence": [
+        {
+          "url": "https://nexus.leagueoflegends.com/en-us/2018/06/the-difference-between-a-contender-and-a-champion/",
+          "claim": "Riot 2018-06-14: Aphromoo 2018 Spring MVP at 100 Thieves."
+        }
+      ]
+    }
   },
   {
     "id": "career-froggen",
@@ -1887,7 +2001,7 @@
     "clubId": "H:ALL",
     "clubTag": "ALL",
     "rating": 91,
-    "note": "从欧洲赛场走向北美，Froggen 的冰鸟与扎实发育留下鲜明印记。本卡以欧洲时期为生涯代表版本。",
+    "note": "2014 EU LCS夏季赛Alliance夺冠，Froggen作为核心中单在半决赛展现统治力，决赛使用小炮、泽拉斯等英雄率队3-1击败FNC，帮助Alliance以欧洲一号种子身份进入S4世界赛。该表现足以作为其单赛季巅峰代表。",
     "roles": [
       "中单"
     ],
@@ -1916,14 +2030,28 @@
     },
     "art": {
       "accent": "#79d7ef",
-      "position": "50% 25%",
-      "credit": "Riot Games / LoL Esports",
-      "source": "https://www.flickr.com/photos/lolesports/33495004012/",
-      "year": 2017,
+      "position": "27% 20%",
+      "credit": "Riot Games / Red Bull",
+      "source": "https://www.redbull.com/us-en/lcs-super-week-heads-into-the-off-season",
+      "year": 2014,
       "serial": 9,
-      "total": 11
+      "total": 11,
+      "zoom": 1
     },
-    "source": "https://www.flickr.com/photos/lolesports/33495004012/"
+    "source": "https://esl.com/article/gamescom-2014-aftermath-alliance-fnatic-sk-gaming-and-dark-passage-heading-to-worlds/",
+    "peakSeason": {
+      "year": 2014,
+      "team": "Alliance",
+      "role": "中单",
+      "selection": "game-design",
+      "basis": "2014夏季赛季后赛及决赛的官方赛事记录，显示Froggen在半决赛和决赛中的核心作用与夺冠结果。",
+      "evidence": [
+        {
+          "url": "https://esl.com/article/gamescom-2014-aftermath-alliance-fnatic-sk-gaming-and-dark-passage-heading-to-worlds/",
+          "claim": "ESL官方回顾gamescom 2014，明确Alliance击败FNC夺冠，并说明Froggen在半决赛展现统治力，决赛使用小炮、泽拉斯等英雄率队3-1战胜FNC，晋级世界赛。"
+        }
+      ]
+    }
   },
   {
     "id": "career-diamondprox",
@@ -1938,7 +2066,7 @@
     "clubId": "H:GMB",
     "clubTag": "GMB",
     "rating": 91,
-    "note": "Diamondprox 是欧洲早期赛场的代表性打野，本卡纪念 Gambit 时期的反野与进攻节奏。",
+    "note": "2013 年代表 Gambit 担任打野，在 IEM 卡托维兹击败 Azubu Blaze 与 Frost 随队夺冠。本卡选取这一赛季的国际赛表现。",
     "roles": [
       "打野"
     ],
@@ -1974,7 +2102,24 @@
       "serial": 10,
       "total": 11
     },
-    "source": "https://www.flickr.com/photos/lolesports/44353653404/"
+    "source": "https://esl.com/article/we-are-working-hard-to-become-a-dominant-team-once-again-an-interview-with-gambit-gamings-edward-abgaryan/",
+    "peakSeason": {
+      "year": 2013,
+      "team": "Gambit Gaming",
+      "role": "打野",
+      "selection": "game-design",
+      "basis": "ESL官方赛后采访及分组报道确认Gambit 2013 Katowice夺冠，并明确Diamondprox以打野身份帮助队伍战胜Blaze和Frost。",
+      "evidence": [
+        {
+          "url": "https://esl.com/article/we-are-working-hard-to-become-a-dominant-team-once-again-an-interview-with-gambit-gamings-edward-abgaryan/",
+          "claim": "Gambit队友Edward在ESL官方采访中确认队伍于2013 Katowice夺冠。"
+        },
+        {
+          "url": "https://esl.com/article/katowice-group-b-bebes-big-adventure/",
+          "claim": "ESL官方Katowice分组报道明确Diamondprox作为Gambit打野帮助队伍击败韩国战队Azubu Blaze与Frost。"
+        }
+      ]
+    }
   },
   {
     "id": "career-soaz",
@@ -1989,7 +2134,7 @@
     "clubId": "T25",
     "clubTag": "FNC",
     "rating": 90,
-    "note": "sOAZ 在欧洲上路征战多年，以经验、单带和团队适应力留下自己的印记。生涯纪念卡。",
+    "note": "2017 年代表 Fnatic 担任上单，入选 EU LCS 夏季赛最佳阵容一阵；全球总决赛小组赛从 0–4 开局逆袭进入八强。",
     "roles": [
       "上单"
     ],
@@ -2025,6 +2170,23 @@
       "serial": 11,
       "total": 11
     },
-    "source": "https://www.flickr.com/photos/lolesports/36900104933/"
+    "source": "https://nexus.leagueoflegends.com/en-us/2018/05/the-middle-mages-fnc-caps/",
+    "peakSeason": {
+      "year": 2017,
+      "team": "Fnatic",
+      "role": "上单",
+      "selection": "game-design",
+      "basis": "Riot官方回顾及历史最佳阵容记录显示sOAZ在2017夏季赛入选一阵上单，并随FNC从0-4开局进入世界赛八强。",
+      "evidence": [
+        {
+          "url": "https://nexus.leagueoflegends.com/en-us/2018/05/the-middle-mages-fnc-caps/",
+          "claim": "Riot 回顾 Fnatic 在 2017 全球总决赛小组赛从 0–4 开局逆袭进入八强。"
+        },
+        {
+          "url": "https://upcomer.com/the-history-of-lec-all-pro-teams/",
+          "claim": "历史奖项汇总列出 2017 夏季赛第一阵容上单为 Fnatic sOAZ；与 Leaguepedia 当季列表交叉核验。"
+        }
+      ]
+    }
   }
 ]

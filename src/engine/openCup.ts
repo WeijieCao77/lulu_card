@@ -241,9 +241,10 @@ export const OPEN_CUP_WIN_COINS = 40
  * person and three spare accounts. Entry is free, so everything here is paid
  * for winning — an account that turns up and loses takes nothing away.
  *
- * `place` is 1 for the champion, 2 the finalist, 4 a losing semi-finalist.
+ * `place` is 1 for the champion, 2 the finalist, 4 a losing semi-finalist,
+ * and 8 a losing quarter-finalist. Smaller fields do not award eighth place.
  */
-export function openCupPlacePrize(entrants: number, place: 1 | 2 | 4): OpenCupPrize {
+export function openCupPlacePrize(entrants: number, place: 1 | 2 | 4 | 8): OpenCupPrize {
   if (place === 1) {
     if (entrants >= 32) return { coins: 1000, pack: 'ten' }
     if (entrants >= 16) return { coins: 600, pack: 'elite' }
@@ -256,14 +257,18 @@ export function openCupPlacePrize(entrants: number, place: 1 | 2 | 4): OpenCupPr
     if (entrants >= 8) return { coins: 200 }
     return { coins: 100 }
   }
-  if (entrants >= 32) return { coins: 150, pack: 'scout' }
-  if (entrants >= 16) return { coins: 100 }
+  if (place === 4) {
+    if (entrants >= 32) return { coins: 150, pack: 'scout' }
+    if (entrants >= 16) return { coins: 100 }
+    return { coins: 0 }
+  }
+  if (entrants >= 32) return { coins: 50, pack: 'scout' }
   return { coins: 0 }
 }
 
 /** Everything one entrant is owed when the cup is over. */
 export function openCupPurse(
-  entrants: number, wins: number, place: 1 | 2 | 4 | null,
+  entrants: number, wins: number, place: 1 | 2 | 4 | 8 | null,
 ): OpenCupPrize {
   const base = place ? openCupPlacePrize(entrants, place) : { coins: 0 }
   return { coins: base.coins + wins * OPEN_CUP_WIN_COINS, ...(base.pack ? { pack: base.pack } : {}) }

@@ -82,7 +82,7 @@ export default function WorldsGallery() {
       <div className="worlds-item-label"><strong>{legendEdition(c.legend!)} · {c.ign}</strong><span>{g.cards[c.id] ? '已收藏 ✦' : '尚未收藏'}</span></div>
     </article>)}</div>
     {!cards.length && <p className="muted">{query ? '没有匹配的选手，试试其他名字或切换到全部。' : filter === '已拥有' ? '还没有收藏彩卡，切换到全部可免费预览。' : filter === '知名选手' ? '知名选手暂未匹配到卡牌。' : '该分类暂无彩卡。'}</p>}
-    <p className="worlds-note">知名选手收录各赛区代表人物的生涯版本；已有 S 赛或 MSI MVP 彩卡的选手不重复收录。<br />普通选手卡基础评分：金卡 {GOLD_AT}—90，银卡 {SILVER_AT}—{GOLD_AT - 1}，铜卡低于 {SILVER_AT}；强化后可超过基础上限。教练基础评分：金卡 {COACH_GOLD_AT} 起，银卡 {COACH_SILVER_AT}—{COACH_GOLD_AT - 1}，铜卡低于 {COACH_SILVER_AT}。知名选手 90—92；冠军成员 90—94；MSI MVP 93—95；S 赛 MVP 94—97。特别纪念卡单独评定。<br />同等级下，知名选手彩卡接近顶尖现役；强化每级 +1，最多 +5。总评是游戏能力估算，比赛还受位置、默契和教练影响。</p>
+    <p className="worlds-note">知名选手每张卡只代表一位选手的一个巅峰赛季；已有 S 赛或 MSI MVP 彩卡的选手不重复收录。<br />普通选手卡基础评分：金卡 {GOLD_AT}—90，银卡 {SILVER_AT}—{GOLD_AT - 1}，铜卡低于 {SILVER_AT}；强化后可超过基础上限。教练基础评分：金卡 {COACH_GOLD_AT} 起，银卡 {COACH_SILVER_AT}—{COACH_GOLD_AT - 1}，铜卡低于 {COACH_SILVER_AT}。知名选手 90—92；冠军成员 90—94；MSI MVP 93—95；S 赛 MVP 94—97。特别纪念卡单独评定。<br />同等级下，知名选手彩卡接近顶尖现役；强化每级 +1，最多 +5。总评是游戏能力估算，比赛还受位置、默契和教练影响。</p>
     <p className="worlds-note">S3 为 Faker「初代王朝」冠军纪念卡，当届没有官方 MVP；S4—S6 标注赛事 MVP，S7—S15 标注决赛 MVP。<br />
       IG 新增五张冠军纪念卡，与已有 Ning FMVP 卡组成六人收藏；MSI 共 11 张，2015 为赛事 MVP，2020 停办，其余为决赛 MVP。<br />
       {MYTHIC_PACK_NAMES}可出彩卡，共享彩卡保底：连续未出时，最迟第 {MYTHIC_FLOOR} 张必出彩卡。十连按 10 张计，换包进度不重置。LPL、LCK、其他三个赛区包均可出本大区彩卡并共享同一彩卡保底；教练包和位置包不出本系列彩卡。收齐基础全图鉴可领取彩卡包。完整概率见右下角“概率”。</p>

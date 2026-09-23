@@ -110,7 +110,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   check('同一套阵容坐哪边都一样（镜像 300 场 40%～60%）', aWins / N > 0.4 && aWins / N < 0.6, `${aWins}/${N}`)
 
   let mono = true
-  for (const place of [1, 2, 4] as const) {
+  for (const place of [1, 2, 4, 8] as const) {
     let prev = -1
     for (const n of [4, 8, 16, 32, 500]) {
       const p = openCupPlacePrize(n, place)
@@ -119,8 +119,12 @@ const check = (name: string, ok: boolean, detail = '') => {
       prev = worth
     }
   }
-  check('人越多奖励越高，冠军 > 亚军 > 四强', mono
-    && openCupPlacePrize(64, 1).coins > openCupPlacePrize(64, 2).coins && openCupPlacePrize(64, 2).coins > openCupPlacePrize(64, 4).coins)
+  check('人越多奖励越高，冠军 > 亚军 > 四强 > 八强', mono
+    && openCupPlacePrize(64, 1).coins > openCupPlacePrize(64, 2).coins
+    && openCupPlacePrize(64, 2).coins > openCupPlacePrize(64, 4).coins
+    && openCupPlacePrize(64, 4).coins > openCupPlacePrize(64, 8).coins)
+  check('32 人起八强有试训包，人数不足不多发', openCupPlacePrize(32, 8).pack === 'scout'
+    && !openCupPlacePrize(31, 8).pack && openCupPlacePrize(31, 8).coins === 0)
   check('4～7 人的小场没有卡包，只有金币', !openCupPlacePrize(7, 1).pack && !openCupPlacePrize(7, 2).pack)
   check('没赢过的人什么都拿不到', openCupPurse(100, 0, null).coins === 0 && !openCupPurse(100, 0, null).pack)
   check('每赢一场的金币', openCupPurse(100, 3, null).coins === 3 * OPEN_CUP_WIN_COINS)
@@ -291,6 +295,7 @@ try {
   check('名次：一个冠军、一个亚军、至多两个四强',
     entries.filter((e: any) => e.place === 1).length === 1 && entries.filter((e: any) => e.place === 2).length === 1
     && entries.filter((e: any) => e.place === 4).length <= 2 && entries.filter((e: any) => e.place === 4).length >= 1)
+  check('32 人以上记录八强', entries.filter((e: any) => e.place === 8).length === 4)
   check('没有人轮空两次', Math.max(...entries.map((e: any) => e.byes)) <= 1 && entries.filter((e: any) => e.byes === 1).length === 29)
   const after = (await sql`select five from open_cup_entries where cup_id = ${cup.id} and id_hash = ${hash(ids[1])}`)[0].five
   check('开赛后改阵容不影响本场', JSON.stringify(after) === JSON.stringify(frozen))

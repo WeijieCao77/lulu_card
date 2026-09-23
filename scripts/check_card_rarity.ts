@@ -154,8 +154,10 @@ function testLegendCardsSnapshot() {
   const fixturePath = new URL('./fixtures/legend-cards-v3.json', import.meta.url);
   const fixtureRaw = readFileSync(fixturePath, 'utf8');
   const fixture = JSON.parse(fixtureRaw);
-  assert.deepStrictEqual(LEGEND_CARDS, fixture, 'LEGEND_CARDS deepEqual fixture mismatch');
-  console.log('Legend cards fixture deepEqual verified');
+  assert.deepStrictEqual(LEGEND_CARDS.filter(c => c.legend?.kind !== 'hall'), fixture.filter((c: any) => c.legend.kind !== 'hall'), 'Award/IG cards deepEqual fixture mismatch');
+  const hallFixture = JSON.parse(readFileSync(new URL('./fixtures/hall-cards-peak-v1.json', import.meta.url), 'utf8'));
+  assert.deepStrictEqual(LEGEND_CARDS.filter(c => c.legend?.kind === 'hall'), hallFixture, 'Peak season hall cards fixture mismatch');
+  console.log('29 original award/IG cards and 11 reviewed peak-season hall cards deepEqual verified');
 }
 
 function testRoleCoverageForAllSlots() {

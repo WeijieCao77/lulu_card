@@ -188,6 +188,8 @@ export type ShelfSort = (typeof SHELF_SORTS)[number]
  * cards is a twelfth of it.
  */
 export interface ShelfQuery {
+  /** Up to 50 player card IDs; [] intentionally shows no listings. */
+  watchedIds?: string[]
   sort?: ShelfSort
   /** where the last page stopped; leave it out for the first */
   cursor?: string

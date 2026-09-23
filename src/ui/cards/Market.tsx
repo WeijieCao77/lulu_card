@@ -20,9 +20,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useCards } from './ctx'
 import { Panel } from '../common'
+import CardActionDialog from './CardActionDialog'
 import CardFace from '../Card'
+import { marketSaleLevel, hasMarketDuplicates } from '../../engine/marketGuidance'
 import { cardById, isPlayerCard } from '../../engine/cards'
-import { collection, levelOf } from '../../engine/gacha'
+import { collection } from '../../engine/gacha'
 import {
   AUCTION_HOURS, AUCTION_HOURS_CHOICES, BID_STEP, BUYOUT_MIN, MAX_LISTINGS, SHELF_PAGE, SNIPE_MINUTES,
   answerOffer, askFloorOf, bidOn, browseShelf, failText, gateText, listCardOnMarket, minBidOf, myOffersEx, peekListings, participatingAuctions, unlistCard,
@@ -32,9 +34,11 @@ import type { Fail, Gate, Listing, Offer, ShelfQuery, ShelfSort } from '../../en
 import type { Card } from '../../engine/cards'
 import { takeServer } from '../../engine/account'
 import { CardFilters, EMPTY_FILTER, matchesFilter } from './Filters'
-import { CardPicker, matchesQuery } from './Picker'
+import { matchesQuery } from './Picker'
+import { SellCardPicker } from './SellCardPicker'
 import type { CardFilter } from './Filters'
 import { MarketHistory } from './MarketHistory'
+import { useMarketWatchlist, MarketWatchButton } from './MarketWatchlist'
 
 /** the old listings' haggling room, for the ones still running out */
 const HAGGLE = 0.1
@@ -149,7 +153,8 @@ const rememberedHours = (): number => {
 
 export default function Market() {
   const { g, commit, toast, cloud, collect } = useCards()
-  const level = (id: string) => levelOf(g, id)
+  const watch = useMarketWatchlist(g.id)
+  const [watchedOnly, setWatchedOnly] = useState(false)
   /** other people's listings, a page at a time, in the order the tabs picked */
   const [shelf, setShelf] = useState<Listing[] | null>(null)
   /** all of your own, which are outside the paging and outside the filter */
@@ -176,6 +181,8 @@ export default function Market() {
   const [ask, setAsk] = useState('')
   const [buyout, setBuyout] = useState('')
   const [hours, setHours] = useState<number>(rememberedHours)
+  const [confirmList, setConfirmList] = useState<{ cardId: string; name: string; level: number; hadDuplicates: boolean; rarity: string; ask: number; buyout: number | null; hours: number } | null>(null)
+  const listLock = useRef(false)
   const [bidOpen, setBidOpen] = useState<Listing | null>(null)
   const [bidPrice, setBidPrice] = useState('')
   // the clock the countdowns read; the server's idea of now, carried forward
@@ -190,6 +197,7 @@ export default function Market() {
   /** leave out what would only be a spare — see the toggle's own note */
   const [unowned, setUnowned] = useState(false)
   const qq = useSettled(q)
+  useEffect(() => { setWatchedOnly(false) }, [g.id])
   const loSet = useSettled(priceLo)
   const hiSet = useSettled(priceHi)
 
@@ -207,8 +215,9 @@ export default function Market() {
       ...(n(loSet) != null ? { priceMin: n(loSet) } : {}),
       ...(n(hiSet) != null ? { priceMax: n(hiSet) } : {}),
       ...(unowned ? { unowned: true } : {}),
+      ...(watchedOnly ? { watchedIds: watch.ids } : {}),
     }
-  }, [sort, filter, qq, loSet, hiSet, unowned])
+  }, [sort, filter, qq, loSet, hiSet, unowned, watchedOnly, watch.ids])
 
   // The newest request wins. Changing the filter while the page before it is
   // still in the air used to be the one way to get a shelf that does not match
@@ -354,45 +363,97 @@ export default function Market() {
   const sellable = collection(g).sort((a, b) => b.rating - a.rating)
 
   const doList = async () => {
+    if (listLock.current || busy) return
     const card = cardById(sellCard)
     const price = Math.round(Number(ask))
     if (!card || !Number.isFinite(price)) { toast('先选一张卡，填个起拍价。'); return }
+    const floor = askFloorOf(card.rarity)
+    if (price < floor || price > 500000) {
+      toast(`起拍价要在 ${money(floor)} ~ 500,000 之间，不低于分解价。`)
+      return
+    }
     const now2 = buyout.trim() === '' ? null : Math.round(Number(buyout))
-    if (now2 != null && (!Number.isFinite(now2) || now2 < Math.ceil(price * BUYOUT_MIN))) {
-      toast(`一口价至少 ${money(Math.ceil(price * BUYOUT_MIN))}（起拍价的 ${BUYOUT_MIN} 倍），可留空。`)
+    if (now2 != null && (!Number.isFinite(now2) || now2 < Math.ceil(price * BUYOUT_MIN) || now2 > 500000)) {
+      toast(`一口价要在 ${money(Math.ceil(price * BUYOUT_MIN))} ~ 500,000 之间，且至少为起拍价的 ${BUYOUT_MIN} 倍，可留空。`)
       return
     }
+    const owned = g.cards[sellCard]
+    if (!owned || typeof owned !== 'object' || Array.isArray(owned)) { toast('先选一张你有的卡。'); return }
+    const saleLevel = marketSaleLevel(owned)
+    if (saleLevel == null) { toast('这张卡无法挂牌。'); return }
+    const hadDupes = hasMarketDuplicates(owned)
+    setConfirmList({
+      cardId: sellCard,
+      name: nameOf(sellCard),
+      level: saleLevel,
+      hadDuplicates: hadDupes,
+      rarity: card.rarity,
+      ask: price,
+      buyout: now2,
+      hours,
+    })
+  }
+
+  const doConfirmedList = async () => {
+    if (listLock.current || busy || !confirmList) return
+    listLock.current = true
     setBusy(true)
-    // taken off this side only after the server has the listing, so a failed
-    // request can never eat the card
-    const sent = await listCardOnMarket(sellCard, price, level(sellCard), card.rarity, now2, hours)
-    setBusy(false)
-    if (sent.fail) {
-      // asked twice with the same request id and heard nothing: it may be up. Say so, and look.
-      toast(sent.fail === 'rate' ? failText('rate') : `${failText(sent.fail)}这次挂牌的结果还不确定，看一下「我挂的牌」。`)
+    try {
+      const { cardId, name, level: snapLevel, hadDuplicates: snapHadDupes, rarity, ask: price, buyout: now2, hours: snapHours } = confirmList
+      const owned = g.cards[cardId]
+      const card = cardById(cardId)
+      if (!owned || typeof owned !== 'object' || Array.isArray(owned) || !card) {
+        toast('这张卡已经不在了，请重新确认。')
+        setConfirmList(null)
+        return
+      }
+      const currentHadDupes = hasMarketDuplicates(owned)
+      if (currentHadDupes !== snapHadDupes) {
+        toast('卡的重复状态已变化，请重新确认。')
+        setConfirmList(null)
+        return
+      }
+      const currentSaleLevel = marketSaleLevel(owned)
+      if (currentSaleLevel !== snapLevel) {
+        toast('卡的状态已变化，请重新确认。')
+        setConfirmList(null)
+        return
+      }
+      const sent = await listCardOnMarket(cardId, price, snapLevel, rarity, now2, snapHours)
+      if (sent.fail) {
+        toast(sent.fail === 'rate' ? failText('rate') : `${failText(sent.fail)}这次挂牌的结果还不确定，看一下「我挂的牌」。`)
+        void refresh()
+        setConfirmList(null)
+        return
+      }
+      const r = sent.data
+      if (!r?.ok) {
+        toast(r?.banned ? String(r.why ?? '交易已暂停。')
+          : r?.newbie ? gateText(r)
+          : r?.notOwned ? '服务器还没同步这张卡，稍后再挂。'
+          : r?.alreadyListed ? '这张卡已经挂上去了。'
+            : r?.full ? `最多同时挂 ${r.max ?? MAX_LISTINGS} 张，卖掉或撤回一张再挂。`
+              : r?.badBuyout ? `一口价要在 ${money(Number(r.min ?? 0))} ~ 500,000 之间，可留空。`
+              : r?.badHours ? `拍卖时长要在 ${r.min} ~ ${r.max} 小时之间。`
+              : r?.bad ? `起拍价要在 ${money(Number(r.min ?? 50))} ~ 500,000 之间，不低于分解价。`
+                : '挂牌失败，稍后再试。')
+        return
+      }
+      if (r.state) takeServer(g, r.state, r.rev)
+      void commit()
+      setSellCard(''); setAsk(''); setBuyout('')
+      setConfirmList(null)
+      try { localStorage.setItem(HOURS_KEY, String(snapHours)) } catch { /* fine */ }
+      toast(`${name} 已挂出，起拍 ${money(price)}${now2 != null ? `，一口价 ${money(now2)}` : ''}。${snapHours} 小时后按最高价成交，流拍退回。`)
       void refresh()
-      return
+    } catch {
+      toast('挂牌结果不确定，请刷新后查看。')
+      setConfirmList(null)
+      void refresh()
+    } finally {
+      listLock.current = false
+      setBusy(false)
     }
-    const r = sent.data
-    if (!r?.ok) {
-      toast(r?.banned ? String(r.why ?? '交易已暂停。')
-        : r?.newbie ? gateText(r)
-        : r?.notOwned ? '服务器还没同步这张卡，稍后再挂。'
-        : r?.alreadyListed ? '这张卡已经挂上去了。'
-          : r?.full ? `最多同时挂 ${r.max ?? MAX_LISTINGS} 张，卖掉或撤回一张再挂。`
-            : r?.badBuyout ? `一口价要在 ${money(Number(r.min ?? 0))} ~ 500,000 之间，可留空。`
-            : r?.badHours ? `拍卖时长要在 ${r.min} ~ ${r.max} 小时之间。`
-            : r?.bad ? `起拍价要在 ${money(Number(r.min ?? 50))} ~ 500,000 之间，不低于分解价。`
-              : '挂牌失败，稍后再试。')
-      return
-    }
-    // the card left the server's copy of the account when it took the listing
-    if (r.state) takeServer(g, r.state, r.rev)
-    void commit()
-    setSellCard(''); setAsk(''); setBuyout('')
-    try { localStorage.setItem(HOURS_KEY, String(hours)) } catch { /* fine */ }
-    toast(`${nameOf(sellCard)} 已挂出，起拍 ${money(price)}${now2 != null ? `，一口价 ${money(now2)}` : ''}。${hours} 小时后按最高价成交，流拍退回。`)
-    void refresh()
   }
 
   /** the shape of a reply to a bid, whichever way it went */
@@ -575,6 +636,7 @@ export default function Market() {
     return (
       <div key={l.id} className="market-box">
         <CardFace card={card} level={l.level} />
+        <MarketWatchButton cardId={l.cardId} name={nameOf(l.cardId)} watched={watch.has(l.cardId)} onToggle={watch.toggle} />
         {participated && !l.bid && <div className="tiny warn">已被超价 · 可再次出价</div>}
         {/* one fact a line, none of them allowed to wrap:
             「起拍 10,000 金币」 once broke mid-word */}
@@ -683,6 +745,28 @@ export default function Market() {
 
       <ParticipatingAuctions now={now} refreshToken={loadedAt} renderTile={(l) => renderTile(l, true)} />
 
+      {confirmList && (
+        <CardActionDialog
+          open={!!confirmList}
+          title="确认挂牌"
+          onClose={() => setConfirmList(null)}
+          confirmLabel={`确认挂出${confirmList.level > 0 ? ` +${confirmList.level}` : ''}`}
+          onConfirm={doConfirmedList}
+          tone="primary"
+          busy={busy}
+        >
+          <p style={{ margin: '0 0 4px' }}><b>{confirmList.name}</b></p>
+          <p style={{ margin: '0 0 4px' }}>
+            等级：+{confirmList.level}（{confirmList.hadDuplicates ? '重复/备用卡' : '唯一一张'}）
+          </p>
+          <p style={{ margin: '0 0 4px' }}>起拍价：{money(confirmList.ask)} 金币</p>
+          <p style={{ margin: '0 0 4px' }}>
+            一口价：{confirmList.buyout != null ? `${money(confirmList.buyout)} 金币` : '未设置'}
+          </p>
+          <p style={{ margin: 0 }}>时长：{confirmList.hours} 小时</p>
+        </CardActionDialog>
+      )}
+
       <Panel
         title="挂一张卡出去"
         actions={
@@ -695,16 +779,20 @@ export default function Market() {
           </span>
         }
       >
-        <CardPicker
-          rows={sellable.map(({ card, owned }) => ({
-            card,
-            note: owned.dupes > 0 ? `多 ${owned.dupes} 张` : owned.level > 0 ? `+${owned.level}` : '仅此一张',
-          }))}
+        <SellCardPicker
+          rows={sellable}
           value={sellCard}
           onChange={setSellCard}
-          placeholder="选一张卡"
+          disabled={busy}
         />
-        {sellCard && <MarketHistory key={sellCard + ":" + level(sellCard)} cardId={sellCard} level={level(sellCard)} />}
+        {sellCard && marketSaleLevel(g.cards[sellCard]) != null && <MarketHistory
+          key={sellCard + ':' + marketSaleLevel(g.cards[sellCard])}
+          cardId={sellCard}
+          level={marketSaleLevel(g.cards[sellCard])!}
+          onUsePrice={(price) => setAsk(String(price))}
+          priceFloor={askFloorOf(cardById(sellCard)?.rarity ?? '')}
+          disabled={busy}
+        />}
         <div className="row wrap" style={{ gap: 6 }}>
           <input
             style={{ flex: '1 1 110px' }}
@@ -744,7 +832,7 @@ export default function Market() {
           <b>拍卖时长 {AUCTION_HOURS_CHOICES[0]} ~ {AUCTION_HOURS_CHOICES[AUCTION_HOURS_CHOICES.length - 1]} 小时自定，到时最高价成交</b>。
           流拍退回信箱；<b>有人出价后不能撤回</b>。
           一口价可不填，填了则按此价立刻成交，至少为起拍价的 {BUYOUT_MIN} 倍。{protectSec > 0 ? `上架前 ${protectSec} 秒是保护期：一口价报名抽签，到点随机一人成交。` : '内测期间，一口价无需等待，直接成交。'}
-          <b>最多同时挂 {MAX_LISTINGS} 张</b>。有重复先卖重复那张（+0），只有一张时连强化等级一起卖出。
+          <b>最多同时挂 {MAX_LISTINGS} 张</b>。优先卖出 +0 重复卡，再卖最低等级备用卡，只有一张时连强化等级一起卖出。挂牌前会显示实际出售等级。
         </p>
       </Panel>
 
@@ -880,9 +968,28 @@ export default function Market() {
               >
                 只看非重复
               </button>
+              <button
+                type="button"
+                className={`sm ${watchedOnly ? '' : 'ghost'}`}
+                title="只看关注的卡（最多 50 张）"
+                aria-pressed={watchedOnly}
+                onClick={() => setWatchedOnly((v) => !v)}
+              >
+                只看关注（{watch.ids.length}/50）
+              </button>
             </>
           }
         />
+        <p className="tiny faint">关注清单按当前账号保存在本机，最多 50 张选手卡。</p>
+        {watch.error && <p className="tiny warn" role="status">{watch.error}</p>}
+        {watch.ids.length > 0 && <details style={{ margin: '8px 0' }}>
+          <summary className="tiny">管理关注清单（{watch.ids.length}）</summary>
+          <div className="row wrap" style={{ gap: 6, marginTop: 6 }}>
+            {watch.ids.map(id => <button key={id} type="button" className="sm ghost" onClick={() => watch.toggle(id)} aria-label={`取消关注 ${nameOf(id)}`}>
+              {nameOf(id)} · 取消关注
+            </button>)}
+          </div>
+        </details>}
         {(shelfFail || offersFail) && (
           <div className="row wrap tiny" style={{ gap: 8, alignItems: 'center', margin: '8px 0', color: 'var(--warn)' }}>
             <span>
@@ -895,7 +1002,7 @@ export default function Market() {
         {shelf === null ? <p className="empty">读取中…</p>
           : theirs.length === 0 ? (
             <p className="empty">
-              {shelfFail ? '还没读到货架。' : total === 0 ? '货架是空的，挂一张试试。' : '没有符合筛选的卡。'}
+              {shelfFail ? '还没读到货架。' : watchedOnly ? (watch.ids.length === 0 ? '还没有关注的选手卡，先关闭筛选并点卡牌上的关注。' : '关注选手暂无符合筛选的在售卡。') : total === 0 ? '货架是空的，挂一张试试。' : '没有符合筛选的卡。'}
             </p>
           )
             : (

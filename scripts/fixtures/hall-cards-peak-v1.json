@@ -1,0 +1,1055 @@
+[
+  {
+    "kind": "player",
+    "id": "career-doublelift",
+    "playerId": "H:Doublelift",
+    "legend": {
+      "id": "career-doublelift",
+      "ign": "Doublelift",
+      "title": "知名选手 · 大师兄",
+      "short": "大师兄",
+      "year": 2018,
+      "kind": "hall",
+      "competition": "Career",
+      "collection": "hall-of-fame",
+      "ratingTier": "hall",
+      "clubId": "T42",
+      "clubTag": "TL",
+      "rating": 92,
+      "note": "2018 赛季在 Team Liquid 展现北美下路统治级表现，季后赛输出稳定性与终结能力突出。",
+      "roles": [
+        "下路"
+      ],
+      "isIgl": false,
+      "person": {
+        "id": "H:Doublelift",
+        "realName": "Yiliang Peng",
+        "nat": "us",
+        "region": "LCS",
+        "age": 25,
+        "roles": [
+          "下路"
+        ],
+        "attrs": {
+          "aim": 94,
+          "reaction": 93,
+          "awareness": 88,
+          "utility": 94,
+          "clutch": 91,
+          "teamwork": 92,
+          "communication": 87,
+          "igl": 86
+        },
+        "overall": 92,
+        "agents": []
+      },
+      "art": {
+        "accent": "#79d7ef",
+        "position": "50% 25%",
+        "credit": "Riot Games / LoL Esports",
+        "source": "https://www.flickr.com/photos/lolesports/45362081761/",
+        "year": 2018,
+        "serial": 1,
+        "total": 11
+      },
+      "source": "https://nexus.leagueoflegends.com/en-us/2018/06/the-difference-between-a-contender-and-a-champion/",
+      "peakSeason": {
+        "year": 2018,
+        "team": "Team Liquid",
+        "role": "下路",
+        "basis": "2018 LCS 春季赛冠军，季后赛打出极强个人数据。",
+        "selection": "game-design",
+        "evidence": [
+          {
+            "url": "https://nexus.leagueoflegends.com/en-us/2018/06/the-difference-between-a-contender-and-a-champion/",
+            "claim": "Riot 2018-06-14: TL 2018 Spring champion; Doublelift playoff KDA 35.3."
+          }
+        ]
+      }
+    },
+    "ign": "Doublelift",
+    "realName": "Yiliang Peng",
+    "nat": "us",
+    "face": "./lol/faces/hall-45362081761.jpg?v=69aace48",
+    "region": "LCS",
+    "clubId": "T42",
+    "clubTag": "TL",
+    "role": "下路",
+    "roles": [
+      "下路"
+    ],
+    "isIgl": false,
+    "age": 25,
+    "attrs": {
+      "aim": 94,
+      "reaction": 93,
+      "awareness": 88,
+      "utility": 94,
+      "clutch": 91,
+      "teamwork": 92,
+      "communication": 87,
+      "igl": 86
+    },
+    "rating": 92,
+    "rarity": "mythic"
+  },
+  {
+    "kind": "player",
+    "id": "career-bjergsen",
+    "playerId": "H:Bjergsen",
+    "legend": {
+      "id": "career-bjergsen",
+      "ign": "Bjergsen",
+      "title": "知名选手 · 北美法王",
+      "short": "北美法王",
+      "year": 2017,
+      "kind": "hall",
+      "competition": "Career",
+      "collection": "hall-of-fame",
+      "ratingTier": "hall",
+      "clubId": "H:TSM",
+      "clubTag": "TSM",
+      "rating": 92,
+      "note": "2017 赛季代表 TSM 拿下夏季赛 MVP，中路对线击杀与团战影响力处于北美顶尖。",
+      "roles": [
+        "中单"
+      ],
+      "isIgl": true,
+      "person": {
+        "id": "H:Bjergsen",
+        "realName": "Søren Bjerg",
+        "nat": "dk",
+        "region": "LCS",
+        "age": 21,
+        "roles": [
+          "中单"
+        ],
+        "attrs": {
+          "aim": 94,
+          "reaction": 94,
+          "awareness": 92,
+          "utility": 91,
+          "clutch": 93,
+          "teamwork": 89,
+          "communication": 90,
+          "igl": 91
+        },
+        "overall": 92,
+        "agents": []
+      },
+      "art": {
+        "accent": "#b2c5ff",
+        "position": "50% 25%",
+        "credit": "Riot Games / LoL Esports",
+        "source": "https://www.flickr.com/photos/lolesports/34534936641/",
+        "year": 2017,
+        "serial": 2,
+        "total": 11
+      },
+      "source": "https://www.youtube.com/watch?v=UAgeW7JKkMU",
+      "peakSeason": {
+        "year": 2017,
+        "team": "TSM",
+        "role": "中单",
+        "basis": "2017 LCS 夏季赛 MVP。",
+        "selection": "game-design",
+        "evidence": [
+          {
+            "url": "https://www.youtube.com/watch?v=UAgeW7JKkMU",
+            "claim": "Verified LoL Esports: TSM Bjergsen 2017 Summer split MVP best plays."
+          }
+        ]
+      }
+    },
+    "ign": "Bjergsen",
+    "realName": "Søren Bjerg",
+    "nat": "dk",
+    "face": "./lol/faces/hall-34534936641.jpg?v=3739e82e",
+    "region": "LCS",
+    "clubId": "H:TSM",
+    "clubTag": "TSM",
+    "role": "中单",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": true,
+    "age": 21,
+    "attrs": {
+      "aim": 94,
+      "reaction": 94,
+      "awareness": 92,
+      "utility": 91,
+      "clutch": 93,
+      "teamwork": 89,
+      "communication": 90,
+      "igl": 91
+    },
+    "rating": 92,
+    "rarity": "mythic"
+  },
+  {
+    "kind": "player",
+    "id": "career-perkz",
+    "playerId": "H:Perkz",
+    "legend": {
+      "id": "career-perkz",
+      "ign": "Perkz",
+      "title": "知名选手 · 欧洲锋芒",
+      "short": "欧洲锋芒",
+      "year": 2019,
+      "kind": "hall",
+      "competition": "Career",
+      "collection": "hall-of-fame",
+      "ratingTier": "hall",
+      "clubId": "T26",
+      "clubTag": "G2",
+      "rating": 92,
+      "note": "2019 赛季转战 G2 下路，随队包揽 LEC 双冠与 MSI 冠军，在世界赛下路对抗中保持高压风格。",
+      "roles": [
+        "下路"
+      ],
+      "isIgl": true,
+      "person": {
+        "id": "H:Perkz",
+        "realName": "Luka Perković",
+        "nat": "hr",
+        "region": "LEC",
+        "age": 21,
+        "roles": [
+          "下路"
+        ],
+        "attrs": {
+          "aim": 93,
+          "reaction": 91,
+          "awareness": 88,
+          "utility": 93,
+          "clutch": 95,
+          "teamwork": 92,
+          "communication": 88,
+          "igl": 86
+        },
+        "overall": 92,
+        "agents": []
+      },
+      "art": {
+        "accent": "#d5b6f6",
+        "position": "79% 25%",
+        "credit": "Riot Games / ingame",
+        "source": "https://www.ingame.de/news/lol-worlds-finale-2019-paris-besten-teams-welt-g2-esports-fpx-funplus-phoenix-13201290.html",
+        "year": 2019,
+        "serial": 3,
+        "total": 11,
+        "zoom": 1
+      },
+      "source": "https://g2esports.com/blogs/news/g2-finishes-second-in-worlds-2019",
+      "peakSeason": {
+        "year": 2019,
+        "team": "G2 Esports",
+        "role": "下路",
+        "basis": "2019 LEC 双冠、MSI 冠军、世界赛亚军。",
+        "selection": "game-design",
+        "evidence": [
+          {
+            "url": "https://g2esports.com/blogs/news/g2-finishes-second-in-worlds-2019",
+            "claim": "G2 official: 2019 two LEC titles, MSI champion, Worlds runner-up; Perkz vs Teddy bottomlane."
+          },
+          {
+            "url": "https://euw.leagueoflegends.com/en/featured/msi-2019-meet-the-teams",
+            "claim": "Riot 2019: Perkz explicitly swapped mid to ADC, Caps mid."
+          }
+        ]
+      }
+    },
+    "ign": "Perkz",
+    "realName": "Luka Perković",
+    "nat": "hr",
+    "face": "./lol/faces/hall-perkz-2019.jpg?v=3c30c8de",
+    "region": "LEC",
+    "clubId": "T26",
+    "clubTag": "G2",
+    "role": "下路",
+    "roles": [
+      "下路"
+    ],
+    "isIgl": true,
+    "age": 21,
+    "attrs": {
+      "aim": 93,
+      "reaction": 91,
+      "awareness": 88,
+      "utility": 93,
+      "clutch": 95,
+      "teamwork": 92,
+      "communication": 88,
+      "igl": 86
+    },
+    "rating": 92,
+    "rarity": "mythic"
+  },
+  {
+    "kind": "player",
+    "id": "career-rekkles",
+    "playerId": "P542",
+    "legend": {
+      "id": "career-rekkles",
+      "ign": "Rekkles",
+      "title": "知名选手 · 北境之弓",
+      "short": "北境之弓",
+      "year": 2018,
+      "kind": "hall",
+      "competition": "Career",
+      "collection": "hall-of-fame",
+      "ratingTier": "hall",
+      "clubId": "T25",
+      "clubTag": "FNC",
+      "rating": 92,
+      "note": "2018 赛季代表 Fnatic 拿下 EULCS 春季赛 MVP，对线处理与团战走位是其当季标志。",
+      "roles": [
+        "下路"
+      ],
+      "isIgl": false,
+      "person": {
+        "id": "P542",
+        "realName": "Carl Martin Erik Larsson",
+        "nat": "se",
+        "region": "LEC",
+        "age": 21,
+        "roles": [
+          "下路"
+        ],
+        "attrs": {
+          "aim": 92,
+          "reaction": 91,
+          "awareness": 92,
+          "utility": 96,
+          "clutch": 91,
+          "teamwork": 92,
+          "communication": 86,
+          "igl": 85
+        },
+        "overall": 92,
+        "agents": []
+      },
+      "art": {
+        "accent": "#efc78b",
+        "position": "50% 25%",
+        "credit": "Riot Games / LoL Esports",
+        "source": "https://www.flickr.com/photos/lolesports/49535032058/",
+        "year": 2020,
+        "serial": 4,
+        "total": 11
+      },
+      "source": "https://www.youtube.com/watch?v=YQIfRubgCEI",
+      "peakSeason": {
+        "year": 2018,
+        "team": "Fnatic",
+        "role": "下路",
+        "basis": "2018 EULCS 春季赛 MVP。",
+        "selection": "game-design",
+        "evidence": [
+          {
+            "url": "https://www.youtube.com/watch?v=YQIfRubgCEI",
+            "claim": "Verified LoL Esports Rekkles 2018 EULCS Spring MVP."
+          }
+        ]
+      }
+    },
+    "ign": "Rekkles",
+    "realName": "Carl Martin Erik Larsson",
+    "nat": "se",
+    "face": "./lol/faces/hall-49535032058.jpg?v=3d2ffcd3",
+    "region": "LEC",
+    "clubId": "T25",
+    "clubTag": "FNC",
+    "role": "下路",
+    "roles": [
+      "下路"
+    ],
+    "isIgl": false,
+    "age": 21,
+    "attrs": {
+      "aim": 92,
+      "reaction": 91,
+      "awareness": 92,
+      "utility": 96,
+      "clutch": 91,
+      "teamwork": 92,
+      "communication": 86,
+      "igl": 85
+    },
+    "rating": 92,
+    "rarity": "mythic"
+  },
+  {
+    "kind": "player",
+    "id": "career-sneaky",
+    "playerId": "H:Sneaky",
+    "legend": {
+      "id": "career-sneaky",
+      "ign": "Sneaky",
+      "title": "知名选手 · 云端射手",
+      "short": "云端射手",
+      "year": 2018,
+      "kind": "hall",
+      "competition": "Career",
+      "collection": "hall-of-fame",
+      "ratingTier": "hall",
+      "clubId": "T35",
+      "clubTag": "C9",
+      "rating": 91,
+      "note": "2018 赛季随 Cloud9 打进世界赛四强，作为下路提供稳定输出与大场面经验。",
+      "roles": [
+        "下路"
+      ],
+      "isIgl": false,
+      "person": {
+        "id": "H:Sneaky",
+        "realName": "Zachary Scuderi",
+        "nat": "us",
+        "region": "LCS",
+        "age": 24,
+        "roles": [
+          "下路"
+        ],
+        "attrs": {
+          "aim": 91,
+          "reaction": 89,
+          "awareness": 89,
+          "utility": 91,
+          "clutch": 92,
+          "teamwork": 93,
+          "communication": 86,
+          "igl": 84
+        },
+        "overall": 91,
+        "agents": []
+      },
+      "art": {
+        "accent": "#79d7ef",
+        "position": "50% 25%",
+        "credit": "Riot Games / LoL Esports",
+        "source": "https://www.flickr.com/photos/lolesports/44552739215/",
+        "year": 2018,
+        "serial": 5,
+        "total": 11
+      },
+      "source": "https://nexus.leagueoflegends.com/en-us/2019/08/10-split-drought-cloud9/",
+      "peakSeason": {
+        "year": 2018,
+        "team": "Cloud9",
+        "role": "下路",
+        "basis": "2018 世界赛四强。",
+        "selection": "game-design",
+        "evidence": [
+          {
+            "url": "https://nexus.leagueoflegends.com/en-us/2019/08/10-split-drought-cloud9/",
+            "claim": "Riot retrospect: Sneaky and Jensen C9 2018 Worlds semifinal, lost to FNC."
+          }
+        ]
+      }
+    },
+    "ign": "Sneaky",
+    "realName": "Zachary Scuderi",
+    "nat": "us",
+    "face": "./lol/faces/hall-44552739215.jpg?v=cfe4c617",
+    "region": "LCS",
+    "clubId": "T35",
+    "clubTag": "C9",
+    "role": "下路",
+    "roles": [
+      "下路"
+    ],
+    "isIgl": false,
+    "age": 24,
+    "attrs": {
+      "aim": 91,
+      "reaction": 89,
+      "awareness": 89,
+      "utility": 91,
+      "clutch": 92,
+      "teamwork": 93,
+      "communication": 86,
+      "igl": 84
+    },
+    "rating": 91,
+    "rarity": "mythic"
+  },
+  {
+    "kind": "player",
+    "id": "career-jensen",
+    "playerId": "H:Jensen",
+    "legend": {
+      "id": "career-jensen",
+      "ign": "Jensen",
+      "title": "知名选手 · 中路破局者",
+      "short": "中路破局者",
+      "year": 2018,
+      "kind": "hall",
+      "competition": "Career",
+      "collection": "hall-of-fame",
+      "ratingTier": "hall",
+      "clubId": "T35",
+      "clubTag": "C9",
+      "rating": 91,
+      "note": "2018 赛季作为 Cloud9 中路核心随队进入世界赛四强，单点突破是队伍关键武器之一。",
+      "roles": [
+        "中单"
+      ],
+      "isIgl": false,
+      "person": {
+        "id": "H:Jensen",
+        "realName": "Nicolaj Jensen",
+        "nat": "dk",
+        "region": "LCS",
+        "age": 23,
+        "roles": [
+          "中单"
+        ],
+        "attrs": {
+          "aim": 94,
+          "reaction": 93,
+          "awareness": 88,
+          "utility": 92,
+          "clutch": 94,
+          "teamwork": 89,
+          "communication": 84,
+          "igl": 86
+        },
+        "overall": 91,
+        "agents": []
+      },
+      "art": {
+        "accent": "#b2c5ff",
+        "position": "50% 25%",
+        "credit": "Riot Games / LoL Esports",
+        "source": "https://www.flickr.com/photos/lolesports/43777953440/",
+        "year": 2018,
+        "serial": 6,
+        "total": 11
+      },
+      "source": "https://nexus.leagueoflegends.com/en-us/2019/08/10-split-drought-cloud9/",
+      "peakSeason": {
+        "year": 2018,
+        "team": "Cloud9",
+        "role": "中单",
+        "basis": "2018 世界赛四强。",
+        "selection": "game-design",
+        "evidence": [
+          {
+            "url": "https://nexus.leagueoflegends.com/en-us/2019/08/10-split-drought-cloud9/",
+            "claim": "Riot retrospect: Sneaky and Jensen C9 2018 Worlds semifinal, Jensen left after."
+          }
+        ]
+      }
+    },
+    "ign": "Jensen",
+    "realName": "Nicolaj Jensen",
+    "nat": "dk",
+    "face": "./lol/faces/hall-43777953440.jpg?v=7c33cfbe",
+    "region": "LCS",
+    "clubId": "T35",
+    "clubTag": "C9",
+    "role": "中单",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": false,
+    "age": 23,
+    "attrs": {
+      "aim": 94,
+      "reaction": 93,
+      "awareness": 88,
+      "utility": 92,
+      "clutch": 94,
+      "teamwork": 89,
+      "communication": 84,
+      "igl": 86
+    },
+    "rating": 91,
+    "rarity": "mythic"
+  },
+  {
+    "kind": "player",
+    "id": "career-xmithie",
+    "playerId": "H:Xmithie",
+    "legend": {
+      "id": "career-xmithie",
+      "ign": "Xmithie",
+      "title": "知名选手 · 野区定盘星",
+      "short": "野区定盘星",
+      "year": 2019,
+      "kind": "hall",
+      "competition": "Career",
+      "collection": "hall-of-fame",
+      "ratingTier": "hall",
+      "clubId": "T42",
+      "clubTag": "TL",
+      "rating": 90,
+      "note": "2019 赛季作为 Team Liquid 打野帮助队伍完成 LCS 三连冠，路线规划与目标控制稳健。",
+      "roles": [
+        "打野"
+      ],
+      "isIgl": true,
+      "person": {
+        "id": "H:Xmithie",
+        "realName": "Jake Puchero",
+        "nat": "us",
+        "region": "LCS",
+        "age": 27,
+        "roles": [
+          "打野"
+        ],
+        "attrs": {
+          "aim": 84,
+          "reaction": 84,
+          "awareness": 95,
+          "utility": 85,
+          "clutch": 88,
+          "teamwork": 92,
+          "communication": 92,
+          "igl": 94
+        },
+        "overall": 90,
+        "agents": []
+      },
+      "art": {
+        "accent": "#d5b6f6",
+        "position": "82% 24%",
+        "credit": "Riot Games / LoL Esports",
+        "source": "https://www.flickr.com/photos/lolesports/32024763187/",
+        "year": 2019,
+        "serial": 7,
+        "total": 11
+      },
+      "source": "https://teamliquid.com/news/2019/04/14/three-peat-complete",
+      "peakSeason": {
+        "year": 2019,
+        "team": "Team Liquid",
+        "role": "打野",
+        "basis": "2019 LCS 春季赛冠军并进入 MSI。",
+        "selection": "game-design",
+        "evidence": [
+          {
+            "url": "https://teamliquid.com/news/2019/04/14/three-peat-complete",
+            "claim": "Official TL: 2019 spring champion, Xmithie."
+          },
+          {
+            "url": "https://euw.leagueoflegends.com/en/featured/msi-2019-meet-the-teams",
+            "claim": "Riot 2019: TL 2019 Xmithie jungle."
+          }
+        ]
+      }
+    },
+    "ign": "Xmithie",
+    "realName": "Jake Puchero",
+    "nat": "us",
+    "face": "./lol/faces/hall-32024763187.jpg?v=4d50d3cc",
+    "region": "LCS",
+    "clubId": "T42",
+    "clubTag": "TL",
+    "role": "打野",
+    "roles": [
+      "打野"
+    ],
+    "isIgl": true,
+    "age": 27,
+    "attrs": {
+      "aim": 84,
+      "reaction": 84,
+      "awareness": 95,
+      "utility": 85,
+      "clutch": 88,
+      "teamwork": 92,
+      "communication": 92,
+      "igl": 94
+    },
+    "rating": 90,
+    "rarity": "mythic"
+  },
+  {
+    "kind": "player",
+    "id": "career-aphromoo",
+    "playerId": "H:Aphromoo",
+    "legend": {
+      "id": "career-aphromoo",
+      "ign": "Aphromoo",
+      "title": "知名选手 · 节奏领航",
+      "short": "节奏领航",
+      "year": 2018,
+      "kind": "hall",
+      "competition": "Career",
+      "collection": "hall-of-fame",
+      "ratingTier": "hall",
+      "clubId": "H:100T",
+      "clubTag": "100T",
+      "rating": 91,
+      "note": "2018 赛季在 100 Thieves 拿下 LCS 春季赛 MVP，团队节奏与视野控制是其当季核心价值。",
+      "roles": [
+        "辅助"
+      ],
+      "isIgl": true,
+      "person": {
+        "id": "H:Aphromoo",
+        "realName": "Zaqueri Black",
+        "nat": "us",
+        "region": "LCS",
+        "age": 25,
+        "roles": [
+          "辅助"
+        ],
+        "attrs": {
+          "aim": 84,
+          "reaction": 85,
+          "awareness": 94,
+          "utility": 84,
+          "clutch": 89,
+          "teamwork": 94,
+          "communication": 96,
+          "igl": 91
+        },
+        "overall": 91,
+        "agents": []
+      },
+      "art": {
+        "accent": "#efc78b",
+        "position": "50% 25%",
+        "credit": "Riot Games / LoL Esports",
+        "source": "https://www.flickr.com/photos/lolesports/42626335040/",
+        "year": 2018,
+        "serial": 8,
+        "total": 11,
+        "zoom": 1
+      },
+      "source": "https://nexus.leagueoflegends.com/en-us/2018/06/the-difference-between-a-contender-and-a-champion/",
+      "peakSeason": {
+        "year": 2018,
+        "team": "100 Thieves",
+        "role": "辅助",
+        "basis": "2018 LCS 春季赛 MVP。",
+        "selection": "game-design",
+        "evidence": [
+          {
+            "url": "https://nexus.leagueoflegends.com/en-us/2018/06/the-difference-between-a-contender-and-a-champion/",
+            "claim": "Riot 2018-06-14: Aphromoo 2018 Spring MVP at 100 Thieves."
+          }
+        ]
+      }
+    },
+    "ign": "Aphromoo",
+    "realName": "Zaqueri Black",
+    "nat": "us",
+    "face": "./lol/faces/hall-aphromoo-2018-42626335040.jpg?v=8cb359be",
+    "region": "LCS",
+    "clubId": "H:100T",
+    "clubTag": "100T",
+    "role": "辅助",
+    "roles": [
+      "辅助"
+    ],
+    "isIgl": true,
+    "age": 25,
+    "attrs": {
+      "aim": 84,
+      "reaction": 85,
+      "awareness": 94,
+      "utility": 84,
+      "clutch": 89,
+      "teamwork": 94,
+      "communication": 96,
+      "igl": 91
+    },
+    "rating": 91,
+    "rarity": "mythic"
+  },
+  {
+    "kind": "player",
+    "id": "career-froggen",
+    "playerId": "H:Froggen",
+    "legend": {
+      "id": "career-froggen",
+      "ign": "Froggen",
+      "title": "知名选手 · 冰鸟之魂",
+      "short": "冰鸟之魂",
+      "year": 2014,
+      "kind": "hall",
+      "competition": "Career",
+      "collection": "hall-of-fame",
+      "ratingTier": "hall",
+      "clubId": "H:ALL",
+      "clubTag": "ALL",
+      "rating": 91,
+      "note": "2014 EU LCS夏季赛Alliance夺冠，Froggen作为核心中单在半决赛展现统治力，决赛使用小炮、泽拉斯等英雄率队3-1击败FNC，帮助Alliance以欧洲一号种子身份进入S4世界赛。该表现足以作为其单赛季巅峰代表。",
+      "roles": [
+        "中单"
+      ],
+      "isIgl": false,
+      "person": {
+        "id": "H:Froggen",
+        "realName": "Henrik Hansen",
+        "nat": "dk",
+        "region": "LEC",
+        "age": 20,
+        "roles": [
+          "中单"
+        ],
+        "attrs": {
+          "aim": 92,
+          "reaction": 91,
+          "awareness": 93,
+          "utility": 95,
+          "clutch": 89,
+          "teamwork": 87,
+          "communication": 85,
+          "igl": 86
+        },
+        "overall": 91,
+        "agents": []
+      },
+      "art": {
+        "accent": "#79d7ef",
+        "position": "27% 20%",
+        "credit": "Riot Games / Red Bull",
+        "source": "https://www.redbull.com/us-en/lcs-super-week-heads-into-the-off-season",
+        "year": 2014,
+        "serial": 9,
+        "total": 11,
+        "zoom": 1
+      },
+      "source": "https://esl.com/article/gamescom-2014-aftermath-alliance-fnatic-sk-gaming-and-dark-passage-heading-to-worlds/",
+      "peakSeason": {
+        "year": 2014,
+        "team": "Alliance",
+        "role": "中单",
+        "selection": "game-design",
+        "basis": "2014夏季赛季后赛及决赛的官方赛事记录，显示Froggen在半决赛和决赛中的核心作用与夺冠结果。",
+        "evidence": [
+          {
+            "url": "https://esl.com/article/gamescom-2014-aftermath-alliance-fnatic-sk-gaming-and-dark-passage-heading-to-worlds/",
+            "claim": "ESL官方回顾gamescom 2014，明确Alliance击败FNC夺冠，并说明Froggen在半决赛展现统治力，决赛使用小炮、泽拉斯等英雄率队3-1战胜FNC，晋级世界赛。"
+          }
+        ]
+      }
+    },
+    "ign": "Froggen",
+    "realName": "Henrik Hansen",
+    "nat": "dk",
+    "face": "./lol/faces/hall-froggen-2014-alliance.jpg?v=892b8633",
+    "region": "LEC",
+    "clubId": "H:ALL",
+    "clubTag": "ALL",
+    "role": "中单",
+    "roles": [
+      "中单"
+    ],
+    "isIgl": false,
+    "age": 20,
+    "attrs": {
+      "aim": 92,
+      "reaction": 91,
+      "awareness": 93,
+      "utility": 95,
+      "clutch": 89,
+      "teamwork": 87,
+      "communication": 85,
+      "igl": 86
+    },
+    "rating": 91,
+    "rarity": "mythic"
+  },
+  {
+    "kind": "player",
+    "id": "career-diamondprox",
+    "playerId": "H:Diamondprox",
+    "legend": {
+      "id": "career-diamondprox",
+      "ign": "Diamondprox",
+      "title": "知名选手 · 野区先驱",
+      "short": "野区先驱",
+      "year": 2013,
+      "kind": "hall",
+      "competition": "Career",
+      "collection": "hall-of-fame",
+      "ratingTier": "hall",
+      "clubId": "H:GMB",
+      "clubTag": "GMB",
+      "rating": 91,
+      "note": "2013 年代表 Gambit 担任打野，在 IEM 卡托维兹击败 Azubu Blaze 与 Frost 随队夺冠。本卡选取这一赛季的国际赛表现。",
+      "roles": [
+        "打野"
+      ],
+      "isIgl": true,
+      "person": {
+        "id": "H:Diamondprox",
+        "realName": "Danil Reshetnikov",
+        "nat": "ru",
+        "region": "LEC",
+        "age": 20,
+        "roles": [
+          "打野"
+        ],
+        "attrs": {
+          "aim": 92,
+          "reaction": 88,
+          "awareness": 96,
+          "utility": 90,
+          "clutch": 91,
+          "teamwork": 89,
+          "communication": 87,
+          "igl": 95
+        },
+        "overall": 91,
+        "agents": []
+      },
+      "art": {
+        "accent": "#b2c5ff",
+        "position": "50% 25%",
+        "credit": "Riot Games / LoL Esports",
+        "source": "https://www.flickr.com/photos/lolesports/44353653404/",
+        "year": 2018,
+        "serial": 10,
+        "total": 11
+      },
+      "source": "https://esl.com/article/we-are-working-hard-to-become-a-dominant-team-once-again-an-interview-with-gambit-gamings-edward-abgaryan/",
+      "peakSeason": {
+        "year": 2013,
+        "team": "Gambit Gaming",
+        "role": "打野",
+        "selection": "game-design",
+        "basis": "ESL官方赛后采访及分组报道确认Gambit 2013 Katowice夺冠，并明确Diamondprox以打野身份帮助队伍战胜Blaze和Frost。",
+        "evidence": [
+          {
+            "url": "https://esl.com/article/we-are-working-hard-to-become-a-dominant-team-once-again-an-interview-with-gambit-gamings-edward-abgaryan/",
+            "claim": "Gambit队友Edward在ESL官方采访中确认队伍于2013 Katowice夺冠。"
+          },
+          {
+            "url": "https://esl.com/article/katowice-group-b-bebes-big-adventure/",
+            "claim": "ESL官方Katowice分组报道明确Diamondprox作为Gambit打野帮助队伍击败韩国战队Azubu Blaze与Frost。"
+          }
+        ]
+      }
+    },
+    "ign": "Diamondprox",
+    "realName": "Danil Reshetnikov",
+    "nat": "ru",
+    "face": "./lol/faces/hall-44353653404.jpg?v=7ddf9866",
+    "region": "LEC",
+    "clubId": "H:GMB",
+    "clubTag": "GMB",
+    "role": "打野",
+    "roles": [
+      "打野"
+    ],
+    "isIgl": true,
+    "age": 20,
+    "attrs": {
+      "aim": 92,
+      "reaction": 88,
+      "awareness": 96,
+      "utility": 90,
+      "clutch": 91,
+      "teamwork": 89,
+      "communication": 87,
+      "igl": 95
+    },
+    "rating": 91,
+    "rarity": "mythic"
+  },
+  {
+    "kind": "player",
+    "id": "career-soaz",
+    "playerId": "H:sOAZ",
+    "legend": {
+      "id": "career-soaz",
+      "ign": "sOAZ",
+      "title": "知名选手 · 上路常青树",
+      "short": "上路常青树",
+      "year": 2017,
+      "kind": "hall",
+      "competition": "Career",
+      "collection": "hall-of-fame",
+      "ratingTier": "hall",
+      "clubId": "T25",
+      "clubTag": "FNC",
+      "rating": 90,
+      "note": "2017 年代表 Fnatic 担任上单，入选 EU LCS 夏季赛最佳阵容一阵；全球总决赛小组赛从 0–4 开局逆袭进入八强。",
+      "roles": [
+        "上单"
+      ],
+      "isIgl": false,
+      "person": {
+        "id": "H:sOAZ",
+        "realName": "Paul Boyer",
+        "nat": "fr",
+        "region": "LEC",
+        "age": 23,
+        "roles": [
+          "上单"
+        ],
+        "attrs": {
+          "aim": 88,
+          "reaction": 89,
+          "awareness": 93,
+          "utility": 88,
+          "clutch": 90,
+          "teamwork": 92,
+          "communication": 88,
+          "igl": 89
+        },
+        "overall": 90,
+        "agents": []
+      },
+      "art": {
+        "accent": "#d5b6f6",
+        "position": "50% 25%",
+        "credit": "Riot Games / LoL Esports",
+        "source": "https://www.flickr.com/photos/lolesports/36900104933/",
+        "year": 2017,
+        "serial": 11,
+        "total": 11
+      },
+      "source": "https://nexus.leagueoflegends.com/en-us/2018/05/the-middle-mages-fnc-caps/",
+      "peakSeason": {
+        "year": 2017,
+        "team": "Fnatic",
+        "role": "上单",
+        "selection": "game-design",
+        "basis": "Riot官方回顾及历史最佳阵容记录显示sOAZ在2017夏季赛入选一阵上单，并随FNC从0-4开局进入世界赛八强。",
+        "evidence": [
+          {
+            "url": "https://nexus.leagueoflegends.com/en-us/2018/05/the-middle-mages-fnc-caps/",
+            "claim": "Riot 回顾 Fnatic 在 2017 全球总决赛小组赛从 0–4 开局逆袭进入八强。"
+          },
+          {
+            "url": "https://upcomer.com/the-history-of-lec-all-pro-teams/",
+            "claim": "历史奖项汇总列出 2017 夏季赛第一阵容上单为 Fnatic sOAZ；与 Leaguepedia 当季列表交叉核验。"
+          }
+        ]
+      }
+    },
+    "ign": "sOAZ",
+    "realName": "Paul Boyer",
+    "nat": "fr",
+    "face": "./lol/faces/hall-36900104933.jpg?v=c597075c",
+    "region": "LEC",
+    "clubId": "T25",
+    "clubTag": "FNC",
+    "role": "上单",
+    "roles": [
+      "上单"
+    ],
+    "isIgl": false,
+    "age": 23,
+    "attrs": {
+      "aim": 88,
+      "reaction": 89,
+      "awareness": 93,
+      "utility": 88,
+      "clutch": 90,
+      "teamwork": 92,
+      "communication": 88,
+      "igl": 89
+    },
+    "rating": 90,
+    "rarity": "mythic"
+  }
+]

@@ -362,8 +362,8 @@ export function makeOpenCupApi(sql, {
         await db`update open_cup_entries set byes = byes + 1
                   where cup_id = ${cup.id} and id_hash in (select jsonb_array_elements_text(${db.json(byeOf)}::jsonb))`
       }
-      // the final's loser is second; the semi-finals' losers share fourth
-      const place = last ? 2 : k === cup.rounds - 2 ? 4 : null
+      // Final, semi-final and quarter-final exits receive their finished rank.
+      const place = last ? 2 : k === cup.rounds - 2 ? 4 : k === cup.rounds - 3 ? 8 : null
       await db`
         update open_cup_entries set alive = false, out_round = ${k}, place = ${place}
          where cup_id = ${cup.id} and id_hash in (select jsonb_array_elements_text(${db.json(losers)}::jsonb))`
@@ -390,7 +390,7 @@ export function makeOpenCupApi(sql, {
        where cup_id = ${cup.id} and (wins > 0 or place is not null)`
     const mail = []
     for (const r of rows) {
-      const place = r.place === 1 || r.place === 2 || r.place === 4 ? r.place : null
+      const place = [1, 2, 4, 8].includes(r.place) ? r.place : null
       const prize = engine.openCupPurse(cup.entrants, r.wins, place)
       if (!prize.coins && !prize.pack) continue
       mail.push({
