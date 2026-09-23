@@ -21,7 +21,7 @@
 - 用户已在 RAM 创建 `lulucard-sms` 并下载 AccessKey CSV，另存了本地副本；本记录不包含也不读取密钥。已在 RAM 创建自定义策略 `LuluCardSmsVerifyOnly`，控制台源代码核对仅含 `dypns:SendSmsVerifyCode` 和 `dypns:CheckSmsVerifyCode`。用户确认已将该策略绑定到 `lulucard-sms`；本次无法独立复核绑定后的列表（浏览器会话中已无该标签页）。
 - 用户随后在阿里云 OpenAPI 门户执行 `SendSmsVerifyCode` 快速测试，手机收到验证码，`CheckSmsVerifyCode` 核验也成功。这是阿里云控制台登录身份的发送与核验测试，尚未证明 `lulucard-sms` 的 AccessKey 或游戏本地流程可用；测试短信正常计费。下一步是在隔离的本地或预发布环境配置密钥并验收游戏流程，不能直接改当前生产环境。已核验的这条验证码不能用于后续游戏端绑定，后续测试需重新发码。
 
-本地专用 RAM 账号的最小烟测入口：在 PowerShell 中运行 `powershell -NoProfile -File <game目录>\scripts\smoke_aliyun_sms.ps1`。脚本由操作者在终端中输入 AccessKey ID、隐藏输入 Secret、当前签名/模板和自己的手机号；只有输入 `SEND` 才会发送一条正常计费的短信，随后隐藏输入验证码并核验。密钥、手机号、验证码不写入文件，也不应复制到聊天。此脚本只验证游戏当前使用的阿里云 `sendVerify`/`checkVerify` 函数及 RAM 权限，不代替正式版完整的注册、绑定、找回与防刷验收；运行前先确认本地环境安全、账户余额足够。**尚未实际运行此烟测。**
+本地专用 RAM 账号的最小烟测入口：在 PowerShell 中运行 `powershell -NoProfile -File <game目录>\scripts\smoke_aliyun_sms.ps1`。脚本可让操作者隐藏输入 Secret，或在明确授权时只读取本地凭据文件中的 `AccessKey ID`、`AccessKey Secret` 两行；手机号与验证码不写入文件。它调用游戏当前使用的阿里云 `sendVerify`/`checkVerify` 函数及专用 RAM 权限，不代替正式版完整的注册、绑定、找回与防刷验收。**2026-09-23 已完成真实烟测：专用 RAM 账号调用发送接口成功，手机收信后使用新验证码核验通过；此次验证没有触及线上 demo。**
 
 ## 与开瓦包认证机制对照
 
