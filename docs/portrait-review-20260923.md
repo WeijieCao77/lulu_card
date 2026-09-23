@@ -8,7 +8,7 @@ This is a staged completion pass, not a claim that every card has a verified rea
 
 ## This release batch
 
-41 previously missing or placeholder photographs were completed: 27 ordinary players and 14 coaches. Pad also received a higher-resolution head-and-shoulders version of the same official photograph. Real-photo coverage rose from 670/831 to 711/831: players 608/677, coaches 63/114, mythics 40/40. Remaining: 120 cards (101 null images and 19 known silhouettes). New files total 708964 bytes.
+48 previously missing or placeholder photographs were completed: 34 ordinary players and 14 coaches. Pad also received a higher-resolution head-and-shoulders version of the same official photograph. Real-photo coverage rose from 670/831 to 718/831: players 615/677, coaches 63/114, mythics 40/40. Remaining: 113 cards (98 null images and 15 known silhouettes). New files total 786116 bytes.
 
 ## Research and acceptance
 
@@ -38,8 +38,14 @@ GALA's current file is a solo 2021 match photograph. Perkz is the principal pers
 
 Run `npx tsx scripts/check_portrait_identity_audit.ts` for current coverage/path/hash results. Every newly accepted photograph has also been decoded with Pillow verify/load and visually checked for a single unobstructed person. Source attribution does not establish a commercial reuse license; the provenance file accurately distinguishes official/publicity and profile/interview sources.
 
-All 41 final hashes and Pillow verify/load checks passed. Original player/coach non-image fields, all logos and the entire 40-mythic dossier section were compared against HEAD and are unchanged.
+All 48 final hashes and Pillow verify/load checks passed. Original player/coach non-image fields, all logos and the entire 40-mythic dossier section were compared against HEAD and are unchanged.
 
 The second official-coach batch added Daeny, Dylan Falco and Melzhet from individually captioned images in Movistar’s 2025 Worlds guide, plus Milan from Vitality. PDF portraits retain native resolution (154–193 pixels wide); they are suitable for small cards and remain candidates for a future higher-resolution upgrade. Pad and Milan use deterministic crops of the original Vitality photographs, with crop coordinates recorded; no facial content was generated or altered.
 
 Mobile-size review: the four oversized Spooder, Toffe, Axelent and bulas source files were proportionally reduced to fit 400×400 and re-encoded as WebP. Each is below 100 KB; provenance hashes, dimensions and runtime cache versions were updated. Composition and facial content were preserved.
+
+The second other-region batch adds Kaboom, Soldier, Riippp, Hiro (French Alexandre El Hodebey/H1RO), Potent, Dawciu and Yeti. Six images are individually named on official 2026 LFL roster pages; Yeti's agency page directly pairs his full name with his photograph. These replace three null mappings and four generic silhouettes. Exact original source hashes, output hashes, identity links and roster/upload context are recorded. Photography dates remain unknown rather than inferred from roster years.
+
+DeepSeek V4 Pro supplied the integration script and a revised implementation. Review caught and corrected path/key handling, alpha preservation, provenance wording and unchanged-field assertions before application. All seven sources matched their staged SHA-256 digests; final WebP files passed Pillow verify/load, runtime card ID/cache-version mapping, and the portrait audit. Compression preserves aspect ratio and alpha, with no crop or enlargement (maximum 400 pixels per side). The final contact sheet was visually reviewed. No player statistics, coach data, logos or mythic mappings were modified by this batch.
+
+Rejected alternatives remain excluded: Vietnamese Hiro is not the French card, the winter Riip image is a game character, and Potent's older ambiguous or multi-person candidates were superseded by the official single-person portrait.

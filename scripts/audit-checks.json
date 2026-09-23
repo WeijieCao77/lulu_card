@@ -725,5 +725,10 @@
   {
     "runtime": "tsx",
     "file": "scripts/check_region_chemistry.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_cup_daily_schedule.ts",
+    "estimatedSeconds": 15
   }
 ]

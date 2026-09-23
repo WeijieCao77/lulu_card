@@ -220,26 +220,6 @@
     "note": "No identity-verified usable photograph applied in this batch; continue source research."
   },
   {
-    "id": "p:P416",
-    "kind": "player",
-    "name": "Kaboom",
-    "realName": "Osman Onur Korkmaz",
-    "region": "LEC",
-    "club": null,
-    "reason": "no-face",
-    "note": "No identity-verified usable photograph applied in this batch; continue source research."
-  },
-  {
-    "id": "p:P418",
-    "kind": "player",
-    "name": "Soldier",
-    "realName": "Thomas Thierry Haudecoeur",
-    "region": "LEC",
-    "club": "IJC",
-    "reason": "no-face",
-    "note": "No identity-verified usable photograph applied in this batch; continue source research."
-  },
-  {
     "id": "p:P421",
     "kind": "player",
     "name": "Shift",
@@ -250,42 +230,12 @@
     "note": "No identity-verified usable photograph applied in this batch; continue source research."
   },
   {
-    "id": "p:P425",
-    "kind": "player",
-    "name": "Yeti",
-    "realName": "Szymon Wójcicki",
-    "region": "LEC",
-    "club": "SC",
-    "reason": "placeholder",
-    "note": "No identity-verified usable photograph applied in this batch; continue source research."
-  },
-  {
     "id": "p:P426",
     "kind": "player",
     "name": "SPOOKY",
     "realName": "Miroslav Gochev",
     "region": "LEC",
     "club": "SC",
-    "reason": "placeholder",
-    "note": "No identity-verified usable photograph applied in this batch; continue source research."
-  },
-  {
-    "id": "p:P440",
-    "kind": "player",
-    "name": "Potent",
-    "realName": "Mehdi Ahmed Bouchaffra",
-    "region": "LEC",
-    "club": "VITB",
-    "reason": "placeholder",
-    "note": "Candidate photo contains background team-mate; held for cleaner solo portrait."
-  },
-  {
-    "id": "p:P441",
-    "kind": "player",
-    "name": "Dawciu",
-    "realName": "Dawid Drzyzga",
-    "region": "LEC",
-    "club": "VITB",
     "reason": "placeholder",
     "note": "No identity-verified usable photograph applied in this batch; continue source research."
   },
@@ -300,16 +250,6 @@
     "note": "No identity-verified usable photograph applied in this batch; continue source research."
   },
   {
-    "id": "p:P445",
-    "kind": "player",
-    "name": "Hiro",
-    "realName": "Alexandre El Hodebey",
-    "region": "LEC",
-    "club": "ZYB",
-    "reason": "no-face",
-    "note": "Rejected ChainCC candidate identifies Vietnamese Bot Nguyen Dinh Hai, not game French Alexandre El Hodebey."
-  },
-  {
     "id": "p:P446",
     "kind": "player",
     "name": "Sleyer",
@@ -317,16 +257,6 @@
     "region": "LEC",
     "club": "ZYB",
     "reason": "no-face",
-    "note": "No identity-verified usable photograph applied in this batch; continue source research."
-  },
-  {
-    "id": "p:P450",
-    "kind": "player",
-    "name": "Riippp",
-    "realName": "Arnaud Mesmin",
-    "region": "LEC",
-    "club": "ZYB",
-    "reason": "placeholder",
     "note": "No identity-verified usable photograph applied in this batch; continue source research."
   },
   {

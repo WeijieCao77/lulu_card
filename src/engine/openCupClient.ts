@@ -57,6 +57,13 @@ export interface OpenCupRow {
   nextAt: number | null
 }
 export interface OpenCupBoardRow { rank: number; name: string; tag: string; titles: number; me: boolean }
+export interface OpenCupLegacyPending {
+  id: string
+  league: CupLeague
+  starts: number
+  status: 'open'
+  entrants: number
+}
 export interface OpenCupState {
   league: CupLeague
   ok: true
@@ -71,6 +78,8 @@ export interface OpenCupState {
   recent: { id: string; starts: number; entrants: number; void: boolean; champion: { name: string; tag: string } | null }[]
   boards: { day: string; today: OpenCupBoardRow[]; all: OpenCupBoardRow[] }
   titles?: { today: number; all: number }
+  /** Legacy registrations for cups that were open before the daily schedule change. */
+  legacyPending?: OpenCupLegacyPending[]
 }
 export interface OpenCupSideDetail { lines: ArenaLine[]; mvpCard: string | null }
 export interface OpenCupMatchDetail {

@@ -1,5 +1,5 @@
 /**
- * 全服杯: every two hours, everybody who signed up, one champion.
+ * 全服杯: twice daily, everybody who signed up, one champion.
  *
  * The club cup is a road against real clubs that only you walk. This is the
  * other kind — the people who play this game against each other, in one
@@ -24,8 +24,18 @@ import { BALANCE_VERSION } from './balance'
 import type { ArenaLine, RivalSquad } from './arena'
 import type { PackKind } from './gacha'
 
-/** A cup starts on every even hour of the Shanghai clock — which is every even hour UTC. */
-export const OPEN_CUP_EVERY_MS = 2 * 60 * 60 * 1000
+/** The Shanghai clock hours a global cup round starts at, in the order they occur each day. */
+export const DAILY_START_HOURS = [12, 20] as const
+/** Every cup displayed or scheduled is Asia/Shanghai local time. */
+export const OPEN_CUP_TIMEZONE = 'Asia/Shanghai'
+/** Shanghai local time formatted for the UI. */
+export const openCupTimeLabel = (ms: number): string =>
+  new Intl.DateTimeFormat('zh-CN', {
+    timeZone: OPEN_CUP_TIMEZONE,
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(ms))
 /** A round every quarter of an hour, unless the field is too deep for that to fit. */
 export const OPEN_CUP_STEP_SEC = 15 * 60
 /**
@@ -40,9 +50,33 @@ export const OPEN_CUP_MAX = 4096
 /** Titles won in a field smaller than this are not counted on the 冠军榜. */
 export const OPEN_CUP_RANKED_MIN = 8
 
-/** The start of the cup that is open for sign-up at `now`. */
-export const openCupSlot = (now: number, everyMs = OPEN_CUP_EVERY_MS): number =>
-  (Math.floor(now / everyMs) + 1) * everyMs
+/**
+ * The start of the cup that is open for sign-up at `now`.
+ *
+ * By default the next scheduled daily Shanghai round is returned: strictly
+ * the next occurrence of DAILY_START_HOURS in Asia/Shanghai, so an exact
+ * start time points to the following slot. The arithmetic always works from
+ * the Shanghai day (UTC+8), so it is invariant across the host timezone,
+ * UTC midnight, US DST changes and month/year boundaries.
+ *
+ * A positive `everyMs` keeps the original fast local/test interval
+ * behaviour, flooring `now` to the previous UTC epoch multiple and returning
+ * the next multiple.
+ */
+export const openCupSlot = (now: number, everyMs?: number): number => {
+  if (everyMs && everyMs > 0) {
+    return (Math.floor(now / everyMs) + 1) * everyMs
+  }
+  const SHANGHAI_OFFSET = 8 * 60 * 60 * 1000
+  const localTime = now + SHANGHAI_OFFSET
+  const dayStart = Math.floor(localTime / 86_400_000) * 86_400_000
+  for (const hour of DAILY_START_HOURS) {
+    const candidate = dayStart + hour * 60 * 60 * 1000 - SHANGHAI_OFFSET
+    if (candidate > now) return candidate
+  }
+  const tomorrow = Math.floor((localTime + 86_400_000) / 86_400_000) * 86_400_000
+  return tomorrow + DAILY_START_HOURS[0] * 60 * 60 * 1000 - SHANGHAI_OFFSET
+}
 
 export interface OpenCupPlan {
   rounds: number

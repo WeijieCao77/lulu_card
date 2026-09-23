@@ -785,5 +785,152 @@
       1679,
       2517
     ]
+  },
+  {
+    "id": "p:P416",
+    "name": "Kaboom",
+    "sourcePage": "https://www.lollfl.fr/equipes/2442218945009901567",
+    "sourceImage": "https://www.lollfl.fr/media/file/2458909465026318329/logo_large",
+    "sourceSha256": "820d1da82737da34fa567b7e7322c47b7f33ad52201336c72048c649afaa7618",
+    "identitySource": "https://lol.fandom.com/wiki/Kaboom",
+    "identityEvidence": "Osman Onur Korkmaz, Turkish Jungle for Ici Japon Corp in January-July 2026. Official league 2026 roster explicitly maps Kaboom to image ID 2458909465026318329.",
+    "file": "/lol/faces/portrait-p-P416-20260923.webp",
+    "sha256": "7c80f4fbb918c4fa52898606aad8f9d615d67eb1f25b54c7db54579add9ca657",
+    "dimensions": [
+      256,
+      256
+    ],
+    "decoded": true,
+    "cropReview": "Single unobstructed person; proportional resize only, no crop or generated content.",
+    "rights": "Official league roster photograph; reuse license not stated.",
+    "reviewed": "2026-09-23",
+    "sourceSeason": "LFL Spring 2026",
+    "photoYearNote": "Source roster/upload year is recorded separately; exact photography date not independently established."
+  },
+  {
+    "id": "p:P418",
+    "name": "Soldier",
+    "sourcePage": "https://www.lollfl.fr/equipes/2442218945009901567",
+    "sourceImage": "https://www.lollfl.fr/media/file/2458909465101815799/logo_large",
+    "sourceSha256": "4cfc09a3019ad6343695d32d93f1867dcce4c61df8d0d0ae89ac79139dccf737",
+    "identitySource": "https://esport-actu.com/joueurs/soldier/",
+    "identityEvidence": "Thomas Thierry Haudecoeur, French Bot for Ici Japon Corp, confirmed 2026 LFL. Official league 2026 roster explicitly maps Soldier to image ID 2458909465101815799.",
+    "file": "/lol/faces/portrait-p-P418-20260923.webp",
+    "sha256": "ce751c33f32fd5490660362e199bdbc918dda8da5479ee6f7c33512dc1bb7ba7",
+    "dimensions": [
+      256,
+      256
+    ],
+    "decoded": true,
+    "cropReview": "Single unobstructed person; proportional resize only, no crop or generated content.",
+    "rights": "Official league roster photograph; reuse license not stated.",
+    "reviewed": "2026-09-23",
+    "sourceSeason": "LFL Spring 2026",
+    "photoYearNote": "Source roster/upload year is recorded separately; exact photography date not independently established."
+  },
+  {
+    "id": "p:P450",
+    "name": "Riippp",
+    "sourcePage": "https://www.lollfl.fr/equipes/2442219165202497535",
+    "sourceImage": "https://www.lollfl.fr/media/file/2458933878045364215/logo_large",
+    "sourceSha256": "2def8427f432bcbff25649a9e8b46a1c599c475efbc0547d30c6a78e35026f71",
+    "identitySource": "https://lol.fandom.com/wiki/Riippp",
+    "identityEvidence": "Arnaud Mesmin, French Support for ZYB. Official spring 2026 roster maps RIIPPP to photo ID 2458933878045364215; winter Riip image is a game character, rejected.",
+    "file": "/lol/faces/portrait-p-P450-20260923.webp",
+    "sha256": "62ef11f9950681519dda6beba05439627721d388be373286d34618d223878e16",
+    "dimensions": [
+      256,
+      256
+    ],
+    "decoded": true,
+    "cropReview": "Single unobstructed person; proportional resize only, no crop or generated content.",
+    "rights": "Official league roster photograph; reuse license not stated.",
+    "reviewed": "2026-09-23",
+    "sourceSeason": "LFL Spring 2026",
+    "photoYearNote": "Source roster/upload year is recorded separately; exact photography date not independently established."
+  },
+  {
+    "id": "p:P445",
+    "name": "Hiro",
+    "sourcePage": "https://www.lollfl.fr/equipes/2392082340884473855",
+    "sourceImage": "https://www.lollfl.fr/media/file/2395762068036145146/logo_large",
+    "sourceSha256": "d43844d22e85d25748a8c66b73b8145681830a516e615d877f2800cc72f284f9",
+    "identitySource": "https://lol.fandom.com/wiki/Hiro_%28Alexandre_El_Hodebey%29",
+    "identityEvidence": "Alexandre El Hodebey, French Top, tournament roster lists H1ro for ZYB LFL 2026 Invitational. Official winter roster H1RO image ID 2395762068036145146. Not Vietnamese Hiro (Nguyen Dinh Hai).",
+    "file": "/lol/faces/portrait-p-P445-20260923.webp",
+    "sha256": "d0723da74331fd2e4009faa315c411a26a6accf85df606bb1aa8149813e38bb4",
+    "dimensions": [
+      256,
+      256
+    ],
+    "decoded": true,
+    "cropReview": "Single unobstructed person; proportional resize only, no crop or generated content.",
+    "rights": "Official league roster photograph; reuse license not stated.",
+    "reviewed": "2026-09-23",
+    "sourceSeason": "LFL - Hiver 2026",
+    "photoYearNote": "Source roster/upload year is recorded separately; exact photography date not independently established."
+  },
+  {
+    "id": "p:P440",
+    "name": "Potent",
+    "sourcePage": "https://www.lollfl.fr/equipes/2442218803069347839",
+    "sourceImage": "https://www.lollfl.fr/media/file/2458927919793227770/logo_large",
+    "sourceSha256": "b4a38ee55cb7039a7ad90292774e7971e119f283bf645106b322060b000ec849",
+    "identitySource": "https://liquipedia.net/leagueoflegends/Potent",
+    "identityEvidence": "Mehdi Ahmed Bouchaffra, Top Vitality.Bee since December 2025. Official LFL Spring 2026 Vitality page names Potent and provides this image. Prefer this to uncertain RFT historical image.",
+    "file": "/lol/faces/portrait-p-P440-20260923.webp",
+    "sha256": "d5a959063b47e19147fab4c844dfc089910e27205ceea1f14afd2b7459b9b66b",
+    "dimensions": [
+      256,
+      256
+    ],
+    "decoded": true,
+    "cropReview": "Single unobstructed person; proportional resize only, no crop or generated content.",
+    "rights": "Official league roster photograph; reuse license not stated.",
+    "reviewed": "2026-09-23",
+    "sourceSeason": "LFL Spring 2026",
+    "photoYearNote": "Source roster/upload year is recorded separately; exact photography date not independently established."
+  },
+  {
+    "id": "p:P441",
+    "name": "Dawciu",
+    "sourcePage": "https://www.lollfl.fr/equipes/2442218803069347839",
+    "sourceImage": "https://www.lollfl.fr/media/file/2458927919835170809/logo_large",
+    "sourceSha256": "be9168392073a634cd9a6b9ed979b0e18a5154ee5c760c05a0e6630e434dbb84",
+    "identitySource": "https://www.sheepesports.com/fr/rl/players/Dawciu",
+    "identityEvidence": "Dawid Drzyzga, Jungle Vitality.Bee, independent source exact full name and 2026 matches; official LFL Spring roster names Dawciu and maps photo ID.",
+    "file": "/lol/faces/portrait-p-P441-20260923.webp",
+    "sha256": "797a7b5a4928a5480322631ed83d508f18e3b6625a0184aae2056fc1e0f59b48",
+    "dimensions": [
+      256,
+      256
+    ],
+    "decoded": true,
+    "cropReview": "Single unobstructed person; proportional resize only, no crop or generated content.",
+    "rights": "Official league roster photograph; reuse license not stated.",
+    "reviewed": "2026-09-23",
+    "sourceSeason": "LFL Spring 2026",
+    "photoYearNote": "Source roster/upload year is recorded separately; exact photography date not independently established."
+  },
+  {
+    "id": "p:P425",
+    "name": "Yeti",
+    "sourcePage": "https://proplayers.gg/",
+    "sourceImage": "https://proplayers.gg/wp-content/uploads/2025/03/yeti_strona.png",
+    "sourceSha256": "31ad1e11afc787992679a9ea2d2c9fbed78975c53ac01a95f443847d90ee8f1b",
+    "identitySource": "https://proplayers.gg/",
+    "identityEvidence": "Player agency primary source pairs photo yeti_strona with Szymon Yeti Wojcicki and League of Legends. Independent Leaguepedia Yeti (Szymon Wojcicki) 2026 Skillcamp top roster confirms identity; not Rainbow Six Yeti.",
+    "file": "/lol/faces/portrait-p-P425-20260923.webp",
+    "sha256": "0efa5673bcced2b6c321a88b3ba0ac3ef10f2775c555720dca6487d292454ad5",
+    "dimensions": [
+      247,
+      400
+    ],
+    "decoded": true,
+    "cropReview": "Single unobstructed person; proportional resize only, no crop or generated content.",
+    "rights": "Player agency profile photograph; reuse license not stated.",
+    "reviewed": "2026-09-23",
+    "sourceSeason": "agency asset uploaded March 2025 (shoot date unknown)",
+    "photoYearNote": "Source roster/upload year is recorded separately; exact photography date not independently established."
   }
 ]

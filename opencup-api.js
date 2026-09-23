@@ -1,7 +1,7 @@
 /**
  * 全服杯 — storage and a clock for the bracket in src/engine/openCup.ts.
  *
- * A cup starts on every even hour. Until it does, anybody who may trade may
+ * Each division starts at 12:00 and 20:00 Asia/Shanghai. Until it does, anybody who may trade may
  * sign up for it (the same fifty pulls and three days the market asks — an
  * account made tonight is no use for padding a field tonight). At the start
  * the server reads, in ONE statement, the five every entrant is fielding at
@@ -217,6 +217,19 @@ export function makeOpenCupApi(sql, {
         on conflict (starts, league) do update set format_version = excluded.format_version, phase = excluded.phase where open_cups.status = 'open'`
     }
     ensureOpen.known = slot
+  }
+
+  async function pendingLegacy(now, me, league) {
+    if (!me) return []
+    const next = slotOf(now)
+    const rows = await sql`
+      select c.id::text as id, c.league, c.starts, c.status, c.entrants
+        from open_cups c
+        join open_cup_entries e on e.cup_id = c.id
+       where e.id_hash = ${me} and c.league = ${league}
+         and c.status = 'open' and c.starts <> ${new Date(next)}
+       order by c.starts`
+    return rows.map((r) => ({ id: r.id, league: r.league, starts: ms(r.starts), status: r.status, entrants: r.entrants }))
   }
 
   /**
@@ -491,10 +504,11 @@ export function makeOpenCupApi(sql, {
     if (publicCache.value && now - publicCache.at < 5000) return publicCache.value
     publicCache.inflight ??= (async () => {
       try {
+        const targetStarts = slotOf(now)
         const cups = await sql`
           select id::text as id, league, starts, status, round, rounds, step_sec, entrants, champion, finished, format_version, phase, stage_round, playoff
             from open_cups where league = ${league} order by starts desc limit 14`
-        const next = cups.find((c) => c.status === 'open') ?? null
+        const next = cups.find((c) => c.status === 'open' && ms(c.starts) === targetStarts) ?? null
         const live = cups.find((c) => c.status === 'live') ?? null
         const last = cups.find((c) => c.status === 'done') ?? null
         let signed = 0
@@ -672,6 +686,7 @@ export function makeOpenCupApi(sql, {
       if (pub.live) out.live = { ...pub.live, me: mine.live }
       if (pub.last) out.last = { ...pub.last, me: mine.last }
       out.titles = mine.titles
+      out.legacyPending = await pendingLegacy(now, me, league)
     }
     json(res, 200, out)
   }
@@ -709,9 +724,11 @@ export function makeOpenCupApi(sql, {
     const entry = engine.leagueEntry(five.five, league)
     if (!entry.ok) { json(res, 200, entry); return }
     const name = mine[0].name ?? null
+    // New joins only enter the next scheduled slot, never a legacy off-time cup that happens to be open.
+    const cutoff = slotOf(now)
     const open = await sql`
       select id::text as id, starts from open_cups
-       where status = 'open' and league = ${league} and starts > ${new Date(now)} order by starts limit 1`
+       where status = 'open' and league = ${league} and starts = ${new Date(cutoff)} order by starts limit 1`
     if (!open.length) { json(res, 200, { ok: false, why: '现在没有可以报名的比赛，稍后再试。' }); return }
     // The seat is taken under the cup's row lock — the lock start() holds
     // while it reads the entrants — and everything that decided it is read

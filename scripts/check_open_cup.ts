@@ -9,6 +9,9 @@
  */
 process.env.ENGINE_FROM_SOURCE = '1'
 process.env.PHONE_GATE = '0'
+// This suite explicitly exercises release signup gates; demo defaults are tested separately.
+process.env.TRADE_DAYS = '3'
+process.env.TRADE_PULLS = '50'
 import { createHash } from 'node:crypto'
 import { PGlite } from '@electric-sql/pglite'
 import { makeSql } from '../pglite-sql.js'
@@ -16,7 +19,7 @@ import { newGacha } from '../src/engine/gacha'
 import type { GachaState } from '../src/engine/gacha'
 import { CUP_TEAMS } from '../src/engine/cupTeams'
 import {
-  OPEN_CUP_EVERY_MS, OPEN_CUP_MIN, OPEN_CUP_RANKED_MIN, OPEN_CUP_STEP_SEC, OPEN_CUP_WIN_COINS,
+  OPEN_CUP_MIN, OPEN_CUP_RANKED_MIN, OPEN_CUP_STEP_SEC, OPEN_CUP_WIN_COINS,
   openCupMatchSeed, openCupPlacePrize, openCupPurse, openCupRoundAt, openCupSlot, pairOpenCupRound,
   planOpenCup, playOpenCupMatch,
 } from '../src/engine/openCup'
@@ -38,11 +41,10 @@ const check = (name: string, ok: boolean, detail = '') => {
 // ------------------------------------------------------------ the rules
 
 {
-  const H = 60 * 60 * 1000
   const t = Date.parse('2026-09-17T03:20:00Z')
-  check('下一场在下一个偶数整点', openCupSlot(t) === Date.parse('2026-09-17T04:00:00Z'))
-  check('正好整点时，报名的是再下一场', openCupSlot(Date.parse('2026-09-17T04:00:00Z')) === Date.parse('2026-09-17T06:00:00Z'))
-  check('上海时间也是偶数整点', new Date(openCupSlot(t) + 8 * H).getUTCHours() % 2 === 0)
+  check('每日上海 12:00/20:00 下一个是 12:00', openCupSlot(t) === Date.parse('2026-09-17T12:00:00+08:00'))
+  check('正好 12:00 时报名 20:00 场', openCupSlot(Date.parse('2026-09-17T12:00:00+08:00')) === Date.parse('2026-09-17T20:00:00+08:00'))
+  check('正好 20:00 时报名次日 12:00 场', openCupSlot(Date.parse('2026-09-17T20:00:00+08:00')) === Date.parse('2026-09-18T12:00:00+08:00'))
 
   let planOk = true, fits = true
   for (let n = 2; n <= 4096; n++) {
@@ -208,7 +210,7 @@ try {
   const T = openCupSlot(now)
   let st = (await call('/api/card/opencup', { id: ids[0] })).body
   check('报两次还是一个名额', st.next?.signed === FIELD && st.next?.joined === true, `${st.next?.signed}`)
-  check('报名的是下一个偶数整点那场', st.next?.starts === T)
+  check('报名的是下一个每日 12/20 场', st.next?.starts === T)
   await call('/api/card/opencup/leave', { id: ids[36] })
   st = (await call('/api/card/opencup', { id: ids[36] })).body
   check('开赛前可以退赛', st.next?.signed === FIELD - 1 && st.next?.joined === false)
@@ -246,7 +248,7 @@ try {
   check('两个进程同时推进，第一轮也只有一份（3 场 + 29 个轮空）', dupMatches[0].n === 32, `${dupMatches[0].n}`)
 
   r = await call('/api/card/opencup/join', { id: ids[2] })
-  check('开赛后报名报的是下一场', r.body.ok && r.body.starts === T + OPEN_CUP_EVERY_MS, JSON.stringify(r.body))
+  check('开赛后报名报的是当天下一个每日场', r.body.ok && r.body.starts === openCupSlot(now), JSON.stringify(r.body))
   await call('/api/card/opencup/leave', { id: ids[0] })
   check('开赛后退不了这一场', (await sql`select 1 from open_cup_entries where cup_id = ${cup.id} and id_hash = ${hash(ids[0])}`).length === 1)
 

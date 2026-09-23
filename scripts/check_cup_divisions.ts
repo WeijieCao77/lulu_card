@@ -113,11 +113,12 @@ for (const format of [1, 2]) {
     switched.pulls = 100; switched.squad = structuredClone(squads.gold)
     for (const id of switched.squad.slots) if (id) switched.cards[id] = { id, level: 0, dupes: 0, seen: 1, got: '2026-09-21' }
     await sql`update card_accounts set state=${sql.json(switched)} where id_hash=${hash(extra)}`
-    now = Date.parse('2026-09-21T14:00Z')
+    const firstStart = (await sql`select starts from open_cups where league = 'bronze' and status = 'open' order by starts limit 1`)[0].starts
+    now = Number(new Date(firstStart))
     api.invalidate(); await api.advance()
     const excluded = await sql`select five, alive, out_round from open_cup_entries where cup_id=${cupIds[2]} and id_hash=${hash(extra)}`
     assert.equal(excluded[0].five, null); assert.equal(excluded[0].alive, false); assert.equal(excluded[0].out_round, -1)
-    now = Date.parse('2026-09-21T15:59Z')
+    now = Number(new Date(firstStart)) + 3 * 60 * 60 * 1000
     api.invalidate(); await api.advance()
     for (let i = 0; i < CUP_LEAGUES.length; i++) {
       const k = CUP_LEAGUES[i]

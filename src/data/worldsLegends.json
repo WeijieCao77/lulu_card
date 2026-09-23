@@ -753,9 +753,10 @@
     },
     "art": {
       "accent": "#dccda7",
-      "position": "62% 22%",
+      "position": "53% 40%",
+      "zoom": 1.2,
       "credit": "Riot Games / LoL Esports",
-      "source": "https://www.flickr.com/photos/lolesports/30308844677/",
+      "source": "https://www.flickr.com/photos/lolesports/31822426628/",
       "serial": 2,
       "total": 6
     },
@@ -803,9 +804,10 @@
     },
     "art": {
       "accent": "#dccda7",
-      "position": "59% 22%",
+      "position": "50% 30%",
+      "zoom": 1.3,
       "credit": "Riot Games / LoL Esports",
-      "source": "https://www.flickr.com/photos/lolesports/30308845207/",
+      "source": "https://www.flickr.com/photos/lolesports/45648012382/",
       "serial": 3,
       "total": 6
     },

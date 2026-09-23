@@ -7,7 +7,7 @@ import {
 } from '../../engine/openCupClient'
 import type { OpenCupMatchDetail, OpenCupMatchRow, OpenCupMine, OpenCupRow, OpenCupState, SwissStanding } from '../../engine/openCupClient'
 import {
-  OPEN_CUP_MIN, OPEN_CUP_RANKED_MIN, openCupPlacePrize, openCupRoundName,
+  DAILY_START_HOURS, OPEN_CUP_MIN, OPEN_CUP_RANKED_MIN, openCupPlacePrize, openCupRoundName, openCupTimeLabel,
 } from '../../engine/openCup'
 import { swissRoundName } from '../../engine/openCupSwiss'
 import { PACKS, CUP_LEAGUES, LEAGUE_RULES, isCupLeague, leagueEntry, type CupLeague } from '../../engine/gacha'
@@ -16,8 +16,7 @@ import { serverNow } from '../../engine/account'
 import { GapOdds } from './GapOdds'
 import type { ArenaResult } from '../../engine/arena'
 
-const clock = (ms: number) =>
-  new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date(ms))
+const clock = (ms: number) => openCupTimeLabel(ms)
 const countdown = (ms: number) => {
   const s = Math.max(0, Math.round(ms / 1000))
   const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60)
@@ -83,7 +82,9 @@ function CupDivision({ league }: { league: CupLeague }) {
   }, [load])
 
   // a round has just fallen due: look again a few seconds after it, once
-  const dueAt = st?.live?.nextAt ?? (st?.next && st.next.joined ? st.next.starts : null)
+  const dueTimes = [st?.live?.nextAt, st?.next?.joined ? st.next.starts : null, ...(st?.legacyPending ?? []).filter(c => now < c.starts + 5 * 60_000).map(c => c.starts)]
+    .filter((t): t is number => typeof t === 'number')
+  const dueAt = dueTimes.length ? Math.min(...dueTimes) : null
   // and again every ten seconds until the server has played it — a big round takes it a few
   const asked = useRef(0)
   useEffect(() => {
@@ -139,12 +140,13 @@ function CupDivision({ league }: { league: CupLeague }) {
 
   const myScore = filled === 5 ? squadRating(g.squad, (id) => g.cards[id]?.level ?? 0) : null
   const rows = board === 'today' ? st.boards.today : st.boards.all
+  const legacy = st.legacyPending ?? []
 
   return (
     <>
       <Panel
         title={`全服杯 · ${LEAGUE_RULES[league].name}`}
-        actions={<span className="tiny muted">免费报名 · 每 2 小时一场</span>}
+        actions={<span className="tiny muted">免费报名 · 每天 {DAILY_START_HOURS.map(h => `${h}:00`).join(' / ')}（北京时间）</span>}
       >
         <p className="small" style={{ marginTop: 0 }}><b>{LEAGUE_RULES[league].blurb}</b> 四个赛制独立报名、独立对阵、独立冠军榜。报名和开赛时均检查卡色，教练也受金银铜上限限制。</p>
         {!entry.ok && <p className="small neg">{entry.why}</p>}
@@ -154,6 +156,19 @@ function CupDivision({ league }: { league: CupLeague }) {
           不足 {OPEN_CUP_MIN} 人取消，{OPEN_CUP_RANKED_MIN} 人以上的冠军计入冠军榜。
         </p>
         <GapOdds />
+
+        {legacy.length > 0 && (
+          <div className="bracket-leg now" style={{ flexWrap: 'wrap', marginBottom: 10 }}>
+            <span style={{ flex: 1, minWidth: 220 }} className="tiny">
+              {legacy.map((c) => (
+                <span key={c.id} className="muted" style={{ display: 'inline-block', marginRight: 8 }}>
+                  旧赛程 {new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: 'numeric', day: 'numeric' }).format(new Date(c.starts))} {clock(c.starts)} · {c.starts > now ? `距开赛 ${countdown(c.starts - now)}` : '正在准备开赛'}
+                </span>
+              ))}
+            </span>
+            <span className="tiny muted">旧赛程报名已保留，按原定时间开赛</span>
+          </div>
+        )}
 
         {st.next && (
           <div className={`bracket-leg ${st.next.joined ? 'won' : 'now'}`} style={{ flexWrap: 'wrap' }}>

@@ -2634,10 +2634,10 @@
       "source": "https://cdn.datalisk.io/players/112551579800765777.png"
     },
     "P425": {
-      "img": "oe-18a199783d1814ee.webp",
-      "v": "556db6d5",
+      "img": "portrait-p-P425-20260923.webp",
+      "v": "0efa5673",
       "real": "Szymon Wójcicki",
-      "source": "https://cdn.datalisk.io/players/108353513683792949.png"
+      "source": "https://proplayers.gg/wp-content/uploads/2025/03/yeti_strona.png"
     },
     "P435": {
       "img": "portrait-p-P435-20260923.webp",
@@ -2647,10 +2647,10 @@
       "page": "https://www.tln.gg/en"
     },
     "P440": {
-      "img": "oe-af111a2574804964.webp",
-      "v": "f0c75f40",
+      "img": "portrait-p-P440-20260923.webp",
+      "v": "d5a95906",
       "real": "Mehdi Ahmed Bouchaffra",
-      "source": "https://cdn.datalisk.io/players/112438134055072580.png"
+      "source": "https://www.lollfl.fr/media/file/2458927919793227770/logo_large"
     },
     "P455": {
       "img": "oe-8de894f6633bef45.webp",
@@ -2659,16 +2659,16 @@
       "source": "https://cdn.datalisk.io/players/116432312762615094.png"
     },
     "P441": {
-      "img": "oe-04b73ad982a5b5ce.webp",
-      "v": "f0c75f40",
+      "img": "portrait-p-P441-20260923.webp",
+      "v": "797a7b5a",
       "real": "Dawid Drzyzga",
-      "source": "https://cdn.datalisk.io/players/111686070373598724.png"
+      "source": "https://www.lollfl.fr/media/file/2458927919835170809/logo_large"
     },
     "P450": {
-      "img": "oe-cb9364d1e845df78.webp",
-      "v": "f0c75f40",
+      "img": "portrait-p-P450-20260923.webp",
+      "v": "62ef11f9",
       "real": "Arnaud Mesmin",
-      "source": "https://cdn.datalisk.io/players/115879729924854654.png"
+      "source": "https://www.lollfl.fr/media/file/2458933878045364215/logo_large"
     },
     "P492": {
       "img": "portrait-p-P492-20260923.webp",
@@ -3576,6 +3576,21 @@
       "v": "8546edea",
       "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/smiley.webp",
       "page": "https://lol.fandom.com/wiki/Smiley_%28Ludvig_Granquist%29"
+    },
+    "P416": {
+      "img": "portrait-p-P416-20260923.webp",
+      "v": "7c80f4fb",
+      "source": "https://www.lollfl.fr/media/file/2458909465026318329/logo_large"
+    },
+    "P418": {
+      "img": "portrait-p-P418-20260923.webp",
+      "v": "ce751c33",
+      "source": "https://www.lollfl.fr/media/file/2458909465101815799/logo_large"
+    },
+    "P445": {
+      "img": "portrait-p-P445-20260923.webp",
+      "v": "d0723da7",
+      "source": "https://www.lollfl.fr/media/file/2395762068036145146/logo_large"
     }
   },
   "coaches": {
@@ -4427,14 +4442,14 @@
       "page": "https://www.flickr.com/photos/lolesports/45288924111/"
     },
     "worlds-2018-duke": {
-      "img": "ig-30308844677.jpg",
+      "img": "ig-31822426628.jpg",
       "tier": "event",
-      "page": "https://www.flickr.com/photos/lolesports/30308844677/"
+      "page": "https://www.flickr.com/photos/lolesports/31822426628/"
     },
     "worlds-2018-rookie": {
-      "img": "ig-30308845207.jpg",
+      "img": "ig-45648012382.jpg",
       "tier": "event",
-      "page": "https://www.flickr.com/photos/lolesports/30308845207/"
+      "page": "https://www.flickr.com/photos/lolesports/45648012382/"
     },
     "worlds-2018-jackeylove": {
       "img": "ig-44722115754.jpg",
