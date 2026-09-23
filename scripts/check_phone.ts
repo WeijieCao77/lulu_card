@@ -14,7 +14,7 @@ import { PGlite } from '@electric-sql/pglite'
 import { makeSql } from '../pglite-sql.js'
 import { createHash } from 'node:crypto'
 import { CARD_SCHEMA, makeCardApi, normalizeId } from '../cards-api.js'
-import { checkVerify, devCodes, devMode, encryptId, decryptId, isVerified, makePhoneApi, normalizePhone, phoneGate, sendVerify, smsConfigured } from '../phone-api.js'
+import { checkVerify, devCodes, devMode, encryptId, decryptId, isVerified, makePhoneApi, normalizePhone, phoneGate, sendVerify, smsConfigured, smsDailyCap } from '../phone-api.js'
 import { RELEASE_POLICIES } from '../release-policy.js'
 
 process.env.PHONE_GATE = '0' // Regression: formal policy must ignore this old demo bypass.
@@ -62,11 +62,11 @@ r = await call(cards, '/api/card/act', { id: ID, action: 'checkin', client: stat
 check('内测当前仍可游玩', r.body.ok === true, String(r.body.why))
 
 // ---- send, bind ---------------------------------------------------------
-r = await call(phone, '/api/card/phone/send', { phone: '13800138000' })
+r = await call(phone, '/api/card/phone/send', { phone: '13800138000', id: ID })
 check('发码成功（开发模式）', r.body.ok === true && r.body.dev === true, JSON.stringify(r.body))
 const code = devCodes[0].code
 check('验证码是六位数字', /^\d{6}$/.test(code))
-r = await call(phone, '/api/card/phone/send', { phone: '13800138000' })
+r = await call(phone, '/api/card/phone/send', { phone: '13800138000', id: ID })
 check('一分钟内不能再发', r.body.ok === false && typeof r.body.wait === 'number', String(r.body.why))
 r = await call(phone, '/api/card/phone/bind', { id: ID, phone: '13800138000', code: '000000' })
 check('错码拒绝', r.body.ok === false && String(r.body.why).includes('不对'))
@@ -93,7 +93,7 @@ r = await call(phone, '/api/card/phone/bind', { id: ID2, phone: '13800138000', c
 check('同一个号绑第二个账号被拒', r.body.ok === false && r.body.taken === true, String(r.body.why))
 r = await call(phone, '/api/card/phone/send', { phone: '13900139000', for: 'bind', id: ID }, 'other2')
 check('绑过的账号给第二个号发码：直接拒，不发', r.body.ok === false && r.body.bound === true && devCodes.length === sentBefore, String(r.body.why))
-r = await call(phone, '/api/card/phone/send', { phone: '13900139000' }, 'other2')
+r = await call(phone, '/api/card/phone/send', { phone: '13900139000', id: ID2 }, 'other2')
 const code3 = devCodes[0].code
 r = await call(phone, '/api/card/phone/bind', { id: ID, phone: '13900139000', code: code3 })
 check('一个账号不能绑第二个号', r.body.ok === false && r.body.bound === true, String(r.body.why))
@@ -114,7 +114,7 @@ check('没绑过的号说没绑过', r.body.ok === false && r.body.none === true
 await sql`delete from card_sms`
 const ID3 = 'VM-3333-3333-3333-3333-3333'
 await call(cards, '/api/card/claim', { id: ID3, name: '试错' })
-await call(phone, '/api/card/phone/send', { phone: '13700137000' }, 'tries')
+await call(phone, '/api/card/phone/send', { phone: '13700137000', id: ID3 }, 'tries')
 let last: Res = { code: 0, body: {} }
 for (let i = 0; i < 6; i++) last = await call(phone, '/api/card/phone/bind', { id: ID3, phone: '13700137000', code: '111111' }, `t${i}`)
 check('五次之后要重新发', String(last.body.why).includes('重新发'))
@@ -193,13 +193,58 @@ r = await call(phone, '/api/admin/sms', {}, 'admin', 'token=tok')
 check('后台能看开发模式的验证码', r.body.ok === true && Array.isArray(r.body.codes))
 check('后台能看发码与绑定的数量，不见号码', r.body.stats && r.body.stats.sent24 >= 1 && r.body.stats.bound >= 1 && !JSON.stringify(r.body.stats).includes('138'))
 
+// ---- the SMS budget: bind codes need an account, per account and per day ----
+{
+  let cap = 1_000
+  const budget = makePhoneApi(sql, { readBody, json, rateLimited: () => false, normalizeId, hash, token: 'tok', tokenFrom: (_r: unknown, u: URL) => u.searchParams.get('token'), tokenOk: (a: string, b: string) => a === b, enabled: true, dailyCap: () => cap } as never)
+  await sql`delete from card_sms`
+  const before = devCodes.length
+  let r = await call(budget, '/api/card/phone/send', { phone: '13100131000', for: 'bind' }, 'b0')
+  check('不带账号的绑定发码直接拒，不发', r.body.ok === false && r.body.noAccount === true && devCodes.length === before, JSON.stringify(r.body))
+  r = await call(budget, '/api/card/phone/send', { phone: '13100131000', for: 'bind', id: 'VM-ZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZ' }, 'b0')
+  check('不存在的账号也拒，不发', r.body.ok === false && r.body.noAccount === true && devCodes.length === before, JSON.stringify(r.body))
+  r = await call(budget, '/api/card/phone/send', { phone: '13100131000', for: 'bind', id: 'not-an-id' }, 'b0')
+  check('格式不对的账号也拒', r.body.ok === false && r.body.noAccount === true && devCodes.length === before)
+  const ID7 = 'VM-7777-7777-7777-7777-7777'
+  await call(cards, '/api/card/claim', { id: ID7, name: '换号狂' })
+  let sentOk = 0
+  for (let i = 0; i < 6; i++) {
+    r = await call(budget, '/api/card/phone/send', { phone: `1310013100${i}`, for: 'bind', id: ID7 }, `b${i}`)
+    if (r.body.ok) sentOk++
+  }
+  check('一个账号一天最多给 5 个号发绑定码', sentOk === 5 && r.body.ok === false && String(r.body.why).includes('账号今天'), JSON.stringify(r.body))
+  await sql`delete from card_sms`
+  cap = 2
+  const ID8 = 'VM-8888-8888-8888-8888-8888'
+  await call(cards, '/api/card/claim', { id: ID8, name: '预算' })
+  const a = await call(budget, '/api/card/phone/send', { phone: '13200132001', for: 'bind', id: ID8 }, 'c1')
+  const b = await call(budget, '/api/card/phone/send', { phone: '13200132002', for: 'bind', id: ID7 }, 'c2')
+  const n = devCodes.length
+  r = await call(budget, '/api/card/phone/send', { phone: '13800138000', for: 'login' }, 'c3')
+  check('全站每日上限到了就停发，找回也停', a.body.ok === true && b.body.ok === true && r.body.ok === false && r.body.capped === true && devCodes.length === n, JSON.stringify(r.body))
+  await sql`delete from card_sms`
+  cap = 0
+  r = await call(budget, '/api/card/phone/send', { phone: '13800138000', for: 'login' }, 'c4')
+  check('上限设 0 立即停发', r.body.ok === false && r.body.capped === true)
+  cap = 1
+  const burst = await Promise.all(['13200132011', '13200132012', '13200132013', '13200132014'].map((p, i) =>
+    call(budget, '/api/card/phone/send', { phone: p, for: 'bind', id: [ID7, ID8, ID3, ID2][i] }, `burst${i}`)))
+  const [{ n: rows }] = await sql`select count(*)::int as n from card_sms`
+  check('并发给不同号码发码也不超出全站上限', burst.filter((x) => x.body.ok).length === 1 && rows === 1, JSON.stringify(burst.map((x) => x.body.ok)))
+  r = await call(budget, '/api/admin/sms', {}, 'admin', 'token=tok')
+  check('后台显示当天上限', r.body.stats?.cap === 1)
+  check('SMS_DAILY_CAP 解析：缺省 2000，0 表示停发，乱填回缺省', smsDailyCap({}) === 2000 && smsDailyCap({ SMS_DAILY_CAP: '0' }) === 0
+    && smsDailyCap({ SMS_DAILY_CAP: '300' }) === 300 && smsDailyCap({ SMS_DAILY_CAP: '-5' }) === 2000 && smsDailyCap({ SMS_DAILY_CAP: 'abc' }) === 2000)
+  await sql`delete from card_sms`
+}
+
 // Even an accidentally retained PHONE_SMS_DEV=1 cannot issue local codes on a
 // formal server without a configured provider.
 {
   const before = devCodes.length
   const oldNodeEnv = process.env.NODE_ENV
   process.env.NODE_ENV = 'production'
-  const noProvider = await call(phone, '/api/card/phone/send', { phone: '13300133000' }, 'formal-no-provider')
+  const noProvider = await call(phone, '/api/card/phone/send', { phone: '13300133000', id: ID3 }, 'formal-no-provider')
   check('正式环境短信缺配置失败关闭，不产开发码', noProvider.body.ok === false && devCodes.length === before)
   if (oldNodeEnv === undefined) delete process.env.NODE_ENV
   else process.env.NODE_ENV = oldNodeEnv
@@ -239,7 +284,7 @@ check('后台能看发码与绑定的数量，不见号码', r.body.stats && r.b
   const ID5 = 'VM-5555-5555-5555-5555-5555'
   await call(cards, '/api/card/claim', { id: ID5, name: '真短信' })
   await sql`delete from card_sms`
-  let r = await call(inj, '/api/card/phone/send', { phone: '13600136000' }, 'inj')
+  let r = await call(inj, '/api/card/phone/send', { phone: '13600136000', id: ID5 }, 'inj')
   check('配置好时验证码不在本地生成', r.body.ok === true && r.body.dev === false && sent[0] === '13600136000' && devCodes.every((d) => d.last4 !== '6000'))
   r = await call(inj, '/api/card/phone/bind', { id: ID5, phone: '13600136000', code: '000000' }, 'inj')
   check('阿里云说不对就不对', r.body.ok === false)

@@ -224,6 +224,9 @@ create table if not exists card_sms (
   ip       text
 );
 create index if not exists card_sms_phone_idx on card_sms (phone_h, sent desc);
+alter table card_sms add column if not exists id_h text;
+create index if not exists card_sms_sent_idx on card_sms (sent);
+create index if not exists card_sms_id_idx on card_sms (id_h, sent);
 alter table card_accounts add column if not exists verified timestamptz;
 alter table card_accounts add column if not exists verify_via text;
 -- One row per action the client named (act's requestId), written in the SAME

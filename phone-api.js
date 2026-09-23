@@ -29,6 +29,16 @@ export const PHONE_SCHEMA = ''
 const MAX_TRIES = 5
 const PER_MINUTE_MS = 60 * 1000
 const PER_DAY = 5
+// A number's own limits do not stop one client from buying an SMS for every
+// number it can list. Bind codes also count per account, and the whole server
+// stops sending past a daily budget (SMS_DAILY_CAP, 0 = stop sending now).
+const PER_ACCOUNT_DAY = 5
+const DAILY_CAP_DEFAULT = 2000
+export function smsDailyCap(env = process.env) {
+  const raw = String(env.SMS_DAILY_CAP ?? '').trim()
+  if (!/^\d+$/.test(raw)) return DAILY_CAP_DEFAULT
+  return Math.min(Number(raw), 1_000_000)
+}
 const SALT = process.env.PHONE_SALT || process.env.ANALYTICS_TOKEN || 'valmanager-phone'
 const KEY = createHash('sha256').update(process.env.PHONE_KEY || process.env.ANALYTICS_TOKEN || 'valmanager-phone-key').digest()
 
@@ -119,7 +129,7 @@ export const devMode = (env = process.env) =>
 
 // ---------------------------------------------------------------- the api
 
-export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, hash, token, tokenFrom, tokenOk, sender, checker, enabled = RELEASE_POLICY.phoneEnabled }) {
+export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, hash, token, tokenFrom, tokenOk, sender, checker, enabled = RELEASE_POLICY.phoneEnabled, dailyCap = smsDailyCap }) {
   const guard = (res, key, max) => {
     if (rateLimited(key, max)) { json(res, 429, { ok: false, why: '操作太频繁，稍等一下。' }); return true }
     return false
@@ -147,27 +157,44 @@ export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, ha
     if (!phone) { json(res, 200, { ok: false, why: '只收中国大陆的 11 位手机号。海外号码请到抖音私信作者人工处理。' }); return }
     const ph = phoneHash(phone)
     const purpose = b.for === 'login' ? 'login' : 'bind'
-    const me = b.id ? hash(normalizeId(b.id) ?? '') : null
+    const id = purpose === 'bind' ? normalizeId(b.id) : null
+    const me = id ? hash(id) : null
     const reservation = `pending:${randomBytes(16).toString('hex')}`
+    const cap = dailyCap()
     const refused = await locked(ph, async (tx) => {
       const held = await tx`select id_hash from card_phones where phone_h = ${ph}`
       if (purpose === 'bind') {
         if (held.length && held[0].id_hash !== me) {
           return { ok: false, why: '这个手机号已经绑过账号了，一个号只能认证一次。要进那个账号，用「用手机号进入」。', taken: true }
         }
-        if (me) {
-          const mine = await tx`select last4 from card_phones where id_hash = ${me}`
-          if (mine.length && !held.length) return { ok: false, why: `这个账号已经绑了尾号 ${mine[0].last4} 的手机。`, bound: true }
-        }
+        // A bind code is bought for an account that exists: without one, any
+        // client could spend the SMS budget on numbers that will never bind.
+        if (!me) return { ok: false, why: '先建好账号，再绑手机号。', noAccount: true }
+        const acct = await tx`select 1 from card_accounts where id_hash = ${me}`
+        if (!acct.length) return { ok: false, why: '账号还没建好，刷新再试。', noAccount: true }
+        const mine = await tx`select last4 from card_phones where id_hash = ${me}`
+        if (mine.length && !held.length) return { ok: false, why: `这个账号已经绑了尾号 ${mine[0].last4} 的手机。`, bound: true }
       } else if (!held.length) return { ok: false, why: '这个手机号还没绑过账号。', none: true }
       const recent = await tx`select sent from card_sms where phone_h = ${ph} and sent > now() - interval '1 day' order by sent desc`
       if (recent.length && Date.now() - new Date(recent[0].sent).getTime() < PER_MINUTE_MS) {
         return { ok: false, why: '一分钟内只能发一次，稍等。', wait: Math.ceil((PER_MINUTE_MS - (Date.now() - new Date(recent[0].sent).getTime())) / 1000) }
       }
       if (recent.length >= PER_DAY) return { ok: false, why: '这个号今天发得太多了，明天再试。' }
+      // The account and server-wide budgets span numbers: serialise just this
+      // short step so concurrent sends to different numbers cannot overshoot.
+      await tx`select pg_advisory_xact_lock(5160410, 0)`
+      if (me) {
+        const [own] = await tx`select count(*)::int as n from card_sms where id_h = ${me} and sent > now() - interval '1 day'`
+        if (own.n >= PER_ACCOUNT_DAY) return { ok: false, why: '这个账号今天发的验证码太多了，明天再试。' }
+      }
+      const [all] = await tx`select count(*)::int as n from card_sms where sent > now() - interval '1 day'`
+      if (all.n >= cap) {
+        console.warn(`sms: daily cap ${cap} reached, sending paused`)
+        return { ok: false, why: '今天的验证码发放已达上限，请明天再试或联系作者。', capped: true }
+      }
       // Count the reservation before contacting the sender: simultaneous
       // requests (including another server process) cannot all buy an SMS.
-      await tx`insert into card_sms (phone_h, code_h, ip) values (${ph}, ${reservation}, ${bucket})`
+      await tx`insert into card_sms (phone_h, code_h, ip, id_h) values (${ph}, ${reservation}, ${bucket}, ${me})`
       return null
     })
     if (refused) { json(res, 200, refused); return }
@@ -395,6 +422,7 @@ export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, ha
         (select max(bound) from card_phones) as last_bound`
       stats = a
     }
+    if (stats) stats.cap = dailyCap()
     json(res, 200, { ok: true, configured: smsConfigured(), dev: devMode(), codes: devMode() ? devCodes : [], stats })
   }
 

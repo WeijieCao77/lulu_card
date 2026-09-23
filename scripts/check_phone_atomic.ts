@@ -41,7 +41,7 @@ const isolated = makePhoneApi(sql, { ...options, sender: async () => {},
     return n > max
   },
 } as never)
-assert((await call(isolated, 'send', { phone: '13400134000' })).ok)
+assert((await call(isolated, 'send', { phone: '13400134000', id: IDS[0] })).ok)
 const unknownLogin = await call(isolated, 'login', { phone: '13400134000', code: '123456' })
 assert(unknownLogin.none)
 console.log('ok  档案读写不会占用手机号发码/登录限额')
@@ -52,9 +52,9 @@ let sends = 0
 const sending = deferred(), finishSend = deferred()
 const delayed = make({ sender: async () => { sends++; sending.release(); await finishSend.promise } })
 const other = make({ sender: async () => { sends++ }, checker: async () => true })
-const firstSend = call(delayed, 'send', { phone: PHONE })
+const firstSend = call(delayed, 'send', { phone: PHONE, id: IDS[0] })
 await sending.promise
-const repeated = await Promise.all(Array.from({ length: 6 }, () => call(other, 'send', { phone: PHONE })))
+const repeated = await Promise.all(Array.from({ length: 6 }, () => call(other, 'send', { phone: PHONE, id: IDS[0] })))
 assert.equal(sends, 1)
 assert(repeated.every((r) => !r.ok && r.wait > 0))
 // This query completes while the provider is blocked: no database transaction is held.
@@ -107,9 +107,9 @@ console.log('ok  成功登录保留每日五条配额')
 // A provider failure releases only its own reservation, allowing a legitimate retry.
 const failedPhone = '13900139000'
 const fail = make({ sender: async () => { throw new Error('injected sender failure') } })
-assert.equal((await call(fail, 'send', { phone: failedPhone })).ok, false)
+assert.equal((await call(fail, 'send', { phone: failedPhone, id: IDS[1] })).ok, false)
 assert.equal((await sql`select count(*)::int as n from card_sms where phone_h = ${phoneHash(failedPhone)}`)[0].n, 0)
-assert((await call(other, 'send', { phone: failedPhone })).ok)
+assert((await call(other, 'send', { phone: failedPhone, id: IDS[1] })).ok)
 let failCheck = true
 const flaky = make({ checker: async () => { if (failCheck) throw new Error('injected checker failure'); return true } })
 assert.equal((await call(flaky, 'bind', { id: IDS[1], phone: failedPhone, code: '123456' })).ok, false)
@@ -133,8 +133,8 @@ console.log('ok  找回记录损坏不会消耗验证码，修复记录后可重
 const thirdId = 'VM-4444-4444-4444-4444-4444'
 await sql`insert into card_accounts (id_hash, state) values (${hash(thirdId)}, '{}')`
 const p3 = '13700137000', p4 = '13600136000'
-await call(other, 'send', { phone: p3 })
-await call(other, 'send', { phone: p4 })
+await call(other, 'send', { phone: p3, id: thirdId })
+await call(other, 'send', { phone: p4, id: thirdId })
 const both = await Promise.all([p3, p4].map((phone) => call(other, 'bind', { id: thirdId, phone, code: '123456' })))
 assert.equal(both.filter((r) => r.ok).length, 1)
 assert.equal((await sql`select count(*)::int as n from card_phones where id_hash = ${hash(thirdId)}`)[0].n, 1)
@@ -143,7 +143,7 @@ console.log('ok  同账号并发绑定不同手机号只保留一个')
 // A write failure after the phone insert rolls back ownership and code consumption.
 const fourthId = 'VM-5555-5555-5555-5555-5555', p5 = '13500135000'
 await sql`insert into card_accounts (id_hash, state) values (${hash(fourthId)}, '{}')`
-await call(other, 'send', { phone: p5 })
+await call(other, 'send', { phone: p5, id: fourthId })
 const failingSql = Object.assign((...args: any[]) => (sql as any)(...args), sql, {
   begin: (fn: (tx: any) => unknown) => sql.begin((tx: any) => fn(Object.assign(
     (strings: TemplateStringsArray, ...values: unknown[]) => {
