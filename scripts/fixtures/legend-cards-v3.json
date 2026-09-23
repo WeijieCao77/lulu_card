@@ -1177,9 +1177,10 @@
       },
       "art": {
         "accent": "#dccda7",
-        "position": "62% 22%",
+        "position": "53% 40%",
+        "zoom": 1.2,
         "credit": "Riot Games / LoL Esports",
-        "source": "https://www.flickr.com/photos/lolesports/30308844677/",
+        "source": "https://www.flickr.com/photos/lolesports/31822426628/",
         "serial": 2,
         "total": 6
       },
@@ -1189,7 +1190,7 @@
     "ign": "Duke",
     "realName": "Lee Ho-seong",
     "nat": "kr",
-    "face": "./lol/faces/ig-30308844677.jpg",
+    "face": "./lol/faces/ig-31822426628.jpg",
     "region": "LPL",
     "clubId": "T4",
     "clubTag": "IG",
@@ -1257,9 +1258,10 @@
       },
       "art": {
         "accent": "#dccda7",
-        "position": "59% 22%",
+        "position": "50% 30%",
+        "zoom": 1.3,
         "credit": "Riot Games / LoL Esports",
-        "source": "https://www.flickr.com/photos/lolesports/30308845207/",
+        "source": "https://www.flickr.com/photos/lolesports/45648012382/",
         "serial": 3,
         "total": 6
       },
@@ -1269,7 +1271,7 @@
     "ign": "Rookie",
     "realName": "송의진",
     "nat": "kr",
-    "face": "./lol/faces/ig-30308845207.jpg",
+    "face": "./lol/faces/ig-45648012382.jpg",
     "region": "LPL",
     "clubId": "T4",
     "clubTag": "IG",

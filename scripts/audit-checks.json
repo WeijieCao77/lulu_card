@@ -190,6 +190,11 @@
   },
   {
     "runtime": "tsx",
+    "file": "scripts/check_west_pack_balance.ts",
+    "estimatedSeconds": 15
+  },
+  {
+    "runtime": "tsx",
     "file": "scripts/check_series.ts",
     "args": [
       "4000"

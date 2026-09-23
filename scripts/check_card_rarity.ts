@@ -93,8 +93,8 @@ function testPlayerCountsAndCardStats() {
   }
 
   const expectedCounts: Record<string, Record<string, number>> = {
-    'LPL': { 'gold': 25, 'silver': 35, 'bronze': 43 },
-    'LCK': { 'gold': 35, 'silver': 30, 'bronze': 57 },
+    'LPL': { 'gold': 16, 'silver': 29, 'bronze': 58 },
+    'LCK': { 'gold': 23, 'silver': 42, 'bronze': 57 },
     'WEST': { 'gold': 42, 'silver': 125, 'bronze': 285 }
   };
   for (const [group, rarityMap] of byGroup) {
@@ -175,8 +175,8 @@ function testRoleCoverageForAllSlots() {
 
 function testOrdinaryRatingAnchors() {
   const anchors: Record<string, Record<number, number>> = {
-    'LPL': { 75: 72, 76: 78, 77: 83, 78: 84, 85: 90 },
-    'LCK': { 70: 72, 76: 83, 77: 84, 79: 85, 80: 85, 93: 90 },
+    'LPL': { 75: 71, 76: 72, 77: 78, 78: 83, 79: 84, 85: 90 },
+    'LCK': { 69: 71, 70: 72, 76: 79, 77: 81, 79: 83, 80: 84, 93: 90 },
     'WEST': { 66: 72, 70: 83, 71: 84, 75: 87, 77: 88 }
   };
   for (const [region, anchorMap] of Object.entries(anchors)) {
@@ -237,7 +237,7 @@ function testGlobalRarityColorConsistency() {
 assert.equal(BASE_PLAYER_CARDS.length, 677);
 assert.equal(LEGEND_CARDS.length, 40);
 assert.equal(COACH_CARDS.length, 114);
-assert.equal(CARD_BALANCE_VERSION, 5);
+assert.equal(CARD_BALANCE_VERSION, 6);
 testPlayerCountsAndCardStats();
 
 const goldFraction = (group: string): number => {
@@ -249,7 +249,13 @@ const lckFraction = goldFraction('LCK');
 const lplFraction = goldFraction('LPL');
 const westFraction = goldFraction('WEST');
 assert.ok(lckFraction > lplFraction && lplFraction > westFraction, 'Gold fraction must be LCK > LPL > WEST');
-assert.ok(lckFraction >= 0.28 && lckFraction <= 0.32, 'LCK gold fraction must be 28–32%');
+assert.ok(lckFraction < .20 && lplFraction < .20, 'LPL and LCK gold fractions must stay below 20%');
+for (const group of ['LPL', 'LCK', 'WEST']) {
+  const cards = BASE_PLAYER_CARDS.filter(c => gameRegionOf(c.region) === group);
+  const count = (rarity: string) => cards.filter(c => c.rarity === rarity).length;
+  assert.ok(count('bronze') > count('silver') && count('silver') > count('gold'), `${group}: bronze > silver > gold`);
+  assert.ok(count('bronze') - count('silver') >= cards.length * .1 && count('silver') - count('gold') >= cards.length * .1, `${group}: each tier has a clear count gap`);
+}
 testCoachCountsAndConsistency();
 testLegendCardsSnapshot();
 testRoleCoverageForAllSlots();

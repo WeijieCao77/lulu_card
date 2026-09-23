@@ -138,7 +138,7 @@ export const PACKS: Record<PackKind, PackDef> = {
   west: {
     kind: 'west', name: '其他包', pool: 'WEST',
     blurb: '包含 LEC、LCS、LCP、CBLOL 选手。三张，至少一张银卡起。',
-    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
+    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.05, silver: 0.08, floor: 'silver', shop: true,
   },
   ame: {
     kind: 'ame', name: 'LCS 包', pool: 'LCS',
