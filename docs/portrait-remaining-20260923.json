@@ -740,16 +740,6 @@
     "note": "No identity-verified usable photograph applied in this batch; continue source research."
   },
   {
-    "id": "c:Tockers",
-    "kind": "coach",
-    "name": "Tockers",
-    "realName": null,
-    "region": "CBLOL",
-    "club": "RED",
-    "reason": "no-face",
-    "note": "No identity-verified usable photograph applied in this batch; continue source research."
-  },
-  {
     "id": "c:Dopil",
     "kind": "coach",
     "name": "Dopil",
@@ -896,16 +886,6 @@
     "realName": "Danny Le Comte",
     "region": "LEC",
     "club": "SLY",
-    "reason": "placeholder",
-    "note": "No identity-verified usable photograph applied in this batch; continue source research."
-  },
-  {
-    "id": "c:Nahovsky",
-    "kind": "coach",
-    "name": "Nahovsky",
-    "realName": "Kacper Merski",
-    "region": "LEC",
-    "club": "VITB",
     "reason": "placeholder",
     "note": "No identity-verified usable photograph applied in this batch; continue source research."
   },

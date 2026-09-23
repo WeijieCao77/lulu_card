@@ -4094,10 +4094,10 @@
       "source": "https://cdn.datalisk.io/players/99322214634684385.png"
     },
     "Nahovsky": {
-      "img": "oe-f343341cb632cd4c.webp",
-      "v": "f0c75f40",
+      "img": "portrait-c-Nahovsky-20260923.webp",
+      "v": "eeb7b836",
       "real": "Kacper Merski",
-      "source": "https://cdn.datalisk.io/players/111704240037844154.png"
+      "source": "https://vitality.gg/cdn/shop/files/LFL_251125_Nahovsky_ClassicPictures__Vanvan_002.jpg?v=1776238297"
     },
     "Nisqy": {
       "img": "oe-f576e84314291f67.webp",
@@ -4368,6 +4368,11 @@
       "v": "6773f25c",
       "source": "https://vitality.gg/cdn/shop/files/LEC_251125_Milan_ClassicPictures__Vanvan_003.jpg?v=1776238297",
       "page": "https://vitality.gg/pages/athletes/milan"
+    },
+    "Tockers": {
+      "img": "portrait-c-Tockers-20260923.webp",
+      "v": "9c7e8699",
+      "source": "https://s2.glbimg.com/lU264Wc1TIzBsLYPeTI3f6e5vqo=/514x40:1234x900/380x454/s.glbimg.com/es/ge/f/original/2016/12/04/tockers_.jpg"
     }
   },
   "legends": {

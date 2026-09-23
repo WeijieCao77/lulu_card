@@ -932,5 +932,60 @@
     "reviewed": "2026-09-23",
     "sourceSeason": "agency asset uploaded March 2025 (shoot date unknown)",
     "photoYearNote": "Source roster/upload year is recorded separately; exact photography date not independently established."
+  },
+  {
+    "id": "c:Nahovsky",
+    "name": "Nahovsky",
+    "sourcePage": "https://vitality.gg/en/pages/athletes/nahovsky",
+    "sourceImage": "https://vitality.gg/cdn/shop/files/LFL_251125_Nahovsky_ClassicPictures__Vanvan_002.jpg?v=1776238297",
+    "sourceSha256": "3285cfc1bd141037d029c746c33f0f30a6ed199e88785d16b433c398f0c1b506",
+    "identitySource": "https://vitality.gg/en/blogs/presse/lfl-team-update-avant-le-summer-split",
+    "identityEvidence": "Kacper Merski; official player page names NAHOVSKY and KACPER MERSKI adjacent to exact image URL. Official April 2023 statement promotes Kacper Nahovsky Merski to head coach. Current LFL profile teammates match VITB.",
+    "file": "/lol/faces/portrait-c-Nahovsky-20260923.webp",
+    "sha256": "eeb7b836b196d624ca32a5417e31e62e42eaf458472f9c3ab14eb594b2a370f0",
+    "dimensions": [
+      400,
+      500
+    ],
+    "decoded": true,
+    "cropReview": "Deterministic head-and-shoulders crop; original pixels only.",
+    "rights": "Official club publicity photograph; reuse license not stated.",
+    "reviewed": "2026-09-23",
+    "sourceDimensions": [
+      1679,
+      2517
+    ],
+    "cropPixels": [
+      490,
+      120,
+      1210,
+      1020
+    ],
+    "photoYearNote": "2025 filename, page current 2026; exact shoot date unverified"
+  },
+  {
+    "id": "c:Tockers",
+    "name": "Tockers",
+    "sourcePage": "https://sportv.globo.com/site/games/noticia/2016/12/apos-felipe-brtt-gabriel-tockers-acerta-com-red-canids-para-2017.html",
+    "sourceImage": "https://s2.glbimg.com/lU264Wc1TIzBsLYPeTI3f6e5vqo=/514x40:1234x900/380x454/s.glbimg.com/es/ge/f/original/2016/12/04/tockers_.jpg",
+    "sourceSha256": "fdd887d853e4894adb81cfc2a1b1f5e47a55cc5e631f4bfaa5a068c4de59c5d2",
+    "identitySource": "https://lol.fandom.com/wiki/Tockers",
+    "identityEvidence": "Gabriel Claumann. Sportv article explicitly names Gabriel Tockers Claumann and photo caption Gabriel Tockers with credit Divulgacao/Riot. Leaguepedia corroborates RED head coach in 2026, same former INTZ player.",
+    "file": "/lol/faces/portrait-c-Tockers-20260923.webp",
+    "sha256": "9c7e8699915479ecf638e1ba6b7334a697f5deb6378726aa783845375b6cf120",
+    "dimensions": [
+      380,
+      454
+    ],
+    "decoded": true,
+    "cropReview": "Single unobstructed portrait; native resolution preserved, no additional crop.",
+    "rights": "Riot publicity photograph reproduced by Sportv; reuse license not stated.",
+    "reviewed": "2026-09-23",
+    "sourceDimensions": [
+      380,
+      454
+    ],
+    "cropPixels": null,
+    "photoYearNote": "2016 article/photo upload"
   }
 ]
