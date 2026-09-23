@@ -185,6 +185,11 @@
   },
   {
     "runtime": "tsx",
+    "file": "scripts/check_pack_distribution.ts",
+    "estimatedSeconds": 15
+  },
+  {
+    "runtime": "tsx",
     "file": "scripts/check_series.ts",
     "args": [
       "4000"
