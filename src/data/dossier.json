@@ -6,11 +6,11 @@
       "Oracle’s Elixir": "Current roster and portraits: https://oe.datalisk.io and https://cdn.datalisk.io"
     },
     "players": 0,
-    "photos": 495,
+    "photos": 664,
     "lpPhotos": 0,
     "hjPhotos": 0,
     "coaches": 0,
-    "coachPhotos": 0,
+    "coachPhotos": 129,
     "events": 0
   },
   "players": {
@@ -1899,8 +1899,10 @@
       "v": "06bd816a"
     },
     "P424": {
-      "img": "P424.webp",
-      "v": "cd8ae5c4"
+      "img": "portrait-p-P424-20260923.webp",
+      "v": "29cb37ff",
+      "source": "https://hll.gr/files/2024/12/hungrypanda.jpg",
+      "page": "https://hll.gr/en/player/hungrypanda/"
     },
     "P426": {
       "img": "oe-da9b8058ed6a35e3.webp",
@@ -1909,8 +1911,10 @@
       "source": "https://cdn.datalisk.io/players/102418332506104195.png"
     },
     "P427": {
-      "img": "P427.webp",
-      "v": "cd8ae5c4"
+      "img": "portrait-p-P427-20260923.webp",
+      "v": "8a519aa5",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/nafkelah.webp",
+      "page": "https://lol.fandom.com/wiki/Nafkelah"
     },
     "P428": {
       "img": "P428.webp",
@@ -1945,12 +1949,16 @@
       "source": "https://cdn.datalisk.io/players/100205576934475691.png"
     },
     "P437": {
-      "img": "P437.webp",
-      "v": "cd8ae5c4"
+      "img": "portrait-p-P437-20260923.webp",
+      "v": "5e429491",
+      "source": "https://www.tln.gg/players/Toffe.png",
+      "page": "https://www.tln.gg/en"
     },
     "P438": {
-      "img": "P438.webp",
-      "v": "cd8ae5c4"
+      "img": "portrait-p-P438-20260923.webp",
+      "v": "a3258fde",
+      "source": "https://www.tln.gg/players/Axelent.png",
+      "page": "https://www.tln.gg/en"
     },
     "P442": {
       "img": "oe-2d12db3c30387b42.webp",
@@ -1965,10 +1973,11 @@
       "source": "https://cdn.datalisk.io/players/107044962045759151.png"
     },
     "P447": {
-      "img": "oe-46d2150ec8fb68ed.webp",
-      "v": "e7a932b0",
+      "img": "portrait-p-P447-20260923.webp",
+      "v": "66777bc4",
       "real": "Stéphane Dimier",
-      "source": "https://cdn.datalisk.io/players/105515253867707529.png"
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/manaty.webp",
+      "page": "https://www.sheepesports.com/fr/all/articles/manaty-joins-ici-japon-corp-in-the-lfl/fr"
     },
     "P448": {
       "img": "P448.webp",
@@ -2005,8 +2014,10 @@
       "v": "67f2bd12"
     },
     "P466": {
-      "img": "P466.webp",
-      "v": "cd8ae5c4"
+      "img": "portrait-p-P466-20260923.webp",
+      "v": "bc82efc1",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/weizhe.webp",
+      "page": "https://lol.fandom.com/wiki/Weizhe"
     },
     "P468": {
       "img": "oe-a9988004b4868a6b.webp",
@@ -2247,8 +2258,10 @@
       "v": "93b7b5cb"
     },
     "P571": {
-      "img": "P571.webp",
-      "v": "cd8ae5c4"
+      "img": "portrait-p-P571-20260923.webp",
+      "v": "ebaa9c54",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/aomine.webp",
+      "page": "https://lol.fandom.com/wiki/Aomine"
     },
     "P572": {
       "img": "P572.webp",
@@ -2559,16 +2572,18 @@
       "source": "https://cdn.datalisk.io/players/108567314915334762.png"
     },
     "P395": {
-      "img": "oe-27daec2fa35f1597.webp",
-      "v": "556db6d5",
+      "img": "portrait-p-P395-20260923.webp",
+      "v": "97383b37",
       "real": "Noah Erikson",
-      "source": "https://cdn.datalisk.io/players/108577048167390593.png"
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/denathor.webp",
+      "page": "https://www.winthrop.edu/news-events/esports-teams-wrap-up-spring-with-two-titles.aspx"
     },
     "P613": {
-      "img": "oe-af8b10e7b56054b1.webp",
-      "v": "f0c75f40",
+      "img": "portrait-p-P613-20260923.webp",
+      "v": "e12c5a49",
       "real": "Lê Ngọc Vinh",
-      "source": "https://cdn.datalisk.io/players/107255594187103787.png"
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/gloryy.webp",
+      "page": "https://liquipedia.net/leagueoflegends/Gloryy_%28Vietnamese_player%29"
     },
     "P247": {
       "img": "oe-4726072043478ba8.webp",
@@ -2625,10 +2640,11 @@
       "source": "https://cdn.datalisk.io/players/108353513683792949.png"
     },
     "P435": {
-      "img": "oe-c5f2ebb6f9e8cf96.webp",
-      "v": "556db6d5",
+      "img": "portrait-p-P435-20260923.webp",
+      "v": "43c071f3",
       "real": "Muhanad Maitham Sharad",
-      "source": "https://cdn.datalisk.io/players/108403323724987346.png"
+      "source": "https://www.tln.gg/players/spooder.png",
+      "page": "https://www.tln.gg/en"
     },
     "P440": {
       "img": "oe-af111a2574804964.webp",
@@ -2655,16 +2671,18 @@
       "source": "https://cdn.datalisk.io/players/115879729924854654.png"
     },
     "P492": {
-      "img": "oe-e1d2d55d7039f80a.webp",
-      "v": "f0c75f40",
+      "img": "portrait-p-P492-20260923.webp",
+      "v": "e334901e",
       "real": "Lucas Adriel",
-      "source": "https://cdn.datalisk.io/players/114148988325728367.png"
+      "source": "https://uploads.rft.gg/images/esport/players/bulecha.webp",
+      "page": "https://rft.gg/player/58139522-bulas/matches"
     },
     "P505": {
-      "img": "oe-9b575d1c71f6d168.webp",
-      "v": "f0c75f40",
+      "img": "portrait-p-P505-20260923.webp",
+      "v": "e4760774",
       "real": "Vinicius Dias",
-      "source": "https://cdn.datalisk.io/players/107559327426244686.png"
+      "source": "https://s-qwer.op.gg/images/lol/players/6622_1672196433144.png?image=w_380,f_webp",
+      "page": "https://esports.op.gg/players/6622/stiner?hl=en_US"
     },
     "OE4534c50e37": {
       "img": "oe-754be3c7d8867a75.webp",
@@ -2775,10 +2793,11 @@
       "source": "https://cdn.datalisk.io/players/116907472040667554.png"
     },
     "OE94c4014157": {
-      "img": "oe-a9f9793fda48f11d.webp",
-      "v": "f0c75f40",
+      "img": "portrait-p-OE94c4014157-20260923.webp",
+      "v": "686d6664",
       "real": "Philip Zeng",
-      "source": "https://cdn.datalisk.io/players/114854730289406368.png"
+      "source": "https://media.trackingthepros.com/profile/p1961.png",
+      "page": "https://www.trackingthepros.com/player/Philip"
     },
     "OE9455a757b7": {
       "img": "oe-70031d5923f596a6.webp",
@@ -2793,16 +2812,18 @@
       "source": "https://cdn.datalisk.io/players/99566408537963625.png"
     },
     "OE86d01cccba": {
-      "img": "oe-9e35e7fb2664f534.webp",
-      "v": "f0c75f40",
+      "img": "portrait-p-OE86d01cccba-20260923.webp",
+      "v": "865a06d6",
       "real": "Yutthapichai Yeangyutthapichai",
-      "source": "https://cdn.datalisk.io/players/116877699738897961.png"
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/inflame.webp",
+      "page": "https://lol.fandom.com/wiki/InFlame"
     },
     "OEaa926cd86b": {
-      "img": "oe-3b9ecb169c77e69e.webp",
-      "v": "f0c75f40",
+      "img": "portrait-p-OEaa926cd86b-20260923.webp",
+      "v": "77473289",
       "real": "Erik Kim",
-      "source": "https://cdn.datalisk.io/players/107577679630942805.png"
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/berik.webp",
+      "page": "https://liquipedia.net/leagueoflegends/Berik"
     },
     "OEc7746f81d0": {
       "img": "oe-73d034076691d92b.webp",
@@ -2823,10 +2844,11 @@
       "source": "https://cdn.datalisk.io/players/116447771535894130.png"
     },
     "OE0a7d3af0b1": {
-      "img": "oe-7ffa58c7f0c25aae.webp",
-      "v": "f0c75f40",
+      "img": "portrait-p-OE0a7d3af0b1-20260923.webp",
+      "v": "ba9a43ea",
       "real": "Caio Henrique Araujo Cordeiro",
-      "source": "https://cdn.datalisk.io/players/116915009185282553.png"
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hirotto.webp",
+      "page": "https://liquipedia.net/leagueoflegends/Hirotto"
     },
     "OE238880bb94": {
       "img": "oe-0a44ad37e7f75ae4.webp",
@@ -2841,10 +2863,11 @@
       "source": "https://cdn.datalisk.io/players/103743600803050303.png"
     },
     "OE5506b39ea3": {
-      "img": "oe-3e14133faeca4cf8.webp",
-      "v": "f0c75f40",
+      "img": "portrait-p-OE5506b39ea3-20260923.webp",
+      "v": "fc494a2e",
       "real": "Murilo Cocco Lopes",
-      "source": "https://cdn.datalisk.io/players/112489397674155987.png"
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/murilao.webp",
+      "page": "https://lol.fandom.com/wiki/Murilao"
     },
     "P13": {
       "img": "portrait-P13.webp",
@@ -3493,6 +3516,66 @@
       "v": "c21cf2fb",
       "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/niles-aiden-tidwell-.webp",
       "page": "https://chaincc.lol/free/players/Niles"
+    },
+    "P543": {
+      "img": "portrait-p-P543-20260923.webp",
+      "v": "b809e276",
+      "source": "https://media.trackingthepros.com/profile/p2114.png",
+      "page": "https://nip.gl/pages/shanji"
+    },
+    "P370": {
+      "img": "portrait-p-P370-20260923.webp",
+      "v": "b2b92583",
+      "source": "https://media.trackingthepros.com/profile/p1858.png",
+      "page": "https://www.outreach.olemiss.edu/esports/league-of-legends.html"
+    },
+    "P562": {
+      "img": "portrait-p-P562-20260923.webp",
+      "v": "9da3302a",
+      "source": "https://media.trackingthepros.com/profile/p1093.png",
+      "page": "https://nip.gl/pages/aki"
+    },
+    "P26": {
+      "img": "portrait-p-P26-20260923.webp",
+      "v": "8d67f9a3",
+      "source": "https://s-qwer.op.gg/images/lol/players/6282_1768043973529.png?image=w_380,f_webp",
+      "page": "https://www.sina.cn/news/detail/5279691465819588.html"
+    },
+    "P578": {
+      "img": "portrait-p-P578-20260923.webp",
+      "v": "b406ce5f",
+      "source": "https://bkimg.cdn.bcebos.com/pic/d31b0ef41bd5ad6eddc4de56af9c2edbb6fd5266964a?x-bce-process=image/resize,m_lfit,w_536,limit_1/quality,Q_70",
+      "page": "https://liquipedia.net/leagueoflegends/Xiaohuangren"
+    },
+    "P579": {
+      "img": "portrait-p-P579-20260923.webp",
+      "v": "f5fae520",
+      "source": "https://media.trackingthepros.com/profile/p2070.png",
+      "page": "https://lol.fandom.com/wiki/Xqw"
+    },
+    "OEb1dd7b0fca": {
+      "img": "portrait-p-OEb1dd7b0fca-20260923.webp",
+      "v": "be5652d3",
+      "source": "https://s-qwer.op.gg/images/lol/players/7910_1768043909555.png?image=w_380,f_webp",
+      "page": "https://prosettings.net/players/vincenzo/"
+    },
+    "P456": {
+      "img": "portrait-p-P456-20260923.webp",
+      "v": "d9a9451b",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/adizai.webp",
+      "page": "https://lol.fandom.com/wiki/Adiza1"
+    },
+    "P519": {
+      "img": "portrait-p-P519-20260923.webp",
+      "v": "4124ff64",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/forlin.webp",
+      "page": "https://liquipedia.net/leagueoflegends/Forlin"
+    },
+    "P602": {
+      "img": "portrait-p-P602-20260923.webp",
+      "v": "8546edea",
+      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/smiley.webp",
+      "page": "https://lol.fandom.com/wiki/Smiley_%28Ludvig_Granquist%29"
     }
   },
   "coaches": {
@@ -3809,10 +3892,11 @@
       "source": "https://cdn.datalisk.io/players/98767991780885336.png"
     },
     "Gismo": {
-      "img": "oe-03db047a60af5dd8.webp",
-      "v": "45cd7643",
+      "img": "portrait-c-Gismo-20260923.webp",
+      "v": "c9eca007",
       "real": "Haruhiko Aoki",
-      "source": "https://cdn.datalisk.io/players/102856147421694822.png"
+      "source": "https://team-detonation.net/wp-content/uploads/2019/08/2024lol_gismo_web-min.png",
+      "page": "https://team-detonation.net/team/member/dfm_gismo"
     },
     "Paz": {
       "img": "oe-9f68798034d56646.webp",
@@ -4191,6 +4275,84 @@
       "v": "6b71a54a",
       "source": "https://imgcdn.cna.com.tw/Eng/WebEngPhotos/800/2026/20260914/1705x960_030616629402.jpg",
       "page": "https://focustaiwan.tw/sports/202609140016"
+    },
+    "bonO": {
+      "img": "portrait-c-bonO-20260923.webp",
+      "v": "5097d191",
+      "source": "https://media.trackingthepros.com/profile/p701.png",
+      "page": "https://lol.fandom.com/wiki/Bon0"
+    },
+    "Guilhoto": {
+      "img": "portrait-c-Guilhoto-20260923.webp",
+      "v": "22df3723",
+      "source": "https://giantx.gg/cdn/shop/files/guilhotto_600x600_crop_center.png?v=1767882375",
+      "page": "https://giantx.gg/en/blogs/news/guilhoto-to-lead-giantx-in-the-lec"
+    },
+    "Spawn": {
+      "img": "portrait-c-Spawn-20260923.webp",
+      "v": "f3c1f3aa",
+      "source": "https://cdn.sanity.io/images/9rqbl8zs/production/03358879a6f6fda837267046eb419ee3dcd37693-1920x1080.webp",
+      "page": "https://www.sheepesports.com/us/cs/articles/tl-spawn-on-facing-kc-it-won-t-be-a-3-0-it-will-be-a-banger/en"
+    },
+    "Pad": {
+      "img": "portrait-c-Pad-20260923.webp",
+      "v": "a72bf100",
+      "source": "https://vitality.gg/cdn/shop/files/LEC_251125_Pad_ClassicPictures__Vanvan_002.jpg?v=1776238297",
+      "page": "https://vitality.gg/pages/athletes/pad"
+    },
+    "Own3r": {
+      "img": "portrait-c-Own3r-20260923.webp",
+      "v": "fae72dec",
+      "source": "https://www.sk-gaming.com/hs-fs/hubfs/OWNER%20(1)-1.png?width=855&height=1026&name=OWNER%20(1)-1.png",
+      "page": "https://www.sk-gaming.com/teams/sk-lec-league-of-legends"
+    },
+    "TheRock7": {
+      "img": "portrait-c-TheRock7-20260923.webp",
+      "v": "fe79401c",
+      "source": "https://img.navi.gg/players/2026/05/players-13998/navi_teammate/62029/conversions/TheRock-290x290-webp.webp",
+      "page": "https://navi.gg/en/teams/lol"
+    },
+    "Rodrigo": {
+      "img": "portrait-c-Rodrigo-20260923.webp",
+      "v": "46a733f4",
+      "source": "https://cdn.shopify.com/s/files/1/0548/8554/8183/files/LoL_Rodrigo_Player_Card.jpg?v=1738924388",
+      "page": "https://g2esports.com/blogs/team-member/memento"
+    },
+    "SeeEl": {
+      "img": "portrait-c-SeeEl-20260923.webp",
+      "v": "1c803e80",
+      "source": "https://keydstars.com.br/wp-content/uploads/2023/06/seeel.jpg",
+      "page": "https://keydstars.com.br/lol/"
+    },
+    "Lyfaenia": {
+      "img": "portrait-c-Lyfaenia-20260923.webp",
+      "v": "b2b0deef",
+      "source": "https://keydstars.com.br/wp-content/uploads/2024/01/lyfanea.jpg",
+      "page": "https://keydstars.com.br/lol/"
+    },
+    "Daeny": {
+      "img": "portrait-c-Daeny-20260923.webp",
+      "v": "0ac88912",
+      "source": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf#page=38",
+      "page": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf"
+    },
+    "Dylan Falco": {
+      "img": "portrait-c-Dylan-Falco-20260923.webp",
+      "v": "7062ecb4",
+      "source": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf#page=41",
+      "page": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf"
+    },
+    "Melzhet": {
+      "img": "portrait-c-Melzhet-20260923.webp",
+      "v": "0b0d4e66",
+      "source": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf#page=44",
+      "page": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf"
+    },
+    "Milan": {
+      "img": "portrait-c-Milan-20260923.webp",
+      "v": "6773f25c",
+      "source": "https://vitality.gg/cdn/shop/files/LEC_251125_Milan_ClassicPictures__Vanvan_003.jpg?v=1776238297",
+      "page": "https://vitality.gg/pages/athletes/milan"
     }
   },
   "legends": {

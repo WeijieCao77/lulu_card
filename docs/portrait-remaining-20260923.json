@@ -1,0 +1,1202 @@
+[
+  {
+    "id": "p:P185",
+    "kind": "player",
+    "name": "KryRa",
+    "realName": "Christian Rahaian",
+    "region": "LCS",
+    "club": "DSG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P350",
+    "kind": "player",
+    "name": "arbrio",
+    "realName": "Leo Berlus-Roy",
+    "region": "LCS",
+    "club": "AMI",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P351",
+    "kind": "player",
+    "name": "Bio",
+    "realName": "Matthew Benitez",
+    "region": "LCS",
+    "club": "AMI",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P352",
+    "kind": "player",
+    "name": "Retrozing",
+    "realName": "Luke Siebert",
+    "region": "LCS",
+    "club": "AMI",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P353",
+    "kind": "player",
+    "name": "Bazz",
+    "realName": "Manuel Carhuayal",
+    "region": "LCS",
+    "club": "AMI",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P356",
+    "kind": "player",
+    "name": "Munchy",
+    "realName": "Janan Chen",
+    "region": "LCS",
+    "club": "BLUE",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P357",
+    "kind": "player",
+    "name": "Samikin",
+    "realName": "Samrith Loeung",
+    "region": "LCS",
+    "club": "WU",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P360",
+    "kind": "player",
+    "name": "Fiji",
+    "realName": "James Thomas Carlisle",
+    "region": "LCS",
+    "club": "CCG",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P362",
+    "kind": "player",
+    "name": "AoJune",
+    "realName": "Jun-Hao \"Jonny\" Chen",
+    "region": "LCS",
+    "club": "MU",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P365",
+    "kind": "player",
+    "name": "Stray",
+    "realName": "Roberto Guallichico",
+    "region": "LCS",
+    "club": "CG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P368",
+    "kind": "player",
+    "name": "Asilah",
+    "realName": "Ez-zejjari Amine",
+    "region": "LCS",
+    "club": "CG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P378",
+    "kind": "player",
+    "name": "Dec0y",
+    "realName": "Noah D'Addario",
+    "region": "LCS",
+    "club": "DOG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P379",
+    "kind": "player",
+    "name": "Lojaz",
+    "realName": "Ben Okun",
+    "region": "LCS",
+    "club": "DOG",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P380",
+    "kind": "player",
+    "name": "aadam",
+    "realName": "Aadam Durgahed",
+    "region": "LCS",
+    "club": "DOG",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P381",
+    "kind": "player",
+    "name": "Hub",
+    "realName": "Max Munday",
+    "region": "LCS",
+    "club": "DOG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P382",
+    "kind": "player",
+    "name": "Redemption",
+    "realName": "Jason Zhi",
+    "region": "LCS",
+    "club": "DOG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P384",
+    "kind": "player",
+    "name": "Crimson",
+    "realName": "Bilal Shoura",
+    "region": "LCS",
+    "club": "MU",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P388",
+    "kind": "player",
+    "name": "MU Scary Jerry",
+    "realName": null,
+    "region": "LCS",
+    "club": null,
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P390",
+    "kind": "player",
+    "name": "Horder",
+    "realName": "Chris Feng",
+    "region": "LCS",
+    "club": "S",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P391",
+    "kind": "player",
+    "name": "Music",
+    "realName": "שון וישקו",
+    "region": "LCS",
+    "club": "S",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P396",
+    "kind": "player",
+    "name": "Wilson",
+    "realName": "William Benoit",
+    "region": "LCS",
+    "club": "WU",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P397",
+    "kind": "player",
+    "name": "Zach",
+    "realName": "Zachary Papanicolas",
+    "region": "LCS",
+    "club": null,
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P416",
+    "kind": "player",
+    "name": "Kaboom",
+    "realName": "Osman Onur Korkmaz",
+    "region": "LEC",
+    "club": null,
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P418",
+    "kind": "player",
+    "name": "Soldier",
+    "realName": "Thomas Thierry Haudecoeur",
+    "region": "LEC",
+    "club": "IJC",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P421",
+    "kind": "player",
+    "name": "Shift",
+    "realName": "Marcel Bąk",
+    "region": "LEC",
+    "club": "JL",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P425",
+    "kind": "player",
+    "name": "Yeti",
+    "realName": "Szymon Wójcicki",
+    "region": "LEC",
+    "club": "SC",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P426",
+    "kind": "player",
+    "name": "SPOOKY",
+    "realName": "Miroslav Gochev",
+    "region": "LEC",
+    "club": "SC",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P440",
+    "kind": "player",
+    "name": "Potent",
+    "realName": "Mehdi Ahmed Bouchaffra",
+    "region": "LEC",
+    "club": "VITB",
+    "reason": "placeholder",
+    "note": "Candidate photo contains background team-mate; held for cleaner solo portrait."
+  },
+  {
+    "id": "p:P441",
+    "kind": "player",
+    "name": "Dawciu",
+    "realName": "Dawid Drzyzga",
+    "region": "LEC",
+    "club": "VITB",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P443",
+    "kind": "player",
+    "name": "Vizzpers",
+    "realName": "Villas Burkal Stadager",
+    "region": "LEC",
+    "club": null,
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P445",
+    "kind": "player",
+    "name": "Hiro",
+    "realName": "Alexandre El Hodebey",
+    "region": "LEC",
+    "club": "ZYB",
+    "reason": "no-face",
+    "note": "Rejected ChainCC candidate identifies Vietnamese Bot Nguyen Dinh Hai, not game French Alexandre El Hodebey."
+  },
+  {
+    "id": "p:P446",
+    "kind": "player",
+    "name": "Sleyer",
+    "realName": "Eric Xie",
+    "region": "LEC",
+    "club": "ZYB",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P450",
+    "kind": "player",
+    "name": "Riippp",
+    "realName": "Arnaud Mesmin",
+    "region": "LEC",
+    "club": "ZYB",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P455",
+    "kind": "player",
+    "name": "kingpo54",
+    "realName": "Mak Chun Pan",
+    "region": "LCP",
+    "club": "FAK",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P458",
+    "kind": "player",
+    "name": "Chain1",
+    "realName": "陳思翰",
+    "region": "LCP",
+    "club": "GZA",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P459",
+    "kind": "player",
+    "name": "GZA 0131",
+    "realName": null,
+    "region": "LCP",
+    "club": null,
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P460",
+    "kind": "player",
+    "name": "GZA PeanutCoco",
+    "realName": null,
+    "region": "LCP",
+    "club": null,
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P461",
+    "kind": "player",
+    "name": "Sorrymbggff",
+    "realName": "周佑翔",
+    "region": "LCP",
+    "club": "ORS",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P462",
+    "kind": "player",
+    "name": "ORS ner4",
+    "realName": null,
+    "region": "LCP",
+    "club": "ORS",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P463",
+    "kind": "player",
+    "name": "ORS K B",
+    "realName": null,
+    "region": "LCP",
+    "club": "ORS",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P464",
+    "kind": "player",
+    "name": "ORS Micinb",
+    "realName": null,
+    "region": "LCP",
+    "club": "ORS",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P465",
+    "kind": "player",
+    "name": "ORS RedamnTion",
+    "realName": null,
+    "region": "LCP",
+    "club": "ORS",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P467",
+    "kind": "player",
+    "name": "Cedric",
+    "realName": "Liu Yu-Yang",
+    "region": "LCP",
+    "club": "SKE",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P470",
+    "kind": "player",
+    "name": "Ashlomailma",
+    "realName": "刘俊",
+    "region": "LCP",
+    "club": "SKE",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P475",
+    "kind": "player",
+    "name": "En",
+    "realName": "蔡豪恩",
+    "region": "LCP",
+    "club": null,
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P476",
+    "kind": "player",
+    "name": "Zartheit1",
+    "realName": "Lee Lun-Fung",
+    "region": "LCP",
+    "club": "VNR",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P477",
+    "kind": "player",
+    "name": "Listo",
+    "realName": "강우석",
+    "region": "LCP",
+    "club": "VNR",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P479",
+    "kind": "player",
+    "name": "MadDogg9",
+    "realName": "岑子聰",
+    "region": "LCP",
+    "club": "VNR",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P481",
+    "kind": "player",
+    "name": "AIex",
+    "realName": "Lin Sheng-Syin",
+    "region": "LCP",
+    "club": "VNR",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P483",
+    "kind": "player",
+    "name": "Killer2",
+    "realName": "張正昱",
+    "region": "LCP",
+    "club": "W",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P484",
+    "kind": "player",
+    "name": "Cid",
+    "realName": "이용준",
+    "region": "LCP",
+    "club": "W",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P485",
+    "kind": "player",
+    "name": "Dotmm",
+    "realName": "周子彧",
+    "region": "LCP",
+    "club": "W",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P514",
+    "kind": "player",
+    "name": "cRa",
+    "realName": "Cauã Rios Abreu",
+    "region": "CBLOL",
+    "club": null,
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P557",
+    "kind": "player",
+    "name": "Nia",
+    "realName": "우준성",
+    "region": "LPL",
+    "club": "LNG",
+    "reason": "no-face",
+    "note": "Identity conflict: game Nia has LNG and realName 우준성, but OP.GG /players/8057/nia identifies IG Zou Guang-Lu. Do not use name-only image."
+  },
+  {
+    "id": "p:P558",
+    "kind": "player",
+    "name": "advance",
+    "realName": "이정영",
+    "region": "LCK",
+    "club": null,
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P577",
+    "kind": "player",
+    "name": "sorrow",
+    "realName": "李德铭",
+    "region": "LPL",
+    "club": null,
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P595",
+    "kind": "player",
+    "name": "j1n5",
+    "realName": "Lê Đình Tấn",
+    "region": "LCP",
+    "club": null,
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:P604",
+    "kind": "player",
+    "name": "Tyrion",
+    "realName": "Peng Jun-Bin",
+    "region": "LPL",
+    "club": null,
+    "reason": "placeholder",
+    "note": "OP.GG /players/8046/tyrion matches Peng Jun-bin but serves player-default.svg, not real portrait."
+  },
+  {
+    "id": "p:P605",
+    "kind": "player",
+    "name": "MG",
+    "realName": "Mihai Gherunda",
+    "region": "LCK",
+    "club": "BFX",
+    "reason": "no-face",
+    "note": "Identity conflict: game MG has BFX and realName Mihai Gherunda; cached Korean tournament MG is Lee Ji-hoon. Needs independent roster identity correction before portrait."
+  },
+  {
+    "id": "p:P618",
+    "kind": "player",
+    "name": "rcg",
+    "realName": "方诚",
+    "region": "LPL",
+    "club": null,
+    "reason": "no-face",
+    "note": "ChainCC rcg profile uses /assets/lol/roles/default.png; no real portrait."
+  },
+  {
+    "id": "p:OE3d6f183c6d",
+    "kind": "player",
+    "name": "Revenge",
+    "realName": null,
+    "region": "LCK",
+    "club": "DSC",
+    "reason": "no-face",
+    "note": "Same-name rejection: game Revenge is LCK/DSC; TrackingThePros/Revenge is American Mohamed Kaddoura."
+  },
+  {
+    "id": "p:OE3b7ab9da44",
+    "kind": "player",
+    "name": "Solid",
+    "realName": "Nam Hyeon-seo",
+    "region": "LCK",
+    "club": "DKC",
+    "reason": "placeholder",
+    "note": "Same-name source contamination: RFT /player/12782-solid displays Nam Hyeon-seo but image URL is solid-diego-vallejo.webp; reject."
+  },
+  {
+    "id": "p:OE264ed7bcec",
+    "kind": "player",
+    "name": "Eclipse",
+    "realName": null,
+    "region": "LCK",
+    "club": "T1A",
+    "reason": "no-face",
+    "note": "RFT /player/635780-eclipse has real name Kim Min-jun but player-fallback.png; no real portrait."
+  },
+  {
+    "id": "p:OEcb8e722e7a",
+    "kind": "player",
+    "name": "Aeon Crystal",
+    "realName": null,
+    "region": "LCS",
+    "club": "CCG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:OEc7746f81d0",
+    "kind": "player",
+    "name": "Emok1ng",
+    "realName": "Li Lai-Him",
+    "region": "LCP",
+    "club": "GZA",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:OE963e06de70",
+    "kind": "player",
+    "name": "Magicpig",
+    "realName": "Lai Chen-You",
+    "region": "LCP",
+    "club": "GZA",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:OEf2dada509d",
+    "kind": "player",
+    "name": "PeanutCoco",
+    "realName": "Chuang Shao-Fu",
+    "region": "LCP",
+    "club": "GZA",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:OEfc70aef7dd",
+    "kind": "player",
+    "name": "XiaoChiao",
+    "realName": null,
+    "region": "LCP",
+    "club": "GZA",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "p:OEf9a097d0f3",
+    "kind": "player",
+    "name": "Elkinho",
+    "realName": null,
+    "region": "CBLOL",
+    "club": "NERD",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Edgar",
+    "kind": "coach",
+    "name": "Edgar",
+    "realName": null,
+    "region": "LPL",
+    "club": "LNG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Maizijian",
+    "kind": "coach",
+    "name": "Maizijian",
+    "realName": null,
+    "region": "LPL",
+    "club": "NIP",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:JinJin",
+    "kind": "coach",
+    "name": "JinJin",
+    "realName": null,
+    "region": "LPL",
+    "club": "WE",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:NoName",
+    "kind": "coach",
+    "name": "NoName",
+    "realName": null,
+    "region": "LPL",
+    "club": "TT",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Yuzhang",
+    "kind": "coach",
+    "name": "Yuzhang",
+    "realName": null,
+    "region": "LPL",
+    "club": "UP",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Shine",
+    "kind": "coach",
+    "name": "Shine",
+    "realName": null,
+    "region": "LPL",
+    "club": "WBG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Edo",
+    "kind": "coach",
+    "name": "Edo",
+    "realName": null,
+    "region": "LCK",
+    "club": "BFX",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:oDin",
+    "kind": "coach",
+    "name": "oDin",
+    "realName": null,
+    "region": "LCK",
+    "club": "DNS",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Striker",
+    "kind": "coach",
+    "name": "Striker",
+    "realName": null,
+    "region": "LEC",
+    "club": "SHFT",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Ido",
+    "kind": "coach",
+    "name": "Ido",
+    "realName": null,
+    "region": "LCS",
+    "club": "DSG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Samyy",
+    "kind": "coach",
+    "name": "Samyy",
+    "realName": null,
+    "region": "CBLOL",
+    "club": "FXW7",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Kaiba",
+    "kind": "coach",
+    "name": "Kaiba",
+    "realName": null,
+    "region": "CBLOL",
+    "club": "LEV",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Tockers",
+    "kind": "coach",
+    "name": "Tockers",
+    "realName": null,
+    "region": "CBLOL",
+    "club": "RED",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Dopil",
+    "kind": "coach",
+    "name": "Dopil",
+    "realName": null,
+    "region": "LCK",
+    "club": "BFX",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:RapidStar",
+    "kind": "coach",
+    "name": "RapidStar",
+    "realName": null,
+    "region": "LCK",
+    "club": "DSC",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Woong",
+    "kind": "coach",
+    "name": "Woong",
+    "realName": null,
+    "region": "LCK",
+    "club": "DKC",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Jerry",
+    "kind": "coach",
+    "name": "Jerry",
+    "realName": null,
+    "region": "LCK",
+    "club": "GGA",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Sensation",
+    "kind": "coach",
+    "name": "Sensation",
+    "realName": null,
+    "region": "LCK",
+    "club": "HLEC",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Spark",
+    "kind": "coach",
+    "name": "Spark",
+    "realName": null,
+    "region": "LCK",
+    "club": "KRC",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Collamer",
+    "kind": "coach",
+    "name": "Collamer",
+    "realName": null,
+    "region": "LCS",
+    "club": "CG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:boc",
+    "kind": "coach",
+    "name": "boc",
+    "realName": null,
+    "region": "LCS",
+    "club": "S",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Artemis",
+    "kind": "coach",
+    "name": "Artemis",
+    "realName": null,
+    "region": "LCS",
+    "club": "WU",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:TBD",
+    "kind": "coach",
+    "name": "TBD",
+    "realName": null,
+    "region": "LEC",
+    "club": "ESN",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:xani",
+    "kind": "coach",
+    "name": "xani",
+    "realName": "Nikola Zrinjski",
+    "region": "LEC",
+    "club": "GL",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Naruterador",
+    "kind": "coach",
+    "name": "Naruterador",
+    "realName": null,
+    "region": "LEC",
+    "club": "IJC",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Viser1on",
+    "kind": "coach",
+    "name": "Viser1on",
+    "realName": null,
+    "region": "LEC",
+    "club": "JL",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Hellombre",
+    "kind": "coach",
+    "name": "Hellombre",
+    "realName": null,
+    "region": "LEC",
+    "club": "SC",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Dan Dan",
+    "kind": "coach",
+    "name": "Dan Dan",
+    "realName": "Danny Le Comte",
+    "region": "LEC",
+    "club": "SLY",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Nahovsky",
+    "kind": "coach",
+    "name": "Nahovsky",
+    "realName": "Kacper Merski",
+    "region": "LEC",
+    "club": "VITB",
+    "reason": "placeholder",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Moonblack",
+    "kind": "coach",
+    "name": "Moonblack",
+    "realName": null,
+    "region": "LCP",
+    "club": "FAK",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Endless",
+    "kind": "coach",
+    "name": "Endless",
+    "realName": null,
+    "region": "LCP",
+    "club": "SSG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:XDDCC",
+    "kind": "coach",
+    "name": "XDDCC",
+    "realName": null,
+    "region": "LCP",
+    "club": "VNR",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Doran",
+    "kind": "coach",
+    "name": "Doran",
+    "realName": null,
+    "region": "CBLOL",
+    "club": "NERD",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Patron",
+    "kind": "coach",
+    "name": "Patron",
+    "realName": null,
+    "region": "CBLOL",
+    "club": "INTZ",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Medina",
+    "kind": "coach",
+    "name": "Medina",
+    "realName": null,
+    "region": "CBLOL",
+    "club": "KIDL",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Capivara",
+    "kind": "coach",
+    "name": "Capivara",
+    "realName": null,
+    "region": "CBLOL",
+    "club": "RMD",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Politico",
+    "kind": "coach",
+    "name": "Politico",
+    "realName": null,
+    "region": "CBLOL",
+    "club": "TSS",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Arces",
+    "kind": "coach",
+    "name": "Arces",
+    "realName": null,
+    "region": "LEC",
+    "club": "SHFT",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Deam147",
+    "kind": "coach",
+    "name": "Deam147",
+    "realName": null,
+    "region": "LEC",
+    "club": "TH",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Hiily",
+    "kind": "coach",
+    "name": "Hiily",
+    "realName": null,
+    "region": "LEC",
+    "club": "SC",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Lanterninho",
+    "kind": "coach",
+    "name": "Lanterninho",
+    "realName": null,
+    "region": "CBLOL",
+    "club": "FUR",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Liet",
+    "kind": "coach",
+    "name": "Liet",
+    "realName": null,
+    "region": "LPL",
+    "club": "EDG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Mascode",
+    "kind": "coach",
+    "name": "Mascode",
+    "realName": null,
+    "region": "LEC",
+    "club": "GL",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Medusa",
+    "kind": "coach",
+    "name": "Medusa",
+    "realName": null,
+    "region": "LPL",
+    "club": "WBG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Millimas",
+    "kind": "coach",
+    "name": "Millimas",
+    "realName": null,
+    "region": null,
+    "club": "SOOPers",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Proba",
+    "kind": "coach",
+    "name": "Proba",
+    "realName": null,
+    "region": "LEC",
+    "club": "SK",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Scartie",
+    "kind": "coach",
+    "name": "Scartie",
+    "realName": null,
+    "region": "CBLOL",
+    "club": "RMD",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:SrVenancio",
+    "kind": "coach",
+    "name": "SrVenancio",
+    "realName": null,
+    "region": null,
+    "club": "Leviatán",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Suga",
+    "kind": "coach",
+    "name": "Suga",
+    "realName": null,
+    "region": "LCP",
+    "club": "MVK",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Zizheng",
+    "kind": "coach",
+    "name": "Zizheng",
+    "realName": null,
+    "region": "LPL",
+    "club": "JDG",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  },
+  {
+    "id": "c:Zuko",
+    "kind": "coach",
+    "name": "Zuko",
+    "realName": null,
+    "region": "LCP",
+    "club": "MVK",
+    "reason": "no-face",
+    "note": "No identity-verified usable photograph applied in this batch; continue source research."
+  }
+]

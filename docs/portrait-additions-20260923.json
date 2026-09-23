@@ -1,0 +1,789 @@
+[
+  {
+    "id": "p:P543",
+    "name": "shanji",
+    "sourcePage": "https://www.trackingthepros.com/player/shanji",
+    "sourceImage": "https://media.trackingthepros.com/profile/p2114.png",
+    "identitySource": "https://nip.gl/pages/shanji",
+    "identityEvidence": "Exact Chinese name 邓子健 matches profile Deng Zi-Jian; official NIP profile confirms ZI JIAN-DENG. Solo portrait reviewed.",
+    "file": "/lol/faces/portrait-p-P543-20260923.webp",
+    "sha256": "b809e2763b69839bb90849572ae941bf2d35228e2582425828045cdb13d4b22c",
+    "dimensions": [
+      320,
+      320
+    ],
+    "decoded": true,
+    "cropReview": "Single-person upper-body portrait; face unobstructed; no team-mate substitution.",
+    "rights": "Profile-page photograph; reuse rights not stated by source.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "c:bonO",
+    "name": "bonO",
+    "sourcePage": "https://www.trackingthepros.com/player/bonO",
+    "sourceImage": "https://media.trackingthepros.com/profile/p701.png",
+    "identitySource": "https://lol.fandom.com/wiki/Bon0",
+    "identityEvidence": "Kim Gi-beom 김기범: profile former jungle bonO; Leaguepedia Bon0 explicitly identifies former bonO/Bono as current Nongshim Esports Academy coach. Solo portrait reviewed.",
+    "file": "/lol/faces/portrait-c-bonO-20260923.webp",
+    "sha256": "5097d191ca7d81ab4d6b33441c90ac0dd4855c1215d6dc7adb6f706555b856d9",
+    "dimensions": [
+      320,
+      253
+    ],
+    "decoded": true,
+    "cropReview": "Single-person upper-body portrait; face unobstructed; no team-mate substitution.",
+    "rights": "Profile-page photograph; reuse rights not stated by source.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P370",
+    "name": "Keel",
+    "sourcePage": "https://www.trackingthepros.com/player/Keel",
+    "sourceImage": "https://media.trackingthepros.com/profile/p1858.png",
+    "identitySource": "https://www.outreach.olemiss.edu/esports/league-of-legends.html",
+    "identityEvidence": "Exact full name Ryan Keel matches source; individual old CLG team portrait. Historic jungle role differs from current roster role, not a different person.",
+    "file": "/lol/faces/portrait-p-P370-20260923.webp",
+    "sha256": "b2b92583700106b7eb73bb6586c91bde54458f27dfd51b9c72d31901ab86accd",
+    "dimensions": [
+      320,
+      267
+    ],
+    "decoded": true,
+    "cropReview": "Single-person upper-body portrait; face unobstructed; no team-mate substitution.",
+    "rights": "Profile-page photograph; reuse rights not stated by source.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P562",
+    "name": "Aki",
+    "sourcePage": "https://www.trackingthepros.com/player/Aki",
+    "sourceImage": "https://media.trackingthepros.com/profile/p1093.png",
+    "identitySource": "https://nip.gl/pages/aki",
+    "identityEvidence": "Exact Chinese name 毛安 matches Mao An profile and NIP Aki identity; solo portrait reviewed.",
+    "file": "/lol/faces/portrait-p-P562-20260923.webp",
+    "sha256": "9da3302ad3b79d110632e41fd7d62b4fbb8345b9934cb9c245163e433e15c95e",
+    "dimensions": [
+      320,
+      320
+    ],
+    "decoded": true,
+    "cropReview": "Single-person upper-body portrait; face unobstructed; no team-mate substitution.",
+    "rights": "Profile-page photograph; reuse rights not stated by source.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "c:Guilhoto",
+    "name": "Guilhoto",
+    "sourcePage": "https://giantx.gg/pages/lec",
+    "sourceImage": "https://giantx.gg/cdn/shop/files/guilhotto_600x600_crop_center.png?v=1767882375",
+    "identitySource": "https://giantx.gg/en/blogs/news/guilhoto-to-lead-giantx-in-the-lec",
+    "identityEvidence": "Official GIANTX LEC roster labels the image Guilhoto, Coach, André Pereira; club announcement corroborates identity.",
+    "file": "/lol/faces/portrait-c-Guilhoto-20260923.webp",
+    "sha256": "22df3723d04747236246907cd3fceac7ac2dbb769dcba8c28946e6c82a0bfce6",
+    "dimensions": [
+      400,
+      400
+    ],
+    "decoded": true,
+    "cropReview": "Official solo upper-body portrait; head fully visible.",
+    "rights": "Official club publicity photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "c:Spawn",
+    "name": "Spawn",
+    "sourcePage": "https://www.sheepesports.com/us/cs/articles/tl-spawn-on-facing-kc-it-won-t-be-a-3-0-it-will-be-a-banger/en",
+    "sourceImage": "https://cdn.sanity.io/images/9rqbl8zs/production/03358879a6f6fda837267046eb419ee3dcd37693-1920x1080.webp",
+    "identitySource": "https://teamliquid.com/games/league/lcs",
+    "identityEvidence": "Interview with Jake Spawn Tiberi labels its solo photograph as Team Liquid head coach; name Spawn visible on shirt and official TL roster confirms coach.",
+    "file": "/lol/faces/portrait-c-Spawn-20260923.webp",
+    "sha256": "f3c1f3aa6dfc48dd6060114fac3e89d9fcccdc3c9571bb6e23112db501eb4eda",
+    "dimensions": [
+      800,
+      450
+    ],
+    "decoded": true,
+    "cropReview": "Single-person centered interview portrait; head unobstructed.",
+    "rights": "Colin Young-Wolff / Riot Games credited by Sheep Esports; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P26",
+    "name": "sasi",
+    "sourcePage": "https://esports.op.gg/players/6282/sasi",
+    "sourceImage": "https://s-qwer.op.gg/images/lol/players/6282_1768043973529.png?image=w_380,f_webp",
+    "identitySource": "https://www.sina.cn/news/detail/5279691465819588.html",
+    "identityEvidence": "OP.GG labels UP sasi; Ultra Prime announcement names sasi as Yan Rui 严睿. Solo UP portrait reviewed.",
+    "file": "/lol/faces/portrait-p-P26-20260923.webp",
+    "sha256": "8d67f9a32e21b325580f29345fe7fb1afa1bdf155b2fcfcbfd722dd29a25c24a",
+    "dimensions": [
+      380,
+      380
+    ],
+    "decoded": true,
+    "cropReview": "Solo upper-body portrait; face unobstructed.",
+    "rights": "Public esports profile photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P578",
+    "name": "xiaohuangren",
+    "sourcePage": "https://bkso.baidu.com/item/%E4%BD%99%E6%99%BA%E6%95%8F/58324467",
+    "sourceImage": "https://bkimg.cdn.bcebos.com/pic/d31b0ef41bd5ad6eddc4de56af9c2edbb6fd5266964a?x-bce-process=image/resize,m_lfit,w_536,limit_1/quality,Q_70",
+    "identitySource": "https://liquipedia.net/leagueoflegends/Xiaohuangren",
+    "identityEvidence": "Baidu Yu Zhimin 余智敏 esports entry identifies xiaohuangren TT jungle and its headshot; Liquipedia confirms name and TT history. Solo portrait reviewed.",
+    "file": "/lol/faces/portrait-p-P578-20260923.webp",
+    "sha256": "b406ce5fb9f8fd3bae22631dcc879b5f338778891f7a7a23f4a2a35228b423ae",
+    "dimensions": [
+      536,
+      536
+    ],
+    "decoded": true,
+    "cropReview": "Solo upper-body portrait; face unobstructed.",
+    "rights": "Public esports profile photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P579",
+    "name": "xqw",
+    "sourcePage": "https://www.trackingthepros.com/player/xqw",
+    "sourceImage": "https://media.trackingthepros.com/profile/p2070.png",
+    "identitySource": "https://lol.fandom.com/wiki/Xqw",
+    "identityEvidence": "Exact full name Zheng Xia-Jian 郑夏健 and LGD career corroborated by profile and Leaguepedia.",
+    "file": "/lol/faces/portrait-p-P579-20260923.webp",
+    "sha256": "f5fae520f6137c17750dd9e678df11a6f349a89b77db39e3b888267308f041b6",
+    "dimensions": [
+      320,
+      320
+    ],
+    "decoded": true,
+    "cropReview": "Single-person portrait, face clearly visible and centered.",
+    "rights": "Public esports profile photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:OE94c4014157",
+    "name": "Philip",
+    "sourcePage": "https://www.trackingthepros.com/player/Philip",
+    "sourceImage": "https://media.trackingthepros.com/profile/p1961.png",
+    "identitySource": "https://www.trackingthepros.com/player/Philip",
+    "identityEvidence": "Exact full name Philip Zeng, Canadian top laner; single-player FlyQuest-era headshot.",
+    "file": "/lol/faces/portrait-p-OE94c4014157-20260923.webp",
+    "sha256": "686d66645750eb34c13798ac3665dfd1170b3ccb9177caf8792b7028e8b4c78c",
+    "dimensions": [
+      320,
+      253
+    ],
+    "decoded": true,
+    "cropReview": "Single-person portrait, face clearly visible and centered.",
+    "rights": "Public esports profile photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:OEb1dd7b0fca",
+    "name": "Vincenzo",
+    "sourcePage": "https://esports.op.gg/players/7910/vincenzo",
+    "sourceImage": "https://s-qwer.op.gg/images/lol/players/7910_1768043909555.png?image=w_380,f_webp",
+    "identitySource": "https://prosettings.net/players/vincenzo/",
+    "identityEvidence": "OP.GG names Korean Vincenzo Ha Seung-Min; ProSettings independently identifies Seungmin Ha, DRX. Existing imported event source uses same full name.",
+    "file": "/lol/faces/portrait-p-OEb1dd7b0fca-20260923.webp",
+    "sha256": "be5652d3a7e8ca86652160a09a0600cb4063b2ff6c7e2a9977439210cb877ac4",
+    "dimensions": [
+      380,
+      301
+    ],
+    "decoded": true,
+    "cropReview": "Single-person portrait, face clearly visible and centered.",
+    "rights": "Public esports profile photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "c:Own3r",
+    "name": "Own3r",
+    "sourcePage": "https://www.sk-gaming.com/teams/sk-lec-league-of-legends",
+    "sourceImage": "https://www.sk-gaming.com/hs-fs/hubfs/OWNER%20(1)-1.png?width=855&height=1026&name=OWNER%20(1)-1.png",
+    "identitySource": "https://www.sk-gaming.com/teams/sk-lec-league-of-legends",
+    "identityEvidence": "SK Gaming article lists Own3rlol Head Coach next to image https://www.sk-gaming.com/news/a-new-lec-year-begins-with-a-new-sk-gaming-roster identifies David Rodriguez Own3r de la Torre; roster card uses alias Own3rlol",
+    "file": "/lol/faces/portrait-c-Own3r-20260923.webp",
+    "sha256": "fae72decf5846e0ba936f592ba4e44f612d143ed6fbee20454094cc6ebd27dca",
+    "dimensions": [
+      467,
+      720
+    ],
+    "decoded": true,
+    "cropReview": "Single-person official portrait; face unobstructed. Native card uses top-center cover, preserving the head.",
+    "rights": "Official club publicity photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "c:TheRock7",
+    "name": "TheRock7",
+    "sourcePage": "https://navi.gg/en/teams/lol",
+    "sourceImage": "https://img.navi.gg/players/2026/05/players-13998/navi_teammate/62029/conversions/TheRock-290x290-webp.webp",
+    "identitySource": "https://navi.gg/en/teams/lol",
+    "identityEvidence": "Official NAVI roster image alt TheRock under Staff, exact named image URL https://navi.gg/en/publications/lol-navi-new-coach identifies Vasileios TheRock Voltis, former WLGaming/Karmine Corp Blue coach Alias cross-check https://liquipedia.net/leagueoflegends/Portal%3APlayers/Europe/Balkan lists TheRock7 / Vasilis Voltis / Natus Vincere (Coach); ERL 2023 archive lists TheRock7 / VOLTIS VASILIS at WLGaming. Same full surname, given-name variant and coaching history.",
+    "file": "/lol/faces/portrait-c-TheRock7-20260923.webp",
+    "sha256": "fe79401c762d6d58b15c3a7602be5cfcfd0dc14ab4549d6cde35b82ab7731c81",
+    "dimensions": [
+      290,
+      290
+    ],
+    "decoded": true,
+    "cropReview": "Single-person official portrait; face unobstructed. Native card uses top-center cover, preserving the head.",
+    "rights": "Official club publicity photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "c:Rodrigo",
+    "name": "Rodrigo",
+    "sourcePage": "https://g2esports.com/blogs/team-member/memento",
+    "sourceImage": "https://cdn.shopify.com/s/files/1/0548/8554/8183/files/LoL_Rodrigo_Player_Card.jpg?v=1738924388",
+    "identitySource": "https://g2esports.com/blogs/team-member/memento",
+    "identityEvidence": "Image belongs to named Rodrigo teammate link on G2 Memento page https://g2esports.com/blogs/team-member/rodrigo biography identifies Rodrigo Domingues Oliveira as G2 Head Analyst",
+    "file": "/lol/faces/portrait-c-Rodrigo-20260923.webp",
+    "sha256": "46a733f4bea0514044cc3a15c639d5951afbc147e7f42d7b56f0197f75984c16",
+    "dimensions": [
+      330,
+      530
+    ],
+    "decoded": true,
+    "cropReview": "Single-person official portrait; face unobstructed. Native card uses top-center cover, preserving the head.",
+    "rights": "Official club publicity photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "c:Gismo",
+    "name": "Gismo",
+    "sourcePage": "https://team-detonation.net/team/member/dfm_gismo",
+    "sourceImage": "https://team-detonation.net/wp-content/uploads/2019/08/2024lol_gismo_web-min.png",
+    "identitySource": "https://team-detonation.net/team/member/dfm_gismo",
+    "identityEvidence": "DFM page img title: Gismo(青木 晴彦)",
+    "file": "/lol/faces/portrait-c-Gismo-20260923.webp",
+    "sha256": "c9eca00736968146e779c45d3aa6b5b56f8573e05ffa19257f1e4ec45e48b9d9",
+    "dimensions": [
+      480,
+      720
+    ],
+    "decoded": true,
+    "cropReview": "Single-person official portrait; face unobstructed. Native card uses top-center cover, preserving the head.",
+    "rights": "Official club publicity photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "c:SeeEl",
+    "name": "SeeEl",
+    "sourcePage": "https://keydstars.com.br/lol/",
+    "sourceImage": "https://keydstars.com.br/wp-content/uploads/2023/06/seeel.jpg",
+    "identitySource": "https://keydstars.com.br/lol/",
+    "identityEvidence": "Keyd Stars modal elementor1936 title SEEEL full name Christopher Lee Head Coach, CSS background-image",
+    "file": "/lol/faces/portrait-c-SeeEl-20260923.webp",
+    "sha256": "1c803e80d8dc01f9803487db3f30dbef2dbafdc28d375530fe25980241b96bd2",
+    "dimensions": [
+      480,
+      650
+    ],
+    "decoded": true,
+    "cropReview": "Single-person official portrait; face unobstructed. Native card uses top-center cover, preserving the head.",
+    "rights": "Official club publicity photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "c:Lyfaenia",
+    "name": "Lyfaenia",
+    "sourcePage": "https://keydstars.com.br/lol/",
+    "sourceImage": "https://keydstars.com.br/wp-content/uploads/2024/01/lyfanea.jpg",
+    "identitySource": "https://keydstars.com.br/lol/",
+    "identityEvidence": "Keyd Stars actual modal elementor3309 names LYFAENIA / Henrique Ruoso / Positional Coach; LPLoL official 2023 GTZ roster confirms Henrique Ruoso. Historical VKS photo; current game FXW7 team unchanged https://lplol.pt/blog/2023/planteis-da-spring-split-da-1-divisao-da-wgr-lplol-2023 confirms GTZ coach Lyfaenia / Henrique Ruoso. Use direct VKS profile name over inconsistent LinkedIn text.",
+    "file": "/lol/faces/portrait-c-Lyfaenia-20260923.webp",
+    "sha256": "b2b0deef9dac2500d73db1ce064c4ff25464752d5541ae7a634c479f4d35e5bd",
+    "dimensions": [
+      480,
+      633
+    ],
+    "decoded": true,
+    "cropReview": "Single-person official portrait; face unobstructed. Native card uses top-center cover, preserving the head.",
+    "rights": "Official club publicity photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P395",
+    "name": "Denathor",
+    "sourcePage": "https://chaincc.lol/free/players/Denathor",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/denathor.webp",
+    "identitySource": "https://www.winthrop.edu/news-events/esports-teams-wrap-up-spring-with-two-titles.aspx",
+    "identityEvidence": "Official university May 2026 roster names Noah Denathor Erikson. Liquipedia confirms Top and transfer Winthrop to Dignitas July 2026.",
+    "file": "/lol/faces/portrait-p-P395-20260923.webp",
+    "sha256": "97383b37cea5f0869eb0ecd0ce2620632ec9f2a1d6bdf93c08c5d7932502c7bd",
+    "dimensions": [
+      238,
+      256
+    ],
+    "decoded": true,
+    "cropReview": "Red Winthrop jersey single portrait; historical team uniform, shoot date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P424",
+    "name": "HungryPanda",
+    "sourcePage": "https://hll.gr/en/player/hungrypanda/",
+    "sourceImage": "https://hll.gr/files/2024/12/hungrypanda.jpg",
+    "identitySource": "https://hll.gr/en/player/hungrypanda/",
+    "identityEvidence": "Official league profile identifies Nikos Nikolaidis, Support, Greece; Leaguepedia Greek name matches game.",
+    "file": "/lol/faces/portrait-p-P424-20260923.webp",
+    "sha256": "29cb37ff1034f6f5b9f05cd1303513938d14046c30e2a98eb96ef300e13c860b",
+    "dimensions": [
+      470,
+      578
+    ],
+    "decoded": true,
+    "cropReview": "Official HLL image selected, single face in Team Queso shirt. Upload path 2024/12; shoot date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P427",
+    "name": "Nafkelah",
+    "sourcePage": "https://chaincc.lol/free/players/Nafkelah",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/nafkelah.webp",
+    "identitySource": "https://lol.fandom.com/wiki/Nafkelah",
+    "identityEvidence": "Andrija Kovacevic, Mid Skillcamp; June 2026 roster matches.",
+    "file": "/lol/faces/portrait-p-P427-20260923.webp",
+    "sha256": "8a519aa5139cccef4dc3d0fb820ee38f0891f909758d05bb023a72cc77cf92ae",
+    "dimensions": [
+      144,
+      256
+    ],
+    "decoded": true,
+    "cropReview": "Single full body black shirt; 144x256 low resolution, exact shoot date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P435",
+    "name": "Spooder",
+    "sourcePage": "https://www.tln.gg/en",
+    "sourceImage": "https://www.tln.gg/players/spooder.png",
+    "identitySource": "https://www.tln.gg/en",
+    "identityEvidence": "Official TLN page names Muhanad Sharad and Spooder as Top; Leaguepedia full name Muhanad Maitham Sharad matches.",
+    "file": "/lol/faces/portrait-p-P435-20260923.webp",
+    "sha256": "43c071f35385f42d76ec77cca873802768599808b78adaebafb86a3f459b65ac",
+    "dimensions": [
+      267,
+      400
+    ],
+    "decoded": true,
+    "cropReview": "Official TLN single portrait selected; retrieved current September 2026 page, shoot date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23",
+    "optimization": "Proportional downscale to fit 400×400; original composition retained; WebP quality 86."
+  },
+  {
+    "id": "p:P437",
+    "name": "Toffe",
+    "sourcePage": "https://www.tln.gg/en",
+    "sourceImage": "https://www.tln.gg/players/Toffe.png",
+    "identitySource": "https://www.tln.gg/en",
+    "identityEvidence": "Official TLN page names Tautvydas Gegeckas and Toffe Mid; Liquipedia TLN since January 2026.",
+    "file": "/lol/faces/portrait-p-P437-20260923.webp",
+    "sha256": "5e4294916e5e926b911ec1eb4cbda887aec5f1e7480f80f4c0067d269fc7ba0e",
+    "dimensions": [
+      267,
+      400
+    ],
+    "decoded": true,
+    "cropReview": "Official TLN single portrait selected; retrieved current September 2026 page, shoot date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23",
+    "optimization": "Proportional downscale to fit 400×400; original composition retained; WebP quality 86."
+  },
+  {
+    "id": "p:P438",
+    "name": "Axelent",
+    "sourcePage": "https://www.tln.gg/en",
+    "sourceImage": "https://www.tln.gg/players/Axelent.png",
+    "identitySource": "https://www.tln.gg/en",
+    "identityEvidence": "Official TLN and HLL identify Nikola Petrusev, Bot; Cyrillic name matches game.",
+    "file": "/lol/faces/portrait-p-P438-20260923.webp",
+    "sha256": "a3258fde6d1046f876e77f5b67bae3475f82332f8eaba72e5712b21c0817a8d3",
+    "dimensions": [
+      267,
+      400
+    ],
+    "decoded": true,
+    "cropReview": "Official TLN single portrait selected; retrieved current September 2026 page, shoot date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23",
+    "optimization": "Proportional downscale to fit 400×400; original composition retained; WebP quality 86."
+  },
+  {
+    "id": "p:P447",
+    "name": "Manaty",
+    "sourcePage": "https://chaincc.lol/free/players/Manaty",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/manaty.webp",
+    "identitySource": "https://www.sheepesports.com/fr/all/articles/manaty-joins-ici-japon-corp-in-the-lfl/fr",
+    "identityEvidence": "July 27 2026 article identifies Stephane Dimier, French jungler, joining IJC from ZYB; exact game name matches. Millenium article 372003 also identifies pictured Solary Manaty.",
+    "file": "/lol/faces/portrait-p-P447-20260923.webp",
+    "sha256": "66777bc4da78c672cd7254bb4db561efd1302a979b0674d8aab08d9d844496f6",
+    "dimensions": [
+      192,
+      200
+    ],
+    "decoded": true,
+    "cropReview": "Single black Solary portrait; historical team uniform, shoot date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P456",
+    "name": "Adizai",
+    "sourcePage": "https://chaincc.lol/free/players/Adizai",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/adizai.webp",
+    "identitySource": "https://lol.fandom.com/wiki/Adiza1",
+    "identityEvidence": "Page explicitly redirects Adizai, names Lu Kuan-Ting (呂冠廷), Top Ground Zero Academy since April 2026; earlier PSG Academy and Hungkuang.",
+    "file": "/lol/faces/portrait-p-P456-20260923.webp",
+    "sha256": "d9a9451bfd89387b4462b740643f6cee1ebb381c1823b85106cb8678bc82cdf9",
+    "dimensions": [
+      256,
+      256
+    ],
+    "decoded": true,
+    "cropReview": "Single casual portrait. Chain current Streamer label differs from competitive top role; image date unknown, historical portrait only.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P466",
+    "name": "Weizhe",
+    "sourcePage": "https://chaincc.lol/free/players/Weizhe",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/weizhe.webp",
+    "identitySource": "https://lol.fandom.com/wiki/Weizhe",
+    "identityEvidence": "Lin Wei-Zhe (林煒哲), Top Shadow Keepers, aliases We1zhe/Quiet matches. Must not use Arena of Valor homonym.",
+    "file": "/lol/faces/portrait-p-P466-20260923.webp",
+    "sha256": "bc82efc1ce150461f3836cd2232a4c5e4a8826fba134483e21ab3a16dceaf214",
+    "dimensions": [
+      250,
+      250
+    ],
+    "decoded": true,
+    "cropReview": "Single black/orange jersey portrait; shoot date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P492",
+    "name": "bulas",
+    "sourcePage": "https://rft.gg/player/58139522-bulas/matches",
+    "sourceImage": "https://uploads.rft.gg/images/esport/players/bulecha.webp",
+    "identitySource": "https://rft.gg/player/58139522-bulas/matches",
+    "identityEvidence": "RFT names Lucas Adriel, Support 7REX with 2026 games; personal kick.com/bulecha/about confirms aliases bulas/bulecha.",
+    "file": "/lol/faces/portrait-p-P492-20260923.webp",
+    "sha256": "e334901e1f98711e59e8346f89b7a0ad8a32cfd452cf7d632dde607e3bd7af81",
+    "dimensions": [
+      400,
+      400
+    ],
+    "decoded": true,
+    "cropReview": "Prefer downloaded RFT high-resolution single portrait with Loud jersey; historical uniform, image date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23",
+    "optimization": "Proportional downscale to fit 400×400; original composition retained; WebP quality 86."
+  },
+  {
+    "id": "p:P505",
+    "name": "StineR",
+    "sourcePage": "https://esports.op.gg/players/6622/stiner?hl=en_US",
+    "sourceImage": "https://s-qwer.op.gg/images/lol/players/6622_1672196433144.png?image=w_380,f_webp",
+    "identitySource": "https://esports.op.gg/players/6622/stiner?hl=en_US",
+    "identityEvidence": "OPGG identifies Dias Vinicius, Jungle FUR; Leaguepedia and Sheepesports independently Vinicius Dias, current INTZ 2026. Strafe different surname excluded.",
+    "file": "/lol/faces/portrait-p-P505-20260923.webp",
+    "sha256": "e4760774990d313f622f4d541efe4639ce3d8a868cd9f39bfaa789ec8bdac7ad",
+    "dimensions": [
+      380,
+      278
+    ],
+    "decoded": true,
+    "cropReview": "Prefer OPGG single portrait; historical FURIA shirt, upload filename timestamp not shoot date.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P519",
+    "name": "Forlin",
+    "sourcePage": "https://chaincc.lol/free/players/Forlin",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/forlin.webp",
+    "identitySource": "https://liquipedia.net/leagueoflegends/Forlin",
+    "identityEvidence": "Leonardo Pereira, Brazilian, last Team Solid; game-tournaments.com/en/lol/player/forlin confirms Top and 2024 history.",
+    "file": "/lol/faces/portrait-p-P519-20260923.webp",
+    "sha256": "4124ff64671462a35d4786fe78c0a7d1736ca9a30b11705267f5423e2514c6f9",
+    "dimensions": [
+      256,
+      196
+    ],
+    "decoded": true,
+    "cropReview": "Single glasses/white-black jersey portrait; chain Streamer current-status label not game role; date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P571",
+    "name": "Aomine",
+    "sourcePage": "https://chaincc.lol/free/players/Aomine",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/aomine.webp",
+    "identitySource": "https://lol.fandom.com/wiki/Aomine",
+    "identityEvidence": "Huynh Thiec Tuan (Huỳnh Thiếc Tuấn), Bot Saigon Warriors matches.",
+    "file": "/lol/faces/portrait-p-P571-20260923.webp",
+    "sha256": "ebaa9c54a3da8447a51ea70db2a7879cf96cc65b3e3acb90019d36a55750f2c8",
+    "dimensions": [
+      256,
+      256
+    ],
+    "decoded": true,
+    "cropReview": "Single close head portrait; exact shoot date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P602",
+    "name": "Smiley",
+    "sourcePage": "https://chaincc.lol/free/players/Smiley",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/smiley.webp",
+    "identitySource": "https://lol.fandom.com/wiki/Smiley_%28Ludvig_Granquist%29",
+    "identityEvidence": "Ludvig Erik Hugo Granquist, former ADC now coach Vivo Keyd Stars; gallery documents GamersOrigin 2019/2020/2022.",
+    "file": "/lol/faces/portrait-p-P602-20260923.webp",
+    "sha256": "8546edea371ac4f30fd89dbdc42fa1159edfba8c95a5059c4d561a0cb120c758",
+    "dimensions": [
+      256,
+      192
+    ],
+    "decoded": true,
+    "cropReview": "Single red GamersOrigin historical player portrait, NOT a new 2026 player photo. Exact year unconfirmed.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:P613",
+    "name": "Gloryy",
+    "sourcePage": "https://chaincc.lol/free/players/Gloryy",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/gloryy.webp",
+    "identitySource": "https://liquipedia.net/leagueoflegends/Gloryy_%28Vietnamese_player%29",
+    "identityEvidence": "Le Ngoc Vinh (Lê Ngọc Vinh), Mid GAM since April 2026; Team Whales June 2022-March 2024.",
+    "file": "/lol/faces/portrait-p-P613-20260923.webp",
+    "sha256": "e12c5a4972cfd37fe7cfe9c6d284a7b69962d5fb280ec79b5587bfe4b6e11092",
+    "dimensions": [
+      256,
+      236
+    ],
+    "decoded": true,
+    "cropReview": "Single Team Whales shirt portrait, historical team interval 2022-2024; shoot date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:OE5506b39ea3",
+    "name": "murilao",
+    "sourcePage": "https://chaincc.lol/free/players/murilao",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/murilao.webp",
+    "identitySource": "https://lol.fandom.com/wiki/Murilao",
+    "identityEvidence": "Murilo Cocco Lopes, Support, historical Brazilian Storm/Pratt; chain 2026 RMD matches game and role.",
+    "file": "/lol/faces/portrait-p-OE5506b39ea3-20260923.webp",
+    "sha256": "fc494a2e8ef314621d1977b4d948e18d7913d3c28f6abdc60931f525fd961c80",
+    "dimensions": [
+      245,
+      245
+    ],
+    "decoded": true,
+    "cropReview": "Single glasses white-blue jersey portrait; exact shoot date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:OE86d01cccba",
+    "name": "InFlame",
+    "sourcePage": "https://chaincc.lol/free/players/InFlame",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/inflame.webp",
+    "identitySource": "https://lol.fandom.com/wiki/InFlame",
+    "identityEvidence": "Yutthapichai Yeangyutthapichai exact name, Thai Support; Liquipedia Dorado July 2026 and former FULL SENSE coach July 2024-June 2026. Not Chinese Dota InFlame.",
+    "file": "/lol/faces/portrait-p-OE86d01cccba-20260923.webp",
+    "sha256": "865a06d616a7227733001c3760916fbb79b1165b13f47b484e940655cc050893",
+    "dimensions": [
+      201,
+      256
+    ],
+    "decoded": true,
+    "cropReview": "Single FULL SENSE jersey historical coach portrait, same person; date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:OEaa926cd86b",
+    "name": "Berik",
+    "sourcePage": "https://chaincc.lol/free/players/Berik",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/berik.webp",
+    "identitySource": "https://liquipedia.net/leagueoflegends/Berik",
+    "identityEvidence": "Erik Kim, Top Winthrop in 2026; Leaguepedia/Esports Charts independently exact full name and role.",
+    "file": "/lol/faces/portrait-p-OEaa926cd86b-20260923.webp",
+    "sha256": "77473289b7f563f705141f3837701c702322aee88511fd2eb7a07516fd8c72c3",
+    "dimensions": [
+      256,
+      170
+    ],
+    "decoded": true,
+    "cropReview": "Single casual face, low-resolution 256x170, no teammate; date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "p:OE0a7d3af0b1",
+    "name": "Hirotto",
+    "sourcePage": "https://chaincc.lol/free/players/Hirotto",
+    "sourceImage": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hirotto.webp",
+    "identitySource": "https://liquipedia.net/leagueoflegends/Hirotto",
+    "identityEvidence": "Caio Henrique Araujo Cordeiro, Jungle, FURIA Youth to 7REX July 8 2026; 7REX roster independently confirms full name.",
+    "file": "/lol/faces/portrait-p-OE0a7d3af0b1-20260923.webp",
+    "sha256": "ba9a43eaad708839b806bc57ccadd2b5ec5e7b32046c25f6cab536429acd68b1",
+    "dimensions": [
+      256,
+      256
+    ],
+    "decoded": true,
+    "cropReview": "Single 7REX jersey portrait; current team identity, exact shoot date unknown.",
+    "rights": "Public esports profile or official club/league photograph; reuse rights not stated.",
+    "photoYear": null,
+    "reviewed": "2026-09-23"
+  },
+  {
+    "id": "c:Daeny",
+    "name": "Daeny",
+    "sourcePage": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf",
+    "sourceImage": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf#page=38",
+    "identitySource": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf",
+    "identityEvidence": "Rendered page index 37 (printed 38) bottom right photo xref 1896 labeled Daeny/Yang Dae-in/Invictus Gaming historical 2025.",
+    "file": "/lol/faces/portrait-c-Daeny-20260923.webp",
+    "sha256": "0ac889129804ded10f0ac3890d5c5eb3e0e3865cd7d455a98e307e510c126260",
+    "dimensions": [
+      177,
+      139
+    ],
+    "decoded": true,
+    "cropReview": "Single unobstructed caption-matched headshot; preserve native small resolution.",
+    "rights": "Movistar Esports editorial Worlds 2025 guide; reuse rights not stated.",
+    "reviewed": "2026-09-23",
+    "sourcePdfPage": 38,
+    "sourcePdfXref": 1896
+  },
+  {
+    "id": "c:Dylan Falco",
+    "name": "Dylan Falco",
+    "sourcePage": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf",
+    "sourceImage": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf#page=41",
+    "identitySource": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf",
+    "identityEvidence": "Rendered page index 40 (printed 41) xref 1976 labeled Dylan Falco/G2.",
+    "file": "/lol/faces/portrait-c-Dylan-Falco-20260923.webp",
+    "sha256": "7062ecb4536801e35719597878fcadde0502ba128dafa2de27396f6d8877be4e",
+    "dimensions": [
+      193,
+      145
+    ],
+    "decoded": true,
+    "cropReview": "Single unobstructed caption-matched headshot; preserve native small resolution.",
+    "rights": "Movistar Esports editorial Worlds 2025 guide; reuse rights not stated.",
+    "reviewed": "2026-09-23",
+    "sourcePdfPage": 41,
+    "sourcePdfXref": 1976
+  },
+  {
+    "id": "c:Melzhet",
+    "name": "Melzhet",
+    "sourcePage": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf",
+    "sourceImage": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf#page=44",
+    "identitySource": "https://movistaresports.com/wp-content/uploads/2025/10/Guia-Worlds-2025-de-Movistar-eSports.pdf",
+    "identityEvidence": "Rendered page index 43 (printed 44) xref 2066 labeled Melzhet/Tomas Campelos Fernandez/Movistar KOI. MKOI official confirms; prior WBG suggestion rejected.",
+    "file": "/lol/faces/portrait-c-Melzhet-20260923.webp",
+    "sha256": "0b0d4e66d85e048972a6c31f4eadf52d8917aa7cab07f49b9a9f722855ef5d60",
+    "dimensions": [
+      154,
+      138
+    ],
+    "decoded": true,
+    "cropReview": "Single unobstructed caption-matched headshot; preserve native small resolution.",
+    "rights": "Movistar Esports editorial Worlds 2025 guide; reuse rights not stated.",
+    "reviewed": "2026-09-23",
+    "sourcePdfPage": 44,
+    "sourcePdfXref": 2066
+  },
+  {
+    "id": "c:Milan",
+    "name": "Milan",
+    "sourcePage": "https://vitality.gg/pages/athletes/milan",
+    "sourceImage": "https://vitality.gg/cdn/shop/files/LEC_251125_Milan_ClassicPictures__Vanvan_003.jpg?v=1776238297",
+    "identitySource": "https://vitality.gg/pages/athletes/milan",
+    "identityEvidence": "Vitality official athlete page lists Milan as Jonas \"Milan\" Morisot.",
+    "file": "/lol/faces/portrait-c-Milan-20260923.webp",
+    "sha256": "6773f25cec412f044de72c3b602429a99f4f38ed27190246ffa4e911dcce0fb3",
+    "dimensions": [
+      400,
+      500
+    ],
+    "decoded": true,
+    "cropReview": "Deterministic head-and-shoulders crop from the official high-resolution original; original pixels only, no face alteration.",
+    "rights": "Official club publicity photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23",
+    "cropPixels": [
+      450,
+      100,
+      1250,
+      1100
+    ],
+    "sourceDimensions": [
+      1679,
+      2517
+    ]
+  },
+  {
+    "id": "c:Pad",
+    "name": "Pad",
+    "sourcePage": "https://vitality.gg/pages/athletes/pad",
+    "sourceImage": "https://vitality.gg/cdn/shop/files/LEC_251125_Pad_ClassicPictures__Vanvan_002.jpg?v=1776238297",
+    "identitySource": "https://vitality.gg/pages/athletes/pad",
+    "identityEvidence": "Vitality official athlete page lists Pad as Patrick Suckow-Breum. Existing pad-original.jpg 1679x2517 from exact observed official Vitality URL.",
+    "file": "/lol/faces/portrait-c-Pad-20260923.webp",
+    "sha256": "a72bf10018a631fb648a561a2f58cdd8604ebffb7f39c75e18b3757454d3f5d1",
+    "dimensions": [
+      400,
+      500
+    ],
+    "decoded": true,
+    "cropReview": "Deterministic head-and-shoulders crop from the official high-resolution original; original pixels only, no face alteration.",
+    "rights": "Official club publicity photograph; reuse rights not stated.",
+    "reviewed": "2026-09-23",
+    "cropPixels": [
+      495,
+      200,
+      1215,
+      1100
+    ],
+    "sourceDimensions": [
+      1679,
+      2517
+    ]
+  }
+]
