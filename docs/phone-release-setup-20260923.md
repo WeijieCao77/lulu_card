@@ -6,11 +6,17 @@
 
 1. 注册或登录阿里云账号并完成实名认证。个人开发者可使用 **号码认证服务（PNVS）→ 短信认证**；这与阿里云“短信服务 SMS”是两个产品，API 端点不同。到号码认证控制台开通短信认证并确认余额/套餐可发送。
 2. 在阿里云 RAM 建立专用子用户的 AccessKey，只授予 `dypns:SendSmsVerifyCode` 与 `dypns:CheckSmsVerifyCode` 所需权限。将 AccessKey ID/Secret 保存在密码管理器，最终只填 Railway Variables，不发在聊天或代码里。
-3. 在 **短信认证参数配置**里抄取该账号当前可用的**系统签名**与配套**系统模板 Code**。两者必须成对。不要照抄旧项目的“速通互联验证码 / 100001”：阿里云已公告历史赠送签名在 **2026-08-31** 停止支持。
+3. 在 **短信认证参数配置**里抄取该账号当前可用的**系统签名**与配套**系统模板 Code**。两者必须成对。不要沿用旧项目的“速通互联验证码”签名：阿里云已公告历史赠送签名在 **2026-08-31** 停止支持。模板编号 `100001` 本身仍可能有效，须以本账号控制台当前显示为准。
 4. Railway 正式环境设置 `ALIYUN_SMS_ACCESS_KEY_ID`、`ALIYUN_SMS_ACCESS_KEY_SECRET`、`ALIYUN_SMS_SIGN_NAME`、`ALIYUN_SMS_TEMPLATE_CODE`。同时设置独立、长期保存的 `PHONE_KEY`、`PHONE_SALT`、`ANALYTICS_TOKEN`，以及 `NODE_ENV=production`。`PHONE_GATE=0`、`PHONE_SMS_DEV=1` 不得保留。切换或重建 `PHONE_KEY`、`PHONE_SALT` 会令既有手机号记录无法匹配或账号 ID 无法解密。
 5. 用自己的真实大陆手机号在**隔离的预发布环境**先验收：收码、错误码、到期、绑定、同号第二账号拒绝、换设备手机号找回、服务商故障；再对正式环境进行小范围真实短信验证。海外号码当前只有后台人工审核路径，需要逐人核验，不能当成批量绕过手机号的默认注册方式。
 
 号码认证控制台与步骤见 [阿里云个人开发者接入指南](https://help.aliyun.com/zh/pnvs/use-cases/sms-verify-for-individual-developers)、[SendSmsVerifyCode 文档](https://help.aliyun.com/zh/pnvs/developer-reference/api-dypnsapi-2017-05-25-sendsmsverifycode) 和 [签名变更公告](https://help.aliyun.com/zh/pnvs/product-overview/sms-authentication-signature-change-notification)。
+
+## 2026-09-23 控制台核对
+
+- 当前账号的「短信认证」显示**已开启**。同一功能页还显示号码认证、图形认证、融合认证为已开启；这些并非噜噜卡目前的接入需求，正式使用前核对其状态与可能的用量。
+- 「短信认证参数配置」的赠送签名列表显示六个「通过」的签名，包括 `恒创联众`。赠送模板中「登录/注册模板」的 Code 为 `100001`，内容包含验证码和有效分钟数。可将这组现行系统签名、模板作为接入候选，正式设置变量前再次确认控制台仍可用，并做真实发送测试。
+- RAM 专用子用户、最小权限及 AccessKey 尚未创建或验证；不得使用主账号密钥代替。当前没有调用发送接口，也没有产生测试短信费用。
 
 ## 代码与验收边界
 
