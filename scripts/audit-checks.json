@@ -721,5 +721,9 @@
   {
     "runtime": "tsx",
     "file": "scripts/check_arena_card_scale.ts"
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_region_chemistry.ts"
   }
 ]

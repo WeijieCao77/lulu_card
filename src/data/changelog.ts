@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-09-22', title: '欧美赛区默契合并', changes: [
+    { kind: '调整', text: '默契统一按 LPL、LCK、欧美三大区计算。原 LEC、LCS、LCP、CBLOL 选手之间，以及这些联赛的教练与选手之间，都可触发同赛区默契；同队传承、同国籍的优先级保持不变。' },
+  ],
+}, {
   date: '2026-09-22', title: '赛区金卡比例校准', changes: [
     { kind: '调整', text: '普通选手金卡占各自赛区卡池的比例调整为 LCK 28.7% > LPL 24.3% > 欧美 9.3%。LCK 现有 35 金、30 银、57 铜；卡包出金概率与保底规则不变。' },
   ],

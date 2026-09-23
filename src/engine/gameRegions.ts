@@ -15,3 +15,8 @@ export function gameRegionOf(raw: unknown): GameRegion | undefined {
     default: return undefined
   }
 }
+
+export function sameGameRegion(a: unknown, b: unknown): boolean {
+  const left = gameRegionOf(a)
+  return left !== undefined && left === gameRegionOf(b)
+}

@@ -281,6 +281,7 @@ export default function SquadScreen() {
               战力综合反映当前培养与阵容搭配，实际比赛还受对手、战术和临场表现影响。
               教练的战术、培养、激励和等级都计入战力，教练带来的默契另算。
               队伍默契包含历史更名传承：<b>同一支俱乐部／同一队伍沿革</b>最高，其次<b>同国籍</b>，再次<b>同赛区</b>。默契高的阵容能打赢评分更高的对手。
+              选手之间及教练的赛区默契统一按 LPL、LCK、欧美计算；LEC、LCS、LCP、CBLOL 之间可触发欧美同赛区默契。
             </p>
             <details className="lineage-guide"><summary>查看队伍传承关系</summary><p className="small muted">历史卡保留当年的队名，已确认的战队更名与延续触发同队加成。转会不会把原队和新队合并；主队与青训队独立计算。</p><ul>{TEAM_LINEAGES.map(f => <li key={f.id}><a href={f.source} target="_blank" rel="noreferrer">{f.label} ↗</a></li>)}</ul></details>
             <GapOdds />

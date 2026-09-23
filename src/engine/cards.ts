@@ -1,4 +1,5 @@
 import { sameClubLineage } from './teamLineage'
+import { sameGameRegion } from './gameRegions'
 import { ordinaryCardStats } from './cardRarity'
 /**
  * The card layer: the same real people, dealt as a collection instead of a
@@ -487,7 +488,7 @@ export function chemistry(squad: Squad): ChemReport {
       // are one nationality here, as they are everywhere else in the game —
       // the group noticed a CN–TW pair was scored as strangers
       else if (a.nat && natCountry(a.nat) === natCountry(b.nat)) why = 'nat'
-      else if (a.region === b.region) why = 'region'
+      else if (sameGameRegion(a.region, b.region)) why = 'region'
       if (!why) continue
       const value = LINK_VALUE[why]
       links.push({ a: i, b: j, why, value, inherited: why === 'club' && (a.clubId !== b.clubId || a.clubTag !== b.clubTag) })
@@ -535,13 +536,13 @@ export function chemistry(squad: Squad): ChemReport {
     // and a man he coaches now is never counted a second time here.
     const coachedBefore = players.filter((p) => !(sameClubLineage(p, coach))
       && !!COACHED.get(coach.name)?.has(p.playerId)).length
-    const sameRegion = players.filter((p) => p.region === coach.region).length
+    const sameRegion = players.filter((p) => sameGameRegion(p.region, coach.region)).length
     coachBonus = sameClub * 2 + coachedBefore + sameRegion
     cards.forEach((p, slot) => {
       if (!isPlayerCard(p)) return
       const club = !!(sameClubLineage(p, coach))
       const before = !club && !!COACHED.get(coach.name)?.has(p.playerId)
-      const region = p.region === coach.region
+      const region = sameGameRegion(p.region, coach.region)
       const value = (club ? 2 : 0) + (before ? 1 : 0) + (region ? 1 : 0)
       if (value) coachLinks.push({ slot, why: club ? 'club' : before ? 'coached' : 'region', value })
     })
