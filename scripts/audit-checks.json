@@ -62,6 +62,18 @@
   },
   {
     "runtime": "tsx",
+    "file": "scripts/check_market_history.ts"
+  },
+  {
+    "runtime": "node",
+    "file": "scripts/check_request_maintenance.mjs"
+  },
+  {
+    "runtime": "node",
+    "file": "scripts/check_database_health.mjs"
+  },
+  {
+    "runtime": "tsx",
     "file": "scripts/check_market_sweep.ts"
   },
   {
@@ -667,6 +679,10 @@
     "runtime": "tsx",
     "file": "scripts/check_open_cup_swiss.ts",
     "estimatedSeconds": 22
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_cup_clock.ts"
   },
   {
     "runtime": "tsx",

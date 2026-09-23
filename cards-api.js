@@ -1,3 +1,5 @@
+import { MARKET_HISTORY_SCHEMA } from './market-history.js'
+import { sweepCardRequests } from './request-maintenance.js'
 /**
  * Accounts for the card mode — the smallest thing that can be called one.
  *
@@ -262,7 +264,8 @@ create index if not exists listing_shelf_card_idx on card_listings (card_id) whe
 -- plus the minute) and is when the settler picks one of them. Null: no entries.
 alter table card_listings add column if not exists draw_at timestamptz;
 create index if not exists listing_draw_idx on card_listings (draw_at) where status = 'open' and draw_at is not null;
-${GUARD_SCHEMA}`
+${GUARD_SCHEMA}
+${MARKET_HISTORY_SCHEMA}`
 
 /** What a client may name a request: long enough not to collide, short enough to index. */
 export const requestIdOf = (v) => (typeof v === 'string' && /^[A-Za-z0-9_-]{16,64}$/.test(v) ? v : null)
@@ -275,9 +278,7 @@ export function requestAction(action, payload) {
 export const MAIL_TAKE_LIMIT = 100
 /** A reply bigger than this is remembered as having happened, without its body (a BO5 report is ~20 KB). */
 const REQUEST_REPLY_MAX = 48 * 1024
-/** How long a full answer is kept; deduplication keys must never be discarded. */
-const REQUEST_KEEP_MS = 6 * 60 * 60 * 1000
-const REQUEST_SWEEP = 2000
+/** Completed request keys are retained 72 hours; full replies are compacted after 6 hours. */
 
 /**
  * The most 大师 points one win can possibly be worth.
@@ -647,14 +648,14 @@ export function makeCardApi(sql, {
    * own clock: fired after a reply is sent, at most once every ten minutes.
    */
   let sweptAt = 0
+  let sweepInProgress = null
   function sweepRequests() {
     const t = Date.now()
-    if (t - sweptAt < 10 * 60 * 1000) return
+    if (sweepInProgress || t - sweptAt < 10 * 60 * 1000) return
     sweptAt = t
-    sql`update card_requests set reply = jsonb_build_object('ok', coalesce((reply->>'ok')::boolean, false), 'trimmed', true, 'why', reply->>'why') where ctid in (
-          select ctid from card_requests where at < ${new Date(t - REQUEST_KEEP_MS)}
-          and reply is not null and not (reply ? 'trimmed') limit ${REQUEST_SWEEP})`
-      .catch((err) => console.warn('cards: request sweep failed', err.message))
+    sweepInProgress = sweepCardRequests(sql, { now: () => t, batch: 500 })
+      .catch(() => console.warn('cards: request maintenance unavailable'))
+      .finally(() => { sweepInProgress = null })
   }
 
   /** One account's actions, one after another (in this process; across processes the revision decides). */

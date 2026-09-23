@@ -39,6 +39,7 @@ import { isVerified } from './phone-api.js'
 import { requestAction } from './cards-api.js'
 import { makeMarketGuard, PROTECT_SEC } from './market-guard.js'
 import { RELEASE_POLICY } from './release-policy.js'
+import { createMarketHistory } from './market-history.js'
 
 /** How long a listing takes bids before the top one wins — the seller's choice, within these. */
 export const AUCTION_HOURS = 24
@@ -1990,6 +1991,8 @@ export function makeMarketApi(sql, {
     json(res, 200, out.gone ? { ok: false, gone: true } : out)
   }
 
+  const marketHistory = createMarketHistory(sql)
+
   return {
     /** one tick of the settler, for the timer's owner and for the checks */
     settleDue,
@@ -2023,6 +2026,22 @@ export function makeMarketApi(sql, {
         const given = tokenFrom ? tokenFrom(req, url) : null
         if (!token || !tokenOk || !tokenOk(given, token)) { json(res, 404, { ok: false }); return true }
         json(res, 200, await retireLegacy())
+        return true
+      }
+      if (path === '/api/market/history') {
+        if (req?.method !== 'POST') { json(res, 405, { ok: false }); return true }
+        if (guard(req, res, `mh:${bucket}`, 30)) return true
+        let b
+        try { b = JSON.parse(await readBody(req, 1024)) } catch { json(res, 400, { ok: false }); return true }
+        const cardId = typeof b?.cardId === 'string' ? b.cardId : ''
+        if (!cardId || cardId.length > 80 || !engine.cardById(cardId)) { json(res, 400, { ok: false, bad: true }); return true }
+        let level = null
+        if (b?.level != null) {
+          if (!Number.isInteger(b.level) || b.level < 0 || b.level > (engine.MAX_LEVEL ?? 5)) { json(res, 400, { ok: false, bad: true }); return true }
+          level = b.level
+        }
+        const data = await marketHistory.history(cardId, level)
+        json(res, data.busy ? 503 : 200, data)
         return true
       }
       if (path === '/api/market/mail') { await mail(req, res, bucket); return true }

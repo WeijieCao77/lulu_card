@@ -45,6 +45,9 @@ import { history, pruneFolded, rollup } from './rollup.js'
 import { SCHEMAS, applySchema } from './db-schema.js'
 import { dashboardHtml } from './dashboard.js'
 import { luluMetrics } from './admin-overview.js'
+import { createDatabaseHealth } from './database-health.js'
+let _databaseHealth = null
+let _databaseHealthSql = null
 import { adminLoginHtml } from './admin-login.js'
 import { bucketOf, clientIp } from './client-ip.js'
 
@@ -727,6 +730,16 @@ function handle(req, res) {
       console.warn('phone: route failed', err.message)
       if (!res.headersSent) json(res, 500, { ok: false })
     })
+    return
+  }
+  if (path === '/api/admin/db') {
+    if (!tokenOk(tokenFrom(req, url), TOKEN)) { res.writeHead(404, { 'Content-Type': 'text/plain' }).end('Not found'); return }
+    if (req.method !== 'GET') { json(res, 405, { ok: false }); return }
+    if (!sqlStats) { json(res, 503, { ok: false, why: 'no database' }); return }
+    if (_databaseHealthSql !== sqlStats) { _databaseHealth = createDatabaseHealth(sqlStats); _databaseHealthSql = sqlStats }
+    _databaseHealth.get()
+      .then((health) => json(res, 200, health))
+      .catch(() => json(res, 500, { ok: false, why: 'database health unavailable' }))
     return
   }
   if (path === '/api/admin/overview') {

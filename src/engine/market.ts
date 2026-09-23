@@ -301,3 +301,18 @@ export const answerOffer = (offer: string, accept: boolean) =>
   post<Record<string, unknown>>('answer', { offer, accept })
 /** Take my own bid back; the coins come home through the inbox. */
 export const withdrawOffer = (offer: string) => post<Record<string, unknown>>('withdraw', { offer })
+
+export interface MarketHistoryReply {
+  ok: boolean
+  bad?: boolean
+  cardId?: string
+  sold?: number
+  avg?: number | null
+  median?: number | null
+  week?: { sold: number; avg: number | null }
+  level?: { level: number; sold: number; avg: number | null } | null
+  recent?: Array<{ price: number; level: number; at: string }>
+}
+
+export const marketHistory = (cardId: string, level: number | null, signal?: AbortSignal) =>
+  request<MarketHistoryReply>('history', { cardId, level }, { signal })

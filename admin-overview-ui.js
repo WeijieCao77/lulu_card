@@ -59,12 +59,61 @@ function luluOverview(d, h) {
   ])));
 
   // Live placeholder
-  html += '</div>';
+  html += '</div><div id="lulu-db"><p class="muted">加载数据库健康数据…</p></div>';
 
   // Queue refresh
-  queueMicrotask(() => refreshLive(d));
+  queueMicrotask(() => {
+    refreshLive(d);
+    refreshDatabaseHealth();
+  });
 
   return html;
+}
+
+function refreshDatabaseHealth() {
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const dbDiv = $('#lulu-db');
+  if (!dbDiv) return;
+  fetch('/api/admin/db', { headers: auth() })
+    .then((r) => {
+      if (!r.ok) throw new Error('数据库 HTTP ' + r.status);
+      return r.json();
+    })
+    .then((health) => {
+      if (!health.ok) throw new Error('数据库健康数据不可用');
+      const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      let html = '<div class="grid">';
+      if (health.unavailable.includes('database') || health.unavailable.includes('tables')) html += '<p class="muted">部分数据库统计暂时不可用。</p>';
+      if (health.database) {
+        const mb = Math.round(health.database.sizeBytes / 1048576);
+        html += panel('数据库大小', '<ul><li>' + mb + ' MB</li></ul>');
+      }
+      if (health.available.includes('tables') && health.tables.length > 0) {
+        const rows = health.tables.slice(0, 20).map((t) => [
+          esc(t.name),
+          Math.round(t.totalBytes / 1048576) + ' MB',
+          (t.heapBytes / 1048576).toFixed(2) + ' MB',
+          (t.indexBytes / 1048576).toFixed(2) + ' MB',
+          (t.toastBytes / 1048576).toFixed(2) + ' MB',
+          t.liveRows !== null ? String(t.liveRows) : '—',
+          t.deadRows !== null ? String(t.deadRows) : '—'
+        ]);
+        html += panel('表统计（前20）', luluTable(['表名', '总大小', '数据', '索引', 'TOAST等', '活行估计', '死行估计'], rows));
+      }
+      if (health.wal) {
+        html += panel('WAL', '<ul><li>' + Math.round(health.wal.totalBytes / 1048576) + ' MB / ' + health.wal.fileCount + ' 文件</li></ul>');
+      } else if (health.unavailable.includes('wal')) {
+        html += panel('WAL', '<ul><li class="muted">WAL 统计不可用</li></ul>');
+      }
+      if (health.available.includes('requests') && health.requests) {
+        html += panel('最近72小时请求 · UTC日期', luluTable(['日期', '数量'], health.requests.map((r) => [esc(r.day), String(r.count)])));
+      }
+      html += '<p class="muted">只读统计；不代表磁盘剩余配额。删除记录后的空间由数据库维护回收。数据最多缓存60秒。</p><button class="sm" onclick="refreshDatabaseHealth()">刷新数据库统计</button></div>';
+      dbDiv.innerHTML = html;
+    })
+    .catch((err) => {
+      if (dbDiv) dbDiv.innerHTML = '<p class="error">加载数据库健康数据失败: ' + esc(err.message) + '</p>';
+    });
 }
 
 function refreshLive(d) {

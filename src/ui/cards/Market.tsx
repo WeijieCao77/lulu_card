@@ -34,6 +34,7 @@ import { takeServer } from '../../engine/account'
 import { CardFilters, EMPTY_FILTER, matchesFilter } from './Filters'
 import { CardPicker, matchesQuery } from './Picker'
 import type { CardFilter } from './Filters'
+import { MarketHistory } from './MarketHistory'
 
 /** the old listings' haggling room, for the ones still running out */
 const HAGGLE = 0.1
@@ -629,6 +630,7 @@ export default function Market() {
         )}
         {bidOpen?.id === l.id && (
           <div style={{ marginTop: 6 }}>
+            <MarketHistory key={l.cardId + ":" + l.level} cardId={l.cardId} level={l.level} />
             <input
               type="number"
               value={bidPrice}
@@ -702,6 +704,7 @@ export default function Market() {
           onChange={setSellCard}
           placeholder="选一张卡"
         />
+        {sellCard && <MarketHistory key={sellCard + ":" + level(sellCard)} cardId={sellCard} level={level(sellCard)} />}
         <div className="row wrap" style={{ gap: 6 }}>
           <input
             style={{ flex: '1 1 110px' }}

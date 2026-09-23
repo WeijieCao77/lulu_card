@@ -27,6 +27,7 @@ import { isVerified } from './phone-api.js'
 import { TRADE_PULLS, TRADE_DAYS } from './market-api.js'
 import { makeSwissCupRunner } from './opencup-v2.js'
 import { createCupComputer } from './opencup-worker.js'
+import { makeCupPass } from './cup-clock.js'
 import { createCupEngineArchive } from './opencup-engine-archive.js'
 
 export const OPEN_CUP_SCHEMA = `
@@ -153,6 +154,7 @@ export function makeOpenCupApi(sql, {
   bg = sql,
   format = Number(process.env.OPEN_CUP_FORMAT ?? 1),
   compute = null,
+  passMs = 120_000,
   cardPoolVersion = 'source',
   engineBundle = null,
 }) {
@@ -433,32 +435,28 @@ export function makeOpenCupApi(sql, {
    * four rounds due and plays them one after another, and the bracket comes
    * out exactly as it would have on time.
    */
-  let running = null
+  // A worker or database await that never settles must not permanently own the cup clock.
+  const cupClock = makeCupPass({ name: 'opencup', limitMs: passMs, onStall: () => computer?.reset() })
   function advance(now = clock()) {
-    running ??= (async () => {
-      try {
-        await ensureOpen(now)
-        for (let pass = 0; pass < (timer ? 1 : 64); pass++) {
-          const due = await bg`
-            select id::text as id, league, starts, status, round, rounds, step_sec, seed::text as seed, entrants, balance_version, format_version, phase, stage_round, playoff, engine_hash
-              from open_cups
-             where status in ('open', 'live') and starts <= ${new Date(now)}
-             order by starts limit 8`
-          let moved = false
-          for (const cup of due) {
-            if (cup.status === 'open') { await start(cup); moved = true; continue }
-            if (engine.openCupRoundAt(ms(cup.starts), cup.step_sec, cup.round) <= now) {
-              moved = (await playRound(cup)) || moved
-            }
+    return cupClock.run(async () => {
+      await ensureOpen(now)
+      for (let pass = 0; pass < (timer ? 1 : 64); pass++) {
+        const due = await bg`
+          select id::text as id, league, starts, status, round, rounds, step_sec, seed::text as seed, entrants, balance_version, format_version, phase, stage_round, playoff, engine_hash
+            from open_cups
+           where status in ('open', 'live') and starts <= ${new Date(now)}
+           order by starts limit 8`
+        let moved = false
+        for (const cup of due) {
+          if (cup.status === 'open') { await start(cup); moved = true; continue }
+          if (engine.openCupRoundAt(ms(cup.starts), cup.step_sec, cup.round) <= now) {
+            moved = (await playRound(cup)) || moved
           }
-          if (!moved) break
         }
-        await prune(now).catch((err) => console.warn('opencup: prune failed', err.message))
-      } finally {
-        running = null
+        if (!moved) break
       }
-    })()
-    return running
+      await prune(now).catch((err) => console.warn('opencup: prune failed', err.message))
+    })
   }
   let interval = null
   if (timer && sql) {

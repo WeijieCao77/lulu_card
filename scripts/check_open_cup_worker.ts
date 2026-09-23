@@ -20,5 +20,8 @@ try {
  worker.close()
  const restarted=await worker.compute([a,b,true,10,2,scores])
  assert.ok(restarted.detail.maps.length>=3)
+ worker.reset()
+ const afterReset=await worker.compute([a,b,false,10,2,scores])
+ assert.deepEqual(afterReset,playOpenCupMatch(a,b,false,10,2,scores))
  console.log('PASS worker error recovery + termination/restart')
 } finally { worker.close() }

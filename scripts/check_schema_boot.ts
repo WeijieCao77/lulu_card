@@ -61,7 +61,8 @@ const fakeSql = (opts: { failTimes: number; tables: boolean }) => {
 {
   console.log('=== 建表清单 ===')
   // seven since 2026-09-18: the 全服杯's later columns are a list entry of their own (OPEN_CUP_V2_SCHEMA)
-  check('九份 schema 都在', SCHEMAS.length === 9, `${SCHEMAS.length} 份`)
+  check('十份 schema 都在', SCHEMAS.length === 10, `${SCHEMAS.length} 份`)
+  check('成交历史索引已进入生产迁移', SCHEMAS.some(s => s.includes('listing_sold_history_idx') && s.includes('offer_accepted_history_idx')))
   check('每份都不是空的', SCHEMAS.every((s) => typeof s === 'string' && s.trim().length > 40))
   const all = SCHEMAS.join('\n')
   for (const t of ['card_accounts', 'card_listings', 'events']) {

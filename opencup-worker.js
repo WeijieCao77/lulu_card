@@ -51,6 +51,7 @@ export function createCupComputer() {
         worker.postMessage({ id, args })
       })
     },
+    reset() { if (worker || pending.size) fail(new Error('cup worker was reset')) },
     close() { fail(new Error('cup worker closed')) },
   }
 }
