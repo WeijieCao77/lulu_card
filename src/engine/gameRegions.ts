@@ -1,6 +1,6 @@
 export type GameRegion = 'LPL' | 'LCK' | 'WEST'
 export const GAME_REGIONS = ['LPL', 'LCK', 'WEST'] as const
-export const GAME_REGION_CN = { LPL: 'LPL', LCK: 'LCK', WEST: '欧美' } as const
+export const GAME_REGION_CN = { LPL: 'LPL', LCK: 'LCK', WEST: '其他' } as const
 
 export function gameRegionOf(raw: unknown): GameRegion | undefined {
   if (typeof raw !== 'string') return undefined

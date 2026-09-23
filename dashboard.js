@@ -507,7 +507,7 @@ body { max-width:1600px; margin:auto; }
           <option value="coach">教练包</option>
           <option value="cn">LPL 包</option>
           <option value="pac">LCK 包</option>
-          <option value="west">欧美包</option><option value="legend">彩卡包</option>
+          <option value="west">其他包</option><option value="legend">彩卡包</option>
           <option value="duelist">上单包</option><option value="initiator">打野包</option><option value="controller">中单包</option><option value="sentinel">下路包</option>
         </select>
         <input type="number" id="gCount" value="1" min="1" max="50" style="width:80px" title="几个">
@@ -681,7 +681,7 @@ function render(d) {
   // ---- 噜噜卡. Four names, not sixty-five: the pull event sends the pack it
   // was, and a four-row lookup is cheaper than making the client send a label
   // with every pull. Anything unrecognised prints its own key.
-  const PACK_CN = { scout: '试训包', elite: '选拔包', ten: '十连包', coach: '教练包', cn: 'LPL 包', pac: 'LCK 包', west: '欧美包', emea: 'LEC 包', ame: 'LCS 包', lcp: 'LCP 包', cblol: 'CBLOL 包', legend: '彩卡包', duelist: '上单包', initiator: '打野包', controller: '中单包', sentinel: '下路包' }
+  const PACK_CN = { scout: '试训包', elite: '选拔包', ten: '十连包', coach: '教练包', cn: 'LPL 包', pac: 'LCK 包', west: '其他包', emea: 'LEC 包', ame: 'LCS 包', lcp: 'LCP 包', cblol: 'CBLOL 包', legend: '彩卡包', duelist: '上单包', initiator: '打野包', controller: '中单包', sentinel: '下路包' }
   const MODE_CN = { ladder: '天梯', cup: '杯赛', seoul: '首尔征途' }
   const cm = d.cards || {}
   const cf = cm.funnel || {}

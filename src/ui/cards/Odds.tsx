@@ -157,7 +157,7 @@ export function OddsWhy() {
           <b>金卡保底</b>：连续 {SOFT_PITY} 抽没出金卡后概率递增，第 {HARD_PITY} 抽必出，所以实测金卡率高于基础值。
         </li>
         <li>
-          <b>彩卡保底</b>：{MYTHIC_PACK_NAMES} 共享 {MYTHIC_FLOOR} 抽保底，LPL、LCK、欧美三个赛区包均可出本大区彩卡并共享此保底；教练包和位置包不出本系列彩卡，不推进此保底。
+          <b>彩卡保底</b>：{MYTHIC_PACK_NAMES} 共享 {MYTHIC_FLOOR} 抽保底，LPL、LCK、其他三个赛区包均可出本大区彩卡并共享此保底；教练包和位置包不出本系列彩卡，不推进此保底。
         </li>
         <li>
           <b>普通选手卡基础评分</b>：金卡 {GOLD_AT}—90，银卡 {SILVER_AT}—{GOLD_AT - 1}，铜卡低于 {SILVER_AT}；强化后可超过基础上限。<br /><b>教练基础评分</b>：金卡 {COACH_GOLD_AT} 起，银卡 {COACH_SILVER_AT}—{COACH_GOLD_AT - 1}，铜卡低于 {COACH_SILVER_AT}。

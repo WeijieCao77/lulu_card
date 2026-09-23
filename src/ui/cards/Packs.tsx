@@ -333,7 +333,7 @@ export default function Packs() {
         actions={<span className="tiny muted">三大区，分开收集</span>}
       >
         <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-          游戏内赛区包分为三大区：LPL、LCK、欧美（原 LEC、LCS、LCP、CBLOL 库存合并保留）。赛区包只出该大区的选手，出金率和选拔包相同；三个区包全部常驻可买，收齐各赛区都有奖励，并且全部可出彩卡、共享彩卡保底。
+          游戏内赛区包分为三大区：LPL、LCK、其他（原 LEC、LCS、LCP、CBLOL 库存合并保留，包含越南等地区队伍）。赛区包只出该大区的选手，出金率和选拔包相同；三个区包全部常驻可买，收齐各赛区都有奖励，并且全部可出彩卡、共享彩卡保底。
           {'　'}每个大区收到 25% / 50% / 75% / 90% / 100% 各有一档奖励，收齐送十连包。
           {'　'}每周可自选一个大区享受八折优惠，本周选定后不可更改，北京时间周一 0 点开放重新选择；锁定前按原价购买。本周推荐是{GAME_REGION_CN[featured]}，仅作推荐展示。
         </p>

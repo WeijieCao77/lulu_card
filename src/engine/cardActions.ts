@@ -132,7 +132,7 @@ function dispatch(
       const kind = a.kind
       if (!isPackKind(kind)) return { ok: false, why: '没有这种卡包' }
       if (kind === 'ame' || kind === 'emea' || kind === 'lcp' || kind === 'cblol') {
-        return { ok: false, why: '旧赛区包已下架，请刷新后选择新的欧美包。' }
+        return { ok: false, why: '旧赛区包已下架，请刷新后选择新的其他包。' }
       }
       const payWith = a.payWith === 'coins' ? 'coins' : 'pack'
       // Coins buying a series pack must name the exact price the page showed

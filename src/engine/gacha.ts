@@ -136,7 +136,7 @@ export const PACKS: Record<PackKind, PackDef> = {
     cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
   },
   west: {
-    kind: 'west', name: '欧美包', pool: 'WEST',
+    kind: 'west', name: '其他包', pool: 'WEST',
     blurb: '包含 LEC、LCS、LCP、CBLOL 选手。三张，至少一张银卡起。',
     cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
   },
@@ -1113,7 +1113,7 @@ export function openPack(
   g: GachaState, kind: PackKind, payWith: 'pack' | 'coins', today?: string,
 ): Pulled[] {
   if (!isPackKind(kind) || kind === 'seoul2024') throw new Error('没有这种卡包')
-  if (isLegacyRegionPack(kind)) throw new Error('赛区包已合并为欧美包，请刷新页面')
+  if (isLegacyRegionPack(kind)) throw new Error('赛区包已合并为其他包，请刷新页面')
   const def = PACKS[kind]
   if (payWith === 'pack') {
     if ((g.packs[kind] ?? 0) < 1) throw new Error('没有这种卡包')

@@ -197,7 +197,7 @@ function run() {
     }
     // Each mail text is readable through mailLine with legacy pack maps to WEST name.
     for (const m of g.mail ?? []) {
-      assert.match(m.text, /欧美/)
+      assert.match(m.text, /其他包/)
     }
   }
 

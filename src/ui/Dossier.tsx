@@ -113,7 +113,7 @@ export default function Dossier({
       }
     >
       <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-        选手与教练资料库。游戏分类为三大区：LPL、LCK、欧美；欧美包含 LEC、LCS、LCP、CBLOL 联赛。选手与教练资料中的联赛信息保留真实所属联赛。能力评分为游戏内评分，非官方评价。生涯数据暂未收录。
+        选手与教练资料库。游戏分类为三大区：LPL、LCK、其他；其他包含 LEC、LCS、LCP、CBLOL 联赛及其中的越南等地区队伍。选手与教练资料中的联赛信息保留真实所属联赛。能力评分为游戏内评分，非官方评价。生涯数据暂未收录。
       </p>
 
       <div className="row wrap" style={{ gap: 8, margin: '12px 0' }}>

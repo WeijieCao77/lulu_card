@@ -85,7 +85,7 @@ export default function WorldsGallery() {
     <p className="worlds-note">知名选手收录各赛区代表人物的生涯版本；已有 S 赛或 MSI MVP 彩卡的选手不重复收录。<br />普通选手卡基础评分：金卡 {GOLD_AT}—90，银卡 {SILVER_AT}—{GOLD_AT - 1}，铜卡低于 {SILVER_AT}；强化后可超过基础上限。教练基础评分：金卡 {COACH_GOLD_AT} 起，银卡 {COACH_SILVER_AT}—{COACH_GOLD_AT - 1}，铜卡低于 {COACH_SILVER_AT}。知名选手 90—92；冠军成员 90—94；MSI MVP 93—95；S 赛 MVP 94—97。特别纪念卡单独评定。<br />同等级下，知名选手彩卡接近顶尖现役；强化每级 +1，最多 +5。总评是游戏能力估算，比赛还受位置、默契和教练影响。</p>
     <p className="worlds-note">S3 为 Faker「初代王朝」冠军纪念卡，当届没有官方 MVP；S4—S6 标注赛事 MVP，S7—S15 标注决赛 MVP。<br />
       IG 新增五张冠军纪念卡，与已有 Ning FMVP 卡组成六人收藏；MSI 共 11 张，2015 为赛事 MVP，2020 停办，其余为决赛 MVP。<br />
-      {MYTHIC_PACK_NAMES}可出彩卡，共享彩卡保底：连续未出时，最迟第 {MYTHIC_FLOOR} 张必出彩卡。十连按 10 张计，换包进度不重置。LPL、LCK、欧美三个赛区包均可出本大区彩卡并共享同一彩卡保底；教练包和位置包不出本系列彩卡。收齐基础全图鉴可领取彩卡包。完整概率见右下角“概率”。</p>
+      {MYTHIC_PACK_NAMES}可出彩卡，共享彩卡保底：连续未出时，最迟第 {MYTHIC_FLOOR} 张必出彩卡。十连按 10 张计，换包进度不重置。LPL、LCK、其他三个赛区包均可出本大区彩卡并共享同一彩卡保底；教练包和位置包不出本系列彩卡。收齐基础全图鉴可领取彩卡包。完整概率见右下角“概率”。</p>
     {pageCount > 1 && <nav className="row" aria-label="名人堂分页" style={{ justifyContent: 'center', gap: 16, marginTop: 20 }}><button disabled={safePage === 0} onClick={() => setPage(safePage - 1)}>上一页</button><span>{safePage + 1} / {pageCount}</span><button disabled={safePage + 1 === pageCount} onClick={() => setPage(safePage + 1)}>下一页</button></nav>}
     {open && <Detail card={open} close={() => setOpen(null)} />}
   </section>
