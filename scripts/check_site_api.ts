@@ -285,12 +285,13 @@ check(readDataUrl('data:image/png;base64,not base64!!') === null, 'junk in the p
 
 // ---- 后台按名字搜卡 -----------------------------------------------------
 {
-  const r0 = await call('/api/admin/cards?q=zmjjkk')
+  const r0 = await call('/api/admin/cards?q=Faker')
   check(r0.code === 404, '不带 token 搜卡是 404', `code ${r0.code}`)
-  const r = await call('/api/admin/cards?q=zmjjkk', { token: TOKEN })
+  const r = await call('/api/admin/cards?q=Faker', { token: TOKEN })
   const b = r.body as { ok: boolean; cards: { id: string; name: string; rarityCn: string; rating: number }[] }
-  check(b.ok === true && b.cards.some((c) => c.id === 'p:P200') && b.cards.every((c) => /zmjjkk/i.test(c.name)),
-    '搜 zmjjkk 找到 p:P200，本体和传奇卡都在', JSON.stringify(b.cards?.slice(0, 3)))
+  check(b.ok === true && b.cards.some((c) => c.id === 'p:P121') && b.cards.some((c) => c.id === 'worlds-2024-faker')
+    && b.cards.every((c) => /faker/i.test(c.name)),
+    '搜 Faker 找到普通卡与赛事彩卡', JSON.stringify(b.cards?.slice(0, 3)))
   check(b.cards.length > 1 && b.cards[0].rating >= b.cards[1].rating, '强的排前面', '')
   const club = await call('/api/admin/cards?q=EDG', { token: TOKEN })
   check(((club.body as { cards: unknown[] }).cards ?? []).length > 0, '按战队缩写也搜得到', '')
@@ -354,7 +355,7 @@ check(readDataUrl('data:image/png;base64,not base64!!') === null, 'junk in the p
   // there as a card nothing can draw or sell
   r = await admin({ who: code, cardId: 'p:NOPE' })
   check(r.body.ok === false && /没有这张卡/.test(String(r.body.why)), '不存在的卡 ID 发不出去', JSON.stringify(r.body))
-  r = await admin({ who: code, cardId: 'p:P0' })
+  r = await admin({ who: code, cardId: 'p:P121' })
   check(r.body.ok === true, '真实的卡 ID 可以发', JSON.stringify(r.body))
   r = await admin({ who: code, pack: 'nope' })
   check(r.body.ok === false && /没有这种卡包/.test(String(r.body.why)), '不存在的卡包会被拒绝',

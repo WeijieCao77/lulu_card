@@ -14,6 +14,7 @@ const options = {
   readBody: async (req: { body: unknown }) => JSON.stringify(req.body),
   json: (res: { body?: any }, _status: number, body: any) => { res.body = body },
   rateLimited: () => false, normalizeId, hash,
+  enabled: true,
 }
 const make = (extra: object) => makePhoneApi(sql, { ...options, ...extra } as never)
 async function call(api: ReturnType<typeof make>, action: string, body: object) {

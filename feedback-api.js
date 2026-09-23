@@ -3,6 +3,7 @@
  * across processes; no feedback, votes, or account credentials enter telemetry.
  */
 import { createHash, randomBytes } from 'node:crypto'
+import { RELEASE_STAGE } from './release-policy.js'
 
 export const FEEDBACK_SCHEMA = `create table if not exists card_feedback (
   key text primary key, items jsonb not null default '[]'::jsonb
@@ -42,7 +43,14 @@ function wire(item, owner, items, admin = false) {
 }
 const rank = (a, b) => Number(b.pin) - Number(a.pin) || b.votes.length - a.votes.length || b.t - a.t
 
-export function makeFeedbackApi({ getSql, readBody, json, normalizeId, rateLimited, token, tokenFrom, tokenOk }) {
+/** The demo board stays open; the formal board cannot be filled by one verified account. */
+export function feedbackPostAllowed(items, owner, now = Date.now(), stage = RELEASE_STAGE) {
+  if (stage !== 'production') return true
+  const own = items.filter(x => x.owner === owner)
+  return own.length < 30 && own.filter(x => x.t > now - 24 * 60 * 60 * 1000).length < 3
+}
+
+export function makeFeedbackApi({ getSql, readBody, json, normalizeId, rateLimited, token, tokenFrom, tokenOk, stage = RELEASE_STAGE }) {
   return async (req, res, path, url, bucket) => {
     const admin = path === '/api/admin/feedback'
     if (!admin && !['/api/feedback/list', '/api/feedback/new', '/api/feedback/vote'].includes(path)) return false
@@ -63,7 +71,10 @@ export function makeFeedbackApi({ getSql, readBody, json, normalizeId, rateLimit
         const id = normalizeId(body.accountId)
         if (!id) reject('请先进入游戏，再使用玩家信箱。', 401)
         owner = hash(id)
-        if (!(await sql`select 1 from card_accounts where id_hash=${owner}`).length) reject('账号不存在。', 401)
+        const account = await sql`select verified from card_accounts where id_hash=${owner}`
+        if (!account.length) reject('账号不存在。', 401)
+        if (stage === 'production' && path !== '/api/feedback/list' && !account[0].verified)
+          reject('请先完成手机号验证，再提交建议或投票。', 403)
       }
       const result = await sql.begin(async tx => {
         await tx`insert into card_feedback(key) values('board') on conflict do nothing`
@@ -77,6 +88,7 @@ export function makeFeedbackApi({ getSql, readBody, json, normalizeId, rateLimit
           const own = items.filter(x => x.owner === owner)
           if (own.some(x => x.text === text)) reject('这条建议已提交，可在「我的」查看。', 409)
           const now = Date.now()
+          if (!feedbackPostAllowed(items, owner, now, stage)) reject('提交建议过于频繁，请稍后再试。', 429)
 
           let id
           do { id = randomBytes(4).toString('hex') } while (items.some(x => x.id === id))

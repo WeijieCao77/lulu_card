@@ -22,7 +22,6 @@ export default function PhoneGate({ id, onBound, onSignOut, backLabel = '换一�
   const [wait, setWait] = useState(0)
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState<string | null>(null)
-  const [dev, setDev] = useState(false)
 
   useEffect(() => {
     if (wait <= 0) return
@@ -42,8 +41,7 @@ export default function PhoneGate({ id, onBound, onSignOut, backLabel = '换一�
       return
     }
     setWait(r.wait ?? 60)
-    setDev(!!r.dev)
-    setMsg(r.dev ? '验证码已生成（服务器还没接短信，作者能在后台看到，找作者要）。' : '验证码已发送。')
+    setMsg('验证码已发送。')
   }
 
   const submit = async () => {
@@ -90,7 +88,7 @@ export default function PhoneGate({ id, onBound, onSignOut, backLabel = '换一�
           {mode === 'bind' ? '绑定' : '进入'}
         </button>
       </div>
-      {msg && <p className={`small ${dev ? 'muted' : ''}`} style={{ color: msg.includes('已') ? 'var(--good)' : 'var(--warn)' }}>{msg}</p>}
+      {msg && <p className="small" style={{ color: msg.includes('已') ? 'var(--good)' : 'var(--warn)' }}>{msg}</p>}
       <div className="row wrap" style={{ gap: 12, marginTop: 16 }}>
         {id && (
           <button className="ghost sm" onClick={() => { setMode(mode === 'bind' ? 'login' : 'bind'); setMsg(null); setCode('') }}>

@@ -1280,7 +1280,7 @@ async function rvAct(undo, code, btn) {
   $('#rMsg').textContent = '…'
   try {
     const q = '/api/admin/verify?code=' + code + (undo ? '&undo=1' : '&via=' + encodeURIComponent(via))
-    const r = await fetch(q, { headers: auth() })
+    const r = await fetch(q, { method: 'POST', headers: auth() })
     const j = await r.json()
     if (!j.ok) throw new Error(j.why || (j.matched === 0 ? (undo ? '不是人工通过的号，或者已经撤回了' : '没有这个账号') : 'HTTP ' + r.status))
     $('#rMsg').textContent = (undo ? '已撤回 ' : '已通过 ') + (j.name || code) + ' · ' + new Date().toLocaleTimeString('zh-CN')

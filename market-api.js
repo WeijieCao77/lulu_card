@@ -39,7 +39,7 @@ import { createHash, randomInt } from 'node:crypto'
 import { isVerified } from './phone-api.js'
 import { requestAction } from './cards-api.js'
 import { makeMarketGuard, PROTECT_SEC } from './market-guard.js'
-import { RELEASE_POLICY } from './release-policy.js'
+import { resolveMarketPolicy } from './market-policy.js'
 import { createMarketHistory } from './market-history.js'
 
 /** How long a listing takes bids before the top one wins — the seller's choice, within these. */
@@ -106,13 +106,11 @@ export const IGNORE_LIMIT = 3
  */
 export const MAX_LISTINGS = 3
 
-/** Demo/production defaults are centralized in release-policy.js.
+/** Demo/production defaults are centralized in market-policy.js (sourced from release-policy).
  * Production baseline: 50 pulls and 3 days, also applied to friend swaps. */
-const tradePullsEnv = Number(process.env.TRADE_PULLS)
-export const TRADE_PULLS = process.env.TRADE_PULLS && Number.isInteger(tradePullsEnv) && tradePullsEnv >= 0 ? tradePullsEnv : RELEASE_POLICY.tradePulls
-
-const tradeDaysEnv = Number(process.env.TRADE_DAYS)
-export const TRADE_DAYS = process.env.TRADE_DAYS && Number.isFinite(tradeDaysEnv) && tradeDaysEnv >= 0 ? tradeDaysEnv : RELEASE_POLICY.tradeDays
+const resolvePolicy = resolveMarketPolicy()
+export const TRADE_PULLS = resolvePolicy.tradePulls
+export const TRADE_DAYS = resolvePolicy.tradeDays
 export const MAX_ASK = 500_000
 
 /**

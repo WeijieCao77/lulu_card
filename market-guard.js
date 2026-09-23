@@ -1,4 +1,4 @@
-import { RELEASE_POLICY } from './release-policy.js'
+import { resolveMarketPolicy, resolveMarketGuardMode } from './market-policy.js'
 /**
  * Scripts on the trading post.
  *
@@ -65,8 +65,8 @@ import { RELEASE_POLICY } from './release-policy.js'
  * so they put an account in front of the owner (「watch」, with the rule's letter) and suspend nobody.
  * MARKET_GUARD_AUTO lists the letters that do; the default is A,E.
  *
- * Suspensions (MARKET_GUARD=ban, the default): three days the first
- * time, five after that. MARKET_GUARD=watch bans nobody; =off does nothing.
+ * Suspensions: three days the first time, five after that. Demo may set
+ * MARKET_GUARD=watch (report only) or =off; production always uses ban.
  *
  * Suspended means: no listing, no bidding, no buying, no swaps. Withdrawing,
  * answering and collecting still work, so nothing a suspended account already
@@ -80,8 +80,8 @@ import { RELEASE_POLICY } from './release-policy.js'
  * a script wins now starts when the minute ENDS, so 「quick」 runs to QUICK_SEC past that moment, and a
  * purchase in the two seconds after it is as inhuman as one in the two seconds after the listing.
  */
-const protectSecondsEnv = Number(process.env.MARKET_PROTECT_SEC)
-export const PROTECT_SEC = process.env.MARKET_PROTECT_SEC && Number.isInteger(protectSecondsEnv) && protectSecondsEnv >= 0 ? protectSecondsEnv : RELEASE_POLICY.protectSeconds
+const resolvePolicy = resolveMarketPolicy()
+export const PROTECT_SEC = resolvePolicy.protectSeconds
 
 export const GUARD = {
   ULTRA_SEC: 2, QUICK_SEC: PROTECT_SEC + 45, FRESH_SEC: 300,
@@ -93,8 +93,8 @@ export const GUARD = {
   FRESH_N: 100, FRESH_HOURS: 20,
   FIRST_DAYS: 3, REPEAT_DAYS: 5,
 }
-/** the rules that suspend by themselves; the rest only report */
-const autoRules = (v = process.env.MARKET_GUARD_AUTO) => new Set(String(v ?? 'A,E').toUpperCase().split(/[^A-E]+/).filter(Boolean))
+/** the rules that suspend by themselves; production always includes A and E */
+const autoRules = (v = process.env.MARKET_GUARD_AUTO) => new Set(resolveMarketPolicy({ env: { MARKET_GUARD_AUTO: v } }).autoRules)
 const DAY = 86_400_000
 
 export const GUARD_SCHEMA = `
@@ -180,6 +180,7 @@ export function judge(buys, now = Date.now(), AUTO = autoRules()) {
 }
 
 export function makeMarketGuard(sql, { bg = null, mode = process.env.MARKET_GUARD ?? 'ban', displayName = null } = {}) {
+  mode = resolveMarketGuardMode(mode)
   const work = bg ?? sql
   const off = mode === 'off' || !sql
   /** id_hash → until (ms), every ban still running; small, re-read once a minute */

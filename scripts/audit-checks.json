@@ -49,6 +49,10 @@
     "file": "scripts/check_phone.ts"
   },
   {
+    "runtime": "node",
+    "file": "scripts/check_formal_phone_gate.mjs"
+  },
+  {
     "runtime": "tsx",
     "file": "scripts/check_cheat.ts"
   },
@@ -140,6 +144,10 @@
   {
     "runtime": "tsx",
     "file": "scripts/check_mailbox.ts"
+  },
+  {
+    "runtime": "node",
+    "file": "scripts/check_feedback_admission.mjs"
   },
   {
     "runtime": "tsx",
@@ -585,6 +593,10 @@
     "file": "scripts/check_market_guard.ts"
   },
   {
+    "runtime": "node",
+    "file": "scripts/check_market_policy.mjs"
+  },
+  {
     "runtime": "tsx",
     "file": "scripts/check_market_protect.ts"
   },
@@ -711,6 +723,10 @@
   {
     "runtime": "tsx",
     "file": "scripts/check_release_readiness.ts"
+  },
+  {
+    "runtime": "node",
+    "file": "scripts/check_release_gate.mjs"
   },
   {
     "runtime": "node",

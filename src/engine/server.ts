@@ -7,6 +7,7 @@
  * the server can run them instead. See engine/cardActions.ts for why.
  */
 export { runAction, wantsRival, squadForPlay, ladderScore, ACTIONS } from './cardActions'
+export { RELEASE_STAGE } from '../../release-policy.js'
 export type { ActEnv, ActResult } from './cardActions'
 export {
   newGacha, migrateGacha, mergeClientFields, takeServerFields, clampState, refreshDaily,

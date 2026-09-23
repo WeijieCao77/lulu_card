@@ -48,8 +48,9 @@ export default function Account({ onSignOut }: { onSignOut: () => void }) {
     <>
       <Panel title="账号">
         <p className="small muted" style={{ marginTop: 0, lineHeight: 1.8 }}>
-          这个 ID 就是你的账号，没有密码，丢了找不回来。
-          <b style={{ color: 'var(--warn)' }}>请截图或复制保存</b>，换设备用它登录。
+          这个 ID 就是你的账号，没有密码。
+          <b style={{ color: 'var(--warn)' }}>请截图或复制保存</b>，换设备可以用它登录。
+          {RELEASE_POLICY.phoneEnabled && phone ? ' 如果忘记 ID，也可以用已绑定的手机号找回。' : ' ID 丢失会导致账号无法找回。'}
         </p>
 
         <div className="acct-id" style={{ filter: reveal ? 'none' : 'blur(7px)' }}>

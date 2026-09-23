@@ -6,7 +6,7 @@
   "description": "2026 LoL player cards, adapted from Val_Manager",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc -b && vite build && node scripts/precompress.mjs && npm run build:server",
+    "build": "node scripts/build-all.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
     "extract": "python3 scripts/extract.py",
@@ -14,7 +14,7 @@
     "start": "node server.js",
     "dossier": "python3 scripts/fetch_vlr_profiles.py && python3 scripts/fetch_vlr_staff.py && python3 scripts/fetch_liquipedia_faces.py && python3 scripts/fetch_legend_faces.py && python3 scripts/fetch_faces.py && python3 scripts/build_dossier.py",
     "people": "python3 scripts/build_people_registry.py && python3 scripts/fetch_vlr_people.py && python3 scripts/fetch_spike_people.py && python3 scripts/build_people.py && python3 scripts/fetch_liquipedia_people.py && python3 scripts/build_people.py && python3 scripts/fetch_people_faces.py && python3 scripts/build_dossier.py && python3 scripts/build_retired.py",
-    "build:server": "esbuild src/engine/server.ts --bundle --platform=node --format=esm --target=node20 --outfile=dist-server/engine.mjs --log-level=warning",
+    "build:server": "node scripts/build-server.mjs",
     "dev:server": "DATABASE_URL=pglite:// PORT=8080 node server.js",
     "audit:pg": "node scripts/pg/check_concurrency_pg.mjs",
     "audit:ci": "node scripts/run-audit.mjs",

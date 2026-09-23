@@ -12,12 +12,12 @@ import { RELEASE_POLICY } from './release-policy.js'
  *
  * What is stored: never the number. sha256(salt + number) to match on, the
  * last four digits to show, and the account's own id encrypted with a server
- * key so a login can hand it back. Codes are stored hashed, expire in ten
+ * key so a login can hand it back. Codes are stored hashed, expire in five
  * minutes, allow five tries, and a number gets one code a minute and five a
  * day. The sender is Aliyun 号码认证服务 · 短信认证 (see below) when
  * ALIYUN_SMS_ACCESS_KEY_ID / ALIYUN_SMS_ACCESS_KEY_SECRET / ALIYUN_SMS_SIGN_NAME
- * are set; off Railway without them, codes go to the server log and to the
- * owner's admin route. Overseas numbers cannot receive a mainland template —
+ * are set; local test codes require an explicit non-production switch.
+ * Overseas numbers cannot receive a mainland template —
  * they message the owner, who calls /api/admin/verify on their battle code.
  */
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, randomInt } from 'node:crypto'
@@ -26,7 +26,6 @@ import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, 
 // the card tables has them; kept as a name for anything that imported it
 export const PHONE_SCHEMA = ''
 
-const CODE_TTL_MS = 10 * 60 * 1000
 const MAX_TRIES = 5
 const PER_MINUTE_MS = 60 * 1000
 const PER_DAY = 5
@@ -62,7 +61,7 @@ export function decryptId(enc) {
 //
 // Not the plain SMS service: a personally-verified Aliyun account cannot get a
 // custom signature there. 号码认证服务's 短信认证 lends a signature
-// (「速通互联验证码」) and a template (100001, 登录/注册) with no paperwork, and
+// and a matching system template selected from this account's console, and
 // it generates, sends, KEEPS and checks the code itself — SendSmsVerifyCode
 // then CheckSmsVerifyCode on dypnsapi.aliyuncs.com. Nothing about the code
 // is stored here; card_sms only remembers when a number was last sent to,
@@ -89,13 +88,15 @@ export async function aliyunRpc(host, action, extra, env = process.env) {
 }
 
 export const smsConfigured = (env = process.env) =>
-  !!(env.ALIYUN_SMS_ACCESS_KEY_ID && env.ALIYUN_SMS_ACCESS_KEY_SECRET && env.ALIYUN_SMS_SIGN_NAME)
+  !!(env.ALIYUN_SMS_ACCESS_KEY_ID && env.ALIYUN_SMS_ACCESS_KEY_SECRET
+    && env.ALIYUN_SMS_SIGN_NAME && env.ALIYUN_SMS_TEMPLATE_CODE)
 
 /** Aliyun makes the code, sends it, and keeps it for five minutes. */
 export async function sendVerify(phone, env = process.env) {
   const d = await aliyunRpc('dypnsapi.aliyuncs.com', 'SendSmsVerifyCode', {
-    PhoneNumber: phone, SignName: env.ALIYUN_SMS_SIGN_NAME, TemplateCode: env.ALIYUN_SMS_TEMPLATE_CODE || '100001',
-    TemplateParam: JSON.stringify({ code: '##code##', min: '5' }), ValidTime: '300', CodeLength: '6',
+    PhoneNumber: phone, SignName: env.ALIYUN_SMS_SIGN_NAME, TemplateCode: env.ALIYUN_SMS_TEMPLATE_CODE,
+    TemplateParam: JSON.stringify({ code: '##code##', min: '5' }), ValidTime: '300', CodeLength: '6', CodeType: '1',
+    ReturnVerifyCode: 'false',
   }, env)
   if (d?.Code !== 'OK') throw new Error(`aliyun ${d?.Code || '?'}: ${d?.Message || ''}`)
   return true
@@ -108,17 +109,16 @@ export async function checkVerify(phone, code, env = process.env) {
 }
 
 /**
- * Local codes only off Railway: on production an unconfigured sender is an
- * error, not a fallback. PHONE_SMS_DEV=1 forces the local codes — the test
- * harness sets it, because the CI job carries Railway's variables and would
- * otherwise read as production.
+ * Local codes are an explicit local-test feature. Neither NODE_ENV=production
+ * nor a Railway runtime can enable them, even with PHONE_SMS_DEV=1.
  */
 export const devMode = (env = process.env) =>
-  !smsConfigured(env) && (env.PHONE_SMS_DEV === '1' || !env.RAILWAY_ENVIRONMENT)
+  !RELEASE_POLICY.phoneEnabled && !smsConfigured(env) && env.PHONE_SMS_DEV === '1'
+  && env.NODE_ENV !== 'production' && !env.RAILWAY_ENVIRONMENT && !env.RAILWAY_PROJECT_ID
 
 // ---------------------------------------------------------------- the api
 
-export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, hash, token, tokenFrom, tokenOk, sender, checker }) {
+export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, hash, token, tokenFrom, tokenOk, sender, checker, enabled = RELEASE_POLICY.phoneEnabled }) {
   const guard = (res, key, max) => {
     if (rateLimited(key, max)) { json(res, 429, { ok: false, why: '操作太频繁，稍等一下。' }); return true }
     return false
@@ -202,7 +202,7 @@ export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, ha
     const reservation = `checking:${randomBytes(16).toString('hex')}`
     const prepared = await locked(ph, async (tx) => {
       const rows = await tx`select ctid, code_h, tries from card_sms where phone_h = ${ph}
-                             and sent > now() - interval '10 minutes' order by sent desc limit 1 for update`
+                             and sent > now() - interval '5 minutes' order by sent desc limit 1 for update`
       if (!rows.length || rows[0].code_h === 'used') return expiredCode
       const r = rows[0]
       if (/^(pending|checking):/.test(r.code_h)) return busyCode
@@ -304,6 +304,7 @@ export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, ha
   /** the owner verifies an account by hand: ?code=<对战码>&via=douyin:xxx */
   async function adminVerify(req, res, url) {
     if (!admin(req, url, res)) return
+    if (req.method !== 'POST') { json(res, 405, { ok: false, why: 'POST required' }); return }
     if (!sql) { json(res, 200, { ok: false, offline: true }); return }
     const code = String(url.searchParams.get('code') || '').toLowerCase().slice(0, 8)
     const via = String(url.searchParams.get('via') || 'manual').slice(0, 60)
@@ -386,12 +387,12 @@ export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, ha
         (select max(bound) from card_phones) as last_bound`
       stats = a
     }
-    json(res, 200, { ok: true, configured: smsConfigured(), dev: devMode(), codes: devCodes, stats })
+    json(res, 200, { ok: true, configured: smsConfigured(), dev: devMode(), codes: devMode() ? devCodes : [], stats })
   }
 
   return {
     async route(req, res, path, bucket, url) {
-      if (!RELEASE_POLICY.phoneEnabled && ['/api/card/phone/send', '/api/card/phone/bind', '/api/card/phone/login'].includes(path)) {
+      if (!enabled && ['/api/card/phone/send', '/api/card/phone/bind', '/api/card/phone/login'].includes(path)) {
         json(res, 403, { ok: false, disabled: true, why: '内测期间暂不开放手机号功能，请使用账号 ID 登录。' }); return true
       }
       if (path === '/api/card/phone/send') { if (req.method !== 'POST') { json(res, 405, { ok: false }); return true } await sendCode(req, res, bucket); return true }
@@ -405,11 +406,11 @@ export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, ha
   }
 }
 
-/** Is this account allowed to play? On unless PHONE_GATE=0 (the test harnesses). */
-export const phoneGate = () => RELEASE_POLICY.phoneEnabled && process.env.PHONE_GATE !== '0'
+/** Formal policy cannot be disabled by Railway's old demo PHONE_GATE variable. */
+export const phoneGate = (policy = RELEASE_POLICY) => policy.phoneEnabled
 
-export async function isVerified(sql, idHash) {
-  if (!phoneGate()) return true
+export async function isVerified(sql, idHash, policy = RELEASE_POLICY) {
+  if (!phoneGate(policy)) return true
   const rows = await sql`select verified from card_accounts where id_hash = ${idHash}`
   return !!rows[0]?.verified
 }

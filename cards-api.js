@@ -15,7 +15,7 @@ import { sweepCardRequests } from './request-maintenance.js'
  * its SHA-256 — so the table is a pile of hashes and game saves, and a copy of
  * it does not let anyone log in as anybody.
  */
-import { isVerified } from './phone-api.js'
+import { isVerified, phoneGate } from './phone-api.js'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto'
@@ -464,7 +464,7 @@ export function makeCardApi(sql, {
         ok: true, today, now: serverNow(), saved,
         // 「太多人开小号了」: an account plays only after a phone has answered
         // a code; the client gates on this and the server refuses act/save
-        verified: !!rows[0].verified || process.env.PHONE_GATE === '0', phone: rows[0].last4 ?? null,
+        verified: !!rows[0].verified || !phoneGate(), phone: rows[0].last4 ?? null,
         rev: rows[0].rev, state: stored(state),
         // the client cannot work its own code out — it has the id, not the
         // hash, and hashing in the browser to learn something the server

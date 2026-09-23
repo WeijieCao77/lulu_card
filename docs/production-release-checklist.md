@@ -24,8 +24,12 @@
 1. 将 release-policy.js 的 RELEASE_STAGE 从 demo 改为 production；前端与服务器共用此配置，必须重新完整构建。
 2. 核对 Railway 的实际变量：清除 TRADE_DAYS=0、TRADE_PULLS=0、MARKET_PROTECT_SEC=0 等覆盖，或改为正式值。PHONE_GATE=1；禁止 PHONE_SMS_DEV=1；MARKET_GUARD=ban；MARKET_GUARD_AUTO 至少包含 A,E。
 3. 配置真实短信服务，保留现有 PHONE_KEY / PHONE_SALT，不能通过生成新值破坏已绑定身份。后台 ANALYTICS_TOKEN 独立保存。
-4. 使用拟上线环境执行 `npm run build` 和 `npm run check:production`。后者只读取配置，不发短信、不改存档；内测状态下应该失败。配置检查通过不等于整体验收通过。
+4. 使用拟上线环境执行 `npm run build` 和 `npm run check:production`。完整构建写入同一个随机构建编号与 release-policy 源码指纹，分别记录在 `dist/release-build.json` 和 `dist-server/release-build.json`。正式服启动时重新核对编号、来源、前端 JS/CSS 与引擎字节哈希，以及打包引擎实际的正式阶段和开局补给。只运行 `vite build` 或 `build:server`、使用旧制品、改完阶段未重建，均不得启动正式服。检查脚本只读配置，不发短信、不改存档；内测状态下应该失败。
 5. 人工完成下面清单并记录证据；任何未确认项不得标记为已完成。当前 CI 验证的是 demo，不是正式上线批准。
+
+正式服启动还要求 `NODE_ENV=production`、`PHONE_GATE=1`、`PHONE_SMS_DEV` 不为 `1`、真实 PostgreSQL `DATABASE_URL`、阿里云号码认证短信认证的 `ALIYUN_SMS_ACCESS_KEY_ID`、`ALIYUN_SMS_ACCESS_KEY_SECRET`、`ALIYUN_SMS_SIGN_NAME`、`ALIYUN_SMS_TEMPLATE_CODE`。模板码以阿里云后台实际取得的值为准，不使用隐式默认值。`ANALYTICS_TOKEN`、`PHONE_KEY`、`PHONE_SALT` 必须各为至少 24 位、三者不同的稳定密钥；已有手机号绑定时绝不能随意更换后两者。正式代码中的交易门槛会把过低环境变量钳制到至少 3 天、50 抽、60 秒，自动风控强制封禁模式及 A/E 规则；仍须核对 Railway 环境变量，不能将内测变量原样视为完成上线配置。
+
+阿里云侧需要开通「号码认证服务」的短信认证能力，为服务创建具备最小权限的 AccessKey，确认签名和 `SendSmsVerifyCode` / `CheckSmsVerifyCode` 可用、有可用余额或额度。将变量只配置在 Railway 的正式环境，先用自己的真实手机完成发送、错误码、过期、重复提交、绑定和登录找回测试。不要把 AccessKey、验证码或手机号明文写进仓库及验收报告。
 
 ## 性能与容量验收（正式发布前）
 

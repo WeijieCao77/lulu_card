@@ -33,6 +33,7 @@ import { makeMarketApi } from './market-api.js'
 import { makeOpenCupApi } from './opencup-api.js'
 import { makePhoneApi } from './phone-api.js'
 import { validatePhoneSecrets } from './phone-config.js'
+import { assertProductionReleaseReady } from './release-gate.js'
 import { releaseFingerprint } from './release-fingerprint.js'
 import { releaseFeatures } from './release-readiness.js'
 import { createMatchComputer } from './match-worker.js'
@@ -75,6 +76,7 @@ const PRODUCTION = process.env.NODE_ENV === 'production' || !!process.env.RAILWA
 const PORT = Number(process.env.PORT) || 8080
 const TOKEN = process.env.ANALYTICS_TOKEN || ''
 const phoneSecrets = validatePhoneSecrets(process.env)
+assertProductionReleaseReady({ engineModule: engine })
 if (phoneSecrets.mode === 'legacy-admin') console.warn('phone: legacy admin-derived secrets retained for existing accounts; see docs/phone-key-rotation.md before rotation')
 
 /**

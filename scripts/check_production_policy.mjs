@@ -1,31 +1,10 @@
-// Read-only pre-release gate. Run with the intended production environment.
-import { RELEASE_STAGE, RELEASE_POLICY } from '../release-policy.js'
-import { TRADE_DAYS, TRADE_PULLS } from '../market-api.js'
-import { PROTECT_SEC } from '../market-guard.js'
-import { smsConfigured } from '../phone-api.js'
-import { validatePhoneSecrets } from '../phone-config.js'
+/** Read-only pre-release gate. Run after a complete build with the intended production environment. */
+import { inspectProductionRelease } from '../release-gate.js'
 
-const failures = []
-const check = (ok, label) => { console.log(`${ok ? 'PASS' : 'BLOCK'} ${label}`); if (!ok) failures.push(label) }
-check(RELEASE_STAGE === 'production', 'Release stage is production (demo must not be published as the formal release)')
-check(RELEASE_POLICY.starterCoins === 3000, 'Starter coins restored to 3,000')
-check(RELEASE_POLICY.starterPacks.scout === 3 && RELEASE_POLICY.starterPacks.elite === 1 && RELEASE_POLICY.starterPacks.ten === 0 && RELEASE_POLICY.starterPacks.coach === 1, 'Starter packs restored: 3 scout, 1 elite, 0 ten, 1 coach')
-check(TRADE_DAYS >= 3 && TRADE_PULLS >= 50, 'Effective market gates: at least 3 days and 50 pulls')
-check(PROTECT_SEC >= 60, 'Effective buyout protection: at least 60 seconds')
-check(RELEASE_POLICY.phoneEnabled && process.env.PHONE_GATE !== '0', 'Phone verification enabled')
-check(process.env.PHONE_SMS_DEV !== '1' && smsConfigured(), 'Real SMS provider configured, no development codes')
-check((process.env.MARKET_GUARD ?? 'ban') === 'ban', 'Automatic market enforcement enabled')
-const rules = new Set((process.env.MARKET_GUARD_AUTO ?? 'A,E').toUpperCase().split(/[^A-E]+/).filter(Boolean))
-check(rules.has('A') && rules.has('E'), 'Anti-script and circular-trading auto rules A/E enabled')
-check(!!process.env.DATABASE_URL && !process.env.DATABASE_URL.startsWith('pglite:'), 'Persistent production database configured')
-try { validatePhoneSecrets({ ...process.env, NODE_ENV: 'production' }) } catch { failures.push('Stable phone secrets missing or weak'); console.log('BLOCK Stable phone secrets missing or weak') }
-const keys = ['ANALYTICS_TOKEN', 'PHONE_KEY', 'PHONE_SALT'].map(k => process.env[k])
-check(keys.every(k => k && k.length >= 24) && new Set(keys).size === 3, 'Three independent stable administration/phone secrets')
-try {
-  const engine = await import('../dist-server/engine.mjs')
-  const fresh = engine.newGacha('release-check', 'check', '2026-01-01')
-  check(fresh.coins === 3000, 'Built server engine uses production starter coins')
-  check(fresh.packs.scout === 3 && fresh.packs.elite === 1 && !fresh.packs.ten && fresh.packs.coach === 1, 'Built server engine uses production starter packs')
-} catch { check(false, 'Build the server before running the production check') }
-console.log('Also complete docs/production-release-checklist.md: configuration checks do not replace abuse tests or SMS delivery verification.')
-process.exitCode = failures.length ? 1 : 0
+let engineModule
+try { engineModule = await import('../dist-server/engine.mjs') } catch { /* reported below */ }
+const result = inspectProductionRelease({ engineModule })
+for (const error of result.errors) console.error(`BLOCK ${error}`)
+if (result.ok) console.log('PASS formal release code, configuration and matching frontend/server artifacts')
+console.log('Manual SMS delivery, abuse, database reset and load acceptance remain in docs/production-release-checklist.md.')
+process.exitCode = result.ok ? 0 : 1
