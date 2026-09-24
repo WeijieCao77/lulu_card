@@ -472,10 +472,13 @@ const hashOf = (id: string) => createHash('sha256').update(id).digest('hex')
   await sql`insert into card_gifts (from_h, to_h, card_id) values (${hashOf(A)}, ${hashOf(B)}, 'p:P1')`
   const waiting = await call('/api/card/gifts', { id: B }, 'gf')
   check('在途的礼物还看得到', waiting.body.waiting === 1, JSON.stringify(waiting.body))
+  // claiming here used to mark it taken without adding the card: it must not
+  // touch the gift; mail_take in /api/card/act delivers it
   const claim = await call('/api/card/gifts', { id: B, claim: true }, 'gf')
-  check('而且还领得到——功能下线不该吃掉别人的卡',
-    (claim.body.gifts as { cardId: string }[])?.[0]?.cardId === 'p:P1',
-    JSON.stringify(claim.body.gifts))
+  const still = await call('/api/card/gifts', { id: B }, 'gf')
+  check('旧领取入口不再吞礼物，礼物留给邮件领取',
+    claim.code === 410 && claim.body.gone === true && still.body.waiting === 1,
+    JSON.stringify(claim.body))
 }
 
 // ---- no database ------------------------------------------------------

@@ -183,6 +183,16 @@ check('撤回过的还能再放行，备注换成新的', !!r.body.account?.veri
   r = await call(phone, '/api/admin/review', {}, 'admin', `token=tok&code=${c6}`)
   check('绑上之后来源是 sms', r.body.account?.via === 'sms' && r.body.account?.last4 === '5000', JSON.stringify(r.body.account))
 }
+{
+  // 对战码只是 ID 哈希的前八位，ID 由客户端选：能刷出一串同码的小号。人工通过只认唯一的一个号
+  const twins = ['ab12cd34' + '0'.repeat(56), 'ab12cd34' + '1'.repeat(56)]
+  for (const h of twins) await sql`insert into card_accounts (id_hash, state) values (${h}, '{}')`
+  r = await call(phone, '/api/admin/verify', {}, 'admin', 'token=tok&code=ab12cd34&via=douyin:twin')
+  const [{ n }] = await sql`select count(*)::int as n from card_accounts where left(id_hash, 8) = 'ab12cd34' and verified is not null`
+  check('同一个对战码对上多个账号：一个都不放行', r.body.ok === false && r.body.clash === true && n === 0, JSON.stringify(r.body))
+  r = await call(phone, '/api/admin/verify', {}, 'admin', 'token=tok&code=ab12cd34&undo=1')
+  check('撤回也一样拒绝', r.body.ok === false && r.body.clash === true)
+}
 r = await call(phone, '/api/admin/verify', {}, 'admin', `token=wrong&code=${hash(ID4).slice(0, 8)}`)
 check('没有口令看不到后台路由', r.code === 0 || r.code === 404)
 r = await call(phone, '/api/admin/verify', {}, 'admin', `token=tok&code=${hash(ID4).slice(0, 8)}`, 'GET')

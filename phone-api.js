@@ -344,19 +344,25 @@ export function makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, ha
     const code = String(url.searchParams.get('code') || '').toLowerCase().slice(0, 8)
     const via = String(url.searchParams.get('via') || 'manual').slice(0, 60)
     if (code.length !== 8) { json(res, 400, { ok: false, why: 'code' }); return }
+    // The code is only the head of a hash of an id the client chose: a player
+    // can grind ids that share it. Act on exactly one account or on none.
+    const hits = await sql`select id_hash from card_accounts where left(id_hash, 8) = ${code} limit 2`
+    if (hits.length > 1) { json(res, 200, { ok: false, matched: hits.length, clash: true, why: '这个对战码对应不止一个账号，请用完整 ID 在审核台查询后处理。' }); return }
+    if (!hits.length) { json(res, 200, { ok: false, matched: 0, name: null }); return }
+    const exact = hits[0].id_hash
     if (url.searchParams.get('undo') === '1') {
       // only a hand-made pass can be taken back: a number that answered a
       // code stays answered. The note stays as revoked:<note>, so the same
       // account asking again is recognised at the desk.
       const rows = await sql`update card_accounts set verified = null, verify_via = 'revoked:' || substr(verify_via, 8)
-                             where left(id_hash, 8) = ${code} and verify_via like 'manual:%' returning name`
+                             where id_hash = ${exact} and verify_via like 'manual:%' returning name`
       json(res, 200, { ok: rows.length > 0, matched: rows.length, name: rows[0]?.name ?? null, undone: true })
       return
     }
     const manual = `manual:${via}`
     const rows = await sql`update card_accounts set verified = coalesce(verified, now()),
                            verify_via = case when verified is null then ${manual} else coalesce(verify_via, ${manual}) end
-                           where left(id_hash, 8) = ${code} returning name, verified, verify_via`
+                           where id_hash = ${exact} returning name, verified, verify_via`
     json(res, 200, { ok: rows.length > 0, matched: rows.length, name: rows[0]?.name ?? null, via: rows[0]?.verify_via ?? null })
   }
 

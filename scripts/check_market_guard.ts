@@ -63,6 +63,10 @@ assert.deepEqual(verdictOf(sleepless), ['watch', 'D'], '买得不快，但一天
 assert.deepEqual([judge(sleepless, now, new Set(['A', 'D', 'E'])).verdict, judge(patientSniper, now, new Set(['C'])).verdict], ['ban', 'ban'])
 // a ring does not get out by waiting: thirty trading purchases from one seller, each an hour after the listing
 assert.deepEqual(verdictOf(Array.from({ length: 32 }, (_, i) => ({ ...buy(5 + i * 20, 3600, 'alt'), card_id: `p:P${i % 4}`, flipped: true }))), ['ban', 'E'], '等一个小时再买也一样：同一个卖家、同几张卡来回倒')
+// …or by auction alone: an auction won is hours old, so it never counts toward speed, but E sees the ring
+const ringAuction = Array.from({ length: 36 }, (_, i) => ({ ...buy(5 + i * 20, 0.5, 'alt'), card_id: `p:P${i % 4}`, auction: true }))
+assert.deepEqual(verdictOf(ringAuction), ['ban', 'E'], '只靠拍卖出价来回倒：同样按 E 封')
+assert.deepEqual([judge(ringAuction, now).counts.ultra, judge(ringAuction, now).counts.quick, judge(ringAuction, now).counts.fresh], [0, 0, 0], '拍卖成交不计入速度规则')
 // a collector with coins: a hundred and fifty different cards in a day, most of them long on the shelf, all kept
 assert.equal(judge(Array.from({ length: 150 }, (_, i) => ({ ...buy(2 + i * 9, 300 + i * 40, `s${i % 60}`), card_id: `p:C${i}`, flipped: false })), now).verdict, null, '有钱的收集党一天扫一百五十张不同的卡：不封，也不上报')
 console.log('ok  规则：两秒内五次封；多家快买四十次封；同一卖家一天三十张封；手快的真人不封；集卡（每张只买一次、不转卖）不计')
@@ -173,4 +177,40 @@ const wk = await call('guard', { action: 'weekly' }, TOKEN)
 assert(wk.ok && wk.buyers >= 1 && wk.all.length === wk.buyers && wk.all.every((n: number, i: number) => i === 0 || n >= wk.all[i - 1]))
 assert(!JSON.stringify(wk).includes(hash(BOT).slice(0, 8)), '只有计数，没有账号')
 console.log('ok  再犯五天；站长可手动暂停')
+
+// suspended means no swaps on EITHER side: a clean account cannot hand a card to a suspended one
+const CLEAN = sellers[5]
+const toBanned = await call('swap', { id: CLEAN, code: hash(HUMAN).slice(0, 8), giveId: cardId, wantId: cardId })
+assert(toBanned.theyBanned && !toBanned.ok, JSON.stringify(toBanned))
+// a swap proposed before the ban cannot be accepted after it; declining still sends the card home
+assert((await call('guard', { code: hash(HUMAN).slice(0, 8), action: 'lift' }, TOKEN)).ok)
+await account(HUMAN, 1) // what he bought is still in his mail; give him the card to be asked for
+const proposed = await call('swap', { id: CLEAN, code: hash(HUMAN).slice(0, 8), giveId: cardId, wantId: cardId })
+assert(proposed.ok, JSON.stringify(proposed))
+const [sw] = await sql`select id from card_swaps where from_h = ${hash(CLEAN)} and status = 'open'`
+assert((await call('guard', { code: hash(HUMAN).slice(0, 8), action: 'ban', days: 3, note: 'test' }, TOKEN)).ok)
+const accepted = await call('swap_answer', { id: HUMAN, swap: String(sw.id), accept: true })
+assert(accepted.banned && !accepted.ok, JSON.stringify(accepted))
+assert.equal((await sql`select status from card_swaps where id = ${sw.id}`)[0].status, 'open')
+const declined = await call('swap_answer', { id: HUMAN, swap: String(sw.id), accept: false })
+assert(declined.ok && declined.declined, JSON.stringify(declined))
+console.log('ok  暂停的账号不能收换卡，也不能接受暂停前的交换；拒绝照常，卡退回')
+
+// a ring through auctions: the alt lists the same card again and again with no buy-now, the main is the only bidder
+const ALT = idOf(30), MAIN = idOf(31)
+await account(ALT, 40); await account(MAIN, 0)
+for (let i = 0; i <= GUARD.LOOP_N; i++) {
+  const listed = await call('list', { id: ALT, cardId, ask: 1000 })
+  assert(listed.ok, JSON.stringify(listed))
+  const [l] = await sql`select id from card_listings where seller_h = ${hash(ALT)} and status = 'open' order by id desc limit 1`
+  const bid = await call('offer', { id: MAIN, listing: String(l.id), price: 1000 })
+  assert(bid.ok, JSON.stringify(bid))
+  await sql`update card_listings set ends = now() - interval '1 second' where id = ${l.id}`
+  await api.settleDue()
+  assert.equal((await sql`select status from card_offers where listing = ${l.id}`)[0].status, 'accepted')
+}
+const ring = await api.guard.check(hash(MAIN))
+assert.equal(ring?.rule, 'E', JSON.stringify(ring))
+assert(await api.guard.banOf(hash(MAIN)), '拍卖输送同样自动暂停')
+console.log('ok  只靠拍卖出价的小号输送：规则 E 自动暂停')
 await db.close()

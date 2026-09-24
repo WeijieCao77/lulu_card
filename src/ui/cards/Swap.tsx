@@ -101,6 +101,7 @@ export default function Swap() {
     if (!r?.ok) {
       toast(r?.rarity ? '只能同等级互换：银换银，金换金。'
         : r?.banned ? String(r.why ?? '交易已暂停。')
+        : r?.theyBanned ? '对方的交易已暂停，暂时不能换卡。'
         : r?.newbie ? gateText(r)
           : r?.theyNew ? `对方是新账号，建满 ${Number(r.days) || 3} 天、开够 ${Number(r.need) || 50} 抽才能换卡。`
             : r?.theyLack ? '对方没有这张卡。'
@@ -124,6 +125,8 @@ export default function Swap() {
     setBusy(false)
     if (!r?.ok) {
       toast(r?.stamina ? `体力不够，接受交换要 ${STAMINA_COST.swap} 点。`
+        : r?.banned ? String(r.why ?? '交易已暂停，可以拒绝，暂时不能接受。')
+        : r?.theyBanned ? '对方的交易已暂停，暂时不能接受，可以拒绝退回。'
         : r?.notOwned ? '你已没有他要的那张卡，交换作废。'
           : '这个交换已经结束了。')
       void refresh()

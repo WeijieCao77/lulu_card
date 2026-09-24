@@ -118,11 +118,12 @@ create index if not exists market_bans_who_idx on market_bans (id_hash, made des
 export function judge(buys, now = Date.now(), AUTO = autoRules()) {
   const rows = buys.map((b) => {
     const made = new Date(b.made).getTime()
-    return { made, age: (made - new Date(b.created).getTime()) / 1000, seller: b.seller, won: b.won !== false, card: b.card_id ?? null, flipped: b.flipped === true }
+    return { made, age: (made - new Date(b.created).getTime()) / 1000, seller: b.seller, won: b.won !== false, card: b.card_id ?? null, flipped: b.flipped === true, auction: b.auction === true }
   }).filter((b) => Number.isFinite(b.age) && b.age >= 0 && b.made <= now)
   // Since the 保护期 a buy-now in the first minute is an entry in a draw, and most entries lose. Volume is
   // still judged on cards actually bought; but an entry two seconds after the listing is a script's, won or lost.
-  const entries = rows.filter((b) => now - b.made <= DAY)
+  // An auction win is hours old by nature: it counts toward cards going round (E), never toward speed.
+  const entries = rows.filter((b) => now - b.made <= DAY && !b.auction)
   rows.splice(0, rows.length, ...rows.filter((b) => b.won))
   // Trading or collecting: a card bought before in the window, or listed again afterwards, is trading. A row
   // with no card id (the check script's paper cases) counts as trading, which is what every rule assumed before.
@@ -144,11 +145,12 @@ export function judge(buys, now = Date.now(), AUTO = autoRules()) {
   // within two seconds of the listing, or of the moment its protected minute ended
   const ultra = entries.filter((b) => b.age <= GUARD.ULTRA_SEC || (b.age >= PROTECT_SEC && b.age <= PROTECT_SEC + GUARD.ULTRA_SEC))
   const trades = (list) => list.filter((b) => b.trading)
-  const quickDay = within(trades(day), GUARD.QUICK_SEC)
-  const quickWeek = within(trades(week), GUARD.QUICK_SEC)
-  const fresh = within(week, GUARD.FRESH_SEC)
+  const fast = (list) => list.filter((b) => !b.auction)
+  const quickDay = within(fast(trades(day)), GUARD.QUICK_SEC)
+  const quickWeek = within(fast(trades(week)), GUARD.QUICK_SEC)
+  const fresh = within(fast(week), GUARD.FRESH_SEC)
   const hours = new Set(fresh.map((b) => new Date(b.made).getUTCHours())).size
-  const ages = week.map((b) => b.age).sort((a, b) => a - b)
+  const ages = fast(week).map((b) => b.age).sort((a, b) => a - b)
   const round1 = (x) => Math.round(x * 10) / 10
   const counts = {
     day: day.length, week: week.length,
@@ -214,14 +216,16 @@ export function makeMarketGuard(sql, { bg = null, mode = process.env.MARKET_GUAR
 
   const buysOf = (me, since) => work`
     select o.made, l.created, l.seller_h as seller, l.card_id, o.price, (o.status = 'accepted') as won,
+           (l.buyout is null or o.price < l.buyout) as auction,
            -- bought and put back on the shelf: trading, not collecting
            exists (select 1 from card_listings r where r.seller_h = o.buyer_h and r.card_id = l.card_id and r.created > o.made) as flipped
     from card_offers o join card_listings l on l.id = o.listing
     -- 'expired' at the buy-now price is an entry in a 保护期 draw that somebody else won
     -- ('open' at that price is an entry whose draw has not happened yet)
-    where o.buyer_h = ${me} and o.status in ('accepted', 'expired', 'open')
-      and l.buyout is not null and o.price >= l.buyout
-      and o.made > ${since}
+    -- plus every auction won: a ring can hand cards over by bidding alone
+    where o.buyer_h = ${me} and o.made > ${since}
+      and ((o.status in ('accepted', 'expired', 'open') and l.buyout is not null and o.price >= l.buyout)
+        or (o.status = 'accepted' and (l.buyout is null or o.price < l.buyout)))
     order by o.made desc limit 3000`
 
   /** When this account's slate was last wiped: its newest ban (or the lift of it). */
@@ -275,8 +279,7 @@ export function makeMarketGuard(sql, { bg = null, mode = process.env.MARKET_GUAR
     const buyers = await work`
       select o.buyer_h, count(*)::int as n
       from card_offers o join card_listings l on l.id = o.listing
-      where o.status = 'accepted' and l.buyout is not null and o.price >= l.buyout
-        and o.made > now() - interval '7 days'
+      where o.status = 'accepted' and o.made > now() - interval '7 days'
       group by o.buyer_h having count(*) >= 10 order by n desc limit 400`
     const out = []
     for (const b of buyers) {

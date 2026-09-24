@@ -1398,7 +1398,7 @@ export function makeCardApi(sql, {
    * The table drains on its own.
    */
 
-  /** What is waiting for me, and marking it taken. */
+  /** How many old gifts are still waiting; they are delivered by mail_take. */
   async function gifts(req, res, bucket) {
     if (guard(req, res, `gi:${bucket}`, 60)) return
     if (!sql) { json(res, 200, { ok: false, offline: true }); return }
@@ -1408,31 +1408,10 @@ export function makeCardApi(sql, {
     if (!id) { json(res, 400, { ok: false, bad: true }); return }
     const me = hash(id)
     try {
-      if (body?.claim) {
-        // Handed over exactly once: the update returns only the rows it moved,
-        // so two tabs claiming at the same moment cannot both be given the card.
-        const rows = await sql`
-          update card_gifts set claimed = now()
-          where to_h = ${me} and claimed is null
-          returning id, from_h, card_id, note`
-        // `= any($1)` with a plain array, NOT sql(list): a nested tagged
-        // template is a driver-specific helper, and the check harness — which
-        // is a real Postgres behind a plain template — cannot build one. The
-        // leaderboard was caught by exactly this once already.
-        const names = rows.length
-          ? await sql`select id_hash, name from card_accounts where id_hash = any(${rows.map((r) => r.from_h)})`
-          : []
-        const by = Object.fromEntries(names.map((n) => [n.id_hash, n]))
-        json(res, 200, {
-          ok: true,
-          gifts: rows.map((r) => {
-            const n = by[r.from_h]
-            const who = displayName(n?.name, r.from_h)
-            return { cardId: r.card_id, note: r.note, from: `${who.name} #${who.tag}` }
-          }),
-        })
-        return
-      }
+      // Claiming here used to mark gifts taken without ever putting the card in
+      // the account (the server owns the collection now). Gifts arrive only
+      // through mail_take in /api/card/act; this route just counts them.
+      if (body?.claim) { json(res, 410, { ok: false, gone: true, why: '礼物会随邮件自动到账。' }); return }
       const n = await sql`select count(*)::int as n from card_gifts where to_h = ${me} and claimed is null`
       json(res, 200, { ok: true, waiting: n[0]?.n ?? 0 })
     } catch (err) {

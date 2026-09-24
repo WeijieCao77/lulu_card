@@ -363,7 +363,9 @@ export function makeMarketApi(sql, {
    * `seller` narrows it to one account's listings. Returns how many were closed.
    */
   async function settleBatch(limit = SETTLE_BATCH, seller = null, only = null, run = bgTx) {
+    let winners = []
     return run(async (db) => {
+      winners = []
       const ended = await db`
         select id, seller_h, card_id, level from card_listings
         where status = 'open' and ends is not null and ends <= now()
@@ -397,6 +399,7 @@ export function makeMarketApi(sql, {
         for (const l of ended) {
           const o = topOf.get(String(l.id))
           if (!o) continue
+          winners.push(o.buyer_h)
           mail.push({ to_h: o.buyer_h, kind: 'bought', card_id: l.card_id, level: l.level, coins: 0,
             body: { price: o.price, who: names[l.seller_h] } })
           mail.push({ to_h: l.seller_h, kind: 'sold', card_id: null, level: 0, coins: o.price,
@@ -419,7 +422,12 @@ export function makeMarketApi(sql, {
       }
       await mailRows(db, mail)
       return ended.length
-    }).then((n) => { if (n) menuCache.clear(); return n })
+    }).then((n) => {
+      if (n) menuCache.clear()
+      // an auction won is a card bought: the guard looks at the winner too (rule E)
+      for (const w of new Set(winners)) guard2.checkSoon(w)
+      return n
+    })
   }
 
   /** The old make-an-offer listings' clock: bounded, and only ever a handful of rows since 2026-09-07. */
@@ -1802,6 +1810,9 @@ export function makeMarketApi(sql, {
     if (them.row.id_hash === me) { json(res, 200, { ok: false, self: true }); return }
     const barred = await guard2.banOf(me)
     if (barred) { json(res, 200, { ok: false, banned: true, ...barred }); return }
+    // Suspended means no swaps on either side: an alt must not hand cards to
+    // a suspended main (market-guard.js).
+    if (await guard2.banOf(them.row.id_hash)) { json(res, 200, { ok: false, theyBanned: true }); return }
     const young = await tooNew(me)
     if (young) { json(res, 200, { ok: false, newbie: true, ...young }); return }
     const theirYoung = await tooNew(them.row.id_hash)
@@ -1909,6 +1920,12 @@ export function makeMarketApi(sql, {
       json(res, 200, out.gone ? { ok: false, gone: true } : out)
       return
     }
+    // Declining stays open to a suspended account (its offers must not be
+    // stranded); accepting moves a card, so neither side may be suspended.
+    // The swap stays open: it can still be declined, cancelled or expire.
+    const barred = await guard2.banOf(me)
+    if (barred) { json(res, 200, { ok: false, banned: true, ...barred }); return }
+    if (await guard2.banOf(row.from_h)) { json(res, 200, { ok: false, theyBanned: true }); return }
     const [theirName, myName] = [await nameOf(row.from_h), await nameOf(me)]
     const out = await tx(async (db) => {
       // The swap row is locked for the whole transaction, so two accepts of
