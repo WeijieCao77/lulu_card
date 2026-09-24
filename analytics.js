@@ -151,12 +151,36 @@ const hits = new Map()
  * being counted.
  */
 export function rateLimited(key, max = RATE_MAX) {
+  return hit(hits, key, max)
+}
+
+/**
+ * The analytics visitor id is chosen by the client, so a flood of fresh ids
+ * must not fill the map the game's network buckets live in: they get their
+ * own, and past its size the oldest ids are dropped instead of scanned for.
+ */
+const visitors = new Map()
+const MAX_VISITORS = 50_000
+export function visitorLimited(vid, max = RATE_MAX) {
+  return hit(visitors, `v:${vid}`, max, MAX_VISITORS)
+}
+
+const PRUNE_AT = 20_000
+const pruned = new WeakMap()
+function hit(store, key, max, cap = Infinity) {
   const t = Date.now()
-  const rec = hits.get(key)
+  const rec = store.get(key)
   if (!rec || t - rec.start > RATE_WINDOW_MS) {
-    hits.set(key, { start: t, n: 1 })
-    if (hits.size > 20000) {
-      for (const [k, v] of hits) if (t - v.start > RATE_WINDOW_MS) hits.delete(k)
+    store.delete(key)
+    store.set(key, { start: t, n: 1 })
+    // at most one sweep a second: a full map of live keys is not rescanned per request
+    if (store.size > PRUNE_AT && t - (pruned.get(store) ?? 0) > 1000) {
+      pruned.set(store, t)
+      for (const [k, v] of store) if (t - v.start > RATE_WINDOW_MS) store.delete(k)
+    }
+    // insertion order is age order: past the cap, the oldest windows go
+    if (store.size > cap) {
+      for (const k of store.keys()) { if (store.size <= cap * 0.9) break; store.delete(k) }
     }
     return false
   }

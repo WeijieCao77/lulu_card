@@ -1429,7 +1429,7 @@ export function makeMarketApi(sql, {
       // the first just set. Without it two equal first bids both went in
       // and the LATER one stood — first come, first served is the rule.
       const locked = await db`
-        select id, status, ends, buyout, draw_at,
+        select id, status, ends, buyout, draw_at, (ends is not null and ends <= now()) as ended,
                extract(epoch from now() - created)::float8 as age,
                extract(epoch from created + make_interval(secs => ${PROTECT_SEC}))::float8 * 1000 as protect_end
         from card_listings where id = ${l.id} for update`
@@ -1449,7 +1449,8 @@ export function makeMarketApi(sql, {
         if (mine.length) return { leading: true, price: l.buyout, entered: true }
       }
       if (auction) {
-        if (endsAt(locked[0]) <= Date.now()) return { gone: true }
+        // the database clock decides, the same one the settler and the extension use
+        if (locked[0].ended) return { gone: true }
         const cur = await db`
           select buyer_h, price from card_offers
           where listing = ${l.id} and status = 'open'

@@ -23,7 +23,7 @@ import { brotliCompress, constants, gzip } from 'node:zlib'
 import { extname, join, normalize, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createHash } from 'node:crypto'
-import { EVENTS, MAX_BODY, rateLimited, sanitize, tokenOk } from './analytics.js'
+import { EVENTS, MAX_BODY, rateLimited, sanitize, tokenOk, visitorLimited } from './analytics.js'
 import { engine, makeCardApi, normalizeId } from './cards-api.js'
 import { displayName } from './names.js'
 import { makeProfileApi } from './profile-api.js'
@@ -430,7 +430,7 @@ async function ingest(req, res) {
   // whole neighbourhood behind one egress address, and a live tab flushes
   // roughly twelve requests a minute, so a shared address runs out while every
   // one of those people is playing normally.
-  if (rateLimited(`v:${payload.vid}`)) { json(res, 429, { ok: false }); return }
+  if (visitorLimited(payload.vid)) { json(res, 429, { ok: false }); return }
 
   const rows = payload.events.map((e) => ({
     n: e.n,
