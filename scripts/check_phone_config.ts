@@ -3,9 +3,11 @@ import { validatePhoneSecrets } from '../phone-config.js'
 import { RELEASE_POLICIES } from '../release-policy.js'
 assert.throws(() => validatePhoneSecrets({ NODE_ENV: 'production' }), /missing or weak/)
 assert.throws(() => validatePhoneSecrets({ RAILWAY_PROJECT_ID: 'test', ANALYTICS_TOKEN: 'short' }), /missing or weak/)
-assert.equal(validatePhoneSecrets({ NODE_ENV: 'production', ANALYTICS_TOKEN: 'a'.repeat(32) }).mode, 'legacy-admin')
-assert.equal(validatePhoneSecrets({ NODE_ENV: 'production', PHONE_KEY: 'k'.repeat(32), PHONE_SALT: 's'.repeat(32), ANALYTICS_TOKEN: 'a'.repeat(32) }).mode, 'dedicated')
-assert.equal(validatePhoneSecrets({}).mode, 'development')
+// legacy/dedicated/development modes are the startup rules under the demo policy; formal ones follow
+const demo = RELEASE_POLICIES.demo
+assert.equal(validatePhoneSecrets({ NODE_ENV: 'production', ANALYTICS_TOKEN: 'a'.repeat(32) }, demo).mode, 'legacy-admin')
+assert.equal(validatePhoneSecrets({ NODE_ENV: 'production', PHONE_KEY: 'k'.repeat(32), PHONE_SALT: 's'.repeat(32), ANALYTICS_TOKEN: 'a'.repeat(32) }, demo).mode, 'dedicated')
+assert.equal(validatePhoneSecrets({}, demo).mode, 'development')
 const formal = { NODE_ENV: 'production', ANALYTICS_TOKEN: 'a'.repeat(32), PHONE_KEY: 'k'.repeat(32), PHONE_SALT: 's'.repeat(32),
   ALIYUN_SMS_ACCESS_KEY_ID: 'id', ALIYUN_SMS_ACCESS_KEY_SECRET: 'secret', ALIYUN_SMS_SIGN_NAME: 'current-sign', ALIYUN_SMS_TEMPLATE_CODE: 'current-template' }
 assert.equal(validatePhoneSecrets(formal, RELEASE_POLICIES.production).mode, 'dedicated')

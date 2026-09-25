@@ -18,6 +18,7 @@
  * offer goes home — and that path is checked here too.
  */
 process.env.ENGINE_FROM_SOURCE = '1'
+import { AUTO_VERIFY } from './verified-fixture.mjs'
 import { PGlite } from '@electric-sql/pglite'
 import { makeSql } from '../pglite-sql.js'
 import { createHash } from 'node:crypto'
@@ -38,6 +39,7 @@ const engine = await import('../src/engine/server.ts')
 const db = new PGlite()
 const sql = makeSql(db)
 await db.exec(CARD_SCHEMA)
+await db.exec(AUTO_VERIFY)
 
 let bad = 0
 const check = (name: string, ok: boolean, detail = '') => {

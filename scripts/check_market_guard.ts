@@ -4,6 +4,7 @@
  *
  *   npx tsx scripts/check_market_guard.ts
  */
+import { AUTO_VERIFY } from './verified-fixture.mjs'
 import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
 import { PGlite } from '@electric-sql/pglite'
@@ -74,6 +75,7 @@ console.log('ok  规则：两秒内五次封；多家快买四十次封；同一
 // ---- on the real market
 const db = new PGlite()
 await db.exec(CARD_SCHEMA)
+await db.exec(AUTO_VERIFY)
 const sql = makeSql(db)
 const hash = (id: string) => createHash('sha256').update(id).digest('hex')
 const TOKEN = 'owner-token'

@@ -12,10 +12,10 @@
  */
 import { PGlite } from '@electric-sql/pglite'
 import { makeSql } from '../pglite-sql.js'
-import { createHash } from 'node:crypto'
+import { createHash, randomInt } from 'node:crypto'
 import { CARD_SCHEMA, makeCardApi, normalizeId } from '../cards-api.js'
 import { checkVerify, devCodes, devMode, encryptId, decryptId, isVerified, makePhoneApi, normalizePhone, phoneGate, sendVerify, smsConfigured, smsDailyCap } from '../phone-api.js'
-import { RELEASE_POLICIES } from '../release-policy.js'
+import { RELEASE_POLICIES, RELEASE_POLICY } from '../release-policy.js'
 
 process.env.PHONE_GATE = '0' // Regression: formal policy must ignore this old demo bypass.
 // the harness decides the mode, not the machine it runs on: CI carries Railway's
@@ -37,7 +37,19 @@ interface Res { code: number; body: Record<string, unknown>; headersSent?: boole
 const json = (res: Res, code: number, body: Record<string, unknown>) => { res.code = code; res.body = body }
 const hash = (id: string) => createHash('sha256').update(String(id)).digest('hex')
 const cards = makeCardApi(sql, { rateLimited, readBody, json } as never)
-const phone = makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, hash, token: 'tok', tokenFrom: (_r: unknown, u: URL) => u.searchParams.get('token'), tokenOk: (a: string, b: string) => a === b, enabled: true } as never)
+// A stand-in provider: the formal policy never makes local codes, so the harness plays Aliyun — it
+// makes the code, keeps it for the checker, and leaves it in devCodes where every check below reads it.
+const issued = new Map<string, string>()
+const sender = async (p: string) => {
+  const code = String(randomInt(0, 1_000_000)).padStart(6, '0')
+  issued.set(p, code)
+  devCodes.unshift({ last4: p.slice(-4), code, at: new Date().toISOString() })
+}
+const checker = async (p: string, c: string) => issued.get(p) === c
+const adminOpts = { token: 'tok', tokenFrom: (_r: unknown, u: URL) => u.searchParams.get('token'), tokenOk: (a: string, b: string) => a === b, enabled: true }
+const phone = makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, hash, ...adminOpts, sender, checker } as never)
+/** the same API with no provider at all: what a formal server without SMS configured does */
+const bare = makePhoneApi(sql, { readBody, json, rateLimited, normalizeId, hash, ...adminOpts } as never)
 async function call(api: { route: (...a: never[]) => Promise<boolean> }, path: string, body: unknown, bucket = 'test', query = '', method?: string): Promise<Res> {
   const res: Res = { code: 0, body: {}, writeHead: () => ({ end: () => {} }) }
   const req = { body: JSON.stringify(body), method: method ?? (path === '/api/admin/verify' || !path.startsWith('/api/admin') ? 'POST' : 'GET') }
@@ -59,11 +71,11 @@ r = await call(cards, '/api/card/load', { id: ID })
 check('正式策略下新账号不能游玩，即使旧 PHONE_GATE=0', phoneGate(RELEASE_POLICIES.production) && !(await isVerified(sql, hash(ID), RELEASE_POLICIES.production)))
 const state = (r.body.state as Record<string, unknown>)
 r = await call(cards, '/api/card/act', { id: ID, action: 'checkin', client: state })
-check('内测当前仍可游玩', r.body.ok === true, String(r.body.why))
+check('正式策略下未绑手机的账号被拦', r.body.ok === false && r.body.unverified === true, String(r.body.why))
 
 // ---- send, bind ---------------------------------------------------------
 r = await call(phone, '/api/card/phone/send', { phone: '13800138000', id: ID })
-check('发码成功（开发模式）', r.body.ok === true && r.body.dev === true, JSON.stringify(r.body))
+check('发码成功，验证码不在本地生成', r.body.ok === true && r.body.dev === false, JSON.stringify(r.body))
 const code = devCodes[0].code
 check('验证码是六位数字', /^\d{6}$/.test(code))
 r = await call(phone, '/api/card/phone/send', { phone: '13800138000', id: ID })
@@ -206,7 +218,7 @@ check('后台能看发码与绑定的数量，不见号码', r.body.stats && r.b
 // ---- the SMS budget: bind codes need an account, per account and per day ----
 {
   let cap = 1_000
-  const budget = makePhoneApi(sql, { readBody, json, rateLimited: () => false, normalizeId, hash, token: 'tok', tokenFrom: (_r: unknown, u: URL) => u.searchParams.get('token'), tokenOk: (a: string, b: string) => a === b, enabled: true, dailyCap: () => cap } as never)
+  const budget = makePhoneApi(sql, { readBody, json, rateLimited: () => false, normalizeId, hash, token: 'tok', tokenFrom: (_r: unknown, u: URL) => u.searchParams.get('token'), tokenOk: (a: string, b: string) => a === b, enabled: true, dailyCap: () => cap, sender, checker } as never)
   await sql`delete from card_sms`
   const before = devCodes.length
   let r = await call(budget, '/api/card/phone/send', { phone: '13100131000', for: 'bind' }, 'b0')
@@ -254,7 +266,7 @@ check('后台能看发码与绑定的数量，不见号码', r.body.stats && r.b
   const before = devCodes.length
   const oldNodeEnv = process.env.NODE_ENV
   process.env.NODE_ENV = 'production'
-  const noProvider = await call(phone, '/api/card/phone/send', { phone: '13300133000', id: ID3 }, 'formal-no-provider')
+  const noProvider = await call(bare, '/api/card/phone/send', { phone: '13300133000', id: ID3 }, 'formal-no-provider')
   check('正式环境短信缺配置失败关闭，不产开发码', noProvider.body.ok === false && devCodes.length === before)
   if (oldNodeEnv === undefined) delete process.env.NODE_ENV
   else process.env.NODE_ENV = oldNodeEnv
@@ -271,7 +283,9 @@ check('后台能看发码与绑定的数量，不见号码', r.body.stats && r.b
   }) as never
   const env = { ALIYUN_SMS_ACCESS_KEY_ID: 'AK', ALIYUN_SMS_ACCESS_KEY_SECRET: 'SK', ALIYUN_SMS_SIGN_NAME: '控制台现行签名', ALIYUN_SMS_TEMPLATE_CODE: '100009' }
   check('四个变量齐了才算配置好', smsConfigured(env) && !smsConfigured({ ...env, ALIYUN_SMS_TEMPLATE_CODE: '' }))
-  check('正式环境无法启用开发码', !devMode({ RAILWAY_ENVIRONMENT: 'production', PHONE_SMS_DEV: '1' }) && !devMode({ NODE_ENV: 'production', PHONE_SMS_DEV: '1' }) && devMode({ PHONE_SMS_DEV: '1' }))
+  check('正式环境无法启用开发码', !devMode({ RAILWAY_ENVIRONMENT: 'production', PHONE_SMS_DEV: '1' }) && !devMode({ NODE_ENV: 'production', PHONE_SMS_DEV: '1' })
+    // local codes are a demo-only convenience: under the formal policy not even a laptop makes them
+    && devMode({ PHONE_SMS_DEV: '1' }) === !RELEASE_POLICY.phoneEnabled)
   const ok = await sendVerify('13800138000', env)
   const u = new URL(seen[0])
   check('SendSmsVerifyCode 走号码认证接口、带齐参数', ok && u.hostname === 'dypnsapi.aliyuncs.com' && u.searchParams.get('Action') === 'SendSmsVerifyCode'

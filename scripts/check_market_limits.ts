@@ -1,4 +1,5 @@
 /** Market slot limits and escrowed inventory under concurrent requests. */
+import { AUTO_VERIFY } from './verified-fixture.mjs'
 import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
 import { PGlite } from '@electric-sql/pglite'
@@ -9,6 +10,7 @@ import { displayName } from '../names.js'
 process.env.PHONE_GATE = '0'
 const db = new PGlite()
 await db.exec(CARD_SCHEMA)
+await db.exec(AUTO_VERIFY)
 const sql = makeSql(db)
 const A = 'VM-2222-2222-2222-2222-2222', B = 'VM-3333-3333-3333-3333-3333'
 const hash = (id: string) => createHash('sha256').update(id).digest('hex')

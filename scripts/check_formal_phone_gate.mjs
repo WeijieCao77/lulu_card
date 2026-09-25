@@ -24,8 +24,8 @@ try {
       api.onResolve({ filter: /release-policy\.js$/ }, () => ({ path: 'release-policy', namespace: 'formal-test' }))
       api.onLoad({ filter: /.*/, namespace: 'formal-test' }, async () => {
         const source = await readFile(join(root, 'release-policy.js'), 'utf8')
-        assert.match(source, /RELEASE_STAGE = 'demo'/)
-        return { contents: source.replace("RELEASE_STAGE = 'demo'", "RELEASE_STAGE = 'production'"), loader: 'js', resolveDir: root }
+        assert.match(source, /RELEASE_STAGE = '\w+'/)
+        return { contents: source.replace(/RELEASE_STAGE = '\w+'/, "RELEASE_STAGE = 'production'"), loader: 'js', resolveDir: root }
       })
     } }],
   })

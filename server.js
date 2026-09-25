@@ -51,6 +51,7 @@ let _databaseHealth = null
 let _databaseHealthSql = null
 import { adminLoginHtml } from './admin-login.js'
 import { bucketOf, clientIp } from './client-ip.js'
+import { makeAdminGuard } from './admin-guard.js'
 
 // A rejected promise is logged and life goes on: the analytics side-car and
 // the odd lost client are where those come from, and none of it is worth
@@ -86,6 +87,7 @@ if (phoneSecrets.mode === 'legacy-admin') console.warn('phone: legacy admin-deri
  * dashboard and for a curl typed by hand — the page itself then strips it
  * from the address bar and sends the header from there on.
  */
+const adminGuard = makeAdminGuard()
 const tokenFrom = (req, url) => {
   const m = /^Bearer\s+(.+)$/i.exec(req.headers.authorization || '')
   return (m && m[1].trim()) || req.headers['x-admin-token'] || url.searchParams.get('token')
@@ -666,6 +668,17 @@ function handle(req, res) {
   if (/[\u0000-\u001f\u007f]/.test(path)) {
     res.writeHead(400, { 'Content-Type': 'text/plain' }).end('Bad request')
     return
+  }
+  // Admin tokens are guessed here or nowhere: every admin route reads its
+  // token through tokenFrom, and players never send one (admin-guard.js).
+  const adminGiven = tokenFrom(req, url)
+  if (adminGiven) {
+    const bucket = bucketOf(req)
+    if (adminGuard.locked(bucket)) {
+      res.writeHead(429, { 'Content-Type': 'text/plain', 'Retry-After': '600' }).end('Too many attempts')
+      return
+    }
+    if (!tokenOk(adminGiven, TOKEN)) adminGuard.fail(bucket)
   }
 
   // what this client will accept, for `json` — see the note on it

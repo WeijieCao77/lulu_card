@@ -11,6 +11,7 @@ import { STARTER_COINS } from '../src/engine/gacha'
  *
  *   npx tsx scripts/check_cards_api.ts
  */
+import { AUTO_VERIFY } from './verified-fixture.mjs'
 import { PGlite } from '@electric-sql/pglite'
 import { makeSql } from '../pglite-sql.js'
 import { createHash } from 'node:crypto'
@@ -24,6 +25,7 @@ process.env.PHONE_GATE = '0'
 const db = new PGlite()
 const sql = makeSql(db)
 await db.exec(CARD_SCHEMA)
+await db.exec(AUTO_VERIFY)
 
 let bad = 0
 const check = (name: string, ok: boolean, detail = '') => {

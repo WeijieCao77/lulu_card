@@ -26,6 +26,7 @@
  *   - an account written by last week's client still loads and still plays
  */
 process.env.ENGINE_FROM_SOURCE = '1'
+import { AUTO_VERIFY } from './verified-fixture.mjs'
 import { PGlite } from '@electric-sql/pglite'
 import { makeSql } from '../pglite-sql.js'
 import { createHash } from 'node:crypto'
@@ -46,6 +47,7 @@ const hashOf = (id: string) => createHash('sha256').update(id).digest('hex')
 const db = new PGlite()
 const sql = makeSql(db)
 await db.exec(CARD_SCHEMA)
+await db.exec(AUTO_VERIFY)
 
 let bad = 0
 const check = (name: string, ok: boolean, detail = '') => {

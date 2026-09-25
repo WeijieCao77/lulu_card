@@ -1,5 +1,8 @@
 import { RELEASE_POLICY } from './release-policy.js'
 
+/** The owner's admin token: short enough to type, guarded by admin-guard.js. */
+export const ADMIN_TOKEN_MIN = 8
+
 /** Validate startup without silently rotating the keys protecting existing identities. */
 export function validatePhoneSecrets(env = process.env, policy = RELEASE_POLICY) {
   const production = env.NODE_ENV === 'production' || !!env.RAILWAY_PROJECT_ID
@@ -13,7 +16,7 @@ export function validatePhoneSecrets(env = process.env, policy = RELEASE_POLICY)
     throw new Error('Production phone secrets missing or weak; preserve existing secrets during configuration, never generate replacements at boot')
   }
   if (policy.phoneEnabled) {
-    if (!legacy || legacy.length < 24 || placeholder(legacy) || new Set([legacy, key, salt]).size !== 3) {
+    if (!legacy || legacy.length < ADMIN_TOKEN_MIN || placeholder(legacy) || new Set([legacy, key, salt]).size !== 3) {
       throw new Error('Formal release requires three independent administration and phone secrets')
     }
     if (env.PHONE_GATE === '0' || env.PHONE_SMS_DEV === '1') {

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { RELEASE_STAGE, RELEASE_POLICY } from './release-policy.js'
 import { resolveMarketPolicy } from './market-policy.js'
 import { smsConfigured } from './phone-api.js'
-import { validatePhoneSecrets } from './phone-config.js'
+import { ADMIN_TOKEN_MIN, validatePhoneSecrets } from './phone-config.js'
 
 const sha256 = value => createHash('sha256').update(value).digest('hex')
 const local = name => fileURLToPath(new URL(name, import.meta.url))
@@ -35,7 +35,10 @@ export function inspectProductionRelease({ env = process.env, frontendManifest, 
   try { validatePhoneSecrets({ ...env, NODE_ENV: 'production' }) } catch { errors.push('stable phone secrets missing or weak') }
   const secretNames = ['ANALYTICS_TOKEN', 'PHONE_KEY', 'PHONE_SALT']
   const secrets = secretNames.map(name => env[name])
-  requireRule(secrets.every(value => typeof value === 'string' && value.length >= 24
+  // The phone key and salt protect stored identities: 24+. The admin token is
+  // typed by the owner and guessing it is capped per network (admin-guard.js): 8+.
+  const minLength = { ANALYTICS_TOKEN: ADMIN_TOKEN_MIN, PHONE_KEY: 24, PHONE_SALT: 24 }
+  requireRule(secrets.every((value, i) => typeof value === 'string' && value.length >= minLength[secretNames[i]]
     && !/^(?:replace|change|todo|your|example|test)[_-]/i.test(value.trim())) && new Set(secrets).size === 3,
     'independent stable admin, phone key and phone salt required')
 

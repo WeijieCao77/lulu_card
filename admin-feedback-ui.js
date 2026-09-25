@@ -11,7 +11,7 @@ export const feedbackAdminScript = String.raw`
   const messageEl = $('#fbMessage');
   const itemsEl = $('#fbItems');
 
-  let currentFilter = 'public';
+  let currentFilter = filterEl ? filterEl.value : 'public';
   let busy = false;
   let items = [];
   let counts = { pending: 0, shown: 0, total: 0 };

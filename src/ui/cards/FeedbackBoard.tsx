@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useCards } from './ctx';
 import './feedback.css';
+import { RELEASE_STAGE } from '../../../release-policy.js';
+
+/** The formal mailbox is val_player's: the owner reads a letter before it goes on the board. */
+const FORMAL = RELEASE_STAGE !== 'demo';
 
 interface FeedbackItem {
   id: string;
@@ -25,6 +29,7 @@ interface FeedbackItem {
 interface ListResponse {
   ok: boolean;
   max?: number;
+  min?: number;
   full?: boolean;
   items?: FeedbackItem[];
   mine?: FeedbackItem[];
@@ -53,7 +58,8 @@ export default function FeedbackBoard() {
   const [text, setText] = useState('');
   const [notice, setNotice] = useState('');
   const [full, setFull] = useState(false);
-  const [maxChars] = useState(2000);
+  const [maxChars, setMaxChars] = useState(FORMAL ? 200 : 2000);
+  const [minChars, setMinChars] = useState(FORMAL ? 4 : 1);
   const [voting, setVoting] = useState(false);
   const listSeqRef = useRef(0);
   const lastListTimeRef = useRef(0);
@@ -116,6 +122,8 @@ export default function FeedbackBoard() {
       setItems(data.items || []);
       setMine(data.mine || []);
       setFull(!!data.full);
+      if (data.max) setMaxChars(data.max);
+      if (data.min) setMinChars(data.min);
       lastListTimeRef.current = Date.now();
     } catch (e: unknown) {
       if (seq !== listSeqRef.current) return;
@@ -141,8 +149,10 @@ export default function FeedbackBoard() {
     if (sending || !cloud) return;
     const trimmed = text.trim();
     const codePoints = [...trimmed].length;
-    if (codePoints < 1 || codePoints > maxChars) {
-      setError('请写下建议，最多 2000 字。');
+    if (codePoints < minChars || codePoints > maxChars) {
+      setError(!FORMAL ? `请写下建议，最多 ${maxChars} 字。`
+        : codePoints < minChars ? `太短了，至少 ${minChars} 个字，把想说的说清楚。`
+          : `一条最多 ${maxChars} 个字，长了就分两条。`);
       return;
     }
     setSending(true);
@@ -150,7 +160,7 @@ export default function FeedbackBoard() {
     try {
       const data = await call<ListResponse & ApiError>('/new', { accountId, text: trimmed });
       setText('');
-      setNotice('已提交，已出现在建议榜。');
+      setNotice(FORMAL ? '收到了。作者看过之后才会展示到榜上——在「我的」里能看到它到哪一步了。' : '已提交，已出现在建议榜。');
       setTab('mine');
       ++listSeqRef.current;
       setItems(data.items || []);
@@ -196,7 +206,9 @@ export default function FeedbackBoard() {
     <div className="feedback-board">
       <div className="feedback-header">
         <h2>玩家建议信箱</h2>
-        <p className="note">内测版建议提交后立即上榜。给好点子点赞，一起完善噜噜卡。</p>
+        <p className="note">{FORMAL
+          ? '想让游戏变成什么样？一条说一件事。作者先看过才会展示到榜上，在这之前只有你自己看得见。'
+          : '内测版建议提交后立即上榜。给好点子点赞，一起完善噜噜卡。'}</p>
         <div className="tabs">
           <button className={tab === 'hot' ? 'active' : ''} onClick={() => setTab('hot')}>最热</button>
           <button className={tab === 'new' ? 'active' : ''} onClick={() => setTab('new')}>最新</button>
@@ -210,14 +222,16 @@ export default function FeedbackBoard() {
           value={text}
           onChange={(e) => setText(e.target.value)}
           maxLength={maxChars * 2} aria-label="建议内容"
-          placeholder="写下你的建议或遇到的问题（最多2000字）"
+          placeholder={FORMAL ? '比如：市场能不能按位置筛选卡牌？' : '写下你的建议或遇到的问题（最多2000字）'}
           rows={3}
           disabled={!cloud}
         />
         <div className="compose-footer">
-          <span className="char-count">{[...text].length}/{maxChars}</span>
+          <span className="char-count">{FORMAL
+            ? (maxChars - [...text].length >= 0 ? `还能写 ${maxChars - [...text].length} 个字` : `超了 ${[...text].length - maxChars} 个字`)
+            : `${[...text].length}/${maxChars}`}</span>
           <button onClick={submitSuggestion} disabled={sending || full || !cloud}>
-            {sending ? '提交中...' : '提交'}
+            {sending ? (FORMAL ? '正在发…' : '提交中...') : (FORMAL ? '发给作者' : '提交')}
           </button>
         </div>
         {full && <p className="error">信箱已满，暂时无法投稿。</p>}
@@ -228,12 +242,14 @@ export default function FeedbackBoard() {
 
       <div className="feedback-list">
         {loading && <div className="loading">加载中...</div>}
-        {!loading && sortedItems.length === 0 && <div className="empty">暂无建议</div>}
+        {!loading && sortedItems.length === 0 && <div className="empty">{!FORMAL ? '暂无建议'
+          : tab === 'mine' ? '你还没写过。上面写一条，作者看过就会展示到榜上。' : '榜上还是空的，第一条就写给你了。'}</div>}
         {!loading && sortedItems.map((item) => (
           <FeedbackCard key={item.id} item={item} onVote={vote} disabled={voting || !cloud} />
         ))}
       </div>
 
+      {FORMAL && <p className="note">一个账号一条一票，可以收回。作者照着赞多的往下改；改好了这条会写「已修复」。</p>}
       <div className="feedback-actions">
         <button onClick={() => fetchList(true)} disabled={loading || sending || voting || !cloud}>刷新</button>
       </div>
@@ -248,7 +264,7 @@ function FeedbackCard({ item, onVote, disabled }: { item: FeedbackItem; onVote: 
       case 'shown': return '已展示';
       case 'taken': return '已采纳';
       case 'fixed': return '已修复';
-      case 'hidden': return '已隐藏';
+      case 'hidden': return FORMAL ? '未展示' : '已隐藏';
       case 'merged': return '已合并';
       default: return state;
     }

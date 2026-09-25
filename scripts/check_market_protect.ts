@@ -4,6 +4,7 @@
  *
  *   npx tsx scripts/check_market_protect.ts
  */
+import { AUTO_VERIFY } from './verified-fixture.mjs'
 import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
 import { PGlite } from '@electric-sql/pglite'
@@ -17,6 +18,7 @@ process.env.MARKET_GUARD = 'watch'
 
 const db = new PGlite()
 await db.exec(CARD_SCHEMA)
+await db.exec(AUTO_VERIFY)
 const sql = makeSql(db)
 const hash = (id: string) => createHash('sha256').update(id).digest('hex')
 const api = makeMarketApi(sql, {
@@ -93,6 +95,9 @@ console.log('ok  满一分钟：随机一人成交，其余金币原数退回，
 let aWins = 0
 const ROUNDS = 40
 for (let i = 0; i < ROUNDS; i++) {
+  // entering the instant a card goes up, forty times, is exactly what rule A suspends (and the formal
+  // policy always suspends); this section is about the draw, so each round starts with a clean slate
+  await sql`delete from market_bans`; api.guard.invalidate()
   await account(A, 0); await account(B, 0)
   lid = await put()
   // B enters first every time: first come must not be first served
@@ -110,6 +115,7 @@ assert(aWins >= 8 && aWins <= 32, `后报名的人 ${ROUNDS} 次里中了 ${aWin
 console.log(`ok  是抽签不是先到先得：后报名的人 ${ROUNDS} 次里中了 ${aWins} 次`)
 
 // 4. after the minute with nobody entered: 一口价 buys at once, as before
+await sql`delete from market_bans`; api.guard.invalidate() // the draw rounds above were rule A's pattern
 await account(A, 0); await account(B, 0); await account(C, 0)
 lid = await put()
 await age(lid, PROTECT_SEC + 5)
