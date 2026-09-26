@@ -58,6 +58,15 @@ const DIGITS = /\d{7,}/
 export const FORMAL = { MIN_TEXT: 4, MAX_TEXT: 200, PER_HOUR: 3, PER_DAY: 10, MAX_PENDING: 200 }
 const DEMO_MAX_TEXT = 2000
 
+/** Words, links and contact numbers that can never hang on a public wall (the mailbox and the support wall). */
+export function publicTextRefusal(text) {
+  const low = text.toLowerCase()
+  if (BLOCK.some(w => low.includes(w))) return '这条里有不能公开展示的词，换个说法再发。'
+  if (LINKY.test(text)) return '先别放链接，直接说就行。'
+  if (DIGITS.test(text)) return '别留联系方式，作者在这儿就能看到你写的。'
+  return null
+}
+
 /** Why this letter cannot be posted, or null. Demo keeps its open board; formal follows val_player. */
 export function feedbackRefusal(items, owner, text, now = Date.now(), stage = RELEASE_STAGE) {
   const n = [...text].length

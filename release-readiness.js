@@ -2,6 +2,7 @@
 export const REQUIRED_COLUMNS = {
   accounts: ['card_accounts.rev'],
   feedback: ['card_feedback.key', 'card_feedback.items'],
+  supportWall: ['support_messages.status', 'support_messages.request_key', 'support_reviews.after_status'],
   idempotency: ['card_requests.id_hash', 'card_requests.request_id', 'card_requests.action', 'card_requests.reply'],
   statsFold: ['rollup_state.last_id', 'rollup_day_sessions.secs'],
   marketSummary: ['card_listings.cur_price', 'card_listings.top_bid', 'card_listings.open_n'],

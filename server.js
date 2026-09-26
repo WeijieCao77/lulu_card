@@ -27,6 +27,7 @@ import { EVENTS, MAX_BODY, rateLimited, sanitize, tokenOk, visitorLimited } from
 import { engine, makeCardApi, normalizeId } from './cards-api.js'
 import { displayName } from './names.js'
 import { makeProfileApi } from './profile-api.js'
+import { makeSupportApi } from './support-api.js'
 import { makeFeedbackApi } from './feedback-api.js'
 import { makeSiteApi } from './site-api.js'
 import { makeMarketApi } from './market-api.js'
@@ -530,6 +531,8 @@ const siteApi = () => (_siteApi ??= makeSiteApi(sql, {
 }))
 let _siteApi = null
 const feedbackApi = makeFeedbackApi({ getSql: () => sql, readBody, json, normalizeId, rateLimited, token: TOKEN, tokenFrom, tokenOk })
+let _supportApi = null
+const supportApi = () => (_supportApi ??= makeSupportApi(sql, { readBody, json, token: TOKEN, tokenFrom, normalizeId, displayName, rateLimited, bucketOf }))
 const marketApi = () => (_marketApi ??= makeMarketApi(sql, {
   readBody, json, normalizeId, displayName, rateLimited, engine, token: TOKEN, tokenFrom, tokenOk, bg: sqlBg,
 }))
@@ -763,6 +766,13 @@ function handle(req, res) {
     if (!sqlStats) { json(res, 503, { ok: false }); return }
     const days = Number(url.searchParams.get('days') || 30)
     void luluMetrics(sqlStats, days).then(data => json(res, 200, data)).catch(() => json(res, 503, { ok: false, why: '统计暂时不可用，请稍后刷新。' }))
+    return
+  }
+  // 赛事应援墙 (support-api.js); before the site dispatcher, which owns every other /api/admin/ route
+  if (path === '/api/support' || path.startsWith('/api/support/') || path === '/api/admin/support') {
+    void supportApi().route(req, res, path, url).then(handled => {
+      if (!handled) json(res, 404, { ok: false })
+    }).catch(() => { if (!res.headersSent) json(res, 503, { ok: false, why: '应援墙暂时不可用。' }) })
     return
   }
   if (path.startsWith('/api/feedback/') || path === '/api/admin/feedback') {

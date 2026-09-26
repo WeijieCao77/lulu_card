@@ -1,4 +1,5 @@
 import { feedbackAdminScript } from './admin-feedback-ui.js'
+import { supportAdminHtml, supportAdminScript } from './admin-support-ui.js'
 import { RELEASE_STAGE } from './release-policy.js'
 import { overviewScript } from './admin-overview-ui.js'
 import { toolsHtml, toolsScript } from './admin-tools-ui.js'
@@ -435,7 +436,7 @@ body { max-width:1600px; margin:auto; }
 </head>
 <body>
 <header class="admin-header"><div><h1>噜<span>噜卡</span> · 后台看板</h1><small>猪之家出品 · 运营中心</small></div><div class="row"><a href="/">返回游戏</a><button id="adminLogout" type="button">退出后台</button></div></header>
-<nav class="admin-nav" aria-label="后台导航"><a href="#app">数据总览</a><a href="#feedback">玩家建议信箱</a><a href="#grant">玩家与信箱发放</a><a href="#guard">交易管理</a><a href="#ops-tools">运营工具</a><a href="#review">账号审核</a><a href="#wechat">社区设置</a></nav>
+<nav class="admin-nav" aria-label="后台导航"><a href="#app">数据总览</a><a href="#feedback">玩家建议信箱</a><a href="#support">赛事应援墙</a><a href="#grant">玩家与信箱发放</a><a href="#guard">交易管理</a><a href="#ops-tools">运营工具</a><a href="#review">账号审核</a><a href="#wechat">社区设置</a></nav>
 <div class="sub">
   身份是浏览器首次访问时生成的匿名 ID，服务端不记录、不存储 IP 地址。
   「时长」只累计确认活跃的分钟数——标签页挂着过夜不算。
@@ -448,6 +449,7 @@ body { max-width:1600px; margin:auto; }
   <span id="status" class="muted" style="font-size:12px;margin-left:auto"></span>
 </div>
 <div class="panel" id="feedback"><h2>玩家建议信箱</h2><div class="row"><span id="fbCounts">加载中…</span><button id="fbRefresh">刷新建议</button></div><p class="why">${RELEASE_STAGE === 'demo' ? '内测版投稿立即上榜。' : '玩家投稿先进「待审核」，点「展示」才上公开榜，在这之前只有作者本人看得见。'}可按赞排序处理问题；合并会去重支持票，并为原作者保留回执。</p><div class="row"><select id="fbFilter" aria-label="建议状态" style="width:180px"><option value="pending"${RELEASE_STAGE === 'demo' ? '' : ' selected'}>待审核</option><option value="public"${RELEASE_STAGE === 'demo' ? ' selected' : ''}>已公开（按赞）</option><option value="hidden">未展示</option><option value="merged">合并回执</option><option value="all">全部建议</option></select></div><p id="fbMessage" role="status"></p><div id="fbItems"></div></div>
+${supportAdminHtml}
 <div id="app"></div>
 <div class="panel" id="wechat" style="margin-bottom:14px">
   <h2>微信群二维码 · 首页那个浮窗</h2>
@@ -1444,6 +1446,7 @@ document.querySelectorAll('button[data-d]').forEach((b) => {
 load(30)
 ${overviewScript}
 ${feedbackAdminScript}
+${supportAdminScript}
 ${toolsScript}
 </script>
 </body>

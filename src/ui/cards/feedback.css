@@ -41,7 +41,8 @@
   margin-bottom: 1rem;
 }
 
-.feedback-board .feedback-compose textarea {
+.feedback-board .feedback-compose textarea,
+.feedback-board .feedback-compose input {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid var(--line);
@@ -51,7 +52,8 @@
   border-radius: 4px;
 }
 
-.feedback-board .feedback-compose textarea:focus {
+.feedback-board .feedback-compose textarea:focus,
+.feedback-board .feedback-compose input:focus {
   outline: none;
   border-color: var(--accent);
 }
@@ -256,7 +258,8 @@
     padding: 0.2rem 0.5rem;
     font-size: 0.9rem;
   }
-  .feedback-board .feedback-compose textarea {
+  .feedback-board .feedback-compose textarea,
+  .feedback-board .feedback-compose input {
     font-size: 0.9rem;
   }
   .feedback-board .item-header {
@@ -266,3 +269,6 @@
 }
 .feedback-board { background:var(--panel); border:1px solid var(--line); border-radius:12px; margin:0; width:100%; max-width:none; }
 .feedback-board button.active,.feedback-board .vote-button.voted,.feedback-board .mine-badge { color:var(--bg); }
+
+/* 应援墙：「致」一行在留言框上面 */
+.feedback-board .feedback-compose input { margin-bottom: .5rem; min-height: 40px; }

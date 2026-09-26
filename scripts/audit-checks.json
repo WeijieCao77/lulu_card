@@ -721,6 +721,10 @@
     "file": "scripts/check_challenge_rating.ts"
   },
   {
+    "runtime": "node",
+    "file": "scripts/check_support_wall.mjs"
+  },
+  {
     "runtime": "tsx",
     "file": "scripts/check_open_cup_worker.ts"
   },
