@@ -23,6 +23,7 @@ import { agentCn, AGENTS, ALL_AGENTS, MAPS, mapCn } from './content'
 import { natCountry, natName } from './nat'
 import { hashStr } from './rng'
 import { WORLD_PLAYERS } from './world'
+import { cardById } from './cards'
 import { WORLD_TEAMS } from './teams'
 import { DOSSIER } from './dossier'
 import { REGION_CN } from './types'
@@ -307,6 +308,9 @@ export function evaluate(kind: ChallengeKind, answerId: string, guessId: string)
   }
 
   if (kind === 'player') {
+    // 「挑战里 Raptor 85，图鉴里 81」: the world file's overall is the uncalibrated figure the card
+    // ratings were fitted from. The number a player can check is the one on his ordinary card.
+    const rating = (p: { id: string; overall: number }) => cardById(`p:${p.id}`)?.rating ?? p.overall
     const a = WORLD_PLAYERS.find((p) => p.id === answerId)
     const g = WORLD_PLAYERS.find((p) => p.id === guessId)
     if (!a || !g) return { id: guessId, name: guessId, cells: [] }
@@ -333,7 +337,7 @@ export function evaluate(kind: ChallengeKind, answerId: string, guessId: string)
         },
         { label: '年龄', value: 'ageEstimated' in g && g.ageEstimated ? '未知' : String(g.age),
           mark: ('ageEstimated' in g && g.ageEstimated) || ('ageEstimated' in a && a.ageEstimated) ? 'miss' : num(g.age, a.age, 1) },
-        { label: '能力', value: String(g.overall), mark: num(g.overall, a.overall, 2) },
+        { label: '能力', value: String(rating(g)), mark: num(rating(g), rating(a), 2) },
       ],
     }
   }

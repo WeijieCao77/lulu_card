@@ -27,6 +27,7 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [{
   date: '2026-09-26', title: '完整战队阵容', changes: [
+    { kind: '修复', text: '每日挑战里选手的「能力」与图鉴卡面评分不一致（例如 Raptor 挑战显示 85、图鉴 81）。现在挑战统一显示卡面评分。' },
     { kind: '新增', text: '五名选手和一名教练全部来自同一俱乐部时，卡组会换上这支队的队色与队标背景，并标出「完整战队阵容 · 6/6」；分享图和对战结算同样显示。只改变外观，不影响战力和比赛计算。' },
   ],
 }, {
