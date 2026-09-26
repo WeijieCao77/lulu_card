@@ -714,6 +714,10 @@
   },
   {
     "runtime": "tsx",
+    "file": "scripts/check_team_identity.ts"
+  },
+  {
+    "runtime": "tsx",
     "file": "scripts/check_open_cup_worker.ts"
   },
   {

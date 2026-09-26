@@ -13,6 +13,7 @@ import { SQUAD_SLOTS, chemistry, isCoachCard, isPlayerCard, cardById, squadPaper
 import { roleGaps } from '../../engine/arena'
 import { CardFilters, EMPTY_FILTER, matchesFilter } from './Filters'
 import ShareSquad from './ShareSquad'
+import TeamBoard from './TeamBoard'
 import { GapOdds } from './GapOdds'
 import type { CardFilter } from './Filters'
 
@@ -203,6 +204,7 @@ export default function SquadScreen() {
           </div>
         }
       >
+        <TeamBoard squad={g.squad}>
         <div className="cm-squad">
           {SQUAD_SLOTS.map((role, i) => {
             const id = g.squad.slots[i]
@@ -342,6 +344,7 @@ export default function SquadScreen() {
             )}
           </div>
         </div>
+        </TeamBoard>
       </Panel>
 
       {sharing && <ShareSquad onClose={() => setSharing(false)} />}

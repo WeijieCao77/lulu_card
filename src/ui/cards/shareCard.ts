@@ -12,6 +12,7 @@
  * lands outside the canvas or on top of anything else without a canvas to
  * draw on.
  */
+import { squadTeamIdentity, teamBackdrop } from '../../engine/teamIdentity'
 import { RARITY_CN, cardById, isPlayerCard } from '../../engine/cards'
 import type { Card, CoachCard, PlayerCard, Rarity, Squad } from '../../engine/cards'
 import { crestUrl } from '../../engine/dossier'
@@ -595,6 +596,20 @@ export async function paintShare(canvas: HTMLCanvasElement, model: ShareModel): 
   ctx.fillStyle = glow
   ctx.fillRect(0, 0, L.width, 900)
 
+  // ---- 完整战队阵容 6/6: one club's five and coach wear its crest (Val_Manager 4f9afab)
+  const team = squadTeamIdentity(model.squad)
+  if (team) {
+    const art = await load(teamBackdrop(team.color))
+    if (art) ctx.drawImage(art, 0, 0, L.width, L.height)
+    const logo = await load(team.crest)
+    if (logo) {
+      ctx.save(); ctx.globalAlpha = 0.14
+      ctx.drawImage(logo, L.width * 0.42, 160, L.width * 0.6, L.width * 0.6)
+      ctx.restore()
+      ctx.drawImage(logo, L.width - 170, L.header.y + 20, 90, 90)
+    }
+  }
+
   // ---- who this is
   ctx.textAlign = 'left'
   ctx.fillStyle = '#ff4655'
@@ -617,7 +632,7 @@ export async function paintShare(canvas: HTMLCanvasElement, model: ShareModel): 
   }
   ctx.fillStyle = FAINT
   ctx.font = font(500, 26)
-  ctx.fillText('我的首发五人', L.header.x, L.header.y + 226)
+  ctx.fillText(team ? `${team.tag} · 完整战队阵容 6/6` : '我的首发五人', L.header.x, L.header.y + 226)
 
   // ---- the five
   const ROLES = ['上单', '打野', '中单', '下路', '辅助']
