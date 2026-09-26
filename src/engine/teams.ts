@@ -20,6 +20,8 @@ export interface RawTeam {
   rating: number; budget: number; reputation: number; roster: string[]
   coach: { name: string; tactics: number; development: number; motivation: number; assistants?: string[] } | null
   facilities: number
+  /** Worlds / MSI finals since 2016, e.g. '2023 WLDs 冠军' (scripts/lol_rating) */
+  honours?: string[]
 }
 
 export const WORLD_TEAMS = teams as unknown as RawTeam[]

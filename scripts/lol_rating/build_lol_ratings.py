@@ -407,6 +407,7 @@ def honours(Y):
     """撸撸卡：世界赛、MSI 的冠亚军，从每届最后一天的决赛局里认出来。返回 {(名字,位置): 加分}（已按年份衰减、封顶）。"""
     pts = collections.Counter()
     detail = collections.defaultdict(list)
+    team_detail = collections.defaultdict(list)      # 战队名 -> ['2016 WLDs 冠军', ...]，给完整战队背景的俱乐部介绍用
     for y in range(FIRST_YEAR, Y + 1):
         path = os.path.join(DATA, 'oracleselixir', f'{y}_OE.csv')
         if not os.path.exists(path):
@@ -427,6 +428,10 @@ def honours(Y):
             if len(names) != 2 or not teams:
                 continue
             winner = teams.most_common(1)[0][0]
+            for t in names:
+                kind = 'win' if t == winner else 'final'
+                if (lg, kind) in HONOUR_PTS:
+                    team_detail[t].append(f'{y} {lg} {"冠军" if kind == "win" else "亚军"}')
             decay = .5 ** ((Y - y) / HONOUR_HALF_LIFE)
             seen = set()
             for r in final:
@@ -439,6 +444,7 @@ def honours(Y):
                 seen.add((key, kind))
                 pts[key] += HONOUR_PTS[(lg, kind)] * decay
                 detail[key].append(f'{y} {lg} {"冠军" if kind == "win" else "亚军"}')
+    honours.teams = dict(team_detail)
     return {k: min(HONOUR_CAP, v) for k, v in pts.items()}, detail
 
 
@@ -638,7 +644,7 @@ def main():
         meta = dict(season=Y, yearWeights={str(y): round(w, 4) for y, w in sorted(year_w.items())},
                     roleWeight={ROLE_CN[p]: {k: round(v, 4) for k, v in w.items()} for p, w in ROLE_WEIGHT.items()},
                     macroMix=MACRO_MIX, honourPoints={f'{a} {b}': v for (a, b), v in HONOUR_PTS.items()},
-                    honourHalfLife=HONOUR_HALF_LIFE, honourCap=HONOUR_CAP, leagueBase={k: round(v, 1) for k, v in base.items() if k in codes})
+                    honourHalfLife=HONOUR_HALF_LIFE, honourCap=HONOUR_CAP, teamHonours=getattr(honours, 'teams', {}), honoursFrom=FIRST_YEAR, leagueBase={k: round(v, 1) for k, v in base.items() if k in codes})
         json.dump(dict(meta=meta, players=out), open(args.ratings_out, 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
         print(f'撸撸卡评分表：{len(out)} 人 -> {args.ratings_out}', file=sys.stderr)
         return

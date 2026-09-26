@@ -91,6 +91,19 @@ def main():
         members = [p for p in players if p['id'] in t['roster']]
         if members:
             t['rating'] = round(sum(p['overall'] for p in members) / len(members))
+    # 战队的世界赛 / MSI 冠亚军（完整战队背景的俱乐部介绍用）。比赛数据里是当年的队名，
+    # 按 teamLineages.json 的曾用名接到今天的队上：SK Telecom T1 → T1，Samsung Galaxy → Gen.G
+    lineages = json.loads((GAME / 'src' / 'data' / 'teamLineages.json').read_text('utf-8'))
+    # full names only: tags collide across eras (SSG was Samsung Galaxy; today it is SillySilly Gaming)
+    def same_club(t, name):
+        return name == t['name'] or any(t['name'] in l['aliases'] and name in l['aliases'] for l in lineages)
+    team_honours = table['meta'].get('teamHonours', {})
+    for t in world['teams']:
+        got = sorted(h for name, hs in team_honours.items() if same_club(t, name) for h in hs)
+        if got:
+            t['honours'] = got
+        else:
+            t.pop('honours', None)
     world['meta']['ratingModel'] = dict(
         version=7, builtBy='scripts/lol_rating/build_lol_ratings.py', **table['meta'],
         note='撸撸卡自己的评分：2016–2026，当年 50%，其余按每早 2 年减半只分给本人有比赛的年份；季后赛×1.5、MSI×2、世界赛×2.5；'

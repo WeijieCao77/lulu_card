@@ -29,4 +29,18 @@ assert.equal(squadTeamIdentity({ slots: five, coach: otherCoach.id }), null, "an
 const twin = LEGEND_CARDS.find((l) => l.clubId === coach.clubId && five.slice(0, 4).some((id) => BASE_PLAYER_CARDS.find((b) => b.id === id)?.playerId === l.playerId))
 if (twin) assert.equal(squadTeamIdentity({ slots: [...five.slice(0, 4), twin.id], coach: coach.id }), null, 'the same player twice')
 assert(teamBackdrop(full.color).startsWith('data:image/svg+xml'))
+// the club in a few lines: T1's lineage and what it has won since 2016, and this five
+import { WORLD_TEAMS } from '../src/engine/teams.ts'
+import { clubIntro } from '../src/engine/teamIdentity.ts'
+const t1 = WORLD_TEAMS.find((t) => t.tag === 'T1')!
+const t1Five = BASE_PLAYER_CARDS.filter((p) => p.clubId === t1.id).slice(0, 5)
+const intro = clubIntro(t1, t1Five)
+assert(intro[0].includes('LCK') && intro[0].includes('SKT → T1'), intro[0])
+assert(/2016 年以来：世界赛冠军 \d+ 次/.test(intro[1]), intro[1])
+assert(intro[2].startsWith('本阵容平均'), intro[2])
+// a club with no finals says nothing about finals rather than 「0 次」
+const quiet = WORLD_TEAMS.find((t) => !t.honours?.length && t.tier === 1)!
+assert(!clubIntro(quiet, []).some((l) => l.includes('2016 年以来')))
+// SillySilly Gaming (tag SSG) is not the Samsung Galaxy of 2017
+assert(!WORLD_TEAMS.find((t) => t.name === 'SillySilly Gaming')?.honours)
 console.log(`team identity: ${full.tag} (${full.name}) 6/6 shows its crest${full.crest ? '' : ' (no crest file)'}; missing coach, empty seat, mixed club${twin ? ', same player twice' : ''} do not`)

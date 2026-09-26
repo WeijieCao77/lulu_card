@@ -9,7 +9,7 @@ export default function TeamBoard({ squad, children }: { squad: Squad; children?
   if (!team) return <>{children}</>
   return <section className="team-board" style={{ '--team-color': team.color, backgroundImage: `url("${teamBackdrop(team.color)}")` } as CSSProperties} aria-label={`${team.name} 完整战队阵容`}>
     {team.crest && <img className="team-board-watermark" src={team.crest} alt="" aria-hidden="true" />}
-    <header className="team-board-title">{team.crest && <img src={team.crest} alt={`${team.tag} 队标`} />}<div><span>完整战队阵容 · 6/6</span><h3>{team.name}</h3><p>五位选手，一位教练，同一面旗帜。</p></div><b>{team.tag}</b></header>
+    <header className="team-board-title">{team.crest && <img src={team.crest} alt={`${team.tag} 队标`} />}<div><span>完整战队阵容 · 6/6</span><h3>{team.name}</h3><p>五位选手，一位教练，同一面旗帜。</p>{team.intro.length > 0 && <ul className="team-board-intro">{team.intro.map(line => <li key={line}>{line}</li>)}</ul>}</div><b>{team.tag}</b></header>
     <div className="team-board-content">{children}</div>
   </section>
 }

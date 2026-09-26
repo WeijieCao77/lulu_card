@@ -9,4 +9,7 @@
 .team-board-title p { font-size: 12px; margin: 6px 0 0; color: #b5c3d6; }
 .team-board-title > b { color: var(--team-color); font-size: clamp(24px, 5vw, 60px); opacity: .65; letter-spacing: -.05em; }
 .team-board-content { position: relative; }
+/* the club in a few lines, under the title: fills the header rather than leaving it a crest and dark space */
+.team-board-intro { list-style: none; margin: 10px 0 0; padding: 8px 10px; background: rgba(6, 10, 18, .62); border-radius: 6px; width: fit-content; max-width: 100%; text-shadow: 0 1px 2px #000; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: #d6e0ec; }
+.team-board-intro li { padding-left: 10px; border-left: 2px solid var(--team-color); line-height: 1.4; }
 @media (max-width: 720px) { .team-board { padding: 14px; } .team-board-title { gap: 10px; padding-bottom: 18px; } .team-board-title > img { width: 44px; height: 44px; } .team-board-title > b { display: none; } }

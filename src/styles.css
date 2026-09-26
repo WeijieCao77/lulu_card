@@ -3187,3 +3187,7 @@ button.primary .faint, button.primary .muted { color: rgba(255, 255, 255, .78); 
 .cardface-coach .cf-attrs { border-color: #b6c7db40; }
 .cardface-coach .cf-club, .cardface-coach .cf-plus { color: #e9d49f; }
 .cardface-coach .cf-crest { opacity: .08; }
+
+/* 完整战队阵容: the coach is the sixth seat — six across when there is room, three by two on a phone */
+.cm-squad.cm-squad-full { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+@media (max-width: 720px) { .cm-squad.cm-squad-full { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

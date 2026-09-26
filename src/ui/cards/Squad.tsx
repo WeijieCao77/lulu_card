@@ -14,6 +14,7 @@ import { roleGaps } from '../../engine/arena'
 import { CardFilters, EMPTY_FILTER, matchesFilter } from './Filters'
 import ShareSquad from './ShareSquad'
 import TeamBoard from './TeamBoard'
+import { squadTeamIdentity } from '../../engine/teamIdentity'
 import { GapOdds } from './GapOdds'
 import type { CardFilter } from './Filters'
 
@@ -90,6 +91,7 @@ export default function SquadScreen() {
     commit(true)
   }
 
+  const fullTeam = squadTeamIdentity(g.squad)
   return (
     <>
       {/* Three fives, because the people who asked for this keep two or three
@@ -205,7 +207,7 @@ export default function SquadScreen() {
         }
       >
         <TeamBoard squad={g.squad}>
-        <div className="cm-squad">
+        <div className={`cm-squad${fullTeam ? ' cm-squad-full' : ''}`}>
           {SQUAD_SLOTS.map((role, i) => {
             const id = g.squad.slots[i]
             const card = id ? cardById(id) : null
@@ -234,10 +236,18 @@ export default function SquadScreen() {
               </div>
             )
           })}
+          {/* 完整战队: the coach takes the sixth seat at the players' size, filling the row instead of
+              sitting small under it */}
+          {fullTeam && g.squad.coach && (
+            <div style={{ minWidth: 0, width: '100%', maxWidth: 150, margin: '0 auto' }}>
+              <CardFace card={cardById(g.squad.coach)!} level={level(g.squad.coach)} onClick={() => setPicking('coach')} footer="教练" />
+              <SquadUpgrade key={g.squad.coach} cardId={g.squad.coach} />
+            </div>
+          )}
         </div>
 
         <div className="row wrap" style={{ gap: 16, marginTop: 16, alignItems: 'flex-start' }}>
-          <div style={{ minWidth: 150 }}>
+          {!fullTeam && <div style={{ minWidth: 150 }}>
             <div className="tiny faint">教练</div>
             {g.squad.coach && cardById(g.squad.coach) ? (
               <div style={{ maxWidth: 150, margin: '6px auto 0' }}>
@@ -254,7 +264,7 @@ export default function SquadScreen() {
                 <CardSlot label="教练" onClick={() => setPicking('coach')} hint="教练包里开得到" />
               </div>
             )}
-          </div>
+          </div>}
 
           <div style={{ flex: 1, minWidth: 260 }}>
             <div className="row" style={{ gap: 20, marginBottom: 6 }}>

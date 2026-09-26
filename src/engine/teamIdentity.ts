@@ -2,6 +2,10 @@ import { cardById, isCoachCard, isPlayerCard } from './cards'
 import type { Squad } from './cards'
 import { WORLD_TEAMS } from './teams'
 import { crestUrl } from './dossier'
+import { TEAM_LINEAGES } from './teamLineage'
+import { REGION_CN } from './types'
+import type { RawTeam } from './teams'
+import type { PlayerCard } from './cards'
 
 /**
  * 完整战队阵容 6/6 — ported from Val_Manager (4f9afab, src/engine/teamIdentity.ts).
@@ -17,7 +21,31 @@ export function squadTeamIdentity(squad: Squad) {
   if (new Set(players.map(p => p && isPlayerCard(p) ? p.playerId : '')).size !== 5) return null
   const team = WORLD_TEAMS.find(t => t.id === coach.clubId)
   const tag = team?.tag ?? coach.clubTag ?? 'TEAM'
-  return { id: coach.clubId, tag, name: team?.name ?? tag, crest: crestUrl(coach.clubId), color: TEAM_COLORS[tag] ?? '#54a9d8' }
+  return { id: coach.clubId, tag, name: team?.name ?? tag, crest: crestUrl(coach.clubId), color: TEAM_COLORS[tag] ?? '#54a9d8',
+    intro: clubIntro(team, players as PlayerCard[]) }
+}
+
+/**
+ * A few short lines about the club, so the board is not a crest and a lot of empty dark: where it plays and what
+ * it was called, what it has won in the years the match data covers (2016 on, so it says so), and this five.
+ */
+export function clubIntro(team: RawTeam | undefined, players: PlayerCard[]): string[] {
+  const lines: string[] = []
+  const lineage = team && TEAM_LINEAGES.find(l => l.aliases.includes(team.name))
+  const region = team && (REGION_CN as Record<string, string>)[team.region]
+  const head = [region, lineage?.label.includes('→') ? `传承 ${lineage.label}` : null].filter(Boolean).join(' · ')
+  if (head) lines.push(head)
+  const hs = team?.honours ?? []
+  const n = (end: string) => hs.filter(h => h.endsWith(end)).length
+  const won = ([[n('WLDs 冠军'), '世界赛冠军'], [n('MSI 冠军'), 'MSI 冠军'], [n('WLDs 亚军'), '世界赛亚军']] as const)
+    .filter(([k]) => k > 0).map(([k, label]) => `${label} ${k} 次`)
+  if (won.length) lines.push(`2016 年以来：${won.join('、')}`)
+  if (players.length) {
+    const avg = Math.round(players.reduce((s, p) => s + p.rating, 0) / players.length)
+    const top = players.reduce((a, b) => (b.rating > a.rating ? b : a))
+    lines.push(`本阵容平均 ${avg} 分，${top.ign} ${top.rating} 分最高`)
+  }
+  return lines
 }
 
 /** Val_Manager's palette, plus the LoL clubs players are most likely to complete; anyone else glows blue. */

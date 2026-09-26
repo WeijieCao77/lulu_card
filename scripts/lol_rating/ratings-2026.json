@@ -78,6 +78,75 @@
 },
 "honourHalfLife": 4.0,
 "honourCap": 3.0,
+"teamHonours": {
+"SK Telecom T1": [
+"2016 MSI 冠军",
+"2016 WLDs 冠军",
+"2017 MSI 冠军",
+"2017 WLDs 亚军"
+],
+"Samsung Galaxy": [
+"2016 WLDs 亚军",
+"2017 WLDs 冠军"
+],
+"Royal Never Give Up": [
+"2018 MSI 冠军",
+"2021 MSI 冠军",
+"2022 MSI 冠军"
+],
+"Invictus Gaming": [
+"2018 WLDs 冠军"
+],
+"Fnatic": [
+"2018 WLDs 亚军"
+],
+"G2 Esports": [
+"2019 MSI 冠军",
+"2019 WLDs 亚军"
+],
+"FunPlus Phoenix": [
+"2019 WLDs 冠军"
+],
+"Suning": [
+"2020 WLDs 亚军"
+],
+"Dplus Kia": [
+"2020 WLDs 冠军",
+"2021 WLDs 亚军"
+],
+"EDward Gaming": [
+"2021 WLDs 冠军"
+],
+"T1": [
+"2022 WLDs 亚军",
+"2023 WLDs 冠军",
+"2024 WLDs 冠军",
+"2025 WLDs 冠军"
+],
+"Kiwoom DRX": [
+"2022 WLDs 冠军"
+],
+"JD Gaming": [
+"2023 MSI 冠军"
+],
+"Weibo Gaming": [
+"2023 WLDs 亚军"
+],
+"Gen.G": [
+"2024 MSI 冠军",
+"2025 MSI 冠军"
+],
+"Bilibili Gaming": [
+"2024 WLDs 亚军"
+],
+"KT Rolster": [
+"2025 WLDs 亚军"
+],
+"Hanwha Life Esports": [
+"2026 MSI 冠军"
+]
+},
+"honoursFrom": 2016,
 "leagueBase": {
 "LPL": 75.6,
 "LCK": 79.0,
