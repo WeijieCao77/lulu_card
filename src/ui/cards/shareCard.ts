@@ -197,7 +197,8 @@ function paintSeat(
   }
   // the stylesheet's numbers are for a 132-wide card
   const k = b.w / 132
-  const metal = METAL[card.rarity]
+  // the coach's seat is dark like his card face; the metal still says the rarity
+  const metal = isPlayerCard(card) ? METAL[card.rarity] : { ...METAL[card.rarity], a: '#233346', b: '#0d1724', ink: '#eef3f8' }
   const player = isPlayerCard(card) ? card : null
   const legend = !!card.legend
   // a 彩卡 IS the photograph: it fills the card and the type sits on a scrim,
@@ -647,7 +648,7 @@ export async function paintShare(canvas: HTMLCanvasElement, model: ShareModel): 
   ctx.textAlign = 'left'
   ctx.fillStyle = FAINT
   ctx.font = font(600, 20)
-  ctx.fillText('教练', L.coach.x + 16, L.coach.y + 32)
+  ctx.fillText('教练组', L.coach.x + 16, L.coach.y + 32)
   if (coachCard) {
     const inner = { x: L.coach.x + 16, y: L.coach.y + 48, w: L.coach.w - 32, h: L.coach.h - 64 }
     paintSeat(ctx, inner, coachCard, '教练', model.level(coachCard.id), faces[5], crests[5])
