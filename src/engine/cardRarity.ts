@@ -3,7 +3,8 @@ import { gameRegionOf } from './gameRegions'
 import { clamp } from './rng'
 
 /** Card data version; independent of the match win-probability curve. */
-export const CARD_BALANCE_VERSION = 6
+/** 7 (2026-09-26): source ratings rebuilt by scripts/lol_rating (2016–2026, stage weights, honours); thresholds unchanged. */
+export const CARD_BALANCE_VERSION = 7
 
 interface RegionParams {
   min: number

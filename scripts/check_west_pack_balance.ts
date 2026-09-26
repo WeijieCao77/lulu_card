@@ -60,7 +60,7 @@ const eligible = BASE_PLAYER_CARDS.filter((c) => gameRegionOf(c.region) === 'WES
 const goldCount = eligible.filter((c) => c.rarity === 'gold').length;
 const silverCount = eligible.filter((c) => c.rarity === 'silver').length;
 const bronzeCount = eligible.filter((c) => c.rarity === 'bronze').length;
-if (goldCount !== 42 || silverCount !== 125 || bronzeCount !== 285) {
+if (goldCount !== 49 || silverCount !== 121 || bronzeCount !== 282) { // v7 (2026-09-26) pool
   throw new Error(`Pool counts: ${goldCount}/${silverCount}/${bronzeCount}`);
 }
 

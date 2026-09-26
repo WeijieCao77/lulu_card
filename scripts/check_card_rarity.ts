@@ -92,10 +92,11 @@ function testPlayerCountsAndCardStats() {
     entry.max = Math.max(entry.max, card.rating);
   }
 
+  // v7 (2026-09-26): 撸撸卡自己的评分表（docs/card-rating-v7-changes.json），门槛不变
   const expectedCounts: Record<string, Record<string, number>> = {
-    'LPL': { 'gold': 16, 'silver': 29, 'bronze': 58 },
-    'LCK': { 'gold': 23, 'silver': 42, 'bronze': 57 },
-    'WEST': { 'gold': 42, 'silver': 125, 'bronze': 285 }
+    'LPL': { 'gold': 14, 'silver': 29, 'bronze': 60 },
+    'LCK': { 'gold': 22, 'silver': 41, 'bronze': 59 },
+    'WEST': { 'gold': 49, 'silver': 121, 'bronze': 282 }
   };
   for (const [group, rarityMap] of byGroup) {
     for (const [rarity, entry] of rarityMap) {
@@ -239,7 +240,7 @@ function testGlobalRarityColorConsistency() {
 assert.equal(BASE_PLAYER_CARDS.length, 677);
 assert.equal(LEGEND_CARDS.length, 40);
 assert.equal(COACH_CARDS.length, 114);
-assert.equal(CARD_BALANCE_VERSION, 6);
+assert.equal(CARD_BALANCE_VERSION, 7);
 testPlayerCountsAndCardStats();
 
 const goldFraction = (group: string): number => {

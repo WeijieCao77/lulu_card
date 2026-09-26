@@ -349,7 +349,7 @@ export default function Collection() {
                         <br />
                         {REGION_CN[sel.region]} · {sel.clubTag ?? '赛季自由选手'} · {sel.roles.join(' / ')}
                         {sel.isIgl && ' · 游戏队长'}
-                        {sel.ratingEstimated && <span className="tag warn">暂定评分</span>}
+                        {sel.ratingEstimated && <span className="tag warn" title="这位选手还没有足够的比赛数据，评分取同赛区同位置选手的中位数。">数据不足，估算</span>}
                       </div>
                       <div className="grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '4px 10px' }}>
                         {ATTR_KEYS.map((k) => (

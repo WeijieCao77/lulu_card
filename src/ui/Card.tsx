@@ -234,6 +234,7 @@ function PlayerBody({
       {card.legend && <div className="cf-moment">{card.legend.short}</div>}
       <div className="cf-name">{card.ign}</div>
       {size === 'lg' && card.realName && <div className="cf-real">{card.realName}</div>}
+      {size === 'lg' && card.ratingEstimated && <div className="cf-real" title="比赛数据不足，评分取同赛区同位置选手的中位数">数据不足，估算</div>}
       <div className="cf-meta">
         <Flag nat={card.nat} />
         <span className="cf-club">{card.clubTag ?? '自由选手'}</span>

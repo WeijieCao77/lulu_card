@@ -19,6 +19,7 @@ const { displayName } = await import('../names.js')
 const engine = await import('../src/engine/server.ts')
 const db = new PGlite(), sql = makeSql(db)
 await db.exec(CARD_SCHEMA)
+await db.exec((await import('./verified-fixture.mjs')).AUTO_VERIFY) // formal policy: harness accounts are phone-verified
 type Reply = { code: number; body: { ok: boolean; why?: string; state?: GachaState; result?: any } }
 const json = (res: Reply, code: number, body: Reply['body']) => { res.code = code; res.body = body }
 const readBody = async (req: { body: string }) => req.body
