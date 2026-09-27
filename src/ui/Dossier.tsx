@@ -14,8 +14,39 @@ import type { GameRegion } from '../engine/gameRegions'
 import raw from '../data/world.json'
 import './dossier.css'
 
-type Source = { id: string; sourceOverall: number; ageEstimated?: boolean; ratingEstimated?: boolean; latestTournament?: string; recentStats?: Record<string, unknown> }
+type Source = { id: string; sourceOverall: number; ageEstimated?: boolean; ratingEstimated?: boolean; latestTournament?: string; rosterCheckedAt?: string; recentStats?: Record<string, unknown> }
 const source = new Map((raw.players as unknown as Source[]).map(p => [p.id, p]))
+
+/**
+ * Where a player's team comes from (owner, 2026-09-27: players keep questioning the teams on the cards).
+ * Three honest levels, from world.json: checked against the team's roster on Oracle's Elixir, taken from
+ * the last 2026 event he played, or neither (no 2026 games: last known team, may be out of date).
+ */
+function teamSource(s: Source | undefined, clubless = false): { label: string; tone: 'good' | 'plain' | 'warn'; detail: string } {
+  const event = s?.latestTournament
+  const day = s?.rosterCheckedAt ? s.rosterCheckedAt.slice(0, 10) : null
+  if (day && clubless) return {
+    label: '✓ 名单已核对', tone: 'good',
+    detail: `按 Oracle's Elixir 公布的 2026 战队名单核对（${day}），他目前不在任何战队的名单上${event ? `；最近参加的赛事：${event}` : ''}。`,
+  }
+  if (day) return {
+    label: '✓ 名单已核对', tone: 'good',
+    detail: `战队按 Oracle's Elixir 公布的 2026 战队名单核对（${day}）${event ? `，最近参加的赛事：${event}` : ''}。只代表最近一次正式比赛的名单，不代表合同或尚未公布的转会。`,
+  }
+  if (event) return {
+    label: '赛事名单', tone: 'plain',
+    detail: `战队取自他最近参加的 2026 赛事：${event}（Oracle's Elixir 逐场数据），之后的转会可能还没更新。`,
+  }
+  return {
+    label: '未核对', tone: 'warn',
+    detail: '这名选手 2026 年没有正式比赛记录，战队信息来自往年数据，可能已经变动。',
+  }
+}
+
+function TeamSourceTag({ s, clubless = false }: { s: Source | undefined; clubless?: boolean }) {
+  const t = teamSource(s, clubless)
+  return <span className={`team-src team-src-${t.tone}`} title={t.detail}>{t.label}</span>
+}
 
 const ROLES: Role[] = ['上单', '打野', '中单', '下路', '辅助']
 const playerCardOf = new Map(BASE_PLAYER_CARDS.map((c) => [c.playerId, c]))
@@ -114,7 +145,7 @@ export default function Dossier({
       }
     >
       <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-        选手与教练资料库。游戏分为五个赛区：LPL、LCK、LEC、LCS、其他；其他包含 LCP、CBLOL 联赛及其中的越南等地区队伍。选手与教练资料中的联赛信息保留真实所属联赛。生涯数据暂未收录。
+        选手与教练资料库。游戏分为五个赛区：LPL、LCK、LEC、LCS、其他；其他包含 LCP、CBLOL 联赛及其中的越南等地区队伍。选手与教练资料中的联赛信息保留真实所属联赛。战队按各队最近一次正式比赛的名单（Oracle's Elixir）整理，每位选手后面的小标记说明来源：✓ 名单已核对、赛事名单、未核对。生涯数据暂未收录。
       </p>
       <RatingExplainer open />
 
@@ -178,7 +209,7 @@ export default function Dossier({
                     </div>
                     <div className="tiny faint">{card.realName ?? '—'}</div>
                     <div className="tiny"><Flag nat={card.nat} /> {natName(card.nat)} · {REGION_CN[card.region]}</div>
-                    <div className="tiny">{card.clubTag ?? '暂无战队'} · {card.roles.join('/')}</div>
+                    <div className="tiny">{card.clubTag ?? '暂无战队'} · {card.roles.join('/')} <TeamSourceTag s={source.get(card.playerId)} clubless={!card.clubId} /></div>
                     <div className="tiny mono">能力 {card.rating}</div>
                     {source.get(card.playerId)?.ratingEstimated && <span className="tiny warn">暂定评分</span>}
                   </div>
@@ -235,13 +266,13 @@ function PlayerDetail({ card, onBack }: { card: PlayerCard; onBack: () => void }
               {s?.ageEstimated ? '生日资料待补充' : `${card.age} 岁`}
               {!s?.ageEstimated && player?.birth ? `（${player.birth}）` : ''}
               {' · '}
-              {club ? club.name : '暂无战队'}
+              {club ? club.name : '暂无战队'} <TeamSourceTag s={s} clubless={!card.clubId} />
               <br />
               {card.roles.join(' / ')}
               {' · '}{RARITY_CN[card.rarity]} {card.rating}
             </div>
-            <div className="tiny muted" style={{ marginTop: 6 }}>
-              {s?.latestTournament ? `最近核对赛事：${s.latestTournament}` : '2026 赛季资料库'}
+            <div className="tiny muted" style={{ marginTop: 6, lineHeight: 1.6 }}>
+              战队信息来源：{teamSource(s, !card.clubId).detail}
             </div>
             {!!legendsOf.get(card.playerId)?.length && (
               <div className="small" style={{ marginTop: 10, padding: '8px 11px', borderRadius: 4, lineHeight: 1.7, background: 'rgba(180,120,255,.10)', border: '1px solid rgba(180,120,255,.35)' }}>

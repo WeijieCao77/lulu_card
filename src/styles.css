@@ -354,6 +354,10 @@ button.chip { font: inherit; font-size: var(--t-small); color: var(--muted); bac
 button.chip:hover { color: var(--text); border-color: var(--line-hi); }
 
 /* 评分怎么算 (RatingExplainer): open at the top of 图鉴, one line in a card's detail */
+/* where a player's team comes from, in 图鉴 (Dossier.tsx teamSource) */
+.team-src { display: inline-block; font-size: 10px; line-height: 1.5; padding: 0 5px; border-radius: 3px; margin-left: 4px; vertical-align: 1px; cursor: help; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.team-src-good { color: var(--pos-ink); border-color: color-mix(in srgb, var(--pos-ink) 45%, transparent); }
+.team-src-warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
 .rating-explainer { border: 1px solid var(--line); border-radius: 6px; background: var(--panel-2); padding: 8px 12px; margin: 8px 0 12px; font-size: var(--t-small); line-height: 1.7; }
 .rating-explainer summary { cursor: pointer; font-weight: 650; color: var(--text); }
 .rating-explainer ul { margin: 6px 0 4px; padding-left: 18px; color: var(--muted); }
