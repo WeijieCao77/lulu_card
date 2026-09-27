@@ -28,6 +28,7 @@ function Seal() {
 function Back() {
   return <div className="ritual-back" aria-hidden="true">
     <span className="ritual-back-corner tl" /><span className="ritual-back-corner br" />
+    <span className="ritual-back-sheen" />
     <div className="ritual-back-ring"><Seal /></div>
     <span className="ritual-back-brand">噜噜卡</span><span className="ritual-back-edition">猪之家出品</span>
   </div>

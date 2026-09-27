@@ -142,3 +142,20 @@
 .ritual-board.is-scroll .ritual-spread{flex-shrink:0}
 .ritual-stage .ritual-dismiss{min-width:44px;min-height:44px}
 @media(max-height:280px){.ritual-stage{overflow-y:auto}.ritual-board{flex:none;min-height:180px}.ritual-opening{flex:none;min-height:160px}}
+
+/* 卡背按稀有度拉开区别（站长 2026-09-27：「铜卡和金卡卡背光泽基本一样」）。翻开前就能看出轻重：
+   铜卡哑光没有扫光；银卡银边、慢扫光；金卡金边、暖光呼吸、亮而快的扫光；彩卡七彩边框与彩虹扫光。 */
+.ritual-back-sheen{position:absolute;inset:0;border-radius:8px;pointer-events:none;opacity:0;background:linear-gradient(115deg,transparent 30%,var(--sheen,#fff8) 48%,transparent 66%);background-size:260% 100%;background-position:120% 0}
+.ritual-card.rarity-bronze .ritual-back{border-color:#7a5a3c;box-shadow:inset 0 0 0 3px #0b1a20,inset 0 0 0 4px #8a6a4a40,inset 0 0 20px #000a;filter:saturate(.8) brightness(.92)}
+.ritual-card.rarity-silver .ritual-back{border-color:#c9d6de;box-shadow:inset 0 0 0 3px #0b1a20,inset 0 0 0 4px #dfe9ef70,inset 0 0 18px #0008,0 0 10px #c8e7ef55}
+.ritual-card.rarity-silver .ritual-back-sheen{--sheen:#eef7ffa0;opacity:1;animation:ritual-sheen 3.2s ease-in-out infinite}
+.ritual-card.rarity-gold .ritual-back{border-color:#f2c66a;box-shadow:inset 0 0 0 3px #0b1a20,inset 0 0 0 4px #ffd98c99,inset 0 0 24px #ffb84a33,0 0 16px #ffcb6488}
+.ritual-card.rarity-gold .ritual-back-sheen{--sheen:#fff0c8e0;opacity:1;animation:ritual-sheen 2s ease-in-out infinite}
+.ritual-card.rarity-mythic .ritual-back{border-color:transparent;background:radial-gradient(ellipse at 50% 40%,#315552,#183536 40%,#101e25 80%) padding-box,conic-gradient(from var(--spin,0deg),#7ae5ff,#c896ff,#ffdea4,#7ae5ff) border-box;box-shadow:inset 0 0 0 3px #0b1a20,inset 0 0 24px #c291ff44,0 0 22px #c291ffaa}
+.ritual-card.rarity-mythic .ritual-back-sheen{--sheen:#ffffffd0;opacity:1;background:linear-gradient(115deg,transparent 28%,#7ae5ff99 42%,#fff 50%,#ffdea499 58%,transparent 72%);background-size:260% 100%;animation:ritual-sheen 1.4s ease-in-out infinite}
+.ritual-card:not(.is-revealed).rarity-silver .ritual-card-light{opacity:.22}
+.ritual-card:not(.is-revealed).rarity-gold .ritual-card-light{opacity:.45;animation:ritual-breathe 2s ease-in-out infinite}
+.ritual-card:not(.is-revealed).rarity-mythic .ritual-card-light{opacity:.6;background:conic-gradient(#7ae5ff,#c896ff,#ffdea4,#7ae5ff);animation:ritual-breathe 1.4s ease-in-out infinite}
+@keyframes ritual-sheen{0%{background-position:120% 0}55%,100%{background-position:-60% 0}}
+@keyframes ritual-breathe{0%,100%{opacity:.35}50%{opacity:.75}}
+@media(prefers-reduced-motion:reduce){.ritual-back-sheen{animation:none!important;opacity:0!important}}
