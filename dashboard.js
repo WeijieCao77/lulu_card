@@ -488,7 +488,7 @@ ${supportAdminHtml}
     <label>补偿名称 <input id="gaName" value="公测补偿-10000" maxlength="60" style="width:200px"></label>
     <label>金币 <input id="gaCoins" type="number" min="0" max="1000000" value="10000" style="width:110px"></label>
     <button id="gaPreview" type="button">预览人数</button>
-    <button id="gaSend" type="button" disabled>发放</button>
+    <button id="gaSend" type="button">发放</button>
   </div>
   <p id="gaMsg" role="status"></p>
 </div>
@@ -1459,32 +1459,48 @@ ${overviewScript}
 ${feedbackAdminScript}
 ${supportAdminScript}
 ;(function () {
-  const msg = $('#gaMsg'), send = $('#gaSend')
+  // 全员补偿. Every step says what it is doing; the send button always works (it counts first if it has to);
+  // opening the page reads the campaign, so the owner sees at once whether it already went out.
+  const msg = $('#gaMsg'), send = $('#gaSend'), previewBtn = $('#gaPreview')
   if (!msg) return
-  const body = (extra) => JSON.stringify({ campaign: $('#gaName').value.trim(), coins: Number($('#gaCoins').value) || 0, ...extra })
+  const say = (text, tone) => { msg.textContent = text; msg.style.color = tone === 'ok' ? 'var(--pos, #3ecf8e)' : tone === 'bad' ? 'var(--neg, #ff6b6b)' : ''; msg.style.fontWeight = tone ? '600' : '' }
+  const values = () => ({ campaign: $('#gaName').value.trim(), coins: Number($('#gaCoins').value) || 0 })
   const post = async (extra) => {
-    const r = await fetch('/api/admin/grant_all', { method: 'POST', headers: { 'Content-Type': 'application/json', ...auth() }, body: body(extra) })
-    const j = await r.json().catch(() => ({ ok: false }))
-    if (!j.ok) throw new Error(j.why || ('HTTP ' + r.status))
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 20000)
+    try {
+      const r = await fetch('/api/admin/grant_all', { method: 'POST', headers: { 'Content-Type': 'application/json', ...auth() }, body: JSON.stringify({ ...values(), ...extra }), signal: ctl.signal })
+      const j = await r.json().catch(() => ({ ok: false, why: r.status === 429 ? '口令试错太多，10 分钟后再试' : 'HTTP ' + r.status }))
+      if (!j.ok) throw new Error(j.why || ('HTTP ' + r.status))
+      return j
+    } catch (e) { throw new Error(e.name === 'AbortError' ? '20 秒没有回应，可能网络不好。可以直接再点一次，已发过的不会重复' : e.message) }
+    finally { clearTimeout(t) }
+  }
+  let counted = null
+  const preview = async () => {
+    say('正在查询…')
+    const j = await post({ preview: true })
+    counted = { ...values(), pending: j.pending }
+    say('共 ' + j.total + ' 个账号：已发过 ' + j.already + ' 个' + (j.pending ? '，这次会发给 ' + j.pending + ' 个。' : '，全部发过了，不用再发。'), j.pending ? '' : 'ok')
     return j
   }
-  let pending = 0
-  $('#gaPreview').addEventListener('click', async () => {
-    try {
-      const j = await post({ preview: true })
-      pending = j.pending
-      msg.textContent = '共 ' + j.total + ' 个账号：已发过 ' + j.already + ' 个，这次会发给 ' + j.pending + ' 个。'
-      send.disabled = !pending
-    } catch (e) { msg.textContent = '没成：' + e.message; send.disabled = true }
-  })
+  previewBtn.addEventListener('click', () => { preview().catch(e => say('没成：' + e.message, 'bad')) })
+  send.disabled = false
   send.addEventListener('click', async () => {
-    const coins = Number($('#gaCoins').value) || 0
-    if (!confirm('确认给 ' + pending + ' 个账号每人发 ' + coins.toLocaleString() + ' 金币？补偿名称：' + $('#gaName').value.trim())) return
     send.disabled = true
-    try { const j = await post({}); msg.textContent = '已发给 ' + j.sent + ' 个账号（跳过已发过的 ' + j.skipped + ' 个）。' }
-    catch (e) { msg.textContent = '没成：' + e.message + '（可以直接再点一次，已发过的不会重复）'; send.disabled = false }
+    try {
+      const v = values()
+      const j = counted && counted.campaign === v.campaign && counted.coins === v.coins ? counted : await preview()
+      if (!j.pending) return
+      if (!confirm('确认给 ' + j.pending + ' 个账号每人发 ' + v.coins.toLocaleString() + ' 金币？ 补偿名称：' + v.campaign)) { say('已取消，没有发放。'); return }
+      say('正在发放…')
+      const r = await post({})
+      counted = null
+      say('已发出：' + r.sent + ' 个账号每人 ' + v.coins.toLocaleString() + ' 金币（跳过已发过的 ' + r.skipped + ' 个）。玩家打开信箱领取即到账。', 'ok')
+    } catch (e) { say('没成：' + e.message, 'bad') }
+    finally { send.disabled = false }
   })
-  ;['#gaName', '#gaCoins'].forEach(s => $(s).addEventListener('input', () => { send.disabled = true; msg.textContent = '改过名称或金额，请重新预览' }))
+  ;['#gaName', '#gaCoins'].forEach(sel => $(sel).addEventListener('input', () => { counted = null }))
+  preview().catch(e => say('没读到补偿状态：' + e.message, 'bad'))
 })();
 ${toolsScript}
 </script>
