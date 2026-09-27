@@ -394,7 +394,8 @@ html[data-theme='cream'] .cardmode.rift-ui {
 
 /* Integration refinements after reviewing DeepSeek's shell. */
 .cardmode.rift-ui { --accent:#65d8cf; --accent-hot:#92efe4; --accent-wash:#65d8cf12; --accent-wash-2:#65d8cf22; --accent-line:#65d8cf55; --rift-bg:#08151c; --rift-navy:#0c2029; --rift-navy-light:#14303b; --rift-panel-bg:linear-gradient(135deg,#122932,#0e222b); --rift-border:#29434b; --rift-cyan:#75d8d0; --rift-cyan-glow:#b0f8e9; --rift-gold:#d7bc83; --rift-text-muted:#9eb8bf; --rift-shadow:0 8px 30px #0002; }
-.cardmode.rift-ui .cm-body { min-width:0; padding:22px 28px 50px; background:radial-gradient(ellipse at 90% 0,#1c4b4228,transparent 65%),var(--rift-bg); }
+/* the bottom padding clears the floating 概率 / 更新日志 stack (~160px), so the last button on any page can scroll out from under it */
+.cardmode.rift-ui .cm-body { min-width:0; padding:22px 28px 170px; background:radial-gradient(ellipse at 90% 0,#1c4b4228,transparent 65%),var(--rift-bg); }
 .cardmode.rift-ui .topbar { min-height:60px; box-shadow:none; }
 .cardmode.rift-ui .topbar .brand-home { min-height:44px; padding:0; border:0; border-radius:3px; background:transparent; cursor:pointer; }
 .cardmode.rift-ui .topbar .brand-home:hover { filter:brightness(1.18); }
@@ -430,7 +431,7 @@ html[data-theme='cream'] .cardmode.rift-ui .pack-box { background:linear-gradien
  .cardmode.rift-ui .topbar { flex-wrap:wrap; padding:8px 10px; gap:6px; }
  .cardmode.rift-ui .topbar .brand { font-size:19px; }
  .cardmode.rift-ui .topbar .chip { padding:3px 6px; font-size:11px; }
- .cardmode.rift-ui .cm-body { padding:12px 10px 40px; }
+ .cardmode.rift-ui .cm-body { padding:12px 10px 170px; }
  .rift-nav { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:2px; padding:6px; }
  .rift-nav-group { display:none; } /* the phone's icon grid has no room for section labels */
  .rift-nav-btn { min-width:0; min-height:49px; padding:5px 1px; gap:3px; border-radius:4px; }
