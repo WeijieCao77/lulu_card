@@ -67,13 +67,21 @@ interface Mirror {
   dirty: boolean
 }
 
+/**
+ * The formal server opened on a new database (2026-09-25). A copy made before then is a beta collection this
+ * device happens to remember: shown offline it read as 「内测数据还在」. It is dropped, never shown or sent.
+ */
+const FORMAL_SINCE = '2026-09-25'
+const dropMirror = (id: string): void => { try { localStorage.removeItem(MIRROR + id) } catch { /* private window */ } }
 const readMirror = (id: string): Mirror | null => {
   try {
     const raw = localStorage.getItem(MIRROR + id)
     if (!raw) return null
     const j: unknown = JSON.parse(raw)
-    if (j && typeof j === 'object' && 'state' in j) return j as Mirror
-    return { state: j as GachaState, rev: null, dirty: true }
+    const m = j && typeof j === 'object' && 'state' in j ? j as Mirror : { state: j as GachaState, rev: null, dirty: true }
+    const made = (m.state as { createdAt?: string } | null)?.createdAt
+    if (!made || made < FORMAL_SINCE) { dropMirror(id); return null }
+    return m
   } catch { return null }
 }
 
@@ -437,7 +445,8 @@ export async function loadAccount(rawId: string): Promise<LoadResult> {
       }
       return { ok: true, state, today, cloud: true, verified: j.verified === true, phone: typeof j.phone === 'string' ? j.phone : null }
     }
-    if (j?.missing) return { ok: false, reason: 'missing', today }
+    // the server has never seen this id (a beta account, before the formal database): forget this device's copy too
+    if (j?.missing) { dropMirror(id); return { ok: false, reason: 'missing', today } }
   } catch { /* fall through to the mirror */ }
   // Unreachable: show what this device last saw. Nothing valuable can be done
   // to it until the server is back, and the screens say so.
