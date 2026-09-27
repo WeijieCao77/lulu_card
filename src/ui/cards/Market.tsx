@@ -728,7 +728,7 @@ export default function Market() {
       {gate && (
         <Panel title="交易区还没对你开放">
           <p className="small muted" style={{ marginTop: 0, lineHeight: 1.8 }}>
-            新账号要建满 <b>{gate.days ?? 3} 天</b>、开够 <b>{gate.need} 抽</b>才能挂牌和出价。
+            新账号{gate.days ? <>要建满 <b>{gate.days} 天</b>、</> : '要'}开够 <b>{gate.need} 抽</b>才能挂牌和出价。
             {gate.have < gate.need && <>你现在 <b>{gate.have}</b> 抽，还差 <b>{gate.need - gate.have}</b> 抽，签到送的包也算。</>}
             {(gate.wait ?? 0) > 0 && <>账号还要等 <b>{waitText(gate.wait ?? 0)}</b>。</>}
           </p>

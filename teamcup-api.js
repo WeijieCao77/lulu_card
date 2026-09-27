@@ -20,7 +20,8 @@
  */
 import { createHash, randomBytes } from 'node:crypto'
 import { isVerified } from './phone-api.js'
-import { TRADE_PULLS, TRADE_DAYS } from './market-api.js'
+import { TRADE_PULLS } from './market-api.js'
+const CUP_MIN_DAYS = 3
 import { createCupComputer } from './opencup-worker.js'
 import { makeCupPass } from './cup-clock.js'
 
@@ -81,7 +82,8 @@ export function makeTeamCupApi(sql, {
   readBody, json, normalizeId, displayName, rateLimited, engine,
   clock = () => Date.now(),
   timer = true,
-  minDays = TRADE_DAYS,
+  /** 杯赛自己的注册天数门槛（交易市场 2026-09-27 起不再要求天数，杯赛保持 3 天） */
+  minDays = CUP_MIN_DAYS,
   /** a local server's fast clock: { everySec, stepSec } — read only beside the in-process database */
   fast = null,
   bg = sql,

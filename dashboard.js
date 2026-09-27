@@ -436,7 +436,7 @@ body { max-width:1600px; margin:auto; }
 </head>
 <body>
 <header class="admin-header"><div><h1>噜<span>噜卡</span> · 后台看板</h1><small>猪之家出品 · 运营中心</small></div><div class="row"><a href="/">返回游戏</a><button id="adminLogout" type="button">退出后台</button></div></header>
-<nav class="admin-nav" aria-label="后台导航"><a href="#app">数据总览</a><a href="#feedback">玩家建议信箱</a><a href="#support">赛事应援墙</a><a href="#grant">玩家与信箱发放</a><a href="#guard">交易管理</a><a href="#ops-tools">运营工具</a><a href="#review">账号审核</a><a href="#wechat">社区设置</a></nav>
+<nav class="admin-nav" aria-label="后台导航"><a href="#app">数据总览</a><a href="#feedback">玩家建议信箱</a><a href="#support">赛事应援墙</a><a href="#grantAll">全员补偿</a><a href="#grant">玩家与信箱发放</a><a href="#guard">交易管理</a><a href="#ops-tools">运营工具</a><a href="#review">账号审核</a><a href="#wechat">社区设置</a></nav>
 <div class="sub">
   身份是浏览器首次访问时生成的匿名 ID，服务端不记录、不存储 IP 地址。
   「时长」只累计确认活跃的分钟数——标签页挂着过夜不算。
@@ -480,6 +480,17 @@ ${supportAdminHtml}
       <div id="wxNone" class="empty" style="padding:30px 10px">还没有二维码</div>
     </div>
   </div>
+</div>
+<div class="panel" id="grantAll" style="margin-bottom:14px">
+  <h2>全员补偿</h2>
+  <p class="why">发给<b>此刻所有已注册的账号</b>，走信箱，玩家领取后到账。同一个补偿名称，每个号<b>只发一次</b>：重复点击、网络超时重试都不会多发；之后新注册的号，再点一次同名补偿只补给新号。</p>
+  <div class="row" style="gap:8px;flex-wrap:wrap">
+    <label>补偿名称 <input id="gaName" value="公测补偿-10000" maxlength="60" style="width:200px"></label>
+    <label>金币 <input id="gaCoins" type="number" min="0" max="1000000" value="10000" style="width:110px"></label>
+    <button id="gaPreview" type="button">预览人数</button>
+    <button id="gaSend" type="button" disabled>发放</button>
+  </div>
+  <p id="gaMsg" role="status"></p>
 </div>
 <div class="panel" id="grant" style="margin-bottom:14px">
   <h2>给玩家发东西</h2>
@@ -1447,6 +1458,34 @@ load(30)
 ${overviewScript}
 ${feedbackAdminScript}
 ${supportAdminScript}
+;(function () {
+  const msg = $('#gaMsg'), send = $('#gaSend')
+  if (!msg) return
+  const body = (extra) => JSON.stringify({ campaign: $('#gaName').value.trim(), coins: Number($('#gaCoins').value) || 0, ...extra })
+  const post = async (extra) => {
+    const r = await fetch('/api/admin/grant_all', { method: 'POST', headers: { 'Content-Type': 'application/json', ...auth() }, body: body(extra) })
+    const j = await r.json().catch(() => ({ ok: false }))
+    if (!j.ok) throw new Error(j.why || ('HTTP ' + r.status))
+    return j
+  }
+  let pending = 0
+  $('#gaPreview').addEventListener('click', async () => {
+    try {
+      const j = await post({ preview: true })
+      pending = j.pending
+      msg.textContent = '共 ' + j.total + ' 个账号：已发过 ' + j.already + ' 个，这次会发给 ' + j.pending + ' 个。'
+      send.disabled = !pending
+    } catch (e) { msg.textContent = '没成：' + e.message; send.disabled = true }
+  })
+  send.addEventListener('click', async () => {
+    const coins = Number($('#gaCoins').value) || 0
+    if (!confirm('确认给 ' + pending + ' 个账号每人发 ' + coins.toLocaleString() + ' 金币？补偿名称：' + $('#gaName').value.trim())) return
+    send.disabled = true
+    try { const j = await post({}); msg.textContent = '已发给 ' + j.sent + ' 个账号（跳过已发过的 ' + j.skipped + ' 个）。' }
+    catch (e) { msg.textContent = '没成：' + e.message + '（可以直接再点一次，已发过的不会重复）'; send.disabled = false }
+  })
+  ;['#gaName', '#gaCoins'].forEach(s => $(s).addEventListener('input', () => { send.disabled = true; msg.textContent = '改过名称或金额，请重新预览' }))
+})();
 ${toolsScript}
 </script>
 </body>

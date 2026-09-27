@@ -167,7 +167,7 @@ export function gateText(reply: object): string {
   const g = reply as { need?: unknown; have?: unknown; days?: unknown; wait?: unknown }
   const need = Number(g.need) || 0
   const pulls = Math.max(0, need - (Number(g.have) || 0))
-  const days = Number(g.days) || 3
+  const days = Number(g.days) || 0
   const wait = Math.max(0, Number(g.wait) || 0)
   if (pulls && wait) return `新账号要建满 ${days} 天、开够 ${need} 抽才能交易：还差 ${pulls} 抽，还要等 ${waitText(wait)}。`
   if (wait) return `新账号要建满 ${days} 天才能交易，还要等 ${waitText(wait)}。`

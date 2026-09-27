@@ -134,6 +134,7 @@ const check = (name: string, ok: boolean, detail = '') => {
 
 const db = new PGlite(), sql = makeSql(db)
 await db.exec(CARD_SCHEMA)
+await db.exec((await import('./verified-fixture.mjs')).AUTO_VERIFY) // formal policy: harness accounts are phone-verified
 await db.exec(OPEN_CUP_SCHEMA)
 await db.exec(OPEN_CUP_V2_SCHEMA); await db.exec(OPEN_CUP_LEAGUE_SCHEMA)
 type Body = Record<string, any>
@@ -198,7 +199,8 @@ try {
   r = await call('/api/card/opencup/join', { id: 'VM-NOPE' })
   check('乱写的账号是 400', r.code === 400)
   r = await call('/api/card/opencup/join', { id: idOf(999) })
-  check('不存在的账号报不了名', !r.body.ok && r.body.missing === true)
+  // under the formal policy it is turned away at the phone check, before the account lookup
+  check('不存在的账号报不了名', !r.body.ok && (r.body.missing === true || r.body.unverified === true))
   r = await call('/api/card/opencup/join', '{not json')
   check('坏的请求体是 400，不是 500', r.code === 400)
 

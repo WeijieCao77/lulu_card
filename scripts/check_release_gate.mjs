@@ -34,10 +34,10 @@ try {
     ALIYUN_SMS_ACCESS_KEY_ID: 'realAccessId12345678', ALIYUN_SMS_ACCESS_KEY_SECRET: 'realAccessSecret1234567890',
     ALIYUN_SMS_SIGN_NAME: '真实签名', ALIYUN_SMS_TEMPLATE_CODE: '100001', ANALYTICS_TOKEN: 'a'.repeat(32), PHONE_KEY: 'k'.repeat(32), PHONE_SALT: 's'.repeat(32),
     TRADE_DAYS: '0', TRADE_PULLS: '0', MARKET_PROTECT_SEC: '0', MARKET_GUARD: 'off', MARKET_GUARD_AUTO: '' }
-  const engineModule = { RELEASE_STAGE: 'production', newGacha: () => ({ coins: 3000, packs: { scout: 3, elite: 1, coach: 1 } }) }
+  const engineModule = { RELEASE_STAGE: 'production', newGacha: () => ({ coins: 10000, packs: { scout: 3, elite: 1, coach: 1 } }) }
   let result = inspectProductionRelease({ env, engineModule })
   assert.equal(result.ok, true, result.errors.join('; '))
-  assert.deepEqual([result.market.tradeDays, result.market.tradePulls, result.market.protectSeconds], [3, 50, 60])
+  assert.deepEqual([result.market.tradeDays, result.market.tradePulls, result.market.protectSeconds], [0, 50, 60])
   result = inspectProductionRelease({ env: { ...env, PHONE_GATE: '0' }, engineModule })
   assert.equal(result.ok, false)
   result = inspectProductionRelease({ env: { ...env, PHONE_SMS_DEV: '1' }, engineModule })

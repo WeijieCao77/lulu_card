@@ -24,7 +24,9 @@ export function resolveMarketPolicy({ stage = RELEASE_STAGE, policy = RELEASE_PO
   }
 
   // production: clamp weak/invalid values to policy minimums, integer days, safe upper bounds
-  const minDays = Math.max(3, base.tradeDays ?? 3)
+  // 2026-09-27 站长：交易不再要求注册天数——每个账号都绑了手机号，小号由手机号和抽数门槛拦。
+  // 抽数与保护期仍是硬下限；天数只可由 TRADE_DAYS 往上加。
+  const minDays = Math.max(0, base.tradeDays ?? 0)
   const minPulls = Math.max(50, base.tradePulls ?? 50)
   const minSec = Math.max(60, base.protectSeconds ?? 60)
 

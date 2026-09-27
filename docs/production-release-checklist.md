@@ -6,10 +6,10 @@
 
 | 项目 | 内测 | 正式上线恢复值/要求 | 位置 |
 | --- | --- | --- | --- |
-| 新账号开局金币 | 100,000 | 3,000（若调整需重新审核经济模型） | release-policy.js |
+| 新账号开局金币 | 100,000 | 10,000（2026-09-27 站长由 3,000 上调；已注册账号不自动补差） | release-policy.js |
 | 新账号卡包补给 | 试训包、选拔包、十连包各 10 个，另保留 1 个教练包 | 试训包 3、选拔包 1、十连包 0、教练包 1 | release-policy.js / starterPacks |
 | 建档公告 | 首次进入游戏弹出删档内测公告，说明补给、临时交易规则、手机号关闭及避免大量小号 | 关闭内测公告并核对正式规则说明 | GateWelcome.tsx / RELEASE_STAGE |
-| 注册后交易等待 | 0 天 | 3 天 | release-policy.js / TRADE_DAYS |
+| 注册后交易等待 | 0 天 | 0 天（2026-09-27 站长取消：已强制手机号绑定，保留 50 抽与 60 秒保护期；全服杯报名仍 3 天） | release-policy.js / TRADE_DAYS |
 | 交易所需抽卡次数 | 0 抽 | 50 抽 | release-policy.js / TRADE_PULLS |
 | 一口价上架保护期 | 0 秒，立即成交 | 60 秒，报名抽签 | release-policy.js / MARKET_PROTECT_SEC |
 | 手机号验证与绑定 | phoneEnabled=false，绑定/手机号登录入口隐藏，发送/绑定/登录 API 返回 403；PHONE_GATE=0 | 开启验证，配置真实短信服务并测试绑定/找回 | phone-api.js / Railway Variables |

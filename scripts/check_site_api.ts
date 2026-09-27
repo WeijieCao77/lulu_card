@@ -28,6 +28,7 @@ const db = new PGlite()
 const sql = makeSql(db)
 await db.exec(SITE_SCHEMA)
 await db.exec(CARD_SCHEMA)
+await db.exec((await import('./verified-fixture.mjs')).AUTO_VERIFY) // formal policy: harness accounts are phone-verified
 
 let bad = 0
 const check = (ok: boolean, what: string, detail = '') => {

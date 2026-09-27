@@ -10,7 +10,9 @@ const rootDir = fileURLToPath(new URL('..', import.meta.url))
 // pure resolver tests with stage injection
 const { resolveMarketPolicy, resolveMarketGuardMode } = await import('../market-policy.js')
 
-const MIN = { tradeDays: 3, tradePulls: 50, protectSeconds: 60 }
+// 2026-09-27: trading needs no account age any more (phone + pulls hold alts); pulls and protection stay floors
+const MIN = { tradeDays: 0, tradePulls: 50, protectSeconds: 60 }
+assert.deepEqual((({ tradeDays, tradePulls, protectSeconds }) => ({ tradeDays, tradePulls, protectSeconds }))(resolveMarketPolicy({ stage: 'production', env: {} })), MIN, 'formal default: no account age, 50 pulls, 60s protection')
 const weakValues = [null, undefined, '', '0', '-1', '1.5', 'NaN', 'Infinity', '-Infinity', '1e999', 'abc', '999999999999999999999999999999', 0, -1, 1.5, NaN, Infinity, -Infinity]
 
 for (const key of ['TRADE_DAYS', 'TRADE_PULLS', 'MARKET_PROTECT_SEC']) {
@@ -38,9 +40,10 @@ assert.deepEqual(p, { tradeDays: 0, tradePulls: 2147483647, protectSeconds: 3153
 p = resolveMarketPolicy({ stage: 'production', env: { TRADE_DAYS: '5', TRADE_PULLS: '100', MARKET_PROTECT_SEC: '90' } })
 assert.deepEqual(p, { tradeDays: 5, tradePulls: 100, protectSeconds: 90, guardMode: 'ban', autoRules: ['A', 'E'] })
 
-// Even a future policy edit to weaker defaults must not silently disable the release floor.
+// Even a future policy edit to weaker defaults must not silently disable the pull and protection floors
+// (account age is no longer a floor: 2026-09-27, phone verification holds alts).
 p = resolveMarketPolicy({ stage: 'production', policy: { tradeDays: 0, tradePulls: 0, protectSeconds: 0 }, env: { TRADE_DAYS: '0', TRADE_PULLS: '0', MARKET_PROTECT_SEC: '0', MARKET_GUARD: 'off', MARKET_GUARD_AUTO: '' } })
-assert.deepEqual(p, { tradeDays: 3, tradePulls: 50, protectSeconds: 60, guardMode: 'ban', autoRules: ['A', 'E'] })
+assert.deepEqual(p, { tradeDays: 0, tradePulls: 50, protectSeconds: 60, guardMode: 'ban', autoRules: ['A', 'E'] })
 
 // production fractional days ceil to not silently weaken operator intended minimum
 p = resolveMarketPolicy({ stage: 'production', env: { TRADE_DAYS: '3.1' } })
@@ -48,7 +51,7 @@ assert.deepEqual(p, { tradeDays: 4, tradePulls: 50, protectSeconds: 60, guardMod
 
 // production limits reject beyond safe baseline to avoid SQL interval/seconds overflow
 p = resolveMarketPolicy({ stage: 'production', env: { TRADE_DAYS: '3651', TRADE_PULLS: '2147483648', MARKET_PROTECT_SEC: '31536001' } })
-assert.deepEqual(p, { tradeDays: 3, tradePulls: 50, protectSeconds: 60, guardMode: 'ban', autoRules: ['A', 'E'] })
+assert.deepEqual(p, { tradeDays: 0, tradePulls: 50, protectSeconds: 60, guardMode: 'ban', autoRules: ['A', 'E'] })
 
 // production always ban including explicit mode option
 for (const m of ['off', 'watch', 'ban', '', 'bad']) {
@@ -107,7 +110,7 @@ try {
     const prodPolicy = await import(pathToFileURL(tmp + '/market-policy.js').href)
     assert.deepEqual(
       { tradeDays: prodPolicy.TRADE_DAYS, tradePulls: prodPolicy.TRADE_PULLS, protectSeconds: prodPolicy.PROTECT_SEC, guardMode: prodPolicy.GUARD_MODE, autoRules: prodPolicy.AUTO_RULES },
-      { tradeDays: 3, tradePulls: 50, protectSeconds: 60, guardMode: 'ban', autoRules: ['A', 'E'] }
+      { tradeDays: 0, tradePulls: 50, protectSeconds: 60, guardMode: 'ban', autoRules: ['A', 'E'] }
     )
     const prodGuard = await import(pathToFileURL(tmp + '/market-guard.js').href)
     assert.equal(prodGuard.PROTECT_SEC, 60)

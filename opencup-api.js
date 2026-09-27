@@ -24,7 +24,8 @@
 import { createHash } from 'node:crypto'
 import { randomBytes } from 'node:crypto'
 import { isVerified } from './phone-api.js'
-import { TRADE_PULLS, TRADE_DAYS } from './market-api.js'
+import { TRADE_PULLS } from './market-api.js'
+const CUP_MIN_DAYS = 3
 import { makeSwissCupRunner } from './opencup-v2.js'
 import { createCupComputer } from './opencup-worker.js'
 import { makeCupPass } from './cup-clock.js'
@@ -144,7 +145,8 @@ export function makeOpenCupApi(sql, {
   /** false in the checks, which call advance() themselves */
   timer = true,
   /** the trading gate's days; the checks cannot backdate an account */
-  minDays = TRADE_DAYS,
+  /** 杯赛自己的注册天数门槛（交易市场 2026-09-27 起不再要求天数，杯赛保持 3 天） */
+  minDays = CUP_MIN_DAYS,
   /**
    * A faster clock, for a local server on the in-process database: a cup
    * every `fast.everySec`, a round every `fast.stepSec`. Never set in

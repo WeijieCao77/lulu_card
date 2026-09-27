@@ -26,6 +26,12 @@ create table if not exists site_config (
   value    jsonb not null,
   updated  timestamptz not null default now()
 );
+create table if not exists grant_campaign_receipts (
+  campaign text not null,
+  id_hash  text not null,
+  made     timestamptz not null default now(),
+  primary key (campaign, id_hash)
+);
 `
 
 /** A QR is a few tens of kilobytes; this is the point of refusing to look. */
@@ -308,6 +314,42 @@ export function makeSiteApi(sql, { readBody, json, token, normalizeId, displayNa
    * pieces of mail without saying which pack was in them, and a busy trader's grants are twenty sales down the
    * list — so a list of 对战码 is answered here in two queries, the way grant() resolves it. Read only.
    */
+  /**
+   * 全员补偿: one grant to every account that exists right now, once per account per campaign.
+   *
+   * The receipt row and the mail are written in one statement, and a receipt already there means no mail:
+   * a second press, a retry after a gateway timeout (2026-09-17 sent one grant eight times) or two tabs
+   * cannot pay anybody twice. {preview: true} only counts who would get it.
+   */
+  async function grantAll(req, res) {
+    if (!sql) { json(res, 503, { ok: false, why: 'no database' }); return }
+    let body
+    try { body = JSON.parse(await readBody(req, 4096)) } catch { json(res, 400, { ok: false }); return }
+    const campaign = String(body?.campaign ?? '').trim().slice(0, 60)
+    if (!campaign) { json(res, 200, { ok: false, why: '填一个补偿名称，比如「公测补偿-10000」：同一个名称每个号只发一次' }); return }
+    const coins = Math.max(0, Math.min(1_000_000, Math.round(Number(body?.coins) || 0)))
+    const pack = body?.pack ? String(body.pack) : null
+    const count = Math.max(1, Math.min(50, Math.round(Number(body?.count) || 1)))
+    if (pack && !PACK_KINDS.includes(pack)) { json(res, 200, { ok: false, why: `没有这种卡包（${PACK_KINDS.join(' / ')}）` }); return }
+    if (!coins && !pack) { json(res, 200, { ok: false, why: '填金币或卡包' }); return }
+    const note = typeof body?.note === 'string' ? body.note.slice(0, 80) : campaign
+    const [c] = await sql`select count(*)::int as total,
+        (select count(*)::int from grant_campaign_receipts where campaign = ${campaign}) as done
+      from card_accounts`
+    if (body?.preview) { json(res, 200, { ok: true, preview: true, total: c.total, already: c.done, pending: Math.max(0, c.total - c.done) }); return }
+    const sent = await sql`
+      with fresh as (
+        insert into grant_campaign_receipts (campaign, id_hash)
+        select ${campaign}, id_hash from card_accounts
+        on conflict do nothing
+        returning id_hash
+      )
+      insert into card_mail (to_h, kind, card_id, coins, pack, count, body)
+      select id_hash, 'grant', null, ${coins}, ${pack}, ${count}, ${sql.json({ note })} from fresh
+      returning to_h`
+    json(res, 200, { ok: true, campaign, sent: sent.length, skipped: c.total - sent.length, coins: coins || undefined, pack, count: pack ? count : undefined })
+  }
+
   async function grants(req, res) {
     if (!sql) { json(res, 503, { ok: false, why: 'no database' }); return }
     let body
@@ -743,6 +785,15 @@ export function makeSiteApi(sql, { readBody, json, token, normalizeId, displayNa
         }
         if (req.method !== 'POST') { json(res, 405, { ok: false }); return true }
         await grant(req, res)
+        return true
+      }
+      if (path === '/api/admin/grant_all') {
+        if (!same(tokenFrom ? tokenFrom(req, url) : url.searchParams.get('token'), token) || !token) {
+          res.writeHead(404, { 'Content-Type': 'text/plain' }).end('Not found')
+          return true
+        }
+        if (req.method !== 'POST') { json(res, 405, { ok: false }); return true }
+        await grantAll(req, res)
         return true
       }
       if (path === '/api/admin/grants') {

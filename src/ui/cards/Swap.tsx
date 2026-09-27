@@ -103,7 +103,7 @@ export default function Swap() {
         : r?.banned ? String(r.why ?? '交易已暂停。')
         : r?.theyBanned ? '对方的交易已暂停，暂时不能换卡。'
         : r?.newbie ? gateText(r)
-          : r?.theyNew ? `对方是新账号，建满 ${Number(r.days) || 3} 天、开够 ${Number(r.need) || 50} 抽才能换卡。`
+          : r?.theyNew ? `对方是新账号，${Number(r.days) ? `建满 ${Number(r.days)} 天、` : ''}开够 ${Number(r.need) || 50} 抽才能换卡。`
             : r?.theyLack ? '对方没有这张卡。'
               : r?.notOwned ? '你已经没有这张卡了。'
                 : r?.stamina ? `体力不够，换卡要 ${STAMINA_COST.swap} 点。`

@@ -62,7 +62,8 @@
   },
   {
     "runtime": "tsx",
-    "file": "scripts/check_market.ts"
+    "file": "scripts/check_market.ts",
+    "env": { "TRADE_DAYS": "3" }
   },
   {
     "runtime": "tsx",
@@ -102,7 +103,8 @@
   },
   {
     "runtime": "tsx",
-    "file": "scripts/check_swap.ts"
+    "file": "scripts/check_swap.ts",
+    "env": { "TRADE_DAYS": "3" }
   },
   {
     "runtime": "tsx",
@@ -723,6 +725,10 @@
   {
     "runtime": "node",
     "file": "scripts/check_support_wall.mjs"
+  },
+  {
+    "runtime": "node",
+    "file": "scripts/check_grant_all.mjs"
   },
   {
     "runtime": "tsx",

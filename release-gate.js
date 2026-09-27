@@ -16,11 +16,11 @@ export function inspectProductionRelease({ env = process.env, frontendManifest, 
   requireRule(RELEASE_STAGE === 'production', 'release stage must be production')
   requireRule(env.NODE_ENV === 'production', 'NODE_ENV must be production')
   requireRule(!env.ENGINE_FROM_SOURCE, 'production must load the verified engine bundle')
-  requireRule(RELEASE_POLICY.starterCoins === 3000, 'starter coins must be 3,000')
+  requireRule(RELEASE_POLICY.starterCoins === 10000, 'starter coins must be 10,000')
   const packs = RELEASE_POLICY.starterPacks
   requireRule(packs.scout === 3 && packs.elite === 1 && packs.ten === 0 && packs.coach === 1, 'starter packs must be 3/1/0/1')
   const market = resolveMarketPolicy({ env })
-  requireRule(market.tradeDays >= 3 && market.tradePulls >= 50 && market.protectSeconds >= 60, 'effective market time, pull and protection gates are weak')
+  requireRule(market.tradeDays >= RELEASE_POLICY.tradeDays && market.tradePulls >= 50 && market.protectSeconds >= 60, 'effective market time, pull and protection gates are weak')
   requireRule(market.guardMode === 'ban' && market.autoRules.includes('A') && market.autoRules.includes('E'), 'effective automatic market enforcement is weak')
   requireRule(RELEASE_POLICY.phoneEnabled && env.PHONE_GATE === '1', 'PHONE_GATE must explicitly equal 1')
   requireRule(env.PHONE_SMS_DEV !== '1', 'development SMS codes must be disabled')
@@ -75,7 +75,7 @@ export function inspectProductionRelease({ env = process.env, frontendManifest, 
   requireRule(engineModule?.RELEASE_STAGE === 'production', 'built engine release stage must be production')
   if (engineModule?.newGacha) {
     const fresh = engineModule.newGacha('release-gate', 'check', '2026-01-01')
-    requireRule(fresh.coins === 3000 && fresh.packs?.scout === 3 && fresh.packs?.elite === 1
+    requireRule(fresh.coins === 10000 && fresh.packs?.scout === 3 && fresh.packs?.elite === 1
       && !fresh.packs?.ten && fresh.packs?.coach === 1, 'built engine uses wrong starter supplies')
   }
   return { ok: errors.length === 0, errors, market }
