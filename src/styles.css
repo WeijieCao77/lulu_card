@@ -1187,13 +1187,13 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
  * — start it any higher and the position line is drawn on top of somebody's
  * face. Measured in the browser rather than guessed: with these numbers the
  * closest approach between the two is 5px on a 150px card, 4px at 96px. */
-/* The photograph is the top of the card, edge to edge (owner, 2026-09-27: first the circle cut the
- * jersey, then a window between the corners still left the player too small on the card). It bleeds
- * to the card's edges through the padding, fades into the metal at the bottom, and the rating and
- * crest ride on top of it, as on a football card. */
+/* The photograph spans the card edge to edge under a header strip (owner, 2026-09-27: the circle cut
+ * the jersey, a window between the corners left the player too small, and a photo under the rating
+ * and crest mixed them up). The strip holds rating, position and crest on the metal; the photo starts
+ * below it, bleeds to the side edges through the padding and fades into the metal at the bottom. */
 .cf-photo {
-  width: calc(100% + 16px); height: 118px;
-  margin: -8px -8px 3px;
+  width: calc(100% + 16px); height: 93px;
+  margin: 24px -8px 3px;
   object-fit: cover;
   object-position: center 14%;
   border-radius: 0;
@@ -1204,8 +1204,8 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
 }
 /* 33 rather than 25: the second position line reaches 45px down, and the
    circle's edge at that height sits 30px in from the left with this margin */
-.s-sm .cf-photo { height: 88px; }
-.s-lg .cf-photo { width: calc(100% + 24px); height: 164px; margin: -12px -12px 5px; }
+.s-sm .cf-photo { height: 70px; margin-top: 18px; }
+.s-lg .cf-photo { width: calc(100% + 24px); height: 131px; margin: 32px -12px 4px; }
 .cf-noface {
   display: grid; place-items: center;
   background: rgba(20, 18, 12, .58);
@@ -1767,7 +1767,7 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
    rather than its own 132px, or three cards plus gaps overflow a 375px phone
    and the fifth seat sits off-screen. */
 .cm-squad .cardface { width: 100%; max-width: 150px; }
-.cm-squad .cf-photo { width: calc(100% + 16px); height: auto; aspect-ratio: 132 / 118; }
+.cm-squad .cf-photo { width: calc(100% + 16px); height: auto; aspect-ratio: 132 / 93; }
 @media (max-width: 420px) {
   .cm-squad { gap: 6px; }
   .cm-squad .cf-attrs { grid-template-columns: repeat(2, 1fr); font-size: 9px; }
@@ -1784,7 +1784,7 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
   justify-items: center;
 }
 .report-cards .cardface { width: 100%; max-width: 150px; }
-.report-cards .cf-photo { width: calc(100% + 16px); height: auto; aspect-ratio: 132 / 118; }
+.report-cards .cf-photo { width: calc(100% + 16px); height: auto; aspect-ratio: 132 / 93; }
 @media (max-width: 420px) {
   .report-cards { gap: 6px; }
   .report-cards .cf-attrs { grid-template-columns: repeat(2, 1fr); font-size: 9px; }
@@ -2183,12 +2183,22 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
 
 /* the photograph has no frame of its own now: it is the top of the card */
 .cf-photo { box-shadow: none; background: transparent; }
-/* the corner rides on the photograph: light type with a shadow reads on any backdrop */
-.cardface:not(.shot) .cf-rate b,
-.cardface:not(.shot) .cf-kind { color: #fff; opacity: 1; text-shadow: 0 1px 2px rgba(0, 0, 0, .9), 0 0 10px rgba(0, 0, 0, .55); }
-.cardface:not(.shot) .cf-plus { color: #ffd98a; text-shadow: 0 1px 2px rgba(0, 0, 0, .9); }
-/* the corner, crest and dupe count sit above the photograph (z 3): many photos have an opaque backdrop */
+/* the header strip: rating, then position, on one line, so the strip stays shallow */
+.cardface:not(.shot) .cf-rate { flex-direction: row; align-items: center; gap: 5px; top: 5px; left: 8px; }
+.cardface:not(.shot) .cf-kind { margin-top: 0; }
+.cardface.s-lg:not(.shot) .cf-rate { top: 7px; left: 11px; gap: 7px; }
+.cardface:not(.shot) .cf-crest { width: 22px; height: 22px; top: 5px; right: 7px; }
+.cardface.s-sm:not(.shot) .cf-crest { width: 16px; height: 16px; top: 5px; right: 5px; }
+.cardface.s-lg:not(.shot) .cf-crest { width: 28px; height: 28px; top: 8px; right: 10px; }
 .cardface:not(.shot) .cf-rate, .cardface:not(.shot) .cf-crest, .cardface:not(.shot) .cf-dupes { z-index: 4; }
+/* the lower half a step smaller, so the photograph gets the room */
+.cardface:not(.shot) .cf-name { font-size: 12px; margin-top: 3px; padding-top: 4px; }
+.cardface.s-sm:not(.shot) .cf-name { font-size: 10.5px; }
+.cardface.s-lg:not(.shot) .cf-name { font-size: 15.5px; }
+.cardface:not(.shot) .cf-meta { font-size: 9px; }
+.cardface:not(.shot) .cf-attrs { font-size: 8.5px; margin-top: 4px; padding-top: 4px; }
+.cardface.s-lg:not(.shot) .cf-attrs { font-size: 10.5px; }
+.cardface.s-lg:not(.shot) .cf-real { font-size: 9.5px; }
 
 /* the moment ribbon: a plate rather than a grey box, and thin enough to let
    the photograph through — it sits on top of the shot, not over it */
@@ -2552,7 +2562,7 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
   .market-shelf { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .market-box { width: auto; }
   .market-box .cardface { width: 100%; max-width: 150px; }
-  .market-box .cf-photo { width: calc(100% + 16px); height: auto; aspect-ratio: 132 / 118; }
+  .market-box .cf-photo { width: calc(100% + 16px); height: auto; aspect-ratio: 132 / 93; }
 }
 
 .preset-box {
