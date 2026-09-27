@@ -116,10 +116,6 @@
   },
   {
     "runtime": "tsx",
-    "file": "scripts/check_predict.ts"
-  },
-  {
-    "runtime": "tsx",
     "file": "scripts/check_cup_path.ts"
   },
   {
@@ -761,10 +757,6 @@
   {
     "runtime": "tsx",
     "file": "scripts/check_market_participating.ts"
-  },
-  {
-    "runtime": "tsx",
-    "file": "scripts/check_prediction_rewards.ts"
   },
   {
     "runtime": "tsx",

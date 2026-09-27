@@ -12,8 +12,6 @@ import { Rng, clamp, hashStr } from './rng'
 import { WORLD_TEAMS } from './teams'
 import { CUP_TEAMS } from './cupTeams'
 import type { Region, Role } from './types'
-import { cleanPredictions } from './predict'
-import type { Picks } from './predict'
 import type { SeoulRouteState } from './seoulRoute'
 import type { WeeklySeriesPick } from './weeklySeries'
 import { cleanWeeklySeriesPick, selectedWeeklySeries } from './weeklySeries'
@@ -785,8 +783,6 @@ export interface GachaState {
   presets?: (SquadPreset | null)[]
   /** what the inbox has delivered, newest first — see MailEntry */
   mail?: MailEntry[]
-  /** 赛事预测 — picks per event and group, see engine/predict.ts */
-  predict?: Record<string, Record<string, { picks: Picks; at: number; claimedAt?: number }>>
   log: LogEntry[]
   /** rolling seed, so a reload cannot reroll the same pack */
   seed: number
@@ -2533,10 +2529,8 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   }
   g.friends ??= []
   g.presets ??= undefined
-  // 赛事预测: only picks the rules allow, for events the game knows
-  const predict = cleanPredictions(g.predict)
-  if (predict) g.predict = predict
-  else delete g.predict
+  // 赛事预测 was removed (2026-09-27: its data was still Valorant's); an old field is dropped
+  delete (g as { predict?: unknown }).predict
   // a cup drawn against a club that has since left the world
   repairCup(g)
   g.seed = typeof g.seed === 'number' && Number.isFinite(g.seed) ? g.seed >>> 0 : hashStr(id + g.createdAt) >>> 0
@@ -2558,7 +2552,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
  */
 export const SERVER_KEYS = [
   'version', 'createdAt', 'coins', 'cards', 'packs', 'pity', 'mythicDry', 'pulls', 'ladder',
-  'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'predict', 'seoulRoute',
+  'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'seoulRoute',
   'weeklySeriesPick',
 ] as const
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends'] as const

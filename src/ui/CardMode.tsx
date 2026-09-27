@@ -14,7 +14,6 @@ import Ladder from './cards/Ladder'
 import Friends from './cards/Friends'
 import Market from './cards/Market'
 import Cup from './cards/Cup'
-import Predict from './cards/Predict'
 import SeoulRoute from './cards/SeoulRoute'
 import AccountScreen, { copyText } from './cards/Account'
 import Dossier from './LoLCatalog'
@@ -350,7 +349,6 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
     friends: Friends,
     market: Market,
     cup: Cup,
-    predict: Predict,
     seoul: SeoulRoute,
   } as Record<string, ComponentType>)[tab]
 
