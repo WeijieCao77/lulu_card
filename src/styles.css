@@ -1192,7 +1192,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
  * and crest mixed them up). The strip holds rating, position and crest on the metal; the photo starts
  * below it, bleeds to the side edges through the padding and fades into the metal at the bottom. */
 .cf-photo {
-  width: calc(100% + 16px); height: 93px;
+  width: calc(100% + 16px); height: 104px;
   margin: 24px -8px 3px;
   object-fit: cover;
   object-position: center 14%;
@@ -1204,8 +1204,8 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
 }
 /* 33 rather than 25: the second position line reaches 45px down, and the
    circle's edge at that height sits 30px in from the left with this margin */
-.s-sm .cf-photo { height: 70px; margin-top: 18px; }
-.s-lg .cf-photo { width: calc(100% + 24px); height: 131px; margin: 32px -12px 4px; }
+.s-sm .cf-photo { height: 78px; margin-top: 18px; }
+.s-lg .cf-photo { width: calc(100% + 24px); height: 146px; margin: 32px -12px 3px; }
 .cf-noface {
   display: grid; place-items: center;
   background: rgba(20, 18, 12, .58);
@@ -1767,7 +1767,7 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
    rather than its own 132px, or three cards plus gaps overflow a 375px phone
    and the fifth seat sits off-screen. */
 .cm-squad .cardface { width: 100%; max-width: 150px; }
-.cm-squad .cf-photo { width: calc(100% + 16px); height: auto; aspect-ratio: 132 / 93; }
+.cm-squad .cf-photo { width: calc(100% + 16px); height: auto; aspect-ratio: 132 / 104; }
 @media (max-width: 420px) {
   .cm-squad { gap: 6px; }
   .cm-squad .cf-attrs { grid-template-columns: repeat(2, 1fr); font-size: 9px; }
@@ -1784,7 +1784,7 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
   justify-items: center;
 }
 .report-cards .cardface { width: 100%; max-width: 150px; }
-.report-cards .cf-photo { width: calc(100% + 16px); height: auto; aspect-ratio: 132 / 93; }
+.report-cards .cf-photo { width: calc(100% + 16px); height: auto; aspect-ratio: 132 / 104; }
 @media (max-width: 420px) {
   .report-cards { gap: 6px; }
   .report-cards .cf-attrs { grid-template-columns: repeat(2, 1fr); font-size: 9px; }
@@ -2191,11 +2191,17 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
 .cardface.s-sm:not(.shot) .cf-crest { width: 16px; height: 16px; top: 5px; right: 5px; }
 .cardface.s-lg:not(.shot) .cf-crest { width: 28px; height: 28px; top: 8px; right: 10px; }
 .cardface:not(.shot) .cf-rate, .cardface:not(.shot) .cf-crest, .cardface:not(.shot) .cf-dupes { z-index: 4; }
-/* the lower half a step smaller, so the photograph gets the room */
-.cardface:not(.shot) .cf-name { font-size: 12px; margin-top: 3px; padding-top: 4px; }
-.cardface.s-sm:not(.shot) .cf-name { font-size: 10.5px; }
-.cardface.s-lg:not(.shot) .cf-name { font-size: 15.5px; }
-.cardface:not(.shot) .cf-meta { font-size: 9px; }
+/* the lower half small and tight (owner, 2026-09-27: the ID and club took too much of the card),
+ * so the photograph gets the room */
+.cardface:not(.shot) .cf-name { font-size: 10.5px; margin-top: 1px; padding-top: 3px; line-height: 1.15; }
+.cardface.s-sm:not(.shot) .cf-name { font-size: 9px; }
+.cardface.s-lg:not(.shot) .cf-name { font-size: 13px; }
+.cardface:not(.shot) .cf-meta { font-size: 8px; margin-top: 0; gap: 3px; line-height: 1.1; }
+.cardface.s-lg:not(.shot) .cf-meta { font-size: 9.5px; }
+.cardface:not(.shot) .cf-meta .cf-igl { font-size: 7.5px; }
+.cardface:not(.shot) .cf-meta .cf-flag.code { font-size: 7px; padding: 0 2px; }
+.cardface.s-lg:not(.shot) .cf-meta .cf-flag.code { font-size: 8px; }
+.cardface:not(.shot) .cf-coach-label { font-size: 8px; margin-top: 0; }
 .cardface:not(.shot) .cf-attrs { font-size: 8.5px; margin-top: 4px; padding-top: 4px; }
 .cardface.s-lg:not(.shot) .cf-attrs { font-size: 10.5px; }
 .cardface.s-lg:not(.shot) .cf-real { font-size: 9.5px; }
@@ -2562,7 +2568,7 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
   .market-shelf { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .market-box { width: auto; }
   .market-box .cardface { width: 100%; max-width: 150px; }
-  .market-box .cf-photo { width: calc(100% + 16px); height: auto; aspect-ratio: 132 / 93; }
+  .market-box .cf-photo { width: calc(100% + 16px); height: auto; aspect-ratio: 132 / 104; }
 }
 
 .preset-box {
