@@ -18,6 +18,8 @@ import { cleanWeeklySeriesPick } from './weeklySeries'
 import { GAME_REGIONS, GAME_REGION_CN, gameRegionOf, type GameRegion } from './gameRegions'
 import { isLegacyRegionPack, migrateRegions } from './regionMigration'
 import { notePull, spendDupes } from './tradeLock'
+import { cleanShop } from './dailyShop'
+import type { DailyShop } from './dailyShop'
 import {
   ALL_CARDS, SEOUL_CARDS, COACH_CARDS, COINS_FOR, DUPES_FOR, LEGEND_CARDS, LEGEND_COACH_CARDS, MAX_LEVEL, RARITY_CN, cardName, PLAYER_CARDS,
   SALVAGE, SQUAD_SLOTS, cardById, cardPower, emptySquad, isPlayerCard, personOf, rarityRank, ratingAt,
@@ -806,6 +808,8 @@ export interface GachaState {
   seoulRoute?: SeoulRouteState
   /** weekly self-selected series discount — server-owned, see weeklySeries.ts */
   weeklySeriesPick?: WeeklySeriesPick
+  /** today's 每日商店 shelf — server-owned, see dailyShop.ts */
+  shop?: DailyShop
 }
 
 /**
@@ -2557,6 +2561,9 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   const cleanPick = cleanWeeklySeriesPick(g.weeklySeriesPick)
   if (cleanPick) g.weeklySeriesPick = cleanPick
   else delete g.weeklySeriesPick
+  const shop = cleanShop(g.shop)
+  if (shop) g.shop = shop
+  else delete g.shop
   return clampState(g)
 }
 
@@ -2573,7 +2580,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
 export const SERVER_KEYS = [
   'version', 'createdAt', 'coins', 'cards', 'packs', 'pity', 'mythicDry', 'pulls', 'ladder',
   'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'seoulRoute',
-  'weeklySeriesPick',
+  'weeklySeriesPick', 'shop',
 ] as const
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends'] as const
 

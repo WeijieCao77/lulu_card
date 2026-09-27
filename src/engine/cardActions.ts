@@ -35,6 +35,7 @@ import {
 import type { MiniGame } from './minigame'
 import type { GachaState, QuestKey, Series } from './gacha'
 import { isLegacyRegionPack } from './regionMigration'
+import { buyShop, ensureShop } from './dailyShop'
 import { arenaOpponentRating, playArenaMatch, playCupMatch, playRivalMatch } from './arena'
 import type { ArenaResult, RivalSquad } from './arena'
 import { challengeBlock, challengeSig, guessChallenge } from './challenge'
@@ -67,7 +68,7 @@ export const ACTIONS = [
   'open', 'checkin', 'quest', 'series', 'fullset', 'salvage', 'salvage_dupes', 'salvage_bulk', 'upgrade',
   'ladder_draw', 'ladder', 'cup_enter', 'cup_play', 'cup_clear', 'challenge', 'mail_seen',
   'minigame_start', 'minigame_finish', 'dismantle', 'seoul_start', 'seoul_play', 'seoul_quit',
-  'series_pick',
+  'series_pick', 'shop', 'shop_buy',
 ] as const
 export type ActionName = (typeof ACTIONS)[number]
 
@@ -329,6 +330,18 @@ function dispatch(
     case 'mail_seen': {
       markMailSeen(g)
       return { ok: true }
+    }
+    // 每日商店 (engine/dailyShop.ts): the shelf is rolled here, on the server, and kept in the save
+    case 'shop': {
+      ensureShop(g, env.today, env.seed)
+      return { ok: true, result: { shop: g.shop } }
+    }
+    case 'shop_buy': {
+      ensureShop(g, env.today, env.seed)
+      const slot = Math.trunc(Number(a.slot))
+      const r = buyShop(g, slot, env.today, env.now)
+      if (!r.ok) return r
+      return { ok: true, result: { cardId: r.cardId, price: r.price, shop: g.shop } }
     }
     case 'series_pick':
       // since 2026-09-27 the week's discounted region is the same for everyone (featuredSeries)

@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client'
 import { BASE_PLAYER_CARDS, COACH_CARDS, LEGEND_CARDS, cardById } from '../engine/cards'
 import type { Card } from '../engine/cards'
 import { newGacha } from '../engine/gacha'
+import { rollShop } from '../engine/dailyShop'
 import { CardCtx } from '../ui/cards/ctx'
 import CardFace from '../ui/Card'
 import SquadScreen from '../ui/cards/Squad'
@@ -32,6 +33,8 @@ const byName = (ign: string) => LEGEND_CARDS.find(c => c.ign === ign || c.legend
 const g = newGacha('VM-PROM-OXXX-XXXX-XXXX-XXXX', '噜噜卡玩家', '2026-09-26') as never as Record<string, any>
 const own = (cards: Card[]) => { for (const c of cards) g.cards[c.id] = { id: c.id, level: 2, dupes: 1, seen: 3, got: '2026-09-20' } }
 g.coins = 128_600; g.pulls = 420
+// the 每日商店 shelf the server would have rolled (view=packs)
+g.shop = rollShop(g as never, params.get('today') ?? '2026-09-28', 20260928)
 if (view === 'team' || view === 'gallery') {
   const coach = COACH_CARDS.find(c => c.clubTag === tag && !c.legend)!
   const five = BASE_PLAYER_CARDS.filter(p => p.clubId === coach.clubId).slice(0, 5)

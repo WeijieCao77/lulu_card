@@ -354,6 +354,14 @@ button.chip { font: inherit; font-size: var(--t-small); color: var(--muted); bac
 button.chip:hover { color: var(--text); border-color: var(--line-hi); }
 
 /* 评分怎么算 (RatingExplainer): open at the top of 图鉴, one line in a card's detail */
+/* 每日商店 (DailyShop.tsx): five cards in a row, wrapping on a phone */
+.shop-shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px; justify-items: center; }
+.shop-slot { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.shop-slot.sold .cardface { opacity: .45; filter: grayscale(.4); }
+.shop-slot button { min-width: 110px; }
+.shop-tags { min-height: 18px; display: flex; gap: 4px; }
+@media (max-width: 520px) { .shop-shelf { grid-template-columns: repeat(2, 1fr); } }
+
 /* where a player's team comes from, in 图鉴 (Dossier.tsx teamSource) */
 .team-src { display: inline-block; font-size: 10px; line-height: 1.5; padding: 0 5px; border-radius: 3px; margin-left: 4px; vertical-align: 1px; cursor: help; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
 .team-src-good { color: var(--pos-ink); border-color: color-mix(in srgb, var(--pos-ink) 45%, transparent); }
