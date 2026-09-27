@@ -112,6 +112,9 @@ const resolvePolicy = resolveMarketPolicy()
 export const TRADE_PULLS = resolvePolicy.tradePulls
 export const TRADE_DAYS = resolvePolicy.tradeDays
 export const MAX_ASK = 500_000
+/** trades a day between the same two accounts, buying and swapping together (owner, 2026-09-27) */
+export const PAIR_PER_DAY = 1
+const PAIR_WHY = `你今天已经和这位玩家交易过了：同一对账号每天最多交易 ${PAIR_PER_DAY} 次（买卡、换卡都算，进行中的出价和交换也算），北京时间 0 点后再来。`
 
 /**
  * The least a card may be listed for: what the game itself would pay you.
@@ -141,6 +144,8 @@ export function makeMarketApi(sql, {
   readBody, json, normalizeId, displayName, rateLimited, engine, token, tokenFrom, tokenOk,
   /** false in the checks, which call settleDue() themselves so nothing moves behind their back */
   timer = true,
+  /** trades a day between two accounts; only the checks that replay many trades between one pair pass more */
+  pairPerDay = PAIR_PER_DAY,
   /** the background connection budget (server.js): the settler's transactions run here, not on the players' pool */
   bg = null,
   /**
@@ -1294,7 +1299,8 @@ export function makeMarketApi(sql, {
         if (!row.length) return { notOwned: true }
         const g = engine.migrateGacha(row[0].state, id)
         const esc = engine.escrowCard(g, cardId)
-        if (!esc.ok) return { notOwned: true }
+        // bound (first pulls) or on hold (traded in lately): say which, not "you do not own it"
+        if (!esc.ok) return esc.locked ? { locked: esc.locked } : { notOwned: true }
         const w = await db`
           update card_accounts set state = ${db.json(stored(g))}, rev = rev + 1, saved = now()
           where id_hash = ${me} and rev = ${row[0].rev} returning rev`
@@ -1311,6 +1317,7 @@ export function makeMarketApi(sql, {
     if (out.clash) { json(res, 200, { ok: false, clash: true }); return }
     if (out.full) { json(res, 200, { ok: false, full: true, max: MAX_LISTINGS }); return }
     if (out.notOwned) { json(res, 200, { ok: false, notOwned: true }); return }
+    if (out.locked) { json(res, 200, { ok: false, locked: true, why: out.locked }); return }
     if (out.busy) { json(res, 409, { ok: false, busy: true }); return }
     if (out.ok) menuCache.clear()
     json(res, 200, out)
@@ -1361,6 +1368,39 @@ export function makeMarketApi(sql, {
    * and if it lands in the last minutes it buys everyone a few more. A bid at
    * the buy-now price is a sale. An old-style listing keeps its ±10% offer.
    */
+  /**
+   * One trade a day between the same two accounts (owner, 2026-09-27), buying and swapping alike and in
+   * either direction, so a main and its alts cannot pass cards or coins across a few at a time under
+   * the guard's volume rules. The day is the Beijing calendar day. Pending trades count: an open bid on
+   * one of their other listings, or an open swap between the two — otherwise two could be started the
+   * same day and both complete. `except` leaves out the listing or swap being acted on.
+   */
+  async function pairTradedToday(a, b, { listing = null, swap = null, pending = true } = {}, db = sql) {
+    const day = 86_400_000, bj = 8 * 3_600_000
+    const since = new Date(Math.floor((Date.now() + bj) / day) * day - bj)
+    const done = await db`
+      select
+        (select count(*)::int from card_offers o join card_listings l on l.id = o.listing
+          where o.status = 'accepted' and o.settled >= ${since}
+            and ((o.buyer_h = ${a} and l.seller_h = ${b}) or (o.buyer_h = ${b} and l.seller_h = ${a}))) +
+        (select count(*)::int from card_swaps s
+          where s.status = 'done' and s.settled >= ${since}
+            and ((s.from_h = ${a} and s.to_h = ${b}) or (s.from_h = ${b} and s.to_h = ${a}))) as n`
+    let n = done[0]?.n ?? 0
+    if (pending && n === 0) {
+      const open = await db`
+        select
+          (select count(*)::int from card_offers o join card_listings l on l.id = o.listing
+            where o.status = 'open' and l.status = 'open' and (${listing}::bigint is null or l.id <> ${listing}::bigint)
+              and ((o.buyer_h = ${a} and l.seller_h = ${b}) or (o.buyer_h = ${b} and l.seller_h = ${a}))) +
+          (select count(*)::int from card_swaps s
+            where s.status = 'open' and (${swap}::bigint is null or s.id <> ${swap}::bigint)
+              and ((s.from_h = ${a} and s.to_h = ${b}) or (s.from_h = ${b} and s.to_h = ${a}))) as n`
+      n += open[0]?.n ?? 0
+    }
+    return n >= pairPerDay
+  }
+
   async function offer(req, res, bucket) {
     if (guard(req, res, `mo:${bucket}`, 40)) return
     let b
@@ -1418,6 +1458,8 @@ export function makeMarketApi(sql, {
     if (barred) { json(res, 200, { ok: false, banned: true, ...barred }); return }
     const young = await tooNew(me)
     if (young) { json(res, 200, { ok: false, newbie: true, ...young }); return }
+    // raising my own bid on this listing is the same trade, so this listing is left out of the pending count
+    if (await pairTradedToday(me, l.seller_h, { listing: l.id })) { json(res, 200, { ok: false, pair: true, why: PAIR_WHY }); return }
     // the coins leave the server's copy of the account, here, before the
     // offer exists — a bid is never made with money the account does not hold
     const who = await nameOf(me)
@@ -1818,6 +1860,7 @@ export function makeMarketApi(sql, {
     if (young) { json(res, 200, { ok: false, newbie: true, ...young }); return }
     const theirYoung = await tooNew(them.row.id_hash)
     if (theirYoung) { json(res, 200, { ok: false, theyNew: true, need: TRADE_PULLS, days: TRADE_DAYS }); return }
+    if (await pairTradedToday(me, them.row.id_hash)) { json(res, 200, { ok: false, pair: true, why: PAIR_WHY }); return }
     const open = await sql`select count(*)::int as n from card_swaps where from_h = ${me} and status = 'open'`
     if ((open[0]?.n ?? 0) >= MAX_SWAPS) { json(res, 200, { ok: false, full: true, max: MAX_SWAPS }); return }
     // they have to hold what I am asking for, right now — checked again when they accept
@@ -1831,15 +1874,17 @@ export function makeMarketApi(sql, {
       const count = await db`select count(*)::int as n from card_swaps where from_h = ${me} and status = 'open'`
       if ((count[0]?.n ?? 0) >= MAX_SWAPS) return { ok: false, why: 'full' }
       let level = 0
+      let lockedWhy = ''
       const r = await editAccount(me, id, (g) => {
         if (!engine.canPlay(g, 'swap', Date.now())) return 'stamina'
         const esc = engine.escrowCard(g, giveId)
+        if (!esc.ok && esc.locked) { lockedWhy = esc.locked; return 'locked' }
         if (!esc.ok) return 'notOwned'
         engine.spendPlay(g, 'swap', Date.now())
         level = esc.level
         return null
       }, db)
-      if (!r.ok) return r
+      if (!r.ok) return r.why === 'locked' ? { ok: false, why: 'locked', lockedWhy } : r
       const ins = await db`
         insert into card_swaps (from_h, to_h, give_id, give_level, want_id)
         values (${me}, ${them.row.id_hash}, ${giveId}, ${level}, ${wantId}) returning id`
@@ -1849,6 +1894,7 @@ export function makeMarketApi(sql, {
       return { ok: true, id: String(ins[0].id), state: r.state, rev: r.rev }
     })
     if (out.clash) { json(res, 200, { ok: false, clash: true }); return }
+    if (!out.ok && out.why === 'locked') { json(res, 200, { ok: false, locked: true, why: out.lockedWhy }); return }
     if (!out.ok) { json(res, 200, { ok: false, [out.why]: true, ...(out.why === 'full' ? { max: MAX_SWAPS } : {}) }); return }
     json(res, 200, out)
   }
@@ -1927,6 +1973,8 @@ export function makeMarketApi(sql, {
     const barred = await guard2.banOf(me)
     if (barred) { json(res, 200, { ok: false, banned: true, ...barred }); return }
     if (await guard2.banOf(row.from_h)) { json(res, 200, { ok: false, theyBanned: true }); return }
+    // the swap stays open: it can wait for tomorrow, or be declined
+    if (await pairTradedToday(me, row.from_h, { swap: row.id })) { json(res, 200, { ok: false, pair: true, why: PAIR_WHY }); return }
     const [theirName, myName] = [await nameOf(row.from_h), await nameOf(me)]
     const out = await tx(async (db) => {
       // The swap row is locked for the whole transaction, so two accepts of
@@ -1952,9 +2000,11 @@ export function makeMarketApi(sql, {
         return { ok: false, why: 'rarity' }
       }
       let level = 0
+      let lockedWhy = ''
       const r = await editAccount(me, id, (g) => {
         if (!engine.canPlay(g, 'swap', Date.now())) return 'stamina'
         const esc = engine.escrowCard(g, row.want_id)
+        if (!esc.ok && esc.locked) { lockedWhy = esc.locked; return 'locked' }
         if (!esc.ok) return 'notOwned'
         engine.spendPlay(g, 'swap', Date.now())
         level = esc.level
@@ -1971,7 +2021,7 @@ export function makeMarketApi(sql, {
             where id = ${row.id} and status = 'open' returning id`
           if (closed.length) await unwindSwap(row, '对方已经没有这张卡了', db)
         }
-        return { ok: false, why: r.why }
+        return { ok: false, why: r.why, ...(r.why === 'locked' ? { lockedWhy } : {}) }
       }
       const won = await db`
         update card_swaps set status = 'done', settled = now()
@@ -1985,6 +2035,7 @@ export function makeMarketApi(sql, {
       await post(row.from_h, 'swap_in', { cardId: row.want_id, level, body: { who: myName } }, db)
       return { ok: true, state: r.state, rev: r.rev }
     })
+    if (!out.ok && out.why === 'locked') { json(res, 200, { ok: false, locked: true, why: out.lockedWhy }); return }
     if (!out.ok) { json(res, 200, out.gone ? out : { ok: false, [out.why]: true }); return }
     json(res, 200, out)
   }

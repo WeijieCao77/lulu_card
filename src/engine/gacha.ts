@@ -17,6 +17,7 @@ import type { WeeklySeriesPick } from './weeklySeries'
 import { cleanWeeklySeriesPick } from './weeklySeries'
 import { GAME_REGIONS, GAME_REGION_CN, gameRegionOf, type GameRegion } from './gameRegions'
 import { isLegacyRegionPack, migrateRegions } from './regionMigration'
+import { notePull, spendDupes } from './tradeLock'
 import {
   ALL_CARDS, SEOUL_CARDS, COACH_CARDS, COINS_FOR, DUPES_FOR, LEGEND_CARDS, LEGEND_COACH_CARDS, MAX_LEVEL, RARITY_CN, cardName, PLAYER_CARDS,
   SALVAGE, SQUAD_SLOTS, cardById, cardPower, emptySquad, isPlayerCard, personOf, rarityRank, ratingAt,
@@ -376,6 +377,10 @@ export interface OwnedCard {
    * (engine/dismantle.ts).
    */
   spares?: number[]
+  /** copies from the account's first pulls, which never trade (engine/tradeLock.ts) */
+  bound?: number
+  /** when each traded-in copy may trade again, ms since epoch (engine/tradeLock.ts) */
+  holds?: number[]
   /** total copies ever pulled, for the collection stats */
   seen: number
   /** ISO date of the first copy */
@@ -404,6 +409,12 @@ function cleanOwnedCards(raw: unknown): Record<string, OwnedCard> {
       .map(x => wholeCount(x)).filter(x => x >= 1 && x <= MAX_LEVEL).sort((a, b) => a - b).slice(0, 99)
     if (spares.length) owned.spares = spares
     else delete owned.spares
+    const bound = wholeCount(row.bound)
+    if (bound) owned.bound = bound
+    else delete owned.bound
+    const holds = (Array.isArray(row.holds) ? row.holds : []).map(Number).filter((t) => Number.isFinite(t) && t > 0).slice(0, 99)
+    if (holds.length) owned.holds = holds
+    else delete owned.holds
     out[id] = owned
   }
   return out
@@ -1172,6 +1183,7 @@ export function openPack(
   const out: Pulled[] = []
   // Pity is settled in roll order above. Fisher–Yates only changes reveal order,
   // including the slot occupied by a guaranteed card; the seed advances below.
+  let drawn = 0
   for (const metal of rng.shuffle(metals)) {
     const list: readonly Card[] = pool[metal].length ? pool[metal] : pool.bronze
     const card = rng.pick(list)
@@ -1184,6 +1196,8 @@ export function openPack(
         id: card.id, level: 0, dupes: 0, seen: 1, got: new Date().toISOString().slice(0, 10),
       }
     }
+    // the account's first pulls are its own: bound, never traded (engine/tradeLock.ts)
+    notePull(g.cards[card.id], g.pulls + drawn++)
     out.push({ card, dupe: !!had, salvage: SALVAGE[card.rarity] })
   }
   g.pulls += def.draws
@@ -1215,6 +1229,7 @@ export function salvage(g: GachaState, cardId: string, count: number): number {
   const n = Math.max(0, Math.min(count, owned.dupes))
   if (!n) return 0
   owned.dupes -= n
+  spendDupes(owned, n, Date.now())
   const coins = SALVAGE[card.rarity] * n
   g.coins += coins
   return coins
@@ -1320,6 +1335,7 @@ export function upgrade(g: GachaState, cardId: string): boolean {
   if (!cost.can || cost.to == null) return false
   const owned = g.cards[cardId]
   owned.dupes = wholeCount(owned.dupes) - cost.dupes
+  spendDupes(owned, cost.dupes, Date.now())
   g.coins -= cost.coins
   owned.level = cost.to
   const card = cardById(cardId)

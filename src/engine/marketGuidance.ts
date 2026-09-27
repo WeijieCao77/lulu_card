@@ -79,15 +79,17 @@ export function suggestMarketPrice(
  * server's escrow rules: duplicate count first, otherwise the lowest upgraded
  * spare, otherwise the main card level.
  */
-export function marketSaleLevel(owned: { level: number; dupes: number; spares?: unknown } | undefined): number | null {
+export function marketSaleLevel(owned: { level: number; dupes: number; spares?: unknown; bound?: number } | undefined): number | null {
   if (!owned) return null
   const level = Number(owned.level)
   if (!Number.isInteger(level) || level < 0 || level > MAX_LEVEL) return null
   const dupes = Number(owned.dupes) || 0
-  if (dupes > 0) return 0
+  // bound copies (engine/tradeLock.ts) are counted among the card and its plain duplicates
+  const bound = Math.min(Math.max(0, Math.trunc(Number(owned.bound) || 0)), 1 + dupes)
+  if (dupes > 0 && 1 + dupes - bound > 0) return 0
   const spares = sparesOf(owned)
   if (spares.length > 0) return spares[0]
-  return level
+  return bound === 0 ? level : null
 }
 
 export function hasMarketDuplicates(owned: { level: number; dupes: number; spares?: unknown } | undefined): boolean {

@@ -25,6 +25,7 @@ import CardFace from '../Card'
 import { marketSaleLevel, hasMarketDuplicates } from '../../engine/marketGuidance'
 import { cardById, isPlayerCard } from '../../engine/cards'
 import { collection } from '../../engine/gacha'
+import { BOUND_PULLS, HOLD_DAYS, tradeableCopies } from '../../engine/tradeLock'
 import {
   AUCTION_HOURS, AUCTION_HOURS_CHOICES, BID_STEP, BUYOUT_MIN, MAX_LISTINGS, SHELF_PAGE, SNIPE_MINUTES,
   answerOffer, askFloorOf, bidOn, browseShelf, failText, gateText, listCardOnMarket, minBidOf, myOffersEx, peekListings, participatingAuctions, unlistCard,
@@ -360,7 +361,11 @@ export default function Market() {
   // Anything in the collection can be sold, spare or not: somebody who pulls a
   // 彩卡 he has no use for and wants to keep opening packs is exactly who this
   // is for. A spare goes first and goes out unupgraded.
-  const sellable = collection(g).sort((a, b) => b.rating - a.rating)
+  // ...except copies that may not trade yet: the first pulls (bound) and cards bought or swapped in
+  // the last few days (engine/tradeLock.ts). Those are left off the list and counted below it.
+  const everything = collection(g)
+  const sellable = everything.filter(({ owned }) => tradeableCopies(owned, now) > 0).sort((a, b) => b.rating - a.rating)
+  const lockedOut = everything.length - sellable.length
 
   const doList = async () => {
     if (listLock.current || busy) return
@@ -430,6 +435,7 @@ export default function Market() {
       if (!r?.ok) {
         toast(r?.banned ? String(r.why ?? '交易已暂停。')
           : r?.newbie ? gateText(r)
+          : r?.locked ? String(r.why ?? '这张卡现在不能交易。')
           : r?.notOwned ? '服务器还没同步这张卡，稍后再挂。'
           : r?.alreadyListed ? '这张卡已经挂上去了。'
             : r?.full ? `最多同时挂 ${r.max ?? MAX_LISTINGS} 张，卖掉或撤回一张再挂。`
@@ -470,6 +476,7 @@ export default function Market() {
     if (!r?.ok) {
       toast(r?.banned ? String(r.why ?? '交易已暂停。')
         : r?.newbie ? gateText(r)
+        : r?.pair ? String(r.why)
         : r?.busy ? '账号正忙，再试一次。'
         : r?.low ? `现在至少要出 ${money(Number(r.min ?? 0))}。`
         : r?.leading ? (r.entered ? '你已报名抽签，等开奖。' : '你已是最高价。')
@@ -785,6 +792,9 @@ export default function Market() {
           onChange={setSellCard}
           disabled={busy}
         />
+        {lockedOut > 0 && <p className="tiny faint" style={{ margin: '4px 0 0' }}>
+          另有 {lockedOut} 张卡暂时不能挂牌：{BOUND_PULLS > 0 ? `新号前 ${BOUND_PULLS} 抽开出的是绑定卡，可以用、升级、分解，不能交易；` : ''}买来或换来的卡 {HOLD_DAYS} 天后才能再卖或再换。
+        </p>}
         {sellCard && marketSaleLevel(g.cards[sellCard]) != null && <MarketHistory
           key={sellCard + ':' + marketSaleLevel(g.cards[sellCard])}
           cardId={sellCard}

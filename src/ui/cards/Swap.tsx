@@ -21,6 +21,7 @@ import type { OwnedCard } from '../../engine/gacha'
 import { fetchFriendCards, myCode, takeServer } from '../../engine/account'
 import type { FriendCard, FriendMiss } from '../../engine/account'
 import { sparesOf } from '../../engine/inbox'
+import { boundOf, tradeableCopies } from '../../engine/tradeLock'
 import { answerSwap, cancelSwap, gateText, mySwaps, proposeSwap } from '../../engine/market'
 import { CardPicker } from './Picker'
 import type { SwapRow } from '../../engine/market'
@@ -48,7 +49,7 @@ const nameOf = (id: string) => {
 /** The copy that leaves when this card is offered — the same order escrowCard takes. */
 const leavingLevel = (o: OwnedCard | undefined): number => {
   if (!o) return 0
-  if (o.dupes > 0) return 0
+  if (o.dupes > 0 && 1 + o.dupes - boundOf(o) > 0) return 0
   const spares = sparesOf(o)
   return spares.length ? spares[0] : o.level
 }
@@ -83,7 +84,8 @@ export default function Swap() {
 
   // what I can put up: anything I hold; a duplicate goes first at +0, then the
   // lowest upgraded spare, and the card itself last
-  const sellable = collection(g).sort((a, b) => b.rating - a.rating)
+  // only cards with a copy that may trade now (engine/tradeLock.ts)
+  const sellable = collection(g).filter(({ owned }) => tradeableCopies(owned, now) > 0).sort((a, b) => b.rating - a.rating)
   const giveCard = give ? cardById(give) : null
   const giveLevel = leavingLevel(give ? g.cards[give] : undefined)
   // theirs, of the same metal — the only ones the server would accept
@@ -105,6 +107,8 @@ export default function Swap() {
         : r?.newbie ? gateText(r)
           : r?.theyNew ? `对方是新账号，${Number(r.days) ? `建满 ${Number(r.days)} 天、` : ''}开够 ${Number(r.need) || 50} 抽才能换卡。`
             : r?.theyLack ? '对方没有这张卡。'
+              : r?.locked ? String(r.why ?? '这张卡现在不能交易。')
+              : r?.pair ? String(r.why)
               : r?.notOwned ? '你已经没有这张卡了。'
                 : r?.stamina ? `体力不够，换卡要 ${STAMINA_COST.swap} 点。`
                   : r?.full ? `最多同时挂 ${r.max} 个交换，先等答复或撤回一个。`
@@ -127,6 +131,8 @@ export default function Swap() {
       toast(r?.stamina ? `体力不够，接受交换要 ${STAMINA_COST.swap} 点。`
         : r?.banned ? String(r.why ?? '交易已暂停，可以拒绝，暂时不能接受。')
         : r?.theyBanned ? '对方的交易已暂停，暂时不能接受，可以拒绝退回。'
+        : r?.locked ? `${String(r.why ?? '这张卡现在不能交易')}。可以先拒绝，或等到能交易时再接受。`
+        : r?.pair ? `${String(r.why)} 这个交换会一直保留到过期，明天可以再接受。`
         : r?.notOwned ? '你已没有他要的那张卡，交换作废。'
           : '这个交换已经结束了。')
       void refresh()

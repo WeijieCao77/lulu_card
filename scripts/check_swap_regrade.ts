@@ -46,7 +46,8 @@ const fakeEngine = {
 }
 
 const cards = makeCardApi(sql, { rateLimited: () => false, readBody, json } as never)
-const market = makeMarketApi(sql, {
+const market = makeMarketApi(sql, { pairPerDay: Infinity, // this check replays many trades between one pair (the daily pair limit has its own check)
+ 
   readBody, json, normalizeId, displayName, rateLimited: () => false, engine: fakeEngine as never, timer: false,
 } as never)
 async function call(path: string, body: unknown): Promise<Record<string, unknown>> {

@@ -15,7 +15,8 @@ const sql = makeSql(db)
 const A = 'VM-2222-2222-2222-2222-2222', B = 'VM-3333-3333-3333-3333-3333'
 const hash = (id: string) => createHash('sha256').update(id).digest('hex')
 const cardId = 'p:P1'
-const api = makeMarketApi(sql, {
+const api = makeMarketApi(sql, { pairPerDay: Infinity, // this check replays many trades between one pair (the daily pair limit has its own check)
+ 
   engine, normalizeId, displayName, rateLimited: () => false,
   readBody: async (req: { body: unknown }) => JSON.stringify(req.body),
   json: (res: { body?: any }, _status: number, body: any) => { res.body = body },

@@ -11,6 +11,7 @@ import { cardById, isPlayerCard, MAX_LEVEL } from './cards'
 import { MAIL_MAX, PACKS } from './gacha'
 import type { GachaState, PackKind } from './gacha'
 import { canonicalRegionPack } from './regionMigration'
+import { boundOf, lockedWhy, noteTradedIn, tidy, tradeableCopies } from './tradeLock'
 
 export interface MailItem {
   kind: string
@@ -36,6 +37,9 @@ export function setSpares(owned: { spares?: number[] }, spares: number[]): void 
   else delete owned.spares
 }
 
+/** Mail that brings a card from another account; own returns (unsold, refused swaps) and grants are not trades. */
+const TRADED_IN = new Set(['bought', 'swap_in', 'gift'])
+
 /**
  * Take a card off this side, ready to be listed.
  *
@@ -45,15 +49,22 @@ export function setSpares(owned: { spares?: number[] }, spares: number[]): void 
  * the card itself last, carrying whatever it was raised to. When the card
  * itself leaves with spares behind it, the best spare steps up into its place.
  */
-export function escrowCard(g: GachaState, cardId: string, want?: number): { ok: boolean; level: number } {
+export function escrowCard(g: GachaState, cardId: string, want?: number, now = Date.now()): { ok: boolean; level: number; locked?: string } {
   const owned = g.cards[cardId]
   if (!owned) return { ok: false, level: 0 }
+  // only copies that are neither bound nor on hold may leave (engine/tradeLock.ts)
+  if (tradeableCopies(owned, now) < 1) return { ok: false, level: 0, locked: lockedWhy(owned, now) ?? '这张卡现在不能交易' }
+  tidy(owned, now)
   const dupes = owned.dupes ?? 0
   const spares = sparesOf(owned)
   // a row written by an early client may have no level at all
   const level = Math.max(0, Math.trunc(Number(owned.level) || 0))
-  const holds = (lv: number) => (lv === 0 ? dupes > 0 : spares.includes(lv)) || lv === level
-  const pick = want != null && holds(want) ? want : dupes > 0 ? 0 : spares.length ? spares[0] : level
+  // plain copies that are not bound: the bound ones are counted among the card and its duplicates
+  const freePlain = 1 + dupes - boundOf(owned)
+  const holds = (lv: number) => (lv === 0 ? dupes > 0 && freePlain > 0 : spares.includes(lv)) || (lv === level && boundOf(owned) === 0)
+  const pick = want != null && holds(want) ? want
+    : dupes > 0 && freePlain > 0 ? 0
+      : spares.length ? spares[0] : level
   if (pick === 0 && dupes > 0) { owned.dupes = dupes - 1; return { ok: true, level: 0 } }
   const at = spares.indexOf(pick)
   if (pick > 0 && at >= 0) {
@@ -191,7 +202,11 @@ export function applyMail(g: GachaState, mail: MailItem[]): void {
   const now = Date.now()
   for (const m of mail) {
     if (m.coins) g.coins += m.coins
-    if (m.cardId) restoreCard(g, m.cardId, m.level)
+    if (m.cardId) {
+      restoreCard(g, m.cardId, m.level)
+      // bought or swapped in: it may not be passed on again for a while (engine/tradeLock.ts)
+      if (TRADED_IN.has(m.kind) && g.cards[m.cardId]) noteTradedIn(g.cards[m.cardId], m.at || now)
+    }
     if (m.pack && m.pack in PACKS) {
       const k = canonicalRegionPack(m.pack) as PackKind
       g.packs[k] = (g.packs[k] ?? 0) + Math.max(1, m.count)
