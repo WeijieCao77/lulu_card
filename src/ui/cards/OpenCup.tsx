@@ -523,7 +523,7 @@ function Replay({ report, onClose }: { report: { detail: OpenCupMatchDetail; fli
           <span className="chiplet">全服杯 · {roundLabel(d, d)} · BO{d.detail.bo}</span>
           {top.five.paper && <span className="tiny muted">参赛快照 · 实际分 {top.five.paper.score.toFixed(2)} · 默契 {top.five.chemistry ?? '—'} · 战力 {top.five.power ?? '—'}</span>}
           {top.five.paper && <details className="tiny muted" style={{ width: '100%' }}><summary>双方参赛分数构成</summary>
-            {[top, bottom].map((side, i) => { const p = side.five.paper; return p && <p key={i}>{side.name}：选手均分 {p.mean.toFixed(2)}（含强化 +{p.growth.toFixed(2)}）＋教练 {p.lift.toFixed(2)}＋默契 {p.chem.toFixed(2)}－缺人 {p.short.toFixed(2)}－指挥缺失 {p.uncalled.toFixed(2)}＝{p.score.toFixed(2)} 分</p> })}
+            {[top, bottom].map((side, i) => { const p = side.five.paper; return p && <p key={i}>{side.name}：选手均分 {p.mean.toFixed(2)}（含强化 +{p.growth.toFixed(2)}）＋教练 {p.lift.toFixed(2)}＋默契 {p.chem.toFixed(2)}－缺人 {p.short.toFixed(2)}{p.uncalled ? `－指挥缺失 ${p.uncalled.toFixed(2)}` : ''}＝{p.score.toFixed(2)} 分</p> })}
           </details>}
         </div>
       }

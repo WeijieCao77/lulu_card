@@ -83,8 +83,12 @@ export const newChallenge = (): ChallengeState => ({
  * learns that the hard one comes round on a rhythm, and a friend saying "今天
  * 这个地图我一次就中了" means the same day to both of them. Players get three
  * of the seven because they are what this game is actually about.
+ *
+ * Champions (agent) are no longer an answer (owner, 2026-09-27): every League champion is drawn to be
+ * recognised at a glance, so the puzzle was solved on the first look. Players four days in seven, teams three;
+ * a champion can still be typed as a guess and is marked as the wrong kind.
  */
-const CYCLE: ChallengeKind[] = ['player', 'agent', 'team', 'player', 'agent', 'team', 'player']
+const CYCLE: ChallengeKind[] = ['player', 'team', 'player', 'team', 'player', 'team', 'player']
 
 /** Days since the epoch, from a YYYY-MM-DD the server handed us. */
 const dayNumber = (day: string): number =>

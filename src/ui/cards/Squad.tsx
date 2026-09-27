@@ -297,7 +297,6 @@ export default function SquadScreen() {
                 {paper.misfits > 0 && ` · 错位 ${signed(-pts(paper.misfits * 6 / paper.players))}`}
                 {` · 默契 ${signed(pts(paper.chem))}`}
                 {paper.lift !== 0 && ` · 教练 ${signed(pts(paper.lift))}`}
-                {paper.uncalled > 0 && ` · 无队长 ${signed(-pts(paper.uncalled))}`}
                 {paper.short > 0 && ` · 缺人 ${signed(-pts(paper.short))}`}
               </div>
             )}
@@ -315,7 +314,6 @@ export default function SquadScreen() {
             {!!gaps.length && (
               <p className="small warn">没人打得了：{gaps.join('、')}，比赛里会吃亏。</p>
             )}
-            {chem.noIgl && filled > 0 && <p className="small warn">没有队长，中局决策会吃亏。</p>}
             {!!chem.notes.length && (
               <p className="tiny faint" style={{ marginBottom: 0 }}>{chem.notes.join(' · ')}</p>
             )}

@@ -384,7 +384,7 @@ export const SALVAGE: Record<Rarity, number> = {
  * levels are worth is shown as 战力 (cardPower) instead.
  */
 export const ratingAt = (base: number, level: number): number =>
-  base + growthOf(level)
+  base + growthOf(level) * LEVEL_GAIN
 
 /** the levels a card has actually earned, 0–MAX_LEVEL */
 export const growthOf = (level: number): number => Math.max(0, Math.min(MAX_LEVEL, level))
@@ -392,7 +392,15 @@ export const growthOf = (level: number): number => Math.max(0, Math.min(MAX_LEVE
 /** one ability point is a hundred 战力 */
 export const POWER_PER_POINT = 100
 /** what a level adds to a player card's 战力 */
-export const POWER_PER_LEVEL = POWER_PER_POINT
+/**
+ * What one level is worth, in ability points (Val_Manager b0f2d3c, 2026-09-21; 噜噜卡 2026-09-27).
+ *
+ * It was 1, so a card taken to +5 — twelve spare copies and 16,500 coins — moved the five by one point, which
+ * nobody could feel. At 1.5 a maxed card is worth half again as much. Every level anywhere goes through
+ * `growthOf` and this constant — paper, 战力 and the add in arena.ts — so the three never disagree.
+ */
+export const LEVEL_GAIN = 1.5
+export const POWER_PER_LEVEL = POWER_PER_POINT * LEVEL_GAIN
 
 /**
  *战力: the card's strength after levelling, as an integer the player can
@@ -401,7 +409,7 @@ export const POWER_PER_LEVEL = POWER_PER_POINT
  * them the same way.
  */
 export const cardPower = (card: Card, level: number): number =>
-  POWER_PER_POINT * (card.rating + growthOf(level))
+  POWER_PER_POINT * (card.rating + growthOf(level) * LEVEL_GAIN)
 
 /** a full five's 阵容战力 per point of paper score: five cards at a hundred a point */
 export const POWER_PER_SQUAD_POINT = POWER_PER_POINT * 5
@@ -566,13 +574,16 @@ export function chemistry(squad: Squad): ChemReport {
   const legends = cards.filter((c) => isPlayerCard(c) && c.rarity === 'mythic').length
   if (legends) notes.push(`${legends} 张彩卡自带默契，跟谁都打得来`)
   if (misfits.length) notes.push(`${misfits.length} 人不在熟悉的位置`)
-  if (noIgl) notes.push('没有人喊队长')
 
   return { score, links, misfits, noIgl, coachBonus, coachLinks, notes }
 }
 
-/** A full five with nobody calling gives this much back. */
-export const NO_IGL_PENALTY = 3
+/**
+ * A full five with nobody calling used to give 3 points back. League has no in-game caller, only 128 of 717
+ * cards carried the flag, and the rule taxed most fives for nothing: retired 2026-09-27 (owner). The field stays
+ * at 0 so saved cup papers still read.
+ */
+export const NO_IGL_PENALTY = 0
 
 /**
  * What a point of 默契 is worth on the squad screen, in rating points.
@@ -606,7 +617,8 @@ export const coachLift = (coach: Pick<CoachCard, 'tactics' | 'development' | 'mo
  * the screen and the server agree. Until 2026-09-13 a coach's levels reached
  * nothing at all: all 76 coach cards built the same match at +5 as at +0.
  */
-export const COACH_LEVEL_LIFT = 0.2
+/** 0.3 a level: a coach's level is worth to the five what one player's level is (LEVEL_GAIN / 5); 0.2 until 2026-09-27 */
+export const COACH_LEVEL_LIFT = LEVEL_GAIN / 5
 export const coachLiftAt = (coach: CoachCard, level: number): number =>
   coachLift(coach) + COACH_LEVEL_LIFT * growthOf(level)
 

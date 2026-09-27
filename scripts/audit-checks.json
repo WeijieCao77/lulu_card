@@ -732,6 +732,10 @@
   },
   {
     "runtime": "tsx",
+    "file": "scripts/check_level_gain.ts"
+  },
+  {
+    "runtime": "tsx",
     "file": "scripts/check_open_cup_worker.ts"
   },
   {
