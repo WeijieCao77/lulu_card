@@ -26,6 +26,7 @@ const check = (name: string, ok: boolean, detail = '') => {
 }
 const db = new PGlite(), sql = makeSql(db)
 await db.exec(CARD_SCHEMA)
+await db.exec((await import('./verified-fixture.mjs')).AUTO_VERIFY) // formal policy: harness accounts are phone-verified
 const hash = (id: string) => createHash('sha256').update(id).digest('hex')
 type Reply = { code: number; body: Record<string, any> }
 const json = (res: Reply, code: number, body: Reply['body']) => { res.code = code; res.body = body }
