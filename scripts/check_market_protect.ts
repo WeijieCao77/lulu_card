@@ -21,7 +21,7 @@ await db.exec(CARD_SCHEMA)
 await db.exec(AUTO_VERIFY)
 const sql = makeSql(db)
 const hash = (id: string) => createHash('sha256').update(id).digest('hex')
-const api = makeMarketApi(sql, { pairPerDay: Infinity, // this check replays many trades between one pair (the daily pair limit has its own check)
+const api = makeMarketApi(sql, { pairPerDay: Infinity, highValuePerDay: Infinity, // this check replays many trades between one pair (the daily pair limit has its own check)
  
   engine, normalizeId, displayName, rateLimited: () => false, timer: false,
   readBody: async (req: { body: unknown }) => JSON.stringify(req.body),

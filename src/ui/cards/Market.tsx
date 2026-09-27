@@ -439,9 +439,10 @@ export default function Market() {
           : r?.notOwned ? '服务器还没同步这张卡，稍后再挂。'
           : r?.alreadyListed ? '这张卡已经挂上去了。'
             : r?.full ? `最多同时挂 ${r.max ?? MAX_LISTINGS} 张，卖掉或撤回一张再挂。`
-              : r?.badBuyout ? `一口价要在 ${money(Number(r.min ?? 0))} ~ 500,000 之间，可留空。`
+              : r?.highCap ? String(r.why)
+              : r?.badBuyout ? `一口价要在 ${money(Number(r.min ?? 0))} ~ ${money(Number(r.max ?? 500000))} 之间，可留空。`
               : r?.badHours ? `拍卖时长要在 ${r.min} ~ ${r.max} 小时之间。`
-              : r?.bad ? `起拍价要在 ${money(Number(r.min ?? 50))} ~ 500,000 之间，不低于分解价。`
+              : r?.bad ? `起拍价要在 ${money(Number(r.min ?? 50))} ~ ${money(Number(r.max ?? 500000))} 之间，不低于分解价${Number(r.max) < 500000 ? '；铜卡最高 2,000、银卡最高 5,000' : ''}。`
                 : '挂牌失败，稍后再试。')
         return
       }
@@ -477,6 +478,8 @@ export default function Market() {
       toast(r?.banned ? String(r.why ?? '交易已暂停。')
         : r?.newbie ? gateText(r)
         : r?.pair ? String(r.why)
+        : r?.highCap ? String(r.why)
+        : r?.capped ? `这张卡最多出到 ${money(Number(r.max ?? 0))}（铜卡 2,000、银卡 5,000 封顶）。`
         : r?.busy ? '账号正忙，再试一次。'
         : r?.low ? `现在至少要出 ${money(Number(r.min ?? 0))}。`
         : r?.leading ? (r.entered ? '你已报名抽签，等开奖。' : '你已是最高价。')

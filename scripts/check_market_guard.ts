@@ -79,7 +79,7 @@ await db.exec(AUTO_VERIFY)
 const sql = makeSql(db)
 const hash = (id: string) => createHash('sha256').update(id).digest('hex')
 const TOKEN = 'owner-token'
-const api = makeMarketApi(sql, { pairPerDay: Infinity, // this check replays many trades between one pair (the daily pair limit has its own check)
+const api = makeMarketApi(sql, { pairPerDay: Infinity, highValuePerDay: Infinity, // this check replays many trades between one pair (the daily pair limit has its own check)
  
   engine, normalizeId, displayName, rateLimited: () => false, timer: false,
   token: TOKEN, tokenFrom: (req: { token?: string }) => req.token ?? null, tokenOk: (a: string, b: string) => a === b,

@@ -114,6 +114,21 @@ export const TRADE_DAYS = resolvePolicy.tradeDays
 export const MAX_ASK = 500_000
 /** trades a day between the same two accounts, buying and swapping together (owner, 2026-09-27) */
 export const PAIR_PER_DAY = 1
+/**
+ * The most a bronze or silver card (player or coach) may be listed, bought out or bid up to (owner, 2026-09-27):
+ * a bronze listed at a fortune and bought by an alt was the way coins were moved to a main.
+ */
+export const PRICE_CAP = { bronze: 2000, silver: 5000 }
+export const priceCap = (rarity) => PRICE_CAP[rarity] ?? MAX_ASK
+/**
+ * High-value trades a day, bought and sold counted apart (owner, 2026-09-27): a trade is high-value when it is a
+ * gold card or a 彩卡, or at HIGH_VALUE_PRICE coins or more. Cheap cards are not counted, so filling a
+ * collection one bronze at a time is untouched. Swaps move no coins and are not counted.
+ */
+export const HIGH_VALUE_PRICE = 3000
+export const HIGH_VALUE_PER_DAY = 3
+export const isHighValue = (rarity, price) => rarity === 'gold' || rarity === 'mythic' || Number(price) >= HIGH_VALUE_PRICE
+const HIGH_WHY = (side) => `今天的高价交易${side}已满 ${HIGH_VALUE_PER_DAY} 笔（金卡、彩卡，或 ${HIGH_VALUE_PRICE} 金币以上都算，进行中的出价和挂牌也算），北京时间 0 点后再来。便宜的铜卡、银卡不受限制。`
 const PAIR_WHY = `你今天已经和这位玩家交易过了：同一对账号每天最多交易 ${PAIR_PER_DAY} 次（买卡、换卡都算，进行中的出价和交换也算），北京时间 0 点后再来。`
 
 /**
@@ -146,6 +161,8 @@ export function makeMarketApi(sql, {
   timer = true,
   /** trades a day between two accounts; only the checks that replay many trades between one pair pass more */
   pairPerDay = PAIR_PER_DAY,
+  /** high-value trades a day each way; only the checks that replay many gold trades in a day pass more */
+  highValuePerDay = HIGH_VALUE_PER_DAY,
   /** the background connection budget (server.js): the settler's transactions run here, not on the players' pool */
   bg = null,
   /**
@@ -1241,15 +1258,16 @@ export function makeMarketApi(sql, {
     const card = engine.cardById(cardId)
     if (!card) { json(res, 200, { ok: false, notOwned: true }); return }
     const floor = askFloor(card.rarity)
-    if (!cardId || !Number.isFinite(ask) || ask < floor || ask > MAX_ASK) {
-      json(res, 200, { ok: false, bad: true, min: floor, max: MAX_ASK })
+    const cap = priceCap(card.rarity)
+    if (!cardId || !Number.isFinite(ask) || ask < floor || ask > cap) {
+      json(res, 200, { ok: false, bad: true, min: floor, max: cap })
       return
     }
     // a buy-now price is optional; set, it must be a real step above the start
     const rawBuyout = b?.buyout == null || b?.buyout === '' ? null : Math.round(Number(b.buyout))
     const buyoutFloor = Math.ceil(ask * BUYOUT_MIN)
-    if (rawBuyout != null && (!Number.isFinite(rawBuyout) || rawBuyout < buyoutFloor || rawBuyout > MAX_ASK)) {
-      json(res, 200, { ok: false, badBuyout: true, min: buyoutFloor, max: MAX_ASK })
+    if (rawBuyout != null && (!Number.isFinite(rawBuyout) || rawBuyout < buyoutFloor || rawBuyout > cap)) {
+      json(res, 200, { ok: false, badBuyout: true, min: buyoutFloor, max: cap })
       return
     }
     const buyout = rawBuyout
@@ -1264,6 +1282,9 @@ export function makeMarketApi(sql, {
     if (barred) { json(res, 200, { ok: false, banned: true, ...barred }); return }
     const young = await tooNew(me)
     if (young) { json(res, 200, { ok: false, newbie: true, ...young }); return }
+    if (isHighValue(card.rarity, Math.max(ask, buyout ?? 0)) && (await highValueToday(me, 'sell')) >= highValuePerDay) {
+      json(res, 200, { ok: false, highCap: true, why: HIGH_WHY('卖出') }); return
+    }
     const openN = async () => (await sql`
       select count(*)::int as n from card_listings where seller_h = ${me} and status = 'open'`)[0]?.n ?? 0
     // Full — but perhaps only with auctions that have ended and that the
@@ -1401,6 +1422,29 @@ export function makeMarketApi(sql, {
     return n >= pairPerDay
   }
 
+  /**
+   * High-value trades of this account today (Beijing day), one side: purchases completed plus bids still open on
+   * other listings ('buy'), or sales completed plus high-value cards on the shelf now ('sell'). `except` is the
+   * listing being bid on, where raising a bid is the same trade.
+   */
+  async function highValueToday(h, side, except = null, db = sql) {
+    const day = 86_400_000, bj = 8 * 3_600_000
+    const since = new Date(Math.floor((Date.now() + bj) / day) * day - bj)
+    const rows = side === 'buy'
+      ? await db`
+          select l.card_id, o.price from card_offers o join card_listings l on l.id = o.listing
+          where o.buyer_h = ${h} and (
+            (o.status = 'accepted' and o.settled >= ${since})
+            or (o.status = 'open' and l.status = 'open' and (${except}::bigint is null or l.id <> ${except}::bigint)))`
+      : await db`
+          select l.card_id, o.price from card_offers o join card_listings l on l.id = o.listing
+          where l.seller_h = ${h} and o.status = 'accepted' and o.settled >= ${since}
+          union all
+          select card_id, greatest(ask, coalesce(buyout, 0)) as price from card_listings
+          where seller_h = ${h} and status = 'open'`
+    return rows.filter((r) => isHighValue(engine.cardById(r.card_id)?.rarity, Number(r.price))).length
+  }
+
   async function offer(req, res, bucket) {
     if (guard(req, res, `mo:${bucket}`, 40)) return
     let b
@@ -1440,11 +1484,14 @@ export function makeMarketApi(sql, {
       if (!Number.isFinite(bid) || bid < min) { json(res, 200, { ok: false, low: true, min }); return }
       // at or over the buy-now price is the buy-now price: nobody pays more
       // than the seller asked to end it
-      if (l.buyout != null && bid >= l.buyout) bid = l.buyout
-      else if (bid > MAX_ASK) { json(res, 200, { ok: false, low: true, min, max: MAX_ASK }); return }
+      // a bronze/silver listed before the cap may carry a buy-now over it: that buy-now no longer applies
+      if (l.buyout != null && bid >= l.buyout && l.buyout <= priceCap(engine.cardById(l.card_id)?.rarity)) bid = l.buyout
+      else if (bid > priceCap(engine.cardById(l.card_id)?.rarity)) {
+        json(res, 200, { ok: false, capped: true, max: priceCap(engine.cardById(l.card_id)?.rarity) }); return
+      }
     } else {
       const lo = Math.ceil(l.ask * (1 - HAGGLE))
-      const hi = Math.floor(l.ask * (1 + HAGGLE))
+      const hi = Math.min(Math.floor(l.ask * (1 + HAGGLE)), priceCap(engine.cardById(l.card_id)?.rarity))
       if (!Number.isFinite(bid) || bid < lo || bid > hi) {
         json(res, 200, { ok: false, range: true, lo, hi })
         return
@@ -1458,6 +1505,9 @@ export function makeMarketApi(sql, {
     if (barred) { json(res, 200, { ok: false, banned: true, ...barred }); return }
     const young = await tooNew(me)
     if (young) { json(res, 200, { ok: false, newbie: true, ...young }); return }
+    if (isHighValue(engine.cardById(l.card_id)?.rarity, bid) && (await highValueToday(me, 'buy', l.id)) >= highValuePerDay) {
+      json(res, 200, { ok: false, highCap: true, why: HIGH_WHY('买入') }); return
+    }
     // raising my own bid on this listing is the same trade, so this listing is left out of the pending count
     if (await pairTradedToday(me, l.seller_h, { listing: l.id })) { json(res, 200, { ok: false, pair: true, why: PAIR_WHY }); return }
     // the coins leave the server's copy of the account, here, before the

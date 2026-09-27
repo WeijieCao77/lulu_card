@@ -279,7 +279,7 @@ console.log('\n交易区：')
   const before = { ...sa.cards[mine] }
   let r = await call('/api/market/list', { id: A, cardId: 'p:P9999', ask: 5000, level: 0, rarity: 'bronze' })
   check('挂一张没有的卡：拒绝', r.body.notOwned === true, JSON.stringify(r.body))
-  r = await call('/api/market/list', { id: A, cardId: mine, ask: 20_000, level: 9, rarity: 'bronze' })
+  r = await call('/api/market/list', { id: A, cardId: mine, ask: 1_500, level: 9, rarity: 'bronze' })
   check('挂自己的卡：成功', r.body.ok === true, JSON.stringify(r.body))
   const after = (await stored(A)).cards[mine]
   check('卡从服务器的账号里拿走了（重复先走，否则整张）',
