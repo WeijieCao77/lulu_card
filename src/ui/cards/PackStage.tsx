@@ -5,7 +5,7 @@ import { cardName, RARITY_CN } from '../../engine/cards'
 import type { Pulled } from '../../engine/gacha'
 import type { PackPosition } from './positionPackDesign'
 import { POSITION_PACKS } from './positionPackDesign'
-import { playPackCue } from '../packAudio'
+import { playAnticipation, playPackCue } from '../packAudio'
 import './packStage.css'
 import './packQuick.css'
 import PackAltar from './PackAltar'
@@ -246,6 +246,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
           const up = revealed.has(i)
           return <div className="ritual-deal" key={`${p.card.id}-${i}`} style={{ gridColumn: i === pulled.length - 1 && pulled.length % layout.columns === 1 ? '1 / -1' : undefined, justifySelf: 'center', '--order': i, '--fan': `${(i - (pulled.length - 1) / 2) * 9}deg` } as CSSProperties}>
             <button className={`ritual-card rarity-${p.card.rarity}${up ? ' is-revealed' : ''}`} data-pack-card={i} aria-label={up ? `查看${cardName(p.card)}，${RARITY_CN[p.card.rarity]}，${p.dupe ? '重复卡' : '新卡'}` : `翻开第 ${i + 1} 张卡`} aria-pressed={up}
+              onPointerEnter={e => { if (!up && e.pointerType === 'mouse') playAnticipation(p.card.rarity, p) }}
               onClick={e => { if (mythicBusy.current) return; if (e.detail !== 0 && Date.now() < ignoreClickUntil.current) return; up ? setInspect(i) : reveal(i) }}>
               <span className="ritual-card-light" aria-hidden="true" />
               <div className="ritual-flipper">
