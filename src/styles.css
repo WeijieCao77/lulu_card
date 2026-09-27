@@ -1187,19 +1187,22 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
  * — start it any higher and the position line is drawn on top of somebody's
  * face. Measured in the browser rather than guessed: with these numbers the
  * closest approach between the two is 5px on a 150px card, 4px at 96px. */
+/* A portrait window, not a circle (owner, 2026-09-27: players could not use their cards as a
+ * reference in the challenge — the circle kept the head and cut the jersey). The same width the
+ * circle had, so the corners still clear it, and taller (4:5), so head, shoulders and jersey fit. */
 .cf-photo {
-  width: 74px; height: 74px;
+  width: 70px; height: 88px;
   margin: 31px 0 2px;
   object-fit: cover;
-  object-position: top center;
-  border-radius: 50%;
+  object-position: center 8%;
+  border-radius: 8px;
   background: rgba(255, 255, 255, .22);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .5);
 }
 /* 33 rather than 25: the second position line reaches 45px down, and the
    circle's edge at that height sits 30px in from the left with this margin */
-.s-sm .cf-photo { width: 52px; height: 52px; margin-top: 33px; }
-.s-lg .cf-photo { width: 104px; height: 104px; margin-top: 34px; }
+.s-sm .cf-photo { width: 48px; height: 60px; margin-top: 33px; border-radius: 6px; }
+.s-lg .cf-photo { width: 98px; height: 124px; margin-top: 34px; border-radius: 10px; }
 .cf-noface {
   display: grid; place-items: center;
   background: rgba(20, 18, 12, .58);
@@ -1761,7 +1764,7 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
    rather than its own 132px, or three cards plus gaps overflow a 375px phone
    and the fifth seat sits off-screen. */
 .cm-squad .cardface { width: 100%; max-width: 150px; }
-.cm-squad .cf-photo { width: 56%; height: auto; aspect-ratio: 1 / 1; }
+.cm-squad .cf-photo { width: 53%; height: auto; aspect-ratio: 4 / 5; }
 @media (max-width: 420px) {
   .cm-squad { gap: 6px; }
   .cm-squad .cf-attrs { grid-template-columns: repeat(2, 1fr); font-size: 9px; }
@@ -1778,7 +1781,7 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
   justify-items: center;
 }
 .report-cards .cardface { width: 100%; max-width: 150px; }
-.report-cards .cf-photo { width: 56%; height: auto; aspect-ratio: 1 / 1; }
+.report-cards .cf-photo { width: 53%; height: auto; aspect-ratio: 4 / 5; }
 @media (max-width: 420px) {
   .report-cards { gap: 6px; }
   .report-cards .cf-attrs { grid-template-columns: repeat(2, 1fr); font-size: 9px; }
@@ -2544,7 +2547,7 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
   .market-shelf { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .market-box { width: auto; }
   .market-box .cardface { width: 100%; max-width: 150px; }
-  .market-box .cf-photo { width: 56%; height: auto; aspect-ratio: 1 / 1; }
+  .market-box .cf-photo { width: 53%; height: auto; aspect-ratio: 4 / 5; }
 }
 
 .preset-box {

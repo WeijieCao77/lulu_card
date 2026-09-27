@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import { BASE_PLAYER_CARDS, COACH_CARDS, LEGEND_CARDS } from '../engine/cards'
+import { BASE_PLAYER_CARDS, COACH_CARDS, LEGEND_CARDS, cardById } from '../engine/cards'
 import type { Card } from '../engine/cards'
 import { newGacha } from '../engine/gacha'
 import { CardCtx } from '../ui/cards/ctx'
@@ -22,6 +22,7 @@ import '../styles.css'
  *   packs    — the pack shop: region packs and the week's discount
  *   nav      — the grouped sidebar          dossier — 图鉴 with the rating explainer
  *   music    — the background-music player (dev only until launch)
+ *   cards    — ordinary cards at lg / md / sm (?ids=p:P8,p:P6,...)
  */
 const params = new URLSearchParams(location.search)
 const view = params.get('view') ?? 'legends'
@@ -75,6 +76,11 @@ if (import.meta.env.DEV) createRoot(document.getElementById('root')!).render(
         : view === 'team' ? <div className="promo-team"><style>{'.promo-team > .panel:first-of-type { display: none }'}</style><SquadScreen /></div>
         : view === 'packs' ? <Packs />
         : view === 'dossier' ? <Dossier playerId={null} onOpen={() => {}} />
+        : view === 'cards' ? <div style={{ display: 'grid', gap: 18 }}>{(['lg', 'md', 'sm'] as const).map(size =>
+            <div key={size} style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+              {(params.get('ids') ?? 'p:P8,p:P6,p:P1,p:P300,p:P500,p:P620').split(',').map(id => cardById(id)).filter(Boolean).map(c =>
+                <CardFace key={c!.id} card={c!} level={2} size={size} />)}
+            </div>)}</div>
         : view === 'music' ? <div className="cardmode rift-ui" style={{ minHeight: 500 }}><MusicPlayer /></div>
         : view === 'nav' ? <div className="cardmode rift-ui" style={{ width: 240 }}><RiftNavigation tabs={TABS} active="packs" onSelect={() => {}} /></div> : <Market />}
     </CardCtx.Provider>
