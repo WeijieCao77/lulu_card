@@ -2,7 +2,8 @@ import type { GachaState } from './gacha'
 import { gameRegionOf, type GameRegion } from './gameRegions'
 
 /** Historical pack IDs are accepted only when migrating inventory or delivered mail. */
-export const LEGACY_REGION_PACKS = ['ame', 'emea', 'lcp', 'cblol'] as const
+/** 'ame' (LCS 包) and 'emea' (LEC 包) are live again since the 2026-09-27 split; only LCP and CBLOL fold into 其他包. */
+export const LEGACY_REGION_PACKS = ['lcp', 'cblol'] as const
 export const isLegacyRegionPack = (raw: unknown): boolean =>
   typeof raw === 'string' && (LEGACY_REGION_PACKS as readonly string[]).includes(raw)
 export const canonicalRegionPack = (raw: string): string => isLegacyRegionPack(raw) ? 'west' : raw

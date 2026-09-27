@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import RatingExplainer from '../RatingExplainer'
 import { useCards } from './ctx'
 import CardFace, { Flag, natName } from '../Card'
 import { Panel } from '../common'
@@ -388,6 +389,7 @@ export default function Collection() {
                       <span className="faint"> · 评分 {sel.rating}</span>
                       {' '}· 战力 <b>{coin(cardPower(sel, owned.level))}</b>
                     </div>
+                    {sel.kind === 'player' && <RatingExplainer />}
                     <div className="tiny faint">
                       重复卡 {owned.dupes} 张
                       {sparesOf(owned).length > 0 && ` · 备用卡 ${sparesOf(owned).map((l) => `+${l}`).join('、')}`}

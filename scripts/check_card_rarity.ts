@@ -96,7 +96,9 @@ function testPlayerCountsAndCardStats() {
   const expectedCounts: Record<string, Record<string, number>> = {
     'LPL': { 'gold': 14, 'silver': 29, 'bronze': 60 },
     'LCK': { 'gold': 22, 'silver': 41, 'bronze': 59 },
-    'WEST': { 'gold': 49, 'silver': 121, 'bronze': 282 }
+    'LEC': { 'gold': 16, 'silver': 32, 'bronze': 79 },
+    'LCS': { 'gold': 11, 'silver': 30, 'bronze': 67 },
+    'WEST': { 'gold': 16, 'silver': 59, 'bronze': 142 } // v8 (2026-09-27): 其他 = LCP + CBLOL
   };
   for (const [group, rarityMap] of byGroup) {
     for (const [rarity, entry] of rarityMap) {
@@ -134,7 +136,9 @@ function testCoachCountsAndConsistency() {
   const expectedCoachCounts: Record<string, Record<string, number>> = {
     'LPL': { gold: 3, silver: 8, bronze: 6 },
     'LCK': { gold: 8, silver: 5, bronze: 7 },
-    'WEST': { gold: 20, silver: 22, bronze: 32 },
+    'LEC': { gold: 6, silver: 7, bronze: 12 },
+    'LCS': { gold: 6, silver: 5, bronze: 6 },
+    'WEST': { gold: 8, silver: 10, bronze: 14 },
     'null': { gold: 0, silver: 0, bronze: 3 }
   };
   for (const [group, rarityMap] of byGroup) {
@@ -162,7 +166,7 @@ function testLegendCardsSnapshot() {
 }
 
 function testRoleCoverageForAllSlots() {
-  for (const group of ['LPL', 'LCK', 'WEST']) {
+  for (const group of ['LPL', 'LCK', 'LEC', 'LCS', 'WEST']) {
   const allCards = BASE_PLAYER_CARDS.filter(c => gameRegionOf(c.region) === group);
   for (const slot of SQUAD_SLOTS) {
     const pool = allCards.filter(c => c.roles?.includes(slot));
@@ -180,7 +184,9 @@ function testOrdinaryRatingAnchors() {
   const anchors: Record<string, Record<number, number>> = {
     'LPL': { 75: 71, 76: 72, 77: 78, 78: 83, 79: 84, 85: 90 },
     'LCK': { 69: 71, 70: 72, 76: 79, 77: 81, 79: 83, 80: 84, 93: 90 },
-    'WEST': { 66: 72, 70: 83, 71: 84, 75: 87, 77: 88 }
+    'LEC': { 67: 72, 71: 83, 72: 84, 77: 90 },
+    'LCS': { 63: 72, 71: 83, 72: 84, 77: 90 },
+    'WEST': { 66: 72, 70: 83, 71: 84, 75: 88, 77: 90 }
   };
   for (const [region, anchorMap] of Object.entries(anchors)) {
     for (const [sourceStr, rating] of Object.entries(anchorMap)) {
@@ -191,7 +197,7 @@ function testOrdinaryRatingAnchors() {
   }
 
   // Monotonicity check for each region source 30..99
-  for (const region of ['LPL', 'LCK', 'WEST']) {
+  for (const region of ['LPL', 'LCK', 'LEC', 'LCS', 'WEST']) {
     let prev = -Infinity;
     for (let source = 30; source <= 99; source++) {
       const rating = ordinaryRating(source, region);
@@ -230,9 +236,9 @@ function testGlobalRarityColorConsistency() {
     const region = gameRegionOf(card.region);
     if (region) playerCardsMaxRegion[region] = Math.max(playerCardsMaxRegion[region] ?? 0, card.rating);
   }
-  assert.ok(playerCardsMaxRegion['WEST'] === 88, `WEST max player rating exceeds 88: ${playerCardsMaxRegion['WEST']}`);
-  for (const region of ['LPL', 'LCK']) {
-    assert.ok(playerCardsMaxRegion[region] === 90, `${region} max exceeds 90`);
+  // v8: one ceiling for every region, so a gold card is worth the same wherever it is from
+  for (const region of ['LPL', 'LCK', 'LEC', 'LCS', 'WEST']) {
+    assert.ok(playerCardsMaxRegion[region] === 90, `${region} max player rating is not 90: ${playerCardsMaxRegion[region]}`);
   }
   console.log('Global rarity color consistency verified');
 }
@@ -240,7 +246,7 @@ function testGlobalRarityColorConsistency() {
 assert.equal(BASE_PLAYER_CARDS.length, 677);
 assert.equal(LEGEND_CARDS.length, 40);
 assert.equal(COACH_CARDS.length, 114);
-assert.equal(CARD_BALANCE_VERSION, 7);
+assert.equal(CARD_BALANCE_VERSION, 8);
 testPlayerCountsAndCardStats();
 
 const goldFraction = (group: string): number => {
@@ -250,10 +256,12 @@ const goldFraction = (group: string): number => {
 };
 const lckFraction = goldFraction('LCK');
 const lplFraction = goldFraction('LPL');
+const lecFraction = goldFraction('LEC');
+const lcsFraction = goldFraction('LCS');
 const westFraction = goldFraction('WEST');
-assert.ok(lckFraction > lplFraction && lplFraction > westFraction, 'Gold fraction must be LCK > LPL > WEST');
+assert.ok(lckFraction > lplFraction && lplFraction > lecFraction && lecFraction > lcsFraction && lcsFraction > westFraction, 'Gold fraction must be LCK > LPL > LEC > LCS > 其他');
 assert.ok(lckFraction < .20 && lplFraction < .20, 'LPL and LCK gold fractions must stay below 20%');
-for (const group of ['LPL', 'LCK', 'WEST']) {
+for (const group of ['LPL', 'LCK', 'LEC', 'LCS', 'WEST']) {
   const cards = BASE_PLAYER_CARDS.filter(c => gameRegionOf(c.region) === group);
   const count = (rarity: string) => cards.filter(c => c.rarity === rarity).length;
   assert.ok(count('bronze') > count('silver') && count('silver') > count('gold'), `${group}: bronze > silver > gold`);

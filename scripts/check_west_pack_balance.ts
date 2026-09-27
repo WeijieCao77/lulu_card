@@ -35,10 +35,10 @@ function run(seed: string, goldRate: number, silverRate: number) {
   }
 }
 
-for (const [kind, gold, silver] of [['scout', .03, .26], ['elite', .08, .38], ['ten', .06, .34], ['cn', .08, .38], ['pac', .08, .38], ['west', .05, .08]] as const) {
+for (const [kind, gold, silver] of [['scout', .03, .26], ['elite', .08, .38], ['ten', .06, .34], ['cn', .08, .38], ['pac', .08, .38], ['emea', .05, .08], ['ame', .05, .08], ['west', .05, .08]] as const) {
   assert.equal(PACKS[kind].gold, gold, `${kind}: gold base`);
   assert.equal(PACKS[kind].silver, silver, `${kind}: silver base`);
-  assert.equal(PACKS[kind].mythic, kind === 'scout' ? .0001 : kind === 'ten' ? .0006 : .0004, `${kind}: mythic base`);
+  assert.equal(PACKS[kind].mythic, kind === 'scout' ? .0001 : kind === 'ten' ? .0006 : kind === 'west' ? 0 : .0004, `${kind}: mythic base`); // 其他包: no LCP/CBLOL 彩卡 exists
 }
 assert.equal(PACKS.west.floor, 'silver');
 assert.equal(PACKS.west.draws, 3);
@@ -60,7 +60,7 @@ const eligible = BASE_PLAYER_CARDS.filter((c) => gameRegionOf(c.region) === 'WES
 const goldCount = eligible.filter((c) => c.rarity === 'gold').length;
 const silverCount = eligible.filter((c) => c.rarity === 'silver').length;
 const bronzeCount = eligible.filter((c) => c.rarity === 'bronze').length;
-if (goldCount !== 49 || silverCount !== 121 || bronzeCount !== 282) { // v7 (2026-09-26) pool
+if (goldCount !== 16 || silverCount !== 59 || bronzeCount !== 142) { // v8 (2026-09-27) pool: LCP + CBLOL
   throw new Error(`Pool counts: ${goldCount}/${silverCount}/${bronzeCount}`);
 }
 

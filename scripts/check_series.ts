@@ -18,7 +18,7 @@
  */
 import {
   PACKS, PACK_ORDER, SERIES, SERIES_REWARDS,
-  claimSeries, featuredSeries, newGacha, openPack, packCost, seriesProgress,
+  claimSeries, featuredSeries, newGacha, openPack, packCost, seriesOfPack, seriesProgress,
 } from '../src/engine/gacha'
 import type { Series } from '../src/engine/gacha'
 import { GAME_REGION_CN as REGION_CN, gameRegionOf } from '../src/engine/gameRegions'
@@ -116,13 +116,13 @@ check((g.packs[pack.pack] ?? 0) === 2, '90% 送的两个本赛区包到账', Str
 check(claimSeries(g, region) === null, '收齐之后再点领奖没有东西')
 check((g.series?.[region] ?? 0) === SERIES_REWARDS.length, '每一档都记为已领')
 
-// ---- the weekly feature recommendation display no longer discounts automatically
-console.log('\n本周主打推荐：')
+// ---- the weekly featured region: the same for everyone and 20% off (details: check_weekly_series.ts)
+console.log('\n本周八折赛区：')
 const seen = new Map<string, number>()
 let last = ''
 let flips = 0
 for (let d = 0; d < 364; d++) {
-  const date = new Date(Date.UTC(2026, 8, 1) + d * 86_400_000).toISOString().slice(0, 10)
+  const date = new Date(Date.UTC(2026, 8, 28) + d * 86_400_000).toISOString().slice(0, 10)
   const r = featuredSeries(date)
   seen.set(r, (seen.get(r) ?? 0) + 1)
   if (r !== last) {
@@ -133,15 +133,16 @@ for (let d = 0; d < 364; d++) {
     }
     last = r
   }
-  // the recommendation changes, but every pack remains at base price without a selection
+  // only the featured region's pack is off, by exactly 20%
   for (const kind of PACK_ORDER) {
     const price = packCost(kind, date)
-    check(price === PACKS[kind].cost, '无自选时全部原价', `${date} ${kind} ${price}`)
+    const want = seriesOfPack(kind) === r ? Math.round(PACKS[kind].cost * .8) : PACKS[kind].cost
+    check(price === want, '只有本周赛区包八折', `${date} ${kind} ${price}`)
     check(price > 0, '价格是正数', `${kind} ${price}`)
   }
 }
 console.log(`  一年 ${flips} 次轮换 · ` + [...seen].map(([r, n]) => `${REGION_CN[r as Series]} ${n} 天`).join(' · '))
-check(seen.size === SERIES.length, '一年之内三个游戏赛区都轮到过')
+check(seen.size === SERIES.length, '一年之内五个赛区都轮到过')
 check(Math.max(...seen.values()) - Math.min(...seen.values()) <= 7, '轮换是均匀的')
 // no date given means no discount — the engine默认按原价算
 for (const kind of PACK_ORDER) check(packCost(kind) === PACKS[kind].cost, '不传日期就是原价', kind)

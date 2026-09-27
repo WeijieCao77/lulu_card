@@ -4,7 +4,8 @@ import { clamp } from './rng'
 
 /** Card data version; independent of the match win-probability curve. */
 /** 7 (2026-09-26): source ratings rebuilt by scripts/lol_rating (2016–2026, stage weights, honours); thresholds unchanged. */
-export const CARD_BALANCE_VERSION = 7
+/** 8 (2026-09-27): 其他 split into LEC / LCS / 其他 (LCP + CBLOL), each with its own lines; gold share LCK > LPL > LEC > LCS > 其他; every region tops out at 90, so a gold card is worth the same wherever it is from. */
+export const CARD_BALANCE_VERSION = 8
 
 interface RegionParams {
   min: number
@@ -17,7 +18,9 @@ interface RegionParams {
 const REGION_PARAMS: Record<string, RegionParams> = {
   LPL: { min: 63, silver: 76, gold: 79, max: 85, top: 90 },
   LCK: { min: 55, silver: 70, gold: 80, max: 93, top: 90 },
-  WEST: { min: 50, silver: 66, gold: 71, max: 77, top: 88 }
+  LEC: { min: 54, silver: 67, gold: 72, max: 77, top: 90 },
+  LCS: { min: 50, silver: 63, gold: 72, max: 77, top: 90 },
+  WEST: { min: 53, silver: 66, gold: 71, max: 77, top: 90 }
 }
 
 function interpolateRating(s: number, params: RegionParams): number {

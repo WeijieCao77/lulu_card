@@ -350,6 +350,16 @@ a { color: var(--accent); }
 }
 .chip b { color: var(--text); font-weight: 650; font-variant-numeric: tabular-nums; }
 .chip.own { border-color: var(--accent-line); background: var(--accent-wash); }
+button.chip { font: inherit; font-size: var(--t-small); color: var(--muted); background: var(--panel); border-radius: 2px; padding: 4px 11px; }
+button.chip:hover { color: var(--text); border-color: var(--line-hi); }
+
+/* 评分怎么算 (RatingExplainer): open at the top of 图鉴, one line in a card's detail */
+.rating-explainer { border: 1px solid var(--line); border-radius: 6px; background: var(--panel-2); padding: 8px 12px; margin: 8px 0 12px; font-size: var(--t-small); line-height: 1.7; }
+.rating-explainer summary { cursor: pointer; font-weight: 650; color: var(--text); }
+.rating-explainer ul { margin: 6px 0 4px; padding-left: 18px; color: var(--muted); }
+.rating-explainer li { margin: 2px 0; }
+.rating-explainer b { color: var(--text); font-weight: 650; }
+.rating-explainer p { margin: 4px 0 0; color: var(--faint); font-size: var(--t-tiny); }
 
 .body { display: flex; flex: 1; min-height: 0; }
 

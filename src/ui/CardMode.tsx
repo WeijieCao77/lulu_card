@@ -38,6 +38,8 @@ import {
 import type { GachaState } from '../engine/gacha'
 import { track, countScreen } from '../engine/telemetry'
 import { mailLine } from '../engine/market'
+import MusicPlayer from './MusicPlayer'
+import { MUSIC_ENABLED, TRACKS } from '../data/music'
 import type { MailItem } from '../engine/market'
 
 /** "12:34" or "1:02:34" — seconds included, because a clock that does not move
@@ -93,13 +95,14 @@ function StaminaChip({ g, onTick }: { g: GachaState; onTick: () => void }) {
   )
 }
 
-const TABS: { key: string; label: string; beta?: boolean }[] = [
-  { key: 'packs', label: '抽卡' },
-  { key: 'worlds', label: '名人堂' },
+// grouped like 开瓦包's sidebar: `group` opens a new section and names it
+export const TABS: { key: string; label: string; beta?: boolean; group?: string }[] = [
+  { key: 'packs', label: '抽卡', group: '卡牌' }, { key: 'collection', label: '收藏' }, { key: 'squad', label: '卡组' },
+  { key: 'ladder', label: '天梯', group: '赛事' }, { key: 'cup', label: '杯赛' },
+  { key: 'worlds', label: '名人堂', group: '发现' }, { key: 'dossier', label: '图鉴' },
   { key: 'challenge', label: '挑战' }, { key: 'minigames', label: '小游戏' },
-  { key: 'ladder', label: '天梯' }, { key: 'cup', label: '杯赛' },
-  { key: 'market', label: '交易市场' }, { key: 'friends', label: '好友' },
-  { key: 'collection', label: '收藏' }, { key: 'squad', label: '卡组' }, { key: 'dossier', label: '图鉴' }, { key: 'account', label: '账号' },
+  { key: 'market', label: '交易市场', group: '社交' }, { key: 'friends', label: '好友' },
+  { key: 'account', label: '账号', group: '我的' },
 ]
 
 /**
@@ -377,6 +380,8 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
     <CardCtx.Provider value={ctx}>
       <div className="app cardmode rift-ui">
         <a className="skip-link" href="#main">跳到主内容</a>
+        {/* background music: dev build only until the owner picks the tracks (data/music.ts) */}
+        {MUSIC_ENABLED && TRACKS.length > 0 && <MusicPlayer />}
         <header className="topbar">
           <button className="brand brand-home" type="button" title="返回首页" aria-label="噜噜卡，返回首页" onClick={() => { flushAccount(g); setAtHome(true) }}>噜<span>噜卡</span><em className="by">猪之家出品</em></button>
           <div className="chip" title="金币">🪙 <b>{g.coins.toLocaleString('en-US')}</b></div>
@@ -388,9 +393,10 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
               <b>{' '}{starsOnTier(g.ladder.div, g.ladder.stars)}/{tierStars(g.ladder.div)}★</b>
             )}
           </div>
-          <div className="chip small muted" title="未开的卡包">
-            📦 {Object.values(g.packs).reduce((s, n) => s + (n ?? 0), 0)}
-          </div>
+          {/* unopened packs: say so in words and take the player to where they are opened */}
+          <button type="button" className="chip small muted" title="未开的卡包，点击去开包" onClick={() => setTab('packs')}>
+            📦 卡包 {Object.values(g.packs).reduce((s, n) => s + (n ?? 0), 0)}
+          </button>
           <MailButton onClick={() => setTab('mail')} active={tab === 'mail'} />
           <div className="spacer" />
           {!cloud && <div className="chip small" style={{ color: 'var(--warn)' }} title="服务器连不上，进度只在本机">仅本机</div>}

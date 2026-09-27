@@ -8,7 +8,8 @@ const originalBaseCards = JSON.stringify(BASE_PLAYER_CARDS)
 const originalCoaches = JSON.stringify(COACH_CARDS)
 const originalLegends = JSON.stringify(LEGEND_CARDS)
 
-const WESTERN_REGIONS = ['LEC', 'LCS', 'LCP', 'CBLOL'] as const
+// 其他 since the 2026-09-27 split: LCP + CBLOL. LEC and LCS are regions of their own.
+const WESTERN_REGIONS = ['LCP', 'CBLOL'] as const
 
 type PlayerCardWithId = PlayerCard & { id: string }
 
@@ -41,7 +42,11 @@ for (const illegal of [undefined, null, '', 'UNKNOWN', 'lec', 'WEST ', true, NaN
   assert.equal(sameGameRegion('LEC', illegal), false, `sameGameRegion('LEC', illegal) should be false`)
 }
 
-// Test 3: All pairs across LEC/LCS/LCP/CBLOL should be same region
+// Test 3: LCP and CBLOL are one game region; LEC, LCS and 其他 are three
+for (const [a, b] of [['LEC', 'LCS'], ['LEC', 'LCP'], ['LCS', 'CBLOL']] as const) {
+  assert.equal(sameGameRegion(a, b), false, `${a} and ${b} are different game regions since the split`)
+}
+assert.equal(sameGameRegion('LEC', 'LEC') && sameGameRegion('LCS', 'LCS'), true)
 for (const regionA of WESTERN_REGIONS) {
   for (const regionB of WESTERN_REGIONS) {
     assert.equal(
@@ -99,7 +104,7 @@ for (let i = 0; i < WESTERN_REGIONS.length; i++) {
   }
 }
 
-assert.equal(pairCount, 6, 'All six original western-region pairs must be tested')
+assert.equal(pairCount, 1, 'The LCP–CBLOL pair must be tested')
 
 // Test 6: Coach chemistry across western regions
 for (const coachRegion of WESTERN_REGIONS) {
@@ -128,7 +133,7 @@ for (const coachRegion of WESTERN_REGIONS) {
   }
 }
 
-assert.equal(coachPairCount, 12, 'All twelve directed cross-region coach pairs must be tested')
+assert.equal(coachPairCount, 2, 'Both directed LCP–CBLOL coach pairs must be tested')
 
 // Test 7: Priority - club > nat > region
 let clubPriorityTested = false
@@ -274,10 +279,9 @@ const caps = LEGEND_CARDS.find(c => c.ign === 'Caps')!
 assert.ok(doublelift && caps && doublelift.region !== caps.region)
 assert.ok(doublelift.nat && caps.nat && natCountry(doublelift.nat) !== natCountry(caps.nat))
 assert.ok(!sameClubLineage(doublelift, caps))
+// LCS and LEC are separate regions since the 2026-09-27 split: no bond between them
 const legendPair = chemistry({slots:[doublelift.id,caps.id,null,null,null],coach:null})
-assert.equal(legendPair.links.length, 1)
-assert.equal(legendPair.links[0].why, 'region')
-assert.equal(legendPair.links[0].value, 1)
+assert.equal(legendPair.links.length, 0)
 assert.equal(JSON.stringify(BASE_PLAYER_CARDS), originalBaseCards)
 assert.equal(JSON.stringify(COACH_CARDS), originalCoaches)
 assert.equal(JSON.stringify(LEGEND_CARDS), originalLegends)

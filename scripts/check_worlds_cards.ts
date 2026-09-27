@@ -20,14 +20,14 @@ for (const c of LEGEND_CARDS) {
   const base=BASE_PLAYER_CARDS.find(b=>b.ign===c.ign)
   if(base) assert.equal(personOf(c),personOf(base),'Same person must share duplicate identity')
 }
-for(const kind of ['scout','elite','ten','cn','pac','west'] as const) {
+for(const kind of ['scout','elite','ten','cn','pac','emea','ame'] as const) {
   const g=newGacha(kind,'test','2026-09-21');g.mythicDry=MYTHIC_FLOOR;g.packs[kind]=1
   const pulled=openPack(g,kind,'pack');assert(pulled.some(p=>p.card.rarity==='mythic'))
-  const regions: Record<string,string> = {cn:'LPL',pac:'LCK',west:'WEST'}
+  const regions: Record<string,string> = {cn:'LPL',pac:'LCK',emea:'LEC',ame:'LCS',west:'WEST'}
   if(regions[kind]) assert(pulled.every(p=>gameRegionOf(p.card.region)===regions[kind]))
   assert(g.mythicDry<PACKS[kind].draws)
 }
-for(const kind of ['coach','duelist','initiator'] as const) {
+for(const kind of ['coach','duelist','initiator','west'] as const) { // 其他包 (LCP + CBLOL) has no 彩卡 since the v8 split
   const g=newGacha(kind,'test','2026-09-21');g.mythicDry=MYTHIC_FLOOR;g.packs[kind]=1
   assert(openPack(g,kind,'pack').every(p=>p.card.rarity!=='mythic'));assert.equal(g.mythicDry,MYTHIC_FLOOR)
 }
@@ -85,9 +85,9 @@ assert.equal(Math.max(...BASE_PLAYER_CARDS.map(c=>c.rating)),90)
 const data=JSON.parse(readFileSync('src/data/world.json','utf8'))
 const ordered=data.players.slice().sort((a:any,b:any)=>a.sourceOverall-b.sourceOverall)
 for(let i=1;i<ordered.length;i++) assert(ordered[i].overall>=ordered[i-1].overall,'Base ranking must not invert')
-assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='gold').length,85) // v7 2026-09-26
+assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='gold').length,79) // v8 2026-09-27 (LEC/LCS split)
 assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='silver').length,191)
-assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='bronze').length,401)
+assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='bronze').length,407)
 for(const name of ['Uzi','Clearlove','Caps']) {
   const versions=LEGEND_CARDS.filter(c=>c.ign===name)
   assert.equal(versions.length,1)

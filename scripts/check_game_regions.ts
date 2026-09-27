@@ -32,24 +32,24 @@ const env = (today: string, seed = 1) => ({
 /** Check function throws on failure; process exits 1 via top-level catch. */
 function run() {
   // ---------------------------------------------------------------------
-  // 1. Exact three-region API and PACK_ORDER, old PACKS kept for history.
+  // 1. Exact five-region API (v8, 2026-09-27) and PACK_ORDER, old PACKS kept for history.
   // ---------------------------------------------------------------------
-  assert.deepEqual(GAME_REGIONS, ['LPL', 'LCK', 'WEST'])
-  assert.deepEqual(SERIES, ['LPL', 'LCK', 'WEST'])
+  assert.deepEqual(GAME_REGIONS, ['LPL', 'LCK', 'LEC', 'LCS', 'WEST'])
+  assert.deepEqual(SERIES, ['LPL', 'LCK', 'LEC', 'LCS', 'WEST'])
   assert.equal(gameRegionOf('LPL'), 'LPL')
   assert.equal(gameRegionOf('LCK'), 'LCK')
   assert.equal(gameRegionOf('WEST'), 'WEST')
-  assert.equal(gameRegionOf('LEC'), 'WEST')
-  assert.equal(gameRegionOf('LCS'), 'WEST')
+  assert.equal(gameRegionOf('LEC'), 'LEC')
+  assert.equal(gameRegionOf('LCS'), 'LCS')
   assert.equal(gameRegionOf('LCP'), 'WEST')
   assert.equal(gameRegionOf('CBLOL'), 'WEST')
   assert.equal(gameRegionOf('unknown'), undefined)
   assert.equal(gameRegionOf('ame'), undefined)
   assert.equal(gameRegionOf(1), undefined)
-  assert.deepEqual(PACK_ORDER, ['scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'west'])
+  assert.deepEqual(PACK_ORDER, ['scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'emea', 'ame', 'west'])
   // Legacy PACKS still exists for historical mail; new code must never use them
   // as first-class pack IDs except through canonicalisation.
-  for (const legacy of ['ame', 'emea', 'lcp', 'cblol'] as const) {
+  for (const legacy of ['lcp', 'cblol'] as const) {
     assert.ok(PACKS[legacy]); assert.equal(PACK_ORDER.includes(legacy), false)
   }
 
@@ -74,11 +74,13 @@ function run() {
     const m1 = migrateGacha(g, 'acct')
 
     // Exactly sum, not MAX or first-wins.
-    assert.equal(m1.packs.west, 5 + 6 + 7 + 8 + 9)
+    assert.equal(m1.packs.west, 7 + 8 + 9)
+    assert.equal(m1.packs.ame, 5, 'LCS 包 is live again, kept as is')
+    assert.equal(m1.packs.emea, 6, 'LEC 包 is live again, kept as is')
     assert.equal(m1.packs.scout, scoutPacksBefore)
     assert.equal(m1.packs.cn, cnPacksBefore)
     assert.equal(m1.coins, coinsBefore)
-    for (const key of ['ame', 'emea', 'lcp', 'cblol'] as const) {
+    for (const key of ['lcp', 'cblol'] as const) {
       assert.equal(Object.hasOwn(m1.packs, key), false, `legacy pack ${key} removed`)
     }
     assert.deepEqual(JSON.parse(cardsBefore), m1.cards, 'cards untouched by migration')
@@ -86,7 +88,7 @@ function run() {
     // Second migration is idempotent on the west key.
     const migratedBefore = structuredClone(m1)
     const m2 = migrateGacha(m1, 'acct')
-    assert.equal(m2.packs.west, 35)
+    assert.equal(m2.packs.west, 24)
     assert.deepEqual(m2, migratedBefore, 'second migration is a deep-equal no-op')
 
     // Real card collection untouched by region migration.
@@ -95,22 +97,21 @@ function run() {
     assert.ok(card, 'test uses real card')
     const g2 = newGacha('acct', '审计', '2026-09-07') as GachaState
     g2.cards[realCard] = { id: realCard, level: 2, dupes: 3, spares: [1], seen: 1, got: '2026-09-01' }
-    g2.packs = { ame: 2, west: 3 }
+    g2.packs = { lcp: 2, west: 3 }
     migrateGacha(g2, 'acct')
     assert.deepEqual(g2.cards[realCard], { id: realCard, level: 2, dupes: 3, spares: [1], seen: 1, got: '2026-09-01' })
     assert.equal(g2.packs.west, 5)
   }
 
   // ---------------------------------------------------------------------
-  // 3. claimSeries only pays the final WEST tier after old-series tiers filled.
+  // 3. LEC/LCS series claims are their own again; LCP/CBLOL fold into WEST.
+  // claimSeries only pays the final WEST tier after old-series tiers filled.
   // ---------------------------------------------------------------------
   {
     const g = newGacha('acct', '审计', '2026-09-07') as GachaState
     Object.assign(g, { series: { LEC: 1, LCS: 3, LCP: 2, CBLOL: 4, WEST: 2 } })
     migrateGacha(g, 'acct')
-    assert.deepEqual(g.series, { WEST: 4 })
-    assert.equal(Object.hasOwn(g.series, 'LEC'), false)
-    assert.equal(Object.hasOwn(g.series, 'LCS'), false)
+    assert.deepEqual(g.series, { LEC: 1, LCS: 3, WEST: 4 })
     assert.equal(Object.hasOwn(g.series, 'LCP'), false)
     assert.equal(Object.hasOwn(g.series, 'CBLOL'), false)
 
@@ -136,8 +137,8 @@ function run() {
   }
 
   // ---------------------------------------------------------------------
-  // 4. Weekly series pick Monday 2026-09-21 with legacy region migrates to WEST,
-  // same-week change fails, week preserved, next week can change.
+  // 4. A stored weekly pick with a legacy region still migrates cleanly to WEST,
+  // but the per-account pick is retired: series_pick is refused (shared rotation since 2026-09-27).
   // ---------------------------------------------------------------------
   {
     const g = newGacha('acct', '审计', '2026-09-21') as GachaState
@@ -145,20 +146,15 @@ function run() {
     const m = migrateGacha(g, 'acct')
     assert.deepEqual(m.weeklySeriesPick, { week: '2026-09-21', region: 'WEST' })
     assert.equal(selectedWeeklySeries(m, '2026-09-21'), 'WEST')
-    const r = runAction(m, 'series_pick', { region: 'LPL' }, env('2026-09-21'))
-    assert.equal(r.ok, false, 'same week cannot change migrated WEST to LPL')
-    assert.deepEqual(m.weeklySeriesPick, { week: '2026-09-21', region: 'WEST' })
-    const nextWeek = '2026-09-28'
-    assert.equal(weekKey(nextWeek), nextWeek)
-    const r2 = runAction(m, 'series_pick', { region: 'LPL' }, env(nextWeek))
-    assert.equal(r2.ok, true)
-    assert.deepEqual(m.weeklySeriesPick, { week: nextWeek, region: 'LPL' })
+    const r = runAction(m, 'series_pick', { region: 'LPL' }, env('2026-09-28'))
+    assert.equal(r.ok, false, 'no more per-account pick')
+    assert.equal(weekKey('2026-09-28'), '2026-09-28')
   }
 
   // ---------------------------------------------------------------------
-  // 5. Legacy four packs rejected for both coin and pack opens, state untouched.
+  // 5. Legacy LCP/CBLOL packs rejected for both coin and pack opens, state untouched.
   // ---------------------------------------------------------------------
-  for (const kind of ['ame', 'emea', 'lcp', 'cblol'] as const) {
+  for (const kind of ['lcp', 'cblol'] as const) {
     for (const payWith of ['coins', 'pack'] as const) {
       const g = newGacha('acct', '审计', '2026-09-07') as GachaState
       g.coins = 100000
@@ -169,7 +165,7 @@ function run() {
         west: 1,
       }
       const wholeBefore = structuredClone(g)
-      assert.throws(() => openPack(g, kind, payWith, '2026-09-07'), /已合并/)
+      assert.throws(() => openPack(g, kind, payWith, '2026-09-07'), /已并入/)
       assert.deepEqual(g, wholeBefore)
       const before = resources(g)
       const r = runAction(g, 'open', { kind, payWith }, env('2026-09-07'))
@@ -179,7 +175,7 @@ function run() {
   }
 
   // ---------------------------------------------------------------------
-  // 6. Old four mail entries each deliver two WEST packs with legacy text.
+  // 6. Mail: LEC/LCS packs arrive as themselves, LCP/CBLOL as WEST packs.
   // ---------------------------------------------------------------------
   {
     const g = newGacha('acct', '审计', '2026-09-07') as GachaState
@@ -191,22 +187,24 @@ function run() {
       { kind: 'grant', cardId: null, level: 0, coins: 0, pack: 'cblol', count: 2, body: {}, at: Date.now() },
     ]
     applyMail(g, mail)
-    assert.equal(g.packs.west, beforePacks + 8)
-    for (const key of ['ame', 'emea', 'lcp', 'cblol'] as const) {
+    assert.equal(g.packs.west, beforePacks + 4)
+    assert.equal(g.packs.ame, 2)
+    assert.equal(g.packs.emea, 2)
+    for (const key of ['lcp', 'cblol'] as const) {
       assert.equal(g.packs[key], undefined)
     }
-    // Each mail text is readable through mailLine with legacy pack maps to WEST name.
-    for (const m of g.mail ?? []) {
-      assert.match(m.text, /其他包/)
-    }
+    const texts = (g.mail ?? []).map(m => m.text).join('\n')
+    assert.match(texts, /LCS 包/)
+    assert.match(texts, /LEC 包/)
+    assert.match(texts, /其他包/)
   }
 
   // ---------------------------------------------------------------------
   // 7. Pool per-region sampling: 50 packs per legal region; WEST origins sampled
-  // 1500 times to show all four legacy origins appear.
+  // 1500 times to show both LCP and CBLOL appear. 彩卡 stay in their region; WEST has none.
   // ---------------------------------------------------------------------
   for (const region of SERIES) {
-    const pack = region === 'LPL' ? 'cn' : region === 'LCK' ? 'pac' : 'west'
+    const pack = ({ LPL: 'cn', LCK: 'pac', LEC: 'emea', LCS: 'ame', WEST: 'west' } as const)[region]
     const g = newGacha('pool-' + region, '审计', '2026-09-07')
     g.packs[pack] = 1501
     const origins = new Set<string>()
@@ -222,32 +220,41 @@ function run() {
       }
       assert.equal(g.coins, before)
     }
-    if (region === 'WEST') assert.deepEqual([...origins].sort(), ['CBLOL', 'LCP', 'LCS', 'LEC'].sort())
+    if (region === 'WEST') assert.deepEqual([...origins].sort(), ['CBLOL', 'LCP'])
     g.mythicDry = MYTHIC_FLOOR - 1
     const forced = openPack(g, pack, 'pack', '2026-09-07')
-    assert.ok(forced.some(p => p.card.rarity === 'mythic'), pack + ' mythic floor')
+    if (region === 'WEST') {
+      assert.equal(PACKS.west.mythic, 0)
+      assert.ok(forced.every(p => p.card.rarity !== 'mythic'), 'no LCP/CBLOL 彩卡 exists, so 其他包 never deals one')
+      assert.equal(g.mythicDry, MYTHIC_FLOOR - 1, '其他包 neither spends nor feeds the 彩卡 floor')
+    } else {
+      assert.ok(forced.some(p => p.card.rarity === 'mythic'), pack + ' mythic floor')
+    }
     assert.ok(forced.every(p => gameRegionOf(p.card.region) === region))
   }
 
   // ---------------------------------------------------------------------
-  // 8. matchesFilter for each old region normal card and WEST; unknown no match;
-  // readFilter maps old region to WEST.
+  // 8. matchesFilter: LEC/LCS are their own regions, LCP/CBLOL match WEST; unknown no match.
   // ---------------------------------------------------------------------
-  const sampleLEC = ALL_CARDS.find((c) => gameRegionOf(c.region) === 'WEST' && c.region === 'LEC')
-  const sampleLCS = ALL_CARDS.find((c) => gameRegionOf(c.region) === 'WEST' && c.region === 'LCS')
+  const sampleLEC = ALL_CARDS.find((c) => c.region === 'LEC')
+  const sampleLCS = ALL_CARDS.find((c) => c.region === 'LCS')
   const sampleLCP = ALL_CARDS.find((c) => gameRegionOf(c.region) === 'WEST' && c.region === 'LCP')
   const sampleCBL = ALL_CARDS.find((c) => gameRegionOf(c.region) === 'WEST' && c.region === 'CBLOL')
   const sampleLPL = ALL_CARDS.find((c) => gameRegionOf(c.region) === 'LPL')
   const sampleLCK = ALL_CARDS.find((c) => gameRegionOf(c.region) === 'LCK')
   assert.ok(sampleLEC && sampleLCS && sampleLCP && sampleCBL && sampleLPL && sampleLCK, 'samples exist')
 
-  for (const card of [sampleLEC, sampleLCS, sampleLCP, sampleCBL]) {
+  for (const card of [sampleLCP, sampleCBL]) {
     assert.equal(matchesFilter(card, { rarity: 'all', region: 'WEST', role: 'all', club: 'all' }), true, `${card.region} matches WEST`)
     assert.equal(matchesFilter(card, readFilter({ region: card.region })), true, `legacy ${card.region} maps to WEST`)
   }
+  for (const card of [sampleLEC, sampleLCS]) {
+    assert.equal(matchesFilter(card, { rarity: 'all', region: 'WEST', role: 'all', club: 'all' }), false, `${card.region} is not 其他`)
+    assert.equal(matchesFilter(card, { rarity: 'all', region: card.region, role: 'all', club: 'all' }), true, `${card.region} matches itself`)
+  }
   assert.equal(matchesFilter({ ...sampleLPL, region: sampleLPL.region }, { rarity: 'all', region: 'WEST', role: 'all', club: 'all' }), false)
-  const read = readFilter({ region: 'LEC' })
-  assert.equal(read.region, 'WEST')
+  assert.equal(readFilter({ region: 'LEC' }).region, 'LEC')
+  assert.equal(readFilter({ region: 'LCP' }).region, 'WEST')
   const readW = readFilter({ region: 'WEST' })
   assert.equal(readW.region, 'WEST')
   const readUnknown = readFilter({ region: 'XX' })
@@ -304,20 +311,19 @@ function run() {
     assert.equal(g.coins, 100000 - 2600)
   }
   {
-    const g = newGacha('acct', '审计', '2026-09-07') as GachaState
+    // 其他 is the fifth week of the shared rotation (2026-10-26)
+    const g = newGacha('acct', '审计', '2026-10-26') as GachaState
     g.coins = 100000
-    selectWeeklySeries(g, '2026-09-07', 'WEST')
-    assert.equal(packCost('west', '2026-09-07', g), 2080)
-    const rCorrect = runAction(g, 'open', { kind: 'west', payWith: 'coins', expectedPrice: 2080 }, env('2026-09-07'))
+    assert.equal(packCost('west', '2026-10-26', g), 2080)
+    const rCorrect = runAction(g, 'open', { kind: 'west', payWith: 'coins', expectedPrice: 2080 }, env('2026-10-26'))
     assert.equal(rCorrect.ok, true)
     assert.equal(g.coins, 100000 - 2080)
   }
   {
-    const g = newGacha('acct', '审计', '2026-09-07') as GachaState
+    const g = newGacha('acct', '审计', '2026-10-26') as GachaState
     g.coins = 100000
-    selectWeeklySeries(g, '2026-09-07', 'WEST')
     const before = snapshot(g)
-    const rStale = runAction(g, 'open', { kind: 'west', payWith: 'coins', expectedPrice: 2080 }, env('2026-09-14'))
+    const rStale = runAction(g, 'open', { kind: 'west', payWith: 'coins', expectedPrice: 2080 }, env('2026-11-02'))
     assert.equal(rStale.ok, false, 'stale price across week rejected')
     assert.equal(snapshot(g), before)
   }
@@ -332,7 +338,7 @@ function run() {
     assert.equal(g.coins, coinsBefore)
   }
 
-  console.log('PASS: three game regions, idempotent migration, retained card levels, milestone no-double-pay, week lock, legacy mail, pool floors, market filter and server-owned price/resources')
+  console.log('PASS: five game regions (LPL, LCK, LEC, LCS, 其他), idempotent migration, retained card levels, milestone no-double-pay, week lock, legacy mail, pool floors, market filter and server-owned price/resources')
 }
 
 try {

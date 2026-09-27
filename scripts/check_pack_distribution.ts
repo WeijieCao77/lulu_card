@@ -26,7 +26,7 @@ function getPool(kind: PackKind): { mythic: Card[]; gold: Card[]; silver: Card[]
   const regionPools = ['LPL', 'LCK', 'WEST', 'LCS', 'LEC', 'LCP', 'CBLOL'] as const
   if ((regionPools as readonly string[]).includes(pool)) {
     const region = pool as typeof regionPools[number]
-    const inRegion = (c: Card) => pool === 'LPL' || pool === 'LCK' || pool === 'WEST' ? gameRegionOf(c.region) === region : c.region === region
+    const inRegion = (c: Card) => pool === 'LPL' || pool === 'LCK' || pool === 'LEC' || pool === 'LCS' || pool === 'WEST' ? gameRegionOf(c.region) === region : c.region === region
     return { mythic: LEGEND_CARDS.filter(inRegion), gold: PLAYER_CARDS.filter(c => c.rarity === 'gold' && inRegion(c)), silver: PLAYER_CARDS.filter(c => c.rarity === 'silver' && inRegion(c)), bronze: PLAYER_CARDS.filter(c => c.rarity === 'bronze' && inRegion(c)) }
   }
   const positions = ['上单', '打野', '中单', '下路'] as const
@@ -72,7 +72,7 @@ function simulateSession(packKind: PackKind, path: 'direct' | 'server', sessionI
       rarityCounts[rarity] = (rarityCounts[rarity] ?? 0) + 1; perCardCounts[id] = (perCardCounts[id] ?? 0) + 1
     }
   }
-  assert.equal(actualDrawCount, numPacks * def.draws)
+  assert.equal(actualDrawCount, numPacks * def.draws, `${packKind} ${path}: ${errors.slice(0, 2).join(" | ")}`)
   const maxEntry = Object.entries(perCardCounts).sort((a, b) => b[1] - a[1])[0]
   return { actualDrawCount, maxPerCard: maxEntry?.[1] ?? 0, maxCardId: maxEntry?.[0] ?? null, rarityCounts, perCardCounts, errors }
 }
@@ -136,7 +136,7 @@ const out: any = { analysis: { timestamp: new Date().toISOString(), activePacks:
 
 for (const [name, arr] of Object.entries({ allCards: ALL_CARDS, playerCards: PLAYER_CARDS, coachCards: COACH_CARDS, legendCards: LEGEND_CARDS, legendCoachCards: LEGEND_COACH_CARDS, seoulCards: SEOUL_CARDS })) out.analysis.duplicateIds[name] = dupIds(arr)
 
-for (const legacy of ['ame', 'emea', 'lcp', 'cblol']) {
+for (const legacy of ['lcp', 'cblol']) { // LEC 包 (emea) and LCS 包 (ame) are live again since 2026-09-27
   try {
     const g1 = newGacha('legacy-test', '测试', '2026-01-01'); g1.packs[legacy] = 1
     let threw = false; try { openPack(g1, legacy as PackKind, 'pack', '2026-01-01') } catch { threw = true }
@@ -175,7 +175,7 @@ for (const packKind of ACTIVE_PACKS) {
 
 
 // Force the shared mythic floor so all eligible cards can be checked without millions of natural rolls.
-for (const kind of ['scout', 'elite', 'ten', 'cn', 'pac', 'west'] as const) {
+for (const kind of ['scout', 'elite', 'ten', 'cn', 'pac', 'emea', 'ame'] as const) { // 其他包 has no 彩卡 since 2026-09-27
   const g = newGacha(`forced-${kind}`, 'Audit', '2026-01-01')
   const counts: Record<string, number> = {}; let total = 0
   const eligible = getPool(kind).mythic

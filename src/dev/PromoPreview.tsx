@@ -7,6 +7,11 @@ import CardFace from '../ui/Card'
 import SquadScreen from '../ui/cards/Squad'
 import WorldsGallery from '../ui/cards/WorldsGallery'
 import Market from '../ui/cards/Market'
+import Packs from '../ui/cards/Packs'
+import { RiftNavigation } from '../ui/RiftChrome'
+import { TABS } from '../ui/CardMode'
+import Dossier from '../ui/Dossier'
+import MusicPlayer from '../ui/MusicPlayer'
 import '../styles.css'
 
 /**
@@ -14,11 +19,14 @@ import '../styles.css'
  * stub account and, for the market, a stub shelf. No server, account or player data is read or written.
  *   legends  — a row of 彩卡 at full size      gallery — the 名人堂 as a player sees it
  *   team     — the squad screen, one full club market  — the trading post with a lively shelf
+ *   packs    — the pack shop: region packs and the week's discount
+ *   nav      — the grouped sidebar          dossier — 图鉴 with the rating explainer
+ *   music    — the background-music player (dev only until launch)
  */
 const params = new URLSearchParams(location.search)
 const view = params.get('view') ?? 'legends'
 const tag = params.get('team') ?? 'T1'
-const byName = (ign: string) => LEGEND_CARDS.find(c => c.ign === ign)
+const byName = (ign: string) => LEGEND_CARDS.find(c => c.ign === ign || c.legend?.id === ign)
 
 const g = newGacha('VM-PROM-OXXX-XXXX-XXXX-XXXX', '噜噜卡玩家', '2026-09-26') as never as Record<string, any>
 const own = (cards: Card[]) => { for (const c of cards) g.cards[c.id] = { id: c.id, level: 2, dupes: 1, seen: 3, got: '2026-09-20' } }
@@ -51,8 +59,8 @@ if (view === 'market') {
 }
 
 const noop = async () => ({ ok: true }) as never
-const ctx = { g, now: Date.now(), cloud: true, phone: '8000', bound: () => {}, commit: async () => {}, act: noop, toast: () => {}, collect: async () => 0, openDossier: () => {}, go: () => {} } as never
-const showcase = ['Faker', 'Uzi', 'Clearlove', 'Caps', 'Rookie', 'TheShy'].map(byName).filter(Boolean) as Card[]
+const ctx = { g, now: Date.now(), today: params.get('today') ?? '2026-09-28', cloud: true, phone: '8000', bound: () => {}, commit: async () => {}, act: noop, toast: () => {}, collect: async () => 0, openDossier: () => {}, go: () => {} } as never
+const showcase = (params.get('names')?.split(',') ?? ['Faker', 'Uzi', 'Clearlove', 'Caps', 'Rookie', 'TheShy']).map(byName).filter(Boolean) as Card[]
 
 function Legends() {
   const cols = Number(params.get('cols')) || 3
@@ -64,7 +72,11 @@ if (import.meta.env.DEV) createRoot(document.getElementById('root')!).render(
   <main className="cm" style={{ padding: 16, maxWidth: 1180, margin: 'auto' }}>
     <CardCtx.Provider value={ctx}>
       {view === 'legends' ? <Legends /> : view === 'gallery' ? <WorldsGallery />
-        : view === 'team' ? <div className="promo-team"><style>{'.promo-team > .panel:first-of-type { display: none }'}</style><SquadScreen /></div> : <Market />}
+        : view === 'team' ? <div className="promo-team"><style>{'.promo-team > .panel:first-of-type { display: none }'}</style><SquadScreen /></div>
+        : view === 'packs' ? <Packs />
+        : view === 'dossier' ? <Dossier playerId={null} onOpen={() => {}} />
+        : view === 'music' ? <div className="cardmode rift-ui" style={{ minHeight: 500 }}><MusicPlayer /></div>
+        : view === 'nav' ? <div className="cardmode rift-ui" style={{ width: 240 }}><RiftNavigation tabs={TABS} active="packs" onSelect={() => {}} /></div> : <Market />}
     </CardCtx.Provider>
   </main>)
 // ?at=<css selector>: scroll that part of the screen to the top before the screenshot is taken

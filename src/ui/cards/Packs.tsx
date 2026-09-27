@@ -8,7 +8,6 @@ import {
   fullSetProgress, FULL_SET_REWARD,
 } from '../../engine/gacha'
 import type { CheckIn, PackKind, Pulled, QuestKey, Series } from '../../engine/gacha'
-import { selectedWeeklySeries } from '../../engine/weeklySeries'
 import { cardById } from '../../engine/cards'
 import { GAME_REGION_CN } from '../../engine/gameRegions'
 import { track } from '../../engine/telemetry'
@@ -31,11 +30,8 @@ export default function Packs() {
   /** the reveal's 分解重复卡, waiting for the player to read the list */
   const [ask, setAsk] = useState<SalvageAsk | null>(null)
   const [fastMode, setFastMode] = useState(() => loadFastPack())
-  const [candidate, setCandidate] = useState<Series | ''>('')
-  const [choosing, setChoosing] = useState(false)
   const openLock = useRef(false)
   const salvageLock = useRef(false)
-  const chooseLock = useRef(false)
   const uncertain = useRef(false)
   const markUnknown = () => { uncertain.current = true; setUnknownError(true) }
 
@@ -48,7 +44,6 @@ export default function Packs() {
   const series = seriesProgress(g)
   const featured = featuredSeries(today)
   const fullSet = fullSetProgress(g)
-  const selectedDiscount = selectedWeeklySeries(g, today)
 
   // The pack is rolled on the server and comes back already in the
   // collection; what happens here is the reveal.
@@ -143,26 +138,6 @@ export default function Packs() {
     const r = await act('quest', { key })
     if (!r.ok) { toast(r.why); return }
     toast(`任务完成，+${(r.result as { coins: number }).coins} 金币。`)
-  }
-
-  const chooseWeekly = async () => {
-    if (!candidate || selectedDiscount || choosing || chooseLock.current) return
-    chooseLock.current = true
-    setChoosing(true)
-    try {
-      const r = await act('series_pick', { region: candidate })
-      if (!r.ok) {
-        toast(r.why)
-        return
-      }
-      toast(`本周赛区已锁定：${GAME_REGION_CN[candidate]}，八折优惠。北京时间周一 0 点后可重新选择。`)
-      setCandidate('')
-    } catch (e) {
-      toast('连不上服务器，结果还不确定，请刷新后核对。')
-    } finally {
-      setChoosing(false)
-      chooseLock.current = false
-    }
   }
 
   const takeSeries = async (region: Series) => {
@@ -330,46 +305,19 @@ export default function Packs() {
 
       <Panel
         title="赛区系列"
-        actions={<span className="tiny muted">三大区，分开收集</span>}
+        actions={<span className="tiny muted">五个赛区，分开收集</span>}
       >
         <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-          游戏内赛区包分为三大区：LPL、LCK、其他（原 LEC、LCS、LCP、CBLOL 库存合并保留，包含越南等地区队伍）。赛区包只出该大区的选手，出金率和选拔包相同；三个区包全部常驻可买，收齐各赛区都有奖励，并且全部可出彩卡、共享彩卡保底。
+          赛区包分为五个：LPL、LCK、LEC、LCS、其他（LCP、CBLOL，包含越南等地区队伍）。赛区包只出该赛区的选手，彩卡也只出本赛区的；五个赛区包全部常驻可买，收齐各赛区都有奖励。LPL、LCK、LEC、LCS 包可出彩卡、共享彩卡保底；其他赛区暂无彩卡。
           {'　'}每个大区收到 25% / 50% / 75% / 90% / 100% 各有一档奖励，收齐送十连包。
-          {'　'}每周可自选一个大区享受八折优惠，本周选定后不可更改，北京时间周一 0 点开放重新选择；锁定前按原价购买。本周推荐是{GAME_REGION_CN[featured]}，仅作推荐展示。
+          {'　'}每周轮换一个赛区包八折，全服相同，北京时间周一 0 点换下一个（LPL → LCK → LEC → LCS → 其他）。本周八折：<b>{GAME_REGION_CN[featured]}</b>。
         </p>
-        {!selectedDiscount ? (
-          <div className="row wrap" style={{ gap: 8, marginBottom: 10 }}>
-            <label htmlFor="weekly-series-choice" className="tiny faint" style={{ whiteSpace: 'nowrap' }}>选择优惠赛区</label>
-            <select
-              id="weekly-series-choice"
-              value={candidate}
-              onChange={(e) => setCandidate(e.target.value as Series | '')}
-              disabled={choosing}
-              style={{ maxWidth: '100%' }}
-            >
-              <option value="">请选择</option>
-              {series.map((s) => (
-                <option key={s.region} value={s.region}>{GAME_REGION_CN[s.region]}</option>
-              ))}
-            </select>
-            <button className="sm primary" onClick={() => void chooseWeekly()} disabled={!candidate || choosing}>
-              确认本周赛区（不可更改）
-            </button>
-          </div>
-        ) : (
-          <div className="row wrap" style={{ gap: 8, marginBottom: 10 }}>
-            <span className="tiny">已选优惠赛区：<b>{GAME_REGION_CN[selectedDiscount]}</b></span>
-            <span className="tiny faint">该赛区包 2080 金币</span>
-            <span className="tiny faint">北京时间周一 0 点重新选择</span>
-          </div>
-        )}
         <div className="pack-shelf">
           {series.map((s) => {
             const def = PACKS[s.pack]
             const own = g.packs[s.pack] ?? 0
             const pct = s.total ? Math.round((s.owned / s.total) * 100) : 0
             const hot = s.region === featured
-            const discounted = s.region === selectedDiscount
             const price = packCost(s.pack, today, g)
             return (
               <div
@@ -379,8 +327,7 @@ export default function Packs() {
               >
                 <h4>
                   {GAME_REGION_CN[s.region]}
-                  {hot && <span className="tag warn" style={{ marginLeft: 6 }}>本周推荐</span>}
-                  {discounted && <span className="tag warn" style={{ marginLeft: 6 }}>自选八折</span>}
+                  {hot && <span className="tag warn" style={{ marginLeft: 6 }}>本周八折</span>}
                   {own > 0 && <span className="pack-own"> ×{own}</span>}
                 </h4>
                 <div className="tiny mono faint" style={{ margin: '2px 0 5px' }}>
@@ -433,7 +380,7 @@ export default function Packs() {
                     disabled={busy || unknownError || g.coins < price}
                   >
                     花 {price} 金币
-                    {discounted && <s className="faint" style={{ marginLeft: 4 }}>{def.cost}</s>}
+                    {price < def.cost && <s className="faint" style={{ marginLeft: 4 }}>{def.cost}</s>}
                   </button>
                 </div>
               </div>

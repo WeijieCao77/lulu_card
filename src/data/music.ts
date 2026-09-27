@@ -10,6 +10,15 @@
  * Order is play order. `file` is relative to the site root and carries a
  * version so a replaced file is a new URL under the week-long cache.
  */
+/**
+ * 噜噜卡's player (owner, 2026-09-27: as 开瓦包's, with music the owner will choose).
+ * Not live yet: on only in the local dev build (npm run dev). The production build
+ * drops it entirely. To launch, set this to true and replace TRACKS below with the
+ * owner's music (files in public/music, m4a) — the ones below are 开瓦包's
+ * VALORANT placeholders, only for trying the player out.
+ */
+export const MUSIC_ENABLED: boolean = typeof import.meta.env !== 'undefined' && import.meta.env.DEV === true
+
 export interface Track {
   id: string
   title: string

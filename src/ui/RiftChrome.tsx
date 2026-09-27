@@ -2,7 +2,7 @@ import React from 'react';
 import './riftChrome.css';
 
 interface RiftNavigationProps {
-  tabs: { key: string; label: string; beta?: boolean }[];
+  tabs: { key: string; label: string; beta?: boolean; group?: string }[];
   active: string;
   utilities?: React.ReactNode;
   onSelect: (key: string) => void;
@@ -13,6 +13,8 @@ export function RiftNavigation({ tabs, active, onSelect, utilities }: RiftNaviga
     <nav className="rift-nav" aria-label="游戏导航">
       <div className="rift-identity" aria-hidden="true"><svg viewBox="0 0 80 80" fill="none"><path d="M40 4 72 23v34L40 76 8 57V23Z" stroke="currentColor"/><path d="m23 30-4-14 18 10m20 4 4-14-18 10" stroke="currentColor" strokeWidth="2"/><ellipse cx="40" cy="43" rx="23" ry="19" stroke="currentColor" strokeWidth="2"/><ellipse cx="40" cy="49" rx="12" ry="8" stroke="currentColor" strokeWidth="2"/><path d="M35 47v4m10-4v4" stroke="currentColor" strokeWidth="3"/><circle cx="30" cy="37" r="2" fill="currentColor"/><circle cx="50" cy="37" r="2" fill="currentColor"/></svg><span>猪之家 · 选手典藏</span></div>
       {tabs.map((tab) => (
+        <React.Fragment key={tab.key}>
+        {tab.group && <div className="rift-nav-group" aria-hidden="true">{tab.group}</div>}
         <button
           key={tab.key}
           className={`rift-nav-btn${active === tab.key ? ' rift-active' : ''}`}
@@ -25,6 +27,7 @@ export function RiftNavigation({ tabs, active, onSelect, utilities }: RiftNaviga
           <span className="rift-nav-label">{tab.label}</span>
           {tab.beta && <span className="rift-nav-beta">BETA</span>}
         </button>
+        </React.Fragment>
       ))}
       <div className="rift-utilities">{utilities}</div>
     </nav>

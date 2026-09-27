@@ -9,6 +9,7 @@ import { Panel, Bar } from './common'
 import { ATTR_CN, ATTR_KEYS, REGION_CN } from '../engine/types'
 import type { Role } from '../engine/types'
 import { gameRegionOf, GAME_REGIONS, GAME_REGION_CN } from '../engine/gameRegions'
+import RatingExplainer from './RatingExplainer'
 import type { GameRegion } from '../engine/gameRegions'
 import raw from '../data/world.json'
 import './dossier.css'
@@ -113,8 +114,9 @@ export default function Dossier({
       }
     >
       <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-        选手与教练资料库。游戏分类为三大区：LPL、LCK、其他；其他包含 LEC、LCS、LCP、CBLOL 联赛及其中的越南等地区队伍。选手与教练资料中的联赛信息保留真实所属联赛。能力评分为游戏内评分，非官方评价。生涯数据暂未收录。
+        选手与教练资料库。游戏分为五个赛区：LPL、LCK、LEC、LCS、其他；其他包含 LCP、CBLOL 联赛及其中的越南等地区队伍。选手与教练资料中的联赛信息保留真实所属联赛。生涯数据暂未收录。
       </p>
+      <RatingExplainer open />
 
       <div className="row wrap" style={{ gap: 8, margin: '12px 0' }}>
         <div className="seg">

@@ -29,12 +29,12 @@ import {
   refreshDaily, salvage, salvageBulk, seriesOfPack, spendPlay, upgrade, ladderSlot, leagueEntry,
   LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad,
 } from './gacha'
-import { selectWeeklySeries } from './weeklySeries'
 import {
   judgeMinigame, MINI_GAMES, MINIGAME_DAILY, MINIGAME_TTL_MS, newMinigame, refreshMinigame,
 } from './minigame'
 import type { MiniGame } from './minigame'
 import type { GachaState, QuestKey, Series } from './gacha'
+import { isLegacyRegionPack } from './regionMigration'
 import { arenaOpponentRating, playArenaMatch, playCupMatch, playRivalMatch } from './arena'
 import type { ArenaResult, RivalSquad } from './arena'
 import { challengeBlock, challengeSig, guessChallenge } from './challenge'
@@ -130,8 +130,8 @@ function dispatch(
     case 'open': {
       const kind = a.kind
       if (!isPackKind(kind)) return { ok: false, why: '没有这种卡包' }
-      if (kind === 'ame' || kind === 'emea' || kind === 'lcp' || kind === 'cblol') {
-        return { ok: false, why: '旧赛区包已下架，请刷新后选择新的其他包。' }
+      if (isLegacyRegionPack(kind)) {
+        return { ok: false, why: 'LCP、CBLOL 包已并入其他包，请刷新页面。' }
       }
       const payWith = a.payWith === 'coins' ? 'coins' : 'pack'
       // Coins buying a series pack must name the exact price the page showed
@@ -330,13 +330,9 @@ function dispatch(
       markMailSeen(g)
       return { ok: true }
     }
-    case 'series_pick': {
-      const region = str(a.region) as Series
-      if (!(SERIES as readonly string[]).includes(region)) return { ok: false, why: '没有这个赛区' }
-      const r = selectWeeklySeries(g, env.today, region)
-      if (!r.ok) return r
-      return { ok: true, result: { region: r.region } }
-    }
+    case 'series_pick':
+      // since 2026-09-27 the week's discounted region is the same for everyone (featuredSeries)
+      return { ok: false, why: '每周优惠赛区已改为全服统一，不用再选，刷新页面即可看到' }
     // ---- 位置小游戏: the server opens the round and judges it — engine/minigame.ts
     case 'minigame_start': {
       const game = str(a.game, 12) as MiniGame

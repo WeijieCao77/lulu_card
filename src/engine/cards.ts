@@ -124,6 +124,7 @@ export const coachRating = (c: { tactics: number; development: number; motivatio
   Math.round(coachAbility(c))
 
 const teamById = new Map(WORLD_TEAMS.map((t) => [t.id, t]))
+const HAN = /[一-鿿]/
 
 function buildPlayerCards(): PlayerCard[] {
   return WORLD_PLAYERS.map((p) => {
@@ -136,8 +137,9 @@ function buildPlayerCards(): PlayerCard[] {
       playerId: p.id,
       ign: p.ign,
       // the scrape fills in what world.json was missing: 178 players carried no
-      // nationality at all, and a card with no flag on it is half a card
-      realName: decodeDisplayName(d?.real ?? p.realName ?? null),
+      // nationality at all, and a card with no flag on it is half a card.
+      // A name in Chinese characters wins over the scrape's romanisation (陈泽彬, not Chen Ze-Bin).
+      realName: decodeDisplayName(HAN.test(p.realName ?? '') ? p.realName : d?.real ?? p.realName ?? null),
       nat: (d?.nat ?? p.nat) || null,
       face: d?.img ? faceUrl(d.img, d.v) : null,
       region: p.region as Region,

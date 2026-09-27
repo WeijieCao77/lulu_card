@@ -14,7 +14,7 @@ import { CUP_TEAMS } from './cupTeams'
 import type { Region, Role } from './types'
 import type { SeoulRouteState } from './seoulRoute'
 import type { WeeklySeriesPick } from './weeklySeries'
-import { cleanWeeklySeriesPick, selectedWeeklySeries } from './weeklySeries'
+import { cleanWeeklySeriesPick } from './weeklySeries'
 import { GAME_REGIONS, GAME_REGION_CN, gameRegionOf, type GameRegion } from './gameRegions'
 import { isLegacyRegionPack, migrateRegions } from './regionMigration'
 import {
@@ -125,28 +125,31 @@ export const PACKS: Record<PackKind, PackDef> = {
   // complaint about a 607-card pile answered in one line.
   cn: {
     kind: 'cn', name: 'LPL 包', pool: 'LPL',
-    blurb: '只出中国赛区的选手卡。三张，至少一张银卡起。',
+    blurb: '只出 LPL 选手卡，彩卡也只出 LPL 的。三张，至少一张银卡起。',
     cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
   },
   pac: {
     kind: 'pac', name: 'LCK 包', pool: 'LCK',
-    blurb: '只出韩国赛区的选手卡。三张，至少一张银卡起。',
+    blurb: '只出 LCK 选手卡，彩卡也只出 LCK 的。三张，至少一张银卡起。',
     cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
   },
   west: {
     kind: 'west', name: '其他包', pool: 'WEST',
-    blurb: '包含 LEC、LCS、LCP、CBLOL 选手。三张，至少一张银卡起。',
-    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.05, silver: 0.08, floor: 'silver', shop: true,
+    blurb: '包含 LCP、CBLOL 选手。三张，至少一张银卡起。',
+    // no 彩卡 since the 2026-09-27 split: every legend is LPL, LCK, LEC or LCS, and a pack with none must not draw one
+    cost: 2600, draws: 3, mythic: 0, gold: 0.05, silver: 0.08, floor: 'silver', shop: true,
   },
   ame: {
     kind: 'ame', name: 'LCS 包', pool: 'LCS',
-    blurb: '只出北美赛区的选手卡。三张，至少一张银卡起。',
-    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
+    blurb: '只出 LCS（北美）选手卡，彩卡也只出这个赛区的。三张，至少一张银卡起。',
+    // smaller pools than LPL/LCK: at .08/.38 one LCS gold would be likelier than one LCS bronze
+    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.05, silver: 0.08, floor: 'silver', shop: true,
   },
   emea: {
     kind: 'emea', name: 'LEC 包', pool: 'LEC',
-    blurb: '只出欧非中东赛区的选手卡。三张，至少一张银卡起。',
-    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
+    blurb: '只出 LEC（欧洲）选手卡，彩卡也只出这个赛区的。三张，至少一张银卡起。',
+    // smaller pools than LPL/LCK: at .08/.38 one LCS gold would be likelier than one LCS bronze
+    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.05, silver: 0.08, floor: 'silver', shop: true,
   },
   lcp: { kind: 'lcp', name: 'LCP 包', pool: 'LCP', blurb: '亚太赛区选手，三张卡，至少一张银卡。', cost: 2600, draws: 3, mythic: 0, gold: .08, silver: .38, floor: 'silver', shop: true },
   cblol: { kind: 'cblol', name: 'CBLOL 包', pool: 'CBLOL', blurb: '巴西赛区选手，三张卡，至少一张银卡。', cost: 2600, draws: 3, mythic: 0, gold: .08, silver: .38, floor: 'silver', shop: true },
@@ -208,11 +211,13 @@ export const MINI_PACK: Record<MiniGame, PackKind> = { aim: 'duelist', recon: 'i
 export const seriesOfPack = (kind: PackKind): Series | null =>
   kind === 'cn' ? 'LPL'
     : kind === 'pac' ? 'LCK'
-      : kind === 'west' ? 'WEST'
-        : null
+      : kind === 'emea' ? 'LEC'
+        : kind === 'ame' ? 'LCS'
+          : kind === 'west' ? 'WEST'
+            : null
 
 export const PACK_ORDER: PackKind[] = [
-  'scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'west',
+  'scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'emea', 'ame', 'west',
 ]
 
 /**
@@ -1042,9 +1047,9 @@ const POOLS = {
   },
   LPL: seriesPool('LPL'),
   LCK: seriesPool('LCK'),
+  LEC: seriesPool('LEC'),
+  LCS: seriesPool('LCS'),
   WEST: seriesPool('WEST'),
-  LCS: legacySeriesPool('LCS'),
-  LEC: legacySeriesPool('LEC'),
   LCP: legacySeriesPool('LCP'),
   CBLOL: legacySeriesPool('CBLOL'),
   legend: {
@@ -1109,7 +1114,7 @@ export function openPack(
   g: GachaState, kind: PackKind, payWith: 'pack' | 'coins', today?: string,
 ): Pulled[] {
   if (!isPackKind(kind) || kind === 'seoul2024') throw new Error('没有这种卡包')
-  if (isLegacyRegionPack(kind)) throw new Error('赛区包已合并为其他包，请刷新页面')
+  if (isLegacyRegionPack(kind)) throw new Error('这个赛区包已并入其他包，请刷新页面')
   const def = PACKS[kind]
   if (payWith === 'pack') {
     if ((g.packs[kind] ?? 0) < 1) throw new Error('没有这种卡包')
@@ -1475,36 +1480,35 @@ const SERIES_LEGENDS = Object.fromEntries(SERIES.map((r) =>
 )) as Record<Series, Set<string>>
 
 const SERIES_PACK: Record<Series, PackKind> = {
-  LPL: 'cn', LCK: 'pac', WEST: 'west',
+  LPL: 'cn', LCK: 'pac', LEC: 'emea', LCS: 'ame', WEST: 'west',
 }
 
 /**
- * The week's recommended region. Discounts are chosen by each account.
- *
- * All three game regions remain available. The shared recommendation rotates on
- * Monday; each account chooses its own discounted region in weeklySeries.ts.
+ * The week's discounted region, the same for everyone (as 开瓦包): one region pack
+ * is 20% off each Asia/Shanghai calendar week, turning over at Monday 00:00 in the
+ * order of SERIES. The first week, 2026-09-28, is LPL, and so is everything before
+ * it. This replaced the per-account pick (weeklySeriesPick) on 2026-09-27.
  */
 export const FEATURE_OFF = 0.2
+export const FEATURE_FIRST_WEEK = '2026-09-28'
 
 export function featuredSeries(today: string): Series {
-  // whole days since a fixed Monday, floored to weeks; the epoch is a Monday
-  // so the recommendation turns over at the same moment the week does
-  const days = Math.floor(Date.parse(`${today}T00:00:00Z`) / 86_400_000)
-  const week = Math.floor((days - 4) / 7) // 1970-01-01 was a Thursday
-  return SERIES[((week % SERIES.length) + SERIES.length) % SERIES.length]
+  const days = (Date.parse(`${today}T00:00:00Z`) - Date.parse(`${FEATURE_FIRST_WEEK}T00:00:00Z`)) / 86_400_000
+  const week = Number.isFinite(days) ? Math.max(0, Math.floor(days / 7)) : 0
+  return SERIES[week % SERIES.length]
 }
 
-/** Server-owned weekly selection gets 20% off; recommendations do not affect prices. */
+/** The week's featured region pack is 20% off for every account. */
 export function packCost(
   kind: PackKind,
   today?: string,
-  g?: Pick<GachaState, 'weeklySeriesPick'>,
+  _g?: unknown,
 ): number {
   const base = PACKS[kind].cost
-  if (!today || !g) return base
+  if (!today) return base
   const region = seriesOfPack(kind)
   if (!region) return base
-  return selectedWeeklySeries(g, today) === region ? Math.round(base * (1 - FEATURE_OFF)) : base
+  return featuredSeries(today) === region ? Math.round(base * (1 - FEATURE_OFF)) : base
 }
 
 /** How many cards of a series a milestone asks for. */

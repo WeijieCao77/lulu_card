@@ -121,9 +121,12 @@ function runChecks() {
     assert(!(kind in g.packs), `${kind} old key should be removed`)
     assert(g.mythicDry === MYTHIC_FLOOR - 1, `${kind} migrated mythicDry should be floor-1, got ${g.mythicDry}`)
 
-    // after migration, opening west must give mythic
+    // 其他包 has had no 彩卡 since the 2026-09-27 split: it deals none and leaves the owed floor for a pack that can pay it
     const pulled = openPack(g, 'west', 'pack')
-    assert(pulled.some(p => p.card.rarity === 'mythic'), `west pack after ${kind} migration must contain mythic`)
+    assert(!pulled.some(p => p.card.rarity === 'mythic'), `west pack after ${kind} migration deals no 彩卡`)
+    assert(g.mythicDry === MYTHIC_FLOOR - 1, `west pack leaves the owed 彩卡 floor alone, got ${g.mythicDry}`)
+    g.packs.cn = 1
+    assert(openPack(g, 'cn', 'pack').some(p => p.card.rarity === 'mythic'), `the next LPL pack pays the owed 彩卡`)
   }
 
   // legend pack does not consume pity/gold counters, uses pack inventory, coins unchanged, existing card upgrades without loss

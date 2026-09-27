@@ -410,6 +410,8 @@ html[data-theme='cream'] .cardmode.rift-ui {
 .rift-nav { padding:20px 10px; gap:3px; }
 .rift-nav-btn { border-radius:6px; min-height:40px; padding:10px 13px; font-weight:600; transition:background .2s,color .2s; }
 .rift-nav-btn.rift-active { background:linear-gradient(90deg,#65d8cf28,transparent); border-left-color:var(--rift-gold); color:var(--rift-gold); }
+/* section labels, as 开瓦包's sidebar: small, quiet, above the first item of each group */
+.rift-nav-group { font-size:11px; letter-spacing:.14em; font-weight:700; color:var(--rift-text-muted); opacity:.7; padding:12px 13px 3px; }
 .rift-identity { display:flex; flex-direction:column; align-items:center; gap:8px; color:var(--rift-gold); margin:0 0 22px; font-size:10px; letter-spacing:2px; }
 .rift-identity svg { width:62px; height:62px; }
 .rift-banner { border-radius:12px; box-shadow:none; background:#0c242b; }
@@ -430,6 +432,7 @@ html[data-theme='cream'] .cardmode.rift-ui .pack-box { background:linear-gradien
  .cardmode.rift-ui .topbar .chip { padding:3px 6px; font-size:11px; }
  .cardmode.rift-ui .cm-body { padding:12px 10px 40px; }
  .rift-nav { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:2px; padding:6px; }
+ .rift-nav-group { display:none; } /* the phone's icon grid has no room for section labels */
  .rift-nav-btn { min-width:0; min-height:49px; padding:5px 1px; gap:3px; border-radius:4px; }
  .rift-nav-label { font-size:10px; white-space:nowrap; }
  .rift-nav-icon { width:17px; height:17px; }

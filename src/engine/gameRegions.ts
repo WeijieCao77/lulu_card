@@ -1,14 +1,15 @@
-export type GameRegion = 'LPL' | 'LCK' | 'WEST'
-export const GAME_REGIONS = ['LPL', 'LCK', 'WEST'] as const
-export const GAME_REGION_CN = { LPL: 'LPL', LCK: 'LCK', WEST: '其他' } as const
+/** Game regions (2026-09-27): LPL, LCK, LEC, LCS, and 其他 = LCP + CBLOL. */
+export type GameRegion = 'LPL' | 'LCK' | 'LEC' | 'LCS' | 'WEST'
+export const GAME_REGIONS = ['LPL', 'LCK', 'LEC', 'LCS', 'WEST'] as const
+export const GAME_REGION_CN = { LPL: 'LPL', LCK: 'LCK', LEC: 'LEC', LCS: 'LCS', WEST: '其他' } as const
 
 export function gameRegionOf(raw: unknown): GameRegion | undefined {
   if (typeof raw !== 'string') return undefined
   switch (raw) {
     case 'LPL': return 'LPL'
     case 'LCK': return 'LCK'
-    case 'LEC':
-    case 'LCS':
+    case 'LEC': return 'LEC'
+    case 'LCS': return 'LCS'
     case 'LCP':
     case 'CBLOL':
     case 'WEST': return 'WEST'
