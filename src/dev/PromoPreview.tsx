@@ -13,8 +13,6 @@ import DailyShopScreen from '../ui/cards/DailyShop'
 import { RiftNavigation } from '../ui/RiftChrome'
 import { TABS } from '../ui/CardMode'
 import Dossier from '../ui/Dossier'
-import MusicPlayer from '../ui/MusicPlayer'
-import { TRACKS } from '../data/music'
 import MatchReport from '../ui/cards/Report'
 import { playRivalMatch } from '../engine/arena'
 import '../styles.css'
@@ -26,7 +24,6 @@ import '../styles.css'
  *   team     — the squad screen, one full club market  — the trading post with a lively shelf
  *   packs    — the pack shop: region packs and the week's discount
  *   nav      — the grouped sidebar          dossier — 图鉴 with the rating explainer
- *   music    — the background-music player (dev only until launch)
  *   cards    — ordinary cards at lg / md / sm (?ids=p:P8,p:P6,...)
  */
 const params = new URLSearchParams(location.search)
@@ -98,7 +95,6 @@ if (import.meta.env.DEV) createRoot(document.getElementById('root')!).render(
           const r = playRivalMatch(mine, () => 2, { name: 'kingard', tag: '#8327', slots: theirs.slots, coach: theirs.coach, levels: {} } as never, 3, Number(params.get('seed') ?? 7), undefined, true)
           return <MatchReport result={r} opponentId="" opponentName="kingard #8327" mySquad={mine} mineTitle="我方" level={() => 2} onClose={() => {}} />
         })()
-        : view === 'music' ? <div className="cardmode rift-ui" style={{ minHeight: 500 }}>{TRACKS.length ? <MusicPlayer /> : <p>还没有曲目（src/data/music.ts）。</p>}</div>
         : view === 'nav' ? <div className="cardmode rift-ui" style={{ width: params.get('full') ? '100%' : 240 }}><RiftNavigation tabs={TABS} active="packs" onSelect={() => {}} /></div> : <Market />}
     </CardCtx.Provider>
   </main>)

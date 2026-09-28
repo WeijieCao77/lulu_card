@@ -12,8 +12,6 @@
  *   gold       a flip, an impact, a brass chord and sparkles
  *   mythic     a彩卡: a deep boom, a rising choir chord, a cascade of sparkles
  *   anticipate hovering an unturned gold / 彩卡 back: a rising hum (once per card)
- *
- * The music player's mute / off choice silences these too.
  */
 export type PackCue = 'grab' | 'tear' | 'reveal' | 'burst' | 'silver' | 'gold' | 'mythic'
 
@@ -21,16 +19,8 @@ let context: AudioContext | null = null
 let bus: GainNode | null = null
 let wet: GainNode | null = null
 
-function volume(): number {
-  try {
-    const raw = localStorage.getItem('lolcards.music')
-    if (!raw) return .7
-    const prefs = JSON.parse(raw) as { vol?: unknown; muted?: unknown; off?: unknown }
-    if (prefs.muted === true || prefs.off === true) return 0
-    // effects sit a little above the music so a quiet music setting still lets a pack be heard
-    return typeof prefs.vol === 'number' ? Math.max(.25, Math.min(1, prefs.vol * 1.4)) : .7
-  } catch { return .7 }
-}
+/** Fixed level. The background-music player that once set it (dev only, never live) was removed 2026-09-28. */
+const volume = (): number => .7
 
 /** a decaying stereo noise tail: a hall without shipping an impulse file */
 function hall(ctx: AudioContext, seconds: number): AudioBuffer {

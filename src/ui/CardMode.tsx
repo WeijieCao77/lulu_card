@@ -40,9 +40,7 @@ import {
 import type { GachaState } from '../engine/gacha'
 import { track, countScreen } from '../engine/telemetry'
 import { mailLine } from '../engine/market'
-import MusicPlayer from './MusicPlayer'
 import type { CupSquadKey } from '../engine/gacha'
-import { MUSIC_ENABLED, TRACKS } from '../data/music'
 import type { MailItem } from '../engine/market'
 
 /** "12:34" or "1:02:34" — seconds included, because a clock that does not move
@@ -387,8 +385,6 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
     <CardCtx.Provider value={ctx}>
       <div className="app cardmode rift-ui">
         <a className="skip-link" href="#main">跳到主内容</a>
-        {/* background music: dev build only until the owner picks the tracks (data/music.ts) */}
-        {MUSIC_ENABLED && TRACKS.length > 0 && <MusicPlayer />}
         <header className="topbar">
           <button className="brand brand-home" type="button" title="返回首页" aria-label="噜噜卡，返回首页" onClick={() => { flushAccount(g); setAtHome(true) }}>噜<span>噜卡</span><em className="by">猪之家出品</em></button>
           <div className="chip" title="金币">🪙 <b>{g.coins.toLocaleString('en-US')}</b></div>

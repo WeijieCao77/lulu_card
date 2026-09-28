@@ -922,8 +922,6 @@ function handle(req, res) {
     // agent portraits and map banners change about as often as the game does —
     // a week of cache costs nothing and saves ~400KB of revalidation churn
     || file.includes(`${sep}agents${sep}`) || file.includes(`${sep}maps${sep}`)
-    // the background music is four megabytes and its URL carries a version
-    || file.includes(`${sep}music${sep}`)
   const head = {
     'Content-Type': TYPES[ext] || 'application/octet-stream',
     'Cache-Control': hashed ? 'public, max-age=31536000, immutable'

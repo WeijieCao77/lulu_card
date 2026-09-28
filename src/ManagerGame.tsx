@@ -236,7 +236,7 @@ export default function ManagerGame({ onHome, testSaves = false }: { onHome: () 
 
   // The shell — rail down the left, advance bar along the bottom of a phone —
   // is marked on the document while it is up, so a fixed thing outside this
-  // component (the music window) can step out of its way with one CSS rule.
+  // component can step out of its way with one CSS rule.
   // Above the early returns: a hook after one of those is a hook that is
   // sometimes not called, which React refuses.
   const shell = booted && !!gameRef.current
