@@ -1767,9 +1767,12 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
   width: 100%;
   font-size: 10.5px; font-weight: 600;
   text-align: center; opacity: .7;
-  margin-top: -1px;
+  line-height: 1.25;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+/* The caption rows keep their own height: in the fixed-height card a long real name (Samyy's is five
+   words) used to squeeze the ID row until the two lines were drawn over each other. */
+.cf-name, .cf-real, .cf-meta, .cf-coach-label { flex-shrink: 0; }
 
 /* An inline stat chip. Not `.pill` — that one is a fixed 19×19 W/L square for
    the form guide, and reusing it here squashed "Sunset 13–11" into a box the

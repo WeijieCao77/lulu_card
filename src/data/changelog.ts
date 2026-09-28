@@ -26,6 +26,11 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-09-28', title: '卡面修正', changes: [
+    { kind: '修复', text: '本名很长的卡（如教练 Samyy）卡面上 ID 和本名不再叠在一起。（玩家反馈）' },
+    { kind: '修复', text: 'VNR 的 AIex 位置由辅助改为打野，与他的实际位置一致。' },
+  ],
+}, {
   date: '2026-09-28', title: '教练荣誉与资料修正', changes: [
     { kind: '新增', text: '图鉴的教练页和卡牌详情里加入「执教荣誉」：逐条列出执教期间拿下的世界赛、MSI 和联赛冠军，助教身份单独标出。自由身教练会写明夺冠俱乐部，「团队身份」改为主教练 / 代理主教练 / 分析师 / 自由身。（玩家反馈）' },
     { kind: '修复', text: 'MG（BFX）和 Nia（LNG）的国籍和本名被错配成了同 ID 的其他选手，已改正：MG 为韩国选手 이지훈，Nia 为中国选手邹广禄。MG 补上照片。' },
