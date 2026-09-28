@@ -4,7 +4,8 @@
  *
  * The shelf is rolled on the server the first time an account asks for it that day and kept in the save
  * (a server-owned key), so a client cannot reroll it by editing its copy. No 彩卡: those stay with packs and
- * the floor. One player slot prefers a card the account does not have yet, to help a collection along.
+ * the floor. Every slot offers a card the account does not have yet (owner, 2026-09-27); only when a metal
+ * holds nothing new for it does that slot fall back to a card it owns.
  * Each slot sells once. A card bought here goes in like one bought on the market: it plays, levels and
  * salvages at once, and may be listed or swapped after the same hold (engine/tradeLock.ts).
  */
@@ -31,7 +32,11 @@ export interface DailyShop {
   /** YYYY-MM-DD, Asia/Shanghai */
   day: string
   slots: ShopSlot[]
+  /** the rule the shelf was rolled under; an untouched shelf from an older rule is rolled again */
+  v?: number
 }
+/** 2: every slot prefers a card not owned (1: only the first) */
+export const SHOP_VERSION = 2
 
 type Metal = 'bronze' | 'silver' | 'gold'
 const metals = (cards: readonly Card[]) => ({
@@ -65,27 +70,27 @@ export function rollShop(g: GachaState, day: string, seed: number): DailyShop {
     }
     return null
   }
+  const unowned = (c: Card) => !g.cards[c.id]
   for (let i = 0; i < SHOP_PLAYERS; i++) {
-    const metal = rollMetal(rng)
-    const fresh = i === 0
-    const card = pick(PLAYERS, metal, fresh ? (c) => !g.cards[c.id] : undefined)
+    const card = pick(PLAYERS, rollMetal(rng), unowned)
     if (!card) continue
     taken.add(card.id)
-    slots.push({ cardId: card.id, price: SHOP_PRICE[card.rarity as Metal] ?? SHOP_PRICE.bronze, ...(fresh && !g.cards[card.id] ? { fresh: true } : {}) })
+    slots.push({ cardId: card.id, price: SHOP_PRICE[card.rarity as Metal] ?? SHOP_PRICE.bronze, ...(!g.cards[card.id] ? { fresh: true } : {}) })
   }
   for (let i = 0; i < SHOP_COACHES; i++) {
-    const card = pick(COACHES, rollMetal(rng))
+    const card = pick(COACHES, rollMetal(rng), unowned)
     if (!card) continue
     taken.add(card.id)
-    slots.push({ cardId: card.id, price: SHOP_PRICE[card.rarity as Metal] ?? SHOP_PRICE.bronze })
+    slots.push({ cardId: card.id, price: SHOP_PRICE[card.rarity as Metal] ?? SHOP_PRICE.bronze, ...(!g.cards[card.id] ? { fresh: true } : {}) })
   }
-  // the fresh slot shows first among the players, then the rest, the coach last
-  return { day, slots }
+  return { day, slots, v: SHOP_VERSION }
 }
 
 /** Today's shelf, rolled if the account has none for today yet. Returns whether it changed. */
 export function ensureShop(g: GachaState, today: string, seed: number): boolean {
-  if (g.shop && g.shop.day === today && g.shop.slots.length) return false
+  // today's shelf stands — unless it was rolled under an older rule and nothing on it has been bought
+  if (g.shop && g.shop.day === today && g.shop.slots.length
+    && (g.shop.v === SHOP_VERSION || g.shop.slots.some((s) => s.bought))) return false
   g.shop = rollShop(g, today, seed)
   return true
 }
@@ -126,5 +131,6 @@ export function cleanShop(raw: unknown): DailyShop | undefined {
     if (!cardId || !Number.isFinite(price) || price <= 0) return []
     return [{ cardId, price: Math.trunc(price), ...(o.fresh ? { fresh: true } : {}), ...(o.bought ? { bought: true } : {}) }]
   })
-  return slots.length ? { day, slots } : undefined
+  const v = Number(r.v)
+  return slots.length ? { day, slots, ...(Number.isInteger(v) && v > 0 ? { v } : {}) } : undefined
 }

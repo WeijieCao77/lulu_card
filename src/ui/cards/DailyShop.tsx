@@ -4,7 +4,7 @@ import { Panel } from '../common'
 import CardFace from '../Card'
 import { cardById } from '../../engine/cards'
 import { HOLD_DAYS } from '../../engine/tradeLock'
-import { SHOP_PRICE } from '../../engine/dailyShop'
+import { SHOP_PRICE, SHOP_VERSION } from '../../engine/dailyShop'
 
 const RARITY_CN: Record<string, string> = { gold: '金卡', silver: '银卡', bronze: '铜卡' }
 
@@ -24,7 +24,9 @@ export default function DailyShop() {
   const { g, today, now, act, toast } = useCards()
   const [busy, setBusy] = useState(false)
   const asked = useRef('')
-  const shop = g.shop && g.shop.day === today ? g.shop : null
+  // a shelf from an older rule is asked for again (the server rolls it anew if nothing was bought from it)
+  const stale = !!g.shop && g.shop.day === today && g.shop.v !== SHOP_VERSION && !g.shop.slots.some((s) => s.bought)
+  const shop = g.shop && g.shop.day === today && !stale ? g.shop : null
 
   useEffect(() => {
     if (shop || asked.current === today) return
@@ -50,8 +52,8 @@ export default function DailyShop() {
   return (
     <Panel title="每日商店" actions={<span className="tiny muted">北京时间 0 点刷新 · 还有 {untilRefresh(now)}</span>}>
       <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-        每天为你随机上架 4 张选手卡和 1 张教练卡，每人不同，每张限买一次。铜卡 {SHOP_PRICE.bronze}、银卡 {SHOP_PRICE.silver}、金卡 {SHOP_PRICE.gold} 金币，不出彩卡；
-        其中一格优先出你还没有的卡。买到的卡马上能用，和市场买的一样，{HOLD_DAYS} 天后才能挂牌或交换。
+        每天为你随机上架 4 张选手卡和 1 张教练卡，都是你还没有的卡（某个稀有度全部收齐时才会出已有的），每人不同，每张限买一次。
+        铜卡 {SHOP_PRICE.bronze}、银卡 {SHOP_PRICE.silver}、金卡 {SHOP_PRICE.gold} 金币，不出彩卡。买到的卡马上能用，和市场买的一样，{HOLD_DAYS} 天后才能挂牌或交换。
       </p>
       {!shop ? <p className="small muted">正在上架……</p> : (
         <div className="shop-shelf">
@@ -62,7 +64,7 @@ export default function DailyShop() {
             return (
               <div key={s.cardId} className={`shop-slot${s.bought ? ' sold' : ''}`}>
                 <div className="shop-tags">
-                  {s.fresh && !owned && <span className="tag win">未拥有</span>}
+                  {/* every slot is a card not owned; a tag only where a metal had nothing new left */}
                   {owned && !s.bought && <span className="tag">已有 ×{1 + owned.dupes}</span>}
                 </div>
                 <CardFace card={card} size="md" />

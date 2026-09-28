@@ -34,8 +34,29 @@ assert.deepEqual(cards.map((c) => c.kind), ['player', 'player', 'player', 'playe
 assert.ok(cards.every((c) => !c.legend && c.rarity !== 'mythic'), 'no 彩卡')
 assert.equal(new Set(shop.slots.map((s) => s.cardId)).size, 5, 'no card twice')
 shop.slots.forEach((s, i) => assert.equal(s.price, SHOP_PRICE[cards[i].rarity as 'gold'], `price by metal: ${cards[i].rarity}`))
-assert.equal(shop.slots[0].fresh, true, 'the first slot is a card this account does not have')
-assert.ok(!g.cards[shop.slots[0].cardId])
+assert.ok(shop.slots.every((s) => !g.cards[s.cardId] && s.fresh), 'every slot is a card this account does not have')
+// an account that already owns a lot still only sees new cards
+const rich = newGacha('VM-RICH', '审计', '2026-09-27') as GachaState
+for (const c of BASE_PLAYER_CARDS.filter((c) => c.rarity === 'bronze').slice(0, 150)) rich.cards[c.id] = { id: c.id, level: 0, dupes: 0, seen: 1, got: '2026-09-01' }
+for (let i = 0; i < 50; i++) {
+  const sh = rollShop(rich, '2026-09-27', i * 7919)
+  assert.ok(sh.slots.every((s) => !rich.cards[s.cardId]), 'owned cards never come up while new ones remain')
+}
+// a shelf rolled under the old rule is rolled again if untouched, kept if something was bought from it
+const old = newGacha('VM-OLD', '审计', '2026-09-27') as GachaState
+const owned1 = BASE_PLAYER_CARDS[0].id
+old.cards[owned1] = { id: owned1, level: 0, dupes: 0, seen: 1, got: '2026-09-01' }
+old.shop = { day: '2026-09-27', slots: [{ cardId: owned1, price: 300 }] }
+runAction(old, 'shop', {}, env('2026-09-27'))
+assert.ok(old.shop!.slots.length === 5 && old.shop!.slots.every((s) => !old.cards[s.cardId]), 'an untouched old shelf is rolled again')
+// buying from an old shelf that gets rolled again sells nothing: the player sees the new shelf first
+old.shop = { day: '2026-09-27', slots: [{ cardId: owned1, price: 300 }] }
+const coins0 = old.coins
+const raced = runAction(old, 'shop_buy', { slot: 0 }, env('2026-09-27'))
+assert.equal(raced.ok, false); assert.equal(old.coins, coins0, 'no coins taken for a card that is no longer there')
+old.shop = { day: '2026-09-27', slots: [{ cardId: owned1, price: 300, bought: true }] }
+runAction(old, 'shop', {}, env('2026-09-27'))
+assert.equal(old.shop!.slots.length, 1, 'a shelf already bought from stays: no second shopping today')
 
 // asking again the same day keeps the same shelf; the client cannot hand in its own
 const same = JSON.stringify(g.shop)

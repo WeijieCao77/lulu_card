@@ -337,7 +337,8 @@ function dispatch(
       return { ok: true, result: { shop: g.shop } }
     }
     case 'shop_buy': {
-      ensureShop(g, env.today, env.seed)
+      // the shelf changed under the page (a new day, or an old-rule shelf rolled again): show it, sell nothing
+      if (ensureShop(g, env.today, env.seed)) return { ok: false, why: '商店已经更新，看看新上架的卡再买。' }
       const slot = Math.trunc(Number(a.slot))
       const r = buyShop(g, slot, env.today, env.now)
       if (!r.ok) return r
