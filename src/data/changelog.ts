@@ -26,6 +26,11 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-09-28', title: '开卡包仪式更新', changes: [
+    { kind: '调整', text: '开包前投入的是完整卡包，带封口、侧边厚度和包名；峡谷仪式台换成八角基座，投入时会亮起并解封。可以拖入卡包，也可以轻点卡包自动投入。' },
+    { kind: '修复', text: '调整手机开包画面：卡包与仪式台说明、操作提示分开摆放，小屏幕上包面文字和徽记不再挤在一起。' },
+  ],
+}, {
   date: '2026-09-28', title: '杯赛报名放宽、新版赛后数据', changes: [
     { kind: '调整', text: '全服杯和组队杯不再要求账号注册满 3 天，开够 50 抽就能报名。' },
     { kind: '调整', text: '赛后数据改成英雄联盟结算界面的样式：我方蓝色、对方红色，标明谁胜谁负；击杀、经济、推塔、小龙、大龙双方对比；选手按上单到辅助排列，显示位置、K/D/A、KDA、补刀（原来的 CS）、经济和伤害。' },
@@ -182,4 +187,4 @@ export const CHANGELOG: ChangeEntry[] = [{
     { kind: '调整', text: '本次先开放基础卡包。世界赛专题卡包与征途稍后制作；开放天梯、杯赛、交易市场、每日挑战、位置小游戏与好友。' },
   ],
 }]
-export const LATEST = CHANGELOG[0]?.date ?? ''
+export const LATEST = CHANGELOG[0] ? `${CHANGELOG[0].date}:${CHANGELOG[0].title}` : ''
