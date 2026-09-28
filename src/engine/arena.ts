@@ -356,11 +356,15 @@ function seatSquad(
   // cards in the game are stars, none of them called, and they lost to
   // ordinary golds who happened to own one.
   //
-  // The stand-in is the best 指挥 attribute on the five, and he is a worse
-  // caller than a real one, which is the cost the screen already names.
-  if (roster.length && !roster.some((id) => state.players[id].isIgl)) {
+  // The caller is simply the best 运营 on the five (owner, 2026-09-27). The card's 「运营」 tag used to decide
+  // it: a tagged card called even beside a teammate with better 运营, so the tag could quietly cost a five
+  // a point or two, and players read it as the real captain besides. Now the tag is information only.
+  if (roster.length) {
     const best = roster.slice().sort((a, b) => state.players[b].attrs.igl - state.players[a].attrs.igl)[0]
-    state.players[best] = { ...state.players[best], isIgl: true, iglSource: 'inferred' }
+    for (const id of roster) {
+      const on = id === best
+      if (state.players[id].isIgl !== on) state.players[id] = { ...state.players[id], isIgl: on, ...(on ? { iglSource: 'inferred' as const } : {}) }
+    }
   }
 
   const mapPrefs: Record<string, number> = {}

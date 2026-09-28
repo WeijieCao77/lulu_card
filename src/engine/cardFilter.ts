@@ -67,7 +67,8 @@ export function readFilter(b: Record<string, unknown> | null | undefined): CardF
   return {
     rarity: s(b?.rarity) as CardFilter['rarity'],
     region: regionMapped as CardFilter['region'],
-    role: s(b?.role) as CardFilter['role'],
+    // 'igl' was the captain filter, retired with the tag (2026-09-27): a saved one reads as every position
+    role: (s(b?.role) === 'igl' ? 'all' : s(b?.role)) as CardFilter['role'],
     club: s(b?.club) as CardFilter['club'],
   }
 }
