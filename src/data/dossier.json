@@ -1906,7 +1906,10 @@
     },
     "P426": {
       "real": "Miroslav Gochev",
-      "source": "https://cdn.datalisk.io/players/102418332506104195.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/0/09/ANO_SPOOKY_2023_SPLIT_1.png/revision/latest?cb=20230414163049",
+      "img": "p-p426-2609.webp",
+      "v": "e1b7ffd8",
+      "page": "https://lol.fandom.com/wiki/File:ANO_SPOOKY_2023_SPLIT_1.png"
     },
     "P427": {
       "img": "portrait-p-P427-20260923.webp",
@@ -1936,7 +1939,12 @@
       "real": "Kang Dong-su",
       "source": "https://cdn.datalisk.io/players/104016422094844578.png"
     },
-    "P433": {},
+    "P433": {
+      "img": "p-p433-2609.webp",
+      "v": "9372930a",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/d/dc/GXP_Aetinoth_2025_Split_1.png/revision/latest?cb=20250121124021",
+      "page": "https://lol.fandom.com/wiki/File:GXP_Aetinoth_2025_Split_1.png"
+    },
     "P436": {
       "img": "oe-26a27b72d0f20640.webp",
       "v": "7f612958",
@@ -2022,7 +2030,10 @@
     },
     "P488": {
       "real": "Eron Rodrigues",
-      "source": "https://cdn.datalisk.io/players/111986481187841424.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/2/21/7REX_Hakari_2026_Split_1.png/revision/latest?cb=20260331191841",
+      "img": "p-p488-2609.webp",
+      "v": "63b54c5a",
+      "page": "https://lol.fandom.com/wiki/File:7REX_Hakari_2026_Split_1.png"
     },
     "P489": {
       "img": "oe-5e99c2bd6f420843.webp",
@@ -2536,7 +2547,10 @@
     },
     "P604": {
       "real": "Peng Jun-Bin",
-      "source": "https://cdn.datalisk.io/players/116447604862313609.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/b/b8/WE_Tyrion_2026_Split_2.png/revision/latest?cb=20260426085534",
+      "img": "p-p604-2609.webp",
+      "v": "cba5e325",
+      "page": "https://lol.fandom.com/wiki/File:WE_Tyrion_2026_Split_2.png"
     },
     "P311": {
       "img": "oe-4b43cd23b9d84148.webp",
@@ -2600,7 +2614,16 @@
     },
     "P357": {
       "real": "Samrith Loeung",
-      "source": "https://cdn.datalisk.io/players/112551579800765777.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/e/e2/Samikin.png/revision/latest?cb=20241118014435",
+      "img": "p-p357-2609.webp",
+      "v": "eef86e2e",
+      "page": "https://lol.fandom.com/wiki/File:Samikin.png",
+      "crop": [
+        0,
+        0,
+        433,
+        400
+      ]
     },
     "P425": {
       "img": "portrait-p-P425-20260923.webp",
@@ -2755,7 +2778,16 @@
     },
     "OE3b7ab9da44": {
       "real": "Nam Hyeon-seo",
-      "source": "https://cdn.datalisk.io/players/116907472040667554.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/d/d5/WSCI_2026_solid.png/revision/latest?cb=20260926030024",
+      "img": "p-oe3b7ab9da44-2609.webp",
+      "v": "4fd06fd7",
+      "page": "https://lol.fandom.com/wiki/File:WSCI_2026_solid.png",
+      "crop": [
+        0,
+        0,
+        938,
+        820
+      ]
     },
     "OE94c4014157": {
       "img": "portrait-p-OE94c4014157-20260923.webp",
@@ -3550,6 +3582,42 @@
       "img": "portrait-p-P445-20260923.webp",
       "v": "d0723da7",
       "source": "https://www.lollfl.fr/media/file/2395762068036145146/logo_large"
+    },
+    "P577": {
+      "img": "p-p577-2609.webp",
+      "v": "57a49307",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/5/58/FPX_sorrow_2025_Split_1.png/revision/latest?cb=20250109143816",
+      "page": "https://lol.fandom.com/wiki/File:FPX_sorrow_2025_Split_1.png"
+    },
+    "P618": {
+      "img": "p-p618-2609.webp",
+      "v": "0b4d4b21",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/4/46/ALY_Ranchen_2024_Placements.png/revision/latest?cb=20240202065404",
+      "page": "https://lol.fandom.com/wiki/File:ALY_Ranchen_2024_Placements.png"
+    },
+    "P595": {
+      "img": "p-p595-2609.webp",
+      "v": "1ee6d0c5",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/b/bd/SGW_j1n5_Final26.png/revision/latest?cb=20260914023533",
+      "page": "https://lol.fandom.com/wiki/File:SGW_j1n5_Final26.png",
+      "crop": [
+        0,
+        0,
+        885,
+        760
+      ]
+    },
+    "OEf9a097d0f3": {
+      "img": "p-oef9a097d0f3-2609.webp",
+      "v": "bbc05532",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/c/cd/NERD_Elkinhoo_2026_Split_2.png/revision/latest?cb=20260723014130",
+      "page": "https://lol.fandom.com/wiki/File:NERD_Elkinhoo_2026_Split_2.png"
+    },
+    "P388": {
+      "img": "p-p388-2609.webp",
+      "v": "8609a1fa",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/3/30/DSG_ScaryJerry_2025_Split_1.png/revision/latest?cb=20250221144315",
+      "page": "https://lol.fandom.com/wiki/File:DSG_ScaryJerry_2025_Split_1.png"
     }
   },
   "coaches": {
@@ -3594,10 +3662,11 @@
       "source": "https://cdn.datalisk.io/players/99566404797667829.png"
     },
     "LvMao": {
-      "img": "oe-72dc9e8c0a282f47.webp",
-      "v": "44654d88",
+      "img": "coach-lvmao-2609.webp",
+      "v": "107e9015",
       "real": "Zuo Ming-Hao",
-      "source": "https://cdn.datalisk.io/players/99566404813905681.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/15/BLG_LvMao_2025_Split_3.png/revision/latest?cb=20251122162846",
+      "page": "https://lol.fandom.com/wiki/File:BLG_LvMao_2025_Split_3.png"
     },
     "694": {
       "real": "He Xin",
@@ -3610,10 +3679,11 @@
       "source": "https://cdn.datalisk.io/players/99566406469528884.png"
     },
     "Clearlove": {
-      "img": "oe-9b756a26f4340936.webp",
-      "v": "0900606f",
+      "img": "coach-clearlove-2609.webp",
+      "v": "c98f064f",
       "real": "Ming Kai",
-      "source": "https://cdn.datalisk.io/players/98767991779035656.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/8/8f/JDG_Clearlove_2025_Split_3.png/revision/latest?cb=20250714161547",
+      "page": "https://lol.fandom.com/wiki/File:JDG_Clearlove_2025_Split_3.png"
     },
     "Lira": {
       "img": "oe-3435ba2460e1f4c4.webp",
@@ -3646,10 +3716,11 @@
       "source": "https://cdn.datalisk.io/players/100205573447578812.png"
     },
     "Ryu": {
-      "img": "oe-5a68d4a17aab1fe8.webp",
-      "v": "c04ef5f7",
+      "img": "coach-ryu-2609.webp",
+      "v": "840d55dd",
       "real": "Ryu Sang-wook",
-      "source": "https://cdn.datalisk.io/players/98926509782092600.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/14/FOX_Ryu_2024_Split_1.png/revision/latest?cb=20250405025301",
+      "page": "https://lol.fandom.com/wiki/File:FOX_Ryu_2024_Split_1.png"
     },
     "Mowgli": {
       "img": "oe-b49612b29d3bf8e2.webp",
@@ -3658,10 +3729,11 @@
       "source": "https://cdn.datalisk.io/players/99566404527577071.png"
     },
     "Score": {
-      "img": "oe-f2217eaee9f3e464.webp",
-      "v": "a098afee",
+      "img": "coach-score-2609.webp",
+      "v": "d9622116",
       "real": "Go Dong-bin",
-      "source": "https://cdn.datalisk.io/players/99566404546534573.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/a/a3/GEN_Score_2022_Split_1.png/revision/latest?cb=20221208160743",
+      "page": "https://lol.fandom.com/wiki/File:GEN_Score_2022_Split_1.png"
     },
     "Easyhoon": {
       "img": "oe-84d631c0026510fd.webp",
@@ -3676,10 +3748,11 @@
       "source": "https://cdn.datalisk.io/players/99566404529717522.png"
     },
     "Joker": {
-      "img": "oe-aa369d85f7f05db4.webp",
-      "v": "33b71bdf",
+      "img": "coach-joker-2609.webp",
+      "v": "425f5723",
       "real": "Cho Jae-eup",
-      "source": "https://cdn.datalisk.io/players/100725844999523250.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/10/DRX_Joker_2026_Split_1.png/revision/latest?cb=20260122171317",
+      "page": "https://lol.fandom.com/wiki/File:DRX_Joker_2026_Split_1.png"
     },
     "Naehyun": {
       "img": "oe-e1efe5909d45b0a6.webp",
@@ -3700,16 +3773,18 @@
       "source": "https://cdn.datalisk.io/players/99566404562013167.png"
     },
     "DanDy": {
-      "img": "oe-a314f9b404553917.webp",
-      "v": "c86e6edb",
+      "img": "coach-dandy-2609.webp",
+      "v": "84138ded",
       "real": "Choi In-kyu",
-      "source": "https://cdn.datalisk.io/players/98926509747330897.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/d/df/HLE_DanDy_2025_Split_1.png/revision/latest?cb=20250121142139",
+      "page": "https://lol.fandom.com/wiki/File:HLE_DanDy_2025_Split_1.png"
     },
     "Reapered": {
-      "img": "oe-26cbeb126ae36943.webp",
-      "v": "b41bb1c7",
+      "img": "coach-reapered-2609.webp",
+      "v": "5c02ce1d",
       "real": "Bok Han-gyu",
-      "source": "https://cdn.datalisk.io/players/106977047189764758.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/1d/KC_Reapered_2026_Split_1.png/revision/latest?cb=20260117095938",
+      "page": "https://lol.fandom.com/wiki/File:KC_Reapered_2026_Split_1.png"
     },
     "Zeph": {
       "real": "Quentin Viguié",
@@ -3812,10 +3887,11 @@
       "source": "https://cdn.datalisk.io/players/98926509773296197.png"
     },
     "Swiffer": {
-      "img": "oe-998f6786e571e625.webp",
-      "v": "16f4d9e4",
+      "img": "coach-swiffer-2609.webp",
+      "v": "7fa387ac",
       "real": "Simon Papamarkos",
-      "source": "https://cdn.datalisk.io/players/99566406282340408.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/2/29/SK_Swiffer_2023_Split_3.png/revision/latest?cb=20231123140109",
+      "page": "https://lol.fandom.com/wiki/File:SK_Swiffer_2023_Split_3.png"
     },
     "Brandini": {
       "img": "oe-c3200c3bf77eb310.webp",
@@ -3824,10 +3900,11 @@
       "source": "https://cdn.datalisk.io/players/98926509832738485.png"
     },
     "Goldenglue": {
-      "img": "oe-633f838578760d9a.webp",
-      "v": "eb17f2c6",
+      "img": "coach-goldenglue-2609.webp",
+      "v": "056da51a",
       "real": "Greyson Gregory Gilmer",
-      "source": "https://cdn.datalisk.io/players/98926509774348209.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/a/a7/100_Goldenglue_2024_Split_2.png/revision/latest?cb=20240923220508",
+      "page": "https://lol.fandom.com/wiki/File:100_Goldenglue_2024_Split_2.png"
     },
     "Damonte": {
       "img": "oe-97266ca416326c77.webp",
@@ -3846,10 +3923,11 @@
       "source": "https://cdn.datalisk.io/players/99566406281070925.png"
     },
     "Chawy": {
-      "img": "oe-4bf3fecccd0b5e0a.webp",
-      "v": "0cec81fa",
+      "img": "coach-chawy-2609.webp",
+      "v": "5f1c368f",
       "real": "Wong Xing Lei",
-      "source": "https://cdn.datalisk.io/players/98767991780885336.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/e/e3/CFO_Chawy_2026_Split_1.png/revision/latest?cb=20260112165038",
+      "page": "https://lol.fandom.com/wiki/File:CFO_Chawy_2026_Split_1.png"
     },
     "Gismo": {
       "img": "portrait-c-Gismo-20260923.webp",
@@ -3859,10 +3937,11 @@
       "page": "https://team-detonation.net/team/member/dfm_gismo"
     },
     "Paz": {
-      "img": "oe-9f68798034d56646.webp",
-      "v": "97633a16",
+      "img": "coach-paz-2609.webp",
+      "v": "4f8732c3",
       "real": "Shirou Sasaki",
-      "source": "https://cdn.datalisk.io/players/100205572901889771.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/3/37/DFM_Paz_2025_Split_1.png/revision/latest?cb=20250130171949",
+      "page": "https://lol.fandom.com/wiki/File:DFM_Paz_2025_Split_1.png"
     },
     "TaNa": {
       "img": "oe-2ae80eea4baeed49.webp",
@@ -3875,10 +3954,11 @@
       "source": "https://cdn.datalisk.io/players/107444032225136979.png"
     },
     "Naul": {
-      "img": "oe-ab4b5546398163ef.webp",
-      "v": "c9f3a73f",
+      "img": "coach-naul-2609.webp",
+      "v": "e3a2f8fe",
       "real": "Võ Thành Luân",
-      "source": "https://cdn.datalisk.io/players/98767975951461782.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/d/d2/TS_Naul_2024_Split_2.png/revision/latest?cb=20250130172702",
+      "page": "https://lol.fandom.com/wiki/File:TS_Naul_2024_Split_2.png"
     },
     "Bigkoro": {
       "img": "oe-5ca36c6a026290eb.webp",
@@ -3899,10 +3979,11 @@
       "source": "https://cdn.datalisk.io/players/99566408329067987.png"
     },
     "Raise": {
-      "img": "oe-e913a5763e17cb85.webp",
-      "v": "e7c65489",
+      "img": "coach-raise-2609.webp",
+      "v": "41be4d18",
       "real": "Oh Ji-hwan",
-      "source": "https://cdn.datalisk.io/players/99566404567892815.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/11/DRX_Raise_2024_Split_2.png/revision/latest?cb=20240816173846",
+      "page": "https://lol.fandom.com/wiki/File:DRX_Raise_2024_Split_2.png"
     },
     "Sephis": {
       "real": "Diego Alejandro de Alencar Jara",
@@ -3910,7 +3991,10 @@
     },
     "Kouke": {
       "real": "Jorge Eduardo Bravo González",
-      "source": "https://cdn.datalisk.io/players/114911254619382480.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/f/f9/ISG_Kouke_2024_Opening.png/revision/latest?cb=20240210065026",
+      "img": "coach-kouke-2609.webp",
+      "v": "ee48e6a9",
+      "page": "https://lol.fandom.com/wiki/File:ISG_Kouke_2024_Opening.png"
     },
     "Vinicin": {
       "real": "Vinicius Garcia",
@@ -3941,20 +4025,31 @@
       "source": "https://cdn.datalisk.io/players/106619546344608600.png"
     },
     "Smiley": {
-      "img": "oe-5272a7df4aea3f1c.webp",
-      "v": "5d8b12dd",
+      "img": "coach-smiley-2609.webp",
+      "v": "4351f5e8",
       "real": "Ludvig Erik Hugo Granquist",
-      "source": "https://cdn.datalisk.io/players/103935319202548658.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/9/9a/VKS_Smiley_2026_Split_1.png/revision/latest?cb=20260321231407",
+      "page": "https://lol.fandom.com/wiki/File:VKS_Smiley_2026_Split_1.png"
     },
     "Sarkis": {
       "real": "Matheus Guimarães Sarquis",
-      "source": "https://cdn.datalisk.io/players/100205576278457162.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/13/PNG_Sarkis_2024.png/revision/latest",
+      "img": "coach-sarkis-2609.webp",
+      "v": "81658461",
+      "page": "https://lol.fandom.com/wiki/File:PNG_Sarkis_2024.png",
+      "crop": [
+        105,
+        0,
+        295,
+        190
+      ]
     },
     "Von": {
-      "img": "oe-b7925338059c4edd.webp",
-      "v": "1493118e",
+      "img": "coach-von-2609.webp",
+      "v": "dcdb887e",
       "real": "Gabriel Barbosa",
-      "source": "https://cdn.datalisk.io/players/105680007964241214.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/3/32/LEV_Von_LTA_2025_Split_1.png/revision/latest?cb=20250213185217",
+      "page": "https://lol.fandom.com/wiki/File:LEV_Von_LTA_2025_Split_1.png"
     },
     "Key": {
       "img": "oe-7791845d0cd8b4e8.webp",
@@ -3979,10 +4074,11 @@
       "source": "https://cdn.datalisk.io/players/100285330135648353.png"
     },
     "Frozen": {
-      "img": "oe-538d9fb4f983564b.webp",
-      "v": "d797c9a1",
+      "img": "coach-frozen-2609.webp",
+      "v": "000a1278",
       "real": "Kim Tae-il",
-      "source": "https://cdn.datalisk.io/players/98767975924122553.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/a/a6/DRX_Frozen_2025_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:DRX_Frozen_2025_Split_1.png"
     },
     "Nagne": {
       "img": "oe-ada79938fbb9c1df.webp",
@@ -3997,14 +4093,18 @@
       "source": "https://cdn.datalisk.io/players/103658484592381698.png"
     },
     "Mash": {
-      "img": "oe-fc71a19951c43872.webp",
-      "v": "52a82479",
+      "img": "coach-mash-2609.webp",
+      "v": "6d9e299f",
       "real": "Brandon Phan",
-      "source": "https://cdn.datalisk.io/players/98926509772289831.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/9/98/CLGC_Mash_2023_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:CLGC_Mash_2023_Split_1.png"
     },
     "xani": {
       "real": "Nikola Zrinjski",
-      "source": "https://cdn.datalisk.io/players/102181670382522783.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/e/ea/Z10_Xani_2024_Split_1.png/revision/latest",
+      "img": "coach-xani-2609.webp",
+      "v": "6e245dd2",
+      "page": "https://lol.fandom.com/wiki/File:Z10_Xani_2024_Split_1.png"
     },
     "Eika": {
       "img": "oe-42f201d54273efff.webp",
@@ -4013,10 +4113,11 @@
       "source": "https://cdn.datalisk.io/players/102787200038371957.png"
     },
     "Dan Dan": {
-      "img": "oe-78c3443c07bc37a7.webp",
-      "v": "e7a932b0",
+      "img": "coach-dandan-2609.webp",
+      "v": "f75b57e1",
       "real": "Danny Le Comte",
-      "source": "https://cdn.datalisk.io/players/101389666794130913.png"
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/5/5b/SLY_Dan_Dan_2025_Split_2.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:SLY_Dan_Dan_2025_Split_2.png"
     },
     "Djoko": {
       "img": "oe-b8ed1de4ebf027fa.webp",
@@ -4055,16 +4156,22 @@
       "source": "https://cdn.datalisk.io/players/103743620262608671.png"
     },
     "1874": {
-      "img": "coach-1874.webp",
-      "v": "c426da96",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/1874.webp",
-      "page": "https://chaincc.lol/free/players/1874"
+      "img": "coach-1874-2609.webp",
+      "v": "79a10f60",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/a/a1/LGD_1874_2025_Split_1.png/revision/latest?cb=20241215100212",
+      "page": "https://lol.fandom.com/wiki/File:LGD_1874_2025_Split_1.png"
     },
     "BigKoro": {
-      "img": "coach-bigkoro.webp",
-      "v": "24c7bdb4",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/bigkoro.webp",
-      "page": "https://chaincc.lol/free/players/BigKoro"
+      "img": "coach-bigkoro-2609.webp",
+      "v": "7ebb7aa9",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/a/aa/MVKA_Bigkoro_VCS_2026_Spring_Playoffs.png/revision/latest?cb=20260326075344",
+      "page": "https://lol.fandom.com/wiki/File:MVKA_Bigkoro_VCS_2026_Spring_Playoffs.png",
+      "crop": [
+        0,
+        0,
+        1240,
+        1240
+      ]
     },
     "Boby": {
       "img": "coach-boby.webp",
@@ -4073,16 +4180,16 @@
       "page": "https://chaincc.lol/free/players/Boby"
     },
     "Cheoni": {
-      "img": "coach-cheoni.webp",
-      "v": "0578e728",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/cheoni.webp",
-      "page": "https://chaincc.lol/free/players/Cheoni"
+      "img": "coach-cheoni-2609.webp",
+      "v": "cb4251ae",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/e/ea/BRO.C_Cheoni_2026_Split_2.png/revision/latest?cb=20260623160832",
+      "page": "https://lol.fandom.com/wiki/File:BRO.C_Cheoni_2026_Split_2.png"
     },
     "CorGi": {
-      "img": "coach-corgi.webp",
-      "v": "a483e255",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/corgi.webp",
-      "page": "https://chaincc.lol/free/players/CorGi"
+      "img": "coach-corgi-2609.webp",
+      "v": "6fd46061",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/f/f7/SHG_CorGi_2026_Split_1.png/revision/latest?cb=20260126162402",
+      "page": "https://lol.fandom.com/wiki/File:SHG_CorGi_2026_Split_1.png"
     },
     "Dionrray": {
       "img": "coach-dionrray.webp",
@@ -4091,28 +4198,28 @@
       "page": "https://chaincc.lol/free/players/Dionrray"
     },
     "DooTi": {
-      "img": "coach-dooti.webp",
-      "v": "a288943b",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/dooti.webp",
-      "page": "https://chaincc.lol/free/players/DooTi"
+      "img": "coach-dooti-2609.webp",
+      "v": "869fd9a8",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/b/be/T1.EA_DooTi_2025_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:T1.EA_DooTi_2025_Split_1.png"
     },
     "Furyz": {
-      "img": "coach-furyz.webp",
-      "v": "8bca519e",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/furyz.webp",
-      "page": "https://chaincc.lol/free/players/Furyz"
+      "img": "coach-furyz-2609.webp",
+      "v": "18a61582",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/a/ac/Furyz_2024.png/revision/latest?cb=20240327023519",
+      "page": "https://lol.fandom.com/wiki/File:Furyz_2024.png"
     },
     "Helper": {
-      "img": "coach-helper.webp",
-      "v": "b771ed3d",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/helper.webp",
-      "page": "https://chaincc.lol/free/players/Helper"
+      "img": "coach-helper-2609.webp",
+      "v": "0786dc4a",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/0/05/GEN_Helper_2025_Split_1.png/revision/latest?cb=20251212152813",
+      "page": "https://lol.fandom.com/wiki/File:GEN_Helper_2025_Split_1.png"
     },
     "Hidon": {
-      "img": "coach-hidon.webp",
-      "v": "f329b172",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/hidon.webp",
-      "page": "https://chaincc.lol/free/players/Hidon"
+      "img": "coach-hidon-2609.webp",
+      "v": "ee8abca2",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/c/c5/TH_Hidon_2026_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:TH_Hidon_2026_Split_1.png"
     },
     "Inero": {
       "img": "coach-inero.webp",
@@ -4121,40 +4228,40 @@
       "page": "https://chaincc.lol/free/players/Inero"
     },
     "Niles": {
-      "img": "coach-niles.webp",
-      "v": "c21cf2fb",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/niles-aiden-tidwell-.webp",
-      "page": "https://chaincc.lol/free/players/Niles"
+      "img": "coach-niles-2609.webp",
+      "v": "2ced9a60",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/b/bd/DST_Niles_AC_2024.jpg/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:DST_Niles_AC_2024.jpg"
     },
     "Poppy": {
-      "img": "coach-poppy.webp",
-      "v": "49d0261f",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/poppy.webp",
-      "page": "https://chaincc.lol/free/players/Poppy"
+      "img": "coach-poppy-2609.webp",
+      "v": "bfe8425a",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/c/cf/EDG_Poppy_2025_Split_2.png/revision/latest?cb=20260709170653",
+      "page": "https://lol.fandom.com/wiki/File:EDG_Poppy_2025_Split_2.png"
     },
     "QingSi": {
-      "img": "coach-qingsi.webp",
-      "v": "6db5c4fc",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/qingsi.webp",
-      "page": "https://chaincc.lol/free/players/QingSi"
+      "img": "coach-qingsi-2609.webp",
+      "v": "6fcfb4cf",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/a/a0/AL_QingSi_2024_Split_2.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:AL_QingSi_2024_Split_2.png"
     },
     "Refra1n": {
-      "img": "coach-refra1n.webp",
-      "v": "2c8b5739",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/refra1n.webp",
-      "page": "https://chaincc.lol/free/players/Refra1n"
+      "img": "coach-refra1n-2609.webp",
+      "v": "c47f915c",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/4/45/FPX_REFRA1N_2021_Split_1.png/revision/latest?cb=20210122170916",
+      "page": "https://lol.fandom.com/wiki/File:FPX_REFRA1N_2021_Split_1.png"
     },
     "Reignover": {
-      "img": "coach-reignover.webp",
-      "v": "5496cdb4",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/reignover.webp",
-      "page": "https://chaincc.lol/free/players/Reignover"
+      "img": "coach-reignover-2609.webp",
+      "v": "77fb26c6",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/b/b6/C9_Reignover_2021_Split_1.png/revision/latest?cb=20210330203825",
+      "page": "https://lol.fandom.com/wiki/File:C9_Reignover_2021_Split_1.png"
     },
     "Reven": {
-      "img": "coach-reven.webp",
-      "v": "fed6f100",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/reven.webp",
-      "page": "https://chaincc.lol/free/players/Reven"
+      "img": "coach-reven-2609.webp",
+      "v": "58f556ed",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/0/00/SR_Reven_2026_Split_2.png/revision/latest?cb=20260802045328",
+      "page": "https://lol.fandom.com/wiki/File:SR_Reven_2026_Split_2.png"
     },
     "Skywalk": {
       "img": "coach-skywalk.webp",
@@ -4169,28 +4276,28 @@
       "page": "https://chaincc.lol/free/players/Strix"
     },
     "Tabe": {
-      "img": "coach-tabe.webp",
-      "v": "700bbdad",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/tabe.webp",
-      "page": "https://chaincc.lol/free/players/Tabe"
+      "img": "coach-tabe-2609.webp",
+      "v": "58e3c864",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/f/fc/AL_Tabe_2024_Split_1.png/revision/latest?cb=20240319140612",
+      "page": "https://lol.fandom.com/wiki/File:AL_Tabe_2024_Split_1.png"
     },
     "Thinkcard": {
-      "img": "coach-thinkcard.webp",
-      "v": "c4711c3d",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/thinkcard.webp",
-      "page": "https://chaincc.lol/free/players/Thinkcard"
+      "img": "coach-thinkcard-2609.webp",
+      "v": "a904a794",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/5/51/CLG_Thinkcard_2023_Split_1.png/revision/latest?cb=20230121032211",
+      "page": "https://lol.fandom.com/wiki/File:CLG_Thinkcard_2023_Split_1.png"
     },
     "cvMax": {
-      "img": "coach-cvmax.webp",
-      "v": "102fb4d9",
-      "source": "https://chaincc.lol/storage/leaguepedia/players/thumbs/cvmax.webp",
-      "page": "https://chaincc.lol/free/players/cvMax"
+      "img": "coach-cvmax-2609.webp",
+      "v": "35dfa778",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/b/bb/DK_CvMax_2026_Split_2.png/revision/latest?cb=20260430191530",
+      "page": "https://lol.fandom.com/wiki/File:DK_CvMax_2026_Split_2.png"
     },
     "kkOma": {
-      "img": "coach-kkoma.webp",
-      "v": "6c06c40e",
-      "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Kkoma_2025.jpg/250px-Kkoma_2025.jpg?utm_source=en.wikipedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail",
-      "page": "https://en.wikipedia.org/wiki/Kkoma"
+      "img": "coach-kkoma-2609.webp",
+      "v": "565cf7a1",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/e/e0/T1_kkOma_2025_Split_1.png/revision/latest?cb=20250119162803",
+      "page": "https://lol.fandom.com/wiki/File:T1_kkOma_2025_Split_1.png"
     },
     "Pockus": {
       "img": "review-20260922-Pockus.webp",
@@ -4199,22 +4306,22 @@
       "page": "https://chaincc.lol/free/players/Pockus"
     },
     "SSONG": {
-      "img": "review-20260922-SSONG.webp",
-      "v": "9480fc5b",
-      "source": "https://static.invenglobal.com/upload/image/2017/03/01/i1488357182721748.jpeg",
-      "page": "https://www.invenglobal.com/articles/1194/coach-ssong-leaves-longzhu-gaming"
+      "img": "coach-ssong-2609.webp",
+      "v": "a511c64f",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/2/2f/DRX_Ssong_2025_Split_1.png/revision/latest?cb=20250121135326",
+      "page": "https://lol.fandom.com/wiki/File:DRX_Ssong_2025_Split_1.png"
     },
     "Homme": {
-      "img": "review-20260922-Homme.webp",
-      "v": "e7ffd902",
-      "source": "https://cdn.oneesports.gg/wp-content/uploads/2023/11/LeagueOfLegends_Worlds2023_Quarterfinals_JDGaming_Homme_Smiling-1024x576.jpg",
-      "page": "https://www.oneesports.gg/league-of-legends/jdg-coach-homme-worlds-2023/"
+      "img": "coach-homme-2609.webp",
+      "v": "0f9545b2",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/a/a5/HLE_Homme_2026_Split_1.png/revision/latest?cb=20260112164233",
+      "page": "https://lol.fandom.com/wiki/File:HLE_Homme_2026_Split_1.png"
     },
     "Mafa": {
-      "img": "review-20260922-Mafa.webp",
-      "v": "10d6c853",
-      "source": "https://static.invenglobal.com/upload/image/2018/11/13/i1542175660713635.jpeg",
-      "page": "https://www.invenglobal.com/articles/6731/igs-2-coaches-becoming-legends-in-6-months-head-coach-kim-and-coach-mafa-on-rebuilding-the-team"
+      "img": "coach-mafa-2609.webp",
+      "v": "49d8102e",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/4/4e/IG_Mafa_2025_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:IG_Mafa_2025_Split_1.png"
     },
     "WarHorse": {
       "img": "review-20260922-WarHorse.webp",
@@ -4223,10 +4330,10 @@
       "page": "https://focustaiwan.tw/sports/202609140016"
     },
     "bonO": {
-      "img": "portrait-c-bonO-20260923.webp",
-      "v": "5097d191",
-      "source": "https://media.trackingthepros.com/profile/p701.png",
-      "page": "https://lol.fandom.com/wiki/Bon0"
+      "img": "coach-bono-2609.webp",
+      "v": "da3fd576",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/8/83/NS.EA_bon0_2025_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:NS.EA_bon0_2025_Split_1.png"
     },
     "Guilhoto": {
       "img": "portrait-c-Guilhoto-20260923.webp",
@@ -4301,9 +4408,310 @@
       "page": "https://vitality.gg/pages/athletes/milan"
     },
     "Tockers": {
-      "img": "portrait-c-Tockers-20260923.webp",
-      "v": "d0af17c4",
-      "source": "https://s2.glbimg.com/lU264Wc1TIzBsLYPeTI3f6e5vqo=/514x40:1234x900/380x454/s.glbimg.com/es/ge/f/original/2016/12/04/tockers_.jpg"
+      "img": "coach-tockers-2609.webp",
+      "v": "38eabe8d",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/5/56/RED_tockers_2025_Split_3.jpg/revision/latest?cb=20250727174759",
+      "page": "https://lol.fandom.com/wiki/File:RED_tockers_2025_Split_3.jpg",
+      "crop": [
+        250,
+        150,
+        2515,
+        2415
+      ]
+    },
+    "BigWei": {
+      "img": "coach-bigwei-2609.webp",
+      "v": "15d51401",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/f/fc/BLG_BigWei_2025_Split_3.png/revision/latest?cb=20251122162827",
+      "page": "https://lol.fandom.com/wiki/File:BLG_BigWei_2025_Split_3.png"
+    },
+    "Maokai": {
+      "img": "coach-maokai-2609.webp",
+      "v": "46a39c12",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/6/6f/EDG_Maokai_2022_Split_2.png/revision/latest?cb=20221209141141",
+      "page": "https://lol.fandom.com/wiki/File:EDG_Maokai_2022_Split_2.png"
+    },
+    "Maizijian": {
+      "img": "coach-maizijian-2609.webp",
+      "v": "06556dd9",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/0/06/NIP_Maizijian_2026_Split_1.png/revision/latest?cb=20260113165911",
+      "page": "https://lol.fandom.com/wiki/File:NIP_Maizijian_2026_Split_1.png"
+    },
+    "Yondaime": {
+      "img": "coach-yondaime-2609.webp",
+      "v": "09fc648d",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/d/db/FPB_yondaime_2023_Split_1.png/revision/latest?cb=20230212100653",
+      "page": "https://lol.fandom.com/wiki/File:FPB_yondaime_2023_Split_1.png"
+    },
+    "NoName": {
+      "img": "coach-noname-2609.webp",
+      "v": "c87043af",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/8/81/OMG_NONAME_2022_Split_2.png/revision/latest?cb=20221209142714",
+      "page": "https://lol.fandom.com/wiki/File:OMG_NONAME_2022_Split_2.png"
+    },
+    "Yuzhang": {
+      "img": "coach-yuzhang-2609.webp",
+      "v": "80ac5acd",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/7/76/UP_Yuzhang_2026_Split_1.png/revision/latest?cb=20251212193606",
+      "page": "https://lol.fandom.com/wiki/File:UP_Yuzhang_2026_Split_1.png"
+    },
+    "Edo": {
+      "img": "coach-edo-2609.webp",
+      "v": "e42b5b35",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/6/61/FOX.Y_Edo_2024_Split_1.png/revision/latest?cb=20250622070956",
+      "page": "https://lol.fandom.com/wiki/File:FOX.Y_Edo_2024_Split_1.png"
+    },
+    "Ggoong": {
+      "img": "coach-ggoong-2609.webp",
+      "v": "e9df77c6",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/e/ea/GEN_Ggoong_2021_Split_1.png/revision/latest?cb=20210207000758",
+      "page": "https://lol.fandom.com/wiki/File:GEN_Ggoong_2021_Split_1.png"
+    },
+    "Striker": {
+      "img": "coach-striker-2609.webp",
+      "v": "63c10b64",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/17/SHFT_Striker_2026_Split_1.png/revision/latest?cb=20260117110406",
+      "page": "https://lol.fandom.com/wiki/File:SHFT_Striker_2026_Split_1.png"
+    },
+    "Ido": {
+      "img": "coach-ido-2609.webp",
+      "v": "5020e1f0",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/8/89/UCI_ido_2018.png/revision/latest?cb=20210115201853",
+      "page": "https://lol.fandom.com/wiki/File:UCI_ido_2018.png"
+    },
+    "Guchi": {
+      "img": "coach-guchi-2609.webp",
+      "v": "77a4fe40",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/b/b3/LEV_Gankkkk_LTA_2025_Split_1.png/revision/latest?cb=20250213185431",
+      "page": "https://lol.fandom.com/wiki/File:LEV_Gankkkk_LTA_2025_Split_1.png"
+    },
+    "RapidStar": {
+      "img": "coach-rapidstar-2609.webp",
+      "v": "a1941b94",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/0/02/DNF_RapidStar_2025_Split_2.png/revision/latest?cb=20250704154811",
+      "page": "https://lol.fandom.com/wiki/File:DNF_RapidStar_2025_Split_2.png"
+    },
+    "Woong": {
+      "img": "coach-woong-2609.webp",
+      "v": "ed6a24ff",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/2/23/DK.C_Woong_2026_Split_2.png/revision/latest?cb=20260430191842",
+      "page": "https://lol.fandom.com/wiki/File:DK.C_Woong_2026_Split_2.png"
+    },
+    "Sensation": {
+      "img": "coach-sensation-2609.webp",
+      "v": "83313e28",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/4/45/HLE.C_Sensation_2025_Split_1.png/revision/latest?cb=20250121142118",
+      "page": "https://lol.fandom.com/wiki/File:HLE.C_Sensation_2025_Split_1.png"
+    },
+    "Spark": {
+      "img": "coach-spark-2609.webp",
+      "v": "4a06a8df",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/1f/KT.C_Spark_2025_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:KT.C_Spark_2025_Split_1.png"
+    },
+    "Collamer": {
+      "img": "coach-collamer-2609.webp",
+      "v": "4d417ab1",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/f/fb/BrandonCollamerProfile.jpg/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:BrandonCollamerProfile.jpg",
+      "crop": [
+        650,
+        100,
+        1850,
+        1300
+      ]
+    },
+    "Artemis": {
+      "img": "coach-artemis-2609.webp",
+      "v": "d59df982",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/d/d5/WU_Artemis_2023.jpg/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:WU_Artemis_2023.jpg",
+      "crop": [
+        700,
+        250,
+        3130,
+        2680
+      ]
+    },
+    "Naruterador": {
+      "img": "coach-naruterador-2609.webp",
+      "v": "be37cf70",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/16/HRTS_Naruterador_2024_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:HRTS_Naruterador_2024_Split_1.png"
+    },
+    "Viser1on": {
+      "img": "coach-viser1on-2609.webp",
+      "v": "7e148f0b",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/c/ca/NSR_Viser1on_2021_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:NSR_Viser1on_2021_Split_1.png"
+    },
+    "Hellombre": {
+      "img": "coach-hellombre-2609.webp",
+      "v": "e4230e22",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/0/0f/ViV_Hellombre_2023.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:ViV_Hellombre_2023.png"
+    },
+    "Endless": {
+      "img": "coach-endless-2609.webp",
+      "v": "711081f0",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/e/e5/RA_Endless_2021_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:RA_Endless_2021_Split_1.png"
+    },
+    "Doran": {
+      "img": "coach-doran-2609.webp",
+      "v": "b5876e51",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/9/97/NERD_Doran_2026_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:NERD_Doran_2026_Split_1.png"
+    },
+    "Patron": {
+      "img": "coach-patron-2609.webp",
+      "v": "834a02f2",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/9/9c/INTZ_Patron_2026_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:INTZ_Patron_2026_Split_1.png",
+      "crop": [
+        0,
+        0,
+        1080,
+        1080
+      ]
+    },
+    "Medina": {
+      "img": "coach-medina-2609.webp",
+      "v": "4b0be23b",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/12/KBM_IDL_Medina_2025_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:KBM_IDL_Medina_2025_Split_1.png"
+    },
+    "Capivara": {
+      "img": "coach-capivara-2609.webp",
+      "v": "542660b0",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/4/45/Coach_capivara_2023.jpg/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:Coach_capivara_2023.jpg"
+    },
+    "Politico": {
+      "img": "coach-politico-2609.webp",
+      "v": "185fdc0a",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/12/FKL_Politico.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:FKL_Politico.png"
+    },
+    "Tom": {
+      "img": "coach-tom-2609.webp",
+      "v": "59a0dc2a",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/6/61/T1_Tom_2025_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:T1_Tom_2025_Split_1.png"
+    },
+    "Edgar": {
+      "img": "coach-edgar-2609.webp",
+      "v": "fee97af9",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/5/51/LNG_Edgar_2026_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:LNG_Edgar_2026_Split_1.png"
+    },
+    "oDin": {
+      "img": "coach-odin-2609.webp",
+      "v": "880b7d5d",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/9/94/GEN_oDin_2021_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:GEN_oDin_2021_Split_1.png"
+    },
+    "Shine": {
+      "img": "coach-shine-2609.webp",
+      "v": "8b7f518f",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/3/35/RA_Shine_2024_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:RA_Shine_2024_Split_1.png"
+    },
+    "Samyy": {
+      "img": "coach-samyy-2609.webp",
+      "v": "4a495137",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/e/e0/FX7M_Samyy_2025_Split_2.jpg/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:FX7M_Samyy_2025_Split_2.jpg"
+    },
+    "Arces": {
+      "img": "coach-arces-2609.webp",
+      "v": "c70f7737",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/e/ea/BDS_Arces_2024_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:BDS_Arces_2024_Split_1.png"
+    },
+    "Deam147": {
+      "img": "coach-deam147-2609.webp",
+      "v": "c207b3fc",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/4/4d/ISG_Deam_2024_Opening.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:ISG_Deam_2024_Opening.png"
+    },
+    "Lanterninho": {
+      "img": "coach-lanterninho-2609.webp",
+      "v": "001a4581",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/a/a2/SCCP_Lanterninho_2025_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:SCCP_Lanterninho_2025_Split_1.png"
+    },
+    "Liet": {
+      "img": "coach-liet-2609.webp",
+      "v": "b21ffe5a",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/1f/IG_Liet_2022_Split_2.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:IG_Liet_2022_Split_2.png"
+    },
+    "Millimas": {
+      "img": "coach-millimas-2609.webp",
+      "v": "72aa48bf",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/4/44/KDF_Millimas_2024_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:KDF_Millimas_2024_Split_1.png"
+    },
+    "Scartie": {
+      "img": "coach-scartie-2609.webp",
+      "v": "141017b5",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/d/d3/ECG_Scartie_2025_Split_2.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:ECG_Scartie_2025_Split_2.png"
+    },
+    "SrVenancio": {
+      "img": "coach-srvenancio-2609.webp",
+      "v": "8ae39f18",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/5/5f/LOUD_SrVenancio_2024_Split_2.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:LOUD_SrVenancio_2024_Split_2.png"
+    },
+    "Suga": {
+      "img": "coach-suga-2609.webp",
+      "v": "a7ba224f",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/d/d2/MVKE_Suga_2025_Split_1.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:MVKE_Suga_2025_Split_1.png"
+    },
+    "Zuko": {
+      "img": "coach-zuko-2609.webp",
+      "v": "a25aedf3",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/2/29/MVKA_Zuko_VCS_2026_Spring_Playoffs.png/revision/latest",
+      "page": "https://lol.fandom.com/wiki/File:MVKA_Zuko_VCS_2026_Spring_Playoffs.png",
+      "crop": [
+        0,
+        0,
+        1160,
+        1160
+      ]
+    },
+    "Moonblack": {
+      "img": "coach-moonblack-2609.webp",
+      "v": "e8dac3e2",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/17/IMP_MoonBlack_2021_PCS_Summer.png/revision/latest?cb=20210704180521",
+      "page": "https://lol.fandom.com/wiki/File:IMP_MoonBlack_2021_PCS_Summer.png"
+    },
+    "Dopil": {
+      "img": "coach-dopil-2609.webp",
+      "v": "fa7f67ce",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/9/9e/WNS_Mareritt_2019_Split_1.jpg/revision/latest?cb=20190121042911",
+      "page": "https://lol.fandom.com/wiki/File:WNS_Mareritt_2019_Split_1.jpg",
+      "crop": [
+        100,
+        20,
+        400,
+        320
+      ]
+    },
+    "Medusa": {
+      "img": "coach-medusa-2609.webp",
+      "v": "b835c19d",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/1/17/OMD_Medusa_2019_Split_1.png/revision/latest?cb=20190226222712",
+      "page": "https://lol.fandom.com/wiki/File:OMD_Medusa_2019_Split_1.png"
+    },
+    "IWDominate": {
+      "img": "coach-iwdominate-2609.webp",
+      "v": "f0976a53",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/e/e2/C9_Dom.png/revision/latest?cb=20201215013401",
+      "page": "https://lol.fandom.com/wiki/File:C9_Dom.png"
     }
   },
   "legends": {

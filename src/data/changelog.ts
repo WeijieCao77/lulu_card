@@ -26,6 +26,11 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-09-28', title: '照片补全', changes: [
+    { kind: '调整', text: '教练卡照片补全到 117/127 张：新增 47 张原来没有照片的教练和分析师照片；当过职业选手的教练（如 Clearlove、Score、Ryu、DanDy、Homme）换成执教时期的照片，不再用选手时期的定妆照。实在没有执教照片的少数几位（如 Perkz、Nukeduck、IWDominate）暂用选手或主播时期的照片。（玩家反馈）' },
+    { kind: '调整', text: '补上 11 张选手照片（Tyrion、sorrow、Solid、Hakari 等），选手卡照片覆盖 624/677。' },
+  ],
+}, {
   date: '2026-09-28', title: '教练卡重评', changes: [
     { kind: '调整', text: '教练卡评分加入执教履历：执教拿过世界赛、MSI 或顶级联赛冠军的教练有履历底分（世界冠军最重，助教身份减半），和本赛季带队表现取较高的一个。kkOma 81 → 90，Homme、Tabe、Daeny、SSONG、GrabbZ、Score 等冠军教头都升到金卡。三项能力同步提高，比赛里的教练加成跟着变。（玩家反馈）' },
     { kind: '调整', text: '教练卡的金银铜和选手卡统一：金卡 84–90、银卡 72–83、铜卡 71 及以下，普通卡最高 90。原来 78–83 分、没有冠军履历的教练由金卡改为银卡。' },
