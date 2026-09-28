@@ -14,8 +14,11 @@
  * 噜噜卡's player (owner, 2026-09-27: as 开瓦包's, with music the owner will choose).
  * Not live yet: on only in the local dev build (npm run dev). The production build
  * drops it entirely. To launch, set this to true and replace TRACKS below with the
- * owner's music (files in public/music, m4a) — the ones below are 开瓦包's
- * VALORANT placeholders, only for trying the player out.
+ * owner's music (files in public/music, m4a).
+ *
+ * Empty since 2026-09-28: 开瓦包's VALORANT placeholder files were being copied into the production
+ * build (never played, but publicly served), so the owner had them removed until the real music
+ * arrives. With no tracks the player does not render, even in the dev build.
  */
 export const MUSIC_ENABLED: boolean = typeof import.meta.env !== 'undefined' && import.meta.env.DEV === true
 
@@ -26,11 +29,4 @@ export interface Track {
   file: string
 }
 
-export const TRACKS: Track[] = [
-  { id: 'die-for-you', title: 'Die For You', artist: 'VALORANT · Grabbitz', file: 'music/die-for-you.m4a?v=2' },
-  { id: 'when-the-world-ends', title: 'When the World Ends', artist: 'VALORANT · Raiden · jeonghyeon', file: 'music/when-the-world-ends.m4a?v=2' },
-  { id: 'ticking-away', title: 'Ticking Away', artist: 'VALORANT · Grabbitz · bbno$', file: 'music/ticking-away.m4a?v=2' },
-  { id: 'superpower', title: 'SUPERPOWER', artist: 'VALORANT · KISS OF LIFE · 段宜恩', file: 'music/superpower.m4a?v=2' },
-  { id: 'la-lumiere', title: 'La Lumière', artist: 'VALORANT · WILLIM缪维霖 · 贺仙人', file: 'music/la-lumiere.m4a?v=2' },
-  { id: 'break-in', title: 'Break In (Strings Remix)', artist: 'Layla', file: 'music/break-in.m4a?v=1' },
-]
+export const TRACKS: Track[] = []
