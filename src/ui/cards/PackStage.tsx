@@ -200,7 +200,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
       <button className="ritual-dismiss" onClick={onDone} disabled={busy} aria-label="收下卡牌并关闭">✕</button>
     </header>
 
-    {phase !== 'cards' ? <PackAltar count={pulled.length} bursting={phase === 'burst'} onOpen={openPack} seal={<Seal />} /> : <div className={`ritual-board count-${pulled.length}${scrollMode ? ' is-scroll' : ''}`} ref={board} inert={inspect !== null || mythics.length > 0}
+    {phase !== 'cards' ? <PackAltar count={pulled.length} packName={title} bursting={phase === 'burst'} onOpen={openPack} seal={<Seal />} /> : <div className={`ritual-board count-${pulled.length}${scrollMode ? ' is-scroll' : ''}`} ref={board} inert={inspect !== null || mythics.length > 0}
       style={{ '--card-width': `${layout.width}px`, '--card-scale': layout.width / 184, '--columns': layout.columns } as CSSProperties}
       onPointerDown={e => {
         if (mythicBusy.current) return

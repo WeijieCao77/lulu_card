@@ -92,26 +92,47 @@
 @media(pointer:coarse){.ritual-touch-hint{display:inline}.ritual-desktop-hint{display:none}.ritual-stage button{min-height:44px}.ritual-stage .ritual-card,.ritual-stage .ritual-pack{min-height:0}}
 @media(max-height:500px) and (min-width:600px){.ritual-stage{padding:12px 24px}.ritual-header h2{font-size:16px;margin-top:3px}.ritual-footer{flex-direction:row;justify-content:center;gap:30px;padding-top:0}.ritual-progress{min-height:0}.ritual-detail{padding:12px}.ritual-detail-card{flex-direction:row;flex-wrap:wrap;justify-content:center}.ritual-detail-card>.cardface{width:160px!important}.ritual-detail-card>.ritual-eyebrow{display:none}.ritual-open-hint{bottom:0}}
 /* A real drop target: the unopened pack begins off the altar. */
-.altar-opening{--altar-x:66%;--altar-y:43%;--source-x:23%;--source-y:51%;--altar-size:min(290px,35vw,55vh);--pack-size:min(165px,22vw,28vh);touch-action:none}
+.altar-opening{--altar-x:65%;--altar-y:43%;--source-x:24%;--source-y:52%;--altar-size:min(350px,39vw,61vh);--pack-size:min(200px,23vw,35vh);touch-action:none}
 .altar-dropzone,.altar-drop-burst{position:absolute;left:var(--altar-x);top:var(--altar-y);width:var(--altar-size);aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none}
-.altar-drop-rings{position:absolute;inset:0;border-radius:50%;background:radial-gradient(#639f9b22,transparent 68%);transition:filter .25s,background .25s}
-.altar-drop-rings i{position:absolute;inset:0;border-radius:50%;border:2px solid #9bbeb375;box-shadow:0 0 16px #83dccc1c,inset 0 0 16px #83dccc1c}
-.altar-drop-rings i:nth-child(2){inset:9%;border-style:dashed;animation:ritual-ring 45s linear infinite}.altar-drop-rings i:nth-child(3){inset:20%;border-color:#cbb57e66;transform:rotate(45deg);border-radius:20%}
-.altar-drop-rings>span{position:absolute;inset:0;display:grid;place-items:center;font-size:46px;color:#b2d2bc88;text-shadow:0 0 20px #99ffe5}
-.altar-drop-label{position:absolute;top:108%;width:100%;text-align:center;color:#b6caba;font-size:12px;letter-spacing:.1em}
-.is-over .altar-drop-rings{filter:drop-shadow(0 0 22px #a4f5cc);background:radial-gradient(#7ecea46b,transparent 70%)}.is-over .altar-drop-label{color:#f2dfad}
-.altar-pack-source{position:absolute;left:var(--source-x);top:var(--source-y);width:var(--pack-size);aspect-ratio:.69;transform:translate(-50%,-50%)}
+.altar-plinth{position:absolute;inset:0;filter:drop-shadow(0 25px 22px #000b)}
+.altar-plinth-wall,.altar-plinth-top{position:absolute;inset:7%;clip-path:polygon(29% 0,71% 0,100% 29%,100% 71%,71% 100%,29% 100%,0 71%,0 29%)}
+.altar-plinth-wall{transform:translateY(17px);background:linear-gradient(145deg,#a79060 0%,#514831 20%,#101c20 53%,#87714b 85%,#282a27);box-shadow:inset 0 -12px 18px #030608}
+.altar-plinth-top{overflow:hidden;background:radial-gradient(circle at 50% 48%,#214249 0 18%,#10252b 19% 38%,#314746 39%,#99805a 40%,#263638 42% 54%,#b69a64 55%,#17272b 57% 66%,#91754a 67%,#111a1d 69%);border:2px solid #b89b65;box-shadow:inset 0 0 0 6px #1b292b,inset 0 0 0 8px #7b6848,inset 0 0 35px #02090d}
+.altar-plinth-top:before,.altar-plinth-top:after{content:"";position:absolute;inset:11%;clip-path:polygon(29% 0,71% 0,100% 29%,100% 71%,71% 100%,29% 100%,0 71%,0 29%);border:1px solid #d1b87880;pointer-events:none}
+.altar-plinth-top:after{inset:21%;border-color:#70aead66;transform:rotate(45deg);box-shadow:0 0 17px #68d5cc30}
+.altar-plinth-inset{position:absolute;inset:24%;border-radius:50%;background:radial-gradient(circle,#102b31 0 31%,#294d4e 45%,#0b1c20 67%,#bca879 69%,#1b3335 73%);box-shadow:inset 0 10px 22px #02090bbb,0 0 19px #8de1d234}
+.altar-channel{position:absolute;left:10%;right:10%;top:50%;height:2px;background:linear-gradient(90deg,transparent,#ccad7140 25%,#a5eee4ad 50%,#ccad7140 75%,transparent);box-shadow:0 0 9px #8bdcd080}.altar-channel.vertical{transform:rotate(90deg)}
+.altar-rune{position:absolute;color:#f3d5a0;font-size:clamp(13px,2vw,22px);text-shadow:0 0 12px #f3d5a0}.rune-n{top:13%;left:calc(50% - .5em)}.rune-e{right:15%;top:calc(50% - .5em)}.rune-s{bottom:13%;left:calc(50% - .5em)}.rune-w{left:15%;top:calc(50% - .5em)}
+.altar-core{position:absolute;inset:33%;border:1px solid #c5b17e;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#356265 0,#142e34 62%,#08191f 100%);box-shadow:inset 0 0 24px #75c9ba60,0 0 15px #9be9cb60;z-index:1}
+.altar-core-mark{display:block;width:64%;color:#e9dbb1;filter:drop-shadow(0 0 7px #e0c783)}.altar-core-mark svg{display:block;width:100%}
+.altar-charge{position:absolute;inset:28%;border-radius:50%;border:2px solid #8debdc70;box-shadow:0 0 15px #8debdc55,inset 0 0 15px #8debdc55;opacity:.25;animation:altar-idle 3.2s ease-in-out infinite}
+.altar-drop-label{position:absolute;top:107%;width:100%;text-align:center;color:#c6bc9d;font-size:12px;letter-spacing:.17em;text-shadow:0 2px 8px #000}
+.is-over .altar-charge,.is-placed .altar-charge{opacity:1;animation:altar-awaken .6s ease-in-out infinite alternate}.is-over .altar-core,.is-placed .altar-core{box-shadow:inset 0 0 30px #a4f9e7,0 0 30px #a2f1d7}.is-over .altar-drop-label{color:#f2dfad}
+.altar-pack-source{position:absolute;left:var(--source-x);top:var(--source-y);width:var(--pack-size);aspect-ratio:.8;transform:translate(-50%,-50%)}
 .altar-pack-carrier{width:100%;height:100%;transform:translate(var(--drag-x),var(--drag-y));transition:transform .38s cubic-bezier(.2,.8,.2,1)}
 .is-dragging .altar-pack-carrier{transition:none}
-.ritual-stage .altar-opening .ritual-pack{width:100%;height:100%;animation:none;transform:rotate(-9deg);transition:transform .25s;touch-action:none;user-select:none;cursor:grab}
+.ritual-stage .altar-opening .ritual-pack{width:100%;height:100%;aspect-ratio:.8;animation:none;transform:rotate(-8deg);transition:transform .25s;touch-action:none;user-select:none;cursor:grab}
 .ritual-stage .altar-opening.is-dragging .ritual-pack{transform:rotate(3deg) scale(1.07);cursor:grabbing;filter:drop-shadow(0 20px 20px #0009) drop-shadow(0 0 14px #88efcf44)}
 .ritual-stage .altar-opening.is-placed .ritual-pack{transform:rotate(0deg);transition:transform .3s}
-.altar-drag-path{position:absolute;left:41%;top:49%;color:#b6c7a584;display:flex;gap:18px;font-size:27px;pointer-events:none}.altar-drag-path b{transform:rotate(90deg);font-weight:400}
+.altar-opening .ritual-pack-half{inset:3% 5%;border-radius:8px 8px 15px 15px;background:linear-gradient(112deg,#314f4b,#11292d 18%,#234d51 47%,#0c2229 72%,#49605a);border:2px solid #bfa779;box-shadow:inset 0 0 0 3px #0b2025,inset 0 0 0 5px #9d8052,inset 15px 0 25px #86c6bc24,inset -13px 0 25px #0009,0 6px 0 #15282a}
+.altar-opening .ritual-pack-half:before{inset:8% 8%;border:1px solid #c9b78290;border-radius:4px;background:repeating-linear-gradient(115deg,#ffffff0d 0 1px,transparent 1px 18px)}
+.altar-opening .ritual-pack-half:after{left:-30%;right:-30%;top:43%;height:20%;transform:rotate(-20deg);background:linear-gradient(90deg,transparent,#d4bc7e55,transparent);border:0;opacity:.55}
+.ritual-pack-side{position:absolute;top:6%;bottom:7%;width:7%;background:repeating-linear-gradient(180deg,#bba471 0 2px,#344948 2px 5px,#0d2529 5px 8px);border-inline:1px solid #bfa878;box-shadow:inset 0 0 8px #061317;z-index:2}.ritual-pack-side.left{left:1%;transform:skewY(-5deg)}.ritual-pack-side.right{right:1%;transform:skewY(5deg)}
+.ritual-pack-crimp{position:absolute;left:0;right:0;height:10%;z-index:4;border:1px solid #dcc890;background:repeating-linear-gradient(90deg,#d1b77e 0 3px,#516b65 3px 6px,#192e32 6px 9px);box-shadow:inset 0 2px 3px #fff5,0 5px 5px #0008}.ritual-pack-crimp.top{top:0;clip-path:polygon(0 0,100% 0,100% 65%,96% 82%,88% 68%,79% 83%,68% 68%,56% 83%,44% 68%,32% 83%,20% 68%,10% 83%,0 65%)}.ritual-pack-crimp.bottom{bottom:0;transform:rotate(180deg);clip-path:polygon(0 0,100% 0,100% 65%,96% 82%,88% 68%,79% 83%,68% 68%,56% 83%,44% 68%,32% 83%,20% 68%,10% 83%,0 65%)}
+.ritual-pack-foil{position:absolute;inset:13% 13%;z-index:2;pointer-events:none;border:1px solid #d5bf8b88;background:linear-gradient(155deg,#d9cba513,transparent 30%,#b0e8df17 48%,transparent 65%,#d9cba513);box-shadow:inset 0 0 0 3px #0d202877}
+.ritual-pack-kicker{position:absolute;top:17%;left:0;width:100%;z-index:3;color:#d7c79d;font:600 clamp(5px,.75vw,9px)/1.2 Georgia,serif;letter-spacing:.11em;text-shadow:0 2px 2px #000}
+.altar-opening .ritual-pack-seal{top:29%;left:32%;width:36%;z-index:3;filter:drop-shadow(0 2px 0 #15201f) drop-shadow(0 0 10px #e1ce87)}
+.altar-opening .ritual-pack-title{bottom:23%;font-family:inherit;font-size:clamp(16px,2vw,25px);z-index:3;letter-spacing:.15em;text-shadow:0 3px 5px #000,0 0 12px #b8a87955}
+.altar-opening .ritual-pack-count{bottom:15%;z-index:3;font-size:clamp(6px,.8vw,10px);letter-spacing:.07em;color:#e0d2b5}
+.ritual-pack-shadow{position:absolute;inset:6% 3% 0;z-index:-1;background:#020b0e;filter:blur(10px);transform:translate(9px,12px)}
+.altar-drag-path{position:absolute;left:41%;top:49%;color:#b6c7a584;display:flex;gap:18px;font-size:27px;pointer-events:none}.altar-drag-path b{font-weight:400}
 .is-dragging .altar-drag-path,.is-placed .altar-drag-path{opacity:0}.is-placed .altar-drop-label{opacity:0}
 .altar-drop-burst .ritual-burst{top:50%}
 .phase-burst .altar-opening .ritual-pack-half.left{animation-delay:.65s}.phase-burst .altar-opening .ritual-pack-half.right{animation-delay:.65s}
-.phase-burst .altar-opening .ritual-pack-seal,.phase-burst .altar-opening .ritual-pack-title,.phase-burst .altar-opening .ritual-pack-count{animation-delay:.62s}
+.phase-burst .altar-opening .ritual-pack-seal,.phase-burst .altar-opening .ritual-pack-title,.phase-burst .altar-opening .ritual-pack-count,.phase-burst .altar-opening .ritual-pack-side,.phase-burst .altar-opening .ritual-pack-crimp,.phase-burst .altar-opening .ritual-pack-foil,.phase-burst .altar-opening .ritual-pack-kicker{animation:ritual-seal-release .45s .62s both}
 .phase-burst .altar-opening .ritual-burst:before{animation-delay:.6s}.phase-burst .altar-opening .ritual-burst i{animation-delay:.65s}
+@keyframes altar-idle{0%,100%{opacity:.15;transform:scale(.95)}50%{opacity:.43;transform:scale(1.04)}}
+@keyframes altar-awaken{from{transform:scale(.96)}to{transform:scale(1.08)}}
 /* Mythic-only scene, mounted once for each newly flipped mythic card. */
 .mythic-entrance{position:absolute;inset:0;z-index:20;isolation:isolate;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#080716f5;color:#f4e5ff}
 .mythic-cosmos{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 50% 47%,#42306399,transparent 63%)}
@@ -135,7 +156,8 @@
 @keyframes mythic-particle{0%{opacity:0;transform:rotate(var(--angle)) translateY(40px)}15%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateY(440px) rotate(100deg)}}
 @keyframes mythic-card-arrive{0%{opacity:0;transform:scale(.25) rotateY(120deg) translateY(40px)}30%{opacity:0;transform:scale(.45) rotateY(95deg)}65%{opacity:1;transform:scale(1.07) rotateY(-7deg)}100%{opacity:1;transform:scale(1) rotateY(0)}}
 @keyframes mythic-word{from{opacity:0;transform:translateY(15px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
-@media(max-width:650px){.altar-opening{--altar-x:50%;--altar-y:27%;--source-x:50%;--source-y:70%;--altar-size:min(210px,49vw,29vh);--pack-size:min(128px,29vw,21vh)}.altar-drag-path{left:calc(50% - 7px);top:48%;flex-direction:column;gap:1px;font-size:17px}.altar-drag-path span{display:none}.altar-drag-path b{transform:none}.altar-drop-label{font-size:10px}.altar-opening .ritual-open-hint{bottom:0}.mythic-spotlight{gap:12px;padding:50px 16px 20px}.mythic-announcement h2{font-size:23px}.mythic-hero-card{width:min(230px,57vw,31vh)}}
+@media(max-width:650px){.altar-opening{--altar-x:50%;--altar-y:29%;--source-x:50%;--source-y:72%;--altar-size:min(245px,65vw,34vh);--pack-size:min(158px,39vw,24vh)}.altar-drag-path{left:calc(50% - 7px);top:50%;flex-direction:column;gap:1px;font-size:17px}.altar-drag-path span{display:none}.altar-drag-path b{transform:rotate(90deg)}.altar-drop-label{font-size:10px}.altar-opening .ritual-pack-kicker{font-size:clamp(5px,1.5vw,7px);letter-spacing:.04em;white-space:nowrap}.altar-opening .ritual-pack-title{font-size:18px}.altar-opening .ritual-pack-count{font-size:7px}.altar-opening .ritual-open-hint{bottom:0}.mythic-spotlight{gap:12px;padding:50px 16px 20px}.mythic-announcement h2{font-size:23px}.mythic-hero-card{width:min(230px,57vw,31vh)}}
+@media(max-width:650px) and (max-height:740px){.altar-opening{--altar-y:22%;--source-y:68%;--altar-size:min(180px,47vw,30vh);--pack-size:min(115px,32vw,20vh)}.altar-drag-path{display:none}.altar-opening .ritual-pack-title{font-size:15px}.altar-opening .ritual-pack-count{font-size:6px}.altar-drop-label{top:105%}.altar-opening .ritual-open-hint{gap:4px}.altar-opening .ritual-open-hint b{font-size:12px}}
 @media(max-height:500px) and (min-width:600px){.mythic-spotlight{display:grid;grid-template-columns:180px 220px;gap:16px 24px;overflow:visible;padding:14px}.mythic-hero-card{grid-column:1;grid-row:1/4;width:min(180px,47vh)}.mythic-announcement,.mythic-identity,.mythic-continue{grid-column:2}.altar-opening{--pack-size:25vh;--altar-size:42vh}}
 @media(prefers-reduced-motion:reduce){.ritual-stage *,.ritual-stage *:before,.ritual-stage *:after{animation:none!important;transition:none!important}.ritual-dust,.ritual-burst,.ritual-flip-sparks,.mythic-pillar,.mythic-shockwave,.mythic-cosmos>i{display:none}.ritual-flipper{transform:none!important}.ritual-card-front{transform:none}.ritual-card:not(.is-revealed) .ritual-card-front{visibility:hidden}.ritual-card.is-revealed .ritual-card-back{visibility:hidden}}
 
