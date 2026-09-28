@@ -12,7 +12,6 @@ import { cardById } from '../../engine/cards'
 import { GAME_REGION_CN } from '../../engine/gameRegions'
 import { track } from '../../engine/telemetry'
 import PackStage from './PackStage'
-import DailyShop from './DailyShop'
 import SalvageConfirm from './SalvageConfirm'
 import type { SalvageAsk } from './SalvageConfirm'
 import { loadFastPack, saveFastPack } from './packPreferences'
@@ -221,7 +220,6 @@ export default function Packs() {
         </Panel>
       </div>
 
-      <DailyShop />
 
       <Panel
         title="卡包"

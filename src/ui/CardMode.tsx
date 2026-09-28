@@ -4,6 +4,7 @@ import PhoneGate from './cards/PhoneGate'
 import type { ComponentType } from 'react'
 import { CardCtx } from './cards/ctx'
 import Packs from './cards/Packs'
+import DailyShop from './cards/DailyShop'
 import WorldsGallery from './cards/WorldsGallery'
 import Pity from './cards/Pity'
 import Challenge from './cards/Challenge'
@@ -97,7 +98,7 @@ function StaminaChip({ g, onTick }: { g: GachaState; onTick: () => void }) {
 
 // grouped like 开瓦包's sidebar: `group` opens a new section and names it
 export const TABS: { key: string; label: string; beta?: boolean; group?: string }[] = [
-  { key: 'packs', label: '抽卡', group: '卡牌' }, { key: 'collection', label: '收藏' }, { key: 'squad', label: '卡组' },
+  { key: 'packs', label: '抽卡', group: '卡牌' }, { key: 'shop', label: '每日商店' }, { key: 'collection', label: '收藏' }, { key: 'squad', label: '卡组' },
   { key: 'ladder', label: '天梯', group: '赛事' }, { key: 'cup', label: '杯赛' },
   { key: 'worlds', label: '名人堂', group: '发现' }, { key: 'dossier', label: '图鉴' },
   { key: 'challenge', label: '挑战' }, { key: 'minigames', label: '小游戏' },
@@ -342,6 +343,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
   // away whatever the player had typed into it.
   const Screen = ({
     packs: Packs,
+    shop: DailyShop,
     mail: MailBox,
     worlds: WorldsGallery,
     challenge: Challenge,

@@ -9,6 +9,7 @@ import SquadScreen from '../ui/cards/Squad'
 import WorldsGallery from '../ui/cards/WorldsGallery'
 import Market from '../ui/cards/Market'
 import Packs from '../ui/cards/Packs'
+import DailyShopScreen from '../ui/cards/DailyShop'
 import { RiftNavigation } from '../ui/RiftChrome'
 import { TABS } from '../ui/CardMode'
 import Dossier from '../ui/Dossier'
@@ -35,6 +36,8 @@ const own = (cards: Card[]) => { for (const c of cards) g.cards[c.id] = { id: c.
 g.coins = 128_600; g.pulls = 420
 // the 每日商店 shelf the server would have rolled (view=packs)
 g.shop = rollShop(g as never, params.get('today') ?? '2026-09-28', 20260928)
+// view=shop: own two of the shelf's cards so the 「已有」 tags show beside the ones without
+if (view === 'shop') own(g.shop.slots.slice(1, 3).map((x: { cardId: string }) => cardById(x.cardId)!).filter(Boolean))
 if (view === 'team' || view === 'gallery') {
   const coach = COACH_CARDS.find(c => c.clubTag === tag && !c.legend)!
   const five = BASE_PLAYER_CARDS.filter(p => p.clubId === coach.clubId).slice(0, 5)
@@ -78,6 +81,7 @@ if (import.meta.env.DEV) createRoot(document.getElementById('root')!).render(
       {view === 'legends' ? <Legends /> : view === 'gallery' ? <WorldsGallery />
         : view === 'team' ? <div className="promo-team"><style>{'.promo-team > .panel:first-of-type { display: none }'}</style><SquadScreen /></div>
         : view === 'packs' ? <Packs />
+        : view === 'shop' ? <DailyShopScreen />
         : view === 'dossier' ? <Dossier playerId={null} onOpen={() => {}} />
         : view === 'cards' ? <div style={{ display: 'grid', gap: 18 }}>{(['lg', 'md', 'sm'] as const).map(size =>
             <div key={size} style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-start' }}>
@@ -85,7 +89,7 @@ if (import.meta.env.DEV) createRoot(document.getElementById('root')!).render(
                 <CardFace key={c!.id} card={c!} level={2} size={size} />)}
             </div>)}</div>
         : view === 'music' ? <div className="cardmode rift-ui" style={{ minHeight: 500 }}><MusicPlayer /></div>
-        : view === 'nav' ? <div className="cardmode rift-ui" style={{ width: 240 }}><RiftNavigation tabs={TABS} active="packs" onSelect={() => {}} /></div> : <Market />}
+        : view === 'nav' ? <div className="cardmode rift-ui" style={{ width: params.get('full') ? '100%' : 240 }}><RiftNavigation tabs={TABS} active="packs" onSelect={() => {}} /></div> : <Market />}
     </CardCtx.Provider>
   </main>)
 // ?at=<css selector>: scroll that part of the screen to the top before the screenshot is taken

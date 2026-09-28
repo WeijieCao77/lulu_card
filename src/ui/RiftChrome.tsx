@@ -44,6 +44,7 @@ export function RiftBanner({ page, owned, total }: RiftBannerProps) {
   if (page === 'worlds') return null
   const pages: Record<string, [string, string]> = {
     packs: ['召唤你的传奇', '一张卡，一个高光时刻。开启卡包，组建属于你的五人阵容。'],
+    shop: ['每日商店', '每天为你上架五张卡，北京时间零点刷新，想要哪张直接买。'],
     worlds: ['名人堂', '冠军时刻与赛区传奇，都在这一册。'],
     challenge: ['每日谜题', '辨认模糊图像里的选手、战队或英雄，用更少的猜测赢得奖励。'],
     minigames: ['峡谷训练营', '热热手，把反应、判断和操作练起来。'],
@@ -108,6 +109,7 @@ function getIcon(key: string): React.ReactNode {
   ladder:'M5 21V3m14 18V3M5 6h14M5 12h14M5 18h14',
   cup:'M7 3h10v7l-5 5-5-5V3zm0 2H3v4l4 3m10-7h4v4l-4 3m-5 3v5m-5 0h10',
   market:'M3 7h18l-2-4H5L3 7zm2 0v14h14V7M9 21v-8h6v8',
+  shop:'M5 8h14l-1 13H6L5 8zm4 0V6a3 3 0 0 1 6 0v2m-6 4h.1m5.9 0h.1',
   friends:'M9 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm-6 16v-3a6 6 0 0 1 12 0v3m2-16a3 3 0 0 1 0 6m1 3a4 4 0 0 1 3 4v3',
   collection:'M3 7h13v14H3V7zm5-4h13v14m-14-5h5m-5 4h5',
   squad:'M9 3h6v6H9V3zM2 15h7v6H2v-6zm13 0h7v6h-7v-6zm-3-6v3m-7 3v-3h14v3',
