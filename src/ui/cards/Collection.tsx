@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import RatingExplainer from '../RatingExplainer'
 import { honoursLine, honoursOf } from '../../engine/coachHonours'
+import CoachHonours from '../CoachHonours'
 import { useCards } from './ctx'
 import CardFace, { Flag, natName } from '../Card'
 import { Panel } from '../common'
@@ -377,7 +378,10 @@ export default function Collection() {
                         ? <>自由身教练{sel.titleClubs?.length ? ` · 夺冠俱乐部 ${titleClubTags(sel).join('、')}` : ''}</>
                         : <>{sel.clubTag ?? '自由身'} 的教练{sel.spec ? '组分析师' : ''}</>}
                       <br />战术 {sel.tactics} · 培养 {sel.development} · 激励 {sel.motivation}
-                      {honoursLine(honoursOf(sel.name)) && <><br />执教履历：{honoursLine(honoursOf(sel.name))}</>}
+                      {honoursLine(honoursOf(sel.name)) && <details style={{ marginTop: 4 }}>
+                        <summary>执教履历：{honoursLine(honoursOf(sel.name))}</summary>
+                        <CoachHonours name={sel.name} empty={false} />
+                      </details>}
                       <br />
                       <span className="tiny">{sel.free && sel.titleClubs?.length ? '带夺冠俱乐部或同赛区的选手时默契更高。' : '带同队或同赛区的选手时默契更高。'}</span>
                     </div>

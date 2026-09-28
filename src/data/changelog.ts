@@ -26,6 +26,12 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-09-28', title: '教练荣誉与资料修正', changes: [
+    { kind: '新增', text: '图鉴的教练页和卡牌详情里加入「执教荣誉」：逐条列出执教期间拿下的世界赛、MSI 和联赛冠军，助教身份单独标出。自由身教练会写明夺冠俱乐部，「团队身份」改为主教练 / 代理主教练 / 分析师 / 自由身。（玩家反馈）' },
+    { kind: '修复', text: 'MG（BFX）和 Nia（LNG）的国籍和本名被错配成了同 ID 的其他选手，已改正：MG 为韩国选手 이지훈，Nia 为中国选手邹广禄。MG 补上照片。' },
+    { kind: '修复', text: 'Solid、Revenge、Eclipse、Hype 等 10 名选手补上国籍和本名。' },
+  ],
+}, {
   date: '2026-09-28', title: '照片补全', changes: [
     { kind: '调整', text: '教练卡照片补全到 117/127 张：新增 47 张原来没有照片的教练和分析师照片；当过职业选手的教练（如 Clearlove、Score、Ryu、DanDy、Homme）换成执教时期的照片，不再用选手时期的定妆照。实在没有执教照片的少数几位（如 Perkz、Nukeduck、IWDominate）暂用选手或主播时期的照片。（玩家反馈）' },
     { kind: '调整', text: '补上 11 张选手照片（Tyrion、sorrow、Solid、Hakari 等），选手卡照片覆盖 624/677。' },

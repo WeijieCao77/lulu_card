@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react'
 import { WORLD_PLAYERS } from '../engine/world'
-import { WORLD_TEAMS } from '../engine/teams'
+import { WORLD_TEAMS, EXTRA_COACHES } from '../engine/teams'
 import { coachDossier, dossierOf, titleCount } from '../engine/dossier'
-import { BASE_PLAYER_CARDS, COACH_CARDS, LEGEND_CARDS, RARITY_CN } from '../engine/cards'
+import { BASE_PLAYER_CARDS, COACH_CARDS, LEGEND_CARDS, RARITY_CN, titleClubTags } from '../engine/cards'
+import { SPEC_CN } from '../engine/staff'
+import CoachHonours from './CoachHonours'
 import type { CoachCard, PlayerCard } from '../engine/cards'
 import CardFace, { Flag, natName } from './Card'
 import { Panel, Bar } from './common'
@@ -333,6 +335,14 @@ function PlayerDetail({ card, onBack }: { card: PlayerCard; onBack: () => void }
   )
 }
 
+/** What the person does now, in words: 主教练, 代理主教练, 分析师 · 专长, or 自由身. */
+function coachRole(card: CoachCard): string {
+  if (card.spec) return `分析师 · ${(SPEC_CN as Record<string, { label: string } | undefined>)[card.spec]?.label ?? card.spec}`
+  if (card.free) return '自由身（目前没有主教练岗位）'
+  if (EXTRA_COACHES.some((x) => x.coach.name === card.name)) return '代理主教练'
+  return '主教练'
+}
+
 function CoachDetail({ card, onBack }: { card: CoachCard; onBack: () => void }) {
   const club = card.clubId ? teamOf.get(card.clubId) : null
   const d = coachDossier(card.name) as unknown as Record<string, unknown> | undefined
@@ -355,10 +365,11 @@ function CoachDetail({ card, onBack }: { card: CoachCard; onBack: () => void }) 
               <Flag nat={card.nat} /> {natName(card.nat)}
               {card.region ? ` · ${REGION_CN[card.region]}` : ''}
               <br />
-              {club ? club.name : '暂无战队'}
-              {card.clubTag ? `（${card.clubTag}）` : ''}
+              {card.free
+                ? <>自由身{card.titleClubs?.length ? ` · 夺冠俱乐部 ${titleClubTags(card).join('、')}` : ''}</>
+                : <>{club ? club.name : '暂无战队'}{card.clubTag ? `（${card.clubTag}）` : ''}</>}
               <br />
-              {card.spec ? `团队身份：${card.spec}` : '团队身份未标注'}
+              {coachRole(card)}
               {' · '}{RARITY_CN[card.rarity]} {card.rating ?? '—'}
             </div>
             {card.legend && (
@@ -377,6 +388,7 @@ function CoachDetail({ card, onBack }: { card: CoachCard; onBack: () => void }) 
           </div>
         </div>
       </Panel>
+      {!card.legend && <Panel title="执教荣誉"><CoachHonours name={card.name} /></Panel>}
       <div className="grid c2" style={{ alignItems: 'start' }}>
         <Panel title="战术">
           <div className="tiny">战术能力：<b>{card.tactics ?? '—'}</b></div>
@@ -391,7 +403,7 @@ function CoachDetail({ card, onBack }: { card: CoachCard; onBack: () => void }) 
           <div className="tiny">激励能力：<b>{card.motivation ?? '—'}</b></div>
         </Panel>
         <Panel title="团队身份">
-          <div className="tiny">{card.spec ?? '团队身份未标注'}</div>
+          <div className="tiny">{coachRole(card)}</div>
         </Panel>
       </div>
     </>

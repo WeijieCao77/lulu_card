@@ -687,7 +687,14 @@ def main():
         hit = [c for c in cands if role_of.get(c.get('role')) == pos and c.get('is_retired') != '1']
         if len(hit) == 1:
             return hit[0]
-        return cands[0] if len(cands) == 1 else None          # 同名多人又分不清：留空，不猜
+        if len(cands) != 1:
+            return None                                       # 同名多人又分不清：留空，不猜
+        # 只有一个同名的人也要核对：队伍和位置都对不上就不是他（2026-09-28：BFX 二队的韩国中单 MG
+        # 被配上了罗马尼亚辅助 MG 的国籍和本名）。只错一项仍收下，转会、换位置时资料常常滞后。
+        c = cands[0]
+        wrong_team = bool(c.get('current_team')) and norm_name(c.get('current_team')) != norm_name(team)
+        wrong_role = bool(c.get('role')) and role_of.get(c.get('role')) != pos
+        return None if wrong_team and wrong_role else c
 
     tags = {}
     tpath = os.path.join(DATA, 'raw', 'teams_en.json')
