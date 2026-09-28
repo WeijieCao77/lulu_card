@@ -2602,7 +2602,16 @@
     },
     "P360": {
       "real": "James Thomas Carlisle",
-      "source": "https://cdn.datalisk.io/players/114854763809366482.png"
+      "source": "https://gocumberlandathletics.com/images/2025/8/18/James_Carlisle.jpg",
+      "img": "p-p360-2609.webp",
+      "v": "d19236fe",
+      "page": "https://gocumberlandathletics.com/sports/esports/roster/james-carlisle/13646",
+      "crop": [
+        0,
+        0,
+        1520,
+        1520
+      ]
     },
     "P380": {
       "real": "Aadam Durgahed",
@@ -3624,6 +3633,54 @@
       "v": "070554d1",
       "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/d/d7/IGY_MG_2023_Split_1.png/revision/latest?cb=20230203122302",
       "page": "https://lol.fandom.com/wiki/File:IGY_MG_2023_Split_1.png"
+    },
+    "P185": {
+      "img": "p-p185-2609.webp",
+      "v": "e7077dd3",
+      "source": "https://cdn.sanity.io/images/9rqbl8zs/production/e2031673a364c71ea9879b05fc6dbace01892040-1920x1080.webp?rect=840,0,1080,1080&w=800",
+      "page": "https://www.sheepesports.com/en/articles/dsg-kryra-today-could-be-a-reality-check-for-me-which-will-help-i-will-learn-a-lot-from-this/en"
+    },
+    "P352": {
+      "img": "p-p352-2609.webp",
+      "v": "93ee0a07",
+      "source": "https://gocumberlandathletics.com/images/2025/8/18/Luke_Siebert.jpg",
+      "page": "https://gocumberlandathletics.com/sports/esports/roster/luke-siebert/13631",
+      "crop": [
+        0,
+        0,
+        1520,
+        1520
+      ]
+    },
+    "P365": {
+      "img": "p-p365-2609.webp",
+      "v": "a82c3814",
+      "source": "https://static.lolesports.com/players/1643048065147_Straight-4.png",
+      "page": "https://esports-api.lolesports.com/persisted/gw/getTeams?hl=en-US"
+    },
+    "P396": {
+      "img": "p-p396-2609.webp",
+      "v": "2cff1732",
+      "source": "https://www.winthrop.edu/uploadedImages/esports/LoL-wilson.png",
+      "page": "https://www.winthrop.edu/esports/league-of-legends-roster.aspx"
+    },
+    "P397": {
+      "img": "p-p397-2609.webp",
+      "v": "e2dd4c6e",
+      "source": "https://www.winthrop.edu/uploadedImages/esports/LoL-PAPA.png",
+      "page": "https://www.winthrop.edu/esports/league-of-legends-roster.aspx"
+    },
+    "P421": {
+      "img": "p-p421-2609.webp",
+      "v": "85398d99",
+      "source": "https://www.lollfl.fr/media/file/2458912356679198713/original",
+      "page": "https://www.lollfl.fr/equipes/2442218892307310591"
+    },
+    "P443": {
+      "img": "p-p443-2609.webp",
+      "v": "418d364d",
+      "source": "https://www.lollfl.fr/media/file/2395765195397326839/original",
+      "page": "https://www.lollfl.fr/equipes/2392081479432062975"
     }
   },
   "coaches": {
