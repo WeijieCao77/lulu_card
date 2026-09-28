@@ -6,6 +6,9 @@ import { honoursOf } from '../engine/coachHonours'
 import type { CoachTitle } from '../engine/coachHonours'
 
 const SPLIT_CN: [RegExp, string][] = [
+  [/^Worlds Season (\d)$/, 'S$1 全球总决赛'], [/^Worlds (\d{4})/, '$1 全球总决赛'], [/^MSI (\d{4})/, '$1 季中冠军赛'],
+  [/^Mid-Season Invitational (\d{4})/, '$1 季中冠军赛'], [/^Champions (\d{4})/, 'OGN Champions $1'],
+  [/ Playoffs/, ' 季后赛'], [/ Main Event/, ' 正赛'],
   [/Season Finals/, '季后总决赛'], [/Grand Finals/, '总决赛'], [/Season Kickoff/, '开幕赛'], [/Mid Season/, '季中赛'],
   [/Championship/, '年度总决赛'], [/Lock-In/, '揭幕赛'], [/Versus/, '对抗赛'], [/Spring/, '春季赛'],
   [/Summer/, '夏季赛'], [/Winter/, '冬季赛'], [/Opening/, '上半年'], [/Closing/, '下半年'],

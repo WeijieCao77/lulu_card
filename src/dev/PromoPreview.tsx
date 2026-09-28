@@ -82,7 +82,7 @@ if (import.meta.env.DEV) createRoot(document.getElementById('root')!).render(
         : view === 'team' ? <div className="promo-team"><style>{'.promo-team > .panel:first-of-type { display: none }'}</style><SquadScreen /></div>
         : view === 'packs' ? <Packs />
         : view === 'shop' ? <DailyShopScreen />
-        : view === 'dossier' ? <Dossier playerId={null} onOpen={() => {}} />
+        : view === 'dossier' ? <Dossier playerId={params.get('player')} onOpen={() => {}} />
         : view === 'cards' ? <div style={{ display: 'grid', gap: 18 }}>{(['lg', 'md', 'sm'] as const).map(size =>
             <div key={size} style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-start' }}>
               {(params.get('ids') ?? 'p:P8,p:P6,p:P1,p:P300,p:P500,p:P620').split(',').map(id => cardById(id)).filter(Boolean).map(c =>

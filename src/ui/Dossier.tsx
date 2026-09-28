@@ -5,6 +5,7 @@ import { coachDossier, dossierOf, titleCount } from '../engine/dossier'
 import { BASE_PLAYER_CARDS, COACH_CARDS, LEGEND_CARDS, RARITY_CN, titleClubTags } from '../engine/cards'
 import { SPEC_CN } from '../engine/staff'
 import CoachHonours from './CoachHonours'
+import { CareerEvents, CareerHonours, CareerTeams } from './PlayerCareer'
 import type { CoachCard, PlayerCard } from '../engine/cards'
 import CardFace, { Flag, natName } from './Card'
 import { Panel, Bar } from './common'
@@ -147,7 +148,7 @@ export default function Dossier({
       }
     >
       <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-        选手与教练资料库。游戏分为五个赛区：LPL、LCK、LEC、LCS、其他；其他包含 LCP、CBLOL 联赛及其中的越南等地区队伍。选手与教练资料中的联赛信息保留真实所属联赛。战队按各队最近一次正式比赛的名单（Oracle's Elixir）整理，每位选手后面的小标记说明来源：✓ 名单已核对、赛事名单、未核对。生涯数据暂未收录。
+        选手与教练资料库。游戏分为五个赛区：LPL、LCK、LEC、LCS、其他；其他包含 LCP、CBLOL 联赛及其中的越南等地区队伍。选手与教练资料中的联赛信息保留真实所属联赛。战队按各队最近一次正式比赛的名单（Oracle's Elixir）整理，每位选手后面的小标记说明来源：✓ 名单已核对、赛事名单、未核对。选手的荣誉、生涯队伍和赛事记录来自 Leaguepedia。
       </p>
       <RatingExplainer open />
 
@@ -308,10 +309,10 @@ function PlayerDetail({ card, onBack }: { card: PlayerCard; onBack: () => void }
             </div>
           ))}
           <p className={`small ${s?.ratingEstimated ? 'warn' : 'muted'}`} style={{ lineHeight: 1.8 }}>
-            {s?.ratingEstimated ? '暂定评分：新补录选手的样本不完整，暂按同赛区同位置基准估算，后续再校准。' : '能力评分为游戏内评分，非官方评价。生涯数据尚未收录。'}
+            {s?.ratingEstimated ? '暂定评分：新补录选手的样本不完整，暂按同赛区同位置基准估算，后续再校准。' : '能力评分为游戏内评分，非官方评价。'}
           </p>
         </Panel>
-        <Panel title="荣誉"><p className="empty">生涯补录中</p></Panel>
+        <CareerHonours playerId={card.playerId} />
       </div>
       {s?.recentStats && (
         <Panel title="最近赛事统计">
@@ -328,8 +329,8 @@ function PlayerDetail({ card, onBack }: { card: PlayerCard; onBack: () => void }
         </Panel>
       )}
       <div className="grid c2" style={{ alignItems: 'start' }}>
-        <Panel title="生涯队伍"><p className="empty">尚未收录。</p></Panel>
-        <Panel title="赛事记录"><p className="empty">尚未收录。</p></Panel>
+        <CareerTeams playerId={card.playerId} />
+        <CareerEvents playerId={card.playerId} />
       </div>
     </>
   )
@@ -392,7 +393,7 @@ function CoachDetail({ card, onBack }: { card: CoachCard; onBack: () => void }) 
       <div className="grid c2" style={{ alignItems: 'start' }}>
         <Panel title="战术">
           <div className="tiny">战术能力：<b>{card.tactics ?? '—'}</b></div>
-          <p className="tiny faint" style={{ marginTop: 12, marginBottom: 0 }}>能力评分为游戏内评分，非官方评价。生涯数据尚未收录。</p>
+          <p className="tiny faint" style={{ marginTop: 12, marginBottom: 0 }}>能力评分为游戏内评分，非官方评价。</p>
         </Panel>
         <Panel title="培养">
           <div className="tiny">培养能力：<b>{card.development ?? '—'}</b></div>
