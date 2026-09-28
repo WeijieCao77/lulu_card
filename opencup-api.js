@@ -25,7 +25,8 @@ import { createHash } from 'node:crypto'
 import { randomBytes } from 'node:crypto'
 import { isVerified } from './phone-api.js'
 import { TRADE_PULLS } from './market-api.js'
-const CUP_MIN_DAYS = 3
+// 2026-09-28 站长：杯赛不再要求账号满 3 天，开够 50 抽即可报名（手机号一人一号仍在）
+const CUP_MIN_DAYS = 0
 import { makeSwissCupRunner } from './opencup-v2.js'
 import { createCupComputer } from './opencup-worker.js'
 import { makeCupPass } from './cup-clock.js'
@@ -707,7 +708,7 @@ export function makeOpenCupApi(sql, {
     if (blocked) {
       json(res, 200, {
         ok: false, gate: blocked,
-        why: `开过 ${blocked.need} 张卡、账号满 ${blocked.days} 天才能报名（现在 ${blocked.have} 张）。`,
+        why: `开过 ${blocked.need} 张卡${blocked.days ? `、账号满 ${blocked.days} 天` : ''}才能报名（现在 ${blocked.have} 张）。`,
       })
       return
     }

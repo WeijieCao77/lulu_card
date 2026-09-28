@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-09-28', title: '杯赛报名放宽', changes: [
+    { kind: '调整', text: '全服杯和组队杯不再要求账号注册满 3 天，开够 50 抽就能报名。' },
+  ],
+}, {
   date: '2026-09-27', title: '杯赛专用阵容', changes: [
     { kind: '修复', text: '去掉卡面上的「CAP」标记：它是按数据选出的队内运营最高的选手，不是现实中的队长，容易误会（比如 BLG 的现实队长是 Knight，标记却在 Bin 身上）。筛选里的「队长」选项一并去掉。' },
     { kind: '调整', text: '比赛指挥改为自动：天梯、杯赛和好友对战中，都由你阵容里「运营」最高的选手指挥。以前带标记的选手即使运营更低也会抢走指挥位，现在不会了。' },

@@ -189,7 +189,9 @@ try {
   { const g = await stored(short); g.squad.slots[2] = null; await setState(short, g) }
 
   let r = await call('/api/card/opencup/join', { id: fresh })
-  check('今天才建的号不能报名', !r.body.ok && /满 3 天/.test(r.body.why ?? ''), r.body.why)
+  // 2026-09-28: no account-age requirement any more — a day-old account with 50 pulls may sign up
+  check('今天才建的号，开够 50 抽也能报名', r.body.ok === true, r.body.why)
+  await call('/api/card/opencup/leave', { id: fresh }) // out again, so the counts below are the field they were written for
   r = await call('/api/card/opencup/join', { id: idle })
   check('开卡不到 50 张不能报名', !r.body.ok && r.body.gate?.have === 10, r.body.why)
   r = await call('/api/card/opencup/join', { id: flagged })
