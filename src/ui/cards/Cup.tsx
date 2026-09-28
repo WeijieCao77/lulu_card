@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useCards } from './ctx'
+import CupLineup from './CupLineup'
+import { cupSquadOf } from '../../engine/gacha'
 import { Panel } from '../common'
 import MatchReport from './Report'
 import {
@@ -47,7 +49,7 @@ function ClubCup() {
   const [busy, setBusy] = useState(false)
   const [shown, setShown] = useState<{ res: ArenaResult; opp: string; out: CupOutcome; levels: Record<string, number> } | null>(null)
 
-  const filled = g.squad.slots.filter(Boolean).length
+  const filled = cupSquadOf(g, 'club').slots.filter(Boolean).length
   const cup = g.cup
   const registration = cup?.registration
   const live = cup && !cup.done
@@ -55,7 +57,7 @@ function ClubCup() {
   const can = canPlay(g, 'cup', now)
 
   const enter = async () => {
-    if (filled < 5) { toast('先凑齐五个人。'); go('squad'); return }
+    if (filled < 5) { toast('先凑齐五个人。'); go('squad', { target: 'club' }); return }
     setBusy(true)
     const r = await act('cup_enter')
     setBusy(false)
@@ -91,11 +93,12 @@ function ClubCup() {
         title="俱乐部杯"
         actions={<span className="tiny muted">入场 {STAMINA_COST.cup} 点体力 · 之后每轮免费</span>}
       >
+        <CupLineup cup="club" />
         <p className="small muted" style={{ marginTop: 0, lineHeight: 1.75 }}>
           <b>{STAMINA_COST.cup} 点体力入场</b>，{CUP_MIN_ROUNDS}～{CUP_MAX_ROUNDS} 轮，<b>之后每轮免费</b>。
           <b>双败</b>：第一次输进败者组，赢一场 BO3 回到下一轮，第二次输才出局。决赛输了先打败者组决赛，再重打决赛。
           对手按你的综合分抽签，<b>一轮比一轮强</b>，决赛 <b>BO5</b>。
-          <b>本届固定使用报名时的五人、教练和等级</b>。
+          <b>本届固定使用报名时的五人、教练和等级</b>（设了专用阵容就用专用的，否则用卡组）。
           出局按晋级轮数给金币（{cupExitPrize(0)} 起，每轮多 150），晋级两轮送{PACKS.scout.name}；
           冠军 <b>{cupTitlePrize(CUP_MIN_ROUNDS)}～{cupTitlePrize(CUP_MAX_ROUNDS)} 金币 + {PACKS.elite.name}</b>，
           4 轮加{PACKS.scout.name}，5 轮换成<b>{PACKS.ten.name}</b>。

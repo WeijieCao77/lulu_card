@@ -27,7 +27,7 @@ import {
   awardMinigame, canPlay, checkIn, claimFullSet, claimQuest, claimSeries, clampState, cupBo, cupOpponent, drawOpponent, enterCup,
   levelOf, oppBumpFor, openPack, packCost, pendingOpponent, primeStamina, recordCup, recordLadder,
   refreshDaily, salvage, salvageBulk, seriesOfPack, spendPlay, upgrade, ladderSlot, leagueEntry,
-  LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad,
+  LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad, cupSquadOf,
 } from './gacha'
 import {
   judgeMinigame, MINI_GAMES, MINIGAME_DAILY, MINIGAME_TTL_MS, newMinigame, refreshMinigame,
@@ -279,7 +279,8 @@ function dispatch(
     }
     case 'cup_enter': {
       if (g.cup && !g.cup.done) return { ok: true, result: { cup: g.cup } }
-      const five = squadForPlay(g)
+      // the club cup's own lineup, if one has been set (gacha.ts cupSquads)
+      const five = squadForPlay({ ...g, squad: cupSquadOf(g, 'club') })
       if (!five.ok) return five
       if (!canPlay(g, 'cup', env.now)) return { ok: false, why: `体力不够，入场要 ${STAMINA_COST.cup} 点` }
       try {
@@ -297,7 +298,7 @@ function dispatch(
       // Older paid brackets acquire their registration on the first actual
       // match, without charging again or redrawing the opponents.
       if (!cup.registration) {
-        const five = squadForPlay(g)
+        const five = squadForPlay({ ...g, squad: cupSquadOf(g, 'club') })
         if (!five.ok) return { ok: false, why: '这届旧杯赛还没有报名阵容，请先凑齐五个人再继续；不会重新收费或抽签。' }
         cup.registration = registerCupSquad(five.squad, id => levelOf(g, id))
       }

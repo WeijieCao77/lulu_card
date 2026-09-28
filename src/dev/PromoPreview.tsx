@@ -66,7 +66,7 @@ if (view === 'market') {
 }
 
 const noop = async () => ({ ok: true }) as never
-const ctx = { g, now: Date.now(), today: params.get('today') ?? '2026-09-28', cloud: true, phone: '8000', bound: () => {}, commit: async () => {}, act: noop, toast: () => {}, collect: async () => 0, openDossier: () => {}, go: () => {} } as never
+const ctx = { g, now: Date.now(), today: params.get('today') ?? '2026-09-28', cupTarget: params.get('cup'), cloud: true, phone: '8000', bound: () => {}, commit: async () => {}, act: noop, toast: () => {}, collect: async () => 0, openDossier: () => {}, go: () => {} } as never
 const showcase = (params.get('names')?.split(',') ?? ['Faker', 'Uzi', 'Clearlove', 'Caps', 'Rookie', 'TheShy']).map(byName).filter(Boolean) as Card[]
 
 function Legends() {

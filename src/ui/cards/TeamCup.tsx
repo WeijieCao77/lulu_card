@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useCards } from './ctx'
+import CupLineup from './CupLineup'
 import { Panel } from '../common'
 import { teamCupJoin, teamCupLeave, teamCupState } from '../../engine/teamCupClient'
 import type { TeamCupMine, TeamCupState, TeamMember, TeamTie } from '../../engine/teamCupClient'
@@ -33,7 +34,7 @@ const placeName = (p: number | null | undefined) => (p === 1 ? '冠军' : p === 
  * first seat against first seat, and the side with three of them goes on.
  */
 export default function TeamCup() {
-  const { toast } = useCards()
+  const { toast, commit } = useCards()
   const [st, setSt] = useState<TeamCupState | null>(null)
   const [why, setWhy] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -64,10 +65,12 @@ export default function TeamCup() {
 
   const join = async () => {
     setBusy(true)
+    // the server reads the lineup it holds, so this cup's lineup has to be there first
+    await commit(true)
     const r = await teamCupJoin()
     setBusy(false)
     if (!r.ok) { toast(r.why ?? '没报上，稍后再试。'); return }
-    toast(`报上了，${clock(r.starts)} 开赛。开赛那一刻的阵容（综合分 ${r.score}）就是你的参赛阵容。`)
+    toast(`报上了，${clock(r.starts)} 开赛。开赛那一刻的组队杯阵容（现在综合分 ${r.score}）就是你的参赛阵容。`)
     void pull()
   }
   const leave = async () => {
@@ -91,6 +94,7 @@ export default function TeamCup() {
           每天 {TEAM_CUP_HOURS.map((h) => `${String(h).padStart(2, '0')}:00`).join('、')} 开赛（北京时间），凌晨不办。不够 {TEAM_CUP_MIN_TEAMS * TEAM_SIZE} 人不开。
           多出来不满五人的，各自加入一支队当第六人，轮流上场。
         </p>
+        <CupLineup cup="team" />
         {why && <p className="small warn">{why}</p>}
         {next && (
           <div className="row wrap" style={{ gap: 10, alignItems: 'center' }}>

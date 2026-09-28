@@ -252,14 +252,15 @@ export function makeOpenCupApi(sql, {
       const held = await db`select status from open_cups where id = ${cup.id} for update`
       if (held[0]?.status !== 'open') return
       const rows = await db`
-        select a.id_hash, a.name, a.state->'squad' as squad,
+        select a.id_hash, a.name, sq.squad as squad,
           (select jsonb_object_agg(k, a.state->'cards'->k->'level')
              from jsonb_array_elements_text(
-               (case when jsonb_typeof(a.state->'squad'->'slots') = 'array'
-                     then a.state->'squad'->'slots' else '[]'::jsonb end)
-               || jsonb_build_array(a.state->'squad'->'coach')) as k
+               (case when jsonb_typeof(sq.squad->'slots') = 'array'
+                     then sq.squad->'slots' else '[]'::jsonb end)
+               || jsonb_build_array(sq.squad->'coach')) as k
             where k is not null) as levels
         from open_cup_entries e join card_accounts a on a.id_hash = e.id_hash
+        cross join lateral (select coalesce(a.state->'cupSquads'->${'open:' + cup.league}, a.state->'squad') as squad) sq
         where e.cup_id = ${cup.id} and not a.suspect
         order by e.joined, e.id_hash
         limit ${engine.OPEN_CUP_MAX}`
@@ -711,14 +712,16 @@ export function makeOpenCupApi(sql, {
       return
     }
     const mine = await sql`
-      select a.id_hash, a.name, a.state->'squad' as squad,
+      select a.id_hash, a.name, sq.squad as squad,
         (select jsonb_object_agg(k, a.state->'cards'->k->'level')
            from jsonb_array_elements_text(
-             (case when jsonb_typeof(a.state->'squad'->'slots') = 'array'
-                   then a.state->'squad'->'slots' else '[]'::jsonb end)
-             || jsonb_build_array(a.state->'squad'->'coach')) as k
+             (case when jsonb_typeof(sq.squad->'slots') = 'array'
+                   then sq.squad->'slots' else '[]'::jsonb end)
+             || jsonb_build_array(sq.squad->'coach')) as k
           where k is not null) as levels
-      from card_accounts a where a.id_hash = ${me}`
+      from card_accounts a
+        cross join lateral (select coalesce(a.state->'cupSquads'->${'open:' + league}, a.state->'squad') as squad) sq
+      where a.id_hash = ${me}`
     const five = mine.length ? fiveOf(mine[0]) : null
     if (!five) { json(res, 200, { ok: false, why: '先凑齐五个人。' }); return }
     const entry = engine.leagueEntry(five.five, league)

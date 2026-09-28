@@ -146,13 +146,14 @@ export function makeTeamCupApi(sql, {
       const held = await db`select status from team_cups where id = ${cup.id} for update`
       if (held[0]?.status !== 'open') return
       const rows = await db`
-        select a.id_hash, a.name, a.state->'squad' as squad,
+        select a.id_hash, a.name, sq.squad as squad,
           (select jsonb_object_agg(k, a.state->'cards'->k->'level')
              from jsonb_array_elements_text(
-               (case when jsonb_typeof(a.state->'squad'->'slots') = 'array' then a.state->'squad'->'slots' else '[]'::jsonb end)
-               || jsonb_build_array(a.state->'squad'->'coach')) as k
+               (case when jsonb_typeof(sq.squad->'slots') = 'array' then sq.squad->'slots' else '[]'::jsonb end)
+               || jsonb_build_array(sq.squad->'coach')) as k
             where k is not null) as levels
         from team_cup_entries e join card_accounts a on a.id_hash = e.id_hash
+        cross join lateral (select coalesce(a.state->'cupSquads'->${'team'}, a.state->'squad') as squad) sq
         where e.cup_id = ${cup.id} and not a.suspect
         order by e.joined, e.id_hash limit ${engine.TEAM_CUP_MAX}`
       const fielded = []
@@ -441,13 +442,15 @@ export function makeTeamCupApi(sql, {
     if (blocked?.why) { json(res, 200, { ok: false, why: blocked.why }); return }
     if (blocked) { json(res, 200, { ok: false, gate: blocked, why: `开过 ${blocked.need} 张卡、账号满 ${blocked.days} 天才能报名（现在 ${blocked.have} 张）。` }); return }
     const mine = await sql`
-      select a.id_hash, a.name, a.state->'squad' as squad,
+      select a.id_hash, a.name, sq.squad as squad,
         (select jsonb_object_agg(k, a.state->'cards'->k->'level')
            from jsonb_array_elements_text(
-             (case when jsonb_typeof(a.state->'squad'->'slots') = 'array' then a.state->'squad'->'slots' else '[]'::jsonb end)
-             || jsonb_build_array(a.state->'squad'->'coach')) as k
+             (case when jsonb_typeof(sq.squad->'slots') = 'array' then sq.squad->'slots' else '[]'::jsonb end)
+             || jsonb_build_array(sq.squad->'coach')) as k
           where k is not null) as levels
-      from card_accounts a where a.id_hash = ${me}`
+      from card_accounts a
+        cross join lateral (select coalesce(a.state->'cupSquads'->${'team'}, a.state->'squad') as squad) sq
+      where a.id_hash = ${me}`
     const five = mine.length ? fiveOf(mine[0]) : null
     if (!five) { json(res, 200, { ok: false, why: '先凑齐五个人。' }); return }
     const open = await sql`select id::text as id, starts from team_cups where status = 'open' and starts > ${new Date(now)} order by starts limit 1`

@@ -40,6 +40,7 @@ import type { GachaState } from '../engine/gacha'
 import { track, countScreen } from '../engine/telemetry'
 import { mailLine } from '../engine/market'
 import MusicPlayer from './MusicPlayer'
+import type { CupSquadKey } from '../engine/gacha'
 import { MUSIC_ENABLED, TRACKS } from '../data/music'
 import type { MailItem } from '../engine/market'
 
@@ -117,6 +118,8 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
   const gRef = useRef<GachaState | null>(null)
   const [version, bump] = useReducer((x: number) => x + 1, 0)
   const [tab, setTab] = useState('packs')
+  // the cup whose own lineup the squad screen is editing (CupLineup.tsx); null means the 卡组
+  const [cupTarget, setCupTarget] = useState<CupSquadKey | null>(null)
   const [atHome, setAtHome] = useState(false)
 
   const [cloud, setCloud] = useState(false)
@@ -299,10 +302,11 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
     toast,
     collect,
     openDossier: (id: string) => { setDossierId(id); setTab('dossier') },
-    go: setTab,
+    go: (next: string, opts?: { target?: CupSquadKey }) => { setCupTarget(next === 'squad' ? opts?.target ?? null : null); setTab(next) },
+    cupTarget,
   // gRef is stable; bump() drives the re-render
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [commit, act, toast, collect, today, now, cloud, phone, gRef.current, tab, version])
+  }), [commit, act, toast, collect, today, now, cloud, phone, gRef.current, tab, version, cupTarget])
 
   if (booting) {
     return <div className="wrap" style={{ padding: 40 }}><p className="muted">正在读取卡牌账号…</p></div>
@@ -405,7 +409,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
           <ThemeToggle compact />
         </header>
 
-        <RiftNavigation utilities={<MailButton onClick={() => setTab('mail')} active={tab === 'mail'} />} tabs={TABS} active={tab} onSelect={key => { setTab(key); if (key !== 'dossier') setDossierId(null) }} />
+        <RiftNavigation utilities={<MailButton onClick={() => setTab('mail')} active={tab === 'mail'} />} tabs={TABS} active={tab} onSelect={key => { setCupTarget(null); setTab(key); if (key !== 'dossier') setDossierId(null) }} />
 
         <div className="cm-body" id="main" ref={mainRef}>
           <RiftBanner page={tab} owned={ALL_CARDS.filter(c => g.cards[c.id]).length} total={ALL_CARDS.length} />

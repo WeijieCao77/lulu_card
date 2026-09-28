@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useCards } from './ctx'
+import CupLineup from './CupLineup'
+import { cupSquadOf } from '../../engine/gacha'
+import type { CupSquadKey } from '../../engine/gacha'
 import { Panel } from '../common'
 import MatchReport from './Report'
 import {
@@ -102,11 +105,14 @@ function CupDivision({ league }: { league: CupLeague }) {
     void collect(true)
   }, [st?.last, lastMe, collect])
 
-  const filled = g.squad.slots.filter(Boolean).length
-  const entry = leagueEntry(g.squad, league)
+  // this division's own lineup, or the 卡组 when none is set (CupLineup.tsx)
+  const cupKey = `open:${league}` as CupSquadKey
+  const lineup = cupSquadOf(g, cupKey)
+  const filled = lineup.slots.filter(Boolean).length
+  const entry = leagueEntry(lineup, league)
   const join = async () => {
-    if (filled < 5) { toast('先凑齐五个人。'); go('squad'); return }
-    if (!entry.ok) { toast(entry.why); go('squad'); return }
+    if (filled < 5) { toast('先凑齐五个人。'); go('squad', { target: cupKey }); return }
+    if (!entry.ok) { toast(entry.why); go('squad', { target: cupKey }); return }
     setBusy(true)
     // the server reads the five it holds, so the five on screen has to be there first
     await commit(true)
@@ -138,7 +144,7 @@ function CupDivision({ league }: { league: CupLeague }) {
   if (!cloud) return <Panel title={`全服杯 · ${LEAGUE_RULES[league].name}`}><p className="small muted">需要联网。</p></Panel>
   if (!st) return <Panel title={`全服杯 · ${LEAGUE_RULES[league].name}`}><p className="small muted">{why ?? '读取中…'}</p></Panel>
 
-  const myScore = filled === 5 ? squadRating(g.squad, (id) => g.cards[id]?.level ?? 0) : null
+  const myScore = filled === 5 ? squadRating(lineup, (id) => g.cards[id]?.level ?? 0) : null
   const rows = board === 'today' ? st.boards.today : st.boards.all
   const legacy = st.legacyPending ?? []
 
@@ -149,10 +155,11 @@ function CupDivision({ league }: { league: CupLeague }) {
         actions={<span className="tiny muted">免费报名 · 每天 {DAILY_START_HOURS.map(h => `${h}:00`).join(' / ')}（北京时间）</span>}
       >
         <p className="small" style={{ marginTop: 0 }}><b>{LEAGUE_RULES[league].blurb}</b> 四个赛制独立报名、独立对阵、独立冠军榜。报名和开赛时均检查卡色，教练也受金银铜上限限制。</p>
+        <CupLineup cup={cupKey} />
         {!entry.ok && <p className="small neg">{entry.why}</p>}
         <p className="small muted" style={{ marginTop: 0, lineHeight: 1.75 }}>
           {(st.next?.format ?? 1) === 2 ? <>先打<b>瑞士轮 BO3：两胜晋级、两败淘汰</b>，输第一场继续参赛；晋级后打<b>Playoff BO5 单败淘汰</b>，决赛也是 BO5。瑞士轮实胜每场 20 金币，Playoff 实胜每场 40 金币，轮空不发金币。</> : <>本赛制的玩家打同一张签表，单败淘汰。BO3，决赛 BO5；每场实胜 40 金币。</>}
-          系统按本届赛程自动比赛，不用在线。<b>开赛时锁定卡组与强化</b>，不符合本赛制的阵容无法参赛，锁定后本场不再变。名次奖励看参赛人数，奖励发到信箱。
+          系统按本届赛程自动比赛，不用在线。<b>开赛时锁定本赛制的阵容与强化</b>（设了专用阵容就用专用的，否则用卡组），不符合本赛制的阵容无法参赛，锁定后本场不再变。名次奖励看参赛人数，奖励发到信箱。
           不足 {OPEN_CUP_MIN} 人取消，{OPEN_CUP_RANKED_MIN} 人以上的冠军计入冠军榜。
         </p>
         <GapOdds />

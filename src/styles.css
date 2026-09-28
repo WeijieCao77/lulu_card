@@ -354,6 +354,12 @@ button.chip { font: inherit; font-size: var(--t-small); color: var(--muted); bac
 button.chip:hover { color: var(--text); border-color: var(--line-hi); }
 
 /* 评分怎么算 (RatingExplainer): open at the top of 图鉴, one line in a card's detail */
+/* a cup's own lineup (CupLineup.tsx), and the banner on the squad screen while one is being edited */
+.cup-lineup { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel-2); }
+.cup-lineup .tiny { flex: 1 1 200px; }
+.cup-edit-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--accent-line); background: var(--accent-wash); font-size: var(--t-small); }
+.cup-edit-banner span { flex: 1 1 260px; }
+
 /* 每日商店 (DailyShop.tsx): five cards in a row, wrapping on a phone */
 .shop-shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px 12px; justify-items: center; align-items: stretch; }
 /* every column the same rows — tag, card, price, metal — so cards and buttons line up whatever the tags say */

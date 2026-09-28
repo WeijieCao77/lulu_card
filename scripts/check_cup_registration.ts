@@ -96,7 +96,7 @@ try {
   assert.equal((await act(A, 'upgrade', { cardId: weak.slots[0] })).ok, true)
   assert.equal((await act(A, 'upgrade', { cardId: weak.coach })).ok, true)
   assert.equal(levelOf(await stored(A), weak.slots[0]), 1)
-  const sale = await call('/api/market/list', { id: A, cardId: weak.slots[1], ask: 20_000 })
+  const sale = await call('/api/market/list', { id: A, cardId: weak.slots[1], ask: 1_500 }) // under the bronze cap (market-api PRICE_CAP)
   assert.equal(sale.ok, true, JSON.stringify(sale))
   assert.equal((await stored(A)).cards[weak.slots[1]], undefined, 'Registered card leaves inventory normally')
   const injected: CupRegistration = { squad: strong, levels: Object.fromEntries([...strong.slots, strong.coach].map(id => [id, 5])) }

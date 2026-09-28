@@ -1,6 +1,8 @@
 import { TEAM_LINEAGES } from '../../engine/teamLineage'
 import { useMemo, useState } from 'react'
 import { useCards } from './ctx'
+import { cupView } from './CupLineup'
+import { CUP_SQUAD_NAMES } from '../../engine/gacha'
 import CardFace, { CardSlot } from '../Card'
 import { Panel } from '../common'
 import CardActionDialog from './CardActionDialog'
@@ -23,7 +25,9 @@ const COACH_WHY_CN = { club: '同队', coached: '带过', region: '同赛区' } 
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 export default function SquadScreen() {
-  const { g, commit, toast } = useCards()
+  const { g: account, commit, toast, cupTarget, go } = useCards()
+  // editing one cup's own lineup: every g.squad below is that cup's (CupLineup.tsx cupView)
+  const g = useMemo(() => (cupTarget ? cupView(account, cupTarget) : account), [account, cupTarget])
   const [picking, setPicking] = useState<number | 'coach' | null>(null)
   const [q, setQ] = useState('')
   // 「卡组选选手的地方也加个筛选器」. The same bar as the collection and the
@@ -98,6 +102,12 @@ export default function SquadScreen() {
           on the go — an all-LEC one, an all-LCK one, and the one with
           their favourites in it — and rebuilding a five card by card to try
           the other one is what stops them trying it at all. */}
+      {cupTarget && (
+        <div className="cup-edit-banner">
+          <span>正在编辑 <b>{CUP_SQUAD_NAMES[cupTarget]}</b> 的专用阵容：报名和开赛都用这一套，改这里不影响卡组和其他杯赛。</span>
+          <button className="sm primary" onClick={() => go('cup')}>完成，回到杯赛</button>
+        </div>
+      )}
       <Panel
         title="卡组配置"
         actions={<span className="tiny muted">存 {SQUAD_PRESETS} 套，随时切换</span>}
@@ -175,7 +185,7 @@ export default function SquadScreen() {
       </Panel>
 
       <Panel
-        title="我的卡组"
+        title={cupTarget ? `${CUP_SQUAD_NAMES[cupTarget]} 专用阵容` : '我的卡组'}
         actions={
           <div className="row" style={{ gap: 8 }}>
             <button

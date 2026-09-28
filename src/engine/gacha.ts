@@ -799,6 +799,12 @@ export interface GachaState {
   friends?: FriendRec[]
   /** saved squad presets — see SQUAD_PRESETS */
   presets?: (SquadPreset | null)[]
+  /**
+   * A lineup of its own for each cup (owner, 2026-09-27): the club cup, the team cup and each 全服杯 division
+   * sign up and kick off with theirs, so a bronze-only five for one cup does not break another. A cup with
+   * none set uses the 卡组. Client-owned like the squad, checked against the collection the same way.
+   */
+  cupSquads?: Partial<Record<CupSquadKey, Squad>>
   /** what the inbox has delivered, newest first — see MailEntry */
   mail?: MailEntry[]
   log: LogEntry[]
@@ -2582,7 +2588,36 @@ export const SERVER_KEYS = [
   'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'seoulRoute',
   'weeklySeriesPick', 'shop',
 ] as const
-export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends'] as const
+export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends', 'cupSquads'] as const
+
+/** The cups that keep a lineup of their own: 俱乐部杯, 组队杯 and the five 全服杯 divisions. */
+export const CUP_SQUAD_KEYS = ['club', 'team', 'open:open', 'open:gold', 'open:silver', 'open:bronze', 'open:hof'] as const
+export type CupSquadKey = (typeof CUP_SQUAD_KEYS)[number]
+export const CUP_SQUAD_NAMES: Record<CupSquadKey, string> = {
+  club: '俱乐部杯', team: '组队杯', 'open:open': '全服杯·天梯', 'open:gold': '全服杯·金卡赛',
+  'open:silver': '全服杯·银卡赛', 'open:bronze': '全服杯·铜卡赛', 'open:hof': '全服杯·名人堂赛',
+}
+/** The lineup a cup plays with: its own if one has been set, otherwise the 卡组. */
+export const cupSquadOf = (g: Pick<GachaState, 'squad' | 'cupSquads'>, key: CupSquadKey): Squad => g.cupSquads?.[key] ?? g.squad
+
+/** A five from the client, kept only as far as the server's collection bears it out. */
+function cleanClientSquad(server: GachaState, raw: Partial<Squad>): Squad {
+  const list = Array.isArray(raw.slots) ? raw.slots.slice(0, 5) : []
+  const seen = new Set<string>()
+  const slots = list.map((id) => {
+    if (typeof id !== 'string' || !server.cards[id]) return null
+    const c = cardById(id)
+    if (!c || !isPlayerCard(c)) return null
+    const who = personOf(c)
+    if (seen.has(who)) return null
+    seen.add(who)
+    return id
+  })
+  while (slots.length < 5) slots.push(null)
+  const coach = typeof raw.coach === 'string' && server.cards[raw.coach]
+    && cardById(raw.coach)?.kind === 'coach' ? raw.coach : null
+  return { slots, coach }
+}
 
 /**
  * The client's cosmetic fields laid over the server's copy.
@@ -2594,22 +2629,15 @@ export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends'] as const
  */
 export function mergeClientFields(server: GachaState, client: Partial<GachaState>): GachaState {
   if (typeof client.name === 'string') server.name = client.name.slice(0, 40)
-  if (client.squad && typeof client.squad === 'object') {
-    const raw = Array.isArray(client.squad.slots) ? client.squad.slots.slice(0, 5) : []
-    const seen = new Set<string>()
-    const slots = raw.map((id) => {
-      if (typeof id !== 'string' || !server.cards[id]) return null
-      const c = cardById(id)
-      if (!c || !isPlayerCard(c)) return null
-      const who = personOf(c)
-      if (seen.has(who)) return null
-      seen.add(who)
-      return id
-    })
-    while (slots.length < 5) slots.push(null)
-    const coach = typeof client.squad.coach === 'string' && server.cards[client.squad.coach]
-      && cardById(client.squad.coach)?.kind === 'coach' ? client.squad.coach : null
-    server.squad = { slots, coach }
+  if (client.squad && typeof client.squad === 'object') server.squad = cleanClientSquad(server, client.squad)
+  if (client.cupSquads && typeof client.cupSquads === 'object' && !Array.isArray(client.cupSquads)) {
+    const next: Partial<Record<CupSquadKey, Squad>> = {}
+    for (const key of CUP_SQUAD_KEYS) {
+      const raw = (client.cupSquads as Record<string, unknown>)[key]
+      if (raw && typeof raw === 'object') next[key] = cleanClientSquad(server, raw as Partial<Squad>)
+    }
+    if (Object.keys(next).length) server.cupSquads = next
+    else delete server.cupSquads
   }
   if (Array.isArray(client.presets)) {
     server.presets = client.presets.slice(0, SQUAD_PRESETS).map((p) => {

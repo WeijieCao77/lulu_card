@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react'
+import type { CupSquadKey } from '../../engine/gacha'
 import type { GachaState } from '../../engine/gacha'
 import type { ActOutcome } from '../../engine/account'
 
@@ -59,7 +60,10 @@ export interface CardCtxValue {
   collect: (quiet?: boolean) => Promise<number>
   /** open the reference page for a real player */
   openDossier: (playerId: string) => void
-  go: (tab: string) => void
+  /** go to a screen; the squad screen may be pointed at one cup's own lineup (CupLineup.tsx) */
+  go: (tab: string, opts?: { target?: CupSquadKey }) => void
+  /** the cup whose lineup the squad screen is editing, or null for the 卡组 */
+  cupTarget?: CupSquadKey | null
 }
 
 export const CardCtx = createContext<CardCtxValue | null>(null)
