@@ -1,0 +1,749 @@
+{
+  "Helper": {
+    "worlds": [],
+    "msi": [
+      {
+        "title": "2024",
+        "assistant": true
+      },
+      {
+        "title": "2025",
+        "assistant": true
+      }
+    ],
+    "leagues": [
+      {
+        "title": "PCS 2021 Spring"
+      },
+      {
+        "title": "PCS 2021 Summer"
+      },
+      {
+        "title": "LCK 2024 Spring",
+        "assistant": true
+      },
+      {
+        "title": "LCK 2025 Season",
+        "assistant": true
+      }
+    ]
+  },
+  "Daeny": {
+    "worlds": [
+      {
+        "title": "2020"
+      }
+    ],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LCK 2020 Summer"
+      },
+      {
+        "title": "LCK 2021 Summer",
+        "assistant": true
+      },
+      {
+        "title": "LPL 2026 Split 1"
+      },
+      {
+        "title": "LPL 2026 Split 2"
+      }
+    ]
+  },
+  "Mafa": {
+    "worlds": [
+      {
+        "title": "2018",
+        "assistant": true
+      }
+    ],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LPL 2019 Spring"
+      },
+      {
+        "title": "LCK 2022 Summer",
+        "assistant": true
+      },
+      {
+        "title": "LCK 2023 Spring",
+        "assistant": true
+      },
+      {
+        "title": "LCK 2023 Summer",
+        "assistant": true
+      }
+    ]
+  },
+  "Tabe": {
+    "worlds": [],
+    "msi": [
+      {
+        "title": "2021"
+      },
+      {
+        "title": "2022"
+      }
+    ],
+    "leagues": [
+      {
+        "title": "LPL 2021 Spring"
+      },
+      {
+        "title": "LPL 2022 Spring"
+      },
+      {
+        "title": "LPL 2025 Split 2"
+      }
+    ]
+  },
+  "Edgar": {
+    "worlds": [
+      {
+        "title": "2014"
+      },
+      {
+        "title": "2017"
+      }
+    ],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "OGN Champions 2014 Spring"
+      }
+    ]
+  },
+  "Poppy": {
+    "worlds": [],
+    "msi": [
+      {
+        "title": "2021",
+        "assistant": true
+      },
+      {
+        "title": "2022",
+        "assistant": true
+      }
+    ],
+    "leagues": [
+      {
+        "title": "LPL 2021 Spring",
+        "assistant": true
+      },
+      {
+        "title": "LPL 2022 Spring",
+        "assistant": true
+      },
+      {
+        "title": "LPL 2025 Split 1"
+      }
+    ]
+  },
+  "Ryu": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LCK 2026 Season"
+      }
+    ]
+  },
+  "SSONG": {
+    "worlds": [
+      {
+        "title": "2022"
+      }
+    ],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LCK 2016 Summer",
+        "assistant": true
+      }
+    ]
+  },
+  "Homme": {
+    "worlds": [
+      {
+        "title": "2014",
+        "assistant": true
+      }
+    ],
+    "msi": [
+      {
+        "title": "2023"
+      },
+      {
+        "title": "2026"
+      }
+    ],
+    "leagues": [
+      {
+        "title": "LPL 2020 Spring"
+      },
+      {
+        "title": "LPL 2022 Summer"
+      },
+      {
+        "title": "LPL 2023 Spring"
+      },
+      {
+        "title": "LPL 2023 Summer"
+      }
+    ]
+  },
+  "Score": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LCK 2022 Summer"
+      },
+      {
+        "title": "LCK 2023 Spring"
+      },
+      {
+        "title": "LCK 2023 Summer"
+      }
+    ]
+  },
+  "DanDy": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LCK 2024 Summer"
+      }
+    ]
+  },
+  "kkOma": {
+    "worlds": [
+      {
+        "title": "2013"
+      },
+      {
+        "title": "2015"
+      },
+      {
+        "title": "2016"
+      },
+      {
+        "title": "2024"
+      },
+      {
+        "title": "2025"
+      }
+    ],
+    "msi": [
+      {
+        "title": "2016"
+      },
+      {
+        "title": "2017"
+      }
+    ],
+    "leagues": [
+      {
+        "title": "OGN Champions 2013 Summer"
+      },
+      {
+        "title": "OGN Champions 2013-14 Winter"
+      },
+      {
+        "title": "LCK 2015 Spring"
+      },
+      {
+        "title": "LCK 2015 Summer"
+      },
+      {
+        "title": "LCK 2016 Spring"
+      },
+      {
+        "title": "LCK 2017 Spring"
+      },
+      {
+        "title": "LCK 2019 Spring"
+      },
+      {
+        "title": "LCK 2019 Summer"
+      },
+      {
+        "title": "LCK 2021 Spring"
+      },
+      {
+        "title": "LCK 2021 Summer"
+      }
+    ]
+  },
+  "GrabbZ": {
+    "worlds": [],
+    "msi": [
+      {
+        "title": "2019"
+      }
+    ],
+    "leagues": [
+      {
+        "title": "LEC 2019 Spring"
+      },
+      {
+        "title": "LEC 2019 Summer"
+      },
+      {
+        "title": "LEC 2020 Spring"
+      },
+      {
+        "title": "LEC 2020 Summer"
+      }
+    ]
+  },
+  "Dylan Falco": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "EU LCS 2018 Spring"
+      },
+      {
+        "title": "EU LCS 2018 Summer"
+      },
+      {
+        "title": "LEC 2022 Spring"
+      },
+      {
+        "title": "LEC 2023 Winter"
+      },
+      {
+        "title": "LEC 2023 Summer"
+      },
+      {
+        "title": "LEC 2023 Season Finals"
+      },
+      {
+        "title": "LEC 2024 Winter"
+      },
+      {
+        "title": "LEC 2024 Spring"
+      },
+      {
+        "title": "LEC 2024 Summer"
+      },
+      {
+        "title": "LEC 2024 Season Finals"
+      },
+      {
+        "title": "LEC 2025 Summer"
+      },
+      {
+        "title": "LEC 2026 Versus"
+      },
+      {
+        "title": "LEC 2026 Spring"
+      }
+    ]
+  },
+  "Reapered": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LCS 2020 Spring"
+      },
+      {
+        "title": "LCS 2021 Summer"
+      }
+    ]
+  },
+  "Melzhet": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LEC 2025 Spring"
+      }
+    ]
+  },
+  "Pad": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LEC 2021 Spring",
+        "assistant": true
+      },
+      {
+        "title": "LEC 2021 Summer",
+        "assistant": true
+      },
+      {
+        "title": "LEC 2023 Spring",
+        "assistant": true
+      }
+    ]
+  },
+  "Swiffer": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LTA 2025 Split 1",
+        "assistant": true
+      }
+    ]
+  },
+  "Thinkcard": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LCS 2023 Summer"
+      },
+      {
+        "title": "LTA South 2025 Split 2"
+      }
+    ]
+  },
+  "Reignover": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LCS 2020 Spring",
+        "assistant": true
+      },
+      {
+        "title": "LCS 2021 Spring"
+      },
+      {
+        "title": "LCS 2024 Spring",
+        "assistant": true
+      },
+      {
+        "title": "LTA 2025 Split 1",
+        "assistant": true
+      },
+      {
+        "title": "LCS 2026 Lock-In"
+      },
+      {
+        "title": "LCS 2026 Spring"
+      }
+    ]
+  },
+  "Spawn": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LCS 2024 Spring"
+      },
+      {
+        "title": "LTA 2025 Split 1"
+      }
+    ]
+  },
+  "Chawy": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LCP 2025 Season Kickoff"
+      },
+      {
+        "title": "LCP 2025 Mid Season"
+      },
+      {
+        "title": "LCP 2025 Season Finals"
+      }
+    ]
+  },
+  "Refra1n": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LMS 2018 Summer",
+        "assistant": true
+      }
+    ]
+  },
+  "CorGi": {
+    "worlds": [
+      {
+        "title": "2021",
+        "assistant": true
+      }
+    ],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LPL 2021 Summer",
+        "assistant": true
+      },
+      {
+        "title": "PCS 2022 Spring"
+      },
+      {
+        "title": "PCS 2023 Spring"
+      },
+      {
+        "title": "PCS 2023 Summer"
+      },
+      {
+        "title": "PCS 2024 Spring"
+      },
+      {
+        "title": "PCS 2024 Summer"
+      }
+    ]
+  },
+  "BigKoro": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "VCS 2024 Spring",
+        "assistant": true
+      },
+      {
+        "title": "VCS 2024 Summer",
+        "assistant": true
+      }
+    ]
+  },
+  "WarHorse": {
+    "worlds": [
+      {
+        "title": "2019"
+      }
+    ],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LMS 2017 Summer"
+      },
+      {
+        "title": "LMS 2018 Spring"
+      },
+      {
+        "title": "LMS 2018 Summer"
+      },
+      {
+        "title": "LPL 2019 Summer"
+      },
+      {
+        "title": "LCP 2026 Split 1"
+      },
+      {
+        "title": "LCP 2026 Split 2"
+      },
+      {
+        "title": "LCP 2026 Split 3"
+      }
+    ]
+  },
+  "Furyz": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LTA South 2025 Split 2",
+        "assistant": true
+      },
+      {
+        "title": "CBLOL 2026 Split 1"
+      }
+    ]
+  },
+  "Raise": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "CBLOL Cup 2026"
+      }
+    ]
+  },
+  "SeeEl": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LEC 2022 Summer",
+        "assistant": true
+      },
+      {
+        "title": "LTA South 2025 Split 3"
+      }
+    ]
+  },
+  "Sarkis": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "CBLOL 2024 Split 2",
+        "assistant": true
+      }
+    ]
+  },
+  "RapidStar": {
+    "worlds": [],
+    "msi": [
+      {
+        "title": "2017",
+        "assistant": true
+      }
+    ],
+    "leagues": [
+      {
+        "title": "LPL 2016 Summer",
+        "assistant": true
+      },
+      {
+        "title": "LCK 2017 Spring",
+        "assistant": true
+      },
+      {
+        "title": "LCS 2020 Spring",
+        "assistant": true
+      },
+      {
+        "title": "LCS 2024 Spring",
+        "assistant": true
+      }
+    ]
+  },
+  "Snok": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LLA 2021 Closing",
+        "assistant": true
+      },
+      {
+        "title": "LLA 2024 Opening"
+      }
+    ]
+  },
+  "Maokai": {
+    "worlds": [
+      {
+        "title": "2021"
+      }
+    ],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LPL 2021 Summer"
+      }
+    ]
+  },
+  "BigWei": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LPL 2024 Spring"
+      },
+      {
+        "title": "LPL 2024 Summer"
+      },
+      {
+        "title": "LPL 2025 Grand Finals",
+        "assistant": true
+      },
+      {
+        "title": "LPL 2026 Grand Finals"
+      }
+    ]
+  },
+  "LvMao": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LPL 2025 Grand Finals",
+        "assistant": true
+      }
+    ]
+  },
+  "Ggoong": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LPL 2020 Summer",
+        "assistant": true
+      }
+    ]
+  },
+  "Tom": {
+    "worlds": [
+      {
+        "title": "2023",
+        "assistant": true
+      },
+      {
+        "title": "2024",
+        "assistant": true
+      },
+      {
+        "title": "2025",
+        "assistant": true
+      }
+    ],
+    "msi": [],
+    "leagues": []
+  },
+  "Perkz": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LEC 2026 Spring",
+        "assistant": true
+      },
+      {
+        "title": "LEC 2026 Summer"
+      }
+    ]
+  },
+  "Nukeduck": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LTA North 2025 Split 2"
+      },
+      {
+        "title": "LTA 2025 Championship"
+      }
+    ]
+  },
+  "Smiley": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "LTA South 2025 Split 3",
+        "assistant": true
+      }
+    ]
+  },
+  "Von": {
+    "worlds": [],
+    "msi": [],
+    "leagues": [
+      {
+        "title": "CBLOL 2022 Split 2"
+      },
+      {
+        "title": "LLA 2021"
+      }
+    ]
+  }
+}

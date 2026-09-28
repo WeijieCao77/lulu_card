@@ -485,4 +485,3 @@ html[data-theme='light'] .rift-pack-art,html[data-theme='cream'] .rift-pack-art 
 @media (max-width: 640px) { .lol-match-report .grid.c2 { grid-template-columns: minmax(0, 1fr); } .lol-match-report .modal-head h2 { font-size: 18px; } }
 
 /* Keep challenge candidates clear while editing on small screens. */
-@media(max-width:720px){.cardmode.rift-ui[data-challenge-search-active] .support-fab.odds-fab,.cardmode.rift-ui[data-challenge-search-active] .support-fab.log-fab{display:none}}

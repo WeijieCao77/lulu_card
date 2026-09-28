@@ -91,7 +91,7 @@ export default function Support({ raised = false }: { raised?: boolean }) {
             </div>
             <div className="support-foot">
               <button className="sm ghost" onClick={hide}>不用了，别再提示</button>
-              <span className="tiny faint">数据来自 vlr.gg / Liquipedia，游戏内容为程序模拟，与现实无关</span>
+              <span className="tiny faint">数据来自 Oracle’s Elixir / Liquipedia，游戏内容为程序模拟，与现实无关</span>
             </div>
           </div>
         </>

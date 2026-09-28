@@ -1,0 +1,500 @@
+{
+ "1874": {
+  "nat": "cn",
+  "real": "陈立信"
+ },
+ "BigWei": {
+  "nat": "tw",
+  "real": "傅千威"
+ },
+ "Daeny": {
+  "nat": "kr",
+  "real": "Yang Dae-in"
+ },
+ "Maokai": {
+  "nat": "cn",
+  "real": "杨济松"
+ },
+ "Helper": {
+  "nat": "kr",
+  "real": "Kwon Yeong-jae"
+ },
+ "Tabe": {
+  "nat": "hk",
+  "real": "王柏勤"
+ },
+ "LvMao": {
+  "nat": "cn",
+  "real": "左名豪"
+ },
+ "Maizijian": {
+  "nat": "cn",
+  "real": "曾信益"
+ },
+ "Yondaime": {
+  "nat": "cn",
+  "real": "罗鹏"
+ },
+ "JinJin": {
+  "nat": "cn",
+  "real": "金光华"
+ },
+ "NoName": {
+  "nat": "cn",
+  "real": "周祺琳"
+ },
+ "Poppy": {
+  "nat": "tw",
+  "real": "張博皓"
+ },
+ "Yuzhang": {
+  "nat": "cn",
+  "real": "樊晨辉"
+ },
+ "Clearlove": {
+  "nat": "cn",
+  "real": "明凯"
+ },
+ "Edo": {
+  "nat": "kr",
+  "real": "Park Jun-seok"
+ },
+ "Ggoong": {
+  "nat": "kr",
+  "real": "Yu Byeong-jun"
+ },
+ "cvMax": {
+  "nat": "kr",
+  "real": "Kim Dae-ho"
+ },
+ "Ryu": {
+  "nat": "kr",
+  "real": "Ryu Sang-wook"
+ },
+ "SSONG": {
+  "nat": "kr",
+  "real": "Kim Sang-soo"
+ },
+ "Homme": {
+  "nat": "kr",
+  "real": "Yoon Sung-young"
+ },
+ "Score": {
+  "nat": "kr",
+  "real": "Go Dong-bin"
+ },
+ "Joker": {
+  "nat": "kr",
+  "real": "Cho Jae-eup"
+ },
+ "DanDy": {
+  "nat": "kr",
+  "real": "Choi In-kyu"
+ },
+ "kkOma": {
+  "nat": "kr",
+  "real": "Kim Jeong-gyun"
+ },
+ "GrabbZ": {
+  "nat": "de",
+  "real": "Fabian Lohmann"
+ },
+ "Perkz": {
+  "nat": "hr",
+  "real": "Luka Perković"
+ },
+ "Guilhoto": {
+  "nat": "pt",
+  "real": "André Pereira Guilhoto"
+ },
+ "Reapered": {
+  "nat": "kr",
+  "real": "Bok Han-gyu"
+ },
+ "Melzhet": {
+  "nat": "es",
+  "real": "Tomás Campelos Fernández"
+ },
+ "TheRock7": {
+  "nat": "gr",
+  "real": "Vasilis Voltis"
+ },
+ "Own3r": {
+  "nat": "es",
+  "real": "David Rodríguez de la Torre"
+ },
+ "Striker": {
+  "nat": "fr",
+  "real": "Yanis Kella"
+ },
+ "Nukeduck": {
+  "nat": "no",
+  "real": "Erlend Våtevik Holm"
+ },
+ "Pad": {
+  "nat": "dk",
+  "real": "Patrick Suckow-Breum"
+ },
+ "IWDominate": {
+  "nat": "us",
+  "real": "Christian Rivera"
+ },
+ "Swiffer": {
+  "nat": "au",
+  "real": "Simon Papamarkos"
+ },
+ "Ido": {
+  "nat": "us",
+  "real": "Ian McCormick"
+ },
+ "Thinkcard": {
+  "nat": "us",
+  "real": "Thomas Slotkin"
+ },
+ "Reignover": {
+  "nat": "kr",
+  "real": "Kim Yeu-jin"
+ },
+ "Goldenglue": {
+  "nat": "us",
+  "real": "Greyson Gilmer"
+ },
+ "Reven": {
+  "nat": "kr",
+  "real": "Seong Sang-hyeon"
+ },
+ "Spawn": {
+  "nat": "au",
+  "real": "Jake Tiberi"
+ },
+ "Chawy": {
+  "nat": "sg",
+  "real": "黃心磊"
+ },
+ "Refra1n": {
+  "nat": "tw",
+  "real": "陳冠廷"
+ },
+ "Paz": {
+  "nat": "jp",
+  "real": "佐々木志郎"
+ },
+ "CorGi": {
+  "nat": "tw",
+  "real": "程品倫"
+ },
+ "Naul": {
+  "nat": "vn",
+  "real": "Võ Thành Luân"
+ },
+ "Skywalk": {
+  "nat": "hk",
+  "real": "黃俊謙"
+ },
+ "BigKoro": {
+  "nat": "vn",
+  "real": "Đặng Ngọc Tài"
+ },
+ "WarHorse": {
+  "nat": "tw",
+  "real": "陳如治"
+ },
+ "Furyz": {
+  "nat": "br",
+  "real": "Erick Susin"
+ },
+ "Guchi": {
+  "nat": "ar",
+  "real": "Andrés Enrique Castro"
+ },
+ "Raise": {
+  "nat": "kr",
+  "real": "Oh Ji-hwan"
+ },
+ "Kouke": {
+  "nat": "pe",
+  "real": "Jorge Eduardo Bravo González"
+ },
+ "Enatron": {
+  "nat": "gr",
+  "real": "Ilias Theodorou"
+ },
+ "Tockers": {
+  "nat": "br",
+  "real": "Gabriel Claumann"
+ },
+ "Smiley": {
+  "nat": "se",
+  "real": "Ludvig Granquist"
+ },
+ "Von": {
+  "nat": "br",
+  "real": "Gabriel Barbosa"
+ },
+ "Dopil": {
+  "nat": "kr",
+  "real": "Yang Seong-pil"
+ },
+ "RapidStar": {
+  "nat": "kr",
+  "real": "Jung Min-sung"
+ },
+ "Woong": {
+  "nat": "kr",
+  "real": "Kim Sun-woong"
+ },
+ "Jerry": {
+  "nat": "kr",
+  "real": "Kang Sung-jun"
+ },
+ "Cheoni": {
+  "nat": "kr",
+  "real": "Jo Seung-mo"
+ },
+ "Sensation": {
+  "nat": "kr",
+  "real": "Kim Dong-hyeon"
+ },
+ "Spark": {
+  "nat": "kr",
+  "real": "Kang Byung-ryul"
+ },
+ "Frozen": {
+  "nat": "kr",
+  "real": "Kim Tae-il"
+ },
+ "bonO": {
+  "nat": "kr",
+  "real": "Kim Gi-beom"
+ },
+ "DooTi": {
+  "nat": "kr",
+  "real": "Choi Du-seong"
+ },
+ "Pockus": {
+  "nat": "ca",
+  "real": "Antoine Bertrand Lafrenière"
+ },
+ "Dionrray": {
+  "nat": "br",
+  "real": "João Pedro Barbosa"
+ },
+ "Autoboost": {
+  "nat": "mx",
+  "real": "Orlando Coronado"
+ },
+ "Collamer": {
+  "nat": "us",
+  "real": "Brandon Collamer"
+ },
+ "Mash": {
+  "nat": "ca",
+  "real": "Brandon Phan"
+ },
+ "Boby": {
+  "nat": "rs",
+  "real": "Mihajlo Ogarević"
+ },
+ "Niles": {
+  "nat": "us",
+  "real": "Aiden Tidwell"
+ },
+ "boc": {
+  "nat": "us",
+  "real": "Samuel August Boudrie"
+ },
+ "Artemis": {
+  "nat": "us",
+  "real": "Connor Doyle"
+ },
+ "xani": {
+  "nat": "hr",
+  "real": "Nikola Zrinjski"
+ },
+ "Naruterador": {
+  "nat": "es",
+  "real": "Ramón Meseguer Fructuoso"
+ },
+ "Viser1on": {
+  "nat": "tr",
+  "real": "Burak Kaan Badan"
+ },
+ "Hellombre": {
+  "nat": "fr",
+  "real": "Adrien Lompre"
+ },
+ "Dan Dan": {
+  "nat": "nl",
+  "real": "Danny Le Comte"
+ },
+ "Djoko": {
+  "nat": "fr",
+  "real": "Charly Guillard"
+ },
+ "Nahovsky": {
+  "nat": "pl",
+  "real": "Kacper Merski"
+ },
+ "Moonblack": {
+  "nat": "hk",
+  "real": "梁頌康"
+ },
+ "Endless": {
+  "nat": "cn",
+  "real": "许昊"
+ },
+ "XDDCC": {
+  "nat": "hk"
+ },
+ "Strix": {
+  "nat": "br",
+  "real": "Douglas Assis"
+ },
+ "Doran": {
+  "nat": "br",
+  "real": "Eduardo Henrique Correa de Carvalho"
+ },
+ "Snok": {
+  "nat": "sv",
+  "real": "Roberto Coello"
+ },
+ "Patron": {
+  "nat": "br",
+  "real": "Leone Patron"
+ },
+ "Medina": {
+  "nat": "br",
+  "real": "Rodrigo Soares Medina da Cunha"
+ },
+ "Capivara": {
+  "nat": "br",
+  "real": "Gabriel Vieira Branco Ferreira"
+ },
+ "Politico": {
+  "nat": "br",
+  "real": "Iago Cerqueira da Silva"
+ },
+ "Tom": {
+  "nat": "kr",
+  "real": "Im Jae-hyeon"
+ },
+ "Mafa": {
+  "nat": "kr",
+  "real": "Won Sang-yeon"
+ },
+ "Edgar": {
+  "nat": "kr",
+  "real": "Choi Woo-beom"
+ },
+ "oDin": {
+  "nat": "kr",
+  "real": "Ju Yeong-dal"
+ },
+ "QingSi": {
+  "nat": "cn",
+  "real": "贺维"
+ },
+ "Shine": {
+  "nat": "kr",
+  "real": "Shin Dong-wook"
+ },
+ "Dylan Falco": {
+  "nat": "ca",
+  "real": "Dylan Falco"
+ },
+ "Hidon": {
+  "nat": "dk",
+  "real": "Jonas Vraa"
+ },
+ "Inero": {
+  "nat": "us",
+  "real": "Nicholas Smith"
+ },
+ "Samyy": {
+  "nat": "br",
+  "real": "Mayoah Samson Steven de Almeida Aboriomo"
+ },
+ "Kaiba": {
+  "nat": "pt",
+  "real": "Renato Guilherme Alcantara Barreto de Oliveira"
+ },
+ "SeeEl": {
+  "nat": "au",
+  "real": "Christopher Lee"
+ },
+ "Sarkis": {
+  "nat": "br",
+  "real": "Matheus Guimarães Sarquis"
+ },
+ "Arces": {
+  "nat": "pl",
+  "real": "Damian Osuch"
+ },
+ "Deam147": {
+  "nat": "cr",
+  "real": "Deam Saavedra Carranza"
+ },
+ "Gismo": {
+  "nat": "jp",
+  "real": "青木春彦"
+ },
+ "Hiily": {
+  "nat": "fr"
+ },
+ "Lanterninho": {
+  "nat": "br",
+  "real": "Caio Cavaglieri Felippe"
+ },
+ "Liet": {
+  "nat": "cn",
+  "real": "刘正洋"
+ },
+ "Lyfaenia": {
+  "nat": "br",
+  "real": "Henrique Ruoso"
+ },
+ "Mascode": {
+  "nat": "fr",
+  "real": "Thomas Jego"
+ },
+ "Medusa": {
+  "nat": "cn",
+  "real": "冯俊达"
+ },
+ "Milan": {
+  "nat": "fr",
+  "real": "Jonas Morisot"
+ },
+ "Millimas": {
+  "nat": "kr",
+  "real": "Kim Geon-woo"
+ },
+ "Rodrigo": {
+  "nat": "pt",
+  "real": "Rodrigo Domingues Oliveira"
+ },
+ "Saroo": {
+  "nat": "kr",
+  "real": "Lee Jong-won"
+ },
+ "Scartie": {
+  "nat": "br",
+  "real": "Carlos Augusto Magalhães Crispino"
+ },
+ "SrVenancio": {
+  "nat": "br",
+  "real": "Victor Venancio"
+ },
+ "Suga": {
+  "nat": "vn",
+  "real": "Phan Bá Phúc"
+ },
+ "Zizheng": {
+  "nat": "cn",
+  "real": "家子正"
+ },
+ "Zuko": {
+  "nat": "vn",
+  "real": "Nguyễn Hoàng Thái"
+ }
+}

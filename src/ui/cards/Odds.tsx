@@ -160,7 +160,7 @@ export function OddsWhy() {
           <b>彩卡保底</b>：{MYTHIC_PACK_NAMES} 共享 {MYTHIC_FLOOR} 抽保底，LPL、LCK、LEC、LCS 赛区包只出本赛区彩卡并共享此保底；其他包（LCP、CBLOL）没有彩卡，不推进此保底；教练包和位置包不出本系列彩卡，不推进此保底。
         </li>
         <li>
-          <b>普通选手卡基础评分</b>：金卡 {GOLD_AT}—90，银卡 {SILVER_AT}—{GOLD_AT - 1}，铜卡低于 {SILVER_AT}；强化后可超过基础上限。<br /><b>教练基础评分</b>：金卡 {COACH_GOLD_AT} 起，银卡 {COACH_SILVER_AT}—{COACH_GOLD_AT - 1}，铜卡低于 {COACH_SILVER_AT}。
+          <b>普通选手卡基础评分</b>：金卡 {GOLD_AT}—90，银卡 {SILVER_AT}—{GOLD_AT - 1}，铜卡低于 {SILVER_AT}；强化后可超过基础上限。<br /><b>教练基础评分</b>：与选手卡相同，金卡 {COACH_GOLD_AT}—90，银卡 {COACH_SILVER_AT}—{COACH_GOLD_AT - 1}，铜卡低于 {COACH_SILVER_AT}；执教冠军有履历底分。
         </li>
         <li>
           <b>保底进度挂在账号上</b>，换一种包开不重置。

@@ -1,0 +1,37 @@
+{
+  "asOf": "2026-09-28",
+  "source": "Leaguepedia / Liquipedia team pages and club announcements, checked 2026-09-28",
+  "teams": {
+    "AL":   { "coach": "BigWei" },
+    "EDG":  { "coach": "Maokai" },
+    "IG":   { "coach": "Helper", "from": "AL" },
+    "LNG":  { "coach": "LvMao" },
+    "OMG":  { "coach": "Yondaime" },
+    "WBG":  { "coach": "Clearlove", "from": "EDG" },
+    "DNS":  { "coach": "Ggoong" },
+    "G2":   { "coach": "Perkz" },
+    "TH":   { "coach": "Nukeduck" },
+    "C9":   { "coach": "IWDominate" },
+    "FXW7": { "coach": "Guchi" },
+    "LEV":  { "coach": "Kouke" },
+    "VKS":  { "coach": "Smiley" },
+    "PNG":  { "coach": "Von" }
+  },
+  "extra": [
+    { "coach": "Tom", "team": "T1", "note": "interim head coach while kkOma is on leave (2026-03-22); kkOma stays T1's registered head coach" }
+  ],
+  "former": {
+    "Mafa":        { "titleClubs": ["IG", "GEN"] },
+    "Edgar":       { "titleClubs": ["GEN"] },
+    "oDin":        { "titleClubs": [] },
+    "QingSi":      { "titleClubs": [] },
+    "Shine":       { "titleClubs": [] },
+    "Dylan Falco": { "titleClubs": ["FNC", "G2"] },
+    "Hidon":       { "titleClubs": [] },
+    "Inero":       { "titleClubs": [] },
+    "Samyy":       { "titleClubs": [] },
+    "Kaiba":       { "titleClubs": [] },
+    "SeeEl":       { "titleClubs": ["VKS"] },
+    "Sarkis":      { "titleClubs": ["PNG"] }
+  }
+}

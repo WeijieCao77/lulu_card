@@ -22,6 +22,7 @@ import OddsFab from './cards/OddsFab'
 import MailBox, { MailButton } from './cards/MailBox'
 import Credit from './Credit'
 import Changelog from './Changelog'
+import Support from './Support'
 import ThemeToggle from './ThemeToggle'
 import { RiftNavigation, RiftBanner } from './RiftChrome'
 import { DemoWelcome, GateBrand, GateStory } from './GateWelcome'
@@ -337,7 +338,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
       {/* the door is a page like any other, and the person standing at it is
           exactly the one who has not decided whether to come in */}
       <Changelog />
-      
+      <Support />
       </>
     )
   }
@@ -377,7 +378,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
         onSignOut={signOut}
       />
       <Changelog />
-      
+      <Support />
       </>
     )
   }
@@ -407,11 +408,19 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
           <div className="spacer" />
           {!cloud && <div className="chip small" style={{ color: 'var(--warn)' }} title="服务器连不上，进度只在本机">仅本机</div>}
           <ThemeToggle compact />
+          {/* back to the games portal, as 开瓦包 has it; the brand on the left still goes to 噜噜卡's own front page */}
+          <a className="button ghost sm" href="https://vctgames.com/" onClick={() => flushAccount(g)}>← 返回首页</a>
         </header>
 
         <RiftNavigation utilities={<MailButton onClick={() => setTab('mail')} active={tab === 'mail'} />} tabs={TABS} active={tab} onSelect={key => { setCupTarget(null); setTab(key); if (key !== 'dossier') setDossierId(null) }} />
 
         <div className="cm-body" id="main" ref={mainRef}>
+          {/* fixed in the page, not floating over it — the same row 开瓦包 has (owner, 2026-09-28) */}
+          <div className="fab-dock">
+            <OddsFab />
+            <Changelog />
+            <Support />
+          </div>
           <RiftBanner page={tab} owned={ALL_CARDS.filter(c => g.cards[c.id]).length} total={ALL_CARDS.length} />
           {fresh && tab === 'account' && (
             <div className="panel" style={{ borderColor: 'var(--accent-line)', marginBottom: 14 }}>
@@ -434,9 +443,6 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
 
         {toastMsg && <div className="toast">{toastMsg}</div>}
         {showDemoWelcome && <DemoWelcome onClose={() => setShowDemoWelcome(false)} />}
-        <OddsFab />
-        <Changelog />
-        
       </div>
     </CardCtx.Provider>
   )

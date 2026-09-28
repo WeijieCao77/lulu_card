@@ -134,11 +134,12 @@ function testCoachCountsAndConsistency() {
     }
   }
   const expectedCoachCounts: Record<string, Record<string, number>> = {
-    'LPL': { gold: 3, silver: 8, bronze: 6 },
-    'LCK': { gold: 8, silver: 5, bronze: 7 },
-    'LEC': { gold: 6, silver: 7, bronze: 12 },
-    'LCS': { gold: 6, silver: 5, bronze: 6 },
-    'WEST': { gold: 8, silver: 10, bronze: 14 },
+    // 2026-09-28: coaches on the player bands (金 84 / 银 72), honours floor, 2026-09 head-coach moves (+13 cards)
+    'LPL': { gold: 8, silver: 7, bronze: 6 },
+    'LCK': { gold: 8, silver: 10, bronze: 4 },
+    'LEC': { gold: 3, silver: 12, bronze: 12 },
+    'LCS': { gold: 2, silver: 11, bronze: 5 },
+    'WEST': { gold: 4, silver: 18, bronze: 14 },
     'null': { gold: 0, silver: 0, bronze: 3 }
   };
   for (const [group, rarityMap] of byGroup) {
@@ -149,8 +150,9 @@ function testCoachCountsAndConsistency() {
   // Coach gold 78+ silver 72+ unified across all groups
   const allCoaches = COACH_CARDS;
   for (const coach of allCoaches) {
-    if (coachRarityOf(coach.rating) === 'gold') assert.ok(coach.rating >= 78, `coach gold < 78 for ${coach.id}`);
-    if (coachRarityOf(coach.rating) === 'silver') assert.ok(coach.rating >= 72, `coach silver < 72 for ${coach.id}`);
+    if (coachRarityOf(coach.rating) === 'gold') assert.ok(coach.rating >= 84, `coach gold < 84 for ${coach.id}`);
+    if (coachRarityOf(coach.rating) === 'silver') assert.ok(coach.rating >= 72 && coach.rating < 84, `coach silver outside 72–83 for ${coach.id}`);
+    if (!coach.legend) assert.ok(coach.rating <= 90, `ordinary coach above 90 for ${coach.id}`);
   }
   console.log('Coach counts verified');
 }
@@ -245,7 +247,7 @@ function testGlobalRarityColorConsistency() {
 
 assert.equal(BASE_PLAYER_CARDS.length, 677);
 assert.equal(LEGEND_CARDS.length, 40);
-assert.equal(COACH_CARDS.length, 114);
+assert.equal(COACH_CARDS.length, 127);
 assert.equal(CARD_BALANCE_VERSION, 8);
 testPlayerCountsAndCardStats();
 

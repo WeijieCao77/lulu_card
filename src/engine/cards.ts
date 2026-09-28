@@ -14,7 +14,7 @@ import { ordinaryCardStats } from './cardRarity'
 import type { SeoulEntry } from './seoul2024'
 import { natCountry } from './nat'
 import { WORLD_PLAYERS } from './world'
-import { WORLD_TEAMS, WORLD_ANALYSTS } from './teams'
+import { WORLD_TEAMS, WORLD_ANALYSTS, EXTRA_COACHES, FORMER_COACHES } from './teams'
 import { DOSSIER, coachDossier, faceUrl, legendPhoto } from './dossier'
 import { LEGENDS } from './legends'
 // which players each coach actually coached: a staff role at a club in months the
@@ -23,6 +23,7 @@ import COACHED_JSON from '../data/coached.json'
 import type { Legend } from './legends'
 import { decodeDisplayName } from './displayText'
 import { clamp } from './rng'
+import { ORDINARY_CAP, honourFloor, honoursOf } from './coachHonours'
 import type { Attrs, Coach, Region, Role } from './types'
 
 export type Rarity = 'mythic' | 'gold' | 'silver' | 'bronze'
@@ -46,9 +47,13 @@ export const SILVER_AT = 72
 export const rarityOf = (rating: number): Rarity =>
   rating >= GOLD_AT ? 'gold' : rating >= SILVER_AT ? 'silver' : 'bronze'
 
-/** Head coaches rate lower than players across the board, so they get their own cut. */
-export const COACH_GOLD_AT = 78
-export const COACH_SILVER_AT = 72
+/**
+ * Coaches use the player bands — 金 84–90, 银 72–83, 铜 below (owner, 2026-09-28). They had their own
+ * cut at 78 while a coach's number was his current season alone; with a champion's record as a floor
+ * (coachHonours.ts) the two scales line up.
+ */
+export const COACH_GOLD_AT = GOLD_AT
+export const COACH_SILVER_AT = SILVER_AT
 export const coachRarityOf = (rating: number): Rarity =>
   rating >= COACH_GOLD_AT ? 'gold' : rating >= COACH_SILVER_AT ? 'silver' : 'bronze'
 
@@ -108,6 +113,20 @@ export interface CoachCard {
   rarity: Rarity
   /** analysts are coaches with a speciality instead of a club */
   spec?: string
+  /** no head-coaching job at present (clubId null): shown as 自由身 */
+  free?: boolean
+  /** a 自由身 coach's championship clubs (team ids): named on the card, and his same-club bond */
+  titleClubs?: string[]
+}
+
+/** A 自由身 coach's championship clubs as tags, for the card detail. */
+export const titleClubTags = (c: CoachCard): string[] =>
+  (c.titleClubs ?? []).map((id) => WORLD_TEAMS.find((t) => t.id === id)?.tag ?? id)
+
+/** Same club for a coach bond: the club he coaches, or — for a 自由身 coach — a club he won titles with. */
+export function coachSharesClub(p: PlayerCard, coach: CoachCard): boolean {
+  if (sameClubLineage(p, coach)) return true
+  return !!coach.titleClubs?.some((id) => sameClubLineage(p, { clubId: id }))
 }
 
 export type Card = PlayerCard | CoachCard
@@ -122,6 +141,26 @@ const coachAbility = (c: { tactics: number; development: number; motivation: num
   c.tactics * 0.45 + c.development * 0.3 + c.motivation * 0.25
 export const coachRating = (c: { tactics: number; development: number; motivation: number }): number =>
   Math.round(coachAbility(c))
+
+type CoachAbilities = { tactics: number; development: number; motivation: number }
+
+/**
+ * The season's three numbers, lifted to the coach's record and held to the ordinary cap.
+ *
+ * The weights sum to one, so adding the same whole number to all three moves the weighted ability
+ * by exactly that much — the face and the arena's lift stay the same number, as before.
+ */
+function withHonours(name: string, c: CoachAbilities): CoachAbilities & { rating: number } {
+  const season = coachRating(c)
+  const target = Math.min(ORDINARY_CAP, Math.max(season, honourFloor(honoursOf(name))))
+  const d = target - season
+  const out = {
+    tactics: clamp(c.tactics + d, 1, 99),
+    development: clamp(c.development + d, 1, 99),
+    motivation: clamp(c.motivation + d, 1, 99),
+  }
+  return { ...out, rating: Math.min(ORDINARY_CAP, coachRating(out)) }
+}
 
 const teamById = new Map(WORLD_TEAMS.map((t) => [t.id, t]))
 const HAN = /[一-鿿]/
@@ -158,6 +197,21 @@ function buildPlayerCards(): PlayerCard[] {
   })
 }
 
+function coachCard(c: { name: string } & CoachAbilities, club: Pick<CoachCard, 'clubId' | 'clubTag' | 'region'>, extra: Partial<CoachCard> = {}): CoachCard {
+  const { rating, ...abilities } = withHonours(c.name, c)
+  const d = coachDossier(c.name)
+  return {
+    kind: 'coach', id: `c:${c.name}`, name: c.name,
+    realName: decodeDisplayName(d?.real ?? null),
+    nat: d?.nat ?? null,
+    face: d?.img ? faceUrl(d.img, d.v) : null,
+    ...club,
+    ...abilities,
+    rating, rarity: coachRarityOf(rating),
+    ...extra,
+  }
+}
+
 function buildCoachCards(): CoachCard[] {
   const out: CoachCard[] = []
   const seen = new Set<string>()
@@ -165,17 +219,25 @@ function buildCoachCards(): CoachCard[] {
     const c = t.coach as Coach | undefined
     if (!c?.name || seen.has(c.name)) continue
     seen.add(c.name)
-    const rating = coachRating(c)
-    const d = coachDossier(c.name)
-    out.push({
-      kind: 'coach', id: `c:${c.name}`, name: c.name,
-      realName: decodeDisplayName(d?.real ?? null),
-      nat: d?.nat ?? null,
-      face: d?.img ? faceUrl(d.img, d.v) : null,
-      clubId: t.id, clubTag: t.tag, region: t.region as Region,
-      tactics: c.tactics, development: c.development, motivation: c.motivation,
-      rating, rarity: coachRarityOf(rating),
+    out.push(coachCard(c, { clubId: t.id, clubTag: t.tag, region: t.region as Region }))
+  }
+  // a second head coach at the same club: T1's interim coach while kkOma is on leave
+  for (const { coach, team } of EXTRA_COACHES) {
+    if (seen.has(coach.name)) continue
+    seen.add(coach.name)
+    out.push(coachCard(coach, { clubId: team.id, clubTag: team.tag, region: team.region as Region }))
+  }
+  // Coaches without a head-coaching job now (owner, 2026-09-28): the card stays, marked 自由身, with the
+  // clubs he won titles with — and the same-club bond with those clubs' players.
+  for (const f of FORMER_COACHES) {
+    if (seen.has(f.coach.name)) continue
+    seen.add(f.coach.name)
+    const titleClubs = f.titleClubs.map((tag) => {
+      const t = WORLD_TEAMS.find((x) => x.tag === tag && x.tier === 1)
+      if (!t) throw new Error(`coachChanges: ${f.coach.name} 的夺冠俱乐部 ${tag} 不在 world.json`)
+      return t.id
     })
+    out.push(coachCard(f.coach, { clubId: null, clubTag: null, region: f.region as Region }, { free: true, titleClubs }))
   }
   // the five real analysts are cards too — they coach a different way, and
   // there are few enough of them to be worth chasing
@@ -183,7 +245,7 @@ function buildCoachCards(): CoachCard[] {
     if (seen.has(a.name)) continue
     seen.add(a.name)
     const club = WORLD_TEAMS.find((t) => t.name === a.from || t.tag === a.from)
-    const rating = coachRating(a)
+    const { rating, ...abilities } = withHonours(a.name, a)
     const d = coachDossier(a.name)
     out.push({
       kind: 'coach', id: `c:${a.name}`, name: a.name,
@@ -192,7 +254,7 @@ function buildCoachCards(): CoachCard[] {
       face: d?.img ? faceUrl(d.img, d.v) : null,
       clubId: club?.id ?? null, clubTag: club?.tag ?? a.from,
       region: (club?.region as Region) ?? null,
-      tactics: a.tactics, development: a.development, motivation: a.motivation,
+      ...abilities,
       rating, rarity: coachRarityOf(rating), spec: a.spec,
     })
   }
@@ -538,19 +600,19 @@ export function chemistry(squad: Squad): ChemReport {
   const coachLinks: CoachLink[] = []
   if (isCoachCard(coach)) {
     const players = cards.filter(isPlayerCard)
-    const sameClub = players.filter((p) => sameClubLineage(p, coach)).length
+    const sameClub = players.filter((p) => coachSharesClub(p, coach)).length
     // Men this coach has actually coached before, somewhere: a staff role at a
     // club in months the player was on it. Not everyone who has ever passed
     // through a club he coaches — 「只有真的和那位教练同时期呆过的人才有默契
     // 值，而不是在同一个俱乐部过就有」. Worth less than the men he coaches now,
     // and a man he coaches now is never counted a second time here.
-    const coachedBefore = players.filter((p) => !(sameClubLineage(p, coach))
+    const coachedBefore = players.filter((p) => !coachSharesClub(p, coach)
       && !!COACHED.get(coach.name)?.has(p.playerId)).length
     const sameRegion = players.filter((p) => sameGameRegion(p.region, coach.region)).length
     coachBonus = sameClub * 2 + coachedBefore + sameRegion
     cards.forEach((p, slot) => {
       if (!isPlayerCard(p)) return
-      const club = !!(sameClubLineage(p, coach))
+      const club = coachSharesClub(p, coach)
       const before = !club && !!COACHED.get(coach.name)?.has(p.playerId)
       const region = sameGameRegion(p.region, coach.region)
       const value = (club ? 2 : 0) + (before ? 1 : 0) + (region ? 1 : 0)

@@ -18,6 +18,7 @@
  * placements, winnings) and Liquipedia's team history.
  */
 import RAW from '../data/dossier.json'
+import COACH_PROFILES_JSON from '../data/coachProfiles.json'
 
 export interface DossierEntry {
   img?: string
@@ -88,8 +89,17 @@ export const titleCount = (playerId: string): number => dossierOf(playerId)?.t ?
  * two people called Autumn, and putting the wrong face on a real person is a
  * worse failure than showing no face at all.
  */
-export const coachDossier = (name: string): DossierEntry | undefined =>
-  DOSSIER.coaches?.[name]
+/**
+ * Hand-checked coach facts (data/coachProfiles.json: nationality, real name — owner, 2026-09-28: every coach
+ * card showed 国籍未知), laid over the generated dossier so a rebuild of dossier.json cannot drop them.
+ */
+const COACH_PROFILES = COACH_PROFILES_JSON as Record<string, Pick<DossierEntry, 'nat' | 'real'>>
+
+export const coachDossier = (name: string): DossierEntry | undefined => {
+  const base = DOSSIER.coaches?.[name]
+  const extra = COACH_PROFILES[name]
+  return extra ? { ...base, ...extra } : base
+}
 
 /**
  * The photograph for a彩卡.

@@ -14,6 +14,7 @@
  * WORLD_TEAMS in the program.
  */
 import { teams, meta } from '../data/world.json'
+import COACH_CHANGES from '../data/coachChanges.json'
 
 export interface RawTeam {
   id: string; name: string; tag: string; region: string; tier: number; league: string
@@ -25,6 +26,42 @@ export interface RawTeam {
 }
 
 export const WORLD_TEAMS = teams as unknown as RawTeam[]
+
+type RawCoach = NonNullable<RawTeam['coach']>
+
+/**
+ * Head coaches as of the last check (data/coachChanges.json), laid over world.json — owner, 2026-09-28:
+ * 「执教俱乐部按最新的」. A coach who moved takes his own three numbers with him; a coach new to the game
+ * takes over the numbers of the team he inherited, which is what those numbers were read from. Coaches
+ * left without a head-coaching job are FORMER_COACHES: still cards, now 自由身.
+ */
+export interface FormerCoach { coach: RawCoach; region: string; titleClubs: string[] }
+export interface ExtraCoach { coach: RawCoach; team: RawTeam }
+
+const byTag = new Map(WORLD_TEAMS.map((t) => [t.tag, t]))
+const originalCoach = new Map(WORLD_TEAMS.map((t) => [t.tag, t.coach]))
+for (const [tag, change] of Object.entries(COACH_CHANGES.teams as Record<string, { coach: string; from?: string }>)) {
+  const team = byTag.get(tag)
+  const numbers = originalCoach.get(change.from ?? tag)
+  if (!team || !numbers) throw new Error(`coachChanges: ${tag} / ${change.from ?? tag} 不在 world.json`)
+  team.coach = { ...numbers, name: change.coach, assistants: change.from ? numbers.assistants : [] }
+}
+
+const coaching = new Set(WORLD_TEAMS.map((t) => t.coach?.name).filter(Boolean))
+export const FORMER_COACHES: FormerCoach[] = Object.entries(COACH_CHANGES.former as Record<string, { titleClubs: string[] }>)
+  .map(([name, f]) => {
+    if (coaching.has(name)) throw new Error(`coachChanges: ${name} 仍是主教练，不能算自由身`)
+    const team = WORLD_TEAMS.find((t) => originalCoach.get(t.tag)?.name === name)
+    if (!team) throw new Error(`coachChanges: 找不到 ${name} 原来的球队`)
+    return { coach: { ...originalCoach.get(team.tag)!, assistants: [] }, region: team.region, titleClubs: f.titleClubs }
+  })
+
+export const EXTRA_COACHES: ExtraCoach[] = (COACH_CHANGES.extra as { coach: string; team: string }[]).map((x) => {
+  const team = byTag.get(x.team)
+  const numbers = originalCoach.get(x.team)
+  if (!team || !numbers) throw new Error(`coachChanges: ${x.team} 不在 world.json`)
+  return { coach: { ...numbers, name: x.coach, assistants: [] }, team }
+})
 
 /**
  * Every real analyst in the world, and there are very few.

@@ -79,6 +79,11 @@ export default function Ladder() {
   const rival = (pinned?.rival ?? null) as RivalSquad | null
   const oppId = pinned?.club ?? opp0
   const opp = WORLD_TEAMS.find((t) => t.id === oppId)
+  // The strength the server scores 大师 points against (cardActions 'ladder'), as a whole number: the arena
+  // paper is unrounded, and players saw 「评分 86.00000000001」.
+  const oppRating = rival
+    ? 84 + Math.min(10, Math.floor(rival.points / 250))
+    : Math.round((arenaOpponentRating(oppId) ?? opp?.rating ?? 80) + bump)
 
   const play = async () => {
     if (filled < 5) { toast('先凑齐五个人。'); go('squad'); return }
@@ -126,7 +131,7 @@ export default function Ladder() {
             {master ? (
               <span className="tiny faint">
                 大师不掉段，改为计分：赢一场 +20 起，对手评分每高出 84 一分多 3 分
-                （下一个对手评分 {(opp?.rating ?? 80) + bump}，赢了 +{20 + Math.max(0, (opp?.rating ?? 80) + bump - 84) * 3}），
+                （下一个对手评分 {oppRating}，赢了 +{20 + Math.max(0, oppRating - 84) * 3}），
                 三连胜起再 +8；输一场 −15，最低 0 分。
                 {MASTER_TITLES.slice().reverse().filter((t) => t.at > 0)
                   .map((t) => `${t.at} 分升「${t.name}」`).join('，')}，上不封顶。
@@ -161,7 +166,7 @@ export default function Ladder() {
                     ) : (
                       <>
                         {REGION_CN[opp.region as keyof typeof REGION_CN]} · {opp.league} · 评分{' '}
-                        {(arenaOpponentRating(opp.id) ?? opp.rating) + bump}
+                        {oppRating}
                         {masterBump > 0 && (
                           <span className="tag warn" style={{ marginLeft: 5 }}>
                             大师加强 +{masterBump}

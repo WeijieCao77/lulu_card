@@ -1944,6 +1944,19 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
 .support-fab .ico { color: var(--accent); font-size: 14px; }
 .support-fab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+/* 卡牌模式: 概率 / 更新日志 / 支持作者 sit in a row at the top of the page, as in 开瓦包,
+   instead of floating over the cards. The panels they open stay where they were. */
+.fab-dock {
+  display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 4px 18px;
+  margin: 0 0 10px;
+}
+.fab-dock .support-fab {
+  position: static; box-shadow: none; background: transparent; border: 0;
+  padding: 6px 2px; font-size: var(--t-body, 15px);
+}
+.fab-dock .support-fab:hover, .fab-dock .support-fab.on { transform: none; color: var(--text); }
+.fab-dock .support-fab .ico { font-size: 16px; }
+
 .support-veil {
   position: fixed; inset: 0; z-index: 54;
   background: var(--scrim);
@@ -1982,6 +1995,8 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
   .support-fab { right: 10px; bottom: 10px; padding: 10px; }
   .support-fab.raised { bottom: 68px; }
   .support-fab .lbl { display: none; }
+  .fab-dock .support-fab { padding: 4px 2px; }
+  .fab-dock .support-fab .lbl { display: inline; }
   .support-card {
     right: 8px; left: 8px; bottom: 8px; width: auto;
     max-height: calc(100vh - 16px);

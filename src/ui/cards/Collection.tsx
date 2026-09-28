@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import RatingExplainer from '../RatingExplainer'
+import { honoursLine, honoursOf } from '../../engine/coachHonours'
 import { useCards } from './ctx'
 import CardFace, { Flag, natName } from '../Card'
 import { Panel } from '../common'
@@ -11,7 +12,7 @@ import { dismantleFee, dismantleYield } from '../../engine/dismantle'
 import { sparesOf } from '../../engine/inbox'
 import { crestUrl } from '../../engine/dossier'
 import {
-  ALL_CARDS, MAX_LEVEL, POWER_PER_LEVEL, RARITY_CN, SALVAGE, cardById, cardPower, isPlayerCard,
+  ALL_CARDS, MAX_LEVEL, POWER_PER_LEVEL, RARITY_CN, SALVAGE, cardById, cardPower, isPlayerCard, titleClubTags,
 } from '../../engine/cards'
 import type { Card, Rarity } from '../../engine/cards'
 import { ATTR_CN, ATTR_KEYS, REGION_CN } from '../../engine/types'
@@ -372,10 +373,13 @@ export default function Collection() {
                     </>
                   ) : (
                     <div className="small muted" style={{ lineHeight: 1.9 }}>
-                      {sel.clubTag ?? '自由身'} 的教练{sel.spec ? '组分析师' : ''}
+                      {sel.free
+                        ? <>自由身教练{sel.titleClubs?.length ? ` · 夺冠俱乐部 ${titleClubTags(sel).join('、')}` : ''}</>
+                        : <>{sel.clubTag ?? '自由身'} 的教练{sel.spec ? '组分析师' : ''}</>}
                       <br />战术 {sel.tactics} · 培养 {sel.development} · 激励 {sel.motivation}
+                      {honoursLine(honoursOf(sel.name)) && <><br />执教履历：{honoursLine(honoursOf(sel.name))}</>}
                       <br />
-                      <span className="tiny">带同队或同赛区的选手时默契更高。</span>
+                      <span className="tiny">{sel.free && sel.titleClubs?.length ? '带夺冠俱乐部或同赛区的选手时默契更高。' : '带同队或同赛区的选手时默契更高。'}</span>
                     </div>
                   )}
                 </div>
@@ -389,7 +393,7 @@ export default function Collection() {
                       <span className="faint"> · 评分 {sel.rating}</span>
                       {' '}· 战力 <b>{coin(cardPower(sel, owned.level))}</b>
                     </div>
-                    {sel.kind === 'player' && <RatingExplainer />}
+                    {(sel.kind === 'player' || !sel.legend) && <RatingExplainer />}
                     <div className="tiny faint">
                       重复卡 {owned.dupes} 张
                       {sparesOf(owned).length > 0 && ` · 备用卡 ${sparesOf(owned).map((l) => `+${l}`).join('、')}`}
