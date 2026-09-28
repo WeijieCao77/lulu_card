@@ -71,9 +71,10 @@ export default function MatchReport({
 
           {them ? (
             <>
-              <div className="grid c2" style={{ alignItems: 'start', marginTop: 4 }}>
-                <Board title={neutral ? `${mineTitle ?? ''} 数据` : '我方数据'} lines={isLoL ? mergedLines : result.lines} mvp={result.mvpCard} level={level} isLoL={isLoL} />
-                <Board title={neutral ? `${them.name} 数据` : '对方数据'} lines={isLoL ? mergedOppLines : them.lines} mvp={them.mvpCard} level={theirLevel} isLoL={isLoL} />
+              {/* League stacks blue over red; the old two-column layout cut the 伤害 column off */}
+              <div className={isLoL ? '' : 'grid c2'} style={{ alignItems: 'start', marginTop: 4, ...(isLoL ? { display: 'flex', flexDirection: 'column', gap: 14 } : {}) }}>
+                <Board side="a" title={neutral ? `${mineTitle ?? ''} 数据` : '我方数据'} lines={isLoL ? mergedLines : result.lines} mvp={result.mvpCard} level={level} isLoL={isLoL} />
+                <Board side="b" title={neutral ? `${them.name} 数据` : '对方数据'} lines={isLoL ? mergedOppLines : them.lines} mvp={them.mvpCard} level={theirLevel} isLoL={isLoL} />
               </div>
               <details style={{ marginTop: 12 }}><summary>查看双方卡组与阵容分</summary>
               <SquadRow
@@ -109,6 +110,8 @@ export default function MatchReport({
   )
 }
 
+const kGold = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n))
+
 function LoLMapStrip({ result, selectedGame, mineLabel, theirLabel }: { result: ArenaResult; selectedGame: number; mineLabel: string; theirLabel: string }) {
   if (selectedGame === -1) {
     // Series total view
@@ -133,52 +136,50 @@ function LoLMapStrip({ result, selectedGame, mineLabel, theirLabel }: { result: 
   if (!m?.lol) return null
   const lol = m.lol
   const winner = lol.winner
-  const goldTotal = lol.goldA + lol.goldB
-  const goldAPct = goldTotal > 0 ? Math.round(100 * lol.goldA / goldTotal) : 50
+  const mins = `${Math.floor(lol.durationSeconds / 60)}:${(lol.durationSeconds % 60).toString().padStart(2, '0')}`
+  // League's post-game: blue side left, red side right, every figure shown for both and compared on one bar
+  const rows: [string, number, number, (n: number) => string][] = [
+    ['击杀', m.scoreA, m.scoreB, String],
+    ['经济', lol.goldA, lol.goldB, kGold],
+    ['推塔', lol.towersA, lol.towersB, String],
+    ['小龙', lol.dragonsA, lol.dragonsB, String],
+    ['大龙', lol.baronsA, lol.baronsB, String],
+  ]
 
   return (
     <div style={{ margin: '4px 0 14px' }}>
-      <div className="row" style={{ gap: 6, alignItems: 'baseline', flexWrap: 'wrap' }}>
-        <b style={{ fontSize: 13 }}>{m.map}</b>
-        <span className="tag t1" style={{ fontSize: 11 }}>{winner === 'A' ? mineLabel + '胜利' : theirLabel + '胜利'} · 摧毁基地</span>
-        <span style={{ fontSize: 12, fontWeight: 600 }}>
-          {Math.floor(lol.durationSeconds / 60)}:{(lol.durationSeconds % 60).toString().padStart(2, '0')}
-        </span>
-        <span className="mono" style={{ fontSize: 13, fontWeight: 800, color: winner === 'A' ? 'var(--win)' : 'var(--loss)' }}>
-          击杀 {m.scoreA}–{m.scoreB}
-        </span>
+      <div className="pg-head">
+        <div className="pg-side a">
+          <b>{mineLabel}</b>
+          <span className={`pg-result ${winner === 'A' ? 'won' : 'lost'}`}>{winner === 'A' ? '胜利' : '失败'}</span>
+        </div>
+        <div className="pg-mid">
+          <span className="tiny faint">{m.map}</span>
+          <b className="mono">{mins}</b>
+        </div>
+        <div className="pg-side b">
+          <span className={`pg-result ${winner === 'B' ? 'won' : 'lost'}`}>{winner === 'B' ? '胜利' : '失败'}</span>
+          <b>{theirLabel}</b>
+        </div>
       </div>
 
-      <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <div className="row" style={{ gap: 8, alignItems: 'center' }}>
-          <span className="tiny" style={{ width: 40 }}>经济</span>
-          <div style={{ flex: 1, background: 'var(--panel)', height: 8, borderRadius: 4, overflow: 'hidden', display: 'flex' }}>
-            <div style={{ width: `${goldAPct}%`, background: 'var(--win)', height: '100%' }} />
-            <div style={{ width: `${100 - goldAPct}%`, background: 'var(--loss)', height: '100%' }} />
-          </div>
-          <span className="mono tiny" style={{ width: 100, textAlign: 'right' }}>{lol.goldA}–{lol.goldB}</span>
-        </div>
-        <div className="row" style={{ gap: 8, alignItems: 'center' }}>
-          <span className="tiny" style={{ width: 40 }}>推塔</span>
-          <div style={{ flex: 1, background: 'var(--panel)', height: 8, borderRadius: 4, overflow: 'hidden' }}>
-            <div style={{ width: `${lol.towersA + lol.towersB > 0 ? 100 * lol.towersA / (lol.towersA + lol.towersB) : 50}%`, background: 'var(--win)', height: '100%' }} />
-          </div>
-          <span className="mono tiny" style={{ width: 100, textAlign: 'right' }}>{lol.towersA}–{lol.towersB}</span>
-        </div>
-        <div className="row" style={{ gap: 8, alignItems: 'center' }}>
-          <span className="tiny" style={{ width: 40 }}>小龙</span>
-          <div style={{ flex: 1, background: 'var(--panel)', height: 8, borderRadius: 4, overflow: 'hidden' }}>
-            <div style={{ width: `${lol.dragonsA + lol.dragonsB > 0 ? 100 * lol.dragonsA / (lol.dragonsA + lol.dragonsB) : 50}%`, background: 'var(--win)', height: '100%' }} />
-          </div>
-          <span className="mono tiny" style={{ width: 100, textAlign: 'right' }}>{lol.dragonsA}–{lol.dragonsB}</span>
-        </div>
-        <div className="row" style={{ gap: 8, alignItems: 'center' }}>
-          <span className="tiny" style={{ width: 40 }}>大龙</span>
-          <div style={{ flex: 1, background: 'var(--panel)', height: 8, borderRadius: 4, overflow: 'hidden' }}>
-            <div style={{ width: `${lol.baronsA + lol.baronsB > 0 ? 100 * lol.baronsA / (lol.baronsA + lol.baronsB) : 50}%`, background: 'var(--win)', height: '100%' }} />
-          </div>
-          <span className="mono tiny" style={{ width: 100, textAlign: 'right' }}>{lol.baronsA}–{lol.baronsB}</span>
-        </div>
+      <div className="pg-compare">
+        {rows.map(([label, a, b, fmt]) => {
+          const pct = a + b > 0 ? (100 * a) / (a + b) : 50
+          return (
+            <div key={label} className="pg-row">
+              <span className="mono pg-num a">{fmt(a)}</span>
+              <div className="pg-bar-wrap">
+                <span className="tiny pg-label">{label}</span>
+                <div className="pg-bar">
+                  <i className="a" style={{ width: `${pct}%` }} />
+                  <i className="b" style={{ width: `${100 - pct}%` }} />
+                </div>
+              </div>
+              <span className="mono pg-num b">{fmt(b)}</span>
+            </div>
+          )
+        })}
       </div>
 
       {lol.events?.length > 0 && (
@@ -271,37 +272,57 @@ function SquadRow({
   )
 }
 
-function Board({ title, lines, mvp, isLoL }: {
-  title: string; lines: ArenaLine[]; mvp: string | null; level: (id: string) => number; isLoL: boolean
+const ROLE_ORDER = ['上单', '打野', '中单', '下路', '辅助']
+
+function Board({ title, lines, mvp, isLoL, side }: {
+  title: string; lines: ArenaLine[]; mvp: string | null; level: (id: string) => number; isLoL: boolean; side?: 'a' | 'b'
 }) {
+  // top to support, as League lists a team
+  const rows = isLoL ? lines.slice().sort((x, y) => {
+    const rx = ROLE_ORDER.indexOf(cardRole(x.cardId)), ry = ROLE_ORDER.indexOf(cardRole(y.cardId))
+    return (rx < 0 ? 9 : rx) - (ry < 0 ? 9 : ry)
+  }) : lines
   return (
-    <div>
-      {title && <div className="tiny faint" style={{ marginBottom: 4 }}>{title}</div>}
+    <div className={side ? `pg-board ${side}` : undefined}>
+      {title && <div className="tiny pg-board-title" style={{ marginBottom: 4 }}>{title}</div>}
       <div className="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>选手</th><th className="right">K</th><th className="right">D</th>
-              <th className="right">A</th><th className="right">KDA</th>
-              {isLoL && <th className="right">CS</th>}
+              <th>选手</th>
+              {isLoL ? <>
+                <th>位置</th><th className="right">K / D / A</th><th className="right">KDA</th>
+                <th className="right" title="补刀：击杀小兵和野怪的数量">补刀</th><th className="right">经济</th><th className="right" title="对英雄造成的伤害（单局）">伤害</th>
+              </> : <>
+                <th className="right">K</th><th className="right">D</th><th className="right">A</th><th className="right">KDA</th>
+              </>}
             </tr>
           </thead>
           <tbody>
-            {lines.map((l) => {
+            {rows.map((l) => {
               const card = cardById(l.cardId)
               if (!card) return null
               const kda = ((l.kills + l.assists) / Math.max(1, l.deaths)).toFixed(2)
+              const damage = (l as ArenaLine & { damage?: number }).damage
               return (
                 <tr key={l.cardId} className={l.cardId === mvp ? 'me' : ''}>
                   <td>
                     {card.kind === 'player' ? card.ign : card.name}
-                    {l.cardId === mvp && <span className="tag t1" style={{ marginLeft: 6 }}>系列赛 MVP</span>}
+                    {l.cardId === mvp && <span className="tag t1" style={{ marginLeft: 6 }}>MVP</span>}
                   </td>
-                  <td className="right mono">{l.kills}</td>
-                  <td className="right mono">{l.deaths}</td>
-                  <td className="right mono">{l.assists}</td>
-                  <td className="right mono">{kda}</td>
-                  {isLoL && <td className="right mono">{l.cs ?? '–'}</td>}
+                  {isLoL ? <>
+                    <td className="tiny muted">{cardRole(l.cardId) || '–'}</td>
+                    <td className="right mono">{l.kills} / {l.deaths} / {l.assists}</td>
+                    <td className="right mono">{kda}</td>
+                    <td className="right mono">{l.cs ?? '–'}</td>
+                    <td className="right mono">{l.gold != null ? kGold(l.gold) : '–'}</td>
+                    <td className="right mono">{damage != null && l.maps === 1 ? damage.toLocaleString('en-US') : '–'}</td>
+                  </> : <>
+                    <td className="right mono">{l.kills}</td>
+                    <td className="right mono">{l.deaths}</td>
+                    <td className="right mono">{l.assists}</td>
+                    <td className="right mono">{kda}</td>
+                  </>}
                 </tr>
               )
             })}
@@ -310,4 +331,10 @@ function Board({ title, lines, mvp, isLoL }: {
       </div>
     </div>
   )
+}
+
+/** the position a card played in this report: its first listed position */
+function cardRole(id: string): string {
+  const c = cardById(id)
+  return c && c.kind === 'player' ? c.roles[0] ?? c.role : ''
 }

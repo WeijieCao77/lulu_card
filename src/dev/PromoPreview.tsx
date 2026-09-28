@@ -14,6 +14,8 @@ import { RiftNavigation } from '../ui/RiftChrome'
 import { TABS } from '../ui/CardMode'
 import Dossier from '../ui/Dossier'
 import MusicPlayer from '../ui/MusicPlayer'
+import MatchReport from '../ui/cards/Report'
+import { playRivalMatch } from '../engine/arena'
 import '../styles.css'
 
 /**
@@ -88,6 +90,13 @@ if (import.meta.env.DEV) createRoot(document.getElementById('root')!).render(
               {(params.get('ids') ?? 'p:P8,p:P6,p:P1,p:P300,p:P500,p:P620').split(',').map(id => cardById(id)).filter(Boolean).map(c =>
                 <CardFace key={c!.id} card={c!} level={2} size={size} />)}
             </div>)}</div>
+        : view === 'report' ? (() => {
+          // a real simulated BO3: T1's five against Gen.G's, to look at the post-game screen
+          const five = (tag: string) => { const coach = COACH_CARDS.find(c => c.clubTag === tag && !c.legend)!; return { slots: BASE_PLAYER_CARDS.filter(p => p.clubId === coach.clubId).slice(0, 5).map(p => p.id), coach: coach.id } }
+          const mine = five('T1'), theirs = five('GEN')
+          const r = playRivalMatch(mine, () => 2, { name: 'kingard', tag: '#8327', slots: theirs.slots, coach: theirs.coach, levels: {} } as never, 3, Number(params.get('seed') ?? 7), undefined, true)
+          return <MatchReport result={r} opponentId="" opponentName="kingard #8327" mySquad={mine} mineTitle="我方" level={() => 2} onClose={() => {}} />
+        })()
         : view === 'music' ? <div className="cardmode rift-ui" style={{ minHeight: 500 }}><MusicPlayer /></div>
         : view === 'nav' ? <div className="cardmode rift-ui" style={{ width: params.get('full') ? '100%' : 240 }}><RiftNavigation tabs={TABS} active="packs" onSelect={() => {}} /></div> : <Market />}
     </CardCtx.Provider>

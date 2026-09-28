@@ -26,8 +26,9 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
-  date: '2026-09-28', title: '杯赛报名放宽', changes: [
+  date: '2026-09-28', title: '杯赛报名放宽、新版赛后数据', changes: [
     { kind: '调整', text: '全服杯和组队杯不再要求账号注册满 3 天，开够 50 抽就能报名。' },
+    { kind: '调整', text: '赛后数据改成英雄联盟结算界面的样式：我方蓝色、对方红色，标明谁胜谁负；击杀、经济、推塔、小龙、大龙双方对比；选手按上单到辅助排列，显示位置、K/D/A、KDA、补刀（原来的 CS）、经济和伤害。' },
   ],
 }, {
   date: '2026-09-27', title: '杯赛专用阵容', changes: [
