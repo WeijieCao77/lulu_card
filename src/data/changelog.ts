@@ -30,6 +30,8 @@ export const CHANGELOG: ChangeEntry[] = [{
     { kind: '新增', text: '图鉴的教练页和卡牌详情里加入「执教荣誉」：逐条列出执教期间拿下的世界赛、MSI 和联赛冠军，助教身份单独标出。自由身教练会写明夺冠俱乐部，「团队身份」改为主教练 / 代理主教练 / 分析师 / 自由身。（玩家反馈）' },
     { kind: '修复', text: 'MG（BFX）和 Nia（LNG）的国籍和本名被错配成了同 ID 的其他选手，已改正：MG 为韩国选手 이지훈，Nia 为中国选手邹广禄。MG 补上照片。' },
     { kind: '修复', text: 'Solid、Revenge、Eclipse、Hype 等 10 名选手补上国籍和本名。' },
+    { kind: '修复', text: '选手档案再补 52 人的国籍和本名（主要是 LCS、LEC 次级队伍和 CBLOL、LCP 选手）；补上国籍后，同国籍队友之间会正常计算同国默契。' },
+    { kind: '修复', text: 'ORS 的 ner4、K B、Micinb、RedamnTion 和 0131 的名字前不再带队伍缩写。' },
   ],
 }, {
   date: '2026-09-28', title: '照片补全', changes: [
