@@ -32,6 +32,7 @@ export const CHANGELOG: ChangeEntry[] = [{
     { kind: '修复', text: 'Solid、Revenge、Eclipse、Hype 等 10 名选手补上国籍和本名。' },
     { kind: '修复', text: '选手档案再补 52 人的国籍和本名（主要是 LCS、LEC 次级队伍和 CBLOL、LCP 选手）；补上国籍后，同国籍队友之间会正常计算同国默契。' },
     { kind: '修复', text: 'ORS 的 ner4、K B、Micinb、RedamnTion 和 0131 的名字前不再带队伍缩写。' },
+    { kind: '修复', text: '合并两张重复的选手卡：「MU Scary Jerry」并入 ScaryJerry，「GZA PeanutCoco」并入 PeanutCoco。已经拥有的不会丢：等级取较高的那张，另一张变成重复卡（升过级的保留为已强化副本），阵容和预设里自动换成保留的那张。' },
   ],
 }, {
   date: '2026-09-28', title: '照片补全', changes: [

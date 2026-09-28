@@ -165,8 +165,19 @@ function withHonours(name: string, c: CoachAbilities): CoachAbilities & { rating
 const teamById = new Map(WORLD_TEAMS.map((t) => [t.id, t]))
 const HAN = /[一-鿿]/
 
+/**
+ * Cards that turned out to be the same person twice, folded into the one that stays (owner, 2026-09-28).
+ * The source roster carried "MU Scary Jerry" beside ScaryJerry and "GZA PeanutCoco" beside PeanutCoco.
+ * The retired id is no longer dealt; a save holding it is folded by gacha.ts `mergeCardAliases`.
+ */
+export const MERGED_CARDS: Readonly<Record<string, string>> = {
+  'p:P388': 'p:P387',
+  'p:P460': 'p:OEf2dada509d',
+}
+export const canonicalCardId = (id: string): string => MERGED_CARDS[id] ?? id
+
 function buildPlayerCards(): PlayerCard[] {
-  return WORLD_PLAYERS.map((p) => {
+  return WORLD_PLAYERS.filter((p) => !MERGED_CARDS[`p:${p.id}`]).map((p) => {
     const d = DOSSIER.players[p.id]
     const stats = ordinaryCardStats(p as typeof p & { sourceOverall?: number })
     const club = p.teamId ? teamById.get(p.teamId) : undefined
@@ -391,7 +402,8 @@ const byId = new Map(ALL_CARDS.map((c) => [c.id, c]))
 const COACHED: Map<string, Set<string>> = new Map(
   Object.entries(COACHED_JSON as Record<string, string[][]>).map(([coach, rows]) => [coach, new Set(rows.map((r) => r[0]))]),
 )
-export const cardById = (id: string): Card | undefined => byId.get(id)
+/** A retired duplicate id (MERGED_CARDS) still finds the card it was folded into — a market row or an old save may name it. */
+export const cardById = (id: string): Card | undefined => byId.get(id) ?? byId.get(canonicalCardId(id))
 
 export const isPlayerCard = (c: Card | undefined): c is PlayerCard => c?.kind === 'player'
 /** The night a card is, whichever kind of card it is. */

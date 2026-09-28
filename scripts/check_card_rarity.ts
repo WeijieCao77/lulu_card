@@ -8,6 +8,7 @@ import {
   COACH_GOLD_AT,
   COACH_SILVER_AT,
   cardById,
+  MERGED_CARDS,
   SQUAD_SLOTS,
   coachRarityOf
 } from '../src/engine/cards';
@@ -64,6 +65,7 @@ function testPlayerCountsAndCardStats() {
   const byGroup = new Map<string, Map<string, { count: number; min: number; max: number }>>();
   for (const p of WORLD_PLAYERS as (typeof WORLD_PLAYERS[number] & { sourceOverall?: number })[]) {
     assert.ok(typeof p.sourceOverall === 'number', `sourceOverall missing for ${p.id}`);
+    if (MERGED_CARDS[`p:${p.id}`]) continue; // a retired duplicate: its id resolves to the kept card
     const card = cardById(`p:${p.id}`);
     assert.ok(card, `card not found for ${p.id}`);
     assertPlayerCardShape(card, p);
@@ -97,8 +99,8 @@ function testPlayerCountsAndCardStats() {
     'LPL': { 'gold': 14, 'silver': 29, 'bronze': 60 },
     'LCK': { 'gold': 22, 'silver': 41, 'bronze': 59 },
     'LEC': { 'gold': 16, 'silver': 32, 'bronze': 79 },
-    'LCS': { 'gold': 11, 'silver': 30, 'bronze': 67 },
-    'WEST': { 'gold': 16, 'silver': 59, 'bronze': 142 } // v8 (2026-09-27): 其他 = LCP + CBLOL
+    'LCS': { 'gold': 11, 'silver': 30, 'bronze': 66 },
+    'WEST': { 'gold': 16, 'silver': 59, 'bronze': 141 } // v8 (2026-09-27): 其他 = LCP + CBLOL; 2026-09-28: one duplicate each merged
   };
   for (const [group, rarityMap] of byGroup) {
     for (const [rarity, entry] of rarityMap) {
@@ -245,7 +247,7 @@ function testGlobalRarityColorConsistency() {
   console.log('Global rarity color consistency verified');
 }
 
-assert.equal(BASE_PLAYER_CARDS.length, 677);
+assert.equal(BASE_PLAYER_CARDS.length, 675); // 2026-09-28: two duplicate cards merged (cards.ts MERGED_CARDS)
 assert.equal(LEGEND_CARDS.length, 40);
 assert.equal(COACH_CARDS.length, 127);
 assert.equal(CARD_BALANCE_VERSION, 8);

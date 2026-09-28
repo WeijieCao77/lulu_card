@@ -23,7 +23,7 @@ import type { DailyShop } from './dailyShop'
 import {
   ALL_CARDS, SEOUL_CARDS, COACH_CARDS, COINS_FOR, DUPES_FOR, LEGEND_CARDS, LEGEND_COACH_CARDS, MAX_LEVEL, RARITY_CN, cardName, PLAYER_CARDS,
   SALVAGE, SQUAD_SLOTS, cardById, cardPower, emptySquad, isPlayerCard, personOf, rarityRank, ratingAt,
-  squadRating, squadPower,
+  squadRating, squadPower, MERGED_CARDS, canonicalCardId,
 } from './cards'
 import type { Card, PlayerCard, Rarity, Squad } from './cards'
 import { newChallenge } from './challenge'
@@ -2485,6 +2485,58 @@ export const clampState = (g: GachaState): GachaState => {
  * it, so a row written by a client from any earlier week has every field the
  * rules expect.
  */
+/**
+ * Fold a retired duplicate card into the card that stays (cards.ts MERGED_CARDS).
+ *
+ * Nothing is lost: the higher-levelled copy becomes the card, the other copy joins it as an upgraded spare
+ * (or a plain duplicate at +0), and duplicates, spares, bound copies, trade holds and pull counts add up.
+ * Every lineup on the save — the squad, the presets and each cup's own — points at the kept id. Runs on
+ * every load, so a retired id that arrives later (a market sale settling, an old client) is folded too.
+ */
+export function mergeCardAliases(g: GachaState): void {
+  for (const [from, to] of Object.entries(MERGED_CARDS)) {
+    const old = g.cards[from]
+    if (old) {
+      const keep = g.cards[to]
+      if (!keep) g.cards[to] = { ...old, id: to }
+      else {
+        const [hi, lo] = old.level > keep.level ? [old, keep] : [keep, old]
+        const spares = [...(hi.spares ?? []), ...(lo.spares ?? []), ...(lo.level > 0 ? [lo.level] : [])].sort((a, b) => a - b)
+        const merged: OwnedCard = {
+          ...keep, id: to, level: hi.level,
+          dupes: keep.dupes + old.dupes + (lo.level > 0 ? 0 : 1),
+          seen: keep.seen + old.seen,
+          got: [keep.got, old.got].filter(Boolean).sort()[0] ?? keep.got,
+        }
+        if (spares.length) merged.spares = spares.slice(0, 99)
+        else delete merged.spares
+        const bound = (keep.bound ?? 0) + (old.bound ?? 0)
+        if (bound) merged.bound = bound
+        else delete merged.bound
+        const holds = [...(keep.holds ?? []), ...(old.holds ?? [])]
+        if (holds.length) merged.holds = holds.slice(0, 99)
+        else delete merged.holds
+        g.cards[to] = merged
+      }
+      delete g.cards[from]
+    }
+  }
+  const fix = (s: Squad | undefined | null) => {
+    if (!s) return
+    const seen = new Set<string>()
+    s.slots = s.slots.map((x) => {
+      const id = typeof x === 'string' ? canonicalCardId(x) : x
+      if (!id) return null
+      if (seen.has(id)) return null
+      seen.add(id)
+      return id
+    })
+  }
+  fix(g.squad)
+  for (const p of g.presets ?? []) fix(p?.squad)
+  for (const s of Object.values(g.cupSquads ?? {})) fix(s)
+}
+
 export function migrateGacha(state: GachaState, id: string): GachaState {
   const g = state as GachaState & { version?: number }
   g.version = GACHA_VERSION
@@ -2524,6 +2576,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   g.squad.slots = Array.isArray(g.squad.slots) ? g.squad.slots.slice(0, 5) : []
   while (g.squad.slots.length < 5) g.squad.slots.push(null)
   g.squad.coach = typeof g.squad.coach === 'string' ? g.squad.coach : null
+  mergeCardAliases(g)
   g.ladder ??= { div: 0, stars: 0, best: 0, wins: 0, losses: 0, streak: 0 }
   g.ladder.wins = Math.max(0, Math.trunc(Number(g.ladder.wins) || 0))
   g.ladder.losses = Math.max(0, Math.trunc(Number(g.ladder.losses) || 0))
@@ -2604,7 +2657,8 @@ export const cupSquadOf = (g: Pick<GachaState, 'squad' | 'cupSquads'>, key: CupS
 function cleanClientSquad(server: GachaState, raw: Partial<Squad>): Squad {
   const list = Array.isArray(raw.slots) ? raw.slots.slice(0, 5) : []
   const seen = new Set<string>()
-  const slots = list.map((id) => {
+  const slots = list.map((raw) => {
+    const id = typeof raw === 'string' ? canonicalCardId(raw) : raw
     if (typeof id !== 'string' || !server.cards[id]) return null
     const c = cardById(id)
     if (!c || !isPlayerCard(c)) return null
@@ -2643,7 +2697,7 @@ export function mergeClientFields(server: GachaState, client: Partial<GachaState
     server.presets = client.presets.slice(0, SQUAD_PRESETS).map((p) => {
       if (!p || typeof p !== 'object' || !p.squad) return null
       const slots = (Array.isArray(p.squad.slots) ? p.squad.slots.slice(0, 5) : [])
-        .map((x) => (typeof x === 'string' ? x.slice(0, 40) : null))
+        .map((x) => (typeof x === 'string' ? canonicalCardId(x.slice(0, 40)) : null))
       while (slots.length < 5) slots.push(null)
       return {
         name: String(p.name ?? '').slice(0, 12) || '配置',
