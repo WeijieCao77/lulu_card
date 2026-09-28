@@ -25,7 +25,7 @@ export default function MailBox() {
   const [page, setPage] = useState<'feedback' | 'support' | 'rewards'>(() => unreadMail(g) > 0 ? 'rewards' : 'feedback')
   return <>
     <div className="row inbox-filters" aria-label="信箱类型">
-      <button className={page === 'feedback' ? 'primary' : 'ghost'} aria-pressed={page === 'feedback'} onClick={() => setPage('feedback')}>玩家建议</button>
+      <button className={page === 'feedback' ? 'primary' : 'ghost'} aria-pressed={page === 'feedback'} onClick={() => setPage('feedback')}>给作者写信</button>
       <button className={page === 'support' ? 'primary' : 'ghost'} aria-pressed={page === 'support'} onClick={() => setPage('support')}>赛事应援</button>
       <button className={page === 'rewards' ? 'primary' : 'ghost'} aria-pressed={page === 'rewards'} onClick={() => setPage('rewards')}>奖励与交易通知{unreadMail(g) > 0 ? `（${unreadMail(g)}）` : ''}</button>
     </div>

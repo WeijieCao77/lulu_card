@@ -26,6 +26,12 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-09-28', title: '给作者写信', changes: [
+    { kind: '调整', text: '信箱里的「玩家建议」改为「给作者写信」：信只有你和作者看得到，不再公开上榜，也没有点赞和排名。每封信会显示作者是否看过、是否采纳或修复。' },
+    { kind: '新增', text: '作者可以直接回复你的来信：回复显示在「我的来信」里，同时「奖励与交易通知」会收到提醒。' },
+    { kind: '调整', text: '一封信最多 500 字（原来 200 字），可以附截图链接和账号 ID。' },
+  ],
+}, {
   date: '2026-09-28', title: '卡面修正', changes: [
     { kind: '修复', text: '本名很长的卡（如教练 Samyy）卡面上 ID 和本名不再叠在一起。（玩家反馈）' },
     { kind: '修复', text: 'VNR 的 AIex 位置由辅助改为打野，与他的实际位置一致。' },

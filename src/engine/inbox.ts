@@ -159,6 +159,7 @@ export function mailLine(m: MailItem): string {
     case 'listing_pulled': return `${nameAt(m.cardId ?? '', m.level)} 已撤回`
     case 'listing_expired': return `${nameAt(m.cardId ?? '', m.level)} 连续三次没回复报价，已自动下架并退回`
     case 'gift': return `收到 ${who} 送的 ${nameAt(m.cardId ?? '', m.level)}`
+    case 'feedback_reply': return `作者回复了你的来信「${String(m.body?.excerpt ?? '')}」，去「给作者写信」的「我的来信」查看`
     case 'swap_offer': return `${who} 想用 ${nameOf(String(m.body?.give ?? ''))} 换你的 ${nameOf(String(m.body?.want ?? ''))}，去好友页答复`
     case 'swap_in': return `换到了 ${nameAt(m.cardId ?? '', m.level)}（和 ${who} 的交换成交）`
     case 'swap_back': return `${nameAt(m.cardId ?? '', m.level)} 退回来了（${String(m.body?.reason ?? '交换没成')}）`
