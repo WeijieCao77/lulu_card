@@ -3681,6 +3681,54 @@
       "v": "418d364d",
       "source": "https://www.lollfl.fr/media/file/2395765195397326839/original",
       "page": "https://www.lollfl.fr/equipes/2392081479432062975"
+    },
+    "P557": {
+      "img": "p-p557-2609.webp",
+      "v": "c8a4b975",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/4/4d/LNG_Nia_2026_Split_3.png/revision/latest?cb=20260823141248",
+      "page": "https://lol.fandom.com/wiki/File:LNG_Nia_2026_Split_3.png"
+    },
+    "OE264ed7bcec": {
+      "img": "p-oe264ed7bcec-2609.webp",
+      "v": "2a694879",
+      "source": "https://pbs.twimg.com/media/HN0vqufbEAACrSC.jpg",
+      "page": "https://x.com/T1LoL/status/2080125757129376050",
+      "crop": [
+        150,
+        0,
+        810,
+        660
+      ]
+    },
+    "OE3d6f183c6d": {
+      "img": "p-oe3d6f183c6d-2609.webp",
+      "v": "444cc6c1",
+      "source": "https://pbs.twimg.com/media/HSo34V7bcAAnOqY.jpg",
+      "page": "https://x.com/SOOPers_LoL/status/2101553623335592259",
+      "crop": [
+        230,
+        120,
+        730,
+        620
+      ]
+    },
+    "P479": {
+      "img": "p-p479-2609.webp",
+      "v": "dbb76bc2",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/6/65/DCG.A_MadDogg_2024_Split_2.png/revision/latest?cb=20240619143421",
+      "page": "https://lol.fandom.com/wiki/File:DCG.A_MadDogg_2024_Split_2.png"
+    },
+    "P475": {
+      "img": "p-p475-2609.webp",
+      "v": "20b93b13",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/d/db/DWT_EnHoa_2023_Split_2.png/revision/latest?cb=20230624091908",
+      "page": "https://lol.fandom.com/wiki/File:DWT_EnHoa_2023_Split_2.png"
+    },
+    "P470": {
+      "img": "p-p470-2609.webp",
+      "v": "22c7d753",
+      "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/5/56/TTY_Ljun_2024_Placements.png/revision/latest?cb=20240202065627",
+      "page": "https://lol.fandom.com/wiki/File:TTY_Ljun_2024_Placements.png"
     }
   },
   "coaches": {
@@ -4775,6 +4823,36 @@
       "v": "f0976a53",
       "source": "https://static.wikia.nocookie.net/lolesports_gamepedia_en/images/e/e2/C9_Dom.png/revision/latest?cb=20201215013401",
       "page": "https://lol.fandom.com/wiki/File:C9_Dom.png"
+    },
+    "JinJin": {
+      "img": "coach-jinjin-2609.webp",
+      "v": "4481eb44",
+      "source": "https://bkimg.cdn.bcebos.com/pic/b151f8198618367adab4d759792e9cd4b31c86014fbb",
+      "page": "https://baike.baidu.com/item/%E9%87%91%E5%85%89%E5%8D%8E/66234864"
+    },
+    "Kaiba": {
+      "img": "coach-kaiba-2609.webp",
+      "v": "d4f5580a",
+      "source": "https://liquipedia.net/commons/images/e/ee/LEV_Kaiba_at_CBLOL_Cup_2026_Week_1.jpeg",
+      "page": "https://liquipedia.net/leagueoflegends/Kaiba",
+      "crop": [
+        620,
+        40,
+        1320,
+        740
+      ]
+    },
+    "boc": {
+      "img": "coach-boc-2609.webp",
+      "v": "31aea6ac",
+      "source": "https://pbs.twimg.com/media/Goq2IBIWAAAJWDw.jpg",
+      "page": "https://x.com/FlameHard/status/1912541253616402941",
+      "crop": [
+        205,
+        235,
+        795,
+        825
+      ]
     }
   },
   "legends": {

@@ -30,6 +30,7 @@ export const CHANGELOG: ChangeEntry[] = [{
     { kind: '修复', text: '本名很长的卡（如教练 Samyy）卡面上 ID 和本名不再叠在一起。（玩家反馈）' },
     { kind: '修复', text: 'VNR 的 AIex 位置由辅助改为打野，与他的实际位置一致。' },
     { kind: '调整', text: '再补 8 张选手照片：KryRa、Retrozing、Fiji、Stray、Wilson、Zach、Shift、Vizzpers（来自 LFL 官网、LoL Esports 官方和大学战队官网）。' },
+    { kind: '调整', text: '补上 Nia、Eclipse、Revenge、MadDogg9、En、Ashlomailma 的选手照片，以及教练 JinJin、Kaiba、boc 的照片。' },
   ],
 }, {
   date: '2026-09-28', title: '教练荣誉与资料修正', changes: [
