@@ -93,7 +93,7 @@ export function CardFilters({
       >
         <option value="all">全部位置</option>
         {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
-        <option value="igl">队长（运营）</option>
+        <option value="igl">运营核心</option>
       </select>
       <select
         className="sm" style={{ width: 'auto', padding: '4px 7px', maxWidth: 170 }}

@@ -239,7 +239,9 @@ function PlayerBody({
       <div className="cf-meta">
         <Flag nat={card.nat} />
         <span className="cf-club">{card.clubTag ?? '自由选手'}</span>
-        {card.isIgl && <span className="cf-igl" title="游戏队长：按运营能力指定，并非现实队长身份">CAP</span>}
+        {/* 运营核心, not 队长 (owner, 2026-09-27: players read 「CAP」 as the real captain — BLG's is Knight, the
+            tag was on Bin): the player with the team's best 运营 rating, picked from match data by the game */}
+        {card.isIgl && <span className="cf-igl" title="运营核心：队内运营评分最高的选手，由游戏按比赛数据选出，不代表现实中的队长">运营</span>}
       </div>
       {footer ? <div className="cf-foot">{footer}</div> : (
         <div className="cf-attrs">
