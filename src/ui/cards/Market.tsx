@@ -25,7 +25,7 @@ import CardFace from '../Card'
 import { marketSaleLevel, hasMarketDuplicates } from '../../engine/marketGuidance'
 import { cardById, isPlayerCard } from '../../engine/cards'
 import { collection } from '../../engine/gacha'
-import { BOUND_PULLS, HOLD_DAYS, tradeableCopies } from '../../engine/tradeLock'
+import { BOUND_PULLS, HOLD_DAYS, nextRelease, releaseText, tradeableCopies, waitText as holdWait } from '../../engine/tradeLock'
 import {
   AUCTION_HOURS, AUCTION_HOURS_CHOICES, BID_STEP, BUYOUT_MIN, MAX_LISTINGS, SHELF_PAGE, SNIPE_MINUTES,
   answerOffer, askFloorOf, bidOn, browseShelf, failText, gateText, listCardOnMarket, minBidOf, myOffersEx, peekListings, participatingAuctions, unlistCard,
@@ -366,6 +366,12 @@ export default function Market() {
   const everything = collection(g)
   const sellable = everything.filter(({ owned }) => tradeableCopies(owned, now) > 0).sort((a, b) => b.rating - a.rating)
   const lockedOut = everything.length - sellable.length
+  // the held ones, soonest free first, so the list under the picker can say when each comes back
+  const held = everything
+    .filter(({ owned }) => tradeableCopies(owned, now) === 0)
+    .map(({ card, owned }) => ({ card, at: nextRelease(owned, now) }))
+    .filter((x): x is { card: typeof x.card; at: number } => x.at != null)
+    .sort((a, b) => a.at - b.at)
 
   const doList = async () => {
     if (listLock.current || busy) return
@@ -796,8 +802,21 @@ export default function Market() {
           disabled={busy}
         />
         {lockedOut > 0 && <p className="tiny faint" style={{ margin: '4px 0 0' }}>
-          另有 {lockedOut} 张卡暂时不能挂牌：{BOUND_PULLS > 0 ? `新号前 ${BOUND_PULLS} 抽开出的是绑定卡，可以用、升级、分解，不能交易；` : ''}买来或换来的卡 {HOLD_DAYS} 天后才能再卖或再换。
+          另有 {lockedOut} 张卡暂时不能挂牌：{BOUND_PULLS > 0 ? `新号前 ${BOUND_PULLS} 抽开出的是绑定卡，可以用、升级、分解，不能交易；` : ''}买来、换来或商店买的卡 {HOLD_DAYS} 天后才能再卖或再换。
         </p>}
+        {held.length > 0 && (
+          <details className="tiny" style={{ marginTop: 4 }}>
+            <summary>看看哪张卡什么时候能卖（{held.length} 张）</summary>
+            <ul style={{ margin: '4px 0 0', paddingLeft: 18, lineHeight: 1.7 }}>
+              {held.map(({ card, at }) => (
+                <li key={card.id}>
+                  {card.kind === 'player' ? card.ign : card.name} · 还要 <b>{holdWait(at - now)}</b>
+                  <span className="faint">（{releaseText(at)} 起）</span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
         {sellCard && marketSaleLevel(g.cards[sellCard]) != null && <MarketHistory
           key={sellCard + ':' + marketSaleLevel(g.cards[sellCard])}
           cardId={sellCard}

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import RatingExplainer from '../RatingExplainer'
 import { honoursLine, honoursOf } from '../../engine/coachHonours'
 import CoachHonours from '../CoachHonours'
+import HoldCountdown from './HoldCountdown'
 import { useCards } from './ctx'
 import CardFace, { Flag, natName } from '../Card'
 import { Panel } from '../common'
@@ -403,6 +404,7 @@ export default function Collection() {
                       {sparesOf(owned).length > 0 && ` · 备用卡 ${sparesOf(owned).map((l) => `+${l}`).join('、')}`}
                       {' '}· 累计抽到 {owned.seen} 次
                     </div>
+                    <HoldCountdown owned={owned} />
                   </div>
                 </div>
                 <Upgrade cardId={sel.id} />

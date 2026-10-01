@@ -97,13 +97,34 @@ export function tidy(owned: OwnedCard, now: number): void {
   else delete owned.holds
 }
 
+/**
+ * Time left on a hold, to the minute: 「1 天 5 小时 12 分」 (players asked for hours and minutes, 2026-10-01 —
+ * the old wording rounded 25 hours up to 「2 天」). Never says 0: the last partial minute reads 「不到 1 分钟」.
+ */
+export function waitText(ms: number): string {
+  const min = Math.ceil(Math.max(0, ms) / 60_000)
+  if (min < 1) return '不到 1 分钟'
+  const d = Math.floor(min / 1440), h = Math.floor((min % 1440) / 60), m = min % 60
+  return [d ? `${d} 天` : '', h ? `${h} 小时` : '', m ? `${m} 分` : ''].filter(Boolean).join(' ')
+}
+
+/** The moment a hold ends, Beijing time: 「10月2日 14:30」. */
+export function releaseText(at: number): string {
+  const d = new Date(at + 8 * 3_600_000)
+  const p = (n: number) => String(n).padStart(2, '0')
+  return `${d.getUTCMonth() + 1}月${d.getUTCDate()}日 ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`
+}
+
+/** Every held copy's release time still ahead, soonest first. */
+export const releasesOf = (owned: OwnedCard | undefined, now: number): number[] =>
+  (Array.isArray(owned?.holds) ? owned!.holds : []).map(Number).filter((t) => t > now).sort((a, b) => a - b)
+
 /** A message for a card that has copies but none that may trade now. */
 export function lockedWhy(owned: OwnedCard | undefined, now: number): string | null {
   if (!owned || tradeableCopies(owned, now) > 0) return null
   const release = nextRelease(owned, now)
   if (heldOf(owned, now) > 0 && release) {
-    const hours = Math.ceil((release - now) / 3_600_000)
-    return `这张卡是交易得来的，${hours >= 24 ? `${Math.ceil(hours / 24)} 天` : `${hours} 小时`}后才能再挂牌或交换`
+    return `这张卡是交易得来的，还要 ${waitText(release - now)}（${releaseText(release)}）才能再挂牌或交换`
   }
   return `这张卡是开局前 ${BOUND_PULLS} 抽开出的绑定卡，可以使用、升级和分解，不能交易`
 }
