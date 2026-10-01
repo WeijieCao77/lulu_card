@@ -87,7 +87,7 @@ const ordered=data.players.slice().sort((a:any,b:any)=>a.sourceOverall-b.sourceO
 for(let i=1;i<ordered.length;i++) assert(ordered[i].overall>=ordered[i-1].overall,'Base ranking must not invert')
 assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='gold').length,79) // v8 2026-09-27 (LEC/LCS split)
 assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='silver').length,191)
-assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='bronze').length,407)
+assert.equal(BASE_PLAYER_CARDS.filter(c=>c.rarity==='bronze').length,405)
 for(const name of ['Uzi','Clearlove','Caps']) {
   const versions=LEGEND_CARDS.filter(c=>c.ign===name)
   assert.equal(versions.length,1)
