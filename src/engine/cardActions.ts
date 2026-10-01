@@ -39,6 +39,7 @@ import { buyShop, ensureShop } from './dailyShop'
 import { arenaOpponentRating, playArenaMatch, playCupMatch, playRivalMatch } from './arena'
 import type { ArenaResult, RivalSquad } from './arena'
 import { challengeBlock, challengeSig, guessChallenge } from './challenge'
+import type { ChallengeKind } from './challenge'
 import { hashStr } from './rng'
 import { cardById, isPlayerCard, personOf, squadRating } from './cards'
 import type { Rarity, Squad } from './cards'
@@ -58,6 +59,8 @@ export interface ActEnv {
   seed: number
   /** a real player's five for the ladder, when the division calls for one and the pool had one */
   rival?: RivalSquad | null
+  /** Chosen and held on the server; never sent to a player before the puzzle ends. */
+  challengePuzzle?: { kind: ChallengeKind; answer: string }
 }
 
 export type ActResult =
@@ -325,7 +328,7 @@ function dispatch(
       // a page from before a data update marks its hints against the wrong answer (see challengeSig):
       // nothing is charged and no try is spent until it has been refreshed
       if (str(a.sig, 16) !== challengeSig()) return { ok: false, why: '游戏数据更新了，刷新页面后再猜。这次不扣次数。' }
-      const turn = guessChallenge(g, env.today, guessId)
+      const turn = guessChallenge(g, env.today, guessId, env.challengePuzzle)
       return { ok: true, result: { turn } }
     }
     case 'mail_seen': {

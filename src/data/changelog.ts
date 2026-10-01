@@ -26,6 +26,11 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-01', title: '默契与挑战修复', changes: [
+    { kind: '修复', text: '教练和选手同国籍时，现在优先按同国籍计算默契，不再只显示同赛区。' },
+    { kind: '修复', text: '每日挑战的答案不再能通过浏览器开发工具直接看到；题图会随猜测次数逐步清晰。' },
+  ],
+}, {
   date: '2026-10-01', title: '游戏内微信群入口', changes: [
     { kind: '新增', text: '游戏左侧「社交」新增「微信群」，顶部「更新日志」旁也有入口；两处都能查看群二维码和说明，手机上同样可用。' },
   ],

@@ -29,7 +29,7 @@ const assetBase = (): string =>
  * The one screen in this mode that is neither a slot machine nor a spectator
  * seat — the session was four minutes long because everything in it resolved
  * in fifteen seconds, and this is the part that asks the player to actually
- * know something. Same puzzle for everybody, so it is a thing to argue about.
+ * know something. Each account gets its own puzzle for the day.
  */
 export default function Challenge() {
   const { g, today, act, toast } = useCards()
@@ -39,7 +39,7 @@ export default function Challenge() {
   const [busy, setBusy] = useState(false)
   const [searchFocused, setSearchFocused] = useState(false)
 
-  const { kind, answer, state, rows } = challengeToday(g, today)
+  const { state, rows } = challengeToday(g, today)
   const choices = useMemo(() => allChoices(), [])
   const used = state.guesses.length
   const left = triesLeft(state)
@@ -62,7 +62,7 @@ export default function Challenge() {
       const after = g.challenge
       const tries = after?.guesses.length ?? 0
       track('card_challenge', {
-        kind, solved: turn.solved ? 1 : 0, tries, streak: after?.streak ?? 0,
+        kind: after?.reveal?.kind ?? 'unknown', solved: turn.solved ? 1 : 0, tries, streak: after?.streak ?? 0,
       })
       if (turn.solved) {
         const rw = turn.reward
@@ -70,12 +70,15 @@ export default function Challenge() {
           + (rw?.pack ? ` + ${rw.pack === 'ten' ? '十连包' : rw.pack === 'elite' ? '选拔包' : '试训包'}` : '')
           + (rw?.streakPack ? ' + 连签七天的十连包' : ''))
       } else {
-        toast(`没猜中，答案是 ${answerRow.name}。退回 ${turn.reward?.coins ?? 0} 金币，明天再来。`)
+        const reveal = after?.reveal
+        const name = reveal ? evaluate(reveal.kind, reveal.id, reveal.id).name : '未知'
+        toast(`没猜中，答案是 ${name}。退回 ${turn.reward?.coins ?? 0} 金币，明天再来。`)
       }
     }
   }
 
-  const answerRow: GuessRow = evaluate(kind, answer, answer)
+  const reveal = state.done ? state.reveal : undefined
+  const answerRow: GuessRow | null = reveal ? evaluate(reveal.kind, reveal.id, reveal.id) : null
 
   const show = state.done ? 1 : revealed(used)
   const zoom = 1 + (1 - show) * 1.6
@@ -128,7 +131,7 @@ export default function Challenge() {
       alive = false; window.clearTimeout(timeout); controller.abort(); release()
       if (image) { image.onload = null; image.onerror = null; image.removeAttribute('src') }
     }
-  }, [g.id, today, answer, retry])
+  }, [g.id, today, used, retry])
 
   useEffect(() => {
     const c = canvas.current
@@ -202,24 +205,20 @@ export default function Challenge() {
           background: 'var(--panel-2)', margin: '0 auto 12px',
           display: 'grid', placeItems: 'center',
         }}>
-          {answerRow.img && !picMissing && !ready && <span role="status" className="small muted">正在加载挑战图片…</span>}
-          {(!answerRow.img || picMissing) && (
+          {!picMissing && !ready && <span role="status" className="small muted">正在加载挑战图片…</span>}
+          {picMissing && (
             <span role="status" className="faint small">
-              {picMissing ? (
-                <>
-                  图片加载失败
-                  <button
-                    className="sm primary"
-                    style={{ marginLeft: 8 }}
-                    onClick={() => { setReady(false); setPicMissing(false); setPic(null); setRetry(n => n + 1) }}
-                  >
-                    重试
-                  </button>
-                </>
-              ) : '（这一题没有图）'}
+              图片加载失败
+              <button
+                className="sm primary"
+                style={{ marginLeft: 8 }}
+                onClick={() => { setReady(false); setPicMissing(false); setPic(null); setRetry(n => n + 1) }}
+              >
+                重试
+              </button>
             </span>
           )}
-          {answerRow.img && !picMissing && (
+          {!picMissing && (
             <canvas
               ref={canvas}
               aria-hidden
@@ -233,7 +232,7 @@ export default function Challenge() {
             borderRadius: 999, background: 'rgba(8,12,18,.72)', color: 'var(--muted)',
           }}>
             {state.done
-              ? `${KIND_CN[kind]} · ${answerRow.name}`
+              ? (reveal && answerRow ? `${KIND_CN[reveal.kind]} · ${answerRow.name}` : '今日挑战已结束')
               : `还剩 ${left} 次`}
           </div>
         </div>
@@ -328,7 +327,7 @@ export default function Challenge() {
                           }} />
                         )}
                         <b>{r.name}</b>
-                        {r.id === answer && <span className="tag t1">正解</span>}
+                        {reveal && r.id === reveal.id && <span className="tag t1">正解</span>}
                       </span>
                     </td>
                     {head.map((h, ci) => {
@@ -361,7 +360,7 @@ export default function Challenge() {
               {state.solved
                 ? `第 ${used} 次猜中，连续第 ${state.streak} 天。`
                 : '今天没猜出来，连胜清零了。'}
-              答案是<b style={{ color: 'var(--text)' }}>{KIND_CN[kind]}「{answerRow.name}」</b>。明天换一道。
+              {reveal && answerRow && <>答案是<b style={{ color: 'var(--text)' }}>{KIND_CN[reveal.kind]}「{answerRow.name}」</b>。明天换一道。</>}
             </p>
             <div style={{
               display: 'flex', gap: 10, alignItems: 'flex-start',

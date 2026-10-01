@@ -538,9 +538,8 @@ export interface ChemReport {
 
 export interface CoachLink {
   slot: number
-  /** club: he coaches this club (or did, the night a彩卡 is); coached: he has
-   * coached this man before; region: the same region and nothing more */
-  why: 'club' | 'coached' | 'region'
+  /** Strongest reason shown to the player; country beats region, as for player pairs. */
+  why: 'club' | 'coached' | 'nat' | 'region'
   value: number
 }
 
@@ -620,15 +619,17 @@ export function chemistry(squad: Squad): ChemReport {
     // and a man he coaches now is never counted a second time here.
     const coachedBefore = players.filter((p) => !coachSharesClub(p, coach)
       && !!COACHED.get(coach.name)?.has(p.playerId)).length
-    const sameRegion = players.filter((p) => sameGameRegion(p.region, coach.region)).length
-    coachBonus = sameClub * 2 + coachedBefore + sameRegion
     cards.forEach((p, slot) => {
       if (!isPlayerCard(p)) return
       const club = coachSharesClub(p, coach)
       const before = !club && !!COACHED.get(coach.name)?.has(p.playerId)
       const region = sameGameRegion(p.region, coach.region)
-      const value = (club ? 2 : 0) + (before ? 1 : 0) + (region ? 1 : 0)
-      if (value) coachLinks.push({ slot, why: club ? 'club' : before ? 'coached' : 'region', value })
+      const nat = !!p.nat && !!coach.nat && natCountry(p.nat) === natCountry(coach.nat)
+      const value = (club ? 2 : 0) + (before ? 1 : 0) + (nat ? 2 : region ? 1 : 0)
+      if (value) {
+        coachBonus += value
+        coachLinks.push({ slot, why: club ? 'club' : before ? 'coached' : nat ? 'nat' : 'region', value })
+      }
     })
     if (sameClub >= 2) notes.push(`${coach.name} 与 ${sameClub} 名选手触发同队／队伍传承羁绊`)
     if (coachedBefore > 0) notes.push(`${coach.name} 以前还带过其中 ${coachedBefore} 人`)

@@ -8,9 +8,8 @@
  * runs out of things to do before the coffee is cold.
  *
  * So: something to think about rather than something to watch. The puzzle is
- * derived from the server's date, so every player on earth gets the same one
- * on the same day and can argue about it, and it resets whether or not you
- * solved it. Six guesses, each one narrowing the answer.
+ * chosen once per account and day by the server, and resets whether or not
+ * you solved it. Six guesses, each one narrowing the answer.
  *
  * Nothing here is invented. The four kinds are built from data the game
  * already ships and is already careful about: 518 real players with their real
@@ -59,6 +58,10 @@ export interface ChallengeState {
   day: string | null
   /** what has been guessed, oldest first — player/team ids, or map/agent names */
   guesses: string[]
+  /** Server-computed hints. Keeping them in the save lets a reload show past guesses without exposing the answer. */
+  rows?: GuessRow[]
+  /** Sent only after the puzzle is finished. */
+  reveal?: { kind: ChallengeKind; id: string }
   /** the fee has been taken for this day's puzzle */
   paid: boolean
   solved: boolean
@@ -72,7 +75,7 @@ export interface ChallengeState {
 }
 
 export const newChallenge = (): ChallengeState => ({
-  day: null, guesses: [], paid: false, solved: false, done: false,
+  day: null, guesses: [], rows: [], paid: false, solved: false, done: false,
   streak: 0, best: 0, total: 0,
 })
 
@@ -235,13 +238,8 @@ export function answerPool(kind: ChallengeKind): string[] {
 }
 
 /**
- * The answer for a date, which every copy of the game agrees on.
- *
- * Seeded on the date alone — not on the account — because the whole point is
- * that it is the same puzzle everywhere. It is derivable on the client, which
- * is not worth defending against: the simulation, the collection and the odds
- * are all in the browser already, and somebody who reads the bundle to win a
- * word game has beaten only themselves.
+ * Legacy deterministic answer, retained for attempts that began before the
+ * server started storing private random answers. New puzzles do not use it.
  */
 export function answerFor(day: string, who = ''): string {
   const kind = kindFor(day, who)
@@ -454,6 +452,8 @@ export function openChallenge(c: ChallengeState, today: string): ChallengeState 
   const consecutive = c.day === yesterday.toISOString().slice(0, 10) && c.solved
   c.day = today
   c.guesses = []
+  c.rows = []
+  delete c.reveal
   c.paid = false
   c.solved = false
   c.done = false
@@ -488,11 +488,13 @@ export interface ChallengeTurn {
  * screen: reading the puzzle and deciding not to play it should be free, and
  * a player who opens the tab to see what today is has not spent anything.
  */
-export function guessChallenge(g: GachaState, today: string, guessId: string): ChallengeTurn {
+export function guessChallenge(g: GachaState, today: string, guessId: string,
+  puzzle?: { kind: ChallengeKind; answer: string }): ChallengeTurn {
   const c = (g.challenge ??= newChallenge())
   openChallenge(c, today)
-  const answer = answerFor(today, g.id)
-  const kind = kindFor(today, g.id)
+  const answer = puzzle?.answer ?? answerFor(today, g.id)
+  const kind = puzzle?.kind ?? kindFor(today, g.id)
+  if (!c.rows) c.rows = c.guesses.map(id => evaluate(kind, answer, id))
 
   if (!c.paid) {
     g.coins -= CHALLENGE_COST
@@ -501,10 +503,12 @@ export function guessChallenge(g: GachaState, today: string, guessId: string): C
 
   const row = evaluate(kind, answer, guessId)
   c.guesses = [...c.guesses, guessId]
+  c.rows.push(row)
 
   if (guessId === answer) {
     c.solved = true
     c.done = true
+    c.reveal = { kind, id: answer }
     c.streak += 1
     c.best = Math.max(c.best, c.streak)
     c.total += 1
@@ -518,6 +522,7 @@ export function guessChallenge(g: GachaState, today: string, guessId: string): C
 
   if (c.guesses.length >= CHALLENGE_TRIES) {
     c.done = true
+    c.reveal = { kind, id: answer }
     c.streak = 0
     const reward = rewardFor(c.guesses.length, false, 0)
     g.coins += reward.coins
@@ -552,17 +557,18 @@ export function challengeSig(): string {
 
 /** Everything the screen needs to draw today, without deciding any of it. */
 export function challengeToday(g: GachaState, today: string): {
-  kind: ChallengeKind
-  answer: string
   state: ChallengeState
   rows: GuessRow[]
 } {
   const c = (g.challenge ??= newChallenge())
   openChallenge(c, today)
-  const answer = answerFor(today, g.id)
-  const kind = kindFor(today, g.id)
-  return {
-    kind, answer, state: c,
-    rows: c.guesses.map((id: string) => evaluate(kind, answer, id)),
+  // Saves from before private puzzles have guesses but no saved hint rows.
+  // Preserve that day's visible progress; all newly assigned puzzles have rows.
+  if (!c.rows && c.guesses.length) {
+    const kind = kindFor(today, g.id)
+    const id = answerFor(today, g.id)
+    c.rows = c.guesses.map(guessId => evaluate(kind, id, guessId))
+    if (c.done) c.reveal = { kind, id }
   }
+  return { state: c, rows: c.rows ?? [] }
 }

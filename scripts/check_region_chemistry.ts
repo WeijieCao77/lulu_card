@@ -117,7 +117,7 @@ for (const coachRegion of WESTERN_REGIONS) {
 
     for (const player of players) {
       // Ensure different club
-      if (sameClubLineage(player, coach)) {
+      if (sameClubLineage(player, coach) || (player.nat && coach.nat && natCountry(player.nat) === natCountry(coach.nat))) {
         continue
       }
 
@@ -134,6 +134,14 @@ for (const coachRegion of WESTERN_REGIONS) {
 }
 
 assert.equal(coachPairCount, 2, 'Both directed LCP–CBLOL coach pairs must be tested')
+
+// A real report: JinJin (CN, LPL) and Flandre (CN, LPL) are not on the same
+// club. The coach used to show only 同赛区 +1, unlike a player pair's 同国籍 +2.
+const jinjin = COACH_CARDS.find(c => c.name === 'JinJin')!
+const flandre = BASE_PLAYER_CARDS.find(p => p.ign === 'Flandre')!
+const jinjinLink = chemistry({ slots: [flandre.id, null, null, null, null], coach: jinjin.id })
+assert.deepEqual(jinjinLink.coachLinks, [{ slot: 0, why: 'nat', value: 2 }])
+assert.equal(jinjinLink.coachBonus, 2)
 
 // Test 7: Priority - club > nat > region
 let clubPriorityTested = false
@@ -267,7 +275,8 @@ for (const east of ['LPL', 'LCK']) {
     assert.ok(pair, `Missing real ${east}/${west} cross-nation fixture`)
     assert.equal(chemistry({slots:[pair[0].id,pair[1].id,null,null,null],coach:null}).links.length, 0)
     const coach = findCoachByRegion(east)!
-    const player = findPlayersByRegion(west).find(p => !sameClubLineage(p,coach))!
+    const player = findPlayersByRegion(west).find(p => !sameClubLineage(p,coach)
+      && (!p.nat || !coach.nat || natCountry(p.nat) !== natCountry(coach.nat)))!
     const report = chemistry({slots:[player.id,null,null,null,null],coach:coach.id})
     assert.equal(report.coachBonus, 0)
     assert.deepEqual(report.coachLinks, [])

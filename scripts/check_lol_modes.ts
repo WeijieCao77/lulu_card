@@ -5,7 +5,7 @@ import { runAction } from '../src/engine/cardActions'
 import { CUP_TEAMS } from '../src/engine/cupTeams'
 import { BASE_PLAYER_CARDS } from '../src/engine/cards'
 import { WORLD_TEAMS } from '../src/engine/teams'
-import { answerFor, kindFor, challengeSig, imgOf, answerPool } from '../src/engine/challenge'
+import { answerFor, kindFor, challengeSig, imgOf, answerPool, challengeToday } from '../src/engine/challenge'
 import { reconPuzzle } from '../src/engine/minigame'
 const today='2026-09-21',now=Date.parse(today+'T12:00Z')
 for(const region of ['LPL','LCK','LEC','LCS','LCP','CBLOL']) {
@@ -43,6 +43,20 @@ for(let d=1;d<=14;d++) {
  const coins=g.coins
  assert.equal(runAction(g,'challenge',{guessId:answer,sig:challengeSig()},{today:date,now:Date.parse(date),seed:3}).ok,false)
  assert.equal(coins,g.coins)
+}
+{
+ const day='2026-09-21',g=newGacha('legacy-puzzle','测试',day)
+ const kind=kindFor(day,g.id),answer=answerFor(day,g.id)
+ const wrong=answerPool(kind).find(id=>id!==answer)!
+ assert(runAction(g,'challenge',{guessId:wrong,sig:challengeSig()},{today:day,now:Date.parse(day),seed:3}).ok)
+ delete g.challenge.rows
+ assert.equal(challengeToday(g,day).rows.length,1,'old in-progress hints are restored')
+ assert.equal(g.challenge.reveal,undefined)
+ assert(runAction(g,'challenge',{guessId:answer,sig:challengeSig()},{today:day,now:Date.parse(day),seed:3}).ok)
+ delete g.challenge.rows
+ delete g.challenge.reveal
+ challengeToday(g,day)
+ assert.deepEqual(g.challenge.reveal,{kind,id:answer},'old finished answer is restored')
 }
 for(const kind of ['agent','team','player'] as const)for(const id of answerPool(kind))assert(existsSync('public/'+imgOf(kind,id)),kind+' '+id)
 for(let seed=0;seed<200;seed++)assert.equal(reconPuzzle(seed).enemies.length,4)

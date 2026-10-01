@@ -494,15 +494,15 @@ check('without a database the route says so instead of throwing',
 
 // ---- the puzzle picture names nothing ---------------------------------
 //
-// Dragging the challenge's <img> to the desktop used to hand over the answer
-// as a file name. The picture now comes from a POST that knows the account,
-// carries a generic name, and must not be cached.
+// The challenge image must be masked on the server, named generically, and
+// stable for this account and day.
 {
-  const { readFile } = await import('node:fs/promises')
+  const sharp = (await import('sharp')).default
   const { join } = await import('node:path')
   const { fileURLToPath } = await import('node:url')
   const engine = await import('../src/engine/server.ts')
   const root = join(fileURLToPath(new URL('.', import.meta.url)), '..', 'public')
+  await sql`insert into card_accounts (id_hash, state) values (${hashOf(ID)}, ${sql.json({})}) on conflict do nothing`
   const api2 = makeCardApi(sql, { rateLimited, readBody, json, staticRoot: root } as never)
   const got: { code: number; head: Record<string, unknown>; body: Buffer | null; json: unknown } =
     { code: 0, head: {}, body: null, json: null }
@@ -515,11 +515,12 @@ check('without a database the route says so instead of throwing',
   void api2
   await api3.route({ body: JSON.stringify({ id: ID }), method: 'POST' } as never, res as never, '/api/card/puzzle', 'pz')
   const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' }).format(new Date())
-  const rel = engine.imgOf(engine.kindFor(today, ID), engine.answerFor(today, ID))
-  const want = rel ? await readFile(join(root, rel)) : null
-  check('puzzle route answers the picture', got.code === 200 && !!got.body && !!want && Buffer.compare(got.body!, want!) === 0)
+  const [stored] = await sql`select kind, answer from card_challenge_puzzles where id_hash=${hashOf(ID)} and day=${today}`
+  const image = got.body ? await sharp(got.body).metadata() : null
+  check('puzzle route answers a private masked picture', got.code === 200 && !!got.body
+    && stored?.kind === engine.kindFor(today, ID) && image?.format === 'webp' && (image?.width ?? 999) <= 56)
   check('with a generic file name and no caching',
-    String(got.head['Content-Disposition']).includes(`puzzle${rel?.slice(rel.lastIndexOf('.'))}`) && got.head['Cache-Control'] === 'no-store')
+    got.head['Content-Disposition'] === 'inline; filename="puzzle.webp"' && got.head['Cache-Control'] === 'no-store')
   check('and no player id anywhere in the headers',
     !JSON.stringify(got.head).match(/P\d{2,}/))
   await api3.route({ body: JSON.stringify({ id: 'nope' }), method: 'POST' } as never, res as never, '/api/card/puzzle', 'pz')

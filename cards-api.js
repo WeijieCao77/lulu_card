@@ -19,6 +19,7 @@ import { isVerified, phoneGate } from './phone-api.js'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto'
+import sharp from 'sharp'
 import { displayName } from './names.js'
 import { progressOf } from './progress.js'
 import { GUARD_SCHEMA } from './market-guard.js'
@@ -104,6 +105,15 @@ update card_accounts set saved = seen where saved is null;
 -- the 好友对战码 is the first eight characters of id_hash, and looking one up
 -- is otherwise a sequential scan of every account in the table
 create index if not exists card_code_idx on card_accounts (left(id_hash, 8));
+-- Daily challenge answers are chosen once and held only on the server. The
+-- browser receives masked artwork and hint rows, never this row before finish.
+create table if not exists card_challenge_puzzles (
+  id_hash text not null,
+  day date not null,
+  kind text not null,
+  answer text not null,
+  primary key (id_hash, day)
+);
 -- Cards handed to a friend. A gift is a row rather than a direct write into
 -- somebody else's save: the receiver's client is the only thing that may edit
 -- his collection, so the gift waits here until he next opens the game.
@@ -407,6 +417,19 @@ export function makeCardApi(sql, {
   /** where the rival scan runs — a pool nobody is waiting on (server.js passes the stats budget) */
   slow = null,
 }) {
+  async function challengePuzzle(id, today, state) {
+    const kind = engine.kindFor(today, id)
+    const pool = engine.answerPool(kind)
+    const old = state?.challenge?.day === today && state.challenge.guesses?.length > 0
+      && !state.challenge.rows
+    const candidate = old ? engine.answerFor(today, id) : pool[randomBytes(4).readUInt32LE(0) % pool.length]
+    const me = hash(id)
+    await sql`insert into card_challenge_puzzles (id_hash, day, kind, answer)
+      values (${me}, ${today}, ${kind}, ${candidate}) on conflict do nothing`
+    const [row] = await sql`select kind, answer from card_challenge_puzzles where id_hash=${me} and day=${today}`
+    return { kind: row.kind, answer: row.answer }
+  }
+
   const guard = (req, res, bucket, max) => {
     if (rateLimited(bucket, max)) {
       json(res, 429, { ok: false, why: 'rate' })
@@ -825,6 +848,7 @@ export function makeCardApi(sql, {
         if (!held.length) return { missing: true }
         let g = engine.mergeClientFields(engine.migrateGacha(held[0].state, id), client)
         const env = { now, today, seed }
+        if (action === 'challenge') env.challengePuzzle = await challengePuzzle(id, today, g)
         t = performance.now()
         if (engine.wantsRival(g, action)) env.rival = await pickRival(g.ladder.div, me, engine.ladderScore(g))
         mark.rival += performance.now() - t
@@ -1343,39 +1367,38 @@ export function makeCardApi(sql, {
    * The challenge used to draw its blurred subject from the ordinary asset
    * URL, faces/P267.webp, so dragging the picture out of the page (or reading
    * the address) handed over the answer by file name, at full clarity. This
-   * route answers a POST with the bytes only: no id in the URL, a generic file
-   * name, no caching — and the page draws them onto a canvas at the current
-   * blur, so what can be dragged or saved is what is on screen.
+   * route answers a POST with a masked WebP only: no id in the URL, a generic
+   * file name, no caching. The server limits detail based on saved attempts,
+   * so opening the response in DevTools no longer reveals the raw portrait.
    */
   async function puzzle(req, res, bucket) {
     if (guard(req, res, `pz:${bucket}`, 60)) return
     let id = null
     try { id = normalizeId(JSON.parse(await readBody(req, 4096))?.id) } catch { /* below */ }
     if (!id) { json(res, 400, { ok: false, bad: true }); return }
+    if (!sql) { json(res, 503, { ok: false }); return }
     const today = serverDay()
-    const kind = engine.kindFor(today, id)
-    const rel = engine.imgOf(kind, engine.answerFor(today, id))
+    const account = await sql`select state from card_accounts where id_hash=${hash(id)}`
+    if (!account.length) { json(res, 404, { ok: false }); return }
+    const state = account[0].state
+    const { kind, answer } = await challengePuzzle(id, today, state)
+    const rel = engine.imgOf(kind, answer)
     if (!rel || !staticRoot) { json(res, 404, { ok: false }); return }
     try {
-      const buf = await readFile(join(staticRoot, rel))
-      const mimeByExt = {
-        '.png': 'image/png',
-        '.jpeg': 'image/jpeg',
-        '.jpg': 'image/jpeg',
-        '.webp': 'image/webp',
-        '.svg': 'image/svg+xml',
-        '.gif': 'image/gif',
-        '.avif': 'image/avif',
-      }
-      const ext = rel.slice(rel.lastIndexOf('.')).toLowerCase()
-      const mime = mimeByExt[ext]
-      if (!mime) { json(res, 404, { ok: false }); return }
-      const safeName = `puzzle${ext}`
+      const original = await readFile(join(staticRoot, rel))
+      const attempts = state?.challenge?.day === today ? Math.min(6, state.challenge.guesses?.length ?? 0) : 0
+      const finished = state?.challenge?.day === today && state.challenge.done
+      // DevTools must see the same limited picture the player sees, never the
+      // original public photo in this response. The account's saved attempts
+      // decide resolution; a client-supplied number cannot ask for more.
+      const width = finished ? 700 : [56, 76, 100, 132, 175, 240][Math.min(5, attempts)]
+      const buf = await sharp(original).resize({ width, withoutEnlargement: true })
+        .webp({ quality: finished ? 85 : 76 }).toBuffer()
       res.writeHead(200, {
-        'Content-Type': mime,
+        'Content-Type': 'image/webp',
         'Content-Length': buf.length,
         'Cache-Control': 'no-store',
-        'Content-Disposition': `inline; filename="${safeName}"`,
+        'Content-Disposition': 'inline; filename="puzzle.webp"',
         // which data this picture was chosen from: a page holding other data asks for a refresh (challengeSig)
         'X-Puzzle-Sig': engine.challengeSig?.() ?? '',
       })
