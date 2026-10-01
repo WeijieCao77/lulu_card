@@ -23,7 +23,8 @@ jobs:
       - run: npx tsx scripts/check_region_chemistry.ts
       - run: npx tsx scripts/check_dashboard.ts
       - run: npx tsx scripts/check_mailbox.ts
-      - run: node scripts/check_admin_entry.mjs
+      - run: node scripts/check_admin_guard.mjs
+      - run: node scripts/check_formal_phone_gate.mjs
       - run: node scripts/check_admin_metrics.mjs
       - run: node scripts/check_market_policy.mjs
       - run: npx tsx scripts/check_market_pair.ts
