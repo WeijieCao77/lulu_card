@@ -1,5 +1,5 @@
 /**
- * The way into the group, on the page people land on.
+ * The way into the group from the front page and the card game.
  *
  * Almost everything in this game came out of that group — the bugs, the
  * balance complaints, half the features — and until now the only way in was
@@ -15,22 +15,64 @@
  * button that opens an empty box.
  */
 import { useEffect, useState } from 'react'
+import { Panel } from './common'
 
 interface Group { on: boolean; note: string | null; v: number }
 
-export default function WeChat() {
+function useGroup() {
   const [group, setGroup] = useState<Group | null>(null)
-  const [open, setOpen] = useState(false)
-  const [broke, setBroke] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let alive = true
     void fetch('/api/site/wechat')
       .then((r) => (r.ok ? r.json() : null))
-      .then((j: Group | null) => { if (alive && j?.on) setGroup(j) })
+      .then((j: Group | null) => { if (alive) setGroup(j?.on ? j : null) })
       .catch(() => { /* offline, or served from a static host with no server */ })
+      .finally(() => { if (alive) setLoading(false) })
     return () => { alive = false }
   }, [])
+  return { group, loading }
+}
+
+function GroupPicture({ group }: { group: Group }) {
+  const [broke, setBroke] = useState(false)
+  return broke ? (
+    <p className="empty" style={{ padding: '30px 10px' }}>二维码没加载出来，刷新一下试试。</p>
+  ) : (
+    <img
+      className="wechat-qr"
+      src={`/api/site/wechat.img?v=${group.v}`}
+      alt="微信群二维码"
+      width={300}
+      height={300}
+      onError={() => setBroke(true)}
+    />
+  )
+}
+
+function GroupDescription({ group }: { group: Group | null }) {
+  return <>
+    <p className="small muted" style={{ margin: 0, lineHeight: 1.8 }}>
+      游戏的大部分改动来自群里的反馈。有问题、有想法，或者想找人打好友房，都可以进来。
+    </p>
+    {group ? <GroupPicture group={group} /> : <p className="empty">群二维码暂未开放，请稍后再来。</p>}
+    {group && <p className="tiny faint" style={{ margin: 0, textAlign: 'center', lineHeight: 1.7 }}>
+      {group.note || '微信扫码进群。二维码过期后会在这里更新。'}
+    </p>}
+  </>
+}
+
+export function WeChatPage() {
+  const { group, loading } = useGroup()
+  return <Panel title="微信群" className="wechat-page">
+    {loading ? <p className="small muted">正在读取群二维码…</p> : <GroupDescription group={group} />}
+  </Panel>
+}
+
+export default function WeChat({ dock = false }: { dock?: boolean }) {
+  const { group, loading } = useGroup()
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     if (!open) return
@@ -39,7 +81,7 @@ export default function WeChat() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
-  if (!group) return null
+  if (!dock && !group) return null
 
   return (
     <>
@@ -61,30 +103,7 @@ export default function WeChat() {
               <h3>进群一起玩</h3>
               <button className="sm ghost" onClick={() => setOpen(false)}>关闭 ✕</button>
             </div>
-            <p className="small muted" style={{ margin: 0, lineHeight: 1.8 }}>
-              游戏的大部分改动来自群里的反馈。
-              有问题、有想法，或者想找人打好友房，都可以进来。
-            </p>
-            {broke ? (
-              // the server only turns the button on when there IS a code, so
-              // this is a network failure rather than a missing picture — and
-              // a blank white box would look like the group had closed
-              <p className="empty" style={{ padding: '30px 10px' }}>二维码没加载出来，刷新一下试试。</p>
-            ) : (
-              <img
-                className="wechat-qr"
-                /* `v` is the moment it was last uploaded: the image is cached
-                   hard, and this is what makes a new code show up immediately */
-                src={`/api/site/wechat.img?v=${group.v}`}
-                alt="微信群二维码"
-                width={300}
-                height={300}
-                onError={() => setBroke(true)}
-              />
-            )}
-            <p className="tiny faint" style={{ margin: 0, textAlign: 'center', lineHeight: 1.7 }}>
-              {group.note || '微信扫码进群。二维码七天一换，扫不进过两天再来。'}
-            </p>
+            {loading ? <p className="small muted">正在读取群二维码…</p> : <GroupDescription group={group} />}
           </div>
         </>
       )}

@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-01', title: '游戏内微信群入口', changes: [
+    { kind: '新增', text: '游戏左侧「社交」新增「微信群」，顶部「更新日志」旁也有入口；两处都能查看群二维码和说明，手机上同样可用。' },
+  ],
+}, {
   date: '2026-10-01', title: '每日挑战说明', changes: [
     { kind: '修复', text: '每日挑战的说明和搜索提示补上「英雄」：题目可能是选手、战队或英雄。' },
   ],

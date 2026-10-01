@@ -22,6 +22,7 @@ import OddsFab from './cards/OddsFab'
 import MailBox, { MailButton } from './cards/MailBox'
 import Credit from './Credit'
 import Changelog from './Changelog'
+import WeChat, { WeChatPage } from './WeChat'
 import Support from './Support'
 import ThemeToggle from './ThemeToggle'
 import { RiftNavigation, RiftBanner } from './RiftChrome'
@@ -102,7 +103,7 @@ export const TABS: { key: string; label: string; beta?: boolean; group?: string 
   { key: 'ladder', label: '天梯', group: '赛事' }, { key: 'cup', label: '杯赛' },
   { key: 'worlds', label: '名人堂', group: '发现' }, { key: 'dossier', label: '图鉴' },
   { key: 'challenge', label: '挑战' }, { key: 'minigames', label: '小游戏' },
-  { key: 'market', label: '交易市场', group: '社交' }, { key: 'friends', label: '好友' },
+  { key: 'market', label: '交易市场', group: '社交' }, { key: 'friends', label: '好友' }, { key: 'wechat', label: '微信群' },
   { key: 'account', label: '账号', group: '我的' },
 ]
 
@@ -355,6 +356,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
     collection: Collection,
     ladder: Ladder,
     friends: Friends,
+    wechat: WeChatPage,
     market: Market,
     cup: Cup,
     seoul: SeoulRoute,
@@ -415,6 +417,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
           <div className="fab-dock">
             <OddsFab />
             <Changelog />
+            <WeChat dock />
             <Support />
           </div>
           <RiftBanner page={tab} owned={ALL_CARDS.filter(c => g.cards[c.id]).length} total={ALL_CARDS.length} />

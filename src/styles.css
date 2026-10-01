@@ -2653,6 +2653,11 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
   display: block; width: 100%; max-width: 300px; margin: 2px auto;
   border-radius: 6px; background: #fff;
 }
+.wechat-page .panel-body {
+  display: flex; flex-direction: column; align-items: center; gap: 18px;
+  padding: 26px 18px 32px; text-align: center;
+}
+.wechat-page .panel-body > p { max-width: 520px; }
 .odds-card { width: min(600px, calc(100vw - 32px)); }
 .odds-card .odds-pack { margin-top: 0; }
 .log-list { display: flex; flex-direction: column; gap: 16px; }

@@ -432,7 +432,7 @@ html[data-theme='cream'] .cardmode.rift-ui .pack-box { background:linear-gradien
  .cardmode.rift-ui .topbar .brand { font-size:19px; }
  .cardmode.rift-ui .topbar .chip { padding:3px 6px; font-size:11px; }
  .cardmode.rift-ui .cm-body { padding:12px 10px 170px; }
- .rift-nav { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:2px; padding:6px; } /* 13 items: two rows */
+ .rift-nav { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:2px; padding:6px; } /* 14 items: two rows */
  .rift-nav-group { display:none; } /* the phone's icon grid has no room for section labels */
  .rift-nav-btn { min-width:0; min-height:49px; padding:5px 1px; gap:3px; border-radius:4px; }
  .rift-nav-label { font-size:10px; white-space:nowrap; }
