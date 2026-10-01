@@ -182,7 +182,7 @@ export default function Challenge() {
         }
       >
         <p className="small muted" style={{ marginTop: 0, lineHeight: 1.7 }}>
-          答案可能是<b>选手或战队</b>，不告诉你是哪一类。每猜错一次图片清楚一点。
+          答案可能是<b>选手、战队或英雄</b>，不告诉你是哪一类。每猜错一次图片清楚一点。
           <br />
           每天一题，<b>每个账号题目不同</b>，入场 <b>{CHALLENGE_COST} 金币</b>。
           猜中按次数给卡包（<b>一次猜中给十连包</b>），没猜中退一半。
@@ -252,7 +252,7 @@ export default function Challenge() {
             <div className="row" style={{ gap: 8 }}>
               <input
                 id="challenge-guess"
-                aria-label="输入选手或战队名字"
+                aria-label="输入选手、战队或英雄名字"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={block ?? `中文名、英文名或常用简称`}
@@ -267,7 +267,7 @@ export default function Challenge() {
                 猜
               </button>
             </div>
-            {query.trim() && !matches.length && <p role="status" className="tiny muted">未找到候选：试试完整中文名、英文 ID 或战队缩写；已经猜过的不会重复列出。</p>}
+            {query.trim() && !matches.length && <p role="status" className="tiny muted">未找到候选：试试完整中文名、英文 ID、英雄名或战队缩写；已经猜过的不会重复列出。</p>}
             {matches.length > 0 && (
               <div style={{
                 position: 'relative', zIndex: 5,
