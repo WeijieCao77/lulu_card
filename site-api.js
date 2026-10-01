@@ -36,6 +36,8 @@ create table if not exists grant_campaign_receipts (
 
 /** A QR is a few tens of kilobytes; this is the point of refusing to look. */
 export const MAX_IMAGE = 600 * 1024
+// JSON carries the image as base64, which needs roughly 4/3 of the file size.
+const MAX_IMAGE_REQUEST = Math.ceil(MAX_IMAGE / 3) * 4 + 8192
 
 const TYPES = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }
 
@@ -53,9 +55,14 @@ export function readDataUrl(raw) {
   if (!m) return null
   const ext = TYPES[m[1]]
   if (!ext) return null
+  if (m[2].length % 4 !== 0 || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(m[2])) return null
   let buf
   try { buf = Buffer.from(m[2], 'base64') } catch { return null }
   if (!buf.length || buf.length > MAX_IMAGE) return null
+  const isPng = buf.length >= 24 && buf.subarray(0, 8).equals(Buffer.from('89504e470d0a1a0a', 'hex')) && buf.toString('ascii', 12, 16) === 'IHDR'
+  const isJpeg = buf.length >= 4 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff
+  const isWebp = buf.length >= 12 && buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP'
+  if (!(ext === 'png' ? isPng : ext === 'jpg' ? isJpeg : isWebp)) return null
   return { mime: m[1], ext, buf }
 }
 
@@ -123,7 +130,7 @@ export function makeSiteApi(sql, { readBody, json, token, normalizeId, displayNa
   async function write(req, res) {
     if (!sql) { json(res, 503, { ok: false, why: 'no database' }); return }
     let body
-    try { body = JSON.parse(await readBody(req, MAX_IMAGE + 8192)) } catch {
+    try { body = JSON.parse(await readBody(req, MAX_IMAGE_REQUEST)) } catch {
       json(res, 400, { ok: false, why: '图太大或者格式不对' })
       return
     }

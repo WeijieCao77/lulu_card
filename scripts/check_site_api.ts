@@ -81,6 +81,9 @@ const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJA
 
 // ---- what a data URL is allowed to be ---------------------------------
 check(!!readDataUrl(PNG), 'a real PNG is accepted')
+check(readDataUrl('data:image/png;base64,' + Buffer.from('<script>alert(1)</script>').toString('base64')) === null,
+  'declaring HTML as PNG does not make it an image')
+check(readDataUrl('data:image/png;base64,AAAA=AAA') === null, 'malformed base64 is refused')
 check(readDataUrl('data:text/html;base64,PHNjcmlwdD4=') === null, 'HTML is not an image')
 check(readDataUrl('data:image/svg+xml;base64,PHN2Zz4=') === null,
   'SVG is refused — it is a document that can carry script, not a picture')
@@ -108,6 +111,15 @@ check(readDataUrl('data:image/png;base64,not base64!!') === null, 'junk in the p
 
 // ---- upload, and it takes effect --------------------------------------
 {
+  // FileReader's base64 adds about a third to the request body. A file that
+  // the 600 KB picker accepts must still fit through the JSON request limit.
+  const nearLimit = 'data:image/png;base64,' + Buffer.concat([
+    Buffer.from(PNG.split(',')[1], 'base64'), Buffer.alloc(550 * 1024),
+  ]).toString('base64')
+  const large = await call('/api/admin/wechat', {
+    method: 'POST', token: TOKEN, body: { on: false, img: nearLimit },
+  })
+  check(large.code === 200, '550 KB 图片能通过上传请求', `code ${large.code}`)
   const w = await call('/api/admin/wechat', {
     method: 'POST', token: TOKEN, body: { on: true, img: PNG, note: '扫码进群' },
   })
