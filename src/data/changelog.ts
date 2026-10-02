@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-02', title: '分差胜率表', changes: [
+    { kind: '新增', text: '左侧「赛事」新增「胜率表」：阵容分高的一方赢下比赛的比例，按分差分档，全部来自玩家真实对局（全服杯和天梯），每天北京时间零点更新。' },
+  ],
+}, {
   date: '2026-10-01', title: '默契与挑战修复', changes: [
     { kind: '修复', text: '教练和选手同国籍时，现在优先按同国籍计算默契，不再只显示同赛区。' },
     { kind: '修复', text: '每日挑战的答案不再能通过浏览器开发工具直接看到；题图会随猜测次数逐步清晰。' },

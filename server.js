@@ -29,6 +29,7 @@ import { displayName } from './names.js'
 import { makeProfileApi } from './profile-api.js'
 import { makeSupportApi } from './support-api.js'
 import { makeFeedbackApi } from './feedback-api.js'
+import { makeWinRateApi } from './winrate-api.js'
 import { makeSiteApi } from './site-api.js'
 import { makeMarketApi } from './market-api.js'
 import { makeOpenCupApi } from './opencup-api.js'
@@ -517,7 +518,10 @@ async function readiness() {
 // Matches are played on a worker thread and the rival scan runs on the stats
 // budget: neither is something a player's connection should be held for.
 const matchComputer = sql ? createMatchComputer() : null
-const cardApi = () => (_cardApi ??= makeCardApi(sql, { rateLimited, readBody, json, staticRoot: ROOT, matches: matchComputer, slow: sqlStats }))
+// 胜率表 (winrate-api.js): ladder matches are logged on the main pool, the daily count runs on the stats one
+const winRateApi = makeWinRateApi(() => sqlStats ?? sql, { json, balanceVersion: engine.BALANCE_VERSION })
+const logLadder = (mode, mine, theirs, won) => { if (sql) winRateApi.logMatch(mode, mine, theirs, won, sql) }
+const cardApi = () => (_cardApi ??= makeCardApi(sql, { rateLimited, readBody, json, staticRoot: ROOT, matches: matchComputer, slow: sqlStats, onLadder: logLadder }))
 let _phoneApi
 const phoneApi = () => (_phoneApi ??= makePhoneApi(sql, {
   readBody, json, rateLimited, normalizeId, hash: (id) => createHash('sha256').update(String(id)).digest('hex'),
@@ -773,6 +777,10 @@ function handle(req, res) {
     void supportApi().route(req, res, path, url).then(handled => {
       if (!handled) json(res, 404, { ok: false })
     }).catch(() => { if (!res.headersSent) json(res, 503, { ok: false, why: '应援墙暂时不可用。' }) })
+    return
+  }
+  if (path === '/api/winrate') {
+    void winRateApi.route(req, res)
     return
   }
   if (path.startsWith('/api/feedback/') || path === '/api/admin/feedback') {

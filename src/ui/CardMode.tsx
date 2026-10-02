@@ -20,6 +20,7 @@ import AccountScreen, { copyText } from './cards/Account'
 import Dossier from './LoLCatalog'
 import OddsFab from './cards/OddsFab'
 import MailBox, { MailButton } from './cards/MailBox'
+import WinRate from './cards/WinRate'
 import Credit from './Credit'
 import Changelog from './Changelog'
 import WeChat, { WeChatPage } from './WeChat'
@@ -100,7 +101,7 @@ function StaminaChip({ g, onTick }: { g: GachaState; onTick: () => void }) {
 // grouped like 开瓦包's sidebar: `group` opens a new section and names it
 export const TABS: { key: string; label: string; beta?: boolean; group?: string }[] = [
   { key: 'packs', label: '抽卡', group: '卡牌' }, { key: 'shop', label: '每日商店' }, { key: 'collection', label: '收藏' }, { key: 'squad', label: '卡组' },
-  { key: 'ladder', label: '天梯', group: '赛事' }, { key: 'cup', label: '杯赛' },
+  { key: 'ladder', label: '天梯', group: '赛事' }, { key: 'cup', label: '杯赛' }, { key: 'winrate', label: '胜率表' },
   { key: 'worlds', label: '名人堂', group: '发现' }, { key: 'dossier', label: '图鉴' },
   { key: 'challenge', label: '挑战' }, { key: 'minigames', label: '小游戏' },
   { key: 'market', label: '交易市场', group: '社交' }, { key: 'friends', label: '好友' }, { key: 'wechat', label: '微信群' },
@@ -359,6 +360,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
     wechat: WeChatPage,
     market: Market,
     cup: Cup,
+    winrate: WinRate,
     seoul: SeoulRoute,
   } as Record<string, ComponentType>)[tab]
 

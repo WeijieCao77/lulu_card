@@ -1,5 +1,6 @@
 import { FEEDBACK_SCHEMA } from './feedback-api.js'
 import { SUPPORT_SCHEMA } from './support-api.js'
+import { WINRATE_SCHEMA } from './winrate-api.js'
 import { SCHEMA } from './analytics.js'
 import { createHash } from 'node:crypto'
 import { setTimeout as sleep } from 'node:timers/promises'
@@ -30,7 +31,7 @@ import { TEAM_CUP_SCHEMA } from './teamcup-api.js'
  * game genuinely cannot run is a database with no card_accounts in it, so
  * that is the only thing asked before keeping the connection.
  */
-export const SCHEMAS = [SCHEMA, CARD_SCHEMA, PROFILE_SCHEMA, SITE_SCHEMA, ROLLUP_SCHEMA, OPEN_CUP_SCHEMA, OPEN_CUP_V2_SCHEMA, OPEN_CUP_LEAGUE_SCHEMA, TEAM_CUP_SCHEMA, FEEDBACK_SCHEMA, SUPPORT_SCHEMA]
+export const SCHEMAS = [SCHEMA, CARD_SCHEMA, PROFILE_SCHEMA, SITE_SCHEMA, ROLLUP_SCHEMA, OPEN_CUP_SCHEMA, OPEN_CUP_V2_SCHEMA, OPEN_CUP_LEAGUE_SCHEMA, TEAM_CUP_SCHEMA, FEEDBACK_SCHEMA, SUPPORT_SCHEMA, WINRATE_SCHEMA]
 /** any constant, as long as every deploy of this service uses the same one */
 const SCHEMA_LOCK = 5150409
 

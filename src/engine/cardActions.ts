@@ -272,12 +272,16 @@ function dispatch(
       const strength = rival
         ? 84 + Math.min(10, Math.floor(rival.points / 250))
         : (arenaOpponentRating(oppId) ?? 80) + bump
-      const mercy = !!rival
-        && squadRating(rival, (id) => rival.levels[id] ?? 0) - squadRating(five.squad, level) >= RIVAL_MERCY_GAP
+      const mine = squadRating(five.squad, level)
+      const theirs = rival
+        ? squadRating(rival, (id) => rival.levels[id] ?? 0)
+        : Math.round((arenaOpponentRating(oppId) ?? 80) + bump)
+      const mercy = !!rival && theirs - mine >= RIVAL_MERCY_GAP
       const out = recordLadder(g, res.win, strength, league, mercy)
       return {
         ok: true,
-        result: { league, res, opp: oppId, who: rival ? `${rival.name} ${rival.tag}` : undefined, out },
+        // `rate`: both 阵容分, for the server's 胜率表 log (winrate-api.js)
+        result: { league, res, opp: oppId, who: rival ? `${rival.name} ${rival.tag}` : undefined, out, rate: { mine, theirs, rival: !!rival } },
       }
     }
     case 'cup_enter': {

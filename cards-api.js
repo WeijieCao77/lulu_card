@@ -416,6 +416,8 @@ export function makeCardApi(sql, {
   matches = null,
   /** where the rival scan runs — a pool nobody is waiting on (server.js passes the stats budget) */
   slow = null,
+  /** winrate-api.js logMatch: one anonymous line per ladder match, for the 胜率表 */
+  onLadder = null,
 }) {
   async function challengePuzzle(id, today, state) {
     const kind = engine.kindFor(today, id)
@@ -918,6 +920,8 @@ export function makeCardApi(sql, {
       }
       sweepRequests()
       const { out } = reply
+      const rate = action === 'ladder' && out.ok ? out.result?.rate : null
+      if (rate && onLadder) onLadder(rate.rival ? 'ladder_pvp' : 'ladder_club', rate.mine, rate.theirs, out.result.res?.win)
       json(res, 200, {
         ok: out.ok,
         why: out.ok ? undefined : out.why,
