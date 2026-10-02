@@ -1809,11 +1809,8 @@ export function recordLadder(
     if (L.div > L.best) {
       L.best = L.div
       // a promotion is the moment to hand over something worth opening
-      // a metal ladder's 钻石 pays a 选拔包, not the 十连包: four ladders of 十连包 would be four
-      // extra 十连包 a head for the same hours (owner, 2026-10-02)
-      out.pack = league === 'open'
-        ? (L.div >= 4 ? 'ten' : L.div >= 2 ? 'elite' : 'scout')
-        : (L.div >= 4 ? 'elite' : 'scout')
+      // the same on every ladder, metal ones included: 钻石 pays the 十连包 (owner, 2026-10-02)
+      out.pack = L.div >= 4 ? 'ten' : L.div >= 2 ? 'elite' : 'scout'
       g.packs[out.pack] = (g.packs[out.pack] ?? 0) + 1
     }
     // every fifth win a 试训包, every twentieth a 选拔包 instead — the ladder

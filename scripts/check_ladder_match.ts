@@ -38,14 +38,14 @@ async function call(path: string, body: unknown) {
 const today = new Date().toISOString().slice(0, 10)
 const sorted = CUP_TEAMS.slice().sort((a, b) => a.rating - b.rating)
 const idOf = (i: number) => `VM-CVPM-CVPM-CVPM-CVPM-CV${'0123456789ABCDEFGHJKMNPQRSTVWXYZ'[Math.floor(i / 32)]}${'0123456789ABCDEFGHJKMNPQRSTVWXYZ'[i % 32]}`
-async function account(i: number, team: typeof CUP_TEAMS[number], div = 4) {
+async function account(i: number, team: typeof CUP_TEAMS[number], div = 4, points = 0) {
   const id = idOf(i)
   await call('/api/card/claim', { id, name: `天梯${i}` })
   const g: GachaState = newGacha(id, `天梯${i}`, today)
   const ids = [...team.squad.slots, team.squad.coach].filter((x): x is string => !!x)
   g.cards = Object.fromEntries(ids.map((c) => [c, { id: c, level: 0, dupes: 0, seen: 1, got: today }]))
   g.squad = structuredClone(team.squad)
-  g.ladder = { ...g.ladder, div, stars: 2, best: div }
+  g.ladder = { ...g.ladder, div, stars: 2, best: div, ...(div >= 5 ? { points, bestPoints: points } : {}) }
   g.daily.staminaAt = Date.now()
   // the formal release plays only phone-bound accounts; these stand in for bound ones
   await sql`update card_accounts set state = ${sql.json(g)}, verified = now() where id_hash = ${hash(id)}`
@@ -71,7 +71,8 @@ try {
     tags.add(String(rival.tag).toUpperCase())
     gaps.push(Math.abs(squadRating(rival, (id: string) => rival.levels?.[id] ?? 0) - me.score))
   }
-  check('池子里有接近的人时，抽到的都在 4 分以内', gaps.length > 0 && Math.max(...gaps) <= 4, `${gaps.length} 次真人，最大分差 ${Math.max(...gaps)}，${clubs} 次俱乐部`)
+  check('同段位有人时，抽到的都在 12 分以内', gaps.length > 0 && Math.max(...gaps) <= 12, `${gaps.length} 次真人，最大分差 ${Math.max(...gaps)}，${clubs} 次俱乐部`)
+  check('不再只挑 4 分以内的：分差有大有小', gaps.some((x) => x > 4), `${[...new Set(gaps)].sort((x, y) => x - y).join(',')}`)
   check('抽到的不是自己，也不总是同一个人', !tags.has(`#${hash(me.id).slice(0, 4).toUpperCase()}`) && tags.size > 1, [...tags].join(' '))
 
   // nobody near: a five far above everybody in the pool
@@ -81,18 +82,45 @@ try {
   cards.invalidate()
   await sql`update card_accounts set state = jsonb_set(state, '{ladder,pending}', 'null'::jsonb) where id_hash = ${hash(me.id)}`
   let r = await call('/api/card/act', { id: me.id, action: 'ladder_draw', args: {}, client: {} })
-  check('8 分以内没有人：打俱乐部，不硬塞一个差很多的真人',
-    !r.result?.pending?.rival && !!r.result?.pending?.club && me.score - Math.max(...low.map((x) => x.score)) > 8,
+  check('12 分以内没有人：打俱乐部，不硬塞一个差很多的真人',
+    !r.result?.pending?.rival && !!r.result?.pending?.club && me.score - Math.max(...low.map((x) => x.score)) > 12,
     `我 ${me.score}，池子最高 ${Math.max(...low.map((x) => x.score))}`)
 
-  // one five 5–8 away: taken as the nearest
+  // the division comes first: a 钻石 ten points away beats a 大师 two points away
   await sql`delete from card_accounts where id_hash <> ${hash(me.id)}`
-  const six = sorted.find((t) => { const d = squadRating(t.squad) - me.score; return d >= 5 && d <= 8 })!
-  const near = await account(200, six)
+  const at = (lo: number, hi: number) => sorted.find((t) => { const d = Math.abs(squadRating(t.squad) - me.score); return d >= lo && d <= hi })!
+  const sameDiv = await account(200, at(8, 11), 4)
+  const closeMaster = await account(201, at(0, 2), 5, 500)
+  cards.invalidate()
+  const tagOf = (id: string) => `#${hash(id).slice(0, 4).toUpperCase()}`
+  let drawn = new Set<string>()
+  for (let k = 0; k < 12; k++) {
+    await sql`update card_accounts set state = jsonb_set(state, '{ladder,pending}', 'null'::jsonb) where id_hash = ${hash(me.id)}`
+    r = await call('/api/card/act', { id: me.id, action: 'ladder_draw', args: {}, client: {} })
+    drawn.add(String(r.result?.pending?.rival?.tag ?? 'club').toUpperCase())
+  }
+  check('同段位优先：钻石先配钻石，哪怕大师那个分更近', drawn.size === 1 && drawn.has(tagOf(sameDiv.id)), `${[...drawn].join(' ')}，钻石 ${sameDiv.score} / 大师 ${closeMaster.score} / 我 ${me.score}`)
+
+  // nobody in 钻石: the next division, same cap
+  await sql`delete from card_accounts where id_hash = ${hash(sameDiv.id)}`
   cards.invalidate()
   await sql`update card_accounts set state = jsonb_set(state, '{ladder,pending}', 'null'::jsonb) where id_hash = ${hash(me.id)}`
   r = await call('/api/card/act', { id: me.id, action: 'ladder_draw', args: {}, client: {} })
-  check('4 分以内没有、8 分以内有：抽最近的那个', !!r.result?.pending?.rival, `对面 ${near.score}，我 ${me.score}`)
+  check('同段位没人：抽相邻段位的', String(r.result?.pending?.rival?.tag ?? '').toUpperCase() === tagOf(closeMaster.id))
+
+  // 大师 meets 大师 by 大师分: within 300 first
+  await sql`delete from card_accounts where id_hash <> ${hash(me.id)}`
+  await sql`update card_accounts set state = jsonb_set(jsonb_set(state, '{ladder,div}', '5'::jsonb), '{ladder,points}', '1000'::jsonb) where id_hash = ${hash(me.id)}`
+  const bandIn = await account(300, at(0, 6), 5, 1150)
+  const bandOut = await account(301, at(0, 6), 5, 2400)
+  cards.invalidate()
+  drawn = new Set<string>()
+  for (let k = 0; k < 12; k++) {
+    await sql`update card_accounts set state = jsonb_set(state, '{ladder,pending}', 'null'::jsonb) where id_hash = ${hash(me.id)}`
+    r = await call('/api/card/act', { id: me.id, action: 'ladder_draw', args: {}, client: {} })
+    drawn.add(String(r.result?.pending?.rival?.tag ?? 'club').toUpperCase())
+  }
+  check('大师按大师分配：300 分以内的先', drawn.size === 1 && drawn.has(tagOf(bandIn.id)), `${[...drawn].join(' ')}（1150 分 ${tagOf(bandIn.id)}，2400 分 ${tagOf(bandOut.id)}）`)
 
   // the mercy rule, on the rules themselves
   const g = newGacha('VM-CVPM-CVPM-CVPM-CVPM-CVZZ', '保护', today)

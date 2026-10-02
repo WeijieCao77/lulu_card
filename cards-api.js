@@ -852,7 +852,7 @@ export function makeCardApi(sql, {
         const env = { now, today, seed }
         if (action === 'challenge') env.challengePuzzle = await challengePuzzle(id, today, g)
         t = performance.now()
-        if (engine.wantsRival(g, action)) env.rival = await pickRival(g.ladder.div, me, engine.ladderScore(g))
+        if (engine.wantsRival(g, action)) env.rival = await pickRival(g.ladder.div, me, engine.ladderScore(g), g.ladder.points ?? 0)
         mark.rival += performance.now() - t
         t = performance.now()
         let out
@@ -1227,28 +1227,31 @@ export function makeCardApi(sql, {
   }
 
   /**
-   * A rival for a ladder match: somebody near you on paper.
+   * A rival for a ladder match: somebody in your division, within RIVAL_CAP points (owner, 2026-10-02).
    *
-   * It used to be anybody in the division. Sampled off the live pool on
-   * 2026-09-17, 钻石 held fives from 74 to 100 and 大师 from 79 to 104, so a
-   * 90 was dealt a 99 about as often as a 91 — and nine points is a match
-   * lost three times in four before it starts. Now: one of the fives within
-   * RIVAL_NEAR points of yours, at random; failing that the nearest within
-   * RIVAL_FAR; failing that nobody, and the match is against a club of the
-   * division, as it is when the pool is empty. `score` absent (an account
-   * with no five) keeps the old behaviour.
+   * Before 2026-09-17 it was anybody in the division: 钻石 held fives from 74 to 100, so a 90 met a
+   * 99 about as often as a 91, and nine points is a match lost three times in four. Then it became
+   * the five nearest yours on paper (within four, else the nearest within eight), which put nearly
+   * every match in the band where the higher score wins only 55–64% (胜率表) — the group's
+   * 「总是被比自己低分的打败」. Now the division decides again, with the old hole closed: 钻石 meets
+   * 钻石, 大师 meets 大师 within MASTER_BAND 大师分 (then twice that, then any 大师), at random,
+   * as long as the fives are within RIVAL_CAP points. Nobody there: the next division either side,
+   * same cap. Nobody at all: a club of the division, as when the pool is empty. A loss to a five
+   * RIVAL_MERCY_GAP or more above yours still costs no star (gacha.ts recordLadder). `score` absent
+   * keeps any rival in the division.
    */
-  const RIVAL_NEAR = 4
-  const RIVAL_FAR = 8
-  async function pickRival(div, mine, score = null) {
-    const rows = (await rivalsNear(div)).filter((r) => r.id_hash !== mine && r.score !== null)
-    if (!rows.length) return null
-    const any = (list) => list[Math.floor(Math.random() * list.length)].five
-    if (typeof score !== 'number') return any(rows)
-    const near = rows.filter((r) => Math.abs(r.score - score) <= RIVAL_NEAR)
-    if (near.length) return any(near)
-    const nearest = rows.reduce((a, b) => (Math.abs(a.score - score) <= Math.abs(b.score - score) ? a : b))
-    return Math.abs(nearest.score - score) <= RIVAL_FAR ? nearest.five : null
+  const RIVAL_CAP = 12
+  const MASTER_BAND = 300
+  async function pickRival(div, mine, score = null, points = 0) {
+    const rows = (await rivalsNear(div)).filter((r) => r.id_hash !== mine && r.score !== null
+      && (typeof score !== 'number' || Math.abs(r.score - score) <= RIVAL_CAP))
+    const any = (list) => (list.length ? list[Math.floor(Math.random() * list.length)].five : null)
+    const same = rows.filter((r) => r.div === div)
+    if (div >= engine.MASTER_DIV && same.length) {
+      const near = (band) => same.filter((r) => Math.abs((r.five.points ?? 0) - (points ?? 0)) <= band)
+      return any(near(MASTER_BAND)) ?? any(near(2 * MASTER_BAND)) ?? any(same)
+    }
+    return any(same) ?? any(rows.filter((r) => Math.abs(r.div - div) === 1))
   }
 
   async function rivals(req, res, bucket) {

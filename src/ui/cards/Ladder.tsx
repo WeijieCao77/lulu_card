@@ -126,7 +126,7 @@ export default function Ladder() {
       <p className="tiny muted" style={{ margin: '0 0 12px' }}>
         {league === 'open'
           ? '所有卡牌稀有度均可入场，钻石起会遇到真人卡组。'
-          : `${rule.blurb} 只打俱乐部，对手按卡色削弱；段位、战绩和排行榜都和公开赛分开算，升到钻石送选拔包。`}
+          : `${rule.blurb} 只打俱乐部，对手按卡色削弱；段位、战绩和排行榜都和公开赛分开算，升段奖励和公开赛一样。`}
         {!entry.ok && <b className="neg"> {entry.why}</b>}
       </p>
 
@@ -207,7 +207,7 @@ export default function Ladder() {
               <p className="tiny faint" style={{ lineHeight: 1.7 }}>
                 BO{LADDER_BO}，先赢 3 局。每局以摧毁基地决定胜负，<b>在服务器上结算</b>。
                 {rival
-                  ? `　优先匹配阵容分相差 4 分以内的玩家。对面高出 ${RIVAL_MERCY_GAP} 分以上，输了不掉星，大师分只扣一半。`
+                  ? `　匹配同段位的玩家（大师按大师分），阵容分相差不超过 12 分。对面高出 ${RIVAL_MERCY_GAP} 分以上，输了不掉星，大师分只扣一半。`
                   : league === 'open' && L.div >= 4 ? '　（暂时没匹配到真人卡组，先打俱乐部。）' : ''}
               </p>
               <GapOdds />
