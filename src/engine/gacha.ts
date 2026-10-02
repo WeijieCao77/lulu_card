@@ -492,10 +492,10 @@ export const tierStars = (div: number): number =>
  */
 // Keep legacy record keys readable; only open remains an active ladder.
 export const LEAGUES = ['open', 'gold', 'silver', 'bronze', 'hof'] as const
-// 全服杯 runs two divisions since 2026-10-02 (owner): 不限赛 and 金卡赛. 银卡赛 and 铜卡赛 were dropped, and
-// 名人堂赛 (two 彩卡 to enter) never filled a single bracket; 不限赛 is where a 彩卡 plays now. Their rules
-// stay below so a bracket already drawn under them still finishes and old records still read.
-export const CUP_LEAGUES = ['free', 'gold'] as const
+// 全服杯 divisions since 2026-10-02 (owner): 不限赛 took the place of 名人堂赛, which (two 彩卡 to enter)
+// never filled a single bracket — 不限赛 is where a 彩卡 plays now. hof's rule stays below so old
+// records still read.
+export const CUP_LEAGUES = ['free', 'gold', 'silver', 'bronze'] as const
 export type CupLeague = (typeof CUP_LEAGUES)[number]
 export const isCupLeague = (k: unknown): k is CupLeague =>
   typeof k === 'string' && (CUP_LEAGUES as readonly string[]).includes(k)
