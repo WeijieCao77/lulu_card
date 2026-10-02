@@ -27,7 +27,7 @@ import {
   awardMinigame, canPlay, checkIn, claimFullSet, claimQuest, claimSeries, clampState, cupBo, cupOpponent, drawOpponent, enterCup,
   levelOf, oppBumpFor, openPack, packCost, pendingOpponent, primeStamina, recordCup, recordLadder,
   refreshDaily, salvage, salvageBulk, seriesOfPack, spendPlay, upgrade, ladderSlot, leagueEntry, isLadderLeague,
-  LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad, cupSquadOf,
+  LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad, cupSquadOf, ladderSquadOf,
 } from './gacha'
 import {
   judgeMinigame, MINI_GAMES, MINIGAME_DAILY, MINIGAME_TTL_MS, newMinigame, refreshMinigame,
@@ -245,7 +245,8 @@ function dispatch(
     }
     case 'ladder': {
       const league = isLadderLeague(a.league) ? a.league : 'open'
-      const five = squadForPlay(g)
+      // a metal ladder plays its own lineup when one has been set (CupLineup), else the 卡组
+      const five = squadForPlay({ ...g, squad: ladderSquadOf(g, league) })
       if (!five.ok) return five
       // the terms of entry, checked here — the client picks the ladder, the
       // server decides whether this five may walk into it

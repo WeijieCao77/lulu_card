@@ -2682,15 +2682,19 @@ export const SERVER_KEYS = [
 ] as const
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends', 'cupSquads'] as const
 
-/** The cups that keep a lineup of their own: 俱乐部杯, 组队杯 and the five 全服杯 divisions. */
-export const CUP_SQUAD_KEYS = ['club', 'team', 'open:open', 'open:free', 'open:gold', 'open:silver', 'open:bronze', 'open:hof'] as const
+/** The cups that keep a lineup of their own — 俱乐部杯, 组队杯, the 全服杯 divisions — and the metal ladders (owner, 2026-10-02). */
+export const CUP_SQUAD_KEYS = ['club', 'team', 'open:open', 'open:free', 'open:gold', 'open:silver', 'open:bronze', 'open:hof', 'ladder:gold', 'ladder:silver', 'ladder:bronze'] as const
 export type CupSquadKey = (typeof CUP_SQUAD_KEYS)[number]
 export const CUP_SQUAD_NAMES: Record<CupSquadKey, string> = {
   club: '俱乐部杯', team: '组队杯', 'open:open': '全服杯·天梯', 'open:free': '全服杯·不限赛', 'open:gold': '全服杯·金卡赛',
   'open:silver': '全服杯·银卡赛', 'open:bronze': '全服杯·铜卡赛', 'open:hof': '全服杯·名人堂赛',
+  'ladder:gold': '天梯·金卡赛', 'ladder:silver': '天梯·银卡赛', 'ladder:bronze': '天梯·铜卡赛',
 }
 /** The lineup a cup plays with: its own if one has been set, otherwise the 卡组. */
 export const cupSquadOf = (g: Pick<GachaState, 'squad' | 'cupSquads'>, key: CupSquadKey): Squad => g.cupSquads?.[key] ?? g.squad
+/** The lineup a ladder plays with: the 卡组 on the open one, a metal ladder's own if one has been set. */
+export const ladderSquadOf = (g: Pick<GachaState, 'squad' | 'cupSquads'>, league: LadderLeague): Squad =>
+  league === 'open' ? g.squad : cupSquadOf(g, `ladder:${league}`)
 
 /** A five from the client, kept only as far as the server's collection bears it out. */
 function cleanClientSquad(server: GachaState, raw: Partial<Squad>): Squad {

@@ -100,6 +100,18 @@ const SQUADS: Record<string, Squad> = {
   check('金卡赛放行', ok.ok, ok.ok ? '' : (ok as { why: string }).why)
   const junk = runAction(g, 'ladder', { league: 'platinum' }, env(Date.now(), 5))
   check('编出来的赛事名当成公开赛，不是崩', junk.ok, junk.ok ? '' : (junk as { why: string }).why)
+
+  // a metal ladder's own lineup (2026-10-02): the 卡组 stays gold, the 铜卡赛 plays a bronze five of its own
+  for (const id of SQUADS.bronze.slots) if (id) g.cards[id] = { id, level: 0, dupes: 0, seen: 1, got: DAY }
+  g.cupSquads = { 'ladder:bronze': { slots: [...SQUADS.bronze.slots], coach: null } }
+  g.daily.stamina = STAMINA_MAX
+  const own = runAction(g, 'ladder', { league: 'bronze' }, env(Date.now(), 21))
+  check('铜卡赛用自己的专用阵容，卡组是金卡也能打', own.ok, own.ok ? '' : (own as { why: string }).why)
+  const mine = (own as { result?: { rate?: { mine: number } } }).result?.rate?.mine
+  check('打的确实是那套铜卡', mine === Math.round(squadPaper({ slots: SQUADS.bronze.slots, coach: null }).score), `${mine}`)
+  delete g.cupSquads
+  const back = runAction(g, 'ladder', { league: 'bronze' }, env(Date.now(), 22))
+  check('删掉专用阵容就跟随卡组：金卡进不了铜卡赛', !back.ok)
 }
 
 // ---- one record each -------------------------------------------------------

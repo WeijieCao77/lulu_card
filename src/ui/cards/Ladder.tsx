@@ -5,7 +5,7 @@ import MatchReport from './Report'
 import {
   DIVISIONS, MASTER_DIV, MASTER_TITLES, PACKS, STAMINA_COST, STAMINA_MAX, canPlay,
   ladderOpponent, ladderOf, levelOf, masterTitle, oppBumpFor, pendingOpponent,
-  leagueEntry, ladderName, LADDER_LEAGUES, LEAGUE_RULES,
+  leagueEntry, ladderName, ladderSquadOf, LADDER_LEAGUES, LEAGUE_RULES,
   rankName, staminaFillHours, staminaNow, staminaRate, starsOnTier, tierStars,
 } from '../../engine/gacha'
 import { LADDER_BO, RIVAL_MERCY_GAP } from '../../engine/gacha'
@@ -19,6 +19,7 @@ import { track } from '../../engine/telemetry'
 import { fetchTop } from '../../engine/account'
 import type { TopRow } from '../../engine/account'
 import { GapOdds } from './GapOdds'
+import CupLineup from './CupLineup'
 
 /**
  * 天梯: the open ladder, where the game is ranked, and one for each metal (after 开瓦包, 2026-10-02).
@@ -43,12 +44,14 @@ export default function Ladder() {
   const pick = (k: LadderLeague) => { setLeague(k); setShown(null); try { localStorage.setItem('luluka-ladder', k) } catch { /* private window */ } }
   const rule = LEAGUE_RULES[league]
   const level = (id: string) => levelOf(g, id)
-  const filled = g.squad.slots.filter(Boolean).length
-  const rating = squadRating(g.squad, level)
+  // the open ladder plays the 卡组; a metal one its own lineup if it has one (CupLineup)
+  const lineup = ladderSquadOf(g, league)
+  const filled = lineup.slots.filter(Boolean).length
+  const rating = squadRating(lineup, level)
   const opp0 = ladderOpponent(g, league)
   const L = ladderOf(g, league)
   const master = L.div >= MASTER_DIV
-  const entry = filled === 5 ? leagueEntry(g.squad, league) : ({ ok: true } as const)
+  const entry = filled === 5 ? leagueEntry(lineup, league) : ({ ok: true } as const)
   const [top, setTop] = useState<TopRow[] | null | 'loading'>('loading')
   const [saved, setSaved] = useState(0)
   const [topAt, setTopAt] = useState(0)
@@ -93,8 +96,9 @@ export default function Ladder() {
     : Math.round((arenaOpponentRating(oppId) ?? opp?.rating ?? 80) + bump)
 
   const play = async () => {
-    if (filled < 5) { toast('先凑齐五个人。'); go('squad'); return }
-    if (!entry.ok) { toast(entry.why); go('squad'); return }
+    const edit = league === 'open' ? undefined : { target: `ladder:${league}` as const }
+    if (filled < 5) { toast('先凑齐五个人。'); go('squad', edit); return }
+    if (!entry.ok) { toast(entry.why); go('squad', edit); return }
     if (!canPlay(g, 'ladder', now)) { toast(`体力不够，${staminaRate()}。`); return }
     setBusy(true)
     const r = await act('ladder', { league })
@@ -129,6 +133,7 @@ export default function Ladder() {
           : `${rule.blurb} 只打俱乐部，对手按卡色削弱；段位、战绩和排行榜都和公开赛分开算，升段奖励和公开赛一样。`}
         {!entry.ok && <b className="neg"> {entry.why}</b>}
       </p>
+      {league !== 'open' && <CupLineup cup={`ladder:${league}`} />}
 
       <div className="grid c2" style={{ alignItems: 'start' }}>
         <Panel title="段位">
@@ -184,7 +189,7 @@ export default function Ladder() {
                         <br />
                         阵容分 <b>{squadRating(rival, (id) => rival.levels[id] ?? 0)}</b> · 默契{' '}
                         <b>{chemistry(rival).score}</b>
-                        {' '}（我 {chemistry(g.squad).score}）
+                        {' '}（我 {chemistry(lineup).score}）
                       </>
                     ) : (
                       <>
@@ -300,7 +305,7 @@ export default function Ladder() {
           result={shown.res}
           opponentId={shown.opp}
           opponentName={shown.who}
-          mySquad={g.squad}
+          mySquad={lineup}
           level={level}
           onClose={() => setShown(null)}
           extra={

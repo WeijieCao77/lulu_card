@@ -38,19 +38,21 @@ export default function CupLineup({ cup }: { cup: CupSquadKey }) {
   const squad = cupSquadOf(g, cup)
   const filled = squad.slots.filter(Boolean).length
   const score = filled === 5 ? squadRating(squad, (id) => levelOf(g, id)) : null
+  // the metal ladders keep a lineup the same way (天梯·金卡赛 …); they say 本赛 rather than 本杯
+  const here = cup.startsWith('ladder:') ? '本赛' : '本杯'
   return (
     <div className="cup-lineup">
       <span className="tiny">
-        本杯阵容：<b>{own ? '专用阵容' : '跟随卡组'}</b>
+        {here}阵容：<b>{own ? '专用阵容' : '跟随卡组'}</b>
         {' · '}{filled}/5 人{score != null ? ` · ${score} 分` : ''}{squad.coach ? ' · 有教练' : ''}
       </span>
       <button className="sm" onClick={() => go('squad', { target: cup })}>
-        {own ? '调整本杯阵容' : '设置本杯专用阵容'}
+        {own ? `调整${here}阵容` : `设置${here}专用阵容`}
       </button>
       {own && (
         <button
           className="sm ghost"
-          title="删掉这个杯赛的专用阵容，之后跟随卡组"
+          title="删掉这个专用阵容，之后跟随卡组"
           onClick={() => {
             if (g.cupSquads) delete g.cupSquads[cup]
             if (g.cupSquads && !Object.keys(g.cupSquads).length) delete g.cupSquads

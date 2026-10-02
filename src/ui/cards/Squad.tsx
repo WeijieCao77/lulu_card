@@ -104,8 +104,13 @@ export default function SquadScreen() {
           the other one is what stops them trying it at all. */}
       {cupTarget && (
         <div className="cup-edit-banner">
-          <span>正在编辑 <b>{CUP_SQUAD_NAMES[cupTarget]}</b> 的专用阵容：报名和开赛都用这一套，改这里不影响卡组和其他杯赛。</span>
-          <button className="sm primary" onClick={() => go('cup')}>完成，回到杯赛</button>
+          {cupTarget.startsWith('ladder:') ? <>
+            <span>正在编辑 <b>{CUP_SQUAD_NAMES[cupTarget]}</b> 的专用阵容：这条天梯每场都用这一套，改这里不影响卡组、杯赛和其他天梯。</span>
+            <button className="sm primary" onClick={() => go('ladder')}>完成，回到天梯</button>
+          </> : <>
+            <span>正在编辑 <b>{CUP_SQUAD_NAMES[cupTarget]}</b> 的专用阵容：报名和开赛都用这一套，改这里不影响卡组和其他杯赛。</span>
+            <button className="sm primary" onClick={() => go('cup')}>完成，回到杯赛</button>
+          </>}
         </div>
       )}
       <Panel
