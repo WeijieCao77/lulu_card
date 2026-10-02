@@ -541,7 +541,8 @@ export function guessChallenge(g: GachaState, today: string, guessId: string,
  * (its own idea of the answer): the pool had changed, so `answerFor` landed somewhere else, and ages, roles,
  * ratings and clubs had moved as well. 「绿的队伍是 TL」. A guess now carries this number and the server
  * refuses one that is not its own — before the fee, before a try is spent — and the picture carries the
- * server's, so the screen can ask for a refresh before anybody types.
+ * server's, so the screen can ask for a refresh before anybody types. The way an answer is chosen is
+ * folded in as well (below), not only the data.
  */
 let sigMemo: string | null = null
 export function challengeSig(): string {
@@ -552,6 +553,11 @@ export function challengeSig(): string {
     return `${kind}:${c.id}:${row.cells.map((x) => x.value).join('|')}`
   })
   for (const kind of ['player', 'team', 'map', 'agent'] as ChallengeKind[]) facts.push(`${kind}#${answerPool(kind).join(',')}`)
+  // How the answer is chosen is part of what a page must agree on. On 2026-10-01 the server began picking a
+  // private random answer per account, but the data — and so this number — did not change, and a page from
+  // the day before went on naming its own `answerFor` under the server's picture: 「明明是残月之肃的图，答案是
+  // 愁云使者」. Bump this whenever the choosing changes, so every older page is asked to refresh.
+  facts.push('answers:server-random-v2')
   return (sigMemo = (hashStr(facts.join('\n')) >>> 0).toString(36))
 }
 

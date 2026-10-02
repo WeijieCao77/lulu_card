@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-02', title: '每日挑战答案对不上', changes: [
+    { kind: '修复', text: '10 月 1 日之前打开、一直没刷新的页面，每日挑战会显示和图片对不上的答案和提示（例如图是残月之肃，答案却写愁云使者）。现在这样的旧页面会先提示刷新，刷新前猜不扣次数。' },
+  ],
+}, {
   date: '2026-10-02', title: '翻页按钮挪到下面', changes: [
     { kind: '调整', text: '「收藏」和「图鉴」的翻页按钮挪到列表下方，看完一页直接翻下一页，翻页后自动回到新一页的开头。' },
   ],
