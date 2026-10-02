@@ -5,10 +5,11 @@ import MatchReport from './Report'
 import {
   DIVISIONS, MASTER_DIV, MASTER_TITLES, PACKS, STAMINA_COST, STAMINA_MAX, canPlay,
   ladderOpponent, ladderOf, levelOf, masterTitle, oppBumpFor, pendingOpponent,
+  leagueEntry, ladderName, LADDER_LEAGUES, LEAGUE_RULES,
   rankName, staminaFillHours, staminaNow, staminaRate, starsOnTier, tierStars,
 } from '../../engine/gacha'
 import { LADDER_BO, RIVAL_MERCY_GAP } from '../../engine/gacha'
-import type { LadderOutcome } from '../../engine/gacha'
+import type { LadderLeague, LadderOutcome } from '../../engine/gacha'
 import type { ArenaResult, RivalSquad } from '../../engine/arena'
 import { arenaOpponentRating } from '../../engine/arena'
 import { chemistry, squadRating } from '../../engine/cards'
@@ -20,7 +21,7 @@ import type { TopRow } from '../../engine/account'
 import { GapOdds } from './GapOdds'
 
 /**
- * 天梯：统一排名，所有卡牌稀有度均可入场。
+ * 天梯: the open ladder, where the game is ranked, and one for each metal (after 开瓦包, 2026-10-02).
  *
  * The opponent is drawn there and pinned to the match, the five that walks
  * out is the five the server knows this account owns, the seed is one the
@@ -34,14 +35,20 @@ export default function Ladder() {
     { res: ArenaResult; opp: string; who?: string; out: LadderOutcome } | null
   >(null)
 
-  // Preserve the original open ladder record and leaderboard.
-  const league = 'open' as const
+  // Which ladder is being played. Each keeps its own record and its own board, so a bronze collection
+  // has a climb of its own; the open one is the original 天梯, record and board where they always were.
+  const [league, setLeague] = useState<LadderLeague>(() => {
+    try { const k = localStorage.getItem('luluka-ladder'); return (LADDER_LEAGUES as readonly string[]).includes(k ?? '') ? k as LadderLeague : 'open' } catch { return 'open' }
+  })
+  const pick = (k: LadderLeague) => { setLeague(k); setShown(null); try { localStorage.setItem('luluka-ladder', k) } catch { /* private window */ } }
+  const rule = LEAGUE_RULES[league]
   const level = (id: string) => levelOf(g, id)
   const filled = g.squad.slots.filter(Boolean).length
   const rating = squadRating(g.squad, level)
   const opp0 = ladderOpponent(g, league)
   const L = ladderOf(g, league)
   const master = L.div >= MASTER_DIV
+  const entry = filled === 5 ? leagueEntry(g.squad, league) : ({ ok: true } as const)
   const [top, setTop] = useState<TopRow[] | null | 'loading'>('loading')
   const [saved, setSaved] = useState(0)
   const [topAt, setTopAt] = useState(0)
@@ -63,7 +70,7 @@ export default function Ladder() {
   }, [saved, league])
   // past 大师 the world's clubs are not strong enough on their own
   const masterBump = master ? oppBumpFor(L.points ?? 0) : 0
-  const bump = masterBump
+  const bump = rule.oppBump + masterBump
 
   const pinned = pendingOpponent(g, league)
   const [drawing, setDrawing] = useState(false)
@@ -87,6 +94,7 @@ export default function Ladder() {
 
   const play = async () => {
     if (filled < 5) { toast('先凑齐五个人。'); go('squad'); return }
+    if (!entry.ok) { toast(entry.why); go('squad'); return }
     if (!canPlay(g, 'ladder', now)) { toast(`体力不够，${staminaRate()}。`); return }
     setBusy(true)
     const r = await act('ladder', { league })
@@ -103,8 +111,23 @@ export default function Ladder() {
 
   return (
     <>
+      {/* four ladders, one record each: the metal ones are where a bronze or silver card is worth playing */}
+      <div className="league-bar">
+        {LADDER_LEAGUES.map((k) => {
+          const rec = k === 'open' ? g.ladder : g.leagues?.[k]
+          return (
+            <button key={k} className={`league-tab${k === league ? ' on' : ''}`} aria-pressed={k === league} onClick={() => pick(k)}>
+              <b>{ladderName(k)}</b>
+              <span className="tiny faint">{rec ? `${DIVISIONS[rec.div]} · ${rec.wins}–${rec.losses}` : '未开始'}</span>
+            </button>
+          )
+        })}
+      </div>
       <p className="tiny muted" style={{ margin: '0 0 12px' }}>
-        所有卡牌稀有度均可入场，统一排名。你的段位、战绩和排行榜都在「天梯」。
+        {league === 'open'
+          ? '所有卡牌稀有度均可入场，钻石起会遇到真人卡组。'
+          : `${rule.blurb} 只打俱乐部，对手按卡色削弱；段位、战绩和排行榜都和公开赛分开算，升到钻石送选拔包。`}
+        {!entry.ok && <b className="neg"> {entry.why}</b>}
       </p>
 
       <div className="grid c2" style={{ alignItems: 'start' }}>
@@ -185,14 +208,15 @@ export default function Ladder() {
                 BO{LADDER_BO}，先赢 3 局。每局以摧毁基地决定胜负，<b>在服务器上结算</b>。
                 {rival
                   ? `　优先匹配阵容分相差 4 分以内的玩家。对面高出 ${RIVAL_MERCY_GAP} 分以上，输了不掉星，大师分只扣一半。`
-                  : L.div >= 4 ? '　（暂时没匹配到真人卡组，先打俱乐部。）' : ''}
+                  : league === 'open' && L.div >= 4 ? '　（暂时没匹配到真人卡组，先打俱乐部。）' : ''}
               </p>
               <GapOdds />
-              <button className="primary" onClick={() => void play()} disabled={busy || !cloud || !canPlay(g, 'ladder', now)}>
+              <button className="primary" onClick={() => void play()} disabled={busy || !cloud || !entry.ok || !canPlay(g, 'ladder', now)}>
                 {busy ? '比赛中…'
                   : !cloud ? '需要联网'
                     : filled < 5 ? '先去组队'
-                      : !canPlay(g, 'ladder', now) ? '体力不够'
+                      : !entry.ok ? `这套卡组进不了${ladderName(league)}`
+                        : !canPlay(g, 'ladder', now) ? '体力不够'
                         : `开打（BO${LADDER_BO} · ${STAMINA_COST.ladder} 体力）`}
               </button>
               <p className="tiny faint" style={{ marginTop: 8, marginBottom: 0 }}>
@@ -207,7 +231,7 @@ export default function Ladder() {
       </div>
 
       <Panel
-        title="天梯排行榜"
+        title={league === 'open' ? '天梯排行榜' : `${ladderName(league)}排行榜`}
         actions={
           <span className="tiny muted">
             按段位和大师分排
@@ -219,7 +243,7 @@ export default function Ladder() {
           : !top ? <p className="empty">暂时读不到排行榜（离线或服务器忙）。</p>
             : top.length === 0 ? (
               <p className="empty">
-                还没有人上榜。
+                {league === 'open' ? '还没有人上榜。' : `${ladderName(league)}还没有人打过，第一场就是第一名。`}
               </p>
             )
               : (

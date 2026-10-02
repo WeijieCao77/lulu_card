@@ -26,7 +26,7 @@
 import {
   awardMinigame, canPlay, checkIn, claimFullSet, claimQuest, claimSeries, clampState, cupBo, cupOpponent, drawOpponent, enterCup,
   levelOf, oppBumpFor, openPack, packCost, pendingOpponent, primeStamina, recordCup, recordLadder,
-  refreshDaily, salvage, salvageBulk, seriesOfPack, spendPlay, upgrade, ladderSlot, leagueEntry,
+  refreshDaily, salvage, salvageBulk, seriesOfPack, spendPlay, upgrade, ladderSlot, leagueEntry, isLadderLeague,
   LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad, cupSquadOf,
 } from './gacha'
 import {
@@ -235,7 +235,7 @@ function dispatch(
       return { ok: true, result: { dupes: r.dupes, coins: r.coins } }
     }
     case 'ladder_draw': {
-      const league = 'open' as const
+      const league = isLadderLeague(a.league) ? a.league : 'open'
       const L = ladderSlot(g, league)
       if (pendingOpponent(g, league)) return { ok: true, result: { league, pending: L.pending } }
       // only the open ladder puts another player's five across the net; a
@@ -244,7 +244,7 @@ function dispatch(
       return { ok: true, result: { league, pending: L.pending } }
     }
     case 'ladder': {
-      const league = 'open' as const
+      const league = isLadderLeague(a.league) ? a.league : 'open'
       const five = squadForPlay(g)
       if (!five.ok) return five
       // the terms of entry, checked here — the client picks the ladder, the

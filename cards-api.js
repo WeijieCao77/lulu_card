@@ -54,7 +54,7 @@ export const STAMINA_POINT_SEC = Math.round((engine.STAMINA_REGEN_MS ?? 30 * 60 
  * typed here — the name goes into a jsonb path, so the list being closed is
  * what keeps that path out of a player's hands.
  */
-export const BOARDS = ['open']
+export const BOARDS = ['open', 'gold', 'silver', 'bronze']
 
 export const CARD_SCHEMA = `
 create table if not exists card_accounts (

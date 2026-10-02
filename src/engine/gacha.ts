@@ -497,6 +497,17 @@ export const LEAGUES = ['open', 'gold', 'silver', 'bronze', 'hof'] as const
 // records still read.
 export const CUP_LEAGUES = ['free', 'gold', 'silver', 'bronze'] as const
 export type CupLeague = (typeof CUP_LEAGUES)[number]
+/**
+ * The ladders that can be played (owner, 2026-10-02, after 开瓦包): the open one, which is still the
+ * leaderboard the game is ranked on, and one for each metal. Each keeps its own record, stars and
+ * board; the metal ones play clubs only, a little weakened for the metal (LEAGUE_RULES.oppBump).
+ */
+export const LADDER_LEAGUES = ['open', 'gold', 'silver', 'bronze'] as const
+export type LadderLeague = (typeof LADDER_LEAGUES)[number]
+export const isLadderLeague = (k: unknown): k is LadderLeague =>
+  typeof k === 'string' && (LADDER_LEAGUES as readonly string[]).includes(k)
+/** what a ladder is called on its tab — the open one is 公开赛 beside the metals, 天梯 everywhere else */
+export const ladderName = (k: LeagueKind): string => (k === 'open' ? '公开赛' : LEAGUE_RULES[k].name)
 export const isCupLeague = (k: unknown): k is CupLeague =>
   typeof k === 'string' && (CUP_LEAGUES as readonly string[]).includes(k)
 export type LeagueKind = (typeof LEAGUES)[number] | 'hof' | 'free'
@@ -525,12 +536,18 @@ export interface LeagueRule {
  * matches and stalls near 大师, which is what a gold five does on the open
  * ladder today. Each number below is the one that reproduces that curve for
  * its own metal (scripts/check_leagues.ts holds the measurement).
+ *
+ * Re-measured 2026-10-02, when the metal ladders were opened (BO5, the v3 curve): the middling half of
+ * each metal at 钻石, unlevelled / at +3 — gold −3: 68% / 93%; silver −10: 58% / 93% (−7 was 43%);
+ * bronze −16: 18% / 48% (−13 was 3% / 38%; bronze is weak enough that its climb is in the levels).
+ * The open ladder's own middling gold five wins 50% there. A metal's best five, levelled, wins nearly
+ * everything below 大师 whatever the number; past 大师 oppBumpFor is what stops it.
  */
 export const LEAGUE_RULES: Record<LeagueKind, LeagueRule> = {
   open:   { name: '天梯', blurb: '任何卡都能上。', ceiling: null, needMythic: 0, oppBump: 0 },
   gold:   { name: '金卡赛', blurb: '金卡、银卡、铜卡都能上。', ceiling: 'gold', needMythic: 0, oppBump: -3 },
-  silver: { name: '银卡赛', blurb: '只能上银卡和铜卡。', ceiling: 'silver', needMythic: 0, oppBump: -7 },
-  bronze: { name: '铜卡赛', blurb: '只能上铜卡。', ceiling: 'bronze', needMythic: 0, oppBump: -13 },
+  silver: { name: '银卡赛', blurb: '只能上银卡和铜卡。', ceiling: 'silver', needMythic: 0, oppBump: -10 },
+  bronze: { name: '铜卡赛', blurb: '只能上铜卡。', ceiling: 'bronze', needMythic: 0, oppBump: -16 },
   hof:    { name: '名人堂赛', blurb: '至少两张彩卡才能入场，其余卡牌不限。', ceiling: null, needMythic: 2, oppBump: 2 },
   free:   { name: '不限赛', blurb: '金卡、银卡、铜卡、彩卡都能上，不限卡色。', ceiling: null, needMythic: 0, oppBump: 0 },
 }
@@ -1792,7 +1809,11 @@ export function recordLadder(
     if (L.div > L.best) {
       L.best = L.div
       // a promotion is the moment to hand over something worth opening
-      out.pack = L.div >= 4 ? 'ten' : L.div >= 2 ? 'elite' : 'scout'
+      // a metal ladder's 钻石 pays a 选拔包, not the 十连包: four ladders of 十连包 would be four
+      // extra 十连包 a head for the same hours (owner, 2026-10-02)
+      out.pack = league === 'open'
+        ? (L.div >= 4 ? 'ten' : L.div >= 2 ? 'elite' : 'scout')
+        : (L.div >= 4 ? 'elite' : 'scout')
       g.packs[out.pack] = (g.packs[out.pack] ?? 0) + 1
     }
     // every fifth win a 试训包, every twentieth a 选拔包 instead — the ladder
