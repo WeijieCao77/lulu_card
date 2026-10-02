@@ -1,5 +1,5 @@
 import { RELEASE_POLICY, RELEASE_STAGE } from '../../release-policy.js'
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import PhoneGate from './cards/PhoneGate'
 import type { ComponentType } from 'react'
 import { CardCtx } from './cards/ctx'
@@ -17,7 +17,8 @@ import Market from './cards/Market'
 import Cup from './cards/Cup'
 import SeoulRoute from './cards/SeoulRoute'
 import AccountScreen, { copyText } from './cards/Account'
-import Dossier from './LoLCatalog'
+// 图鉴 is opened by few and costs its own code and the careers data: fetched the first time it is opened
+const Dossier = lazy(() => import('./LoLCatalog'))
 import OddsFab from './cards/OddsFab'
 import MailBox, { MailButton } from './cards/MailBox'
 import WinRate from './cards/WinRate'
@@ -436,7 +437,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
               </div>
             </div>
           )}
-          {tab === 'dossier' ? <Dossier playerId={dossierId} onOpen={setDossierId} />
+          {tab === 'dossier' ? <Suspense fallback={<p className="empty">图鉴加载中…</p>}><Dossier playerId={dossierId} onOpen={setDossierId} /></Suspense>
             : tab === 'account' ? <AccountScreen onSignOut={signOut} />
             : Screen ? <>{tab === 'packs' && <Pity />}<Screen /></> : <Packs />}
           <Credit />
