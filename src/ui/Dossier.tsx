@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { WORLD_PLAYERS } from '../engine/world'
 import { WORLD_TEAMS, EXTRA_COACHES } from '../engine/teams'
 import { coachDossier, dossierOf, titleCount } from '../engine/dossier'
@@ -121,6 +121,12 @@ export default function Dossier({
   const rows = page === 'players' ? playerRows : coachRows
   const currentPage = page === 'players' ? playerPage : coachPage
   const setCurrentPage = page === 'players' ? setPlayerPage : setCoachPage
+  // the pager sits under the list (players asked, 2026-10-02): a turn goes back to the top of the new page
+  const listTop = useRef<HTMLDivElement>(null)
+  const turn = (n: number) => {
+    setCurrentPage(n)
+    listTop.current?.scrollIntoView({ block: 'start' })
+  }
   const totalPages = Math.max(1, Math.ceil(rows.length / PER_PAGE))
   const safePage = Math.min(currentPage, totalPages - 1)
   const pageRows = rows.slice(safePage * PER_PAGE, (safePage + 1) * PER_PAGE)
@@ -181,18 +187,7 @@ export default function Dossier({
         <button className="sm" onClick={clearFilters}>清除筛选</button>
       </div>
 
-      {rows.length > PER_PAGE && (
-        <div className="row wrap" style={{ gap: 8, marginBottom: 8, alignItems: 'center' }}>
-          <span className="tiny faint">第 {safePage + 1} / {totalPages} 页 · 共 {rows.length} 条</span>
-          <div className="seg dossier-pages">
-            <button className="sm" disabled={safePage <= 0} onClick={() => setCurrentPage(0)}>第一页</button>
-            <button className="sm" disabled={safePage <= 0} onClick={() => setCurrentPage(Math.max(0, safePage - 1))}>上一页</button>
-            <button className="sm" disabled={safePage >= totalPages - 1} onClick={() => setCurrentPage(Math.min(totalPages - 1, safePage + 1))}>下一页</button>
-            <button className="sm" disabled={safePage >= totalPages - 1} onClick={() => setCurrentPage(totalPages - 1)}>最后一页</button>
-          </div>
-        </div>
-      )}
-
+      <div ref={listTop} style={{ scrollMarginTop: 72 }} />
       {pageRows.length === 0 ? (
         <p className="empty">没有匹配的记录。试试清除筛选。</p>
       ) : (
@@ -237,6 +232,18 @@ export default function Dossier({
                   </div>
                 </button>
               ))}
+        </div>
+      )}
+
+      {rows.length > PER_PAGE && (
+        <div className="row wrap" style={{ gap: 8, marginTop: 12, alignItems: 'center' }}>
+          <span className="tiny faint">第 {safePage + 1} / {totalPages} 页 · 共 {rows.length} 条</span>
+          <div className="seg dossier-pages">
+            <button className="sm" disabled={safePage <= 0} onClick={() => turn(0)}>第一页</button>
+            <button className="sm" disabled={safePage <= 0} onClick={() => turn(Math.max(0, safePage - 1))}>上一页</button>
+            <button className="sm" disabled={safePage >= totalPages - 1} onClick={() => turn(Math.min(totalPages - 1, safePage + 1))}>下一页</button>
+            <button className="sm" disabled={safePage >= totalPages - 1} onClick={() => turn(totalPages - 1)}>最后一页</button>
+          </div>
         </div>
       )}
     </Panel>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import RatingExplainer from '../RatingExplainer'
 import { honoursLine, honoursOf } from '../../engine/coachHonours'
 import CoachHonours from '../CoachHonours'
@@ -49,6 +49,12 @@ export default function Collection() {
 
   const [page, setPage] = useState(0)
   useEffect(() => setPage(0), [q, filter, missing, dupesOnly, bulk])
+  // the pager sits under the cards (players asked, 2026-10-02): a turn goes back to the top of the new page
+  const listTop = useRef<HTMLDivElement>(null)
+  const turn = (n: number) => {
+    setPage(n)
+    listTop.current?.scrollIntoView({ block: 'start' })
+  }
   const rows = useMemo(() => {
     const text = q.trim().toLowerCase()
     const match = (c: Card) => {
@@ -277,7 +283,7 @@ export default function Collection() {
           </div>
         )}
 
-        {pageCount > 1 && <nav className="row" aria-label="收藏分页" style={{ justifyContent: 'center', gap: 16, marginBottom: 12 }}><button disabled={safePage === 0} onClick={() => setPage(safePage - 1)}>上一页</button><span>{safePage + 1} / {pageCount}</span><button disabled={safePage + 1 === pageCount} onClick={() => setPage(safePage + 1)}>下一页</button></nav>}
+        <div ref={listTop} style={{ scrollMarginTop: 72 }} />
         {rows.length === 0 ? (
           <p className="empty">{bulk ? '没有可分解的重复卡。' : '没有符合条件的卡。'}</p>
         ) : (
@@ -298,6 +304,7 @@ export default function Collection() {
             ))}
           </div>
         )}
+        {pageCount > 1 && <nav className="row" aria-label="收藏分页" style={{ justifyContent: 'center', gap: 16, marginTop: 12 }}><button disabled={safePage === 0} onClick={() => turn(safePage - 1)}>上一页</button><span>{safePage + 1} / {pageCount}</span><button disabled={safePage + 1 === pageCount} onClick={() => turn(safePage + 1)}>下一页</button></nav>}
         {rows.length > 48 && (
           <p className="tiny faint" style={{ marginTop: 10 }}>共 {rows.length} 张，每页 48 张，可翻页或搜索。</p>
         )}
