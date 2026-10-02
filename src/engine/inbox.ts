@@ -8,7 +8,7 @@
  * one copy that cannot drift.
  */
 import { cardById, isPlayerCard, MAX_LEVEL } from './cards'
-import { MAIL_MAX, PACKS } from './gacha'
+import { MAIL_MAX, PACKS, refundPlay } from './gacha'
 import type { GachaState, PackKind } from './gacha'
 import { canonicalRegionPack } from './regionMigration'
 import { boundOf, lockedWhy, noteTradedIn, tidy, tradeableCopies } from './tradeLock'
@@ -162,7 +162,7 @@ export function mailLine(m: MailItem): string {
     case 'feedback_reply': return `作者回复了你的来信「${String(m.body?.excerpt ?? '')}」，去「给作者写信」的「我的来信」查看`
     case 'swap_offer': return `${who} 想用 ${nameOf(String(m.body?.give ?? ''))} 换你的 ${nameOf(String(m.body?.want ?? ''))}，去好友页答复`
     case 'swap_in': return `换到了 ${nameAt(m.cardId ?? '', m.level)}（和 ${who} 的交换成交）`
-    case 'swap_back': return `${nameAt(m.cardId ?? '', m.level)} 退回来了（${String(m.body?.reason ?? '交换没成')}）`
+    case 'swap_back': return `${nameAt(m.cardId ?? '', m.level)} 退回来了（${String(m.body?.reason ?? '交换没成')}）${m.body?.stamina ? '，退还 1 点体力' : ''}`
     case 'open_cup': {
       const place = Number(m.body?.place) || 0
       const label = ({ free: '不限赛', region: '地区杯', gold: '金卡赛', silver: '银卡赛', bronze: '铜卡赛', hof: '名人堂赛' } as Record<string, string>)[String(m.body?.league)]
@@ -208,6 +208,8 @@ export function applyMail(g: GachaState, mail: MailItem[]): void {
       // bought or swapped in: it may not be passed on again for a while (engine/tradeLock.ts)
       if (TRADED_IN.has(m.kind) && g.cards[m.cardId]) noteTradedIn(g.cards[m.cardId], m.at || now)
     }
+    // a swap that did not happen gives the proposer's 体力 back with his card (market-api.js unwindSwap)
+    if (m.kind === 'swap_back' && m.body?.stamina) refundPlay(g, 'swap', now)
     if (m.pack && m.pack in PACKS) {
       const k = canonicalRegionPack(m.pack) as PackKind
       g.packs[k] = (g.packs[k] ?? 0) + Math.max(1, m.count)

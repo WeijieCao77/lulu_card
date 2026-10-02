@@ -1819,9 +1819,14 @@ export function makeMarketApi(sql, {
   const MAX_SWAPS = 5
 
   /** Send both escrowed cards home from a swap that did not happen. */
-  async function unwindSwap(row, reason, db = sql) {
+  /**
+   * The proposer's card goes home through the inbox. `refund`: the swap failed through no choice of his —
+   * turned down, unanswered, or impossible on the other side — so the point of 体力 he paid comes back
+   * with the card (owner, 2026-10-02). Taking his own offer back refunds nothing.
+   */
+  async function unwindSwap(row, reason, db = sql, refund = true) {
     await post(row.from_h, 'swap_back', {
-      cardId: row.give_id, level: row.give_level, body: { reason, swap: String(row.id) },
+      cardId: row.give_id, level: row.give_level, body: { reason, swap: String(row.id), ...(refund ? { stamina: 1 } : {}) },
     }, db)
   }
 
@@ -2107,7 +2112,7 @@ export function makeMarketApi(sql, {
         where id = ${sid}::bigint and from_h = ${me} and status = 'open'
         returning id, from_h, give_id, give_level`
       if (!rows.length) return { gone: true }
-      await unwindSwap(rows[0], '你撤回了', db)
+      await unwindSwap(rows[0], '你撤回了', db, false)
       return { ok: true }
     })
     json(res, 200, out.gone ? { ok: false, gone: true } : out)

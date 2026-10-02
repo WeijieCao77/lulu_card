@@ -50,7 +50,7 @@ interface Res { code: number; body: Record<string, unknown> }
 const json = (res: Res, code: number, body: Record<string, unknown>) => { res.code = code; res.body = body }
 const readBody = (req: { body: string }) => Promise.resolve(req.body)
 const cards = makeCardApi(sql, { rateLimited: () => false, readBody, json } as never)
-const market = makeMarketApi(sql, { readBody, json, normalizeId, displayName, rateLimited: () => false, engine } as never)
+const market = makeMarketApi(sql, { readBody, json, normalizeId, displayName, rateLimited: () => false, engine, pairPerDay: Infinity, highValuePerDay: Infinity } as never)
 async function call(path: string, body: unknown): Promise<Record<string, unknown>> {
   const res: Res = { code: 0, body: {} }
   const api = path.startsWith('/api/market/') ? market : cards
@@ -152,6 +152,7 @@ r = await call('/api/market/swap_answer', { id: B, swap: String(r.id), accept: f
 check('对方拒绝', r.ok === true && r.declined === true)
 let back = await inbox(A)
 check('卡退回来了', back.some((m) => m.kind === 'swap_back' && m.cardId === silver[1]), JSON.stringify(back))
+check('被拒绝：退回的信里带着 1 点体力', back.some((m) => m.kind === 'swap_back' && m.body?.stamina === 1))
 check('退回之后重复数恢复', (await stored(A)).cards[silver[1]]?.dupes === 1)
 
 r = await call('/api/market/swap', { id: A, code: codeOf(B), giveId: silver[1], wantId: silver[0] })

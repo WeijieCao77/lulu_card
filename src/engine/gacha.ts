@@ -2296,6 +2296,18 @@ export function spendPlay(g: GachaState, kind: PlayKind, now: number): boolean {
 
 
 
+/**
+ * Give back what a play cost, when the thing it paid for did not happen — a swap the other side turned down
+ * (owner, 2026-10-02). Never past a full meter: 体力 does not bank beyond STAMINA_MAX.
+ */
+export function refundPlay(g: GachaState, kind: PlayKind, now: number): number {
+  settle(g, now)
+  const before = g.daily.stamina
+  g.daily.stamina = Math.min(STAMINA_MAX, before + STAMINA_COST[kind])
+  if (g.daily.stamina >= STAMINA_MAX) g.daily.staminaAt = now
+  return g.daily.stamina - before
+}
+
 function bumpQuest(g: GachaState, key: QuestKey, by: number): void {
   if (!g.daily.picked.includes(key)) return
   g.daily.progress[key] = (g.daily.progress[key] ?? 0) + by
