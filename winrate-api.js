@@ -33,7 +33,7 @@ create table if not exists winrate_snapshots (
 /** gap bands, inclusive; a level gap (0) has no higher side and is left out */
 export const BANDS = [[1, 1], [2, 4], [5, 7], [8, 11], [12, 99]]
 /** cup: 全服杯 (players); cup_club: 俱乐部杯 (against clubs); the ladder against players or clubs */
-export const MODES = ['cup', 'cup_club', 'ladder_pvp', 'ladder_club']
+export const MODES = ['cup', 'cup_club', 'ladder_pvp', 'ladder_club', 'cup_region']
 /** how far back the ladder log is read */
 export const LADDER_DAYS = 30
 const DAY = 86_400_000

@@ -37,6 +37,8 @@ import type { GachaState, QuestKey, Series } from './gacha'
 import { isLegacyRegionPack } from './regionMigration'
 import { buyShop, ensureShop } from './dailyShop'
 import { BALANCE_VERSION, arenaOpponentRating, playArenaMatch, playCupMatch, playRivalMatch } from './arena'
+import { canEnterRegionCup, drawRegionCup, regionOpponent, squadRegion } from './regionCup'
+import type { RegionEntry } from './regionCup'
 import { CUP_TEAMS } from './cupTeams'
 import type { ArenaResult, RivalSquad } from './arena'
 import { challengeBlock, challengeSig, guessChallenge } from './challenge'
@@ -62,6 +64,8 @@ export interface ActEnv {
   rival?: RivalSquad | null
   /** Chosen and held on the server; never sent to a player before the puzzle ends. */
   challengePuzzle?: { kind: ChallengeKind; answer: string }
+  /** other players' registered 地区杯 fives, for the draw (cards-api.js regionPool) */
+  regionPool?: RegionEntry[]
 }
 
 export type ActResult =
@@ -72,7 +76,7 @@ export const ACTIONS = [
   'open', 'checkin', 'quest', 'series', 'fullset', 'salvage', 'salvage_dupes', 'salvage_bulk', 'upgrade',
   'ladder_draw', 'ladder', 'cup_enter', 'cup_play', 'cup_clear', 'challenge', 'mail_seen',
   'minigame_start', 'minigame_finish', 'dismantle', 'seoul_start', 'seoul_play', 'seoul_quit',
-  'series_pick', 'shop', 'shop_buy',
+  'series_pick', 'shop', 'shop_buy', 'region_enter', 'region_play',
 ] as const
 export type ActionName = (typeof ACTIONS)[number]
 
@@ -323,6 +327,53 @@ function dispatch(
         ? { mine: squadRating(cup.registration.squad, level), theirs: team.rating - (cup.ease ?? 0) }
         : undefined
       return { ok: true, result: { res, opp: oppId, out, registration: cup.registration, rate } }
+    }
+    case 'region_enter': {
+      const cup = g.regionCup
+      if (cup && !cup.done) return { ok: true, result: { cup } }
+      const gate = canEnterRegionCup(cup, env.today)
+      if (!gate.ok) return gate
+      // the 地区杯's own lineup if one has been set, else the 卡组
+      const five = squadForPlay({ ...g, squad: cupSquadOf(g, 'region') })
+      if (!five.ok) return five
+      const home = squadRegion(five.squad)
+      if (!home.ok) return home
+      const registration = registerCupSquad(five.squad, (id) => levelOf(g, id))
+      g.regionCup = drawRegionCup(registration, home.region, env.regionPool ?? [], env.today, env.seed)
+      const score = squadRating(registration.squad, (id) => registration.levels[id] ?? 0)
+      return {
+        ok: true,
+        // `entry`: what the server keeps for other players to draw (cards-api.js)
+        result: { cup: g.regionCup, entry: { region: home.region, slots: registration.squad.slots, coach: registration.squad.coach, levels: registration.levels, score } },
+      }
+    }
+    case 'region_play': {
+      const cup = g.regionCup
+      const oppId = regionOpponent(cup)
+      if (!cup || !oppId || !cup.registration) return { ok: false, why: '没有进行中的地区杯' }
+      const rival = cup.rivals[oppId]
+      if (!rival) return { ok: false, why: '对手读不出来，刷新一下再试。' }
+      const reg = cup.registration
+      const level = (id: string) => reg.levels[id] ?? 0
+      const res = playRivalMatch(reg.squad, level, rival, cupBo(cup), env.seed, undefined, cup.balance ?? true)
+      // the bracket, 双败 and purse are the 俱乐部杯's: recordCup works on g.cup, so it is lent this one
+      const club = g.cup
+      g.cup = cup
+      let out
+      try {
+        out = recordCup(g, { opponent: oppId, win: res.win, mapsWon: res.mapsWon, mapsLost: res.mapsLost })
+      } finally {
+        g.cup = club
+      }
+      // recordCup draws a club for the 败者组; a 地区杯 drew its own opponent for each round
+      if (cup.lower) cup.lower = cup.lowers[cup.round] ?? cup.lower
+      return {
+        ok: true,
+        result: {
+          res, opp: oppId, who: `${rival.name} ${rival.tag}`, out, registration: reg,
+          rate: { mine: squadRating(reg.squad, level), theirs: rival.score },
+        },
+      }
     }
     case 'cup_clear': {
       // only a finished bracket can be put away; an unfinished one is a paid

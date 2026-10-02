@@ -14,6 +14,7 @@ import { cardById, cardName, squadRating } from '../../engine/cards'
 import { CUP_TEAMS } from '../../engine/cupTeams'
 import { track } from '../../engine/telemetry'
 import OpenCup from './OpenCup'
+import RegionCup from './RegionCup'
 
 /**
  * The cup: one ticket, then play until you lose or lift it.
@@ -23,10 +24,10 @@ import OpenCup from './OpenCup'
  * scoreboards back.
  */
 export default function Cup() {
-  const [mode, setMode] = useState<'club' | 'open'>(() => {
-    try { const m = localStorage.getItem('vm-cup-mode'); return m === 'open' || m === 'team' ? 'open' : 'club' } catch { return 'club' }
+  const [mode, setMode] = useState<'club' | 'open' | 'region'>(() => {
+    try { const m = localStorage.getItem('vm-cup-mode'); return m === 'open' || m === 'team' ? 'open' : m === 'region' ? 'region' : 'club' } catch { return 'club' }
   })
-  const pick = (m: 'club' | 'open') => {
+  const pick = (m: 'club' | 'open' | 'region') => {
     setMode(m)
     try { localStorage.setItem('vm-cup-mode', m) } catch { /* private window */ }
   }
@@ -35,8 +36,9 @@ export default function Cup() {
       <div className="seg" style={{ marginBottom: 12 }}>
         <button className={mode === 'club' ? 'on' : ''} onClick={() => pick('club')}>俱乐部杯</button>
         <button className={mode === 'open' ? 'on' : ''} onClick={() => pick('open')}>全服杯</button>
+        <button className={mode === 'region' ? 'on' : ''} onClick={() => pick('region')}>地区杯</button>
       </div>
-      {mode === 'club' ? <ClubCup /> : <OpenCup />}
+      {mode === 'club' ? <ClubCup /> : mode === 'open' ? <OpenCup /> : <RegionCup />}
     </>
   )
 }

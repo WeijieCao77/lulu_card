@@ -807,6 +807,8 @@ export interface GachaState {
   /** the metal ladders and 名人堂; `ladder` above is the open one */
   leagues?: Partial<Record<LeagueKind, LadderState>>
   cup: CupState | null
+  /** 地区杯 (engine/regionCup.ts): one a day, kept until the next is entered */
+  regionCup?: import('./regionCup').RegionCupState | null
   daily: DailyState
   /** 每日挑战 — see engine/challenge.ts */
   challenge?: ChallengeState
@@ -2683,10 +2685,10 @@ export const SERVER_KEYS = [
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends', 'cupSquads'] as const
 
 /** The cups that keep a lineup of their own — 俱乐部杯, 组队杯, the 全服杯 divisions — and the metal ladders (owner, 2026-10-02). */
-export const CUP_SQUAD_KEYS = ['club', 'team', 'open:open', 'open:free', 'open:gold', 'open:silver', 'open:bronze', 'open:hof', 'ladder:gold', 'ladder:silver', 'ladder:bronze'] as const
+export const CUP_SQUAD_KEYS = ['club', 'team', 'region', 'open:open', 'open:free', 'open:gold', 'open:silver', 'open:bronze', 'open:hof', 'ladder:gold', 'ladder:silver', 'ladder:bronze'] as const
 export type CupSquadKey = (typeof CUP_SQUAD_KEYS)[number]
 export const CUP_SQUAD_NAMES: Record<CupSquadKey, string> = {
-  club: '俱乐部杯', team: '组队杯', 'open:open': '全服杯·天梯', 'open:free': '全服杯·不限赛', 'open:gold': '全服杯·金卡赛',
+  club: '俱乐部杯', team: '组队杯', region: '地区杯', 'open:open': '全服杯·天梯', 'open:free': '全服杯·不限赛', 'open:gold': '全服杯·金卡赛',
   'open:silver': '全服杯·银卡赛', 'open:bronze': '全服杯·铜卡赛', 'open:hof': '全服杯·名人堂赛',
   'ladder:gold': '天梯·金卡赛', 'ladder:silver': '天梯·银卡赛', 'ladder:bronze': '天梯·铜卡赛',
 }

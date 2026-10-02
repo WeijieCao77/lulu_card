@@ -56,6 +56,23 @@ export const STAMINA_POINT_SEC = Math.round((engine.STAMINA_REGEN_MS ?? 30 * 60 
  */
 export const BOARDS = ['open', 'gold', 'silver', 'bronze']
 
+/**
+ * 地区杯 (engine/regionCup.ts): every five registered, one row per account and day — what other
+ * players draw as their opponents. A list of its own so adding it touches nothing anybody reads.
+ */
+export const REGION_CUP_SCHEMA = `
+create table if not exists region_cup_entries (
+  day     text not null,
+  id_hash text not null,
+  region  text not null,
+  five    jsonb not null,
+  score   int not null,
+  made    timestamptz not null default now(),
+  primary key (day, id_hash)
+);
+create index if not exists region_cup_entries_day_idx on region_cup_entries(day);
+`
+
 export const CARD_SCHEMA = `
 create table if not exists card_accounts (
   id_hash  text primary key,
@@ -408,7 +425,7 @@ const stored = (state) => {
 const freshSeed = () => randomBytes(4).readUInt32LE(0)
 
 /** The actions that simulate a match: the ones worth a worker thread. */
-const HEAVY = new Set(['ladder', 'cup_play', 'seoul_play'])
+const HEAVY = new Set(['ladder', 'cup_play', 'seoul_play', 'region_play'])
 
 export function makeCardApi(sql, {
   rateLimited, readBody, json, staticRoot,
@@ -853,6 +870,7 @@ export function makeCardApi(sql, {
         if (action === 'challenge') env.challengePuzzle = await challengePuzzle(id, today, g)
         t = performance.now()
         if (engine.wantsRival(g, action)) env.rival = await pickRival(g.ladder.div, me, engine.ladderScore(g), g.ladder.points ?? 0)
+        if (action === 'region_enter') env.regionPool = await regionPool(me, today)
         mark.rival += performance.now() - t
         t = performance.now()
         let out
@@ -920,8 +938,9 @@ export function makeCardApi(sql, {
       }
       sweepRequests()
       const { out } = reply
-      const rate = (action === 'ladder' || action === 'cup_play') && out.ok ? out.result?.rate : null
-      if (rate && onLadder) onLadder(action === 'cup_play' ? 'cup_club' : rate.rival ? 'ladder_pvp' : 'ladder_club', rate.mine, rate.theirs, out.result.res?.win)
+      const rate = (action === 'ladder' || action === 'cup_play' || action === 'region_play') && out.ok ? out.result?.rate : null
+      if (rate && onLadder) onLadder(action === 'cup_play' ? 'cup_club' : action === 'region_play' ? 'cup_region' : rate.rival ? 'ladder_pvp' : 'ladder_club', rate.mine, rate.theirs, out.result.res?.win)
+      if (action === 'region_enter' && out.ok && out.result?.entry) saveRegionEntry(me, today, out.result.entry)
       json(res, 200, {
         ok: out.ok,
         why: out.ok ? undefined : out.why,
@@ -1252,6 +1271,42 @@ export function makeCardApi(sql, {
       return any(near(MASTER_BAND)) ?? any(near(2 * MASTER_BAND)) ?? any(same)
     }
     return any(same) ?? any(rows.filter((r) => Math.abs(r.div - div) === 1))
+  }
+
+  /**
+   * Other players' 地区杯 fives for a draw: the latest each account registered in the last three days,
+   * shared for a minute. An entry is the five as it was registered, levels and all — nothing of the
+   * account behind it but its displayed name.
+   */
+  let regionCache = null
+  async function regionPool(mine, today) {
+    if (!regionCache || Date.now() - regionCache.at > 60_000 || regionCache.today !== today) {
+      const since = new Date(Date.parse(`${today}T00:00:00Z`) - 3 * 86_400_000).toISOString().slice(0, 10)
+      const rows = await (slow ?? sql)`
+        select distinct on (e.id_hash) e.id_hash, e.region, e.five, e.score, a.name
+          from region_cup_entries e join card_accounts a on a.id_hash = e.id_hash
+         where e.day >= ${since} and not a.suspect
+         order by e.id_hash, e.day desc
+         limit 600`
+      regionCache = {
+        at: Date.now(), today,
+        rows: rows.map((r) => {
+          const shown = displayName(r.name, r.id_hash)
+          const five = typeof r.five === 'string' ? JSON.parse(r.five) : r.five
+          return { hash: r.id_hash, id: r.id_hash.slice(0, 16), name: shown.name, tag: `#${shown.tag}`, region: r.region, slots: five.slots, coach: five.coach, levels: five.levels ?? {}, score: r.score }
+        }),
+      }
+    }
+    return regionCache.rows.filter((r) => r.hash !== mine).map(({ hash: _h, ...e }) => e)
+  }
+  function saveRegionEntry(me, today, entry) {
+    const five = { slots: entry.slots, coach: entry.coach, levels: entry.levels }
+    void sql`insert into region_cup_entries (day, id_hash, region, five, score)
+      values (${today}, ${me}, ${String(entry.region).slice(0, 8)}, ${sql.json(five)}, ${Math.round(Number(entry.score) || 0)})
+      on conflict (day, id_hash) do update set region = excluded.region, five = excluded.five, score = excluded.score`
+      // the next draw should see it, not wait out the minute
+      .then(() => { regionCache = null })
+      .catch((err) => console.warn('cards: region entry not saved', err.message))
   }
 
   async function rivals(req, res, bucket) {
