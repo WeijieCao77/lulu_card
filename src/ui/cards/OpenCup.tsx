@@ -13,7 +13,7 @@ import {
   DAILY_START_HOURS, OPEN_CUP_MIN, OPEN_CUP_RANKED_MIN, openCupPlacePrize, openCupRoundName, openCupTimeLabel,
 } from '../../engine/openCup'
 import { swissRoundName } from '../../engine/openCupSwiss'
-import { PACKS, CUP_LEAGUES, LEAGUE_RULES, isCupLeague, leagueEntry, type CupLeague } from '../../engine/gacha'
+import { PACKS, OPEN_CUP_TABS, LEAGUE_RULES, leagueEntry, type CupLeague } from '../../engine/gacha'
 import { cardById, cardName, squadRating } from '../../engine/cards'
 import { serverNow } from '../../engine/account'
 import { GapOdds } from './GapOdds'
@@ -44,11 +44,11 @@ const prizeText = (n: number, place: 1 | 2 | 4 | 8) => {
  */
 export default function OpenCup() {
   const [league, setLeague] = useState<CupLeague>(() => {
-    try { const saved = localStorage.getItem('luluka-cup-league'); return isCupLeague(saved) ? saved : 'free' } catch { return 'free' }
+    try { const saved = localStorage.getItem('luluka-cup-league'); return (OPEN_CUP_TABS as readonly string[]).includes(saved ?? '') ? saved as CupLeague : 'free' } catch { return 'free' }
   })
   return <>
     <div className="league-bar" aria-label="全服杯赛制">
-      {CUP_LEAGUES.map(k => <button key={k} className={`league-tab${league === k ? ' on' : ''}`} aria-pressed={league === k}
+      {OPEN_CUP_TABS.map(k => <button key={k} className={`league-tab${league === k ? ' on' : ''}`} aria-pressed={league === k}
         onClick={() => { setLeague(k); try { localStorage.setItem('luluka-cup-league', k) } catch { /* private window */ } }}>
         <b>{LEAGUE_RULES[k].name}</b>
       </button>)}
@@ -57,7 +57,9 @@ export default function OpenCup() {
   </>
 }
 
-function CupDivision({ league }: { league: CupLeague }) {
+/** One division's page — a 全服杯 tab, or 地区杯 on a tab of its own (Cup.tsx). */
+export function CupDivision({ league }: { league: CupLeague }) {
+  const title = league === 'region' ? '地区杯' : `全服杯 · ${LEAGUE_RULES[league].name}`
   const { g, cloud, commit, toast, go, collect } = useCards()
   // the countdowns here are in seconds, so this page keeps its own second hand on the server's clock
   const [now, setNow] = useState(() => serverNow())
@@ -141,8 +143,8 @@ function CupDivision({ league }: { league: CupLeague }) {
     setOld(r.cup)
   }
 
-  if (!cloud) return <Panel title={`全服杯 · ${LEAGUE_RULES[league].name}`}><p className="small muted">需要联网。</p></Panel>
-  if (!st) return <Panel title={`全服杯 · ${LEAGUE_RULES[league].name}`}><p className="small muted">{why ?? '读取中…'}</p></Panel>
+  if (!cloud) return <Panel title={title}><p className="small muted">需要联网。</p></Panel>
+  if (!st) return <Panel title={title}><p className="small muted">{why ?? '读取中…'}</p></Panel>
 
   const myScore = filled === 5 ? squadRating(lineup, (id) => g.cards[id]?.level ?? 0) : null
   const rows = board === 'today' ? st.boards.today : st.boards.all
@@ -151,10 +153,12 @@ function CupDivision({ league }: { league: CupLeague }) {
   return (
     <>
       <Panel
-        title={`全服杯 · ${LEAGUE_RULES[league].name}`}
+        title={title}
         actions={<span className="tiny muted">免费报名 · 每天 {DAILY_START_HOURS.map(h => `${h}:00`).join(' / ')}（北京时间）</span>}
       >
-        <p className="small" style={{ marginTop: 0 }}><b>{LEAGUE_RULES[league].blurb}</b> 四个赛制独立报名、独立对阵、独立冠军榜。金卡、银卡、铜卡赛在报名和开赛时都检查卡色，教练也受同样的上限限制。</p>
+        <p className="small" style={{ marginTop: 0 }}><b>{LEAGUE_RULES[league].blurb}</b> {league === 'region'
+          ? '和全服杯不限赛同一套机制：玩家之间纯随机配对，先打瑞士轮再打淘汰赛，独立报名、独立冠军榜。报名和开赛时都检查六人是否同一地区。'
+          : '四个赛制独立报名、独立对阵、独立冠军榜。金卡、银卡、铜卡赛在报名和开赛时都检查卡色，教练也受同样的上限限制。'}</p>
         <CupLineup cup={cupKey} />
         {!entry.ok && <p className="small neg">{entry.why}</p>}
         <p className="small muted" style={{ marginTop: 0, lineHeight: 1.75 }}>

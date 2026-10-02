@@ -1,100 +1,50 @@
 /**
- * 地区杯: who may enter, once a day, the draw (players' fives from another 地区 first, 联队 where
- * nobody fits), 双败 to the end, and the 地区 rule (中国台湾 its own, 香港 / 澳门 in 中国).
+ * 地区杯: a 全服杯 division like 不限赛 whose five and coach must be one 地区 — 中国台湾 its own,
+ * 香港 / 澳门 in 中国 — checked by leagueEntry, which the server runs at sign-up and at the start.
  *
  *   npx tsx scripts/check_region_cup.ts
  */
-import { runAction } from '../src/engine/cardActions'
-import { newGacha } from '../src/engine/gacha'
-import type { GachaState } from '../src/engine/gacha'
-import { BASE_PLAYER_CARDS, COACH_CARDS, SQUAD_SLOTS, personOf } from '../src/engine/cards'
+import { CUP_LEAGUES, OPEN_CUP_TABS, leagueEntry } from '../src/engine/gacha'
+import { BASE_PLAYER_CARDS, COACH_CARDS, LEGEND_CARDS, SQUAD_SLOTS, personOf } from '../src/engine/cards'
 import type { Squad } from '../src/engine/cards'
-import { playableRegions, regionName, regionOf, squadRegion } from '../src/engine/regionCup'
-import type { RegionEntry } from '../src/engine/regionCup'
+import { regionName, regionOf } from '../src/engine/nationRegion'
 
 let bad = 0
 const check = (name: string, ok: boolean, detail = '') => {
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? '  — ' + detail : ''}`)
   if (!ok) bad++
 }
-const DAY = '2026-10-02'
-const env = (today = DAY, seed = 7, regionPool: RegionEntry[] = []) => ({ now: Date.parse(`${today}T12:00:00+08:00`), today, seed, regionPool })
-
-/** the best five and a coach a 地区 can field from ordinary cards */
-function fiveOf(region: string, skip = 0): Squad {
-  const list = BASE_PLAYER_CARDS.filter((c) => regionOf(c.nat) === region).sort((a, b) => b.rating - a.rating).slice(skip)
+function fiveOf(region: string, pool = BASE_PLAYER_CARDS as readonly { id: string; nat?: string | null; rating: number; roles: string[] }[]): Squad {
+  const list = pool.filter((c) => regionOf(c.nat) === region).slice().sort((a, b) => b.rating - a.rating)
   const used = new Set<string>()
   const slots = SQUAD_SLOTS.map((slot) => {
-    const p = list.find((c) => !used.has(personOf(c)) && c.roles.includes(slot))
-    if (p) used.add(personOf(p))
+    const p = list.find((c) => !used.has(personOf(c as never)) && c.roles.includes(slot))
+    if (p) used.add(personOf(p as never))
     return p?.id ?? null
   })
-  const coach = COACH_CARDS.find((c) => regionOf((c as { nat?: string }).nat) === region)?.id ?? null
-  return { slots, coach }
+  return { slots, coach: COACH_CARDS.find((c) => regionOf((c as { nat?: string }).nat) === region)?.id ?? null }
 }
-function account(squad: Squad, id = 'VM-REGN-REGN-REGN-REGN-RG01'): GachaState {
-  const g = newGacha(id, '地区', DAY)
-  for (const c of [...squad.slots, squad.coach]) if (c) g.cards[c] = { id: c, level: 0, dupes: 0, seen: 1, got: DAY }
-  g.squad = structuredClone(squad)
-  return g
-}
+const why = (r: ReturnType<typeof leagueEntry>) => (r.ok ? '' : r.why)
 
-console.log('=== 地区 ===')
+check('地区杯是全服杯的一个赛制，有自己的标签页', CUP_LEAGUES.includes('region') && !(OPEN_CUP_TABS as readonly string[]).includes('region'))
 check('香港、澳门算中国', regionOf('HK') === 'cn' && regionOf('mo') === 'cn')
 check('中国台湾单独一个地区', regionOf('tw') === 'tw' && regionName('tw') === '中国台湾')
-check('韩国、中国、中国台湾都凑得出联队', ['kr', 'cn', 'tw'].every((r) => playableRegions().includes(r)), playableRegions().map(regionName).join('、'))
-const kr = fiveOf('kr'), tw = fiveOf('tw')
-check('一套韩国阵容是韩国', (() => { const r = squadRegion(kr); return r.ok && r.region === 'kr' })())
-const mixed = { slots: [...kr.slots.slice(0, 4), tw.slots[4]], coach: kr.coach }
-const why = squadRegion(mixed)
-check('混了中国台湾的选手就进不了', !why.ok && why.why.includes('中国台湾'), why.ok ? '' : why.why)
-check('没有教练进不了', !squadRegion({ slots: kr.slots, coach: null }).ok)
-
-console.log('\n=== 报名与对阵 ===')
-{
-  const g = account(kr)
-  const coins = g.coins
-  const r = runAction(g, 'region_enter', {}, env())
-  check('报名成功', r.ok, r.ok ? '' : (r as { why: string }).why)
-  const cup = g.regionCup!
-  check('三到五轮', cup.path.length >= 3 && cup.path.length <= 5, `${cup.path.length} 轮`)
-  check('没人报名时全是联队', cup.path.every((id) => cup.rivals[id]?.ai))
-  check('联队优先别的地区', cup.path.every((id) => cup.rivals[id].region !== 'kr'), cup.path.map((id) => cup.rivals[id].name).join(' / '))
-  check('不花体力也不花金币', g.coins === coins && g.daily.stamina === newGacha('x', 'x', DAY).daily.stamina)
-  check('一轮比一轮强', cup.path.every((id, i) => i === 0 || cup.rivals[id].score >= cup.rivals[cup.path[i - 1]].score))
-  const again = runAction(g, 'region_enter', {}, env())
-  check('没打完再点报名，还是这一届', again.ok && g.regionCup === cup)
-  let n = 0
-  while (!g.regionCup!.done && n < 12) {
-    const p = runAction(g, 'region_play', {}, env(DAY, 100 + n++))
-    if (!p.ok) { check('每场都打得了', false, (p as { why: string }).why); break }
-  }
-  check('打得完', g.regionCup!.done, `${n} 场`)
-  check('双败：至少打满轮数或输两场', n >= (g.regionCup!.won ? g.regionCup!.path.length : 1))
-  check('拿到奖励', g.coins > coins, `+${g.coins - coins}`)
-  const third = runAction(g, 'region_enter', {}, env())
-  check('同一天不能再报', !third.ok)
-  const next = runAction(g, 'region_enter', {}, env('2026-10-03'))
-  check('第二天可以再报', next.ok && g.regionCup!.day === '2026-10-03')
-  check('俱乐部杯没被碰', g.cup === null)
+const kr = fiveOf('kr'), tw = fiveOf('tw'), cn = fiveOf('cn')
+check('全韩国阵容能报', leagueEntry(kr, 'region').ok, why(leagueEntry(kr, 'region')))
+check('全中国台湾阵容能报', leagueEntry(tw, 'region').ok, why(leagueEntry(tw, 'region')))
+check('全中国阵容能报', leagueEntry(cn, 'region').ok, why(leagueEntry(cn, 'region')))
+const mixed = { slots: [...cn.slots.slice(0, 4), tw.slots[4]], coach: cn.coach }
+const m = leagueEntry(mixed, 'region')
+check('中国阵容里混一个中国台湾选手就不行', !m.ok && why(m).includes('中国台湾'), why(m))
+const foreignCoach = { slots: kr.slots, coach: cn.coach }
+check('教练也要同一地区', !leagueEntry(foreignCoach, 'region').ok, why(leagueEntry(foreignCoach, 'region')))
+check('没有教练不行', !leagueEntry({ slots: kr.slots, coach: null }, 'region').ok)
+check('不限赛不管地区', leagueEntry(mixed, 'free').ok)
+// 卡色不限: a 彩卡 of the right 地区 is fine
+const legendKr = LEGEND_CARDS.find((c) => regionOf(c.nat) === 'kr' && c.roles.includes(SQUAD_SLOTS[2]))
+if (legendKr) {
+  const withLegend = { slots: kr.slots.map((id, i) => (i === 2 ? legendKr.id : id)), coach: kr.coach }
+  check('同地区的彩卡也能上', leagueEntry(withLegend, 'region').ok, why(leagueEntry(withLegend, 'region')))
 }
-
-console.log('\n=== 真人对手 ===')
-{
-  const g = account(kr)
-  const entry = (id: string, region: string, squad: Squad, score: number): RegionEntry =>
-    ({ id, name: `玩家${id}`, tag: '#0000', region, slots: squad.slots, coach: squad.coach, levels: {}, score })
-  // a pool around every target, half Korean, half from 中国台湾
-  const pool: RegionEntry[] = []
-  for (let s = 60; s <= 110; s++) { pool.push(entry(`k${s}`, 'kr', kr, s)); pool.push(entry(`t${s}`, 'tw', tw, s)) }
-  runAction(g, 'region_enter', {}, env(DAY, 9, pool))
-  const cup = g.regionCup!
-  const all = [...cup.path, ...cup.lowers].map((id) => cup.rivals[id])
-  check('池子里有人时抽真人', all.every((r) => !r.ai))
-  check('别的地区优先：一个韩国队都没抽到', all.every((r) => r.region === 'tw'), all.map((r) => regionName(r.region)).join(' '))
-  const p = runAction(g, 'region_play', {}, env(DAY, 11, pool))
-  check('和真人阵容打得起来', p.ok && !!(p as { result: { res: { opp?: unknown } } }).result.res.opp)
-}
-
 console.log(bad ? `\n${bad} 处不对` : '\n全部通过')
 process.exit(bad ? 1 : 0)

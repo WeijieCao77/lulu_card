@@ -13,8 +13,7 @@ import type { ArenaResult } from '../../engine/arena'
 import { cardById, cardName, squadRating } from '../../engine/cards'
 import { CUP_TEAMS } from '../../engine/cupTeams'
 import { track } from '../../engine/telemetry'
-import OpenCup from './OpenCup'
-import RegionCup from './RegionCup'
+import OpenCup, { CupDivision } from './OpenCup'
 
 /**
  * The cup: one ticket, then play until you lose or lift it.
@@ -38,7 +37,8 @@ export default function Cup() {
         <button className={mode === 'open' ? 'on' : ''} onClick={() => pick('open')}>全服杯</button>
         <button className={mode === 'region' ? 'on' : ''} onClick={() => pick('region')}>地区杯</button>
       </div>
-      {mode === 'club' ? <ClubCup /> : mode === 'open' ? <OpenCup /> : <RegionCup />}
+      {/* 地区杯 is a 全服杯 division (gacha.ts CUP_LEAGUES) with a tab of its own */}
+      {mode === 'club' ? <ClubCup /> : mode === 'open' ? <OpenCup /> : <CupDivision key="region" league="region" />}
     </>
   )
 }

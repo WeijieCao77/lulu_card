@@ -27,6 +27,7 @@ import {
 } from './cards'
 import type { Card, PlayerCard, Rarity, Squad } from './cards'
 import { newChallenge } from './challenge'
+import { squadRegion } from './nationRegion'
 import { MINI_CN, MINI_COINS, MINI_PAYS_PACK, newMinigame } from './minigame'
 import type { MiniGame, MinigameState, Tier } from './minigame'
 import type { ChallengeState } from './challenge'
@@ -495,7 +496,11 @@ export const LEAGUES = ['open', 'gold', 'silver', 'bronze', 'hof'] as const
 // 全服杯 divisions since 2026-10-02 (owner): 不限赛 took the place of 名人堂赛, which (two 彩卡 to enter)
 // never filled a single bracket — 不限赛 is where a 彩卡 plays now. hof's rule stays below so old
 // records still read.
-export const CUP_LEAGUES = ['free', 'gold', 'silver', 'bronze'] as const
+// 地区杯 (owner, 2026-10-02) is a division like 不限赛 — same schedule, Swiss, purse — whose five and
+// coach must all be from one 地区 (nationRegion.ts); it has a tab of its own on the cup page.
+export const CUP_LEAGUES = ['free', 'gold', 'silver', 'bronze', 'region'] as const
+/** the 全服杯's own divisions, the tabs on its page */
+export const OPEN_CUP_TABS = ['free', 'gold', 'silver', 'bronze'] as const
 export type CupLeague = (typeof CUP_LEAGUES)[number]
 /**
  * The ladders that can be played (owner, 2026-10-02, after 开瓦包): the open one, which is still the
@@ -510,7 +515,7 @@ export const isLadderLeague = (k: unknown): k is LadderLeague =>
 export const ladderName = (k: LeagueKind): string => (k === 'open' ? '公开赛' : LEAGUE_RULES[k].name)
 export const isCupLeague = (k: unknown): k is CupLeague =>
   typeof k === 'string' && (CUP_LEAGUES as readonly string[]).includes(k)
-export type LeagueKind = (typeof LEAGUES)[number] | 'hof' | 'free'
+export type LeagueKind = (typeof LEAGUES)[number] | 'hof' | 'free' | 'region'
 
 export interface LeagueRule {
   name: string
@@ -519,6 +524,8 @@ export interface LeagueRule {
   ceiling: Rarity | null
   /** how many 彩卡 the five must hold to enter */
   needMythic: number
+  /** five players and a coach from one 地区 (地区杯) */
+  sameRegion?: boolean
   /**
    * How much weaker the clubs on the other side are.
    *
@@ -550,6 +557,7 @@ export const LEAGUE_RULES: Record<LeagueKind, LeagueRule> = {
   bronze: { name: '铜卡赛', blurb: '只能上铜卡。', ceiling: 'bronze', needMythic: 0, oppBump: -16 },
   hof:    { name: '名人堂赛', blurb: '至少两张彩卡才能入场，其余卡牌不限。', ceiling: null, needMythic: 2, oppBump: 2 },
   free:   { name: '不限赛', blurb: '金卡、银卡、铜卡、彩卡都能上，不限卡色。', ceiling: null, needMythic: 0, oppBump: 0 },
+  region: { name: '地区杯', blurb: '五名选手加一名教练必须同一地区（按选手国籍，香港、澳门算中国，中国台湾单独算），卡色不限。', ceiling: null, needMythic: 0, oppBump: 0, sameRegion: true },
 }
 
 export const isLeague = (k: unknown): k is LeagueKind =>
@@ -586,6 +594,10 @@ export function ladderSlot(g: GachaState, league: LeagueKind = 'open'): LadderSt
 /** Does this five meet the league's terms? A reason when it does not. */
 export function leagueEntry(squad: Squad, league: LeagueKind): { ok: true } | { ok: false; why: string } {
   const rule = LEAGUE_RULES[league]
+  if (rule.sameRegion) {
+    const home = squadRegion(squad)
+    if (!home.ok) return home
+  }
   const cards = squad.slots.map((id) => (id ? cardById(id) : undefined)).filter(isPlayerCard)
   if (rule.ceiling) {
     const cap = rarityRank(rule.ceiling)
@@ -807,8 +819,6 @@ export interface GachaState {
   /** the metal ladders and 名人堂; `ladder` above is the open one */
   leagues?: Partial<Record<LeagueKind, LadderState>>
   cup: CupState | null
-  /** 地区杯 (engine/regionCup.ts): one a day, kept until the next is entered */
-  regionCup?: import('./regionCup').RegionCupState | null
   daily: DailyState
   /** 每日挑战 — see engine/challenge.ts */
   challenge?: ChallengeState
@@ -2685,10 +2695,10 @@ export const SERVER_KEYS = [
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends', 'cupSquads'] as const
 
 /** The cups that keep a lineup of their own — 俱乐部杯, 组队杯, the 全服杯 divisions — and the metal ladders (owner, 2026-10-02). */
-export const CUP_SQUAD_KEYS = ['club', 'team', 'region', 'open:open', 'open:free', 'open:gold', 'open:silver', 'open:bronze', 'open:hof', 'ladder:gold', 'ladder:silver', 'ladder:bronze'] as const
+export const CUP_SQUAD_KEYS = ['club', 'team', 'open:open', 'open:free', 'open:region', 'open:gold', 'open:silver', 'open:bronze', 'open:hof', 'ladder:gold', 'ladder:silver', 'ladder:bronze'] as const
 export type CupSquadKey = (typeof CUP_SQUAD_KEYS)[number]
 export const CUP_SQUAD_NAMES: Record<CupSquadKey, string> = {
-  club: '俱乐部杯', team: '组队杯', region: '地区杯', 'open:open': '全服杯·天梯', 'open:free': '全服杯·不限赛', 'open:gold': '全服杯·金卡赛',
+  club: '俱乐部杯', team: '组队杯', 'open:open': '全服杯·天梯', 'open:free': '全服杯·不限赛', 'open:region': '地区杯', 'open:gold': '全服杯·金卡赛',
   'open:silver': '全服杯·银卡赛', 'open:bronze': '全服杯·铜卡赛', 'open:hof': '全服杯·名人堂赛',
   'ladder:gold': '天梯·金卡赛', 'ladder:silver': '天梯·银卡赛', 'ladder:bronze': '天梯·铜卡赛',
 }
