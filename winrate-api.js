@@ -4,9 +4,9 @@
  *
  * Two sources. The 全服杯 already keeps every match with both fives' 阵容分
  * (open_cup_entries.score), so its history is read as it is, for the cups
- * played on the current score curve. The 天梯 kept nothing of the kind, so from
- * this release each ladder match writes one line here: which kind of opponent,
- * the gap, and whether the higher side won. No account, no names — nothing in
+ * played on the current score curve. The 天梯 and the 俱乐部杯 kept nothing of
+ * the kind, so from 2026-10-02 each of their matches writes one line here: which
+ * kind of match, the gap, and whether the higher side won. No account, no names — nothing in
  * card_match_log says who played.
  *
  * The table is cut once a day at Beijing midnight and stays the same until the
@@ -32,7 +32,8 @@ create table if not exists winrate_snapshots (
 
 /** gap bands, inclusive; a level gap (0) has no higher side and is left out */
 export const BANDS = [[1, 1], [2, 4], [5, 7], [8, 11], [12, 99]]
-export const MODES = ['cup', 'ladder_pvp', 'ladder_club']
+/** cup: 全服杯 (players); cup_club: 俱乐部杯 (against clubs); the ladder against players or clubs */
+export const MODES = ['cup', 'cup_club', 'ladder_pvp', 'ladder_club']
 /** how far back the ladder log is read */
 export const LADDER_DAYS = 30
 const DAY = 86_400_000

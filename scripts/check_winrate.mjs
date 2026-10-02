@@ -25,13 +25,14 @@ const get = async () => { const res = {}; await api.route({ method: 'GET' }, res
 api.logMatch('ladder_pvp', 80, 77, true)   // gap 3, higher won
 api.logMatch('ladder_pvp', 77, 80, true)   // gap 3, lower won
 api.logMatch('ladder_club', 70, 82, false) // gap 12, higher won
+api.logMatch('cup_club', 75, 81, true)     // gap 6, lower won
 api.logMatch('ladder_pvp', 80, 80, true)   // level: left out
 api.logMatch('nonsense', 80, 70, true)     // unknown mode: never written
 await new Promise((r) => setTimeout(r, 50))
 await sql`update card_match_log set at = ${new Date(clock - 86_400_000).toISOString()}`
 api.logMatch('ladder_pvp', 90, 80, true)   // today: not in today's table
 await new Promise((r) => setTimeout(r, 50))
-assert.equal((await sql`select count(*)::int as n from card_match_log`)[0].n, 5)
+assert.equal((await sql`select count(*)::int as n from card_match_log`)[0].n, 6)
 
 // the 全服杯: one cup on the current curve, one on an old one
 await sql`insert into open_cups (id, starts, status, balance_version) values (1, '2026-09-29T12:00:00Z', 'done', 3), (2, '2026-09-20T12:00:00Z', 'done', 2)`
@@ -53,6 +54,7 @@ assert.deepEqual(band('ladder_pvp', 2), { lo: 2, hi: 4, n: 2, w: 1 })
 assert.deepEqual(band('ladder_pvp', 8), { lo: 8, hi: 11, n: 0, w: 0 }, "today's match waits for tomorrow")
 assert.deepEqual(band('ladder_club', 12), { lo: 12, hi: 99, n: 1, w: 1 })
 assert.deepEqual(band('cup', 5), { lo: 5, hi: 7, n: 1, w: 0 })
+assert.deepEqual(band('cup_club', 5), { lo: 5, hi: 7, n: 1, w: 0 })
 assert.deepEqual(band('cup', 8), { lo: 8, hi: 11, n: 1, w: 1 })
 assert.equal(t.modes.cup.reduce((s, b) => s + b.n, 0), 2)
 

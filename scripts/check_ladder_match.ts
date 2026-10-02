@@ -47,7 +47,8 @@ async function account(i: number, team: typeof CUP_TEAMS[number], div = 4) {
   g.squad = structuredClone(team.squad)
   g.ladder = { ...g.ladder, div, stars: 2, best: div }
   g.daily.staminaAt = Date.now()
-  await sql`update card_accounts set state = ${sql.json(g)} where id_hash = ${hash(id)}`
+  // the formal release plays only phone-bound accounts; these stand in for bound ones
+  await sql`update card_accounts set state = ${sql.json(g)}, verified = now() where id_hash = ${hash(id)}`
   return { id, score: squadRating(team.squad) }
 }
 

@@ -62,7 +62,8 @@ async function account(i: number) {
   g.squad = structuredClone(team.squad)
   g.ladder = { ...g.ladder, div: 4, stars: 2, best: 4 }
   g.daily.stamina = 20; g.daily.staminaAt = Date.now()
-  await raw`update card_accounts set state = ${raw.json(g)} where id_hash = ${hash(id)}`
+  // the formal release plays only phone-bound accounts; these stand in for bound ones
+  await raw`update card_accounts set state = ${raw.json(g)}, verified = now() where id_hash = ${hash(id)}`
   return id
 }
 const row = async (id: string) => (await raw`select state, rev from card_accounts where id_hash = ${hash(id)}`)[0]

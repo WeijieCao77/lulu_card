@@ -36,7 +36,8 @@ import type { MiniGame } from './minigame'
 import type { GachaState, QuestKey, Series } from './gacha'
 import { isLegacyRegionPack } from './regionMigration'
 import { buyShop, ensureShop } from './dailyShop'
-import { arenaOpponentRating, playArenaMatch, playCupMatch, playRivalMatch } from './arena'
+import { BALANCE_VERSION, arenaOpponentRating, playArenaMatch, playCupMatch, playRivalMatch } from './arena'
+import { CUP_TEAMS } from './cupTeams'
 import type { ArenaResult, RivalSquad } from './arena'
 import { challengeBlock, challengeSig, guessChallenge } from './challenge'
 import type { ChallengeKind } from './challenge'
@@ -315,7 +316,12 @@ function dispatch(
       const out = recordCup(g, {
         opponent: oppId, win: res.win, mapsWon: res.mapsWon, mapsLost: res.mapsLost,
       })
-      return { ok: true, result: { res, opp: oppId, out, registration: cup.registration } }
+      // both 阵容分 for the 胜率表 (winrate-api.js), only for brackets on the current curve
+      const team = CUP_TEAMS.find((t) => t.id === oppId)
+      const rate = team && (cup.balance ?? 1) === BALANCE_VERSION
+        ? { mine: squadRating(cup.registration.squad, level), theirs: team.rating - (cup.ease ?? 0) }
+        : undefined
+      return { ok: true, result: { res, opp: oppId, out, registration: cup.registration, rate } }
     }
     case 'cup_clear': {
       // only a finished bracket can be put away; an unfinished one is a paid
