@@ -5,7 +5,7 @@ import { GapOdds } from './GapOdds'
 /**
  * 胜率表 — how often the higher 阵容分 wins, from real matches only (winrate-api.js).
  * The server cuts it once a day at Beijing midnight; nothing on this page is simulated.
- * 总表 adds every kind of match together; the table under it splits them by mode.
+ * Players see only the 总表, every kind of match added together (owner, 2026-10-02); the API keeps the modes apart.
  */
 type Mode = 'cup' | 'cup_club' | 'ladder_pvp' | 'ladder_club'
 interface Band { lo: number; hi: number; n: number; w: number }
@@ -19,13 +19,6 @@ interface Table {
 
 /** below this many matches a percentage says more about luck than about the gap */
 const MIN_N = 30
-
-const COLUMNS: { key: Mode; label: string; note: string }[] = [
-  { key: 'ladder_pvp', label: '天梯', note: '对真人' },
-  { key: 'ladder_club', label: '天梯', note: '对俱乐部' },
-  { key: 'cup', label: '全服杯', note: '玩家对玩家' },
-  { key: 'cup_club', label: '俱乐部杯', note: '对俱乐部' },
-]
 
 const bandName = (b: Band) => (b.hi >= 99 ? `${b.lo} 分以上` : b.lo === b.hi ? `${b.lo} 分` : `${b.lo}–${b.hi} 分`)
 
@@ -110,35 +103,9 @@ export default function WinRate() {
                   </tbody>
                 </table>
               </div>
-            </Panel>
-
-            <Panel title="按模式分开看">
-              <div className="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>分差</th>
-                      {COLUMNS.map((c) => (
-                        <th key={c.key} className="num">
-                          {c.label}<div className="tiny faint" style={{ fontWeight: 'normal' }}>{c.note}</div>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {all.map((b, i) => (
-                      <tr key={b.lo}>
-                        <td>{bandName(b)}</td>
-                        {COLUMNS.map((c) => <td key={c.key} className="num"><Cell b={loaded.modes![c.key]?.[i]} /></td>)}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
               <ul className="tiny muted" style={{ lineHeight: 1.75, margin: '10px 0 0', paddingLeft: 18 }}>
                 <li>百分比是<b>高分一方</b>赢下整场的比例；100% 减去它，就是低分一方爆冷的比例。</li>
-                <li>天梯和俱乐部杯算最近 {loaded.ladderDays ?? 30} 天（从 10 月 2 日开始记录）；全服杯算当前版本的全部场次。同分的对局没有高低之分，不计入。</li>
-                <li>对俱乐部时，对方的分是比赛里显示的俱乐部综合分。</li>
+                <li>天梯和俱乐部杯算最近 {loaded.ladderDays ?? 30} 天（从 10 月 2 日开始记录），全服杯算当前版本的全部场次；对俱乐部时用比赛里显示的俱乐部综合分。同分的对局不计入。</li>
                 <li>一格少于 {MIN_N} 场时只显示场次，不给百分比——场次太少，数字说明不了什么。</li>
                 <li>天梯优先匹配阵容分相差 4 分以内的真人对手。这一段高分方优势不大，打得多了，输给低分对手也就常见。</li>
               </ul>
