@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-02', title: 'T1 队标更新', changes: [
+    { kind: '调整', text: 'T1 的队标换成现在的新版（去掉了 SK telecom 字样），每日挑战和图鉴里都会更新。' },
+  ],
+}, {
   date: '2026-10-02', title: '好友换卡被拒退还体力', changes: [
     { kind: '调整', text: '好友换卡发起后，如果对方拒绝、三天没答复，或者对方已经没有那张卡，发起时扣的 1 点体力会随退回的卡一起发到信箱，领取后到账（体力满了不会超过上限）。自己撤回的不退。' },
   ],
