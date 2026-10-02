@@ -26,6 +26,11 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-02', title: '战队筛选与国籍修正', changes: [
+    { kind: '修复', text: '战队筛选里，Ruler 的 2017 三星彩卡被归到了太平洋赛区 SillySilly Gaming（简称同为 SSG）下面。现在按俱乐部传承分组：三星（SSG）算作 Gen.G 的前身，归在 GEN 下；台湾的 SSG 只有自己的选手。' },
+    { kind: '修复', text: 'Ghost 的国籍补为韩国，之前显示「国籍未知」。' },
+  ],
+}, {
   date: '2026-10-02', title: '新杯赛：地区杯', changes: [
     { kind: '新增', text: '「杯赛」里新增「地区杯」：和全服杯不限赛同一套机制，玩家报名、玩家之间纯随机配对，先打瑞士轮再打淘汰赛，每天 12:00、17:00、21:00 开赛，奖励按名次发到信箱。' },
     { kind: '新增', text: '地区杯的报名条件：五名选手加一名教练必须同一地区（按选手国籍，香港、澳门算中国，中国台湾单独算），卡色不限，可以存一套专用阵容。' },

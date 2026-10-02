@@ -18,6 +18,7 @@ import type { Card, Rarity } from './cards'
 import type { Series } from './gacha'
 import type { Role } from './types'
 import { gameRegionOf } from './gameRegions'
+import { clubLineage } from './teamLineage'
 
 export interface CardFilter {
   rarity: 'all' | Rarity | 'coach'
@@ -26,6 +27,15 @@ export interface CardFilter {
   role: 'all' | Role | 'igl'
   club: 'all' | string
 }
+
+/**
+ * Which club a card is filed under in the club menu: its lineage (SKT and T1 are one; Samsung Galaxy and Gen.G
+ * are one), else its club id. Not the tag — two clubs share a tag: the 2017 Samsung Galaxy of Ruler's 彩卡 and
+ * the LCP's SillySilly Gaming are both 「SSG」, and filtering by tag put Ruler among the Taiwanese side
+ * (reported 2026-10-02). A filter saved before this held a bare tag; that still matches by tag.
+ */
+export const clubKey = (card: Pick<Card, 'clubId' | 'clubTag' | 'region'>): string | null =>
+  clubLineage(card) ?? (card.clubTag ? `tag:${card.clubTag}` : null)
 
 export const EMPTY_FILTER: CardFilter = { rarity: 'all', region: 'all', role: 'all', club: 'all' }
 
@@ -43,7 +53,10 @@ export function matchesFilter(card: Card, f: CardFilter): boolean {
   // a coach has no position; asking for one leaves coaches out
   if (f.role === 'igl') { if (!(isPlayerCard(card) && card.isIgl)) return false }
   else if (f.role !== 'all' && !(isPlayerCard(card) && card.roles.includes(f.role))) return false
-  if (f.club !== 'all' && (card.clubTag ?? '') !== f.club) return false
+  if (f.club !== 'all') {
+    const keyed = /^(lineage|club|tag):/.test(f.club)
+    if (keyed ? clubKey(card) !== f.club : (card.clubTag ?? '') !== f.club) return false
+  }
   return true
 }
 

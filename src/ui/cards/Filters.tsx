@@ -24,7 +24,7 @@ import type { Role } from '../../engine/types'
 // The rule itself lives in the engine: the trading post's server runs it too,
 // and a filter that means one thing on each side of the wire is worse than no
 // filter at all. See engine/cardFilter.ts.
-import { EMPTY_FILTER, filterActive, matchesFilter } from '../../engine/cardFilter'
+import { EMPTY_FILTER, clubKey, filterActive, matchesFilter } from '../../engine/cardFilter'
 import type { CardFilter } from '../../engine/cardFilter'
 
 export { EMPTY_FILTER, filterActive, matchesFilter, matchesQuery } from '../../engine/cardFilter'
@@ -32,12 +32,24 @@ export type { CardFilter } from '../../engine/cardFilter'
 
 const ROLES: Role[] = ['上单', '打野', '中单', '下路', '辅助']
 
-/** The clubs present in a pile, busiest first, for the club menu. */
-export function clubsIn(cards: Card[]): { tag: string; n: number }[] {
-  const n = new Map<string, number>()
-  for (const c of cards) if (c.clubTag) n.set(c.clubTag, (n.get(c.clubTag) ?? 0) + 1)
-  return [...n].map(([tag, k]) => ({ tag, n: k }))
-    .sort((a, b) => b.n - a.n || a.tag.localeCompare(b.tag))
+/**
+ * The clubs present in a pile, busiest first, for the club menu — one entry per club lineage (cardFilter.ts
+ * clubKey), named by its current tag where it has one, so Ruler's Samsung Galaxy files under GEN and not under
+ * the LCP's SSG. `tag` is the menu value (the key); `label` is what is shown.
+ */
+export function clubsIn(cards: Card[]): { tag: string; label: string; n: number }[] {
+  const n = new Map<string, { label: string; n: number; live: boolean }>()
+  for (const c of cards) {
+    const key = clubKey(c)
+    if (!key || !c.clubTag) continue
+    const live = !!c.clubId && !c.clubId.startsWith('H:')
+    const had = n.get(key)
+    // the live club's tag names the entry; a historical tag only when nothing current is in the pile
+    if (!had) n.set(key, { label: c.clubTag, n: 1, live })
+    else n.set(key, { label: !had.live && live ? c.clubTag : had.label, n: had.n + 1, live: had.live || live })
+  }
+  return [...n].map(([tag, v]) => ({ tag, label: v.label, n: v.n }))
+    .sort((a, b) => b.n - a.n || a.label.localeCompare(b.label))
 }
 
 const METALS: { key: CardFilter['rarity']; label: string }[] = [
@@ -65,7 +77,7 @@ export function CardFilters({
   const set = (patch: Partial<CardFilter>) => {
     const next = { ...value, ...patch }
     // a chosen club that the new region or metal leaves nothing of is let go
-    if (next.club !== 'all' && !pool.some((c) => c.clubTag === next.club && matchesFilter(c, { ...next, club: 'all' }))) {
+    if (next.club !== 'all' && !pool.some((c) => matchesFilter(c, next))) {
       next.club = 'all'
     }
     onChange(next)
@@ -99,9 +111,9 @@ export function CardFilters({
         value={value.club} onChange={(e) => set({ club: e.target.value })}
       >
         <option value="all">全部战队</option>
-        {clubs.map((c) => <option key={c.tag} value={c.tag}>{c.tag}（{c.n}）</option>)}
+        {clubs.map((c) => <option key={c.tag} value={c.tag}>{c.label}（{c.n}）</option>)}
         {value.club !== 'all' && !clubs.some((c) => c.tag === value.club) && (
-          <option value={value.club}>{value.club}（0）</option>
+          <option value={value.club}>{value.club.replace(/^(lineage|club|tag):(H:)?/, '')}（0）</option>
         )}
       </select>
       {extra}
