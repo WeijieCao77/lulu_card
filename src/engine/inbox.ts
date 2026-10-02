@@ -165,7 +165,7 @@ export function mailLine(m: MailItem): string {
     case 'swap_back': return `${nameAt(m.cardId ?? '', m.level)} 退回来了（${String(m.body?.reason ?? '交换没成')}）`
     case 'open_cup': {
       const place = Number(m.body?.place) || 0
-      const label = ({ gold: '金卡赛', silver: '银卡赛', bronze: '铜卡赛', hof: '名人堂赛' } as Record<string, string>)[String(m.body?.league)]
+      const label = ({ free: '不限赛', gold: '金卡赛', silver: '银卡赛', bronze: '铜卡赛', hof: '名人堂赛' } as Record<string, string>)[String(m.body?.league)]
       const head = place === 1 ? '全服杯冠军' : place === 2 ? '全服杯亚军' : place === 4 ? '全服杯四强' : place === 8 ? '全服杯八强' : `全服杯赢了 ${Number(m.body?.wins) || 0} 场`
       const bits = []
       if (m.coins) bits.push(`${m.coins} 金币`)

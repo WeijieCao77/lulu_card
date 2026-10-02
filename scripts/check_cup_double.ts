@@ -9,7 +9,7 @@
  * advanced. A bracket drawn before 双败 stays single elimination.
  */
 import {
-  newGacha, enterCup, recordCup, cupOpponent, cupBo, cupExitPrize, cupTitlePrize, cupEaseFor, cupFloor, repairCup,
+  newGacha, enterCup, recordCup, cupOpponent, cupBo, cupExitPrize, cupTitlePrize, cupEaseFor, cupFloor, repairCup, CUP_FOLLOW, CUP_FOLLOW_FROM,
   STAMINA_MAX, STAMINA_COST, CUP_EASE_MAX, CUP_SHARPEN_MAX,
 } from '../src/engine/gacha'
 import type { GachaState } from '../src/engine/gacha'
@@ -124,7 +124,11 @@ const play = (g: GachaState, win: boolean) => {
 {
   const lowest = Math.min(...CUP_TEAMS.map((t) => t.rating)), highest = Math.max(...CUP_TEAMS.map((t) => t.rating))
   check('让分：只给低分阵容，有上限', cupEaseFor(lowest) > 0 && cupEaseFor(40) === CUP_EASE_MAX && cupEaseFor(Math.ceil(cupFloor()) + 9) === 0 && cupEaseFor(85) === 0)
-  check('加强：只给超过最强俱乐部的阵容，有上限', cupEaseFor(highest - 3) === 0 && cupEaseFor(highest - 2) === -1 && cupEaseFor(highest + 2) === -CUP_SHARPEN_MAX, `${cupEaseFor(highest + 2)}`)
+  // measured from where the bracket is pitched (cupPitch), not from the five's own score
+  const pitchAt = (p: number) => CUP_FOLLOW_FROM + (p - CUP_FOLLOW_FROM) / CUP_FOLLOW
+  check('加强：只给超过最强俱乐部的阵容，有上限',
+    cupEaseFor(highest - 3) === 0 && cupEaseFor(pitchAt(highest - 3)) === 0 && cupEaseFor(pitchAt(highest - 2)) === -1
+      && cupEaseFor(pitchAt(highest + 2)) === -CUP_SHARPEN_MAX, `${cupEaseFor(pitchAt(highest - 2))}`)
   check('加强不超过上限', cupEaseFor(130) === -CUP_SHARPEN_MAX)
   // a 败者组 club that has since left the world is replaced, like a club in the path
   const g = fresh(8)

@@ -97,7 +97,7 @@ function ClubCup() {
         <p className="small muted" style={{ marginTop: 0, lineHeight: 1.75 }}>
           <b>{STAMINA_COST.cup} 点体力入场</b>，{CUP_MIN_ROUNDS}～{CUP_MAX_ROUNDS} 轮，<b>之后每轮免费</b>。
           <b>双败</b>：第一次输进败者组，赢一场 BO3 回到下一轮，第二次输才出局。决赛输了先打败者组决赛，再重打决赛。
-          对手按你的综合分抽签，<b>一轮比一轮强</b>，决赛 <b>BO5</b>。
+          对手按你的综合分抽签，<b>一轮比一轮强</b>，决赛 <b>BO5</b>。综合分 80 以上，每多 1 分对手只强 0.75 分，阵容越强越好拿冠军。
           <b>本届固定使用报名时的五人、教练和等级</b>（设了专用阵容就用专用的，否则用卡组）。
           出局按晋级轮数给金币（{cupExitPrize(0)} 起，每轮多 150），晋级两轮送{PACKS.scout.name}；
           冠军 <b>{cupTitlePrize(CUP_MIN_ROUNDS)}～{cupTitlePrize(CUP_MAX_ROUNDS)} 金币 + {PACKS.elite.name}</b>，

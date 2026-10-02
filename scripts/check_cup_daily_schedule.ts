@@ -21,7 +21,7 @@ const hash = (id: string) => createHash('sha256').update(id).digest('hex')
 const iso = (ms: number) => new Date(ms + 8 * 60 * 60 * 1000).toISOString().slice(11, 19)
 const shanghaiDay = (ms: number) => new Date(ms + 8 * 60 * 60 * 1000).toISOString().slice(0, 10)
 
-// --- pure schedule: deterministic Shanghai 12/20, fast override intact
+// --- pure schedule: deterministic Shanghai 12/17/21, fast override intact
 {
   const slots = (day: string, h: number) => Date.parse(`${day}T${String(h).padStart(2, '0')}:00:00+08:00`)
   const every = 2 * 60 * 60 * 1000
@@ -29,13 +29,14 @@ const shanghaiDay = (ms: number) => new Date(ms + 8 * 60 * 60 * 1000).toISOStrin
   assert.equal(engine.openCupSlot(t, every), Date.parse('2026-09-17T04:00:00Z'))
   assert.equal(engine.openCupSlot(Date.parse('2026-09-17T04:00:00Z'), every), Date.parse('2026-09-17T06:00:00Z'))
   assert.equal(engine.openCupSlot(slots('2026-09-17', 12) - 1), slots('2026-09-17', 12))
-  assert.equal(engine.openCupSlot(slots('2026-09-17', 12)), slots('2026-09-17', 20), 'exact start points to next slot')
-  assert.equal(engine.openCupSlot(slots('2026-09-17', 20) - 1), slots('2026-09-17', 20))
-  assert.equal(engine.openCupSlot(slots('2026-09-17', 20)), slots('2026-09-18', 12))
-  assert.deepEqual(DAILY_START_HOURS, [12, 20])
+  assert.equal(engine.openCupSlot(slots('2026-09-17', 12)), slots('2026-09-17', 17), 'exact start points to next slot')
+  assert.equal(engine.openCupSlot(slots('2026-09-17', 17)), slots('2026-09-17', 21))
+  assert.equal(engine.openCupSlot(slots('2026-09-17', 21) - 1), slots('2026-09-17', 21))
+  assert.equal(engine.openCupSlot(slots('2026-09-17', 21)), slots('2026-09-18', 12))
+  assert.deepEqual(DAILY_START_HOURS, [12, 17, 21])
   assert.equal(OPEN_CUP_TIMEZONE, 'Asia/Shanghai')
 
-  // two distinct daily starts across UTC midnight, month boundaries, US DST change and new year
+  // three distinct daily starts across UTC midnight, month boundaries, US DST change and new year
   for (const day of ['2026-03-07', '2026-11-01', '2026-12-31']) {
     let cursor = Date.parse(`${day}T00:00:00+08:00`)
     const dayStarts = new Set<string>()
@@ -43,19 +44,21 @@ const shanghaiDay = (ms: number) => new Date(ms + 8 * 60 * 60 * 1000).toISOStrin
       cursor = engine.openCupSlot(cursor)
       if (shanghaiDay(cursor) === day) dayStarts.add(iso(cursor).slice(0, 5))
     }
-    assert.deepEqual([...dayStarts].sort(), ['12:00', '20:00'], `${day}: ${[...dayStarts]}`)
+    assert.deepEqual([...dayStarts].sort(), ['12:00', '17:00', '21:00'], `${day}: ${[...dayStarts]}`)
   }
 
   const boundaries = [
     ['2026-09-17T11:59:59+08:00', '2026-09-17T12:00:00+08:00'],
-    ['2026-09-17T12:00:00+08:00', '2026-09-17T20:00:00+08:00'],
-    ['2026-09-17T19:59:59+08:00', '2026-09-17T20:00:00+08:00'],
-    ['2026-09-17T20:00:00+08:00', '2026-09-18T12:00:00+08:00'],
+    ['2026-09-17T12:00:00+08:00', '2026-09-17T17:00:00+08:00'],
+    ['2026-09-17T16:59:59+08:00', '2026-09-17T17:00:00+08:00'],
+    ['2026-09-17T17:00:00+08:00', '2026-09-17T21:00:00+08:00'],
+    ['2026-09-17T20:59:59+08:00', '2026-09-17T21:00:00+08:00'],
+    ['2026-09-17T21:00:00+08:00', '2026-09-18T12:00:00+08:00'],
   ]
   for (const [nowTs, expected] of boundaries) {
     assert.equal(engine.openCupSlot(Date.parse(nowTs)), Date.parse(expected), `${nowTs} -> ${expected}`)
   }
-  console.log('PASS daily Shanghai 12:00/20:00 schedule, exact boundaries and fast override')
+  console.log('PASS daily Shanghai 12:00/17:00/21:00 schedule, exact boundaries and fast override')
 }
 
 // --- real API + PGlite
@@ -107,7 +110,8 @@ const shanghaiDay = (ms: number) => new Date(ms + 8 * 60 * 60 * 1000).toISOStrin
     for (const card of g.squad.slots) {
       if (card) g.cards[card] = { id: card, level: 0, dupes: 0, seen: 1, got: '2026-09-17' }
     }
-    await sql`insert into card_accounts(id_hash, name, state, created) values(${hash(id)}, ${g.name}, ${sql.json(g)}, now()-interval '4 days')`
+    // the formal release plays only phone-bound accounts; these stand in for bound ones
+    await sql`insert into card_accounts(id_hash, name, state, created, verified) values(${hash(id)}, ${g.name}, ${sql.json(g)}, now()-interval '4 days', now())`
     return id
   }
 
@@ -158,9 +162,9 @@ const shanghaiDay = (ms: number) => new Date(ms + 8 * 60 * 60 * 1000).toISOStrin
     assert(!outsiderState.legacyPending?.some((c: any) => c.id === String(legacyCupId)))
 
     // Other league filter hides pending but keeps its own next.
-    const memberBronzeState = await call('/api/card/opencup', { id: member, league: 'bronze' })
-    assert(!memberBronzeState.legacyPending?.some((c: any) => c.id === String(legacyCupId)))
-    assert(memberBronzeState.next?.starts)
+    const memberFreeState = await call('/api/card/opencup', { id: member, league: 'free' })
+    assert(!memberFreeState.legacyPending?.some((c: any) => c.id === String(legacyCupId)))
+    assert(memberFreeState.next?.starts)
 
     // A future off-schedule legacy while current next is still 12:00 is also visible.
     const futureLegacyStart = legacyStart + 4 * 60 * 60 * 1000 // 14:00

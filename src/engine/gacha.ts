@@ -492,11 +492,14 @@ export const tierStars = (div: number): number =>
  */
 // Keep legacy record keys readable; only open remains an active ladder.
 export const LEAGUES = ['open', 'gold', 'silver', 'bronze', 'hof'] as const
-export const CUP_LEAGUES = ['gold', 'silver', 'bronze', 'hof'] as const
+// 全服杯 runs two divisions since 2026-10-02 (owner): 不限赛 and 金卡赛. 银卡赛 and 铜卡赛 were dropped, and
+// 名人堂赛 (two 彩卡 to enter) never filled a single bracket; 不限赛 is where a 彩卡 plays now. Their rules
+// stay below so a bracket already drawn under them still finishes and old records still read.
+export const CUP_LEAGUES = ['free', 'gold'] as const
 export type CupLeague = (typeof CUP_LEAGUES)[number]
 export const isCupLeague = (k: unknown): k is CupLeague =>
   typeof k === 'string' && (CUP_LEAGUES as readonly string[]).includes(k)
-export type LeagueKind = (typeof LEAGUES)[number] | 'hof'
+export type LeagueKind = (typeof LEAGUES)[number] | 'hof' | 'free'
 
 export interface LeagueRule {
   name: string
@@ -529,6 +532,7 @@ export const LEAGUE_RULES: Record<LeagueKind, LeagueRule> = {
   silver: { name: '银卡赛', blurb: '只能上银卡和铜卡。', ceiling: 'silver', needMythic: 0, oppBump: -7 },
   bronze: { name: '铜卡赛', blurb: '只能上铜卡。', ceiling: 'bronze', needMythic: 0, oppBump: -13 },
   hof:    { name: '名人堂赛', blurb: '至少两张彩卡才能入场，其余卡牌不限。', ceiling: null, needMythic: 2, oppBump: 2 },
+  free:   { name: '不限赛', blurb: '金卡、银卡、铜卡、彩卡都能上，不限卡色。', ceiling: null, needMythic: 0, oppBump: 0 },
 }
 
 export const isLeague = (k: unknown): k is LeagueKind =>
@@ -1936,6 +1940,22 @@ export const cupFloor = (): number => {
   const low = CUP_TEAMS.map((t) => t.rating).sort((a, b) => a - b).slice(0, 6)
   return low.reduce((s, r) => s + r, 0) / low.length
 }
+/**
+ * Where the bracket is pitched: the five's own score up to CUP_FOLLOW_FROM, and
+ * above it only CUP_FOLLOW of every further point (owner, 2026-10-02).
+ *
+ * Pitched on the five's full score, the clubs rose point for point with it and
+ * a title came about 27% of the time at 60 and at 95 alike
+ * (scripts/measure_cup_experience.ts) — 「不管自己的阵容多少分对面会相应提高」:
+ * a stronger five bought nothing in the cup. Now a point above 80 lifts the
+ * draw by three quarters of a point: titles 26% at 78, 41% at 85, 52% at 95,
+ * 89% at 104 (300 cups each). Half a point made 95 a 89% walk and 0.85 hardly
+ * moved it. Below 80 nothing changed, so a new account's cup is as it was.
+ */
+export const CUP_FOLLOW_FROM = 80
+export const CUP_FOLLOW = 0.75
+export const cupPitch = (squadRating: number): number =>
+  squadRating <= CUP_FOLLOW_FROM ? squadRating : CUP_FOLLOW_FROM + CUP_FOLLOW * (squadRating - CUP_FOLLOW_FROM)
 export const cupEaseFor = (squadRating: number): number => {
   const ratings = CUP_TEAMS.map((t) => t.rating)
   const ease = clamp(Math.ceil(cupFloor() + CUP_CLIMB_FROM - squadRating), 0, CUP_EASE_MAX)
@@ -1943,8 +1963,9 @@ export const cupEaseFor = (squadRating: number): number => {
   // and the other end: the best club there is sits at 99, so a levelled 彩卡
   // five never met its equal and a second life would have made its cup a
   // formality. Those clubs turn up at full stretch, a capped number of
-  // points above their paper, printed the same way.
-  return -clamp(Math.floor(squadRating + CUP_CLIMB_TO - Math.max(...ratings)), 0, CUP_SHARPEN_MAX)
+  // points above their paper, printed the same way — measured from where the
+  // bracket is pitched, not from the five's own score.
+  return -clamp(Math.floor(cupPitch(squadRating) + CUP_CLIMB_TO - Math.max(...ratings)), 0, CUP_SHARPEN_MAX)
 }
 
 /** kept for saves written when a cup was priced in coins; nothing reads it */
@@ -1986,7 +2007,7 @@ export function enterCup(g: GachaState, squadRating: number, now: number, regist
     // table: the first version took "within five points" and, when nobody
     // was, any club on earth — which is how a squad in the sixties drew LOUD
     // in the quarters, Heretics in the semi, and a 66 in the final.
-    const target = squadRating - CUP_CLIMB_FROM + ((CUP_CLIMB_FROM + CUP_CLIMB_TO) / (rounds - 1)) * round + ease
+    const target = cupPitch(squadRating) - CUP_CLIMB_FROM + ((CUP_CLIMB_FROM + CUP_CLIMB_TO) / (rounds - 1)) * round + ease
     const near = sorted
       .filter((t) => !taken.has(t.id))
       .sort((a, b) => Math.abs(a.rating - target) - Math.abs(b.rating - target))
@@ -2644,10 +2665,10 @@ export const SERVER_KEYS = [
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends', 'cupSquads'] as const
 
 /** The cups that keep a lineup of their own: 俱乐部杯, 组队杯 and the five 全服杯 divisions. */
-export const CUP_SQUAD_KEYS = ['club', 'team', 'open:open', 'open:gold', 'open:silver', 'open:bronze', 'open:hof'] as const
+export const CUP_SQUAD_KEYS = ['club', 'team', 'open:open', 'open:free', 'open:gold', 'open:silver', 'open:bronze', 'open:hof'] as const
 export type CupSquadKey = (typeof CUP_SQUAD_KEYS)[number]
 export const CUP_SQUAD_NAMES: Record<CupSquadKey, string> = {
-  club: '俱乐部杯', team: '组队杯', 'open:open': '全服杯·天梯', 'open:gold': '全服杯·金卡赛',
+  club: '俱乐部杯', team: '组队杯', 'open:open': '全服杯·天梯', 'open:free': '全服杯·不限赛', 'open:gold': '全服杯·金卡赛',
   'open:silver': '全服杯·银卡赛', 'open:bronze': '全服杯·铜卡赛', 'open:hof': '全服杯·名人堂赛',
 }
 /** The lineup a cup plays with: its own if one has been set, otherwise the 卡组. */

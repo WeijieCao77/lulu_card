@@ -42,9 +42,10 @@ const check = (name: string, ok: boolean, detail = '') => {
 
 {
   const t = Date.parse('2026-09-17T03:20:00Z')
-  check('每日上海 12:00/20:00 下一个是 12:00', openCupSlot(t) === Date.parse('2026-09-17T12:00:00+08:00'))
-  check('正好 12:00 时报名 20:00 场', openCupSlot(Date.parse('2026-09-17T12:00:00+08:00')) === Date.parse('2026-09-17T20:00:00+08:00'))
-  check('正好 20:00 时报名次日 12:00 场', openCupSlot(Date.parse('2026-09-17T20:00:00+08:00')) === Date.parse('2026-09-18T12:00:00+08:00'))
+  check('每日上海 12:00/17:00/21:00 下一个是 12:00', openCupSlot(t) === Date.parse('2026-09-17T12:00:00+08:00'))
+  check('正好 12:00 时报名 17:00 场', openCupSlot(Date.parse('2026-09-17T12:00:00+08:00')) === Date.parse('2026-09-17T17:00:00+08:00'))
+  check('正好 17:00 时报名 21:00 场', openCupSlot(Date.parse('2026-09-17T17:00:00+08:00')) === Date.parse('2026-09-17T21:00:00+08:00'))
+  check('正好 21:00 时报名次日 12:00 场', openCupSlot(Date.parse('2026-09-17T21:00:00+08:00')) === Date.parse('2026-09-18T12:00:00+08:00'))
 
   let planOk = true, fits = true
   for (let n = 2; n <= 4096; n++) {

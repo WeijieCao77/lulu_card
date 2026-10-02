@@ -25,7 +25,8 @@ import type { ArenaLine, RivalSquad } from './arena'
 import type { PackKind } from './gacha'
 
 /** The Shanghai clock hours a global cup round starts at, in the order they occur each day. */
-export const DAILY_START_HOURS = [12, 20] as const
+// noon, afternoon and evening (owner, 2026-10-02: three a day, was 12 and 20); a cup takes about 1 h 45 m
+export const DAILY_START_HOURS = [12, 17, 21] as const
 /** Every cup displayed or scheduled is Asia/Shanghai local time. */
 export const OPEN_CUP_TIMEZONE = 'Asia/Shanghai'
 /** Shanghai local time formatted for the UI. */

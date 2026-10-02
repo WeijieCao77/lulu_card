@@ -44,7 +44,7 @@ const prizeText = (n: number, place: 1 | 2 | 4 | 8) => {
  */
 export default function OpenCup() {
   const [league, setLeague] = useState<CupLeague>(() => {
-    try { const saved = localStorage.getItem('luluka-cup-league'); return isCupLeague(saved) ? saved : 'gold' } catch { return 'gold' }
+    try { const saved = localStorage.getItem('luluka-cup-league'); return isCupLeague(saved) ? saved : 'free' } catch { return 'free' }
   })
   return <>
     <div className="league-bar" aria-label="全服杯赛制">
@@ -154,7 +154,7 @@ function CupDivision({ league }: { league: CupLeague }) {
         title={`全服杯 · ${LEAGUE_RULES[league].name}`}
         actions={<span className="tiny muted">免费报名 · 每天 {DAILY_START_HOURS.map(h => `${h}:00`).join(' / ')}（北京时间）</span>}
       >
-        <p className="small" style={{ marginTop: 0 }}><b>{LEAGUE_RULES[league].blurb}</b> 四个赛制独立报名、独立对阵、独立冠军榜。报名和开赛时均检查卡色，教练也受金银铜上限限制。</p>
+        <p className="small" style={{ marginTop: 0 }}><b>{LEAGUE_RULES[league].blurb}</b> 两个赛制独立报名、独立对阵、独立冠军榜。金卡赛在报名和开赛时都检查卡色，教练也不能是彩卡。</p>
         <CupLineup cup={cupKey} />
         {!entry.ok && <p className="small neg">{entry.why}</p>}
         <p className="small muted" style={{ marginTop: 0, lineHeight: 1.75 }}>

@@ -1,7 +1,7 @@
 /**
  * 全服杯 — storage and a clock for the bracket in src/engine/openCup.ts.
  *
- * Each division starts at 12:00 and 20:00 Asia/Shanghai. Until it does, anybody who may trade may
+ * Each division starts at 12:00, 17:00 and 21:00 Asia/Shanghai. Until it does, anybody who may trade may
  * sign up for it (the same fifty pulls and three days the market asks — an
  * account made tonight is no use for padding a field tonight). At the start
  * the server reads, in ONE statement, the five every entrant is fielding at
