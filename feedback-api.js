@@ -30,6 +30,8 @@ function wire(item, admin = false) {
   const out = { id: item.id, t: item.t, text: item.text, state: stateOf(item.state) }
   if (item.reply) out.reply = { text: item.reply.text, t: item.reply.t }
   if (admin) {
+    // the nickname (as typed — the owner needs to know who it is) and the # tag are added after the
+    // letters' transaction, in the admin branch below
     out.author = item.owner.slice(0, 6)
     if (item.reply) out.replySeen = !!item.replySeen
   } else if (item.reply) out.replyNew = !item.replySeen
@@ -161,10 +163,23 @@ export function makeFeedbackApi({ getSql, readBody, json, normalizeId, rateLimit
           await tx`update card_feedback set items=${tx.json(items)} where key='board'`
         }
         const counts = { total: items.length, pending: items.filter(x => x.state === 'pending').length, replied: items.filter(x => x.reply).length }
-        if (admin) return { ok: true, counts, items: [...items].sort((a, b) => b.t - a.t).map(x => wire(x, true)) }
+        if (admin) return { ok: true, counts, items: [...items].sort((a, b) => b.t - a.t).map(x => ({ ...wire(x, true), owner: x.owner })) }
         return { ok: true, max: stage === 'production' ? FORMAL.MAX_TEXT : DEMO_MAX_TEXT, min: stage === 'production' ? FORMAL.MIN_TEXT : 1,
           full: items.length >= MAX_LETTERS, mine, ...(created ? { created: created.id } : {}) }
       })
+      if (admin && result.items) {
+        // nicknames after the letters' transaction, so a lookup that fails costs the label, never the mailbox
+        const owners = [...new Set(result.items.map(x => x.owner))]
+        let names = new Map()
+        try {
+          const rows = owners.length ? await sql`select id_hash, name from card_accounts where id_hash = any(${owners})` : []
+          names = new Map(rows.map(r => [r.id_hash, r.name]))
+        } catch { /* no names */ }
+        result.items = result.items.map(({ owner: who, ...x }) => {
+          const name = names.get(who)
+          return { ...x, authorName: name ? String(name).trim().slice(0, 40) : null, authorTag: who.slice(0, 4).toUpperCase() }
+        })
+      }
       json(res, 200, result)
     } catch (error) {
       json(res, error.status || 503, { ok: false, why: error.status ? error.message : '信箱暂时无法保存，请稍后重试。' })

@@ -41,7 +41,7 @@ export const feedbackAdminScript = String.raw`
       card.style.overflowWrap = 'anywhere';
       card.dataset.id = item.id;
       let html = '<div style="font-size:0.9em;color:var(--muted);">';
-      html += '来信人：' + esc(item.author) + ' · ' + new Date(item.t).toLocaleString() + ' · 状态：<b>' + (stateText[item.state] || esc(item.state)) + '</b>';
+      html += '来信人：' + (item.authorName ? '<b>' + esc(item.authorName) + '</b> #' + esc(item.authorTag) + '（' + esc(item.author) + '）' : esc(item.author)) + ' · ' + new Date(item.t).toLocaleString() + ' · 状态：<b>' + (stateText[item.state] || esc(item.state)) + '</b>';
       if (item.reply) html += ' · ' + (item.replySeen ? '玩家已看回复' : '<span style="color:var(--warn);">玩家还没看回复</span>');
       html += '</div>';
       html += '<div style="margin:0.5em 0;white-space:pre-wrap;">' + esc(item.text) + '</div>';
