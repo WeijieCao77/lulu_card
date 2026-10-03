@@ -27,7 +27,7 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [{
   date: '2026-10-03', title: '移除 naiyou', changes: [
-    { kind: '调整', text: 'naiyou 因打假赛禁赛，选手卡从游戏中移除：卡包不再开出，图鉴不再显示，已持有的卡和阵容里的他一并移除，不作补偿。' },
+    { kind: '调整', text: 'naiyou 因打假赛禁赛，选手卡从游戏中移除：卡包不再开出，图鉴不再显示，已持有的卡和阵容里的他一并移除；持有他的玩家每人补一个试训包，到信箱查看。' },
   ],
 }, {
   date: '2026-10-02', title: '队标更新', changes: [

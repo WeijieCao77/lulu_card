@@ -2603,9 +2603,19 @@ export function mergeCardAliases(g: GachaState): void {
 /**
  * Take a removed card (cards.ts REMOVED_CARDS) off the save: out of the collection and out of every
  * lineup — the squad, the presets and each cup's own. Runs on every load, like `mergeCardAliases`.
+ * A holder gets one 试训包 per removed card, whatever the level or copies (owner, 2026-10-03), with a line in the 信箱.
  */
-export function dropRemovedCards(g: GachaState): void {
-  for (const id of REMOVED_CARDS) delete g.cards[id]
+export function dropRemovedCards(g: GachaState, now = Date.now()): void {
+  for (const id of REMOVED_CARDS) {
+    if (!g.cards[id]) continue
+    delete g.cards[id]
+    g.packs.scout = (g.packs.scout ?? 0) + 1
+    const name = id === 'p:P58' ? 'naiyou' : id
+    g.mail = [
+      { at: now, kind: 'grant', text: `收到官方发放：试训包 ×1`, note: `${name} 选手卡已从游戏中移除，这是补偿`, seen: false },
+      ...(g.mail ?? []),
+    ].slice(0, MAIL_MAX)
+  }
   const fix = (s: Squad | undefined | null) => {
     if (!s) return
     s.slots = s.slots.map((x) => (typeof x === 'string' && REMOVED_CARDS.has(x) ? null : x))
