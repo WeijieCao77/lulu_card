@@ -23,7 +23,7 @@ import type { DailyShop } from './dailyShop'
 import {
   ALL_CARDS, SEOUL_CARDS, COACH_CARDS, COINS_FOR, DUPES_FOR, LEGEND_CARDS, LEGEND_COACH_CARDS, MAX_LEVEL, RARITY_CN, cardName, PLAYER_CARDS,
   SALVAGE, SQUAD_SLOTS, cardById, cardPower, emptySquad, isPlayerCard, personOf, rarityRank, ratingAt,
-  squadRating, squadPower, MERGED_CARDS, canonicalCardId,
+  squadRating, squadPower, MERGED_CARDS, REMOVED_CARDS, canonicalCardId,
 } from './cards'
 import type { Card, PlayerCard, Rarity, Squad } from './cards'
 import { newChallenge } from './challenge'
@@ -2600,6 +2600,21 @@ export function mergeCardAliases(g: GachaState): void {
   for (const s of Object.values(g.cupSquads ?? {})) fix(s)
 }
 
+/**
+ * Take a removed card (cards.ts REMOVED_CARDS) off the save: out of the collection and out of every
+ * lineup — the squad, the presets and each cup's own. Runs on every load, like `mergeCardAliases`.
+ */
+export function dropRemovedCards(g: GachaState): void {
+  for (const id of REMOVED_CARDS) delete g.cards[id]
+  const fix = (s: Squad | undefined | null) => {
+    if (!s) return
+    s.slots = s.slots.map((x) => (typeof x === 'string' && REMOVED_CARDS.has(x) ? null : x))
+  }
+  fix(g.squad)
+  for (const p of g.presets ?? []) fix(p?.squad)
+  for (const s of Object.values(g.cupSquads ?? {})) fix(s)
+}
+
 export function migrateGacha(state: GachaState, id: string): GachaState {
   const g = state as GachaState & { version?: number }
   g.version = GACHA_VERSION
@@ -2640,6 +2655,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   while (g.squad.slots.length < 5) g.squad.slots.push(null)
   g.squad.coach = typeof g.squad.coach === 'string' ? g.squad.coach : null
   mergeCardAliases(g)
+  dropRemovedCards(g)
   g.ladder ??= { div: 0, stars: 0, best: 0, wins: 0, losses: 0, streak: 0 }
   g.ladder.wins = Math.max(0, Math.trunc(Number(g.ladder.wins) || 0))
   g.ladder.losses = Math.max(0, Math.trunc(Number(g.ladder.losses) || 0))

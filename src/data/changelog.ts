@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-03', title: '移除 naiyou', changes: [
+    { kind: '调整', text: 'naiyou 因打假赛禁赛，选手卡从游戏中移除：卡包不再开出，图鉴不再显示，已持有的卡和阵容里的他一并移除，不作补偿。' },
+  ],
+}, {
   date: '2026-10-02', title: '队标更新', changes: [
     { kind: '调整', text: 'T1 的队标换成现在的新版（去掉了 SK telecom 字样），每日挑战和图鉴里都会更新。' },
     { kind: '修复', text: 'Deep Cross Gaming（DCG）的队标用错了图，现在换成正确的队标。' },

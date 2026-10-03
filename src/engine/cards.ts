@@ -176,8 +176,14 @@ export const MERGED_CARDS: Readonly<Record<string, string>> = {
 }
 export const canonicalCardId = (id: string): string => MERGED_CARDS[id] ?? id
 
+/**
+ * Cards taken out of the game altogether (owner, 2026-10-03): naiyou, banned for match-fixing.
+ * No longer dealt or listed; a save holding one loses it on load (gacha.ts `dropRemovedCards`), uncompensated.
+ */
+export const REMOVED_CARDS: ReadonlySet<string> = new Set(['p:P58'])
+
 function buildPlayerCards(): PlayerCard[] {
-  return WORLD_PLAYERS.filter((p) => !MERGED_CARDS[`p:${p.id}`]).map((p) => {
+  return WORLD_PLAYERS.filter((p) => !MERGED_CARDS[`p:${p.id}`] && !REMOVED_CARDS.has(`p:${p.id}`)).map((p) => {
     const d = DOSSIER.players[p.id]
     const stats = ordinaryCardStats(p as typeof p & { sourceOverall?: number })
     const club = p.teamId ? teamById.get(p.teamId) : undefined
