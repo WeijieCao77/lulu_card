@@ -9,6 +9,7 @@ import {
   COACH_SILVER_AT,
   cardById,
   MERGED_CARDS,
+  REMOVED_CARDS,
   SQUAD_SLOTS,
   coachRarityOf
 } from '../src/engine/cards';
@@ -66,6 +67,7 @@ function testPlayerCountsAndCardStats() {
   for (const p of WORLD_PLAYERS as (typeof WORLD_PLAYERS[number] & { sourceOverall?: number })[]) {
     assert.ok(typeof p.sourceOverall === 'number', `sourceOverall missing for ${p.id}`);
     if (MERGED_CARDS[`p:${p.id}`]) continue; // a retired duplicate: its id resolves to the kept card
+    if (REMOVED_CARDS.has(`p:${p.id}`)) continue; // intentionally removed player is covered by check_removed_cards.ts
     const card = cardById(`p:${p.id}`);
     assert.ok(card, `card not found for ${p.id}`);
     assertPlayerCardShape(card, p);
@@ -96,7 +98,7 @@ function testPlayerCountsAndCardStats() {
 
   // v7 (2026-09-26): 撸撸卡自己的评分表（docs/card-rating-v7-changes.json），门槛不变
   const expectedCounts: Record<string, Record<string, number>> = {
-    'LPL': { 'gold': 14, 'silver': 29, 'bronze': 60 },
+    'LPL': { 'gold': 14, 'silver': 29, 'bronze': 59 }, // naiyou (p:P58) intentionally removed
     'LCK': { 'gold': 22, 'silver': 41, 'bronze': 59 },
     'LEC': { 'gold': 16, 'silver': 32, 'bronze': 79 },
     'LCS': { 'gold': 11, 'silver': 30, 'bronze': 66 },
@@ -247,7 +249,7 @@ function testGlobalRarityColorConsistency() {
   console.log('Global rarity color consistency verified');
 }
 
-assert.equal(BASE_PLAYER_CARDS.length, 675); // 2026-09-28: two duplicate cards merged (cards.ts MERGED_CARDS)
+assert.equal(BASE_PLAYER_CARDS.length, 674); // two duplicate cards merged; naiyou (p:P58) intentionally removed
 assert.equal(LEGEND_CARDS.length, 40);
 assert.equal(COACH_CARDS.length, 127);
 assert.equal(CARD_BALANCE_VERSION, 8);

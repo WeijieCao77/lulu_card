@@ -82,7 +82,12 @@
   --shadow-up:   0 -8px 20px rgba(0, 0, 0, .45);
   --shadow-edge: rgba(0, 0, 0, .35);
 
-  --radius: 3px;
+  /* controls round a little; surfaces (panels, modals, empty states) a
+     little more, so a button never looks like a small panel */
+  --radius: 5px;
+  --radius-panel: 8px;
+  /* the top edge of a raised surface catching the light */
+  --edge-hi: rgba(255, 255, 255, .04);
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
   --sans: "Inter", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
 
@@ -149,6 +154,7 @@
   --shadow-fab:  0 4px 14px rgba(23, 34, 48, .14);
   --shadow-up:   0 -6px 18px rgba(23, 34, 48, .12);
   --shadow-edge: rgba(23, 34, 48, .10);
+  --edge-hi: rgba(255, 255, 255, .7);
 }
 
 /* ------------------------------------------------------------- 米色
@@ -203,6 +209,7 @@
   --shadow-fab:  0 4px 14px rgba(42, 35, 24, .14);
   --shadow-up:   0 -6px 18px rgba(42, 35, 24, .12);
   --shadow-edge: rgba(42, 35, 24, .10);
+  --edge-hi: rgba(255, 255, 255, .55);
 }
 
 /* a real monitor has the room */
@@ -258,10 +265,12 @@ button {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 7px 14px;
-  transition: background .15s ease, border-color .15s ease, color .15s ease;
+  transition: background .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease;
 }
 button:hover:not(:disabled) { background: var(--panel-3); border-color: var(--line-hi); }
-button:active:not(:disabled) { background: var(--line); }
+/* a press sinks into the surface: shade, not movement, so a button that is
+   positioned with a transform never jumps */
+button:active:not(:disabled) { background: var(--line); box-shadow: inset 0 1px 3px var(--shadow-edge); }
 button:disabled { opacity: .38; cursor: not-allowed; }
 
 button.primary {
@@ -308,7 +317,11 @@ input, select, textarea {
   border-radius: var(--radius);
   padding: 7px 10px;
   width: 100%;
+  transition: border-color .15s ease, box-shadow .15s ease;
 }
+input:hover:not(:disabled):not(:focus), select:hover:not(:disabled):not(:focus), textarea:hover:not(:disabled):not(:focus) { border-color: var(--line-hi); }
+input::placeholder, textarea::placeholder { color: var(--faint); opacity: 1; }
+input:disabled, select:disabled, textarea:disabled { opacity: .5; cursor: not-allowed; }
 /* the ring replaces the outline rather than removing it — a field with the
    caret in it has to be findable from across the room */
 input:focus, select:focus, textarea:focus {
@@ -412,10 +425,18 @@ button.chip:hover { color: var(--text); border-color: var(--line-hi); }
   border-radius: 0; padding: 9px 16px; color: var(--muted); font-size: var(--t-body);
 }
 .nav button:hover { background: var(--panel); color: var(--text); }
-.nav button { transition: background .15s ease, color .15s ease; }
+.nav button { transition: background .15s ease, color .15s ease, box-shadow .15s ease; }
+/* each item is a rounded row inside the rail rather than a stripe across
+   it; the selected one carries a wash of the accent and a bar on its edge */
+.nav .nav-item {
+  width: calc(100% - 12px); margin: 1px 6px;
+  border-left: 0; border-radius: var(--radius);
+}
+.nav .nav-item.active { box-shadow: inset 3px 0 0 var(--accent); }
 .nav button.active {
   color: var(--text); border-left-color: var(--accent);
-  background: var(--panel); font-weight: 650;
+  background: linear-gradient(90deg, var(--accent-wash-2), var(--panel) 85%);
+  font-weight: 650;
 }
 .nav .nav-group {
   font-size: var(--t-label); letter-spacing: .14em; color: var(--faint);
@@ -425,9 +446,13 @@ button.chip:hover { color: var(--text); border-color: var(--line-hi); }
 .main { flex: 1; overflow-y: auto; padding: 16px; min-width: 0; }
 
 /* ---------------------------------------------------------------- panels */
+/* flat fill on purpose: pinned table cells paint var(--panel) and must not
+   show a seam against a gradient behind them; the depth is the lit top edge
+   and a soft drop instead */
 .panel {
   background: var(--panel); border: 1px solid var(--line);
-  border-radius: var(--radius); margin-bottom: 12px;
+  border-radius: var(--radius-panel); margin-bottom: 12px;
+  box-shadow: inset 0 1px 0 var(--edge-hi), 0 8px 22px -14px var(--shadow-edge);
 }
 .panel-head {
   display: flex; align-items: center; gap: 10px;
@@ -471,6 +496,7 @@ button.chip:hover { color: var(--text); border-color: var(--line-hi); }
   input:not([type=range]):not([type=checkbox]), select, textarea { font-size: 16px; }
   .nav { width: 54px; }
   .nav button { padding: 11px 4px; text-align: center; font-size: var(--t-tiny); }
+  .nav .nav-item { width: calc(100% - 6px); margin: 1px 3px; padding: 11px 2px; }
   .nav-foot { padding: 8px 6px; }
   .nav .nav-group { display: none; }
 
@@ -685,9 +711,9 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
   padding: 36px 16px; z-index: 50; overflow-y: auto;
 }
 .modal {
-  background: var(--panel); border: 1px solid var(--line);
-  border-radius: var(--radius); width: 100%; max-width: 780px;
-  box-shadow: var(--shadow-pop);
+  background: var(--panel); border: 1px solid var(--line-hi);
+  border-radius: var(--radius-panel); width: 100%; max-width: 780px;
+  box-shadow: inset 0 1px 0 var(--edge-hi), var(--shadow-pop);
 }
 .modal-head {
   display: flex; align-items: center; gap: 12px;
@@ -756,7 +782,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
   padding: 6px 13px; font-size: var(--t-body); color: var(--muted);
   flex: none; white-space: nowrap;
 }
-.seg button:hover { background: var(--panel-2); }
+.seg button:hover { background: var(--panel-2); color: var(--text); }
 .seg button.on { background: var(--accent); color: #fff; font-weight: 650; }
 
 /* A labelled control in a row of them. A <select> and a .seg are built
@@ -802,7 +828,15 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
   box-shadow: var(--shadow-card); max-width: 90vw;
 }
 
-.empty { padding: 28px; text-align: center; color: var(--faint); font-size: var(--t-small); }
+/* nothing here yet: a dashed well, so an empty list reads as a place that
+   will fill rather than as a page that failed to load */
+.empty {
+  padding: 28px; text-align: center; color: var(--muted); font-size: var(--t-small);
+  border: 1px dashed var(--line-hi); border-radius: var(--radius-panel);
+  background: color-mix(in srgb, var(--well) 70%, transparent);
+}
+/* a flush panel body has no padding of its own; keep the well off its edges */
+.panel-body.flush > .empty { margin: 10px; }
 
 /* origin cards — three dealt from eight, pick one */
 .origin-card {
@@ -1338,7 +1372,8 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
 .cm-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
-  gap: 12px;
+  /* a little more air between rows, so a hover lift never touches the row above */
+  gap: 16px 12px;
   justify-items: center;
 }
 .cm-grid.sm { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
@@ -2270,6 +2305,107 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
     box-shadow: 0 12px 28px rgba(0, 0, 0, .6);
   }
   .cardface.r-mythic.tap:hover { box-shadow: 0 12px 30px rgba(0, 0, 0, .6), 0 0 26px rgba(180, 120, 255, .35); }
+}
+
+/* ---- the ordinary metals, die-cast -----------------------------------
+ *
+ * Gold, silver and bronze keep the layout above — strip, photograph, name,
+ * six numbers — and gain a frame: a bright outer edge on a dark rim, a
+ * hairline inside it, a fine static grain and a bevel. Three temperatures:
+ * warm gold, cold silver, red copper. All of it is painted once; nothing
+ * moves unless a finger or a pointer asks, so a grid of 48 costs what it did.
+ * The bottom of each gradient comes back up to the body metal rather than
+ * down to its shadow, because that is where the 8px numbers sit.
+ *
+ * Coaches have their own dark face, and 彩卡, 首尔 and 名人堂 cards their own
+ * classes; none of them match this selector, so the specials stay a step
+ * above. */
+.cardface:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach) {
+  --metal-hi: #fae7b5; --metal: #d8b46c; --metal-mid: #b98b43; --metal-low: #74522a;
+  --metal-rim: rgba(52, 36, 14, .62);
+  --ink: #211911;
+  color: var(--ink);
+  border: 1px solid var(--metal-hi);
+  background:
+    radial-gradient(120% 55% at 50% 0%, var(--metal-hi) 0%, transparent 60%),
+    linear-gradient(168deg, var(--metal-hi) 0%, var(--metal) 22%, var(--metal-mid) 56%, var(--metal) 90%, var(--metal-mid) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .55),
+    inset 0 -2px 3px rgba(0, 0, 0, .16),
+    0 0 0 1px var(--metal-rim),
+    0 4px 12px rgba(0, 0, 0, .42);
+}
+/* the pack reveal's detail view keeps the soft halo packStage.css gives it */
+.ritual-detail-card > .cardface:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach) {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .55),
+    inset 0 -2px 3px rgba(0, 0, 0, .16),
+    0 0 0 1px var(--metal-rim),
+    0 0 55px #dfbd5430;
+}
+.cardface.r-silver:not(.cardface-coach) {
+  --metal-hi: #f1f7fa; --metal: #bfcad5; --metal-mid: #8a9dad; --metal-low: #566a7b;
+  --metal-rim: rgba(22, 34, 46, .62);
+  --ink: #131f29;
+}
+.cardface.r-bronze:not(.cardface-coach) {
+  --metal-hi: #f2c7a2; --metal: #c48a66; --metal-mid: #9c5d3e; --metal-low: #653b2c;
+  --metal-rim: rgba(52, 22, 12, .62);
+  --ink: #22120b;
+}
+/* the sheen band stays, quieter, with a fine diagonal grain under it */
+.cardface:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach)::before {
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0) 34%, rgba(255, 255, 255, .24) 47%, rgba(255, 255, 255, 0) 60%),
+    repeating-linear-gradient(142deg, transparent 0 8px, rgba(255, 255, 255, .07) 9px, transparent 10px 15px);
+}
+/* the inner hairline: light on the inside, a dark line just outside it */
+.cardface:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach)::after {
+  inset: 3px;
+  border-radius: 5px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .42), 0 0 0 1px rgba(30, 22, 14, .2);
+}
+.cardface.s-sm:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach)::after { inset: 2px; border-radius: 4px; }
+/* numbers read first: heavier, tabular, pressed into the metal */
+.cardface:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach) .cf-rate b {
+  font-weight: 900;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .4);
+}
+.cardface:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach) .cf-kind { opacity: .8; }
+.cardface:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach) :is(.cf-name, .cf-attrs, .cf-foot) {
+  border-top-color: rgba(255, 255, 255, .55);
+  box-shadow: 0 -1px 0 rgba(30, 22, 14, .2);
+}
+.cardface:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach) .cf-name {
+  font-weight: 850; letter-spacing: .01em;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .35);
+}
+.cardface:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach) .cf-meta { opacity: .9; }
+.cardface:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach) .cf-attrs i { opacity: .74; }
+.cardface:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach) .cf-attrs b {
+  font-weight: 900; font-variant-numeric: tabular-nums;
+}
+/* feedback only when asked: a small lift with the metal's own edge, and a
+   press that sinks it — no glow, no loop */
+.cardface.tap:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach) { transition: transform .14s ease, box-shadow .14s ease, filter .14s ease; }
+@media (hover: hover) {
+  .cardface.tap:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach):hover {
+    transform: translateY(-4px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, .55),
+      inset 0 -2px 3px rgba(0, 0, 0, .16),
+      0 0 0 1px var(--metal-rim),
+      0 0 0 2px color-mix(in srgb, var(--metal-hi) 55%, transparent),
+      0 12px 24px rgba(0, 0, 0, .5);
+  }
+}
+.cardface.tap:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach):active {
+  transform: translateY(-1px) scale(.985);
+  filter: brightness(.94);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cardface.tap:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach):hover,
+  .cardface.tap:is(.r-gold, .r-silver, .r-bronze):not(.cardface-coach):active { transform: none; }
 }
 
 /* ---------------------------------------------------------------- crests

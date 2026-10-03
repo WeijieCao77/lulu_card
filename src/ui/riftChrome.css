@@ -485,3 +485,57 @@ html[data-theme='light'] .rift-pack-art,html[data-theme='cream'] .rift-pack-art 
 @media (max-width: 640px) { .lol-match-report .grid.c2 { grid-template-columns: minmax(0, 1fr); } .lol-match-report .modal-head h2 { font-size: 18px; } }
 
 /* Keep challenge candidates clear while editing on small screens. */
+
+/* ===== Visual refresh (design/ui-refresh) =====
+ * Deep indigo ground, teal for navigation state, a little warm gold for
+ * decoration. The dark ground re-points the shared tokens too, so buttons,
+ * fields, empty states and modals inside the card mode follow without their
+ * own rules. Light and cream keep their tokens and only take the shapes. */
+html:not([data-theme]) .cardmode.rift-ui {
+  --bg:#090f1b; --bg-rail:#0c1825; --panel:#111d2d; --panel-2:#172536; --panel-3:#203245; --well:#0d1a29;
+  --line:#2a3d52; --line-soft:#1f3042; --line-hi:#4a6a7c;
+  --text:#edf2f3; --muted:#9faebd; --faint:#8395a7; --panel-me:#173039;
+  --accent:#73c8c7; --accent-hot:#b8eeee; --accent-wash:#73c8c714; --accent-wash-2:#73c8c726; --accent-line:#73c8c75c;
+  --rift-bg:#090f1b; --rift-navy:#0b1723; --rift-navy-light:#172536;
+  --rift-panel-bg:linear-gradient(153deg,#172536,#101b2a 70%);
+  --rift-border:#26384b; --rift-cyan:#73c8c7; --rift-cyan-glow:#b8eeee; --rift-gold:#ddb66b;
+  --rift-text:#edf2f3; --rift-text-muted:#9faebd;
+}
+html:not([data-theme]) .cardmode.rift-ui .cm-body { background:radial-gradient(ellipse 63% 30% at 70% 0,#17445335,transparent 80%),var(--rift-bg); }
+html:not([data-theme]) .cardmode.rift-ui .topbar { background:#0b1723; border-bottom-color:#5e819044; }
+
+/* navigation: a rounded row, teal wash and an edge bar when selected */
+.rift-nav-btn { border:1px solid transparent; border-radius:8px; transition:background .16s,border-color .16s,color .16s; }
+.rift-nav-btn:hover { background:color-mix(in srgb,var(--rift-cyan) 9%,transparent); border-color:color-mix(in srgb,var(--rift-cyan) 18%,transparent); color:var(--rift-text); }
+.rift-nav-btn.rift-active { color:var(--rift-cyan-glow); background:linear-gradient(90deg,color-mix(in srgb,var(--rift-cyan) 20%,transparent),color-mix(in srgb,var(--rift-cyan) 4%,transparent)); border-color:color-mix(in srgb,var(--rift-cyan) 38%,transparent); box-shadow:inset 3px 0 var(--rift-cyan); font-weight:650; }
+.rift-nav-btn.rift-active .rift-nav-icon { color:var(--rift-cyan); }
+.rift-nav-btn:focus-visible { outline:2px solid var(--rift-cyan-glow); outline-offset:2px; }
+html:not([data-theme]) .rift-nav-btn.rift-active { color:#e5f9f7; background:linear-gradient(90deg,#23656a50,#172e3f55); border-color:#4c919063; }
+
+/* surfaces: opaque, so the blur under them only cost frames on a phone */
+.cardmode.rift-ui .panel { backdrop-filter:none; box-shadow:inset 0 1px 0 var(--edge-hi),0 9px 28px -12px var(--shadow-edge); }
+html:not([data-theme]) .cardmode.rift-ui .pack-box { background:linear-gradient(153deg,#1d3440,#101d2c 72%); border-color:#355262; }
+.cardmode.rift-ui .modal { border-radius:12px; }
+
+/* segmented filters sit in a well; the chosen one is a teal plate with
+   light text, not white on bright teal */
+.cardmode.rift-ui .seg:not(.wrap) { background:var(--well); border-color:var(--line); border-radius:8px; padding:3px; gap:2px; }
+.cardmode.rift-ui .seg button { border-radius:6px; }
+.cardmode.rift-ui .seg button.on { background:color-mix(in srgb,var(--accent) 30%,var(--panel-2)); color:var(--text); box-shadow:inset 0 0 0 1px var(--accent-line); }
+.cardmode.rift-ui .seg.theme button.on { background:var(--panel-3); box-shadow:none; }
+
+.cardmode.rift-ui .primary:active:not(:disabled) { filter:brightness(.94); box-shadow:inset 0 1px 3px #0003; }
+.cardmode.rift-ui .club-set,.cardmode.rift-ui .salvage-bar { border-radius:8px; }
+
+/* the banner: indigo with a teal underline, gold kept for the title */
+.rift-banner { background:linear-gradient(112deg,#162a3a,#122a33 57%,#172a32); border-color:#375a66; }
+.rift-banner::after { content:''; position:absolute; left:0; right:0; bottom:0; height:2px; z-index:2; pointer-events:none; background:linear-gradient(90deg,#66aaa6,transparent 75%); }
+.rift-banner-content { background:linear-gradient(90deg,#142838 35%,#14283808); }
+.rift-banner-kicker { color:#8ed0cc; font-weight:700; letter-spacing:.22em; }
+
+@media (max-width:768px) {
+ .rift-nav-btn { border-radius:6px; }
+ .rift-nav-btn.rift-active { box-shadow:inset 0 -2px var(--rift-cyan); }
+ .cardmode.rift-ui .seg:not(.wrap) { padding:2px; }
+}
+@media (prefers-reduced-motion:reduce) { .rift-nav-btn { transition:none; } }
