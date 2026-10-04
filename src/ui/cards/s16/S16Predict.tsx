@@ -19,10 +19,10 @@ function Team({ id, on, dim, onClick }: { id: string; on?: boolean; dim?: boolea
  * S16 赛事预测 (engine/s16Predict.ts): the 瑞士轮 sheet — eight qualifiers, two 3-0, two 0-3 — and, once the eight are
  * drawn, the 淘汰赛 bracket. Each locks at its stage's first match; rewards are claimed after the results are in.
  */
-export default function S16Predict({ onClose }: { onClose: () => void }) {
+export default function S16Predict({ onClose, data = S16_PREDICT }: { onClose: () => void; data?: typeof S16_PREDICT }) {
   const { g, now, act, toast } = useCards()
   const mine = g.s16Predict ?? {}
-  const sw = S16_PREDICT.swiss, ko = S16_PREDICT.ko
+  const sw = data.swiss, ko = data.ko
   const [qual, setQual] = useState<string[]>(mine.swiss?.qual ?? [])
   const [three, setThree] = useState<string[]>(mine.swiss?.threeZero ?? [])
   const [zero, setZero] = useState<string[]>(mine.swiss?.zeroThree ?? [])
@@ -30,7 +30,7 @@ export default function S16Predict({ onClose }: { onClose: () => void }) {
   const [sf, setSf] = useState<string[]>(mine.ko?.sf ?? ['', ''])
   const [final, setFinal] = useState<string>(mine.ko?.final ?? '')
   const [busy, setBusy] = useState(false)
-  const swOpen = swissOpen(now), kOpen = koOpen(now)
+  const swOpen = swissOpen(now, sw), kOpen = koOpen(now, ko)
   const toggle = (list: string[], set: (v: string[]) => void, id: string, max: number) =>
     set(list.includes(id) ? list.filter((x) => x !== id) : list.length < max ? [...list, id] : list)
   const send = async (action: string, args: Record<string, unknown>, ok: string) => {
@@ -41,7 +41,7 @@ export default function S16Predict({ onClose }: { onClose: () => void }) {
       toast(r.ok ? ok : r.why ?? '没成功，稍后再试。')
     } finally { setBusy(false) }
   }
-  const swR = swissReward(mine.swiss, now), koR = koReward(mine.ko, now)
+  const swR = swissReward(mine.swiss, now, sw), koR = koReward(mine.ko, now, ko)
   return (
     <Modal title="S16 赛事预测" onClose={onClose} onBgClose={() => {}}>
       <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
