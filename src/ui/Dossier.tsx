@@ -288,7 +288,7 @@ export default function Dossier({
   )
 }
 
-/** 峡谷回响 card in the 图鉴: the card, who he was and where he played. No birthday data yet, so no age. */
+/** 峡谷回响 card in the 图鉴: the card, who he was, his age and where he played. */
 function EchoDetail({ card, onBack }: { card: PlayerCard; onBack: () => void }) {
   const echo = card.echo!
   const club = card.clubId ? teamOf.get(card.clubId) : null
@@ -300,6 +300,8 @@ function EchoDetail({ card, onBack }: { card: PlayerCard; onBack: () => void }) 
           <div style={{ fontSize: 20, fontWeight: 700 }}>{card.realName ?? card.ign}</div>
           <div className="small muted" style={{ marginTop: 6, lineHeight: 1.9 }}>
             <Flag nat={card.nat} /> {natName(card.nat)} · {REGION_CN[card.region]} · 已退役
+            <br />
+            {echo.birth ? `${card.age} 岁（${echo.birth}）` : '生日资料待补充'}
             <br />
             代表战队：{echo.team}{echo.span ? `（${echo.span}）` : ''}
             <br />

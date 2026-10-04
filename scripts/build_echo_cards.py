@@ -89,6 +89,10 @@ def attrs_for(c):
 
 # Owner 2026-10-04 「把这4张低分辨率的照片换掉」: sharper sources, kept beside this script (scripts/echo_photo_overrides/).
 OVERRIDES = Path(__file__).resolve().parent / 'echo_photo_overrides'
+# Birthdays (owner 2026-10-04 「把 193 人的生日补上」): Leaguepedia infoboxes, checked against each card's real name;
+# Sicca from Baidu/Sogou. Four have none published (HeaQ, Link) or no year (Chippys, Big) and show 「生日资料待补充」.
+BIRTHS = json.load(open(Path(__file__).resolve().parent / 'echo_births.json', encoding='utf-8'))
+
 PHOTO_OVERRIDE = {
     'Sicca': {'file': 'Sicca.jpg', 'source_page': 'https://www.doyo.cn/article/331542',
               'source_description': 'Sicca as an LPL caster at the desk, cropped from a two-person booth photo; identity matched to the @西卡_李浩宇 weibo photos'},
@@ -136,7 +140,7 @@ for c in sorted(cards, key=lambda c: (['LPL', 'LCK', 'LEC', 'LCS', 'WEST'].index
         'attrs': attrs, 'attrsEstimated': estimated,
         'clubId': c['club'], 'clubTag': team_tag.get(c['club']) if c['club'] else None,
         'team': rt.get('as_named') or None, 'span': rt.get('span') or None,
-        'photo': photo(pid), 'manual': c['manual'],
+        'photo': photo(pid), 'manual': c['manual'], 'birth': BIRTHS.get(pid, {}).get('birth'),
     })
 json.dump({'meta': {'series': '峡谷回响', 'count': len(out), 'note': '由 scripts/build_echo_cards.py 生成，不要手改'}, 'cards': out},
           open(ROOT / 'src' / 'data' / 'echoCards.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)

@@ -110,6 +110,8 @@ export interface EchoInfo {
   /** no game data behind him: the six numbers follow his position's average shape */
   attrsEstimated: boolean
   photo: { img: string; w: number; h: number; credit: string | null } | null
+  /** YYYY-MM-DD, null where no birthday is published */
+  birth: string | null
 }
 
 export interface CoachCard {
@@ -416,14 +418,19 @@ function buildLegendCoachCards(): CoachCard[] {
   return out
 }
 
-type EchoRow = (typeof ECHO_JSON.cards)[number]
+type EchoRow = (typeof ECHO_JSON.cards)[number] & { birth?: string | null }
+/** whole years from a YYYY-MM-DD birthday to today */
+function ageOn(birth: string, now = new Date()): number {
+  const [y, m, d] = birth.split('-').map(Number)
+  return now.getFullYear() - y - (now.getMonth() + 1 < m || (now.getMonth() + 1 === m && now.getDate() < d) ? 1 : 0)
+}
 function buildEchoCards(): PlayerCard[] {
   return (ECHO_JSON.cards as EchoRow[]).map((e) => ({
     kind: 'player' as const,
     id: e.id,
     // the same man as his 名人堂彩卡 (H:Uzi …) — one five cannot hold both
     playerId: e.person,
-    echo: { team: e.team, span: e.span, group: e.group, attrsEstimated: e.attrsEstimated, photo: e.photo ?? null },
+    echo: { team: e.team, span: e.span, group: e.group, attrsEstimated: e.attrsEstimated, photo: e.photo ?? null, birth: e.birth ?? null },
     ign: e.ign,
     realName: e.realName ?? null,
     nat: e.nat ?? null,
@@ -434,9 +441,9 @@ function buildEchoCards(): PlayerCard[] {
     role: e.role as Role,
     roles: e.roles as Role[],
     isIgl: false,
-    // no birthdays in the series data yet: the age is unknown, not zero (reported 2026-10-04: 「年龄都是 0 岁」)
-    age: 0,
-    ageEstimated: true,
+    // today's age from the birthday; four have none published, and their age is unknown rather than zero
+    age: e.birth ? ageOn(e.birth) : 0,
+    ageEstimated: !e.birth,
     attrs: e.attrs as Attrs,
     rating: e.rating,
     rarity: e.rarity as Rarity,

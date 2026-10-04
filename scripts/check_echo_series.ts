@@ -27,6 +27,8 @@ check('金 37 / 银 77 / 铜 79', count('gold') === 37 && count('silver') === 77
 check('没有彩卡', count('mythic') === 0)
 check('评分在 60–87 之间', ECHO_CARDS.every((c) => c.rating >= 60 && c.rating <= 87))
 check('每张都有照片、国籍、真名', ECHO_CARDS.every((c) => c.face && c.nat && c.realName), ECHO_CARDS.filter((c) => !c.face || !c.nat || !c.realName).map((c) => c.ign).join(' '))
+check('至少 189 人有生日，年龄按生日算（Uzi 1997-04-05）', ECHO_CARDS.filter((c) => c.echo!.birth).length >= 189 && ECHO_CARDS.find((c) => c.ign === 'Uzi')!.age === new Date().getFullYear() - 1997 - (new Date() < new Date(new Date().getFullYear(), 3, 5) ? 1 : 0))
+check('没生日的不显示 0 岁', ECHO_CARDS.filter((c) => !c.echo!.birth).every((c) => c.ageEstimated))
 check('每张卡都在总卡表里（服务器、市场、补偿认得）', ECHO_CARDS.every((c) => cardById(c.id) === c))
 check('不在普通选手卡表里', !PLAYER_CARDS.some(isEchoCard) && !BASE_PLAYER_CARDS.some(isEchoCard))
 check('id 不和别的卡重复', new Set(ALL_CARDS.map((c) => c.id)).size === ALL_CARDS.length)
