@@ -1,0 +1,7343 @@
+{
+ "meta": {
+  "series": "峡谷回响",
+  "count": 193,
+  "note": "由 scripts/build_echo_cards.py 生成，不要手改"
+ },
+ "cards": [
+  {
+   "id": "echo:Ming",
+   "person": "H:Ming",
+   "ign": "Ming",
+   "realName": "史森明",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 87,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 88,
+    "reaction": 89,
+    "awareness": 87,
+    "utility": 92,
+    "clutch": 86,
+    "teamwork": 85,
+    "communication": 86,
+    "igl": 84
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Royal Never Give Up",
+   "span": "2017–2024",
+   "photo": {
+    "img": "/lol/faces/echo/Ming.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/45261305142/",
+    "note": "Day 5 at the 2018 World Championship Group Stage at the Busan Exhibition and Convention Center in Busan, South Korea, on 14 October 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Uzi",
+   "person": "H:Uzi",
+   "ign": "Uzi",
+   "realName": "简自豪",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 87,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 87,
+    "reaction": 90,
+    "awareness": 84,
+    "utility": 95,
+    "clutch": 78,
+    "teamwork": 84,
+    "communication": 79,
+    "igl": 84
+   },
+   "attrsEstimated": false,
+   "clubId": "T2",
+   "clubTag": "BLG",
+   "team": "Royal Never Give Up",
+   "span": "2016–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Uzi.webp",
+    "w": 371,
+    "h": 519,
+    "credit": "https://commons.wikimedia.org/wiki/File:Uzi_at_All-Star_Los_Angeles_2015.jpg",
+    "note": "League of Legends All-Star Los Angeles 2015 Day 3"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Duke",
+   "person": "H:Duke",
+   "ign": "Duke",
+   "realName": "이호성",
+   "nat": "kr",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 86,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 85,
+    "reaction": 91,
+    "awareness": 83,
+    "utility": 92,
+    "clutch": 80,
+    "teamwork": 83,
+    "communication": 82,
+    "igl": 80
+   },
+   "attrsEstimated": false,
+   "clubId": "T4",
+   "clubTag": "IG",
+   "team": "Invictus Gaming",
+   "span": "2017–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Duke.webp",
+    "w": 550,
+    "h": 825,
+    "credit": "https://www.xportsnews.com/article/711578",
+    "note": "SKT in 2016"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Mystic",
+   "person": "H:Mystic",
+   "ign": "Mystic",
+   "realName": "진성준",
+   "nat": "kr",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 86,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 88,
+    "reaction": 86,
+    "awareness": 83,
+    "utility": 89,
+    "clutch": 82,
+    "teamwork": 84,
+    "communication": 82,
+    "igl": 90
+   },
+   "attrsEstimated": false,
+   "clubId": "T10",
+   "clubTag": "WE",
+   "team": "Team WE",
+   "span": "2016–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Mystic.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/37307658980/",
+    "note": "2017 World Championship Group Stage at Wuhan Sports Center Gymnasium in Wuhan, Hubei, China on 8 October 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:GimGoon",
+   "person": "H:GimGoon",
+   "ign": "GimGoon",
+   "realName": "김한샘",
+   "nat": "kr",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 85,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 86,
+    "reaction": 82,
+    "awareness": 88,
+    "utility": 80,
+    "clutch": 87,
+    "teamwork": 87,
+    "communication": 85,
+    "igl": 86
+   },
+   "attrsEstimated": false,
+   "clubId": "T18",
+   "clubTag": "GEN",
+   "team": "FunPlus Phoenix",
+   "span": "2018–2020",
+   "photo": {
+    "img": "/lol/faces/echo/GimGoon.webp",
+    "w": 800,
+    "h": 605,
+    "credit": "https://www.dailyesports.com/view.php?ud=2019110223471018073cf949c6b9_27",
+    "note": "Worlds 2019 semifinal, FPX"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Lwx",
+   "person": "H:Lwx",
+   "ign": "Lwx",
+   "realName": "林炜翔",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 85,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 84,
+    "reaction": 89,
+    "awareness": 79,
+    "utility": 88,
+    "clutch": 86,
+    "teamwork": 84,
+    "communication": 83,
+    "igl": 74
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "FunPlus Phoenix",
+   "span": "2018–2023",
+   "photo": {
+    "img": "/lol/faces/echo/Lwx.webp",
+    "w": 2000,
+    "h": 1333,
+    "credit": "https://ttvn.toquoc.vn/doinb-se-tai-ngo-voi-lwx-trong-mau-ao-lng-esports-20221201142623145.htm",
+    "note": "FPX match image; article published 2022-12-02"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:WeiXiao",
+   "person": "H:WeiXiao",
+   "ign": "WeiXiao",
+   "realName": "高学成",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 85,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 85,
+    "reaction": 86,
+    "awareness": 84,
+    "utility": 86,
+    "clutch": 84,
+    "teamwork": 85,
+    "communication": 84,
+    "igl": 78
+   },
+   "attrsEstimated": true,
+   "clubId": "T10",
+   "clubTag": "WE",
+   "team": "Team WE",
+   "span": "2011–2014",
+   "photo": {
+    "img": "/lol/faces/echo/WeiXiao.webp",
+    "w": 534,
+    "h": 800,
+    "credit": "https://lol.qq.com/webplat/info/news_version3/152/4579/4580/m3106/201405/259302.shtml",
+    "note": "WeiXiao solo portrait in Paris for the 2014 LoL All-Star event; clear face, not a match-station photo"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:Clearlove",
+   "person": "H:Clearlove",
+   "ign": "Clearlove",
+   "realName": "明凯",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 84,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 82,
+    "reaction": 85,
+    "awareness": 86,
+    "utility": 83,
+    "clutch": 79,
+    "teamwork": 85,
+    "communication": 85,
+    "igl": 83
+   },
+   "attrsEstimated": false,
+   "clubId": "T3",
+   "clubTag": "EDG",
+   "team": "EDward Gaming",
+   "span": "2014–2021",
+   "photo": {
+    "img": "/lol/faces/echo/Clearlove.webp",
+    "w": 1024,
+    "h": 682,
+    "credit": "https://www.flickr.com/photos/lolesports/15090375268/",
+    "note": "SSW and EDG vie for a spot in quarterfinals"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Mlxg",
+   "person": "H:Mlxg",
+   "ign": "Mlxg",
+   "realName": "刘世宇",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 84,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 84,
+    "reaction": 87,
+    "awareness": 81,
+    "utility": 86,
+    "clutch": 84,
+    "teamwork": 85,
+    "communication": 85,
+    "igl": 88
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Royal Never Give Up",
+   "span": "2016–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Mlxg.webp",
+    "w": 600,
+    "h": 900,
+    "credit": "https://www.dailyesports.com/view.php?ud=20181014225036864974bcc1e038_27",
+    "note": "2018 Worlds group stage, RNG"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:Baolan",
+   "person": "H:Baolan",
+   "ign": "Baolan",
+   "realName": "王柳羿",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 83,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 86,
+    "reaction": 81,
+    "awareness": 83,
+    "utility": 84,
+    "clutch": 86,
+    "teamwork": 85,
+    "communication": 83,
+    "igl": 81
+   },
+   "attrsEstimated": false,
+   "clubId": "T4",
+   "clubTag": "IG",
+   "team": "Invictus Gaming",
+   "span": "2016–2021",
+   "photo": {
+    "img": "/lol/faces/echo/Baolan.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/45288924631/",
+    "note": "Day 4 at the 2018 World Championship Group Stage at the Busan Exhibition and Convention Center in Busan, South Korea, on 13 October 2018."
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:Gogoing",
+   "person": "H:Gogoing",
+   "ign": "Gogoing",
+   "realName": "高地平",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 83,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 82,
+    "reaction": 84,
+    "awareness": 84,
+    "utility": 83,
+    "clutch": 83,
+    "teamwork": 83,
+    "communication": 83,
+    "igl": 77
+   },
+   "attrsEstimated": true,
+   "clubId": "T9",
+   "clubTag": "OMG",
+   "team": "Oh My God",
+   "span": "2012–2014",
+   "photo": {
+    "img": "/lol/faces/echo/Gogoing.webp",
+    "w": 540,
+    "h": 414,
+    "credit": "https://www.inven.co.kr/webzine/news/?news=119431&site=lol",
+    "note": "Worlds 2014 quarterfinal, OMG vs Najin Shield"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:Ning",
+   "person": "H:Ning",
+   "ign": "Ning",
+   "realName": "高振宁",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 83,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 87,
+    "reaction": 87,
+    "awareness": 78,
+    "utility": 91,
+    "clutch": 87,
+    "teamwork": 83,
+    "communication": 81,
+    "igl": 75
+   },
+   "attrsEstimated": false,
+   "clubId": "T4",
+   "clubTag": "IG",
+   "team": "Invictus Gaming",
+   "span": "2017–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Ning.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/31569356818/",
+    "note": "Day 1 at the 2018 World Championship Quarterfinals Stage at the Busan Exhibition and Convention Center in Busan, South Korea, on 20 October 2018."
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:PDD",
+   "person": "H:PDD",
+   "ign": "PDD",
+   "realName": "刘谋",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 83,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 82,
+    "reaction": 84,
+    "awareness": 84,
+    "utility": 83,
+    "clutch": 83,
+    "teamwork": 83,
+    "communication": 83,
+    "igl": 77
+   },
+   "attrsEstimated": true,
+   "clubId": "T4",
+   "clubTag": "IG",
+   "team": "Invictus Gaming",
+   "span": "2012–2014",
+   "photo": {
+    "img": "/lol/faces/echo/PDD.webp",
+    "w": 690,
+    "h": 388,
+    "credit": "https://i.ifeng.com/c/8CjfRn3dH4W",
+    "note": "Historical iG competition image; article published 2022-01-12"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:Smlz",
+   "person": "H:Smlz",
+   "ign": "Smlz",
+   "realName": "韩金",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 82,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 83,
+    "reaction": 84,
+    "awareness": 77,
+    "utility": 83,
+    "clutch": 80,
+    "teamwork": 81,
+    "communication": 79,
+    "igl": 72
+   },
+   "attrsEstimated": false,
+   "clubId": "T9",
+   "clubTag": "OMG",
+   "team": "Oh My God",
+   "span": "2016–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Smlz.webp",
+    "w": 550,
+    "h": 751,
+    "credit": "https://dj.sina.com.cn/article/fyeimqy1409657.shtml",
+    "note": "OMG 2017-2018 roster promotional series"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Letme",
+   "person": "H:Letme",
+   "ign": "Letme",
+   "realName": "严君泽",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 81,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 78,
+    "reaction": 84,
+    "awareness": 80,
+    "utility": 78,
+    "clutch": 80,
+    "teamwork": 81,
+    "communication": 83,
+    "igl": 85
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Royal Never Give Up",
+   "span": "2016–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Letme.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/36801073874/",
+    "note": "2017 World Championship Group Stage at Wuhan Sports Center Gymnasium in Wuhan, Hubei, China on 5 October 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Xiye",
+   "person": "H:Xiye",
+   "ign": "Xiye",
+   "realName": "苏汉伟",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 80,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 79,
+    "reaction": 82,
+    "awareness": 79,
+    "utility": 81,
+    "clutch": 81,
+    "teamwork": 81,
+    "communication": 82,
+    "igl": 72
+   },
+   "attrsEstimated": false,
+   "clubId": "T10",
+   "clubTag": "WE",
+   "team": "Team WE",
+   "span": "2016–2022",
+   "photo": {
+    "img": "/lol/faces/echo/Xiye.webp",
+    "w": 1024,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/34663365025/",
+    "note": "Day 5 of 2017 Mid-Season Invitational Group Stage at Jeunesse Arena in Rio de Janeiro, Rio de Janeiro, Brazil, on 14 May 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Cryin",
+   "person": "H:Cryin",
+   "ign": "Cryin",
+   "realName": "袁成伟",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 79,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 80,
+    "reaction": 76,
+    "awareness": 75,
+    "utility": 74,
+    "clutch": 85,
+    "teamwork": 83,
+    "communication": 86,
+    "igl": 76
+   },
+   "attrsEstimated": false,
+   "clubId": "T4",
+   "clubTag": "IG",
+   "team": "Royal Never Give Up",
+   "span": "2020–2021",
+   "photo": {
+    "img": "/lol/faces/echo/Cryin.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.oneesports.gg/league-of-legends/rng-cryin-underrated-mid-laner-msi-2021/",
+    "note": "MSI 2021, RNG"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:iBoy",
+   "person": "H:iBoy",
+   "ign": "iBoy",
+   "realName": "胡显昭",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 79,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 77,
+    "reaction": 82,
+    "awareness": 82,
+    "utility": 81,
+    "clutch": 80,
+    "teamwork": 76,
+    "communication": 77,
+    "igl": 76
+   },
+   "attrsEstimated": false,
+   "clubId": "T3",
+   "clubTag": "EDG",
+   "team": "EDward Gaming",
+   "span": "2017–2019",
+   "photo": {
+    "img": "/lol/faces/echo/iBoy.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/36843582203/",
+    "note": "EDG Worlds 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Yagao",
+   "person": "H:Yagao",
+   "ign": "Yagao",
+   "realName": "曾奇",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 78,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 77,
+    "reaction": 77,
+    "awareness": 80,
+    "utility": 73,
+    "clutch": 78,
+    "teamwork": 79,
+    "communication": 81,
+    "igl": 92
+   },
+   "attrsEstimated": false,
+   "clubId": "T5",
+   "clubTag": "JDG",
+   "team": "JD Gaming",
+   "span": "2018–2024",
+   "photo": {
+    "img": "/lol/faces/echo/Yagao.webp",
+    "w": 800,
+    "h": 517,
+    "credit": "https://www.dailyesports.com/view.php?ud=202311111735594879b91e133c1f_27",
+    "note": "Worlds 2023 semifinal, BLG"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Condi",
+   "person": "H:Condi",
+   "ign": "Condi",
+   "realName": "向人杰",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 77,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 74,
+    "reaction": 77,
+    "awareness": 77,
+    "utility": 78,
+    "clutch": 78,
+    "teamwork": 79,
+    "communication": 81,
+    "igl": 70
+   },
+   "attrsEstimated": false,
+   "clubId": "T10",
+   "clubTag": "WE",
+   "team": "Team WE",
+   "span": "2016–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Condi.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/34255947230/",
+    "note": "Day 4 of 2017 Mid-Season Invitational Group Stage at Jeunesse Arena in Rio de Janeiro, Rio de Janeiro, Brazil, on 13 May 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:LoveLing",
+   "person": "H:LoveLing",
+   "ign": "LoveLing",
+   "realName": "尹乐",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 77,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 77,
+    "reaction": 78,
+    "awareness": 77,
+    "utility": 78,
+    "clutch": 77,
+    "teamwork": 77,
+    "communication": 77,
+    "igl": 72
+   },
+   "attrsEstimated": true,
+   "clubId": "T9",
+   "clubTag": "OMG",
+   "team": "Oh My God",
+   "span": "2012–2014",
+   "photo": {
+    "img": "/lol/faces/echo/LoveLing.webp",
+    "w": 540,
+    "h": 397,
+    "credit": "https://www.inven.co.kr/webzine/news/?news=119431&site=lol",
+    "note": "Worlds 2014 quarterfinal, OMG vs Najin Shield"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:NaMei",
+   "person": "H:NaMei",
+   "ign": "NaMei",
+   "realName": "朱佳文",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 77,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 77,
+    "reaction": 78,
+    "awareness": 76,
+    "utility": 78,
+    "clutch": 76,
+    "teamwork": 77,
+    "communication": 76,
+    "igl": 70
+   },
+   "attrsEstimated": true,
+   "clubId": "T3",
+   "clubTag": "EDG",
+   "team": "Positive Energy",
+   "span": "2013",
+   "photo": {
+    "img": "/lol/faces/echo/NaMei.webp",
+    "w": 1024,
+    "h": 682,
+    "credit": "https://www.flickr.com/photos/lolesports/15276939425/",
+    "note": "SSW and EDG vie for a spot in quarterfinals"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:San",
+   "person": "H:San",
+   "ign": "San",
+   "realName": "郭俊良",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 77,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 77,
+    "reaction": 78,
+    "awareness": 76,
+    "utility": 78,
+    "clutch": 76,
+    "teamwork": 77,
+    "communication": 76,
+    "igl": 70
+   },
+   "attrsEstimated": true,
+   "clubId": "T9",
+   "clubTag": "OMG",
+   "team": "Oh My God",
+   "span": "2012–2014",
+   "photo": {
+    "img": "/lol/faces/echo/San.webp",
+    "w": 540,
+    "h": 426,
+    "credit": "https://www.inven.co.kr/webzine/news/?news=119431&site=lol",
+    "note": "Worlds 2014 quarterfinal, OMG vs Najin Shield"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:Ben",
+   "person": "H:Ben",
+   "ign": "Ben",
+   "realName": "남동현",
+   "nat": "kr",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 76,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 78,
+    "reaction": 77,
+    "awareness": 72,
+    "utility": 75,
+    "clutch": 75,
+    "teamwork": 76,
+    "communication": 79,
+    "igl": 73
+   },
+   "attrsEstimated": false,
+   "clubId": "T10",
+   "clubTag": "WE",
+   "team": "Team WE",
+   "span": "2017–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Ben.webp",
+    "w": 1100,
+    "h": 733,
+    "credit": "https://liquipedia.net/commons/File:BLG_Ben_First_Stand_2026.jpg",
+    "note": ""
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Puff",
+   "person": "H:Puff",
+   "ign": "Puff",
+   "realName": "丁旺",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 75,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 75,
+    "reaction": 73,
+    "awareness": 76,
+    "utility": 78,
+    "clutch": 77,
+    "teamwork": 73,
+    "communication": 73,
+    "igl": 60
+   },
+   "attrsEstimated": false,
+   "clubId": "T4",
+   "clubTag": "IG",
+   "team": "Invictus Gaming",
+   "span": "2020–2021",
+   "photo": {
+    "img": "/lol/faces/echo/Puff.webp",
+    "w": 2000,
+    "h": 1333,
+    "credit": "https://m.bjnews.com.cn/detail/159592641115277.html",
+    "note": "iG at LPL Summer 2020"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:957",
+   "person": "H:957",
+   "ign": "957",
+   "realName": "柯昌宇",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 73,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 71,
+    "reaction": 72,
+    "awareness": 73,
+    "utility": 70,
+    "clutch": 75,
+    "teamwork": 76,
+    "communication": 80,
+    "igl": 65
+   },
+   "attrsEstimated": false,
+   "clubId": "T10",
+   "clubTag": "WE",
+   "team": "Team WE",
+   "span": "2016–2019",
+   "photo": {
+    "img": "/lol/faces/echo/957.webp",
+    "w": 1100,
+    "h": 619,
+    "credit": "https://liquipedia.net/commons/File:Team_WE_957_2017_Worlds.jpg",
+    "note": ""
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:Xiyang",
+   "person": "H:Xiyang",
+   "ign": "Xiyang",
+   "realName": "胡彬",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 73,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 68,
+    "reaction": 73,
+    "awareness": 80,
+    "utility": 72,
+    "clutch": 72,
+    "teamwork": 76,
+    "communication": 78,
+    "igl": 56
+   },
+   "attrsEstimated": false,
+   "clubId": "T9",
+   "clubTag": "OMG",
+   "team": "Oh My God",
+   "span": "2014–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Xiyang.webp",
+    "w": 550,
+    "h": 751,
+    "credit": "https://dj.sina.com.cn/article/fyeimqy1409657.shtml",
+    "note": "OMG 2017-2018 roster promotional series"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Flawless",
+   "person": "H:Flawless",
+   "ign": "Flawless",
+   "realName": "성연준",
+   "nat": "kr",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 72,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 70,
+    "reaction": 70,
+    "awareness": 77,
+    "utility": 71,
+    "clutch": 71,
+    "teamwork": 71,
+    "communication": 72,
+    "igl": 63
+   },
+   "attrsEstimated": false,
+   "clubId": "T5",
+   "clubTag": "JDG",
+   "team": "JD Gaming",
+   "span": "2019",
+   "photo": {
+    "img": "/lol/faces/echo/Flawless.webp",
+    "w": 650,
+    "h": 489,
+    "credit": "https://www.invenglobal.com/articles/13172/gen-flawless-on-which-champion-could-become-the-next-udyr-i-think-iverns-a-champion-worth-digging-into",
+    "note": "Gen.G LCK Spring 2021"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Sicca",
+   "person": "H:Sicca",
+   "ign": "Sicca",
+   "realName": "李浩宇",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 72,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 73,
+    "reaction": 73,
+    "awareness": 72,
+    "utility": 73,
+    "clutch": 72,
+    "teamwork": 72,
+    "communication": 73,
+    "igl": 66
+   },
+   "attrsEstimated": true,
+   "clubId": "T9",
+   "clubTag": "OMG",
+   "team": "Positive Energy",
+   "span": "2013–2014",
+   "photo": {
+    "img": "/lol/faces/echo/Sicca.webp",
+    "w": 118,
+    "h": 118,
+    "credit": "https://www.wanplus.cn/lol/player/16536",
+    "note": "Sicca OMG-era jersey portrait; photo date unrecorded"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:Wayward",
+   "person": "H:Wayward",
+   "ign": "Wayward",
+   "realName": "黄任行",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 72,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 68,
+    "reaction": 74,
+    "awareness": 69,
+    "utility": 73,
+    "clutch": 76,
+    "teamwork": 72,
+    "communication": 75,
+    "igl": 70
+   },
+   "attrsEstimated": false,
+   "clubId": "T12",
+   "clubTag": "TES",
+   "team": "Top Esports",
+   "span": "2022–2023",
+   "photo": {
+    "img": "/lol/faces/echo/Wayward.webp",
+    "w": 550,
+    "h": 550,
+    "credit": "https://www.trackingthepros.com/player/Wayward",
+    "note": "Wayward player profile; photo date and team not stated"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:Zz1tai",
+   "person": "H:Zz1tai",
+   "ign": "Zz1tai",
+   "realName": "刘志豪",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 72,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 71,
+    "reaction": 74,
+    "awareness": 71,
+    "utility": 74,
+    "clutch": 68,
+    "teamwork": 74,
+    "communication": 74,
+    "igl": 46
+   },
+   "attrsEstimated": false,
+   "clubId": "T4",
+   "clubTag": "IG",
+   "team": "Invictus Gaming",
+   "span": "2012–2016",
+   "photo": {
+    "img": "/lol/faces/echo/Zz1tai.webp",
+    "w": 700,
+    "h": 500,
+    "credit": "https://lol.17173.com/dby/ig/zitai.shtml",
+    "note": "2014 iG Zz1tai at a match station, wearing iG jersey and headset; face clear"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:COLD",
+   "person": "H:COLD",
+   "ign": "COLD",
+   "realName": "刘时雨",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 71,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 71,
+    "reaction": 69,
+    "awareness": 67,
+    "utility": 70,
+    "clutch": 69,
+    "teamwork": 73,
+    "communication": 74,
+    "igl": 71
+   },
+   "attrsEstimated": false,
+   "clubId": "T9",
+   "clubTag": "OMG",
+   "team": "Oh My God",
+   "span": "2016–2022",
+   "photo": {
+    "img": "/lol/faces/echo/COLD.webp",
+    "w": 560,
+    "h": 347,
+    "credit": "https://www.163.com/dy/article/GD1E1S8I0526B0CL.html",
+    "note": "OMG match station, article interviewing COLD Liu Shiyu"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:pyl",
+   "person": "H:pyl",
+   "ign": "pyl",
+   "realName": "陈博",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 70,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 68,
+    "reaction": 68,
+    "awareness": 71,
+    "utility": 70,
+    "clutch": 70,
+    "teamwork": 70,
+    "communication": 69,
+    "igl": 69
+   },
+   "attrsEstimated": false,
+   "clubId": "T6",
+   "clubTag": "LGD",
+   "team": "LGD Gaming",
+   "span": "2012–2019",
+   "photo": {
+    "img": "/lol/faces/echo/pyl.webp",
+    "w": 1024,
+    "h": 703,
+    "credit": "https://www.flickr.com/photos/lolesports/53720752054/",
+    "note": "Esports caster Chen &quot;PYL&quot; Bo speaks during MSI 2024 Bracket Stage at the Chengdu Financial City Performing Arts Center in Chengdu, China on May 14, 20"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Cool",
+   "person": "H:Cool",
+   "ign": "Cool",
+   "realName": "余家俊",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 68,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 67,
+    "reaction": 68,
+    "awareness": 68,
+    "utility": 67,
+    "clutch": 72,
+    "teamwork": 73,
+    "communication": 75,
+    "igl": 49
+   },
+   "attrsEstimated": false,
+   "clubId": "T9",
+   "clubTag": "OMG",
+   "team": "Oh My God",
+   "span": "2012–2016",
+   "photo": {
+    "img": "/lol/faces/echo/Cool.webp",
+    "w": 540,
+    "h": 359,
+    "credit": "https://www.inven.co.kr/webzine/news/?news=119000&site=lol",
+    "note": "OMG interview at Worlds 2014"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:fearness",
+   "person": "H:fearness",
+   "ign": "fearness",
+   "realName": "陈国基",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 67,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 66,
+    "reaction": 65,
+    "awareness": 68,
+    "utility": 67,
+    "clutch": 72,
+    "teamwork": 71,
+    "communication": 72,
+    "igl": 56
+   },
+   "attrsEstimated": false,
+   "clubId": "T6",
+   "clubTag": "LGD",
+   "team": "LGD Gaming",
+   "span": "2020–2023",
+   "photo": {
+    "img": "/lol/faces/echo/fearness.webp",
+    "w": 1920,
+    "h": 1080,
+    "credit": "https://csgo.5eplay.com/article/lgd-player-changes-former-lsb-envyy-join-under-road-fearness-regression",
+    "note": "LGD roster poster 2023"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Dada777",
+   "person": "H:Dada777",
+   "ign": "Dada777",
+   "realName": "方虹日",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 66,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 67,
+    "reaction": 67,
+    "awareness": 66,
+    "utility": 67,
+    "clutch": 66,
+    "teamwork": 66,
+    "communication": 67,
+    "igl": 60
+   },
+   "attrsEstimated": true,
+   "clubId": "T9",
+   "clubTag": "OMG",
+   "team": "Oh My God",
+   "span": "2013–2014",
+   "photo": {
+    "img": "/lol/faces/echo/Dada777.webp",
+    "w": 500,
+    "h": 500,
+    "credit": "https://lol.fandom.com/wiki/Da7?theme=dark",
+    "note": "OMG DaDa777 official-style player portrait at Worlds 2014"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:eimy",
+   "person": "H:eimy",
+   "ign": "eimy",
+   "realName": "谢丹",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 66,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 63,
+    "reaction": 63,
+    "awareness": 71,
+    "utility": 62,
+    "clutch": 69,
+    "teamwork": 67,
+    "communication": 68,
+    "igl": 54
+   },
+   "attrsEstimated": false,
+   "clubId": "T6",
+   "clubTag": "LGD",
+   "team": "LGD Gaming",
+   "span": "2016–2019",
+   "photo": {
+    "img": "/lol/faces/echo/eimy.webp",
+    "w": 690,
+    "h": 1035,
+    "credit": "https://wanplus.cn/article/265904.html",
+    "note": "LGD farewell announcement, photographed solo in LGD jersey"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:xiaoxiao",
+   "person": "H:xiaoxiao",
+   "ign": "xiaoxiao",
+   "realName": "孙亚龙",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 66,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 67,
+    "reaction": 67,
+    "awareness": 66,
+    "utility": 67,
+    "clutch": 66,
+    "teamwork": 66,
+    "communication": 67,
+    "igl": 60
+   },
+   "attrsEstimated": true,
+   "clubId": "T4",
+   "clubTag": "IG",
+   "team": "Invictus Gaming",
+   "span": "2011–2013",
+   "photo": {
+    "img": "/lol/faces/echo/xiaoxiao.webp",
+    "w": 690,
+    "h": 508,
+    "credit": "https://csgo.5eplay.com/article/231201oxjpt5",
+    "note": "Invictus Gaming player portrait; article published 2023"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:Forge",
+   "person": "H:Forge",
+   "ign": "Forge",
+   "realName": "邓杰",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 64,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 62,
+    "reaction": 63,
+    "awareness": 62,
+    "utility": 63,
+    "clutch": 72,
+    "teamwork": 68,
+    "communication": 72,
+    "igl": 51
+   },
+   "attrsEstimated": false,
+   "clubId": "T1",
+   "clubTag": "AL",
+   "team": "Vici Gaming",
+   "span": "2020",
+   "photo": {
+    "img": "/lol/faces/echo/Forge.webp",
+    "w": 1269,
+    "h": 952,
+    "credit": "https://ol.gamersky.com/news/202101/1353029.shtml",
+    "note": "LPL All-Star interview backdrop, RW.forge"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:New",
+   "person": "H:New",
+   "ign": "New",
+   "realName": "田志鹏",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 63,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 62,
+    "reaction": 62,
+    "awareness": 64,
+    "utility": 63,
+    "clutch": 65,
+    "teamwork": 66,
+    "communication": 68,
+    "igl": 46
+   },
+   "attrsEstimated": false,
+   "clubId": "T9",
+   "clubTag": "OMG",
+   "team": "Oh My God",
+   "span": "2021",
+   "photo": {
+    "img": "/lol/faces/echo/New.webp",
+    "w": 504,
+    "h": 284,
+    "credit": "https://baike.baidu.com/item/%E7%94%B0%E5%BF%97%E9%B9%8F/50353817",
+    "note": "RNG on-air LPL interview/broadcast frame"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:y4",
+   "person": "H:y4",
+   "ign": "y4",
+   "realName": "王弄墨",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 61,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 60,
+    "reaction": 58,
+    "awareness": 64,
+    "utility": 56,
+    "clutch": 63,
+    "teamwork": 67,
+    "communication": 69,
+    "igl": 49
+   },
+   "attrsEstimated": false,
+   "clubId": "T8",
+   "clubTag": "NIP",
+   "team": "Victory Five",
+   "span": "2019–2021",
+   "photo": {
+    "img": "/lol/faces/echo/y4.webp",
+    "w": 600,
+    "h": 405,
+    "credit": "https://lol.te5.com/2019/403706.html",
+    "note": "V5 starting lineup for LPL Spring 2019"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Qingtian",
+   "person": "H:Qingtian",
+   "ign": "Qingtian",
+   "realName": "余子涵",
+   "nat": "cn",
+   "region": "LPL",
+   "group": "LPL",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 60,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 58,
+    "reaction": 61,
+    "awareness": 61,
+    "utility": 60,
+    "clutch": 66,
+    "teamwork": 60,
+    "communication": 62,
+    "igl": 48
+   },
+   "attrsEstimated": false,
+   "clubId": "T12",
+   "clubTag": "TES",
+   "team": "Top Esports",
+   "span": "2021–2023",
+   "photo": {
+    "img": "/lol/faces/echo/Qingtian.webp",
+    "w": 800,
+    "h": 533,
+    "credit": "https://www.dailyesports.com/view.php?ud=202106181023042821b91e133c1f_27",
+    "note": "LPL Summer 2021, TES"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Bang",
+   "person": "H:Bang",
+   "ign": "Bang",
+   "realName": "배준식",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 87,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 90,
+    "reaction": 86,
+    "awareness": 86,
+    "utility": 88,
+    "clutch": 85,
+    "teamwork": 86,
+    "communication": 84,
+    "igl": 78
+   },
+   "attrsEstimated": false,
+   "clubId": "T24",
+   "clubTag": "T1",
+   "team": "SK Telecom T1",
+   "span": "2014–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Bang.webp",
+    "w": 1100,
+    "h": 733,
+    "credit": "https://liquipedia.net/commons/File:SKT_T1_Bang_Worlds_2016_Finals.jpg",
+    "note": ""
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Nuguri",
+   "person": "H:Nuguri",
+   "ign": "Nuguri",
+   "realName": "장하권",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 87,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 91,
+    "reaction": 89,
+    "awareness": 83,
+    "utility": 93,
+    "clutch": 82,
+    "teamwork": 82,
+    "communication": 79,
+    "igl": 83
+   },
+   "attrsEstimated": false,
+   "clubId": "T17",
+   "clubTag": "DK",
+   "team": "DAMWON Gaming",
+   "span": "2018–2022",
+   "photo": {
+    "img": "/lol/faces/echo/Nuguri.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/50418308477/",
+    "note": "SHANGHAI, CHINA- October 4th: Day 2 of the League of Legends 2020 Worlds Group Stage on October 4, 2020 in Shanghai, China. (Photo by David Lee/Riot Games)"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Deft",
+   "person": "H:Deft",
+   "ign": "Deft",
+   "realName": "김혁규",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 86,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 88,
+    "reaction": 88,
+    "awareness": 83,
+    "utility": 84,
+    "clutch": 83,
+    "teamwork": 83,
+    "communication": 83,
+    "igl": 99
+   },
+   "attrsEstimated": false,
+   "clubId": "T22",
+   "clubTag": "KRX",
+   "team": "DRX",
+   "span": "2019–2022",
+   "photo": {
+    "img": "/lol/faces/echo/Deft.webp",
+    "w": 1024,
+    "h": 682,
+    "credit": "https://www.flickr.com/photos/lolesports/50489799166/",
+    "note": "SHANGHAI, CHINA- October 15th: Day 1 of the League of Legends 2020 Worlds Quarterfinals on October 15, 2020 in Shanghai, China. (Photo by Yicun Liu/Riot Games)"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Huni",
+   "person": "H:Huni",
+   "ign": "Huni",
+   "realName": "허승훈",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 86,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 90,
+    "reaction": 85,
+    "awareness": 79,
+    "utility": 90,
+    "clutch": 85,
+    "teamwork": 84,
+    "communication": 83,
+    "igl": 90
+   },
+   "attrsEstimated": false,
+   "clubId": "T24",
+   "clubTag": "T1",
+   "team": "SK Telecom T1",
+   "span": "2017",
+   "photo": {
+    "img": "/lol/faces/echo/Huni.webp",
+    "w": 1023,
+    "h": 681,
+    "credit": "https://www.flickr.com/photos/lolesports/32190275887/",
+    "note": "Photo by Timothy Norris/Riot Games."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Wolf",
+   "person": "H:Wolf",
+   "ign": "Wolf",
+   "realName": "이재완",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 86,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 87,
+    "reaction": 84,
+    "awareness": 86,
+    "utility": 86,
+    "clutch": 86,
+    "teamwork": 83,
+    "communication": 84,
+    "igl": 99
+   },
+   "attrsEstimated": false,
+   "clubId": "T24",
+   "clubTag": "T1",
+   "team": "SK Telecom T1",
+   "span": "2014–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Wolf.webp",
+    "w": 1100,
+    "h": 619,
+    "credit": "https://liquipedia.net/commons/File:SKT_Wolf_Worlds_2017.jpg",
+    "note": "SKT Wolf during the Worlds 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:MaRin",
+   "person": "H:MaRin",
+   "ign": "MaRin",
+   "realName": "장경환",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 85,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 85,
+    "reaction": 89,
+    "awareness": 81,
+    "utility": 94,
+    "clutch": 80,
+    "teamwork": 79,
+    "communication": 77,
+    "igl": 86
+   },
+   "attrsEstimated": false,
+   "clubId": "T24",
+   "clubTag": "T1",
+   "team": "SK Telecom T1",
+   "span": "2013–2015",
+   "photo": {
+    "img": "/lol/faces/echo/MaRin.webp",
+    "w": 550,
+    "h": 825,
+    "credit": "https://www.xportsnews.com/article/662197",
+    "note": "SKT era / Korea e-Sports Awards in 2015"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Peanut",
+   "person": "H:Peanut",
+   "ign": "Peanut",
+   "realName": "한왕호",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 85,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 82,
+    "reaction": 83,
+    "awareness": 88,
+    "utility": 87,
+    "clutch": 83,
+    "teamwork": 82,
+    "communication": 82,
+    "igl": 95
+   },
+   "attrsEstimated": false,
+   "clubId": "T20",
+   "clubTag": "HLE",
+   "team": "ROX Tigers",
+   "span": "2016",
+   "photo": {
+    "img": "/lol/faces/echo/Peanut.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/23853582718/",
+    "note": "2017 World Championship Group Stage at Wuhan Sports Center Gymnasium in Wuhan, Hubei, China on 15 October 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Smeb",
+   "person": "H:Smeb",
+   "ign": "Smeb",
+   "realName": "송경호",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 85,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 87,
+    "reaction": 85,
+    "awareness": 81,
+    "utility": 88,
+    "clutch": 80,
+    "teamwork": 84,
+    "communication": 83,
+    "igl": 75
+   },
+   "attrsEstimated": false,
+   "clubId": "T21",
+   "clubTag": "KT",
+   "team": "KT Rolster",
+   "span": "2017–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Smeb.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/43546071560/",
+    "note": "Day 7 at the 2018 World Championship Group Stage at the Busan Exhibition and Convention Center in Busan, South Korea, on 16 October 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Blank",
+   "person": "H:Blank",
+   "ign": "Blank",
+   "realName": "강선구",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 84,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 81,
+    "reaction": 81,
+    "awareness": 86,
+    "utility": 81,
+    "clutch": 83,
+    "teamwork": 84,
+    "communication": 88,
+    "igl": 86
+   },
+   "attrsEstimated": false,
+   "clubId": "T24",
+   "clubTag": "T1",
+   "team": "SK Telecom T1",
+   "span": "2016–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Blank.webp",
+    "w": 550,
+    "h": 367,
+    "credit": "https://www.xportsnews.com/article/731449",
+    "note": "SKT in 2016"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Mata",
+   "person": "H:Mata",
+   "ign": "Mata",
+   "realName": "조세형",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 84,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 84,
+    "reaction": 83,
+    "awareness": 87,
+    "utility": 88,
+    "clutch": 83,
+    "teamwork": 81,
+    "communication": 81,
+    "igl": 82
+   },
+   "attrsEstimated": false,
+   "clubId": "T18",
+   "clubTag": "GEN",
+   "team": "Samsung White",
+   "span": "2013–2014",
+   "photo": {
+    "img": "/lol/faces/echo/Mata.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/43626081290/",
+    "note": "Day 1 at the 2018 World Championship Quarterfinals Stage at the Busan Exhibition and Convention Center in Busan, South Korea, on 20 October 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:PraY",
+   "person": "H:PraY",
+   "ign": "PraY",
+   "realName": "김종인",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 83,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 84,
+    "reaction": 86,
+    "awareness": 81,
+    "utility": 85,
+    "clutch": 79,
+    "teamwork": 80,
+    "communication": 80,
+    "igl": 83
+   },
+   "attrsEstimated": false,
+   "clubId": "T20",
+   "clubTag": "HLE",
+   "team": "ROX Tigers",
+   "span": "2015–2016",
+   "photo": {
+    "img": "/lol/faces/echo/PraY.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/42082128552/",
+    "note": "2018 Mid-Season Invitational Group Stage at EU LCS Studio in Berlin, Germany, on 14 May 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Ambition",
+   "person": "H:Ambition",
+   "ign": "Ambition",
+   "realName": "강찬용",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 82,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 80,
+    "reaction": 87,
+    "awareness": 83,
+    "utility": 88,
+    "clutch": 79,
+    "teamwork": 79,
+    "communication": 82,
+    "igl": 83
+   },
+   "attrsEstimated": false,
+   "clubId": "T18",
+   "clubTag": "GEN",
+   "team": "CJ Entus Blaze",
+   "span": "2012–2015",
+   "photo": {
+    "img": "/lol/faces/echo/Ambition.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/36879884583/",
+    "note": "2017 World Championship Group Stage at Wuhan Sports Center Gymnasium in Wuhan, Hubei, China on 7 October 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Ssol",
+   "person": "H:Ssol",
+   "ign": "Ssol",
+   "realName": "서진솔",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 81,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 83,
+    "reaction": 77,
+    "awareness": 80,
+    "utility": 82,
+    "clutch": 77,
+    "teamwork": 85,
+    "communication": 87,
+    "igl": 60
+   },
+   "attrsEstimated": false,
+   "clubId": "T16",
+   "clubTag": "DNS",
+   "team": "Kongdoo Monster",
+   "span": "2016–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Ssol.webp",
+    "w": 550,
+    "h": 367,
+    "credit": "https://www.xportsnews.com/article/711240",
+    "note": "Kongdoo Monster in 2016"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Bengi",
+   "person": "H:Bengi",
+   "ign": "Bengi",
+   "realName": "배성웅",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 80,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 81,
+    "reaction": 80,
+    "awareness": 82,
+    "utility": 79,
+    "clutch": 81,
+    "teamwork": 77,
+    "communication": 77,
+    "igl": 80
+   },
+   "attrsEstimated": false,
+   "clubId": "T24",
+   "clubTag": "T1",
+   "team": "SK Telecom T1",
+   "span": "2013–2016",
+   "photo": {
+    "img": "/lol/faces/echo/Bengi.webp",
+    "w": 550,
+    "h": 825,
+    "credit": "https://www.xportsnews.com/article/723359",
+    "note": "2016 Mid-Season Invitational semifinal, SK Telecom T1"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:PawN",
+   "person": "H:PawN",
+   "ign": "PawN",
+   "realName": "허원석",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 80,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 78,
+    "reaction": 80,
+    "awareness": 84,
+    "utility": 82,
+    "clutch": 85,
+    "teamwork": 80,
+    "communication": 82,
+    "igl": 69
+   },
+   "attrsEstimated": false,
+   "clubId": "T21",
+   "clubTag": "KT",
+   "team": "KT Rolster",
+   "span": "2017–2018",
+   "photo": {
+    "img": "/lol/faces/echo/PawN.webp",
+    "w": 550,
+    "h": 383,
+    "credit": "https://www.xportsnews.com/article/844043",
+    "note": "2017 LCK Spring final, KT Rolster"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Piglet",
+   "person": "H:Piglet",
+   "ign": "Piglet",
+   "realName": "채광진",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 79,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 81,
+    "reaction": 79,
+    "awareness": 79,
+    "utility": 77,
+    "clutch": 78,
+    "teamwork": 80,
+    "communication": 80,
+    "igl": 64
+   },
+   "attrsEstimated": false,
+   "clubId": "T42",
+   "clubTag": "TL",
+   "team": "Team Liquid",
+   "span": "2015–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Piglet.webp",
+    "w": 1023,
+    "h": 681,
+    "credit": "https://www.flickr.com/photos/lolesports/46218202915/",
+    "note": "Photo by Timothy Norris/Riot Games."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:CuVee",
+   "person": "H:CuVee",
+   "ign": "CuVee",
+   "realName": "이성진",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 78,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 78,
+    "reaction": 75,
+    "awareness": 80,
+    "utility": 82,
+    "clutch": 79,
+    "teamwork": 77,
+    "communication": 78,
+    "igl": 86
+   },
+   "attrsEstimated": false,
+   "clubId": "T18",
+   "clubTag": "GEN",
+   "team": "Samsung Galaxy",
+   "span": "2015–2019",
+   "photo": {
+    "img": "/lol/faces/echo/CuVee.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/37312827540/",
+    "note": "2017 World Championship Group Stage at Wuhan Sports Center Gymnasium in Wuhan, Hubei, China on 8 October 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Crown",
+   "person": "H:Crown",
+   "ign": "Crown",
+   "realName": "이민호",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 77,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 75,
+    "reaction": 79,
+    "awareness": 79,
+    "utility": 82,
+    "clutch": 75,
+    "teamwork": 74,
+    "communication": 76,
+    "igl": 66
+   },
+   "attrsEstimated": false,
+   "clubId": "T18",
+   "clubTag": "GEN",
+   "team": "Samsung Galaxy",
+   "span": "2015–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Crown.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/36839933254/",
+    "note": "2017 World Championship Group Stage at Wuhan Sports Center Gymnasium in Wuhan, Hubei, China on 7 October 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:PoohManDu",
+   "person": "H:PoohManDu",
+   "ign": "PoohManDu",
+   "realName": "이정현",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 77,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 78,
+    "reaction": 78,
+    "awareness": 77,
+    "utility": 78,
+    "clutch": 77,
+    "teamwork": 77,
+    "communication": 78,
+    "igl": 71
+   },
+   "attrsEstimated": true,
+   "clubId": "T24",
+   "clubTag": "T1",
+   "team": "SK Telecom T1",
+   "span": "2013–2014",
+   "photo": {
+    "img": "/lol/faces/echo/PoohManDu.webp",
+    "w": 450,
+    "h": 641,
+    "credit": "https://www.xportsnews.com/article/433971",
+    "note": "SKT T1 K return, 2014"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:DanDy",
+   "person": "H:DanDy",
+   "ign": "DanDy",
+   "realName": "최인규",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 76,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 77,
+    "reaction": 80,
+    "awareness": 75,
+    "utility": 80,
+    "clutch": 75,
+    "teamwork": 78,
+    "communication": 77,
+    "igl": 61
+   },
+   "attrsEstimated": false,
+   "clubId": "T18",
+   "clubTag": "GEN",
+   "team": "Samsung White",
+   "span": "2012–2014",
+   "photo": {
+    "img": "/lol/faces/echo/DanDy.webp",
+    "w": 650,
+    "h": 975,
+    "credit": "https://www.dailyesports.com/view.php?ud=2014091818501330007_27",
+    "note": "Samsung Galaxy White at Worlds 2014 group stage"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:GorillA",
+   "person": "H:GorillA",
+   "ign": "GorillA",
+   "realName": "강범현",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 75,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 76,
+    "reaction": 79,
+    "awareness": 72,
+    "utility": 75,
+    "clutch": 73,
+    "teamwork": 73,
+    "communication": 74,
+    "igl": 82
+   },
+   "attrsEstimated": false,
+   "clubId": "T20",
+   "clubTag": "HLE",
+   "team": "ROX Tigers",
+   "span": "2015–2016",
+   "photo": {
+    "img": "/lol/faces/echo/GorillA.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/41311406525/",
+    "note": "2018 Mid-Season Invitational Semifinal Stage at Zénith Paris in Paris, France, on 19 May 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Key",
+   "person": "H:Key",
+   "ign": "Key",
+   "realName": "김한기",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 75,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 72,
+    "reaction": 72,
+    "awareness": 78,
+    "utility": 77,
+    "clutch": 72,
+    "teamwork": 72,
+    "communication": 76,
+    "igl": 73
+   },
+   "attrsEstimated": false,
+   "clubId": "T20",
+   "clubTag": "HLE",
+   "team": "Hanwha Life Esports",
+   "span": "2017–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Key.webp",
+    "w": 550,
+    "h": 367,
+    "credit": "https://www.xportsnews.com/article/736232",
+    "note": "ESC Ever in 2016"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Kuro",
+   "person": "H:Kuro",
+   "ign": "Kuro",
+   "realName": "이서행",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 74,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 73,
+    "reaction": 71,
+    "awareness": 80,
+    "utility": 72,
+    "clutch": 73,
+    "teamwork": 75,
+    "communication": 78,
+    "igl": 88
+   },
+   "attrsEstimated": false,
+   "clubId": "T20",
+   "clubTag": "HLE",
+   "team": "ROX Tigers",
+   "span": "2015–2016",
+   "photo": {
+    "img": "/lol/faces/echo/Kuro.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/44565210814/",
+    "note": "Day 4 at the 2018 World Championship Group Stage at the Busan Exhibition and Convention Center in Busan, South Korea, on 13 October 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Looper",
+   "person": "H:Looper",
+   "ign": "Looper",
+   "realName": "장형석",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 73,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 70,
+    "reaction": 78,
+    "awareness": 76,
+    "utility": 73,
+    "clutch": 73,
+    "teamwork": 72,
+    "communication": 71,
+    "igl": 59
+   },
+   "attrsEstimated": false,
+   "clubId": "T18",
+   "clubTag": "GEN",
+   "team": "Samsung White",
+   "span": "2013–2014",
+   "photo": {
+    "img": "/lol/faces/echo/Looper.webp",
+    "w": 1024,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/32963268026/",
+    "note": "Week 5 Day 3 at 2017 NA LCS Spring Split in Los Angeles, California, USA on 19 February 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:imp",
+   "person": "H:imp",
+   "ign": "imp",
+   "realName": "구승빈",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 72,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 72,
+    "reaction": 73,
+    "awareness": 70,
+    "utility": 72,
+    "clutch": 70,
+    "teamwork": 73,
+    "communication": 72,
+    "igl": 61
+   },
+   "attrsEstimated": false,
+   "clubId": "T6",
+   "clubTag": "LGD",
+   "team": "LGD Gaming",
+   "span": "2015–2018",
+   "photo": {
+    "img": "/lol/faces/echo/imp.webp",
+    "w": 477,
+    "h": 348,
+    "credit": "https://news.tf.co.kr/read/economy/1429226.htm",
+    "note": "Samsung Galaxy White at Worlds 2014 semifinal"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Spirit",
+   "person": "H:Spirit",
+   "ign": "Spirit",
+   "realName": "이다윤",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 71,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 70,
+    "reaction": 73,
+    "awareness": 77,
+    "utility": 71,
+    "clutch": 69,
+    "teamwork": 71,
+    "communication": 73,
+    "igl": 51
+   },
+   "attrsEstimated": false,
+   "clubId": "T16",
+   "clubTag": "DNS",
+   "team": "Afreeca Freecs",
+   "span": "2017–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Spirit.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/30287175017/",
+    "note": "Day 1 at the 2018 World Championship Group Stage at the Busan Exhibition and Convention Center in Busan, South Korea, on 10 October 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Coco",
+   "person": "H:Coco",
+   "ign": "Coco",
+   "realName": "신진영",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 70,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 70,
+    "reaction": 68,
+    "awareness": 70,
+    "utility": 69,
+    "clutch": 68,
+    "teamwork": 71,
+    "communication": 72,
+    "igl": 66
+   },
+   "attrsEstimated": false,
+   "clubId": "T22",
+   "clubTag": "KRX",
+   "team": "CJ Entus",
+   "span": "2014–2015",
+   "photo": {
+    "img": "/lol/faces/echo/Coco.webp",
+    "w": 540,
+    "h": 360,
+    "credit": "https://www.dailyesports.com/view.php?ud=2015012121102830625_27",
+    "note": "CJ Entus 2015"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:SoHwan",
+   "person": "H:SoHwan",
+   "ign": "SoHwan",
+   "realName": "김준영",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 69,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 66,
+    "reaction": 71,
+    "awareness": 72,
+    "utility": 71,
+    "clutch": 64,
+    "teamwork": 67,
+    "communication": 68,
+    "igl": 62
+   },
+   "attrsEstimated": false,
+   "clubId": "T20",
+   "clubTag": "HLE",
+   "team": "Jin Air Green Wings",
+   "span": "2016–2018",
+   "photo": {
+    "img": "/lol/faces/echo/SoHwan.webp",
+    "w": 540,
+    "h": 377,
+    "credit": "https://www.inven.co.kr/webzine/news/?news=192012&site=lol",
+    "note": "Jin Air SoHwan 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Easyhoon",
+   "person": "H:Easyhoon",
+   "ign": "Easyhoon",
+   "realName": "이지훈",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 68,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 65,
+    "reaction": 72,
+    "awareness": 68,
+    "utility": 72,
+    "clutch": 62,
+    "teamwork": 67,
+    "communication": 68,
+    "igl": 63
+   },
+   "attrsEstimated": false,
+   "clubId": "T24",
+   "clubTag": "T1",
+   "team": "Vici Gaming",
+   "span": "2016–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Easyhoon.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/54620728584/",
+    "note": "Coach Easyhoon of BILIBILI GAMING is seen back stage during MSI 2025 Play-In Stage Day 2 at the Pacific Coliseum in Vancouver, Canada on June 28, 2025. (Photo b"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Hybrid",
+   "person": "H:Hybrid",
+   "ign": "Hybrid",
+   "realName": "이우진",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 68,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 67,
+    "reaction": 63,
+    "awareness": 67,
+    "utility": 78,
+    "clutch": 62,
+    "teamwork": 67,
+    "communication": 63,
+    "igl": 63
+   },
+   "attrsEstimated": false,
+   "clubId": "T21",
+   "clubTag": "KT",
+   "team": "Crest Gaming Act",
+   "span": "2022",
+   "photo": {
+    "img": "/lol/faces/echo/Hybrid.webp",
+    "w": 650,
+    "h": 400,
+    "credit": "https://www.inven.co.kr/webzine/news/?news=238118&site=lol",
+    "note": "APK/SeolHaeOne Prince Hybrid 2020 interview"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:MadLife",
+   "person": "H:MadLife",
+   "ign": "MadLife",
+   "realName": "홍민기",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 67,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 69,
+    "reaction": 66,
+    "awareness": 69,
+    "utility": 65,
+    "clutch": 65,
+    "teamwork": 69,
+    "communication": 72,
+    "igl": 49
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "CJ Entus",
+   "span": "2011–2016",
+   "photo": {
+    "img": "/lol/faces/echo/MadLife.webp",
+    "w": 1024,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/32991300853/",
+    "note": "Day 3 at 2017 NA LCS Summer Promotion Tournament in Los Angeles, California, USA on 2 April 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Heart",
+   "person": "H:Heart",
+   "ign": "Heart",
+   "realName": "이관형",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 66,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 67,
+    "reaction": 67,
+    "awareness": 66,
+    "utility": 67,
+    "clutch": 66,
+    "teamwork": 66,
+    "communication": 67,
+    "igl": 60
+   },
+   "attrsEstimated": true,
+   "clubId": "T18",
+   "clubTag": "GEN",
+   "team": "Samsung Blue",
+   "span": "2013–2014",
+   "photo": {
+    "img": "/lol/faces/echo/Heart.webp",
+    "w": 540,
+    "h": 304,
+    "credit": "https://www.inven.co.kr/webzine/news/?news=119358&site=lol",
+    "note": "Samsung Blue at Worlds 2014"
+   },
+   "manual": true
+  },
+  {
+   "id": "echo:Rascal",
+   "person": "H:Rascal",
+   "ign": "Rascal",
+   "realName": "김광희",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 66,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 63,
+    "reaction": 65,
+    "awareness": 70,
+    "utility": 72,
+    "clutch": 67,
+    "teamwork": 65,
+    "communication": 67,
+    "igl": 71
+   },
+   "attrsEstimated": false,
+   "clubId": "T22",
+   "clubTag": "KRX",
+   "team": "DRX",
+   "span": "2017–2024",
+   "photo": {
+    "img": "/lol/faces/echo/Rascal.webp",
+    "w": 1200,
+    "h": 1800,
+    "credit": "https://www.xportsnews.com/article/1866080",
+    "note": "DRX in 2024"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Space",
+   "person": "H:Space",
+   "ign": "Space",
+   "realName": "선호산",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 65,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 67,
+    "reaction": 65,
+    "awareness": 63,
+    "utility": 63,
+    "clutch": 62,
+    "teamwork": 65,
+    "communication": 65,
+    "igl": 57
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "CJ Entus Frost",
+   "span": "2012–2015",
+   "photo": {
+    "img": "/lol/faces/echo/Space.webp",
+    "w": 540,
+    "h": 430,
+    "credit": "https://www.inven.co.kr/webzine/news/?news=148964",
+    "note": "CJ Entus Space retirement article 2015"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Shy",
+   "person": "H:Shy",
+   "ign": "Shy",
+   "realName": "박상면",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 64,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 62,
+    "reaction": 65,
+    "awareness": 65,
+    "utility": 71,
+    "clutch": 64,
+    "teamwork": 63,
+    "communication": 64,
+    "igl": 59
+   },
+   "attrsEstimated": false,
+   "clubId": "T20",
+   "clubTag": "HLE",
+   "team": "CJ Entus",
+   "span": "2012–2016",
+   "photo": {
+    "img": "/lol/faces/echo/Shy.webp",
+    "w": 600,
+    "h": 420,
+    "credit": "https://www.dailyesports.com/view.php?ud=2015101614475763045",
+    "note": "CJ Entus 2015"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:inSec",
+   "person": "H:inSec",
+   "ign": "inSec",
+   "realName": "최인석",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 63,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 63,
+    "reaction": 65,
+    "awareness": 64,
+    "utility": 65,
+    "clutch": 65,
+    "teamwork": 64,
+    "communication": 64,
+    "igl": 48
+   },
+   "attrsEstimated": false,
+   "clubId": "T21",
+   "clubTag": "KT",
+   "team": "KT Rolster",
+   "span": "2013–2014",
+   "photo": {
+    "img": "/lol/faces/echo/inSec.webp",
+    "w": 600,
+    "h": 414,
+    "credit": "https://gamek.vn/esport/tieu-su-cua-vua-rung-lien-minh-huyen-thoai-insec-2014042708447987.chn",
+    "note": "KT Rolster Bullets inSec 2014 biography"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Untara",
+   "person": "H:Untara",
+   "ign": "Untara",
+   "realName": "박의진",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 63,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 60,
+    "reaction": 62,
+    "awareness": 67,
+    "utility": 64,
+    "clutch": 62,
+    "teamwork": 64,
+    "communication": 68,
+    "igl": 56
+   },
+   "attrsEstimated": false,
+   "clubId": "T24",
+   "clubTag": "T1",
+   "team": "SK Telecom T1",
+   "span": "2017–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Untara.webp",
+    "w": 600,
+    "h": 400,
+    "credit": "https://www.invenglobal.com/articles/7231/untaras-thoughts-on-leaving-skt-i-feel-sorry-that-i-could-not-live-up-to-my-expectations",
+    "note": "Untara interview after leaving SKT"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Haru",
+   "person": "H:Haru",
+   "ign": "Haru",
+   "realName": "강민승",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 62,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 62,
+    "reaction": 67,
+    "awareness": 63,
+    "utility": 70,
+    "clutch": 64,
+    "teamwork": 62,
+    "communication": 62,
+    "igl": 45
+   },
+   "attrsEstimated": false,
+   "clubId": "T18",
+   "clubTag": "GEN",
+   "team": "Samsung Galaxy",
+   "span": "2017–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Haru.webp",
+    "w": 540,
+    "h": 432,
+    "credit": "https://www.invenglobal.com/articles/840/ssg-haru-we-are-in-it-to-win-it",
+    "note": "Haru postmatch interview, Samsung Galaxy, LCK Spring 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:GuGer",
+   "person": "H:GuGer",
+   "ign": "GuGer",
+   "realName": "김도엽",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 61,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 61,
+    "reaction": 61,
+    "awareness": 63,
+    "utility": 59,
+    "clutch": 62,
+    "teamwork": 64,
+    "communication": 63,
+    "igl": 50
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Kongdoo Monster",
+   "span": "2016–2017",
+   "photo": {
+    "img": "/lol/faces/echo/GuGer.webp",
+    "w": 550,
+    "h": 367,
+    "credit": "https://www.xportsnews.com/article/706706",
+    "note": "Kongdoo Monster in 2016"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:dade",
+   "person": "H:dade",
+   "ign": "dade",
+   "realName": "배어진",
+   "nat": "kr",
+   "region": "LCK",
+   "group": "LCK",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 60,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 60,
+    "reaction": 59,
+    "awareness": 60,
+    "utility": 59,
+    "clutch": 62,
+    "teamwork": 63,
+    "communication": 63,
+    "igl": 40
+   },
+   "attrsEstimated": false,
+   "clubId": "T18",
+   "clubTag": "GEN",
+   "team": "Samsung Blue",
+   "span": "2013–2014",
+   "photo": {
+    "img": "/lol/faces/echo/dade.webp",
+    "w": 540,
+    "h": 424,
+    "credit": "https://www.inven.co.kr/webzine/news/?news=235564&site=lol",
+    "note": "Samsung-era portrait, republished in 2020 RCK interview"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Armut",
+   "person": "H:Armut",
+   "ign": "Armut",
+   "realName": "İrfan Berk Tükek",
+   "nat": "tr",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 87,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 86,
+    "reaction": 89,
+    "awareness": 89,
+    "utility": 87,
+    "clutch": 84,
+    "teamwork": 86,
+    "communication": 85,
+    "igl": 84
+   },
+   "attrsEstimated": false,
+   "clubId": "T29",
+   "clubTag": "MKOI",
+   "team": "Papara SuperMassive",
+   "span": "2020–2025",
+   "photo": {
+    "img": "/lol/faces/echo/Armut.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/52396460550/",
+    "note": "MAD Lions Worlds 2022"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:HolyPhoenix",
+   "person": "H:HolyPhoenix",
+   "ign": "HolyPhoenix",
+   "realName": "Anıl Işık",
+   "nat": "tr",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 86,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 88,
+    "reaction": 85,
+    "awareness": 81,
+    "utility": 84,
+    "clutch": 86,
+    "teamwork": 88,
+    "communication": 87,
+    "igl": 82
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Dark Passage",
+   "span": "2012–2017",
+   "photo": {
+    "img": "/lol/faces/echo/HolyPhoenix.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/52393678466/",
+    "note": "Istanbul Wildcats Worlds 2022 Play-In"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Jankos",
+   "person": "H:Jankos",
+   "ign": "Jankos",
+   "realName": "Marcin Jankowski",
+   "nat": "pl",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 86,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 87,
+    "reaction": 84,
+    "awareness": 89,
+    "utility": 85,
+    "clutch": 84,
+    "teamwork": 85,
+    "communication": 84,
+    "igl": 82
+   },
+   "attrsEstimated": false,
+   "clubId": "T26",
+   "clubTag": "G2",
+   "team": "G2 Esports",
+   "span": "2018–2022",
+   "photo": {
+    "img": "/lol/faces/echo/Jankos.webp",
+    "w": 1200,
+    "h": 675,
+    "credit": "https://www.millenium.org/news/324189.html",
+    "note": "G2 Jankos LEC 2019 interview"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Froggen",
+   "person": "H:Froggen",
+   "ign": "Froggen",
+   "realName": "Henrik Hansen",
+   "nat": "dk",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 85,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 87,
+    "reaction": 86,
+    "awareness": 81,
+    "utility": 84,
+    "clutch": 80,
+    "teamwork": 89,
+    "communication": 88,
+    "igl": 58
+   },
+   "attrsEstimated": false,
+   "clubId": "T36",
+   "clubTag": "DIG",
+   "team": "Counter Logic Gaming Europe",
+   "span": "2012–2015",
+   "photo": {
+    "img": "/lol/faces/echo/Froggen.webp",
+    "w": 1024,
+    "h": 684,
+    "credit": "https://www.flickr.com/photos/lolesports/13727623323/",
+    "note": ""
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Perkz",
+   "person": "H:Perkz",
+   "ign": "Perkz",
+   "realName": "Luka Perković",
+   "nat": "hr",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 85,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 85,
+    "reaction": 88,
+    "awareness": 82,
+    "utility": 90,
+    "clutch": 85,
+    "teamwork": 79,
+    "communication": 77,
+    "igl": 88
+   },
+   "attrsEstimated": false,
+   "clubId": "T26",
+   "clubTag": "G2",
+   "team": "G2 Esports",
+   "span": "2015–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Perkz.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/45394582152/",
+    "note": "Day 1 at the 2018 World Championship Quarterfinals Stage at the Busan Exhibition and Convention Center in Busan, South Korea, on 20 October 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Forg1ven",
+   "person": "H:Forg1ven",
+   "ign": "Forg1ven",
+   "realName": "Konstantinos-Napoleon Tzortziou",
+   "nat": "gr",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 84,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 82,
+    "reaction": 88,
+    "awareness": 84,
+    "utility": 94,
+    "clutch": 81,
+    "teamwork": 79,
+    "communication": 77,
+    "igl": 64
+   },
+   "attrsEstimated": false,
+   "clubId": "T31",
+   "clubTag": "SK",
+   "team": "H2k-Gaming",
+   "span": "2016",
+   "photo": {
+    "img": "/lol/faces/echo/Forg1ven.webp",
+    "w": 1600,
+    "h": 900,
+    "credit": "https://www.gamereactor.eu/forg1ven-reveals-his-free-agency/",
+    "note": "H2K Forg1ven 2016 free agency article"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Xerxe",
+   "person": "H:Xerxe",
+   "ign": "Xerxe",
+   "realName": "Andrei Dragomir",
+   "nat": "ro",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 83,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 83,
+    "reaction": 82,
+    "awareness": 86,
+    "utility": 78,
+    "clutch": 82,
+    "teamwork": 85,
+    "communication": 84,
+    "igl": 74
+   },
+   "attrsEstimated": false,
+   "clubId": "T27",
+   "clubTag": "GX",
+   "team": "Splyce",
+   "span": "2018–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Xerxe.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/42360687615/",
+    "note": "Splyce at Rift Rivals 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Broxah",
+   "person": "H:Broxah",
+   "ign": "Broxah",
+   "realName": "Mads Brock-Pedersen",
+   "nat": "dk",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 82,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 81,
+    "reaction": 82,
+    "awareness": 83,
+    "utility": 80,
+    "clutch": 81,
+    "teamwork": 83,
+    "communication": 83,
+    "igl": 78
+   },
+   "attrsEstimated": false,
+   "clubId": "T25",
+   "clubTag": "FNC",
+   "team": "Fnatic",
+   "span": "2017–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Broxah.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/41468985094/",
+    "note": "2018 Mid-Season Invitational Semifinal Stage at Zénith Paris in Paris, France, on 18 May 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Kaiser",
+   "person": "H:Kaiser",
+   "ign": "Kaiser",
+   "realName": "Norman Kaiser",
+   "nat": "de",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 81,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 81,
+    "reaction": 79,
+    "awareness": 82,
+    "utility": 82,
+    "clutch": 80,
+    "teamwork": 82,
+    "communication": 82,
+    "igl": 73
+   },
+   "attrsEstimated": false,
+   "clubId": "T29",
+   "clubTag": "MKOI",
+   "team": "MAD Lions",
+   "span": "2020–2022",
+   "photo": {
+    "img": "/lol/faces/echo/Kaiser.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/52394313000/",
+    "note": "MAD Lions Worlds 2022"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Expect",
+   "person": "H:Expect",
+   "ign": "Expect",
+   "realName": "기대한",
+   "nat": "kr",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 80,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 80,
+    "reaction": 80,
+    "awareness": 80,
+    "utility": 80,
+    "clutch": 81,
+    "teamwork": 83,
+    "communication": 85,
+    "igl": 66
+   },
+   "attrsEstimated": false,
+   "clubId": "T26",
+   "clubTag": "G2",
+   "team": "G2 Esports",
+   "span": "2016–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Expect.webp",
+    "w": 1024,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/34439878162/",
+    "note": "G2 MSI 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Diamondprox",
+   "person": "H:Diamondprox",
+   "ign": "Diamondprox",
+   "realName": "Danil Reshetnikov",
+   "nat": "ru",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 79,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 82,
+    "reaction": 84,
+    "awareness": 78,
+    "utility": 82,
+    "clutch": 78,
+    "teamwork": 76,
+    "communication": 73,
+    "igl": 77
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Gambit Esports",
+   "span": "2012–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Diamondprox.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/43315658930/",
+    "note": "Day 5 at the 2018 World Championship Play-In at LoL PARK in Seoul, Korea, on 5 October 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Hjarnan",
+   "person": "H:Hjarnan",
+   "ign": "Hjarnan",
+   "realName": "Petter Freyschuss",
+   "nat": "se",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 78,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 79,
+    "reaction": 77,
+    "awareness": 76,
+    "utility": 80,
+    "clutch": 75,
+    "teamwork": 78,
+    "communication": 77,
+    "igl": 73
+   },
+   "attrsEstimated": false,
+   "clubId": "T26",
+   "clubTag": "G2",
+   "team": "G2 Esports",
+   "span": "2018",
+   "photo": {
+    "img": "/lol/faces/echo/Hjarnan.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/44138859505/",
+    "note": "G2 Worlds 2018 Play-In"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Febiven",
+   "person": "H:Febiven",
+   "ign": "Febiven",
+   "realName": "Fabian Diepstraten",
+   "nat": "nl",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 77,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 75,
+    "reaction": 80,
+    "awareness": 77,
+    "utility": 80,
+    "clutch": 77,
+    "teamwork": 75,
+    "communication": 74,
+    "igl": 75
+   },
+   "attrsEstimated": false,
+   "clubId": "T25",
+   "clubTag": "FNC",
+   "team": "Fnatic",
+   "span": "2015–2016",
+   "photo": {
+    "img": "/lol/faces/echo/Febiven.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/39358482164/",
+    "note": "Week 3 Day 1 at 2018 NA LCS Spring Split in Los Angeles, California, USA on 3 February 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Thaldrin",
+   "person": "H:Thaldrin",
+   "ign": "Thaldrin",
+   "realName": "Berke Demir",
+   "nat": "tr",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 76,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 75,
+    "reaction": 79,
+    "awareness": 75,
+    "utility": 75,
+    "clutch": 77,
+    "teamwork": 76,
+    "communication": 77,
+    "igl": 75
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Fenerbahçe Esports",
+   "span": "2017–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Thaldrin.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/37549564051/",
+    "note": "2017 World Championship Group Stage at Wuhan Sports Center Gymnasium in Wuhan, Hubei, China on 7 October 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Edward",
+   "person": "H:Edward",
+   "ign": "Edward",
+   "realName": "Edward Abgaryan",
+   "nat": "ru",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 75,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 75,
+    "reaction": 76,
+    "awareness": 77,
+    "utility": 80,
+    "clutch": 77,
+    "teamwork": 74,
+    "communication": 71,
+    "igl": 74
+   },
+   "attrsEstimated": false,
+   "clubId": "T42",
+   "clubTag": "TL",
+   "team": "Gambit Gaming",
+   "span": "2012–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Edward.webp",
+    "w": 559,
+    "h": 314,
+    "credit": "https://www.millenium.org/news/378656.html",
+    "note": "Retrospective on Moscow Five/Gambit; original portrait date unstated"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Odoamne",
+   "person": "H:Odoamne",
+   "ign": "Odoamne",
+   "realName": "Andrei Pascu",
+   "nat": "ro",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 74,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 75,
+    "reaction": 76,
+    "awareness": 72,
+    "utility": 71,
+    "clutch": 70,
+    "teamwork": 74,
+    "communication": 74,
+    "igl": 74
+   },
+   "attrsEstimated": false,
+   "clubId": "T27",
+   "clubTag": "GX",
+   "team": "H2k-Gaming",
+   "span": "2014–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Odoamne.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/52431029720/",
+    "note": "Rogue Worlds 2022"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:YellOwStaR",
+   "person": "H:YellOwStaR",
+   "ign": "YellOwStaR",
+   "realName": "Bora Kim",
+   "nat": "fr",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 73,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 75,
+    "reaction": 77,
+    "awareness": 74,
+    "utility": 76,
+    "clutch": 78,
+    "teamwork": 73,
+    "communication": 74,
+    "igl": 60
+   },
+   "attrsEstimated": false,
+   "clubId": "T25",
+   "clubTag": "FNC",
+   "team": "Fnatic",
+   "span": "2013–2016",
+   "photo": {
+    "img": "/lol/faces/echo/YellOwStaR.webp",
+    "w": 683,
+    "h": 1024,
+    "credit": "https://www.flickr.com/photos/lolesports/55388502568/",
+    "note": "MSI showmatch 2026; past pro era"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Mithy",
+   "person": "H:Mithy",
+   "ign": "Mithy",
+   "realName": "Alfonso Aguirre Rodríguez",
+   "nat": "es",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 72,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 73,
+    "reaction": 74,
+    "awareness": 72,
+    "utility": 73,
+    "clutch": 79,
+    "teamwork": 71,
+    "communication": 72,
+    "igl": 69
+   },
+   "attrsEstimated": false,
+   "clubId": "T26",
+   "clubTag": "G2",
+   "team": "Origen",
+   "span": "2015–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Mithy.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/50498396351/",
+    "note": "SHANGHAI, CHINA- October 17th: Day 3 of the League of Legends 2020 Worlds Quarterfinals on October 17, 2020 in Shanghai, China. (Photo by David Lee/Riot Games)"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Vizicsacsi",
+   "person": "H:Vizicsacsi",
+   "ign": "Vizicsacsi",
+   "realName": "Tamás Kiss",
+   "nat": "hu",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 71,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 71,
+    "reaction": 71,
+    "awareness": 72,
+    "utility": 69,
+    "clutch": 72,
+    "teamwork": 70,
+    "communication": 70,
+    "igl": 70
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Unicorns of Love",
+   "span": "2014–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Vizicsacsi.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/48867210297/",
+    "note": "Splyce Worlds 2019 Play-In"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Kikis",
+   "person": "H:Kikis",
+   "ign": "Kikis",
+   "realName": "Mateusz Szkudlarek",
+   "nat": "pl",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 70,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 69,
+    "reaction": 69,
+    "awareness": 75,
+    "utility": 68,
+    "clutch": 77,
+    "teamwork": 72,
+    "communication": 72,
+    "igl": 55
+   },
+   "attrsEstimated": false,
+   "clubId": "T26",
+   "clubTag": "G2",
+   "team": "G2 Esports",
+   "span": "2015–2016",
+   "photo": {
+    "img": "/lol/faces/echo/Kikis.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/44399043095/",
+    "note": "Vitality Worlds 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Wickd",
+   "person": "H:Wickd",
+   "ign": "Wickd",
+   "realName": "Mike Petersen",
+   "nat": "dk",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 70,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 69,
+    "reaction": 72,
+    "awareness": 69,
+    "utility": 68,
+    "clutch": 73,
+    "teamwork": 69,
+    "communication": 70,
+    "igl": 64
+   },
+   "attrsEstimated": false,
+   "clubId": "T31",
+   "clubTag": "SK",
+   "team": "Counter Logic Gaming Europe",
+   "span": "2012–2015",
+   "photo": {
+    "img": "/lol/faces/echo/Wickd.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/14742022977/",
+    "note": ""
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:xPeke",
+   "person": "H:xPeke",
+   "ign": "xPeke",
+   "realName": "Enrique Cedeño Martínez",
+   "nat": "es",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 69,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 68,
+    "reaction": 71,
+    "awareness": 70,
+    "utility": 76,
+    "clutch": 75,
+    "teamwork": 64,
+    "communication": 64,
+    "igl": 55
+   },
+   "attrsEstimated": false,
+   "clubId": "T25",
+   "clubTag": "FNC",
+   "team": "Fnatic",
+   "span": "2011–2014",
+   "photo": {
+    "img": "/lol/faces/echo/xPeke.webp",
+    "w": 640,
+    "h": 427,
+    "credit": "https://www.millenium.org/news/199307.html?page=2",
+    "note": "Origen xPeke match portrait republished in 2015 EU mid-laner analysis"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Kold",
+   "person": "H:Kold",
+   "ign": "Kold",
+   "realName": "Jonas Andersen",
+   "nat": "dk",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 68,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 66,
+    "reaction": 64,
+    "awareness": 70,
+    "utility": 66,
+    "clutch": 68,
+    "teamwork": 70,
+    "communication": 72,
+    "igl": 62
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Splyce",
+   "span": "2016–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Kold.webp",
+    "w": 640,
+    "h": 427,
+    "credit": "https://www.invenglobal.com/articles/8050/origens-kold-on-the-lec-spring-split-when-we-look-back-at-it-we-will-be-proud-but-we-will-not-be-satisfied-i-think-we-can-still-accomplish-more",
+    "note": "Origen Kold LEC Spring 2019 interview"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Krepo",
+   "person": "H:Krepo",
+   "ign": "Krepo",
+   "realName": "Mitch Voorspoels",
+   "nat": "be",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 68,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 69,
+    "reaction": 70,
+    "awareness": 69,
+    "utility": 68,
+    "clutch": 67,
+    "teamwork": 69,
+    "communication": 70,
+    "igl": 51
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Counter Logic Gaming Europe",
+   "span": "2012–2013",
+   "photo": {
+    "img": "/lol/faces/echo/Krepo.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/16354568534/",
+    "note": ""
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:LIMIT",
+   "person": "H:LIMIT",
+   "ign": "LIMIT",
+   "realName": "Dino Tot",
+   "nat": "hr",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 67,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 67,
+    "reaction": 65,
+    "awareness": 67,
+    "utility": 68,
+    "clutch": 68,
+    "teamwork": 69,
+    "communication": 72,
+    "igl": 54
+   },
+   "attrsEstimated": false,
+   "clubId": "T32",
+   "clubTag": "SHFT",
+   "team": "Team BDS",
+   "span": "2022–2023",
+   "photo": {
+    "img": "/lol/faces/echo/LIMIT.webp",
+    "w": 1200,
+    "h": 1080,
+    "credit": "https://www.invenglobal.com/articles/16153/ranking-the-top-5-supports-competing-in-lec-2022",
+    "note": "Schalke 04 era interview photo in 2022 LEC ranking"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Neon",
+   "person": "H:Neon",
+   "ign": "Neon",
+   "realName": "Matúš Jakubčík",
+   "nat": "sk",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 66,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 68,
+    "reaction": 65,
+    "awareness": 64,
+    "utility": 65,
+    "clutch": 66,
+    "teamwork": 67,
+    "communication": 67,
+    "igl": 64
+   },
+   "attrsEstimated": false,
+   "clubId": "T34",
+   "clubTag": "VIT",
+   "team": "FC Schalke 04 Esports",
+   "span": "2020–2021",
+   "photo": {
+    "img": "/lol/faces/echo/Neon.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/51351385230/",
+    "note": "LEC Summer 2021 Week 8, Schalke 04"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Wadid",
+   "person": "H:Wadid",
+   "ign": "Wadid",
+   "realName": "김배인",
+   "nat": "kr",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 66,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 67,
+    "reaction": 66,
+    "awareness": 68,
+    "utility": 67,
+    "clutch": 69,
+    "teamwork": 67,
+    "communication": 69,
+    "igl": 51
+   },
+   "attrsEstimated": false,
+   "clubId": "T26",
+   "clubTag": "G2",
+   "team": "Team ROCCAT",
+   "span": "2017",
+   "photo": {
+    "img": "/lol/faces/echo/Wadid.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/41414786150/",
+    "note": "G2 Rift Rivals 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Sencux",
+   "person": "H:Sencux",
+   "ign": "Sencux",
+   "realName": "Chres Laursen",
+   "nat": "dk",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 65,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 65,
+    "reaction": 64,
+    "awareness": 65,
+    "utility": 63,
+    "clutch": 68,
+    "teamwork": 67,
+    "communication": 68,
+    "igl": 46
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Splyce",
+   "span": "2016–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Sencux.webp",
+    "w": 1023,
+    "h": 682,
+    "credit": "https://www.flickr.com/photos/lolesports/29724361120/",
+    "note": "2016 Worlds group stage, Splyce vs Samsung Galaxy"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Shook",
+   "person": "H:Shook",
+   "ign": "Shook",
+   "realName": "Ilyas Hartsema",
+   "nat": "nl",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 65,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 61,
+    "reaction": 66,
+    "awareness": 65,
+    "utility": 60,
+    "clutch": 71,
+    "teamwork": 68,
+    "communication": 72,
+    "igl": 47
+   },
+   "attrsEstimated": false,
+   "clubId": "T34",
+   "clubTag": "VIT",
+   "team": "Team Vitality",
+   "span": "2016",
+   "photo": {
+    "img": "/lol/faces/echo/Shook.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/16293908718/",
+    "note": ""
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:sOAZ",
+   "person": "H:sOAZ",
+   "ign": "sOAZ",
+   "realName": "Paul Boyer",
+   "nat": "fr",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 64,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 64,
+    "reaction": 66,
+    "awareness": 66,
+    "utility": 62,
+    "clutch": 69,
+    "teamwork": 64,
+    "communication": 66,
+    "igl": 53
+   },
+   "attrsEstimated": false,
+   "clubId": "T25",
+   "clubTag": "FNC",
+   "team": "Fnatic",
+   "span": "2012–2018",
+   "photo": {
+    "img": "/lol/faces/echo/sOAZ.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/41147100580/",
+    "note": ""
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Alex Ich",
+   "person": "H:Alex Ich",
+   "ign": "Alex Ich",
+   "realName": "Alexey Ichetovkin",
+   "nat": "ru",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 63,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 61,
+    "reaction": 60,
+    "awareness": 66,
+    "utility": 62,
+    "clutch": 71,
+    "teamwork": 66,
+    "communication": 69,
+    "igl": 44
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Gambit Gaming",
+   "span": "2012–2014",
+   "photo": {
+    "img": "/lol/faces/echo/Alex_Ich.webp",
+    "w": 266,
+    "h": 266,
+    "credit": "https://www.cybersport.ru/players/league-of-legends/alex-ich",
+    "note": "Player profile; photo period unstated"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Exile",
+   "person": "H:Exile",
+   "ign": "Exile",
+   "realName": "Fabian Schubert",
+   "nat": "de",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 63,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 65,
+    "reaction": 63,
+    "awareness": 60,
+    "utility": 63,
+    "clutch": 65,
+    "teamwork": 61,
+    "communication": 60,
+    "igl": 62
+   },
+   "attrsEstimated": false,
+   "clubId": "T27",
+   "clubTag": "GX",
+   "team": "Unicorns of Love",
+   "span": "2016–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Exile.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/24914152077/",
+    "note": "EU LCS Spring 2018 Week 1, Unicorns of Love"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Gilius",
+   "person": "H:Gilius",
+   "ign": "Gilius",
+   "realName": "Erberk Demir",
+   "nat": "de",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 62,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 60,
+    "reaction": 63,
+    "awareness": 66,
+    "utility": 59,
+    "clutch": 68,
+    "teamwork": 61,
+    "communication": 64,
+    "igl": 54
+   },
+   "attrsEstimated": false,
+   "clubId": "T31",
+   "clubTag": "SK",
+   "team": "FC Schalke 04 Esports",
+   "span": "2016–2021",
+   "photo": {
+    "img": "/lol/faces/echo/Gilius.webp",
+    "w": 640,
+    "h": 427,
+    "credit": "https://www.invenglobal.com/articles/4078/eu-lcs-making-it-count-the-gilius-ark",
+    "note": "Team Vitality Gilius EU LCS 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:HeaQ",
+   "person": "H:HeaQ",
+   "ign": "HeaQ",
+   "realName": "Martin Kordmaa",
+   "nat": "ee",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 61,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 60,
+    "reaction": 60,
+    "awareness": 65,
+    "utility": 60,
+    "clutch": 63,
+    "teamwork": 65,
+    "communication": 68,
+    "igl": 44
+   },
+   "attrsEstimated": false,
+   "clubId": "T27",
+   "clubTag": "GX",
+   "team": "Rogue (European Team)",
+   "span": "2019",
+   "photo": {
+    "img": "/lol/faces/echo/HeaQ.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/38769215600/",
+    "note": "EU LCS Spring 2018 Week 7, ROCCAT"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Jactroll",
+   "person": "H:Jactroll",
+   "ign": "Jactroll",
+   "realName": "Jakub Skurzyński",
+   "nat": "pl",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 61,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 62,
+    "reaction": 66,
+    "awareness": 60,
+    "utility": 63,
+    "clutch": 64,
+    "teamwork": 63,
+    "communication": 62,
+    "igl": 51
+   },
+   "attrsEstimated": false,
+   "clubId": "T34",
+   "clubTag": "VIT",
+   "team": "Team Vitality",
+   "span": "2018–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Jactroll.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/45309716911/",
+    "note": "Vitality Worlds 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Tabzz",
+   "person": "H:Tabzz",
+   "ign": "Tabzz",
+   "realName": "Erik van Helvert",
+   "nat": "nl",
+   "region": "LEC",
+   "group": "LEC",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 60,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 61,
+    "reaction": 53,
+    "awareness": 65,
+    "utility": 61,
+    "clutch": 67,
+    "teamwork": 62,
+    "communication": 64,
+    "igl": 38
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Alliance",
+   "span": "2014",
+   "photo": {
+    "img": "/lol/faces/echo/Tabzz.webp",
+    "w": 639,
+    "h": 426,
+    "credit": "https://www.flickr.com/photos/lolesports/15171970720/",
+    "note": "NWS face off ALL to open Day 2 Group Stages in Singapore."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Bjergsen",
+   "person": "H:Bjergsen",
+   "ign": "Bjergsen",
+   "realName": "Søren Bjerg",
+   "nat": "dk",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 87,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 85,
+    "reaction": 89,
+    "awareness": 80,
+    "utility": 86,
+    "clutch": 88,
+    "teamwork": 88,
+    "communication": 90,
+    "igl": 90
+   },
+   "attrsEstimated": false,
+   "clubId": "T42",
+   "clubTag": "TL",
+   "team": "TSM",
+   "span": "2014–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Bjergsen.webp",
+    "w": 2048,
+    "h": 1365,
+    "credit": "https://exp.gg/en/63360/",
+    "note": "TSM Bjergsen postmatch interview at NA LCS 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Hauntzer",
+   "person": "H:Hauntzer",
+   "ign": "Hauntzer",
+   "realName": "Kevin Yarnell",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 86,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 87,
+    "reaction": 86,
+    "awareness": 84,
+    "utility": 89,
+    "clutch": 85,
+    "teamwork": 86,
+    "communication": 86,
+    "igl": 81
+   },
+   "attrsEstimated": false,
+   "clubId": "T41",
+   "clubTag": "SR",
+   "team": "TSM",
+   "span": "2016–2023",
+   "photo": {
+    "img": "/lol/faces/echo/Hauntzer.webp",
+    "w": 1024,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/32674541266/",
+    "note": "Week 3 Day 2 at 2017 NA LCS Spring Split in Los Angeles, California, USA on 4 February 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Jensen",
+   "person": "H:Jensen",
+   "ign": "Jensen",
+   "realName": "Nicolaj Jensen",
+   "nat": "dk",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 86,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 86,
+    "reaction": 87,
+    "awareness": 80,
+    "utility": 90,
+    "clutch": 82,
+    "teamwork": 86,
+    "communication": 86,
+    "igl": 83
+   },
+   "attrsEstimated": false,
+   "clubId": "T35",
+   "clubTag": "C9",
+   "team": "Cloud9",
+   "span": "2015–2022",
+   "photo": {
+    "img": "/lol/faces/echo/Jensen.webp",
+    "w": 1024,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/32562195182/",
+    "note": "Cloud9 NA LCS Spring 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Slow",
+   "person": "H:Slow",
+   "ign": "Slow",
+   "realName": "Eduardo Franco Garcés Cerda",
+   "nat": "cl",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 86,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 88,
+    "reaction": 89,
+    "awareness": 85,
+    "utility": 86,
+    "clutch": 80,
+    "teamwork": 87,
+    "communication": 85,
+    "igl": 83
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Isurus",
+   "span": "2019–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Slow.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/48833100061/",
+    "note": "Isurus Worlds 2019 Play-In"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Doublelift",
+   "person": "H:Doublelift",
+   "ign": "Doublelift",
+   "realName": "Yiliang Peng",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 85,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 84,
+    "reaction": 86,
+    "awareness": 86,
+    "utility": 88,
+    "clutch": 84,
+    "teamwork": 84,
+    "communication": 84,
+    "igl": 81
+   },
+   "attrsEstimated": false,
+   "clubId": "T42",
+   "clubTag": "TL",
+   "team": "Counter Logic Gaming",
+   "span": "2011–2015",
+   "photo": {
+    "img": "/lol/faces/echo/Doublelift.webp",
+    "w": 1023,
+    "h": 721,
+    "credit": "https://www.flickr.com/photos/lolesports/32024764437/",
+    "note": "LCS Spring 2019 Week 2.  Photos by Colin Young-Wolff/Riot Games. "
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Biofrost",
+   "person": "H:Biofrost",
+   "ign": "Biofrost",
+   "realName": "Vincent Wang",
+   "nat": "ca",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 84,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 85,
+    "reaction": 81,
+    "awareness": 86,
+    "utility": 83,
+    "clutch": 84,
+    "teamwork": 85,
+    "communication": 87,
+    "igl": 75
+   },
+   "attrsEstimated": false,
+   "clubId": "T36",
+   "clubTag": "DIG",
+   "team": "TSM",
+   "span": "2016–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Biofrost.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/42698374374/",
+    "note": "Week 4 Day 1 at 2018 NA LCS Summer Split in Los Angeles, California, USA on 14 July 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Shernfire",
+   "person": "H:Shernfire",
+   "ign": "Shernfire",
+   "realName": "Shern Cherng Tai",
+   "nat": "au",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 84,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 92,
+    "reaction": 98,
+    "awareness": 77,
+    "utility": 92,
+    "clutch": 83,
+    "teamwork": 83,
+    "communication": 79,
+    "igl": 72
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Dire Wolves",
+   "span": "2014–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Shernfire.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/40078541980/",
+    "note": "2018 Mid-Season Invitational Play-In Stage at EU LCS Studio in Berlin, Germany, on 4 May 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Xmithie",
+   "person": "H:Xmithie",
+   "ign": "Xmithie",
+   "realName": "Jake Kevin Puchero",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 83,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 81,
+    "reaction": 80,
+    "awareness": 83,
+    "utility": 84,
+    "clutch": 84,
+    "teamwork": 82,
+    "communication": 84,
+    "igl": 85
+   },
+   "attrsEstimated": false,
+   "clubId": "T42",
+   "clubTag": "TL",
+   "team": "Counter Logic Gaming",
+   "span": "2015–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Xmithie.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/30004341888/",
+    "note": "Week 7 Day 2 at 2018 NA LCS Summer Split in Los Angeles, California, USA on 5 August 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Chippys",
+   "person": "H:Chippys",
+   "ign": "Chippys",
+   "realName": "Ryan Short",
+   "nat": "au",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 82,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 84,
+    "reaction": 83,
+    "awareness": 80,
+    "utility": 85,
+    "clutch": 78,
+    "teamwork": 80,
+    "communication": 77,
+    "igl": 74
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Dire Wolves",
+   "span": "2015–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Chippys.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/41845624142/",
+    "note": "2018 Mid-Season Invitational Play-In Stage at EU LCS Studio in Berlin, Germany, on 4 May 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Santorin",
+   "person": "H:Santorin",
+   "ign": "Santorin",
+   "realName": "Lucas Tao Kilmer Larsen",
+   "nat": "dk",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 81,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 78,
+    "reaction": 78,
+    "awareness": 84,
+    "utility": 76,
+    "clutch": 81,
+    "teamwork": 85,
+    "communication": 88,
+    "igl": 71
+   },
+   "attrsEstimated": false,
+   "clubId": "T38",
+   "clubTag": "FLY",
+   "team": "FlyQuest",
+   "span": "2018–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Santorin.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/36507831755/",
+    "note": "GCU 2017 promotion tournament"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Seiya",
+   "person": "H:Seiya",
+   "ign": "Seiya",
+   "realName": "Édgar Ali Bracamontes Munguía",
+   "nat": "mx",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 80,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 80,
+    "reaction": 81,
+    "awareness": 85,
+    "utility": 79,
+    "clutch": 82,
+    "teamwork": 80,
+    "communication": 80,
+    "igl": 69
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Isurus",
+   "span": "2019–2022",
+   "photo": {
+    "img": "/lol/faces/echo/Seiya.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/34394481175/",
+    "note": "Day 4 of 2017 Mid-Season Invitational Play-in Stage at Quantas Studios in São Paulo, São Paulo, Brazil on 1 May 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Grell",
+   "person": "H:Grell",
+   "ign": "Grell",
+   "realName": "Jesús Alberto Loya Trujillo",
+   "nat": "mx",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 79,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 83,
+    "reaction": 81,
+    "awareness": 70,
+    "utility": 84,
+    "clutch": 77,
+    "teamwork": 80,
+    "communication": 78,
+    "igl": 88
+   },
+   "attrsEstimated": false,
+   "clubId": "T57",
+   "clubTag": "VKS",
+   "team": "Vivo Keyd",
+   "span": "2019–2023",
+   "photo": {
+    "img": "/lol/faces/echo/Grell.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/52392802287/",
+    "note": "Isurus Worlds 2022"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Aphromoo",
+   "person": "H:Aphromoo",
+   "ign": "Aphromoo",
+   "realName": "Zaqueri Black",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 78,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 76,
+    "reaction": 78,
+    "awareness": 76,
+    "utility": 74,
+    "clutch": 81,
+    "teamwork": 77,
+    "communication": 79,
+    "igl": 83
+   },
+   "attrsEstimated": false,
+   "clubId": "T36",
+   "clubTag": "DIG",
+   "team": "Counter Logic Gaming",
+   "span": "2013–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Aphromoo.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/40329662041/",
+    "note": "100 Thieves NA LCS Spring 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Svenskeren",
+   "person": "H:Svenskeren",
+   "ign": "Svenskeren",
+   "realName": "Dennis Johnsen",
+   "nat": "dk",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 77,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 80,
+    "reaction": 78,
+    "awareness": 73,
+    "utility": 77,
+    "clutch": 82,
+    "teamwork": 76,
+    "communication": 75,
+    "igl": 83
+   },
+   "attrsEstimated": false,
+   "clubId": "T31",
+   "clubTag": "SK",
+   "team": "TSM",
+   "span": "2016–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Svenskeren.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/30136487508/",
+    "note": "Week 8 Day 2 at 2018 NA LCS Summer Split in Los Angeles, California, USA on 12 August 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Pobelter",
+   "person": "H:Pobelter",
+   "ign": "Pobelter",
+   "realName": "Eugene Park",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 76,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 75,
+    "reaction": 75,
+    "awareness": 77,
+    "utility": 78,
+    "clutch": 76,
+    "teamwork": 76,
+    "communication": 78,
+    "igl": 70
+   },
+   "attrsEstimated": false,
+   "clubId": "T42",
+   "clubTag": "TL",
+   "team": "Counter Logic Gaming",
+   "span": "2015–2021",
+   "photo": {
+    "img": "/lol/faces/echo/Pobelter.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/26472173965/",
+    "note": "Immortals NA LCS Spring 2016"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Sneaky",
+   "person": "H:Sneaky",
+   "ign": "Sneaky",
+   "realName": "Zachary Scuderi",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 75,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 77,
+    "reaction": 75,
+    "awareness": 75,
+    "utility": 73,
+    "clutch": 75,
+    "teamwork": 75,
+    "communication": 75,
+    "igl": 83
+   },
+   "attrsEstimated": false,
+   "clubId": "T35",
+   "clubTag": "C9",
+   "team": "Cloud9",
+   "span": "2013–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Sneaky.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/43496015190/",
+    "note": "Cloud9 Worlds 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Stixxay",
+   "person": "H:Stixxay",
+   "ign": "Stixxay",
+   "realName": "Trevor Hayes",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 74,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 74,
+    "reaction": 73,
+    "awareness": 75,
+    "utility": 75,
+    "clutch": 75,
+    "teamwork": 73,
+    "communication": 71,
+    "igl": 66
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Counter Logic Gaming",
+   "span": "2016–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Stixxay.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/44074196242/",
+    "note": "Week 9 Day 1 at 2018 NA LCS Summer Split in Los Angeles, California, USA on 18 August 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Meteos",
+   "person": "H:Meteos",
+   "ign": "Meteos",
+   "realName": "William Hartman",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 73,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 71,
+    "reaction": 76,
+    "awareness": 76,
+    "utility": 74,
+    "clutch": 72,
+    "teamwork": 73,
+    "communication": 75,
+    "igl": 60
+   },
+   "attrsEstimated": false,
+   "clubId": "T35",
+   "clubTag": "C9",
+   "team": "Cloud9",
+   "span": "2013–2016",
+   "photo": {
+    "img": "/lol/faces/echo/Meteos.webp",
+    "w": 1024,
+    "h": 681,
+    "credit": "https://www.flickr.com/photos/lolesports/15379303015/",
+    "note": "C9 and NWS fight it out in Day 4."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Link",
+   "person": "H:Link",
+   "ign": "Link",
+   "realName": "Austin Shin",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 72,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 73,
+    "reaction": 71,
+    "awareness": 74,
+    "utility": 68,
+    "clutch": 69,
+    "teamwork": 74,
+    "communication": 75,
+    "igl": 58
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Counter Logic Gaming",
+   "span": "2012–2015",
+   "photo": {
+    "img": "/lol/faces/echo/Link.webp",
+    "w": 984,
+    "h": 656,
+    "credit": "https://www.techtudo.com.br/listas/2020/04/csgo-e-fifa-veja-jogadores-polemicos-que-interromperam-suas-carreiras-esports.ghtml",
+    "note": "NA LCS stage with CLG; exact photograph date not stated"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Jirall",
+   "person": "H:Jirall",
+   "ign": "Jirall",
+   "realName": "Daniel del Castillo",
+   "nat": "mx",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 71,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 68,
+    "reaction": 75,
+    "awareness": 78,
+    "utility": 70,
+    "clutch": 74,
+    "teamwork": 69,
+    "communication": 69,
+    "igl": 67
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Lyon Gaming (2013 Latin American Team)",
+   "span": "2017",
+   "photo": {
+    "img": "/lol/faces/echo/Jirall.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/34219159501/",
+    "note": "Lyon Gaming MSI 2017 Play-In"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Acce",
+   "person": "H:Acce",
+   "ign": "Acce",
+   "realName": "Emmanuel Juárez",
+   "nat": "ar",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 70,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 68,
+    "reaction": 72,
+    "awareness": 71,
+    "utility": 69,
+    "clutch": 71,
+    "teamwork": 70,
+    "communication": 71,
+    "igl": 64
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Furious Gaming",
+   "span": "2014–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Acce.webp",
+    "w": 350,
+    "h": 233,
+    "credit": "https://www.infobae.com/america/agencias/2020/07/23/argentino-acce-asegura-que-isurus-ya-no-da-miedo-en-la-liga-latina-de-lol/",
+    "note": "Rainbow7 Acce Mexico City 2020; article 2020-07-23"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:WildTurtle",
+   "person": "H:WildTurtle",
+   "ign": "WildTurtle",
+   "realName": "Jason Tran",
+   "nat": "ca",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 70,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 68,
+    "reaction": 71,
+    "awareness": 68,
+    "utility": 72,
+    "clutch": 73,
+    "teamwork": 69,
+    "communication": 70,
+    "igl": 68
+   },
+   "attrsEstimated": false,
+   "clubId": "T38",
+   "clubTag": "FLY",
+   "team": "TSM",
+   "span": "2013–2023",
+   "photo": {
+    "img": "/lol/faces/echo/WildTurtle.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/42237310545/",
+    "note": "Week 3 Day 2 at 2018 NA LCS Summer Split in Los Angeles, California, USA on 1 July 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Aloned",
+   "person": "H:Aloned",
+   "ign": "Aloned",
+   "realName": "Tomás Antonio Díaz Valiente",
+   "nat": "cl",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 69,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 70,
+    "reaction": 70,
+    "awareness": 73,
+    "utility": 68,
+    "clutch": 69,
+    "teamwork": 68,
+    "communication": 68,
+    "igl": 56
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Team Aze",
+   "span": "2022–2023",
+   "photo": {
+    "img": "/lol/faces/echo/Aloned.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/52063470818/",
+    "note": "Team Aze MSI 2022"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Darshan",
+   "person": "H:Darshan",
+   "ign": "Darshan",
+   "realName": "Darshan Upadhyaya",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 69,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 70,
+    "reaction": 71,
+    "awareness": 72,
+    "utility": 64,
+    "clutch": 72,
+    "teamwork": 70,
+    "communication": 70,
+    "igl": 54
+   },
+   "attrsEstimated": false,
+   "clubId": "T36",
+   "clubTag": "DIG",
+   "team": "Counter Logic Gaming",
+   "span": "2015–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Darshan.webp",
+    "w": 1024,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/33231876892/",
+    "note": "Week 7 Day 2 at 2017 NA LCS Spring Split in Los Angeles, California, USA on 11 March 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Smoothie",
+   "person": "H:Smoothie",
+   "ign": "Smoothie",
+   "realName": "Andy Ta",
+   "nat": "ca",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 68,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 71,
+    "reaction": 66,
+    "awareness": 68,
+    "utility": 67,
+    "clutch": 71,
+    "teamwork": 70,
+    "communication": 74,
+    "igl": 51
+   },
+   "attrsEstimated": false,
+   "clubId": "T35",
+   "clubTag": "C9",
+   "team": "Cloud9",
+   "span": "2016–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Smoothie.webp",
+    "w": 1024,
+    "h": 682,
+    "credit": "https://www.flickr.com/photos/lolesports/33090362148/",
+    "note": "TSM LCS 2019"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Cotopaco",
+   "person": "H:Cotopaco",
+   "ign": "Cotopaco",
+   "realName": "Sergio Silva Sánchez",
+   "nat": "co",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 67,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 73,
+    "reaction": 66,
+    "awareness": 63,
+    "utility": 61,
+    "clutch": 69,
+    "teamwork": 66,
+    "communication": 65,
+    "igl": 57
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "INFINITY",
+   "span": "2017–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Cotopaco.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/31275780338/",
+    "note": "Infinity Worlds 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Xpecial",
+   "person": "H:Xpecial",
+   "ign": "Xpecial",
+   "realName": "Alex Chu",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 67,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 68,
+    "reaction": 67,
+    "awareness": 66,
+    "utility": 68,
+    "clutch": 67,
+    "teamwork": 68,
+    "communication": 72,
+    "igl": 58
+   },
+   "attrsEstimated": false,
+   "clubId": "T42",
+   "clubTag": "TL",
+   "team": "TSM",
+   "span": "2011–2014",
+   "photo": {
+    "img": "/lol/faces/echo/Xpecial.webp",
+    "w": 1024,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/33387669445/",
+    "note": "Week 7 Day 2 at 2017 NA LCS Spring Split in Los Angeles, California, USA on 11 March 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:LemonNation",
+   "person": "H:LemonNation",
+   "ign": "LemonNation",
+   "realName": "Daerek Hart",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 66,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 67,
+    "reaction": 67,
+    "awareness": 68,
+    "utility": 68,
+    "clutch": 67,
+    "teamwork": 68,
+    "communication": 66,
+    "igl": 54
+   },
+   "attrsEstimated": false,
+   "clubId": "T35",
+   "clubTag": "C9",
+   "team": "Cloud9",
+   "span": "2013–2015",
+   "photo": {
+    "img": "/lol/faces/echo/LemonNation.webp",
+    "w": 1024,
+    "h": 681,
+    "credit": "https://www.flickr.com/photos/lolesports/15376138621/",
+    "note": "C9 and NWS fight it out in Day 4."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Saintvicious",
+   "person": "H:Saintvicious",
+   "ign": "Saintvicious",
+   "realName": "Brandon DiMarco",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 66,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 64,
+    "reaction": 66,
+    "awareness": 65,
+    "utility": 71,
+    "clutch": 69,
+    "teamwork": 67,
+    "communication": 70,
+    "igl": 59
+   },
+   "attrsEstimated": false,
+   "clubId": "T42",
+   "clubTag": "TL",
+   "team": "Team Curse",
+   "span": "2012–2013",
+   "photo": {
+    "img": "/lol/faces/echo/Saintvicious.webp",
+    "w": 982,
+    "h": 1024,
+    "credit": "https://www.flickr.com/photos/vsmak/7069733115/",
+    "note": "CLG 2012 playing era"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Akaadian",
+   "person": "H:Akaadian",
+   "ign": "Akaadian",
+   "realName": "Matthew Higginbotham",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 65,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 66,
+    "reaction": 67,
+    "awareness": 65,
+    "utility": 70,
+    "clutch": 71,
+    "teamwork": 65,
+    "communication": 63,
+    "igl": 49
+   },
+   "attrsEstimated": false,
+   "clubId": "T36",
+   "clubTag": "DIG",
+   "team": "Echo Fox",
+   "span": "2017",
+   "photo": {
+    "img": "/lol/faces/echo/Akaadian.webp",
+    "w": 1023,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/32222636630/",
+    "note": "Echo Fox NA LCS Spring 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Matt Elento",
+   "person": "H:Matt Elento",
+   "ign": "Matt Elento",
+   "realName": "Matthew Elento",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 64,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 66,
+    "reaction": 63,
+    "awareness": 62,
+    "utility": 62,
+    "clutch": 64,
+    "teamwork": 66,
+    "communication": 67,
+    "igl": 57
+   },
+   "attrsEstimated": false,
+   "clubId": "T42",
+   "clubTag": "TL",
+   "team": "Team Liquid",
+   "span": "2016–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Matt_Elento.webp",
+    "w": 1024,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/32527267714/",
+    "note": "Team Liquid NA LCS Spring 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Pirean",
+   "person": "H:Pirean",
+   "ign": "Pirean",
+   "realName": "최준식",
+   "nat": "kr",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 64,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 64,
+    "reaction": 59,
+    "awareness": 71,
+    "utility": 61,
+    "clutch": 66,
+    "teamwork": 66,
+    "communication": 69,
+    "igl": 61
+   },
+   "attrsEstimated": false,
+   "clubId": "T24",
+   "clubTag": "T1",
+   "team": "Phoenix1",
+   "span": "2016–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Pirean.webp",
+    "w": 658,
+    "h": 438,
+    "credit": "https://v.daum.net/v/gvNWXFBOna",
+    "note": "SKT 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Hai",
+   "person": "H:Hai",
+   "ign": "Hai",
+   "realName": "Hai Du Lam",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 63,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 65,
+    "reaction": 60,
+    "awareness": 65,
+    "utility": 60,
+    "clutch": 64,
+    "teamwork": 64,
+    "communication": 65,
+    "igl": 58
+   },
+   "attrsEstimated": false,
+   "clubId": "T35",
+   "clubTag": "C9",
+   "team": "Cloud9",
+   "span": "2013–2016",
+   "photo": {
+    "img": "/lol/faces/echo/Hai.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/24555362373/",
+    "note": "North America League of Legends Championship Series - NA LCS 2016 Spring Week 6"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Balls",
+   "person": "H:Balls",
+   "ign": "Balls",
+   "realName": "An Van Le",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 62,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 59,
+    "reaction": 64,
+    "awareness": 62,
+    "utility": 61,
+    "clutch": 66,
+    "teamwork": 63,
+    "communication": 66,
+    "igl": 56
+   },
+   "attrsEstimated": false,
+   "clubId": "T35",
+   "clubTag": "C9",
+   "team": "Cloud9",
+   "span": "2013–2014",
+   "photo": {
+    "img": "/lol/faces/echo/Balls.webp",
+    "w": 1023,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/14902992428/",
+    "note": "C9 and CRS fight for a slot at Worlds."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Dyrus",
+   "person": "H:Dyrus",
+   "ign": "Dyrus",
+   "realName": "Marcus Hill",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 62,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 58,
+    "reaction": 64,
+    "awareness": 66,
+    "utility": 60,
+    "clutch": 77,
+    "teamwork": 60,
+    "communication": 62,
+    "igl": 55
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "TSM",
+   "span": "2012–2015",
+   "photo": {
+    "img": "/lol/faces/echo/Dyrus.webp",
+    "w": 580,
+    "h": 400,
+    "credit": "https://gamek.vn/esport/sieu-sao-lien-minh-huyen-thoai-giai-nghe-trong-nuoc-mat-ngay-tai-cktg-20151012124212804.chn",
+    "note": "TSM Dyrus portrait republished on retirement in 2015"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Big",
+   "person": "H:Big",
+   "ign": "Big",
+   "realName": "Terry Chuong",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 61,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 60,
+    "reaction": 60,
+    "awareness": 65,
+    "utility": 64,
+    "clutch": 65,
+    "teamwork": 62,
+    "communication": 64,
+    "igl": 42
+   },
+   "attrsEstimated": false,
+   "clubId": "T36",
+   "clubTag": "DIG",
+   "team": "OpTic Gaming",
+   "span": "2018–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Big.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/35243727611/",
+    "note": "Dignitas NA LCS Summer 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Lourlo",
+   "person": "H:Lourlo",
+   "ign": "Lourlo",
+   "realName": "Samson Jackson",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 61,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 61,
+    "reaction": 57,
+    "awareness": 66,
+    "utility": 63,
+    "clutch": 64,
+    "teamwork": 65,
+    "communication": 67,
+    "igl": 44
+   },
+   "attrsEstimated": false,
+   "clubId": "T42",
+   "clubTag": "TL",
+   "team": "Team Liquid",
+   "span": "2016–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Lourlo.webp",
+    "w": 1024,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/33364479042/",
+    "note": "Team Liquid NA LCS 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Keith",
+   "person": "H:Keith",
+   "ign": "Keith",
+   "realName": "Yuri Jew",
+   "nat": "us",
+   "region": "LCS",
+   "group": "LCS",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 60,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 59,
+    "reaction": 61,
+    "awareness": 64,
+    "utility": 58,
+    "clutch": 66,
+    "teamwork": 60,
+    "communication": 62,
+    "igl": 45
+   },
+   "attrsEstimated": false,
+   "clubId": "T42",
+   "clubTag": "TL",
+   "team": "Echo Fox",
+   "span": "2016–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Keith.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/42865867311/",
+    "note": "Cloud9 NA LCS Summer 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Levi",
+   "person": "H:Levi",
+   "ign": "Levi",
+   "realName": "Đỗ Duy Khánh",
+   "nat": "vn",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 87,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 92,
+    "reaction": 90,
+    "awareness": 82,
+    "utility": 94,
+    "clutch": 86,
+    "teamwork": 86,
+    "communication": 81,
+    "igl": 89
+   },
+   "attrsEstimated": false,
+   "clubId": "T47",
+   "clubTag": "GAM",
+   "team": "GAM Esports",
+   "span": "2017–2025",
+   "photo": {
+    "img": "/lol/faces/echo/Levi.webp",
+    "w": 1920,
+    "h": 1080,
+    "credit": "https://thanhnien.vn/tiet-lo-cua-gam-esport-chung-toi-thuc-su-rat-muon-levi-o-lai-1851518701.htm",
+    "note": "GAM Levi at Worlds 2022"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Hanabi",
+   "person": "H:Hanabi",
+   "ign": "Hanabi",
+   "realName": "蘇嘉祥",
+   "nat": "tw",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 86,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 85,
+    "reaction": 86,
+    "awareness": 88,
+    "utility": 89,
+    "clutch": 83,
+    "teamwork": 83,
+    "communication": 83,
+    "igl": 91
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "PSG Talon",
+   "span": "2020–2022",
+   "photo": {
+    "img": "/lol/faces/echo/Hanabi.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/27338614177/",
+    "note": "2018 Mid-Season Invitational Semifinal Stage at Zénith Paris in Paris, France, on 19 May 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Palette",
+   "person": "H:Palette",
+   "ign": "Palette",
+   "realName": "Nguyễn Hải Trung",
+   "nat": "vn",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 86,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 87,
+    "reaction": 94,
+    "awareness": 89,
+    "utility": 89,
+    "clutch": 83,
+    "teamwork": 87,
+    "communication": 81,
+    "igl": 76
+   },
+   "attrsEstimated": false,
+   "clubId": "T47",
+   "clubTag": "GAM",
+   "team": "Team Flash.Vietnam",
+   "span": "2020–2021",
+   "photo": {
+    "img": "/lol/faces/echo/Palette.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/44523867584/",
+    "note": "Phong Vũ Buffalo Worlds 2018"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Yutapon",
+   "person": "H:Yutapon",
+   "ign": "Yutapon",
+   "realName": "杉浦 悠太",
+   "nat": "jp",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 85,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 86,
+    "reaction": 87,
+    "awareness": 82,
+    "utility": 85,
+    "clutch": 81,
+    "teamwork": 84,
+    "communication": 83,
+    "igl": 88
+   },
+   "attrsEstimated": false,
+   "clubId": "T45",
+   "clubTag": "DFM",
+   "team": "DetonatioN FocusMe",
+   "span": "2013–2024",
+   "photo": {
+    "img": "/lol/faces/echo/Yutapon.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/30094655077/",
+    "note": "Day 1 at 2018 World Championship Play-In at LoL PARK in Seoul, Korea, on 1 October 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:MooJin",
+   "person": "H:MooJin",
+   "ign": "MooJin",
+   "realName": "김무진",
+   "nat": "kr",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 84,
+   "rarity": "gold",
+   "attrs": {
+    "aim": 85,
+    "reaction": 83,
+    "awareness": 84,
+    "utility": 85,
+    "clutch": 85,
+    "teamwork": 81,
+    "communication": 80,
+    "igl": 91
+   },
+   "attrsEstimated": false,
+   "clubId": "T20",
+   "clubTag": "HLE",
+   "team": "Hanwha Life Esports",
+   "span": "2019",
+   "photo": {
+    "img": "/lol/faces/echo/MooJin.webp",
+    "w": 600,
+    "h": 405,
+    "credit": "https://www.invenglobal.com/articles/6437/fw-moojin-i-told-my-coach-that-im-confident-in-making-aggressive-plays-on-taliyah-and-thats-why-he-allowed-me-to-use-her",
+    "note": "Flash Wolves MooJin Worlds 2018 interview"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:SwordArT",
+   "person": "H:SwordArT",
+   "ign": "SwordArT",
+   "realName": "胡碩傑",
+   "nat": "tw",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 83,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 85,
+    "reaction": 82,
+    "awareness": 82,
+    "utility": 81,
+    "clutch": 83,
+    "teamwork": 83,
+    "communication": 84,
+    "igl": 89
+   },
+   "attrsEstimated": false,
+   "clubId": "T14",
+   "clubTag": "WBG",
+   "team": "Flash Wolves",
+   "span": "2013–2018",
+   "photo": {
+    "img": "/lol/faces/echo/SwordArT.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/42015916722/",
+    "note": "2018 Mid-Season Invitational Group Stage at EU LCS Studio in Berlin, Germany, on 12 May 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Steal",
+   "person": "H:Steal",
+   "ign": "Steal",
+   "realName": "문건영",
+   "nat": "kr",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 82,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 84,
+    "reaction": 79,
+    "awareness": 86,
+    "utility": 80,
+    "clutch": 81,
+    "teamwork": 80,
+    "communication": 80,
+    "igl": 87
+   },
+   "attrsEstimated": false,
+   "clubId": "T45",
+   "clubTag": "DFM",
+   "team": "DetonatioN FocusMe",
+   "span": "2017–2024",
+   "photo": {
+    "img": "/lol/faces/echo/Steal.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/30094652697/",
+    "note": "Day 1 at 2018 World Championship Play-In at LoL PARK in Seoul, Korea, on 1 October 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Unified",
+   "person": "H:Unified",
+   "ign": "Unified",
+   "realName": "黃俊杰",
+   "nat": "hk",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 82,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 82,
+    "reaction": 83,
+    "awareness": 84,
+    "utility": 81,
+    "clutch": 80,
+    "teamwork": 83,
+    "communication": 84,
+    "igl": 80
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Hong Kong Attitude",
+   "span": "2017–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Unified.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/52063740006/",
+    "note": "PSG Talon MSI 2022"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Maple",
+   "person": "H:Maple",
+   "ign": "Maple",
+   "realName": "黃熠棠",
+   "nat": "tw",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 81,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 83,
+    "reaction": 81,
+    "awareness": 80,
+    "utility": 80,
+    "clutch": 78,
+    "teamwork": 80,
+    "communication": 79,
+    "igl": 84
+   },
+   "attrsEstimated": false,
+   "clubId": "T14",
+   "clubTag": "WBG",
+   "team": "Flash Wolves",
+   "span": "2013–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Maple.webp",
+    "w": 800,
+    "h": 533,
+    "credit": "https://www.cna.com.tw/news/aspt/202412070150.aspx",
+    "note": "Maple retirement / KeSPA Cup 2024"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Karsa",
+   "person": "H:Karsa",
+   "ign": "Karsa",
+   "realName": "洪浩軒",
+   "nat": "tw",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 80,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 81,
+    "reaction": 83,
+    "awareness": 80,
+    "utility": 82,
+    "clutch": 81,
+    "teamwork": 78,
+    "communication": 78,
+    "igl": 79
+   },
+   "attrsEstimated": false,
+   "clubId": "T12",
+   "clubTag": "TES",
+   "team": "Flash Wolves",
+   "span": "2015–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Karsa.webp",
+    "w": 1000,
+    "h": 625,
+    "credit": "https://www.4gamers.com.tw/news/detail/34951/2018-msi-knock-out-stage-semi-day-1-karsa-interview",
+    "note": "RNG Karsa postmatch interview at MSI 2018 semifinal"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Yang",
+   "person": "H:Yang",
+   "ign": "Yang",
+   "realName": "Felipe Zhao",
+   "nat": "br",
+   "region": "CBLOL",
+   "group": "WEST",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 79,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 78,
+    "reaction": 81,
+    "awareness": 81,
+    "utility": 78,
+    "clutch": 77,
+    "teamwork": 78,
+    "communication": 77,
+    "igl": 66
+   },
+   "attrsEstimated": false,
+   "clubId": "T57",
+   "clubTag": "VKS",
+   "team": "Vivo Keyd",
+   "span": "2017–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Yang.webp",
+    "w": 330,
+    "h": 253,
+    "credit": "https://www.oficinadanet.com.br/post/15349-entrevista-com-felipe-yang-zhao",
+    "note": "INTZ Yang 2015 interview"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Ziv",
+   "person": "H:Ziv",
+   "ign": "Ziv",
+   "realName": "陳奕",
+   "nat": "tw",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 79,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 81,
+    "reaction": 76,
+    "awareness": 81,
+    "utility": 77,
+    "clutch": 78,
+    "teamwork": 81,
+    "communication": 80,
+    "igl": 77
+   },
+   "attrsEstimated": false,
+   "clubId": "T1",
+   "clubTag": "AL",
+   "team": "ahq eSports Club",
+   "span": "2014–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Ziv.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/37532677481/",
+    "note": "ahq Worlds 2017 Groups"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:NL",
+   "person": "H:NL",
+   "ign": "NL",
+   "realName": "熊汶銨",
+   "nat": "tw",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 78,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 80,
+    "reaction": 81,
+    "awareness": 73,
+    "utility": 81,
+    "clutch": 74,
+    "teamwork": 74,
+    "communication": 73,
+    "igl": 84
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Flash Wolves",
+   "span": "2013–2016",
+   "photo": {
+    "img": "/lol/faces/echo/NL.webp",
+    "w": 683,
+    "h": 1024,
+    "credit": "https://www.flickr.com/photos/lolesports/21946539915/",
+    "note": "Worlds Group Stages Week 1 Day 4 - Le Dock Pullman"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Ceros",
+   "person": "H:Ceros",
+   "ign": "Ceros",
+   "realName": "吉田 恭平",
+   "nat": "jp",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 77,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 80,
+    "reaction": 80,
+    "awareness": 73,
+    "utility": 71,
+    "clutch": 77,
+    "teamwork": 76,
+    "communication": 77,
+    "igl": 77
+   },
+   "attrsEstimated": false,
+   "clubId": "T45",
+   "clubTag": "DFM",
+   "team": "DetonatioN FocusMe",
+   "span": "2013–2021",
+   "photo": {
+    "img": "/lol/faces/echo/Ceros.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/44984140152/",
+    "note": "Day 1 at 2018 World Championship Play-In at LoL PARK in Seoul, Korea, on 1 October 2018."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Albis",
+   "person": "H:Albis",
+   "ign": "Albis",
+   "realName": "康家維",
+   "nat": "tw",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 76,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 74,
+    "reaction": 75,
+    "awareness": 79,
+    "utility": 79,
+    "clutch": 76,
+    "teamwork": 72,
+    "communication": 71,
+    "igl": 89
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "ahq eSports Club",
+   "span": "2012–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Albis.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/37292513430/",
+    "note": "ahq Worlds 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:An",
+   "person": "H:An",
+   "ign": "An",
+   "realName": "周俊諳",
+   "nat": "tw",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 76,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 75,
+    "reaction": 78,
+    "awareness": 79,
+    "utility": 78,
+    "clutch": 76,
+    "teamwork": 74,
+    "communication": 74,
+    "igl": 69
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "ahq eSports Club",
+   "span": "2014–2019",
+   "photo": {
+    "img": "/lol/faces/echo/An.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/37657781426/",
+    "note": "ahq Worlds 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Mountain",
+   "person": "H:Mountain",
+   "ign": "Mountain",
+   "realName": "薛兆鴻",
+   "nat": "tw",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 75,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 76,
+    "reaction": 81,
+    "awareness": 73,
+    "utility": 82,
+    "clutch": 77,
+    "teamwork": 73,
+    "communication": 72,
+    "igl": 77
+   },
+   "attrsEstimated": false,
+   "clubId": "T9",
+   "clubTag": "OMG",
+   "team": "ahq eSports Club",
+   "span": "2014–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Mountain.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/37036542163/",
+    "note": "ahq Worlds 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Kami",
+   "person": "H:Kami",
+   "ign": "Kami",
+   "realName": "Gabriel Bohm Santos",
+   "nat": "br",
+   "region": "CBLOL",
+   "group": "WEST",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 74,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 73,
+    "reaction": 76,
+    "awareness": 74,
+    "utility": 74,
+    "clutch": 69,
+    "teamwork": 77,
+    "communication": 78,
+    "igl": 63
+   },
+   "attrsEstimated": false,
+   "clubId": "T58",
+   "clubTag": "PNG",
+   "team": "paiN Gaming",
+   "span": "2012–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Kami.webp",
+    "w": 924,
+    "h": 616,
+    "credit": "https://sportv.globo.com/site/e-sportv/noticia/jogador-mais-caro-do-lol-brasileiro-anuncia-afastamento-para-periodo-sabatico.ghtml",
+    "note": "PaiN Gaming Kami sabbatical article; source photo path dated 2016"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Croc",
+   "person": "H:Croc",
+   "ign": "Croc",
+   "realName": "박종훈",
+   "nat": "kr",
+   "region": "CBLOL",
+   "group": "WEST",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 73,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 74,
+    "reaction": 76,
+    "awareness": 69,
+    "utility": 74,
+    "clutch": 75,
+    "teamwork": 71,
+    "communication": 71,
+    "igl": 86
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "LOUD",
+   "span": "2022–2024",
+   "photo": {
+    "img": "/lol/faces/echo/Croc.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/52393238917/",
+    "note": "LOUD Worlds 2022"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Mylon",
+   "person": "H:Mylon",
+   "ign": "Mylon",
+   "realName": "Matheus Borges",
+   "nat": "br",
+   "region": "CBLOL",
+   "group": "WEST",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 73,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 70,
+    "reaction": 78,
+    "awareness": 72,
+    "utility": 74,
+    "clutch": 68,
+    "teamwork": 72,
+    "communication": 75,
+    "igl": 64
+   },
+   "attrsEstimated": false,
+   "clubId": "T58",
+   "clubTag": "PNG",
+   "team": "paiN Gaming",
+   "span": "2015–2017",
+   "photo": {
+    "img": "/lol/faces/echo/Mylon.webp",
+    "w": 784,
+    "h": 621,
+    "credit": "https://esports365.com/league-of-legends/cblol/2015-second-split/players/mylon",
+    "note": "PaiN Gaming CBLOL 2015 second split player profile"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Dia1",
+   "person": "H:Dia1",
+   "ign": "Dia1",
+   "realName": "Lê Phú Quý",
+   "nat": "vn",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 72,
+   "rarity": "silver",
+   "attrs": {
+    "aim": 73,
+    "reaction": 76,
+    "awareness": 74,
+    "utility": 74,
+    "clutch": 72,
+    "teamwork": 66,
+    "communication": 62,
+    "igl": 63
+   },
+   "attrsEstimated": false,
+   "clubId": "T47",
+   "clubTag": "GAM",
+   "team": "SBTC Esports",
+   "span": "2021–2023",
+   "photo": {
+    "img": "/lol/faces/echo/Dia1.webp",
+    "w": 660,
+    "h": 440,
+    "credit": "https://kenh14.vn/dia1-tu-tay-choi-duong-giua-hang-dau-vcs-toi-ke-di-dem-linh-ban-an-cam-thi-dau-1-nam-20210518003155795.chn",
+    "note": "GAM Esports VCS-era photo"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Revolta",
+   "person": "H:Revolta",
+   "ign": "Revolta",
+   "realName": "Gabriel Henud Cresci",
+   "nat": "br",
+   "region": "CBLOL",
+   "group": "WEST",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 71,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 70,
+    "reaction": 73,
+    "awareness": 74,
+    "utility": 71,
+    "clutch": 69,
+    "teamwork": 72,
+    "communication": 72,
+    "igl": 57
+   },
+   "attrsEstimated": false,
+   "clubId": "T57",
+   "clubTag": "VKS",
+   "team": "Keyd Stars",
+   "span": "2013–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Revolta.webp",
+    "w": 1024,
+    "h": 576,
+    "credit": "https://www.flickr.com/photos/lolesports/25057730918/",
+    "note": "CBLOL All-Star 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:brTT",
+   "person": "H:brTT",
+   "ign": "brTT",
+   "realName": "Felipe Gonçalves da Rocha",
+   "nat": "br",
+   "region": "CBLOL",
+   "group": "WEST",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 70,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 68,
+    "reaction": 78,
+    "awareness": 66,
+    "utility": 72,
+    "clutch": 69,
+    "teamwork": 68,
+    "communication": 67,
+    "igl": 56
+   },
+   "attrsEstimated": false,
+   "clubId": "T58",
+   "clubTag": "PNG",
+   "team": "paiN Gaming",
+   "span": "2012–2021",
+   "photo": {
+    "img": "/lol/faces/echo/brTT.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/48837090028/",
+    "note": "LEC STUDIO, BERLIN, GERMANY - OCTOBER 03: Felipe &quot;brTT&quot; Gonçalves waits to play at Worlds. (Photo by Michal Konkol/Riot Games)"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Tussle",
+   "person": "H:Tussle",
+   "ign": "Tussle",
+   "realName": "이문용",
+   "nat": "kr",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 70,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 68,
+    "reaction": 73,
+    "awareness": 71,
+    "utility": 73,
+    "clutch": 70,
+    "teamwork": 70,
+    "communication": 72,
+    "igl": 59
+   },
+   "attrsEstimated": false,
+   "clubId": "T46",
+   "clubTag": "SHG",
+   "team": "Fukuoka SoftBank HAWKS gaming",
+   "span": "2020–2021",
+   "photo": {
+    "img": "/lol/faces/echo/Tussle.webp",
+    "w": 540,
+    "h": 473,
+    "credit": "https://www.inven.co.kr/webzine/news/?news=185646&site=lol",
+    "note": "Rampage 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:MMD",
+   "person": "H:MMD",
+   "ign": "MMD",
+   "realName": "游立宏",
+   "nat": "tw",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 69,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 70,
+    "reaction": 72,
+    "awareness": 69,
+    "utility": 68,
+    "clutch": 67,
+    "teamwork": 67,
+    "communication": 68,
+    "igl": 71
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Flash Wolves",
+   "span": "2014–2018",
+   "photo": {
+    "img": "/lol/faces/echo/MMD.webp",
+    "w": 1024,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/34451307761/",
+    "note": "Day 1 of 2017 Mid-Season Invitational Group Stage at Jeunesse Arena in Rio de Janeiro, Rio de Janeiro, Brazil, on 10 May 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Yoshino",
+   "person": "H:Yoshino",
+   "ign": "Yoshino",
+   "realName": "Lê Trung Kiên",
+   "nat": "vn",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 68,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 71,
+    "reaction": 67,
+    "awareness": 71,
+    "utility": 64,
+    "clutch": 68,
+    "teamwork": 69,
+    "communication": 67,
+    "igl": 57
+   },
+   "attrsEstimated": false,
+   "clubId": "T47",
+   "clubTag": "GAM",
+   "team": "Team Flash.Vietnam",
+   "span": "2020–2024",
+   "photo": {
+    "img": "/lol/faces/echo/Yoshino.webp",
+    "w": 600,
+    "h": 338,
+    "credit": "https://kenh14.vn/hot-vua-roi-gam-yoshino-bat-ngo-lo-dien-tai-gaminghouse-cua-team-flash-20191214212100176.chn",
+    "note": "GAM player at VCS match station, article Dec 2019"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Celebrity",
+   "person": "H:Celebrity",
+   "ign": "Celebrity",
+   "realName": "Nguyễn Phước Long Hiệp",
+   "nat": "vn",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 67,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 67,
+    "reaction": 69,
+    "awareness": 64,
+    "utility": 70,
+    "clutch": 64,
+    "teamwork": 64,
+    "communication": 60,
+    "igl": 66
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "SBTC Esports",
+   "span": "2021–2022",
+   "photo": {
+    "img": "/lol/faces/echo/Celebrity.webp",
+    "w": 683,
+    "h": 1024,
+    "credit": "https://www.flickr.com/photos/lolesports/48838105512/",
+    "note": "Lowkey Esports Worlds 2019"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Westdoor",
+   "person": "H:Westdoor",
+   "ign": "Westdoor",
+   "realName": "劉書瑋",
+   "nat": "tw",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "中单",
+   "roles": [
+    "中单"
+   ],
+   "rating": 67,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 66,
+    "reaction": 65,
+    "awareness": 71,
+    "utility": 69,
+    "clutch": 70,
+    "teamwork": 67,
+    "communication": 69,
+    "igl": 65
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "ahq eSports Club",
+   "span": "2013–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Westdoor.webp",
+    "w": 1023,
+    "h": 682,
+    "credit": "https://www.flickr.com/photos/lolesports/30147206306/",
+    "note": "ahq e-Sports Club vs H2K at the 2016 World Championship - Group Stage at the Bill Graham Civic Auditorium in San Francisco, California, USA on 7 October 2016."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:micaO",
+   "person": "H:micaO",
+   "ign": "micaO",
+   "realName": "Micael Rodrigues",
+   "nat": "br",
+   "region": "CBLOL",
+   "group": "WEST",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 66,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 66,
+    "reaction": 68,
+    "awareness": 67,
+    "utility": 60,
+    "clutch": 70,
+    "teamwork": 67,
+    "communication": 68,
+    "igl": 62
+   },
+   "attrsEstimated": false,
+   "clubId": "T57",
+   "clubTag": "VKS",
+   "team": "INTZ",
+   "span": "2014–2022",
+   "photo": {
+    "img": "/lol/faces/echo/micaO.webp",
+    "w": 799,
+    "h": 533,
+    "credit": "https://maisesports.com.br/lol-micao-intz-potencial-imenso/",
+    "note": "INTZ micaO Superliga 2019 interview"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Dioud",
+   "person": "H:Dioud",
+   "ign": "Dioud",
+   "realName": "Hugo Padioleau",
+   "nat": "br",
+   "region": "CBLOL",
+   "group": "WEST",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 65,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 65,
+    "reaction": 66,
+    "awareness": 68,
+    "utility": 62,
+    "clutch": 61,
+    "teamwork": 65,
+    "communication": 67,
+    "igl": 59
+   },
+   "attrsEstimated": false,
+   "clubId": "T56",
+   "clubTag": "RED",
+   "team": "RED Canids",
+   "span": "2016–2018",
+   "photo": {
+    "img": "/lol/faces/echo/Dioud.webp",
+    "w": 1000,
+    "h": 667,
+    "credit": "https://maisesports.com.br/lol-dioud-aciona-riot-na-sobre-scripters-no-brasil",
+    "note": "RED Canids archive portrait reused in 2022 interview"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Archie",
+   "person": "H:Archie",
+   "ign": "Archie",
+   "realName": "Trần Minh Nhựt",
+   "nat": "vn",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 64,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 65,
+    "reaction": 66,
+    "awareness": 64,
+    "utility": 64,
+    "clutch": 64,
+    "teamwork": 64,
+    "communication": 64,
+    "igl": 56
+   },
+   "attrsEstimated": false,
+   "clubId": "T47",
+   "clubTag": "GAM",
+   "team": "GAM Esports",
+   "span": "2014–2019",
+   "photo": {
+    "img": "/lol/faces/echo/Archie.webp",
+    "w": 1024,
+    "h": 683,
+    "credit": "https://www.flickr.com/photos/lolesports/34109717970/",
+    "note": "Day 7 of 2017 Mid-Season Invitational Play-in Stage at Quantas Studios in São Paulo, São Paulo, Brazil on 6 May 2017."
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Spot",
+   "person": "H:Spot",
+   "ign": "Spot",
+   "realName": "Nguyễn Phan Đình Khôi",
+   "nat": "vn",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "打野",
+   "roles": [
+    "打野"
+   ],
+   "rating": 64,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 70,
+    "reaction": 73,
+    "awareness": 65,
+    "utility": 72,
+    "clutch": 63,
+    "teamwork": 63,
+    "communication": 58,
+    "igl": 41
+   },
+   "attrsEstimated": false,
+   "clubId": "T47",
+   "clubTag": "GAM",
+   "team": "SBTC Esports",
+   "span": "2022–2023",
+   "photo": {
+    "img": "/lol/faces/echo/Spot.webp",
+    "w": 640,
+    "h": 426,
+    "credit": "https://kenh14.vn/cuu-tuyen-thu-gam-esports-spot-tiep-tuc-gay-phan-no-vi-thoi-toxic-kho-bo-bi-ca-fan-lck-ca-khia-tham-sau-20211116004957103.chn",
+    "note": "GAM Esports archive photo, article date 2021"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Slay",
+   "person": "H:Slay",
+   "ign": "Slay",
+   "realName": "Nguyễn Ngọc Hùng",
+   "nat": "vn",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 63,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 63,
+    "reaction": 67,
+    "awareness": 63,
+    "utility": 63,
+    "clutch": 69,
+    "teamwork": 60,
+    "communication": 58,
+    "igl": 60
+   },
+   "attrsEstimated": false,
+   "clubId": "T47",
+   "clubTag": "GAM",
+   "team": "GAM Esports",
+   "span": "2017–2020",
+   "photo": {
+    "img": "/lol/faces/echo/Slay.webp",
+    "w": 1024,
+    "h": 768,
+    "credit": "https://www.flickr.com/photos/lolesports/34600694935/",
+    "note": "GAM MSI 2017"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Tay",
+   "person": "H:Tay",
+   "ign": "Tay",
+   "realName": "Rodrigo Panisa",
+   "nat": "br",
+   "region": "CBLOL",
+   "group": "WEST",
+   "role": "上单",
+   "roles": [
+    "上单"
+   ],
+   "rating": 62,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 62,
+    "reaction": 58,
+    "awareness": 66,
+    "utility": 63,
+    "clutch": 67,
+    "teamwork": 64,
+    "communication": 63,
+    "igl": 55
+   },
+   "attrsEstimated": false,
+   "clubId": "T58",
+   "clubTag": "PNG",
+   "team": "INTZ",
+   "span": "2018–2024",
+   "photo": {
+    "img": "/lol/faces/echo/Tay.webp",
+    "w": 1200,
+    "h": 801,
+    "credit": "https://sportv.globo.com/site/e-sportv/noticia/tay-admite-inconstancia-da-intz-no-cblol-e-rebate-goku-que-venca-o-melhor-time.ghtml",
+    "note": "INTZ Tay CBLOL 2019"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:GodJJ",
+   "person": "H:GodJJ",
+   "ign": "GodJJ",
+   "realName": "王永傑",
+   "nat": "tw",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "下路",
+   "roles": [
+    "下路"
+   ],
+   "rating": 61,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 61,
+    "reaction": 61,
+    "awareness": 61,
+    "utility": 57,
+    "clutch": 64,
+    "teamwork": 65,
+    "communication": 67,
+    "igl": 46
+   },
+   "attrsEstimated": false,
+   "clubId": null,
+   "clubTag": null,
+   "team": "Taipei Assassins",
+   "span": "2012–2014",
+   "photo": {
+    "img": "/lol/faces/echo/GodJJ.webp",
+    "w": 300,
+    "h": 450,
+    "credit": "https://www.techbang.com/posts/38865-interview-with-taipei-taipei-snipers-attacks",
+    "note": "Taipei Snipers roster studio portraits 2013"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Jockster",
+   "person": "H:Jockster",
+   "ign": "Jockster",
+   "realName": "Luan Cardoso",
+   "nat": "br",
+   "region": "CBLOL",
+   "group": "WEST",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 61,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 62,
+    "reaction": 69,
+    "awareness": 58,
+    "utility": 63,
+    "clutch": 67,
+    "teamwork": 61,
+    "communication": 59,
+    "igl": 56
+   },
+   "attrsEstimated": false,
+   "clubId": "T57",
+   "clubTag": "VKS",
+   "team": "INTZ",
+   "span": "2014–2022",
+   "photo": {
+    "img": "/lol/faces/echo/Jockster.webp",
+    "w": 719,
+    "h": 1024,
+    "credit": "https://www.flickr.com/photos/189548325@N03/51202012560/",
+    "note": "FURIA roster 2021"
+   },
+   "manual": false
+  },
+  {
+   "id": "echo:Corporal",
+   "person": "H:Corporal",
+   "ign": "Corporal",
+   "realName": "Ian Pearse",
+   "nat": "jp",
+   "region": "LCP",
+   "group": "WEST",
+   "role": "辅助",
+   "roles": [
+    "辅助"
+   ],
+   "rating": 60,
+   "rarity": "bronze",
+   "attrs": {
+    "aim": 60,
+    "reaction": 63,
+    "awareness": 61,
+    "utility": 60,
+    "clutch": 60,
+    "teamwork": 62,
+    "communication": 62,
+    "igl": 46
+   },
+   "attrsEstimated": false,
+   "clubId": "T46",
+   "clubTag": "SHG",
+   "team": "Fukuoka SoftBank HAWKS gaming",
+   "span": "2021",
+   "photo": {
+    "img": "/lol/faces/echo/Corporal.webp",
+    "w": 1024,
+    "h": 763,
+    "credit": "https://www.flickr.com/photos/lolesports/52068024848/",
+    "note": "ORDER MSI 2022"
+   },
+   "manual": false
+  }
+ ]
+}
