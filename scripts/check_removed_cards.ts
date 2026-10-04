@@ -23,8 +23,10 @@ check('主阵容里清掉', save.squad.slots[0] === null && save.squad.slots[1] 
 check('预设阵容里清掉', save.presets![0].squad.slots[1] === null)
 check('杯赛阵容里清掉', (save.cupSquads as Record<string, { slots: unknown[] }>)['open:free'].slots[2] === null)
 check('补一个试训包', save.packs.scout === 1)
-check('信箱里有一条说明', !!save.mail?.[0]?.note?.includes('naiyou') && save.mail[0].seen === false)
+// the 峡谷回响 launch gift adds a letter of its own on the same load, so look for this one by its note
+const naiyouMail = (s: typeof save) => (s.mail ?? []).filter((m) => m.note?.includes('naiyou'))
+check('信箱里有一条说明', naiyouMail(save).length === 1 && naiyouMail(save)[0].seen === false)
 const again = migrateGacha(save, 'test')
-check('再加载不会重复补', again.packs.scout === 1 && again.mail!.length === 1)
+check('再加载不会重复补', again.packs.scout === 1 && naiyouMail(again).length === 1)
 console.log(bad ? `\n${bad} 处不对` : '\n全部通过')
 process.exit(bad ? 1 : 0)

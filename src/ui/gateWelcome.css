@@ -870,3 +870,15 @@
 .demo-welcome button:hover { background: #efd097; }
 .demo-welcome button:focus-visible { outline: 2px solid #8fdbe0; outline-offset: 4px; }
 @media (max-width: 480px) { .demo-welcome { padding: 22px; } .demo-welcome h2 { font-size: 24px; } }
+
+/* 峡谷回响 launch cover (owner 2026-10-04): the card back in the middle, two echo cards fanned behind it */
+.lulu-gate .gate-echo { background: radial-gradient(circle at 50% 55%, rgba(111, 217, 198, 0.14) 0%, transparent 55%), linear-gradient(160deg, #0d211e 0%, #070f0e 100%); border-color: rgba(214, 189, 124, 0.35); overflow: hidden; }
+.lulu-gate .gate-echo-tag { position: absolute; z-index: 4; top: 12px; left: 14px; padding: 3px 9px; border: 1px solid rgba(214, 189, 124, 0.55); color: #e3cb8c; background: rgba(7, 15, 14, 0.75); font-size: 0.66rem; letter-spacing: 0.18em; }
+.lulu-gate .gate-echo-back { position: absolute; z-index: 3; left: 50%; top: 46%; width: 150px; transform: translate(-50%, -50%); filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 22px rgba(214, 189, 124, 0.18)); }
+.lulu-gate .gate-echo-side { position: absolute; z-index: 2; top: 46%; width: 132px; }
+.lulu-gate .gate-echo-side.left { left: 50%; transform: translate(-138%, -50%) rotate(-9deg) scale(.86); }
+.lulu-gate .gate-echo-side.right { left: 50%; transform: translate(38%, -50%) rotate(9deg) scale(.86); }
+.lulu-gate .gate-echo .gate-art-caption { z-index: 4; color: #d6bd7c; letter-spacing: 0.12em; text-transform: none; font-size: 0.66rem; padding: 0 12px; box-sizing: border-box; }
+.lulu-gate .gate-echo-back .cardback { width: 100%; height: auto; min-height: 0; aspect-ratio: 63 / 88; }
+.lulu-gate .gate-echo-back { width: 160px; top: 45%; }
+.lulu-gate .gate-echo-side { top: 45%; }

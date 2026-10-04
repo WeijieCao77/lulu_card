@@ -13,7 +13,7 @@
  * a controller or a sentinel who also calls — but the one thing after position
  * that people look for a card by.
  */
-import { isPlayerCard } from './cards'
+import { isEchoCard, isPlayerCard } from './cards'
 import type { Card, Rarity } from './cards'
 import type { Series } from './gacha'
 import type { Role } from './types'
@@ -21,7 +21,8 @@ import { gameRegionOf } from './gameRegions'
 import { clubLineage } from './teamLineage'
 
 export interface CardFilter {
-  rarity: 'all' | Rarity | 'coach'
+  /** a metal, or a kind of card: coaches, or the 峡谷回响 series (its own 图鉴, owner 2026-10-04) */
+  rarity: 'all' | Rarity | 'coach' | 'echo'
   region: 'all' | Series
   /** a position, or 'igl' — the callers, whatever position they play */
   role: 'all' | Role | 'igl'
@@ -44,6 +45,7 @@ export const filterActive = (f: CardFilter): boolean =>
 
 export function matchesFilter(card: Card, f: CardFilter): boolean {
   if (f.rarity === 'coach') { if (card.kind !== 'coach') return false }
+  else if (f.rarity === 'echo') { if (!isEchoCard(card)) return false }
   else if (f.rarity !== 'all' && card.rarity !== f.rarity) return false
   if (f.region !== 'all') {
     const mapped = gameRegionOf(f.region)

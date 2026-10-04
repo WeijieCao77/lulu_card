@@ -861,6 +861,10 @@ export interface GachaState {
   shop?: DailyShop
   /** 峡谷回响问答, once per account — see engine/echoQuiz.ts; absent until started */
   echoQuiz?: EchoQuizState
+  /** 1 once the 峡谷回响 launch gift (one 回响包) has been delivered — see grantEchoGift */
+  echoGift?: 1
+  /** how many 峡谷回响图鉴 milestones have been collected — see ECHO_SET_REWARDS */
+  echoSet?: number
 }
 
 /**
@@ -1685,6 +1689,62 @@ export function claimFullSet(g: GachaState): string | null {
   g.fullSet = 1
   const got = `${PACKS[pack].name} ×${count}`
   note(g, `全图鉴集齐：${got}`)
+  return got
+}
+
+/**
+ * 峡谷回响图鉴 — the series' own collection ladder (owner 2026-10-04), apart from the 全图鉴 and the region series.
+ * Marks at 25% / 50% / 75% / 100% of the 193 cards, rounded up: 49 / 97 / 145 / 193.
+ */
+export const ECHO_SET_REWARDS: SeriesReward[] = [
+  { at: 0.25, coins: 1500, label: '+1500 金币' },
+  { at: 0.5, coins: 1000, pack: 'echo', label: '峡谷回响包 ×1，+1000 金币' },
+  { at: 0.75, coins: 4000, label: '+4000 金币' },
+  { at: 1, coins: 10000, pack: 'ten', label: '十连包 ×1，+10000 金币' },
+]
+const ECHO_SET_CARDS: ReadonlySet<string> = new Set(ECHO_CARDS.map((c) => c.id))
+
+export interface EchoSetProgress {
+  owned: number
+  total: number
+  /** collected so far */
+  claimed: number
+  /** cards each mark asks for */
+  marks: number[]
+  ready: SeriesReward[]
+  next: (SeriesReward & { need: number }) | null
+}
+
+export function echoSetProgress(g: GachaState): EchoSetProgress {
+  let owned = 0
+  for (const id of Object.keys(g.cards)) if (ECHO_SET_CARDS.has(id)) owned++
+  const total = ECHO_SET_CARDS.size
+  const claimed = g.echoSet ?? 0
+  const marks = ECHO_SET_REWARDS.map((r) => milestoneAt(r, total))
+  const ready = ECHO_SET_REWARDS.filter((_, i) => i >= claimed && owned >= marks[i])
+  const nextIdx = marks.findIndex((m) => owned < m)
+  const next = nextIdx < 0 ? null : { ...ECHO_SET_REWARDS[nextIdx], need: marks[nextIdx] - owned }
+  return { owned, total, claimed, marks, ready, next }
+}
+
+/** Pays every mark reached and not yet collected, in one go, like claimSeries. */
+export function claimEchoSet(g: GachaState): string | null {
+  const prog = echoSetProgress(g)
+  if (!prog.ready.length) return null
+  let coins = 0
+  const packs: string[] = []
+  for (const r of prog.ready) {
+    coins += r.coins
+    if (r.pack && r.pack !== 'self') {
+      const n = r.count ?? 1
+      g.packs[r.pack] = (g.packs[r.pack] ?? 0) + n
+      packs.push(`${PACKS[r.pack].name} ×${n}`)
+    }
+  }
+  g.coins += coins
+  g.echoSet = prog.claimed + prog.ready.length
+  const got = [packs.join('、'), coins ? `+${coins} 金币` : ''].filter(Boolean).join('，')
+  note(g, `峡谷回响图鉴奖励：${got}`)
   return got
 }
 
@@ -2646,6 +2706,20 @@ export function dropRemovedCards(g: GachaState, now = Date.now()): void {
   for (const s of Object.values(g.cupSquads ?? {})) fix(s)
 }
 
+/**
+ * 峡谷回响 launch gift (owner 2026-10-04): every account, old or new, gets one 回响包, once, through the inbox
+ * line so it is seen. Runs on load like dropRemovedCards; the flag is the server's.
+ */
+export function grantEchoGift(g: GachaState, now = Date.now()): void {
+  if (g.echoGift === 1) return
+  g.echoGift = 1
+  g.packs.echo = (g.packs.echo ?? 0) + 1
+  g.mail = [
+    { at: now, kind: 'grant', text: `收到官方发放：${PACKS.echo.name} ×1`, note: '新系列「峡谷回响」上线，每个账号送一包', seen: false },
+    ...(Array.isArray(g.mail) ? g.mail : []),
+  ].slice(0, MAIL_MAX)
+}
+
 export function migrateGacha(state: GachaState, id: string): GachaState {
   const g = state as GachaState & { version?: number }
   g.version = GACHA_VERSION
@@ -2687,6 +2761,13 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   g.squad.coach = typeof g.squad.coach === 'string' ? g.squad.coach : null
   mergeCardAliases(g)
   dropRemovedCards(g)
+  if (g.echoGift !== 1) delete g.echoGift
+  if (g.echoSet !== undefined) {
+    const n = Math.trunc(Number(g.echoSet))
+    if (n >= 1 && n <= ECHO_SET_REWARDS.length) g.echoSet = n
+    else delete g.echoSet
+  }
+  grantEchoGift(g)
   g.ladder ??= { div: 0, stars: 0, best: 0, wins: 0, losses: 0, streak: 0 }
   g.ladder.wins = Math.max(0, Math.trunc(Number(g.ladder.wins) || 0))
   g.ladder.losses = Math.max(0, Math.trunc(Number(g.ladder.losses) || 0))
@@ -2752,7 +2833,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
 export const SERVER_KEYS = [
   'version', 'createdAt', 'coins', 'cards', 'packs', 'pity', 'mythicDry', 'pulls', 'ladder',
   'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'seoulRoute',
-  'weeklySeriesPick', 'shop', 'echoQuiz',
+  'weeklySeriesPick', 'shop', 'echoQuiz', 'echoGift', 'echoSet',
 ] as const
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends', 'cupSquads'] as const
 

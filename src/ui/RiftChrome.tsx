@@ -1,5 +1,6 @@
 import React from 'react';
 import './riftChrome.css';
+import EchoBanner from './cards/echo/EchoBanner';
 
 interface RiftNavigationProps {
   tabs: { key: string; label: string; beta?: boolean; group?: string }[];
@@ -38,10 +39,13 @@ interface RiftBannerProps {
   page: string;
   owned: number;
   total: number;
+  /** the pack page's banner is the 峡谷回响 ad: its 图鉴 count and whether the quiz is finished */
+  echo?: { owned: number; quizDone: boolean };
 }
 
-export function RiftBanner({ page, owned, total }: RiftBannerProps) {
+export function RiftBanner({ page, owned, total, echo }: RiftBannerProps) {
   if (page === 'worlds') return null
+  if (page === 'packs' && echo) return <EchoBanner owned={echo.owned} quizDone={echo.quizDone} />
   const pages: Record<string, [string, string]> = {
     packs: ['召唤你的传奇', '一张卡，一个高光时刻。开启卡包，组建属于你的五人阵容。'],
     shop: ['每日商店', '每天为你上架五张卡，北京时间零点刷新，想要哪张直接买。'],

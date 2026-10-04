@@ -21,6 +21,7 @@ import { ATTR_CN, ATTR_KEYS, REGION_CN } from '../../engine/types'
 import { LEGEND_KIND_CN } from '../../engine/legends'
 import { legendPhoto } from '../../engine/dossier'
 import { CardFilters, EMPTY_FILTER, matchesFilter } from './Filters'
+import EchoSet from './echo/EchoSet'
 import type { CardFilter } from './Filters'
 
 const coin = (n: number) => n.toLocaleString('en-US')
@@ -199,6 +200,10 @@ export default function Collection() {
         )}
         </div>
         )}
+      </Panel>
+
+      <Panel title="峡谷回响图鉴">
+        <EchoSet onBrowse={() => setFilter({ ...EMPTY_FILTER, rarity: 'echo' })} />
       </Panel>
 
       <Panel

@@ -6,6 +6,9 @@ import PackStage from '../ui/cards/PackStage'
 import type { Pulled } from '../engine/gacha'
 import { EchoCard, EchoCardBack } from '../ui/cards/echo/EchoCard'
 import reference from './echo/reference.webp'
+import EchoBanner from '../ui/cards/echo/EchoBanner'
+import { GateStory } from '../ui/GateWelcome'
+import '../ui/riftChrome.css'
 import '../styles.css'
 
 /**
@@ -40,6 +43,7 @@ function Review() {
       .er-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--w),1fr));gap:22px 18px}
       .er-cell{display:flex;flex-direction:column;gap:6px}
       .er-cell .cardface,.er-top .cardback{width:var(--w)}.er-metals .cardface.s-lg,.er-legend .cardface.s-lg{width:184px}.er-metals .cardface.s-sm{width:96px}
+      .er-promo{max-width:1100px;margin:0 0 28px}.er-gate{max-width:560px;background:#0d1417}
       .er-meta{font-size:11.5px;line-height:1.45;color:#9fb0a8}.er-meta b{color:#e8ece6}.er-warn{color:#e8a866}
     `}</style>
     <h1>峡谷回响 · 卡面审核</h1>
@@ -57,6 +61,12 @@ function Review() {
           {(['gold', 'silver', 'bronze'] as const).map((r) => <EchoCard key={r} card={ECHO_CARDS.find((c) => c.rarity === r)!} size="lg" />)}
           {(['gold', 'silver', 'bronze'] as const).map((r) => <EchoCard key={r + 's'} card={ECHO_CARDS.find((c) => c.rarity === r)!} size="sm" />)}
         </div></div>
+    </div>
+    <div className="er-promo">
+      <div className="er-meta" style={{ marginBottom: 6 }}>宣传位 ① 卡包页横幅（点「老将问答」打开问答）</div>
+      <div><EchoBanner owned={0} quizDone={false} /></div>
+      <div className="er-meta" style={{ margin: '18px 0 6px' }}>宣传位 ② 登录页封面</div>
+      <div className="lulu-gate er-gate"><GateStory /></div>
     </div>
     <div className="er-bar">
       <span>赛区：{GROUPS.map((g) => <button key={g} className={g === group ? 'on' : ''} onClick={() => setGroup(g)}>{GROUP_CN[g]}</button>)}</span>

@@ -16,6 +16,8 @@ import SalvageConfirm from './SalvageConfirm'
 import type { SalvageAsk } from './SalvageConfirm'
 import { loadFastPack, saveFastPack } from './packPreferences'
 import EchoQuiz from './echo/EchoQuiz'
+import EchoSet from './echo/EchoSet'
+import { ECHO_QUIZ_EVENT, ECHO_SECTION_ID } from './echo/EchoBanner'
 import { EchoCardBack } from './echo/EchoCard'
 import { ECHO_QUIZ_COUNT, echoQuizDone } from '../../engine/echoQuiz'
 
@@ -42,6 +44,12 @@ export default function Packs() {
   useEffect(() => {
     saveFastPack(fastMode)
   }, [fastMode])
+  // the banner's 「老将问答」 button (EchoBanner) lives outside this page
+  useEffect(() => {
+    const show = () => setQuiz(true)
+    window.addEventListener(ECHO_QUIZ_EVENT, show)
+    return () => window.removeEventListener(ECHO_QUIZ_EVENT, show)
+  }, [])
 
   refreshDaily(g, today)
   const prog = collectionProgress(g)
@@ -226,6 +234,7 @@ export default function Packs() {
 
 
       {/* 峡谷回响: its own pack and the launch quiz, above the ordinary shelf (owner 2026-10-04) */}
+      <div id={ECHO_SECTION_ID} />
       <Panel title="峡谷回响" actions={<span className="tiny muted">退役老将回归 · {PACKS.echo.cost} 金币三张</span>}>
         <div className="echo-hero">
           <div className="echo-hero-art"><EchoCardBack size="sm" /></div>
@@ -246,6 +255,7 @@ export default function Packs() {
             </div>
           </div>
         </div>
+        <div style={{ marginTop: 14 }}><EchoSet /></div>
         <style>{`.echo-hero{display:flex;gap:16px;align-items:center}.echo-hero-art{width:76px;flex:none}.echo-hero-copy{display:flex;flex-direction:column;gap:10px;min-width:0}`}</style>
       </Panel>
       {quiz && <EchoQuiz onClose={() => setQuiz(false)} />}

@@ -24,7 +24,7 @@
  * lets scripts/check_authority.ts drive every action without a database.
  */
 import {
-  awardMinigame, canPlay, note, checkIn, claimFullSet, claimQuest, claimSeries, clampState, cupBo, cupOpponent, drawOpponent, enterCup,
+  awardMinigame, canPlay, claimEchoSet, note, checkIn, claimFullSet, claimQuest, claimSeries, clampState, cupBo, cupOpponent, drawOpponent, enterCup,
   levelOf, oppBumpFor, openPack, packCost, pendingOpponent, primeStamina, recordCup, recordLadder,
   refreshDaily, salvage, salvageBulk, seriesOfPack, spendPlay, upgrade, ladderSlot, leagueEntry, isLadderLeague,
   LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad, cupSquadOf, ladderSquadOf,
@@ -76,7 +76,7 @@ export const ACTIONS = [
   'open', 'checkin', 'quest', 'series', 'fullset', 'salvage', 'salvage_dupes', 'salvage_bulk', 'upgrade',
   'ladder_draw', 'ladder', 'cup_enter', 'cup_play', 'cup_clear', 'challenge', 'mail_seen',
   'minigame_start', 'minigame_finish', 'dismantle', 'seoul_start', 'seoul_play', 'seoul_quit',
-  'series_pick', 'shop', 'shop_buy', 'echo_quiz', 'echo_quiz_answer',
+  'series_pick', 'shop', 'shop_buy', 'echo_quiz', 'echo_quiz_answer', 'echo_set',
 ] as const
 export type ActionName = (typeof ACTIONS)[number]
 
@@ -198,6 +198,11 @@ function dispatch(
     case 'fullset': {
       const got = claimFullSet(g)
       if (!got) return { ok: false, why: '全图鉴还没集齐，或者已经领过了' }
+      return { ok: true, result: { got } }
+    }
+    case 'echo_set': {
+      const got = claimEchoSet(g)
+      if (!got) return { ok: false, why: '峡谷回响图鉴还没到下一档，或者已经领过了' }
       return { ok: true, result: { got } }
     }
     case 'salvage': {

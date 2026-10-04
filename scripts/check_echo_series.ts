@@ -7,7 +7,8 @@ import { ALL_CARDS, BASE_PLAYER_CARDS, COACH_CARDS, ECHO_CARDS, LEGEND_CARDS, PL
 import { FULL_SET_CARDS, PACKS, collectionProgress, newGacha, openPack, packCost, seriesOfPack } from '../src/engine/gacha'
 import { clubSets } from '../src/engine/clubSets'
 import { rollShop } from '../src/engine/dailyShop'
-import { mergeClientFields, migrateGacha } from '../src/engine/gacha'
+import { echoSetProgress, mergeClientFields, migrateGacha } from '../src/engine/gacha'
+import { matchesFilter, readFilter } from '../src/engine/cardFilter'
 import { runAction } from '../src/engine/cardActions'
 import { ECHO_QUIZ } from '../echo-quiz.js'
 import { readFileSync, readdirSync, statSync } from 'node:fs'
@@ -114,9 +115,48 @@ check('其他教练不受影响', personOf(COACH_CARDS.find((c) => !ECHO_CARDS.s
   const kept = migrateGacha(JSON.parse(JSON.stringify(g)), 'quiz')
   check('存档迁移后问答记录还在（不能重答）', !!kept.echoQuiz && kept.echoQuiz.picks.every((p) => p !== null))
   const forged = mergeClientFields(migrateGacha(JSON.parse(JSON.stringify(newGacha('q2', 'q2', day))), 'q2'), { echoQuiz: g.echoQuiz, packs: { echo: 99 } } as never)
-  check('客户端改不了问答和卡包', !forged.echoQuiz && (forged.packs.echo ?? 0) === 0)
+  check('客户端改不了问答和卡包（只有上线赠送的 1 包）', !forged.echoQuiz && (forged.packs.echo ?? 0) === 1)
   check('选项顺序每人打乱', new Set(Array.from({ length: 20 }, (_, k) => { const x = newGacha('s' + k, 's' + k, day); runAction(x, 'echo_quiz', {}, env(k * 31 + 5)); return x.echoQuiz!.order.map((o) => o.join('')).join('|') })).size > 15)
 }
+
+// 上线赠礼: one 回响包 per account, once, with an inbox line
+{
+  const day = '2026-10-10'
+  const g = migrateGacha(JSON.parse(JSON.stringify(newGacha('gift', 'gift', day))), 'gift')
+  check('每个账号送 1 个回响包，信箱有说明', (g.packs.echo ?? 0) === 1 && g.echoGift === 1 && !!g.mail?.[0]?.text.includes('峡谷回响包'))
+  const again = migrateGacha(JSON.parse(JSON.stringify(g)), 'gift')
+  check('只送一次（再次读档不重复）', (again.packs.echo ?? 0) === 1)
+  const forged = mergeClientFields(again, { echoGift: undefined, echoSet: 4 } as never)
+  check('客户端改不了赠礼和图鉴领取记录', forged.echoGift === 1 && !forged.echoSet)
+}
+
+// 峡谷回响图鉴: 49 / 97 / 145 / 193, owner's rewards
+{
+  const day = '2026-10-10'
+  const g = migrateGacha(JSON.parse(JSON.stringify(newGacha('set', 'set', day))), 'set')
+  const p0 = echoSetProgress(g)
+  check('图鉴档位 49 / 97 / 145 / 193', p0.marks.join('/') === '49/97/145/193' && p0.total === 193, p0.marks.join('/'))
+  const give = (n: number) => { for (const c of ECHO_CARDS.slice(0, n)) g.cards[c.id] ??= { level: 0, dupes: 0, got: 0 } as never }
+  const day0 = { now: Date.parse(day), today: day, seed: 1 }
+  give(48)
+  check('48 张领不了', !runAction(g, 'echo_set', {}, day0).ok)
+  give(49)
+  let coins = g.coins
+  check('49 张：+1500 金币', runAction(g, 'echo_set', {}, day0).ok && g.coins === coins + 1500 && g.echoSet === 1)
+  check('同一档不能重复领', !runAction(g, 'echo_set', {}, day0).ok)
+  give(145)
+  coins = g.coins; const packs = g.packs.echo ?? 0
+  check('一次补领 50%、75%：回响包 ×1，+5000 金币', runAction(g, 'echo_set', {}, day0).ok && g.coins === coins + 5000 && (g.packs.echo ?? 0) === packs + 1 && g.echoSet === 3)
+  give(193)
+  coins = g.coins; const ten = g.packs.ten ?? 0
+  check('193 张：十连包 ×1，+10000 金币', runAction(g, 'echo_set', {}, day0).ok && g.coins === coins + 10000 && (g.packs.ten ?? 0) === ten + 1 && g.echoSet === 4)
+  check('领完后不再有奖励', !runAction(g, 'echo_set', {}, day0).ok)
+  check('回响图鉴不影响全图鉴进度', collectionProgress(g).total === collectionProgress(newGacha('x', 'x', day)).total)
+}
+
+// 图鉴和市场的「峡谷回响」筛选
+check('筛选「峡谷回响」只出回响卡，193 张', ALL_CARDS.filter((c) => matchesFilter(c, { rarity: 'echo', region: 'all', role: 'all', club: 'all' })).length === 193 && ALL_CARDS.filter((c) => matchesFilter(c, { rarity: 'echo', region: 'all', role: 'all', club: 'all' })).every(isEchoCard))
+check('服务器读筛选认得「峡谷回响」', readFilter({ rarity: 'echo' }).rarity === 'echo')
 
 console.log(bad ? `\n${bad} 处不对` : '\n全部通过')
 process.exit(bad ? 1 : 0)

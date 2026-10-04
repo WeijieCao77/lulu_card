@@ -1,6 +1,9 @@
 import './gateWelcome.css'
 import { useEffect, useRef } from 'react'
 import { RELEASE_POLICY, RELEASE_STAGE } from '../../release-policy.js'
+import { ECHO_CARDS } from '../engine/cards'
+import { EchoCard, EchoCardBack } from './cards/echo/EchoCard'
+import { ECHO_QUIZ_COUNT } from '../engine/echoQuiz'
 
 function PigSeal() {
   return <svg viewBox="0 0 80 80" fill="none" aria-hidden="true">
@@ -22,12 +25,16 @@ export function GateStory() {
     <p className="gate-eyebrow">峡谷典藏 · 由你开场</p>
     <h1>每一张高光，<br /><em>都值得收藏。</em></h1>
     <p className="gate-intro">开包寻找心仪选手，组建你的首发五人。<br />让同队默契，成为下一场胜利的伏笔。</p>
-    <div className="gate-art" aria-hidden="true">
+    {/* the cover is the 峡谷回响 launch ad (owner 2026-10-04): the series' card back, two of its cards, and what a new account gets */}
+    <div className="gate-art gate-echo" aria-label="新系列 峡谷回响">
       <div className="gate-orbit" />
-      <div className="gate-card gate-card-left"><span>默契</span><b>V</b><small>FIVE AS ONE</small></div>
-      <div className="gate-card gate-card-right"><span>高光</span><b>✦</b><small>HALL OF FAME</small></div>
-      <div className="gate-card gate-card-main"><span>LULU / 001</span><PigSeal /><strong>猪之家典藏</strong><small>YOUR NEXT LEGEND</small></div>
-      <div className="gate-art-caption">一张卡，一个属于你的故事。</div>
+      <span className="gate-echo-tag">新系列 · 峡谷回响</span>
+      {(['Uzi', 'Clearlove'] as const).map((ign, i) => {
+        const card = ECHO_CARDS.find((c) => c.ign === ign)
+        return card && <div key={ign} className={`gate-echo-side ${i ? 'right' : 'left'}`}><EchoCard card={card} size="md" /></div>
+      })}
+      <div className="gate-echo-back"><EchoCardBack size="md" /></div>
+      <div className="gate-art-caption">{ECHO_CARDS.length} 位退役老将回归峡谷 · 每个账号送 1 个回响包 · 老将问答最多再送 {ECHO_QUIZ_COUNT} 包</div>
     </div>
     <div className="gate-features"><span>01 / 收集选手</span><span>02 / 组建阵容</span><span>03 / 征战峡谷</span></div>
   </section>
