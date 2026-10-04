@@ -62,6 +62,9 @@ function account(id: string) {
   g.pulls = TRADE_PULLS + 1
   g.seed = 7654321
   g.daily.staminaAt = Date.now()
+  // the 峡谷回响 launch gift is delivered on the first load; a fixture written straight to the table has not had it
+  // yet, so mark it delivered or the first action's load would change `packs` under the test
+  g.echoGift = 1
   return g
 }
 const A = 'VM-CVPA-CVPA-CVPA-CVPA-CVPA', B = 'VM-CVPB-CVPB-CVPB-CVPB-CVPB'

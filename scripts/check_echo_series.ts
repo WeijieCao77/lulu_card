@@ -3,13 +3,13 @@
  *
  *   npx tsx scripts/check_echo_series.ts
  */
-import { ALL_CARDS, BASE_PLAYER_CARDS, COACH_CARDS, ECHO_CARDS, LEGEND_CARDS, PLAYER_CARDS, cardById, isEchoCard, personOf } from '../src/engine/cards'
+import { SQUAD_SLOTS, ALL_CARDS, BASE_PLAYER_CARDS, COACH_CARDS, ECHO_CARDS, LEGEND_CARDS, PLAYER_CARDS, cardById, isEchoCard, personOf } from '../src/engine/cards'
 import { FULL_SET_CARDS, PACKS, collectionProgress, newGacha, openPack, packCost, seriesOfPack } from '../src/engine/gacha'
 import { clubSets } from '../src/engine/clubSets'
 import { rollShop } from '../src/engine/dailyShop'
 import { echoSetProgress, mergeClientFields, migrateGacha } from '../src/engine/gacha'
 import { matchesFilter, readFilter } from '../src/engine/cardFilter'
-import { runAction } from '../src/engine/cardActions'
+import { runAction, squadForPlay } from '../src/engine/cardActions'
 import { ECHO_QUIZ } from '../echo-quiz.js'
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
@@ -152,6 +152,34 @@ check('其他教练不受影响', personOf(COACH_CARDS.find((c) => !ECHO_CARDS.s
   check('193 张：十连包 ×1，+10000 金币', runAction(g, 'echo_set', {}, day0).ok && g.coins === coins + 10000 && (g.packs.ten ?? 0) === ten + 1 && g.echoSet === 4)
   check('领完后不再有奖励', !runAction(g, 'echo_set', {}, day0).ok)
   check('回响图鉴不影响全图鉴进度', collectionProgress(g).total === collectionProgress(newGacha('x', 'x', day)).total)
+}
+
+// 回响卡就是普通的金银铜：能和普通卡混搭上阵、报名杯赛
+{
+  const day = '2026-10-10'
+  const g = migrateGacha(JSON.parse(JSON.stringify(newGacha('mix', 'mix', day))), 'mix')
+  const used = new Set<string>()
+  const pick = (role: string, echoCard: boolean) => {
+    const pool = echoCard ? ECHO_CARDS : BASE_PLAYER_CARDS
+    const c = pool.find((x) => !used.has(personOf(x)) && (role === '辅助' || x.roles.includes(role as never)))!
+    used.add(personOf(c))
+    return c.id
+  }
+  const slots = SQUAD_SLOTS.map((role, i) => pick(role, i < 2))
+  for (const id of slots) g.cards[id] = { id, level: 0, dupes: 0, seen: 1, got: day } as never
+  g.squad = { slots, coach: null }
+  g.coins = 100_000
+  const ok = squadForPlay(g)
+  check('两张回响卡 + 三张普通卡能组成阵容', ok.ok && ok.squad.slots.filter((x) => x && isEchoCard(cardById(x))).length === 2)
+  const entered = runAction(g, 'cup_enter', {}, { now: Date.parse(day), today: day, seed: 3 })
+  check('混搭阵容能报名杯赛，报名表里有回响卡', entered.ok && !!g.cup?.registration?.squad.slots.some((x) => x && isEchoCard(cardById(x))), entered.ok ? '' : entered.why)
+  const echoUzi = ECHO_CARDS.find((c) => c.ign === 'Uzi')!, legendUzi = LEGEND_CARDS.find((c) => c.ign === 'Uzi')
+  if (legendUzi) {
+    g.cards[echoUzi.id] = { id: echoUzi.id, level: 0, dupes: 0, seen: 1, got: day } as never
+    g.cards[legendUzi.id] = { id: legendUzi.id, level: 0, dupes: 0, seen: 1, got: day } as never
+    g.squad = { slots: [echoUzi.id, legendUzi.id, ...slots.slice(2)], coach: null }
+    check('同一个人（回响 Uzi + 名人堂 Uzi）不能同时上阵', !squadForPlay(g).ok)
+  }
 }
 
 // 图鉴和市场的「峡谷回响」筛选
