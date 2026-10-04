@@ -175,6 +175,13 @@ check('其他教练不受影响', personOf(COACH_CARDS.find((c) => !ECHO_CARDS.s
   check('两张回响卡 + 三张普通卡能组成阵容', ok.ok && ok.squad.slots.filter((x) => x && isEchoCard(cardById(x))).length === 2)
   const entered = runAction(g, 'cup_enter', {}, { now: Date.parse(day), today: day, seed: 3 })
   check('混搭阵容能报名杯赛，报名表里有回响卡', entered.ok && !!g.cup?.registration?.squad.slots.some((x) => x && isEchoCard(cardById(x))), entered.ok ? '' : entered.why)
+  // and then actually PLAY: registration alone passed while every real match threw 「峡谷比赛需要双方各五名选手」 (500 in production, 2026-10-04)
+  const played = runAction(g, 'cup_play', {}, { now: Date.parse(day), today: day, seed: 5 })
+  check('混搭阵容能真的打杯赛（五人都上场）', played.ok && (played.result as { res: { lines: { cardId: string }[] } }).res.lines.filter((l) => slots.includes(l.cardId)).length === 5, played.ok ? '' : played.why)
+  g.cup = null
+  runAction(g, 'ladder_draw', {}, { now: Date.parse(day), today: day, seed: 6 })
+  const ladder = runAction(g, 'ladder', {}, { now: Date.parse(day), today: day, seed: 7 })
+  check('混搭阵容能打天梯', ladder.ok, ladder.ok ? '' : ladder.why)
   const echoUzi = ECHO_CARDS.find((c) => c.ign === 'Uzi')!, legendUzi = LEGEND_CARDS.find((c) => c.ign === 'Uzi')
   if (legendUzi) {
     g.cards[echoUzi.id] = { id: echoUzi.id, level: 0, dupes: 0, seen: 1, got: day } as never

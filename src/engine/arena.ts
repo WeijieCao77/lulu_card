@@ -37,6 +37,23 @@ function legendArenaPlayer(card: PlayerCard): Player | undefined {
   }
 }
 
+/**
+ * A 峡谷回响 card is a retired player: he is not in today's world roster, so the match has to be told who he is
+ * from the card itself, as with a 名人堂 card. Without this the five fielded four and every ladder or cup match
+ * with a 回响 card in it failed (reported 2026-10-04: 「服务器没有明确回应（500）」).
+ */
+function echoArenaPlayer(card: PlayerCard): Player | undefined {
+  if (!card.echo) return undefined
+  return {
+    id: card.playerId, ign: card.ign, realName: card.realName ?? card.ign, nat: card.nat ?? '',
+    teamId: card.clubId, region: card.region, role: card.role, roles: [...card.roles],
+    age: card.age, ageEstimated: !!card.ageEstimated, isIgl: card.isIgl, attrs: { ...card.attrs }, overall: card.rating,
+    potential: card.rating, form: 76, morale: 84, fatigue: 0, salary: 0, value: 0, contractYears: 0,
+    loyalty: 70, ambition: 70, agentPool: [],
+    season: emptyStats(), career: emptyStats(), injuredUntil: 0, xp: {},
+  }
+}
+
 export { BALANCE_VERSION, GAP_CURVES, cardStrengths } from './balance'
 
 export const ARENA_TEAM = 'ARENA'
@@ -288,7 +305,7 @@ function seatSquad(
     if (!isPlayerCard(card)) return
     if (seated.has(personOf(card))) return
     seated.add(personOf(card))
-    const src = seoulArenaPlayer(card) ?? legendArenaPlayer(card) ?? state.players[card.playerId]
+    const src = seoulArenaPlayer(card) ?? legendArenaPlayer(card) ?? echoArenaPlayer(card) ?? state.players[card.playerId]
     if (!src) return
     const id = ids?.[i] ?? `${prefix}${i}`
     const misfit = !card.roles.includes(SQUAD_SLOTS[i])
