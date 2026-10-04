@@ -225,6 +225,8 @@ export function paintPuzzle(
   ctx: CanvasRenderingContext2D, pic: HTMLImageElement,
   w: number, h: number, zoom: number, cells: number,
   shift: readonly [number, number] = [0, 0],
+  /** sit the subject on the frame's bottom edge (a player's jersey) instead of centring it */
+  bottom = false,
 ) {
   const [frame, f] = blank(w, h)
   const ground = groundOf(pic)
@@ -244,6 +246,7 @@ export function paintPuzzle(
   // subject: the whole picture, contained, nudged by the puzzle's own drift
   const fit = Math.min(w / pic.width, h / pic.height) * zoom
   const l = puzzleLayout(pic.width, pic.height, w, h, fit, shift)
+  if (bottom) l.y = h - l.dh
   f.drawImage(pic, l.x, l.y, l.dw, l.dh)
   ctx.clearRect(0, 0, w, h)
   ctx.drawImage(coarsen(frame, cells), 0, 0)

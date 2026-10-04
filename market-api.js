@@ -126,7 +126,8 @@ export const priceCap = (rarity) => PRICE_CAP[rarity] ?? MAX_ASK
  * collection one bronze at a time is untouched. Swaps move no coins and are not counted.
  */
 export const HIGH_VALUE_PRICE = 3000
-export const HIGH_VALUE_PER_DAY = 3
+// 5 since 2026-10-04 (players: 「每天三个金卡的交易限制太少了」), was 3
+export const HIGH_VALUE_PER_DAY = 5
 export const isHighValue = (rarity, price) => rarity === 'gold' || rarity === 'mythic' || Number(price) >= HIGH_VALUE_PRICE
 const HIGH_WHY = (side) => `今天的高价交易${side}已满 ${HIGH_VALUE_PER_DAY} 笔（金卡、彩卡，或 ${HIGH_VALUE_PRICE} 金币以上都算，进行中的出价和挂牌也算），北京时间 0 点后再来。便宜的铜卡、银卡不受限制。`
 const PAIR_WHY = `你今天已经和这位玩家交易过了：同一对账号每天最多交易 ${PAIR_PER_DAY} 次（买卡、换卡都算，进行中的出价和交换也算），北京时间 0 点后再来。`

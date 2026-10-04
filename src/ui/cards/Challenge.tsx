@@ -5,7 +5,7 @@ import { Panel } from '../common'
 import { track } from '../../engine/telemetry'
 import {
   allChoices, CHALLENGE_COST, CHALLENGE_TRIES, challengeBlock, challengeSig, challengeToday,
-  detail, evaluate, KIND_CN, revealed, triesLeft,
+  detail, evaluate, KIND_CN, kindFor, revealed, triesLeft,
 } from '../../engine/challenge'
 import type { ChallengeTurn, GuessRow, HintMark } from '../../engine/challenge'
 import { FRAME_ASPECT, FRAME_MAX, paintPuzzle, puzzleShift } from './puzzle'
@@ -81,7 +81,12 @@ export default function Challenge() {
   const answerRow: GuessRow | null = reveal ? evaluate(reveal.kind, reveal.id, reveal.id) : null
 
   const show = state.done ? 1 : revealed(used)
-  const zoom = 1 + (1 - show) * 1.6
+  // A player's photo is a head-and-shoulders shot whose jersey is the bottom third. Zoomed 2.6× into the middle
+  // it was a face and nothing else, which nobody can name blurred (players, 2026-10-04: 「只有脸完全认不出，希望能
+  // 漏出一点队服」). A player is zoomed far less and sits on the frame's bottom edge, so the jersey's colours are
+  // always in the picture; the blur (cells) is what makes it hard.
+  const isPlayer = (state.done ? state.reveal?.kind : kindFor(today, g.id)) === 'player'
+  const zoom = 1 + (1 - show) * (isPlayer ? 0.3 : 1.6)
   const cells = state.done ? Infinity : detail(used)
   const shift = useMemo(() => puzzleShift(hashStr(`puzzle:${today}:${g.id}`)), [today, g.id])
 
@@ -147,7 +152,7 @@ export default function Challenge() {
         if (c.height !== w / aw * ah) c.height = w / aw * ah
         const ctx = c.getContext('2d')
         if (!ctx) throw new Error('canvas')
-        paintPuzzle(ctx, pic, c.width, c.height, zoom, cells, shift)
+        paintPuzzle(ctx, pic, c.width, c.height, zoom, cells, shift, isPlayer)
         setReady(true)
       } catch { setReady(false); setPicMissing(true) }
     }
@@ -157,7 +162,7 @@ export default function Challenge() {
     window.addEventListener('resize', schedule)
     schedule()
     return () => { observer?.disconnect(); window.removeEventListener('resize', schedule); cancelAnimationFrame(raf) }
-  }, [pic, zoom, cells, shift])
+  }, [pic, zoom, cells, shift, isPlayer])
 
   const searchActive = !state.done && (searchFocused || matches.length > 0)
 
