@@ -46,7 +46,7 @@ function run() {
   assert.equal(gameRegionOf('unknown'), undefined)
   assert.equal(gameRegionOf('ame'), undefined)
   assert.equal(gameRegionOf(1), undefined)
-  assert.deepEqual(PACK_ORDER, ['scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'emea', 'ame', 'west'])
+  assert.deepEqual(PACK_ORDER, ['scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'emea', 'ame', 'west', 'echo']) // 峡谷回响 (2026-10-04)
   // Legacy PACKS still exists for historical mail; new code must never use them
   // as first-class pack IDs except through canonicalisation.
   for (const legacy of ['lcp', 'cblol'] as const) {

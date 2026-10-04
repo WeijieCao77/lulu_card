@@ -20,6 +20,7 @@ import { LEGENDS } from './legends'
 // which players each coach actually coached: a staff role at a club in months the
 // player was on it — scripts/build_coached.py, off vlr.gg careers and Liquipedia tenure
 import COACHED_JSON from '../data/coached.json'
+import ECHO_JSON from '../data/echoCards.json'
 import type { Legend } from './legends'
 import { decodeDisplayName } from './displayText'
 import { clamp } from './rng'
@@ -71,6 +72,8 @@ export interface PlayerCard {
    * chemistry graph reads 2023 FNATIC rather than wherever he ended up.
    */
   legend?: Legend
+  /** set on a 峡谷回响 card: a retired player's career, not a night (see ECHO_CARDS) */
+  echo?: EchoInfo
   ign: string
   realName: string | null
   /** two-letter country code, lowercased, from vlr.gg */
@@ -90,6 +93,23 @@ export interface PlayerCard {
   attrs: Attrs
   rating: number
   rarity: Rarity
+}
+
+/**
+ * 峡谷回响 (owner, 2026-10-04): retired players, one card each for the career.
+ * The club on the card is the one he spent longest with at the top level (or the owner's pick);
+ * clubId is the 2026 club that carries that name forward, null when nobody does.
+ */
+export interface EchoInfo {
+  /** the club the card shows, as it was called then */
+  team: string | null
+  /** seasons with that club, e.g. 2013–2016 */
+  span: string | null
+  /** LPL / LCK / LEC / LCS / WEST — the series group, which is how the 图鉴 and the quotas count */
+  group: string
+  /** no game data behind him: the six numbers follow his position's average shape */
+  attrsEstimated: boolean
+  photo: { img: string; w: number; h: number; credit: string | null } | null
 }
 
 export interface CoachCard {
@@ -396,13 +416,45 @@ function buildLegendCoachCards(): CoachCard[] {
   return out
 }
 
+type EchoRow = (typeof ECHO_JSON.cards)[number]
+function buildEchoCards(): PlayerCard[] {
+  return (ECHO_JSON.cards as EchoRow[]).map((e) => ({
+    kind: 'player' as const,
+    id: e.id,
+    // the same man as his 名人堂彩卡 (H:Uzi …) — one five cannot hold both
+    playerId: e.person,
+    echo: { team: e.team, span: e.span, group: e.group, attrsEstimated: e.attrsEstimated, photo: e.photo ?? null },
+    ign: e.ign,
+    realName: e.realName ?? null,
+    nat: e.nat ?? null,
+    face: e.photo?.img ?? null,
+    region: e.region as Region,
+    clubId: e.clubId ?? null,
+    clubTag: e.clubTag ?? null,
+    role: e.role as Role,
+    roles: e.roles as Role[],
+    isIgl: false,
+    age: 0,
+    attrs: e.attrs as Attrs,
+    rating: e.rating,
+    rarity: e.rarity as Rarity,
+  }))
+}
+
 export const BASE_PLAYER_CARDS: PlayerCard[] = buildPlayerCards()
 export const LEGEND_CARDS: PlayerCard[] = buildLegendCards(BASE_PLAYER_CARDS)
 export const PLAYER_CARDS: PlayerCard[] = [...BASE_PLAYER_CARDS, ...LEGEND_CARDS]
 export const SEOUL_CARDS: PlayerCard[] = []
 export const LEGEND_COACH_CARDS: CoachCard[] = buildLegendCoachCards()
 export const COACH_CARDS: CoachCard[] = [...buildCoachCards(), ...LEGEND_COACH_CARDS]
-export const ALL_CARDS: Card[] = [...PLAYER_CARDS, ...SEOUL_CARDS, ...COACH_CARDS]
+/**
+ * 峡谷回响 cards. Kept out of PLAYER_CARDS on purpose: that list feeds the ordinary packs, the 每日商店, the
+ * 全图鉴 and the club sets, and none of those take a retired player. They are in ALL_CARDS so the server,
+ * the market, the mailbox and the collection know them.
+ */
+export const ECHO_CARDS: PlayerCard[] = buildEchoCards()
+export const ALL_CARDS: Card[] = [...PLAYER_CARDS, ...ECHO_CARDS, ...SEOUL_CARDS, ...COACH_CARDS]
+export const isEchoCard = (c: Card | undefined): boolean => c?.kind === 'player' && !!c.echo
 
 const byId = new Map(ALL_CARDS.map((c) => [c.id, c]))
 const COACHED: Map<string, Set<string>> = new Map(
@@ -426,8 +478,10 @@ export const cardName = (c: Card): string => (c.kind === 'player' ? c.ign : c.na
  * "Derke, Team Vitality" are the same man, and a five containing both is a
  * five of four people. Anything picking a squad compares this, not the id.
  */
+// a coach who was once a player with a 峡谷回响 card (Clearlove, Perkz, DanDy …) is that player
+const ECHO_PERSON = new Map(ECHO_CARDS.map((c) => [c.ign.toLowerCase(), c.playerId]))
 export const personOf = (c: Card): string =>
-  c.kind === 'player' ? c.playerId : `c:${c.name}`
+  c.kind === 'player' ? c.playerId : (ECHO_PERSON.get(c.name.toLowerCase()) ?? `c:${c.name}`)
 
 // ---------------------------------------------------------------- levels
 

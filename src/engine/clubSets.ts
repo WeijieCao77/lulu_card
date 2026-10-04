@@ -34,7 +34,8 @@ export interface ClubSet {
 const CLUB_CARDS: Map<string, PlayerCard[]> = (() => {
   const by = new Map<string, PlayerCard[]>()
   for (const c of ALL_CARDS) {
-    if (!isPlayerCard(c) || c.rarity === 'mythic' || c.event || !c.clubId) continue
+    // 峡谷回响 cards are retired players: a club set is the cards the club fields today
+    if (!isPlayerCard(c) || c.rarity === 'mythic' || c.event || c.echo || !c.clubId) continue
     const list = by.get(c.clubId) ?? []
     list.push(c)
     by.set(c.clubId, list)

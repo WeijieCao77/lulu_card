@@ -21,7 +21,7 @@ import { notePull, spendDupes } from './tradeLock'
 import { cleanShop } from './dailyShop'
 import type { DailyShop } from './dailyShop'
 import {
-  ALL_CARDS, SEOUL_CARDS, COACH_CARDS, COINS_FOR, DUPES_FOR, LEGEND_CARDS, LEGEND_COACH_CARDS, MAX_LEVEL, RARITY_CN, cardName, PLAYER_CARDS,
+  ALL_CARDS, SEOUL_CARDS, ECHO_CARDS, isEchoCard, COACH_CARDS, COINS_FOR, DUPES_FOR, LEGEND_CARDS, LEGEND_COACH_CARDS, MAX_LEVEL, RARITY_CN, cardName, PLAYER_CARDS,
   SALVAGE, SQUAD_SLOTS, cardById, cardPower, emptySquad, isPlayerCard, personOf, rarityRank, ratingAt,
   squadRating, squadPower, MERGED_CARDS, REMOVED_CARDS, canonicalCardId,
 } from './cards'
@@ -48,6 +48,8 @@ export type PackKind =
   | 'cn' | 'pac' | 'west' | 'ame' | 'emea' | 'lcp' | 'cblol'
   // one per position — a single card that plays it; paid by the 位置小游戏, never sold
   | 'duelist' | 'initiator' | 'controller' | 'sentinel'
+  // 峡谷回响: retired players only (owner, 2026-10-04) — its own pack, never in the 每日商店, never discounted
+  | 'echo'
 
 /** the positions a pack can be dealt from; 辅助 is not a pool, it is the absence of one */
 export type PackPosition = Extract<Role, '上单' | '打野' | '中单' | '下路'>
@@ -81,7 +83,7 @@ export interface PackDef {
    */
   shop?: boolean
   /** coach packs deal from a different deck; a series deals from one region; a position from its players; 'legend' is every 彩卡 */
-  pool: 'player' | 'coach' | 'seoul2024' | 'legend' | Series | Region | PackPosition
+  pool: 'player' | 'coach' | 'seoul2024' | 'legend' | 'echo' | Series | Region | PackPosition
 }
 
 /**
@@ -99,6 +101,12 @@ export const PACKS: Record<PackKind, PackDef> = {
     blurb: '16 支战队 · 80 位登场选手。三张首尔赛事卡，至少一张银卡，不出彩卡。',
     // 23 golds after the caller and initiator credit; at 8% a full set cost 314
     // packs against 228 before, 12% brings it back (analyze_seoul_rarity.mjs)
+    cost: 3000, draws: 3, mythic: 0, gold: .12, silver: .38, floor: 'silver', shop: true,
+  },
+  echo: {
+    kind: 'echo', name: '峡谷回响包', pool: 'echo',
+    blurb: '退役老将回归。三张峡谷回响卡，至少一张银卡，不出彩卡。',
+    // the 首尔包 numbers the owner already approved: 3,000 coins, 12% gold, 38% silver
     cost: 3000, draws: 3, mythic: 0, gold: .12, silver: .38, floor: 'silver', shop: true,
   },
   scout: {
@@ -221,7 +229,7 @@ export const seriesOfPack = (kind: PackKind): Series | null =>
             : null
 
 export const PACK_ORDER: PackKind[] = [
-  'scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'emea', 'ame', 'west',
+  'scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'emea', 'ame', 'west', 'echo',
 ]
 
 /**
@@ -1089,6 +1097,12 @@ const POOLS = {
     silver: SEOUL_CARDS.filter(c => c.rarity === 'silver'),
     bronze: SEOUL_CARDS.filter(c => c.rarity === 'bronze'),
   },
+  echo: {
+    mythic: [] as PlayerCard[],
+    gold: ECHO_CARDS.filter((c) => c.rarity === 'gold'),
+    silver: ECHO_CARDS.filter((c) => c.rarity === 'silver'),
+    bronze: ECHO_CARDS.filter((c) => c.rarity === 'bronze'),
+  },
   上单: rolePool('上单'),
   打野: rolePool('打野'),
   中单: rolePool('中单'),
@@ -1403,8 +1417,9 @@ export function collection(g: GachaState): { card: Card; owned: OwnedCard; ratin
 }
 
 export const collectionProgress = (g: GachaState) => ({
-  owned: Object.keys(g.cards).length,
-  total: ALL_CARDS.length,
+  // 峡谷回响 has its own 图鉴 and progress (owner, 2026-10-04); the main count is the ordinary game
+  owned: Object.keys(g.cards).filter((id) => !id.startsWith('echo:')).length,
+  total: ALL_CARDS.filter((c) => !isEchoCard(c)).length,
 })
 
 /**
@@ -1441,7 +1456,8 @@ export interface ClubSet {
 const CLUB_CARDS: Map<string, PlayerCard[]> = (() => {
   const by = new Map<string, PlayerCard[]>()
   for (const c of ALL_CARDS) {
-    if (!isPlayerCard(c) || c.rarity === 'mythic' || c.event || !c.clubId) continue
+    // a retired player is not part of a club set: 集齐 NRG means the cards NRG fields today
+    if (!isPlayerCard(c) || c.rarity === 'mythic' || c.event || c.echo || !c.clubId) continue
     const list = by.get(c.clubId) ?? []
     list.push(c)
     by.set(c.clubId, list)
@@ -1635,7 +1651,8 @@ export function claimSeries(g: GachaState, region: Series): string | null {
  * one you hold if you hold it already.
  */
 export const FULL_SET_CARDS: ReadonlySet<string> = new Set(
-  ALL_CARDS.filter((c) => c.rarity !== 'mythic').map((c) => c.id),
+  // 峡谷回响 is not part of the 全图鉴 (owner, 2026-10-04): it has its own 图鉴 and rewards
+  ALL_CARDS.filter((c) => c.rarity !== 'mythic' && !isEchoCard(c)).map((c) => c.id),
 )
 export const FULL_SET_REWARD = { pack: 'legend' as PackKind, count: 1 }
 

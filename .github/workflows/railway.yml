@@ -20,6 +20,7 @@ jobs:
       - run: npm run build
       - run: npx tsx scripts/check_worlds_cards.ts
       - run: npx tsx scripts/check_removed_cards.ts
+      - run: npx tsx scripts/check_echo_series.ts
       - run: npx tsx scripts/check_team_lineage.ts
       - run: npx tsx scripts/check_region_chemistry.ts
       - run: npx tsx scripts/check_dashboard.ts
