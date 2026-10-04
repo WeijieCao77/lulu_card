@@ -1,87 +1,72 @@
 /**
- * 峡谷回响卡背 v3 (owner, 2026-10-04: 「卡背不够帅……参考开瓦包曼谷系列」).
+ * 峡谷回响卡背 v4 (owner, 2026-10-04: no crystal — 「把卡背做的帅一点，还是要回响元素」).
  *
- * Built the way the 曼谷 back works (Val_Manager src/ui/cards/BangkokDesign.tsx): one luminous hero object that
- * fades into the ground at top and bottom, thin flowing lines behind it, oversized hard type, a single hairline
- * and an inner frame. The hero here is a faceted hextech crystal bloom in the series' teal with a gold rim —
- * the echo — with ripple arcs spreading from it. Pure SVG, generated, so it is sharp at every card size.
+ * The echo IS the art: 「回」 and 「响」 stacked large in gold, each trailed by widening, fading outline copies the
+ * way a sound rings out, a voiceprint line running between them, sound rings spreading from the centre, a double
+ * hairline with gold corner marks. The calligraphy uses the same font stack as the confirmed card face.
  */
-type P = [number, number]
-const rad = (d: number) => (d * Math.PI) / 180
+const FONT = "'KaiTi','STKaiti','Noto Serif SC','Songti SC',serif"
 
-/** a kite-shaped crystal petal from `base`, pointing at `angle` (0 = up), split into four facets */
-function petal(base: P, angle: number, len: number, width: number) {
-  const a = rad(angle)
-  const ux = Math.sin(a), uy = -Math.cos(a)          // along the petal
-  const vx = Math.cos(a), vy = Math.sin(a)           // across it
-  const tip: P = [base[0] + ux * len, base[1] + uy * len]
-  const mid: P = [base[0] + ux * len * 0.42, base[1] + uy * len * 0.42]
-  const left: P = [mid[0] - vx * width, mid[1] - vy * width]
-  const right: P = [mid[0] + vx * width, mid[1] + vy * width]
-  const core: P = [base[0] + ux * len * 0.5, base[1] + uy * len * 0.5]
-  return { tip, left, right, core, base }
+function EchoGlyph({ ch, x, y, size }: { ch: string; x: number; y: number; size: number }) {
+  const trails = [1.5, 1.32, 1.16]
+  return <g>
+    {trails.map((s, i) => <text key={s} x={x} y={y} textAnchor="middle" dominantBaseline="central" fontFamily={FONT} fontSize={size} fontWeight="700"
+      fill="none" stroke="#d6bd7c" strokeWidth={1.5 / s} strokeOpacity={0.14 + i * 0.12}
+      transform={`translate(${x} ${y}) scale(${s}) translate(${-x} ${-y})`}>{ch}</text>)}
+    <text x={x} y={y + 4} textAnchor="middle" dominantBaseline="central" fontFamily={FONT} fontSize={size} fontWeight="700" fill="#020807" opacity=".55">{ch}</text>
+    <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fontFamily={FONT} fontSize={size} fontWeight="700" fill="url(#eb4-gold)" stroke="#fff3cf" strokeWidth="1" strokeOpacity=".35">{ch}</text>
+  </g>
 }
-const pts = (...p: P[]) => p.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ')
 
 export default function EchoBackArt() {
-  const C: P = [315, 560]
-  // back row first, the tall centre crystal last
-  const petals = [
-    { angle: -80, len: 175, width: 40 }, { angle: 80, len: 175, width: 40 },
-    { angle: -56, len: 205, width: 46 }, { angle: 56, len: 205, width: 46 },
-    { angle: -29, len: 235, width: 50 }, { angle: 29, len: 235, width: 50 },
-    { angle: -135, len: 95, width: 28 }, { angle: 135, len: 95, width: 28 },
-    { angle: 180, len: 105, width: 32 },
-    { angle: 0, len: 270, width: 60 },
-  ]
+  // a voiceprint: bars whose height follows an envelope, loudest at the centre
+  const bars = Array.from({ length: 41 }, (_, i) => {
+    const t = (i - 20) / 20
+    const env = Math.exp(-t * t * 3.2)
+    const wobble = 0.55 + 0.45 * Math.abs(Math.sin(i * 1.7) * Math.cos(i * 0.6))
+    return { x: 115 + i * 10, h: 6 + 70 * env * wobble }
+  })
   return <svg className="echo-back-art" viewBox="0 0 630 880" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
     <defs>
-      <radialGradient id="eb3-bg" cx="50%" cy="48%" r="72%">
-        <stop offset="0" stopColor="#163a35" /><stop offset=".5" stopColor="#0a1d1b" /><stop offset="1" stopColor="#040b0b" />
+      <radialGradient id="eb4-bg" cx="50%" cy="50%" r="72%">
+        <stop offset="0" stopColor="#163a34" /><stop offset=".55" stopColor="#0a1c19" /><stop offset="1" stopColor="#030908" />
       </radialGradient>
-      <radialGradient id="eb3-bloom" cx="50%" cy="50%" r="50%">
-        <stop offset="0" stopColor="#c9fff4" stopOpacity=".55" /><stop offset=".25" stopColor="#6fd9c6" stopOpacity=".22" /><stop offset="1" stopColor="#6fd9c6" stopOpacity="0" />
-      </radialGradient>
-      {/* four facet tones: lit, half-lit, shade, iridescent */}
-      <linearGradient id="eb3-f1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#f4fffb" /><stop offset=".5" stopColor="#9fe9dc" /><stop offset="1" stopColor="#4fb7a8" /></linearGradient>
-      <linearGradient id="eb3-f2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#7fd6c8" /><stop offset=".6" stopColor="#2f8f86" /><stop offset="1" stopColor="#155a57" /></linearGradient>
-      <linearGradient id="eb3-f3" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#0e3b3b" /><stop offset=".55" stopColor="#1f6e69" /><stop offset="1" stopColor="#8fe3d6" /></linearGradient>
-      <linearGradient id="eb3-f4" x1="1" y1="1" x2="0" y2="0"><stop offset="0" stopColor="#b9a8f2" /><stop offset=".45" stopColor="#8fe6d7" /><stop offset="1" stopColor="#fbfff4" /></linearGradient>
-      <linearGradient id="eb3-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff1c4" /><stop offset=".5" stopColor="#d6b46a" /><stop offset="1" stopColor="#9c7a3a" /></linearGradient>
-      <linearGradient id="eb3-fade" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stopColor="#fff" stopOpacity="0" /><stop offset=".2" stopColor="#fff" stopOpacity="1" /><stop offset=".8" stopColor="#fff" stopOpacity="1" /><stop offset="1" stopColor="#fff" stopOpacity="0" />
+      <linearGradient id="eb4-gold" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#fff5d6" /><stop offset=".38" stopColor="#ecd08d" /><stop offset=".72" stopColor="#c49a4c" /><stop offset="1" stopColor="#f1d896" />
       </linearGradient>
-      <mask id="eb3-mask"><rect width="630" height="880" fill="url(#eb3-fade)" /></mask>
-      <filter id="eb3-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9" /></filter>
+      <linearGradient id="eb4-rule" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stopColor="#d6bd7c" stopOpacity="0" /><stop offset=".5" stopColor="#d6bd7c" /><stop offset="1" stopColor="#d6bd7c" stopOpacity="0" />
+      </linearGradient>
+      <radialGradient id="eb4-hush" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stopColor="#6fd9c6" stopOpacity=".16" /><stop offset="1" stopColor="#6fd9c6" stopOpacity="0" />
+      </radialGradient>
     </defs>
-    <rect width="630" height="880" fill="url(#eb3-bg)" />
-    <g mask="url(#eb3-mask)">
-      {/* the echo: arcs and flowing lines spreading from the crystal */}
-      <g fill="none" stroke="#9fdccf" strokeWidth="1.3">
-        {[150, 205, 262, 322, 386].map((r, i) => <circle key={r} cx={C[0]} cy={C[1] - 60} r={r} strokeOpacity={0.2 - i * 0.03} />)}
-      </g>
-      <g fill="none" stroke="#d8c48e" strokeWidth="1.1" strokeOpacity=".22">
-        {[-1, 1].map((s) => [0, 1, 2, 3].map((k) => <path key={`${s}${k}`} d={`M ${C[0]} ${C[1] + 40} C ${C[0] + s * (90 + k * 55)} ${C[1] - 30 - k * 40}, ${C[0] + s * (150 + k * 60)} ${C[1] - 200 - k * 30}, ${C[0] + s * (70 + k * 30)} ${C[1] - 330 - k * 25}`} />))}
-      </g>
-      <ellipse cx={C[0]} cy={C[1] - 70} rx="250" ry="250" fill="url(#eb3-bloom)" />
-      {/* glow pass */}
-      <g filter="url(#eb3-glow)" opacity=".55">
-        {petals.map((p, i) => { const k = petal(C, p.angle, p.len, p.width); return <polygon key={i} points={pts(k.base, k.left, k.tip, k.right)} fill="#7fe3d4" /> })}
-      </g>
-      {/* the crystal bloom */}
-      {petals.map((p, i) => {
-        const k = petal(C, p.angle, p.len, p.width)
-        return <g key={i}>
-          <polygon points={pts(k.left, k.tip, k.core)} fill="url(#eb3-f1)" />
-          <polygon points={pts(k.right, k.tip, k.core)} fill="url(#eb3-f2)" />
-          <polygon points={pts(k.left, k.base, k.core)} fill="url(#eb3-f3)" />
-          <polygon points={pts(k.right, k.base, k.core)} fill="url(#eb3-f4)" />
-          <polygon points={pts(k.base, k.left, k.tip, k.right)} fill="none" stroke="url(#eb3-gold)" strokeWidth={i === petals.length - 1 ? 2.4 : 1.6} strokeLinejoin="round" />
-          <polyline points={pts(k.tip, k.core, k.base)} fill="none" stroke="#f6fff9" strokeOpacity=".55" strokeWidth="1" />
-        </g>
-      })}
-      <circle cx={C[0]} cy={C[1]} r="7" fill="#fffbe9" />
-      <circle cx={C[0]} cy={C[1]} r="22" fill="#fffbe9" opacity=".35" filter="url(#eb3-glow)" />
+    <rect width="630" height="880" fill="url(#eb4-bg)" />
+    {/* sound rings from the centre */}
+    <g fill="none" stroke="#9fd9cb">
+      {[120, 175, 235, 300, 370, 445].map((r, i) => <circle key={r} cx="315" cy="452" r={r} strokeWidth={i < 2 ? 1.4 : 1.1} strokeOpacity={0.17 - i * 0.022} />)}
+    </g>
+    <ellipse cx="315" cy="452" rx="260" ry="300" fill="url(#eb4-hush)" />
+    {/* the two characters, echoing */}
+    <EchoGlyph ch="回" x={315} y={318} size={205} />
+    <EchoGlyph ch="响" x={315} y={596} size={205} />
+    {/* the voiceprint between them */}
+    <g transform="translate(0 456)">
+      <rect x="70" y="-0.8" width="490" height="1.6" fill="url(#eb4-rule)" opacity=".7" />
+      {bars.map((b) => <rect key={b.x} x={b.x - 2.2} y={-b.h / 2} width="4.4" height={b.h} rx="2.2" fill="url(#eb4-gold)" opacity={0.35 + 0.6 * (b.h / 76)} />)}
+    </g>
+    {/* header and foot */}
+    <g fontFamily="'Segoe UI',Arial,sans-serif" textAnchor="middle">
+      <text x="315" y="96" fill="#d6bd7c" fontSize="20" fontWeight="600" letterSpacing="9">RIFT ECHOES</text>
+      <rect x="235" y="112" width="160" height="1.2" fill="url(#eb4-rule)" />
+      <text x="315" y="792" fill="#e9e0c4" fontFamily="'Microsoft YaHei',sans-serif" fontSize="24" letterSpacing="10">退役老将回归</text>
+      <text x="315" y="826" fill="#7f978c" fontSize="13" letterSpacing="5">RETURNING LEGENDS · SERIES 01</text>
+    </g>
+    {/* double hairline and corner marks */}
+    <rect x="6" y="6" width="618" height="868" rx="20" fill="none" stroke="#d6bd7c" strokeOpacity=".6" strokeWidth="2" />
+    <rect x="20" y="20" width="590" height="840" rx="10" fill="none" stroke="#d6bd7c" strokeOpacity=".22" strokeWidth="1.3" />
+    <g stroke="url(#eb4-gold)" strokeWidth="3" fill="none" strokeLinecap="round">
+      <path d="M20 66 V20 H66" /><path d="M564 20 H610 V66" /><path d="M610 814 V860 H564" /><path d="M66 860 H20 V814" />
     </g>
   </svg>
 }

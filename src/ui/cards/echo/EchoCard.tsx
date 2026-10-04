@@ -97,13 +97,7 @@ export function EchoCard({ card, level = 0, dupes = 0, size = 'md', selected, di
   </div>
 }
 
-/** 卡背 v3 — the 曼谷 structure (hero art + oversized type + hairlines), see EchoBackArt.tsx */
+/** 卡背 v4 — the two characters themselves, echoing (see EchoBackArt.tsx); all type lives in the SVG */
 export function EchoCardBack({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
-  return <div className={`cardback echo-back-v2 s-${size}`} aria-label="峡谷回响卡背">
-    <EchoBackArt />
-    <div className="eb-inner" aria-hidden="true" />
-    <header className="eb-head">LEAGUE OF LEGENDS<span>RETIRED LEGENDS</span></header>
-    <div className="eb-title"><small>RIFT</small><strong>ECHOES</strong></div>
-    <div className="eb-bottom"><b>THE LEGENDS<br />RETURN</b><span>峡谷回响 · 退役老将回归</span><small>2013 — 2025 · ALL REGIONS</small></div>
-  </div>
+  return <div className={`cardback echo-back-v2 s-${size}`} aria-label="峡谷回响卡背"><EchoBackArt /></div>
 }

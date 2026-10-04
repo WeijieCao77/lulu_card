@@ -99,7 +99,7 @@ kept.append('.cardback.echo-back-v2.echo-back-v2{position:relative;aspect-ratio:
             '.cardback.echo-back-v2.echo-back-v2::before,.cardback.echo-back-v2.echo-back-v2::after{content:none}'
             '.cardback.echo-back-v2 .echo-back-art{display:block;position:absolute;inset:0;width:100%;height:100%}'
             # v3 type, after the 曼谷 back: hairline + inner frame, small header, oversized title, a bold line at the foot
-            '.cardback.echo-back-v2.echo-back-v2{border:1px solid #c9b27c;font-family:Arial,"Microsoft YaHei",sans-serif;color:#eef6f1}'
+            '.cardback.echo-back-v2.echo-back-v2{border:0;font-family:Arial,"Microsoft YaHei",sans-serif;color:#eef6f1}'
             '.echo-back-v2 .eb-inner{position:absolute;inset:2.2%;border:1px solid color-mix(in srgb,#c9b27c,transparent 55%);border-radius:3px;pointer-events:none;z-index:3}'
             '.echo-back-v2 .eb-head{position:absolute;z-index:2;top:6.5%;left:9%;right:9%;display:flex;justify-content:space-between;font-size:2.4cqw;letter-spacing:.09em;color:#bfd2c8}'
             '.echo-back-v2 .eb-head span{color:#e3cb8c}'
