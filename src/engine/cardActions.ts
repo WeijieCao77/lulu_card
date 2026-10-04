@@ -48,6 +48,7 @@ import { WORLD_TEAMS } from './teams'
 import { markMailSeen } from './inbox'
 import { dailyQuestion, echoQuizDone, startEchoQuiz, viewDaily, viewEchoQuiz } from './echoQuiz'
 import type { EchoQuizQ } from './echoQuiz'
+import { koReward, setKo, setSwiss, swissReward } from './s16Predict'
 import { dismantle } from './dismantle'
 import { SEOUL_TEAMS } from './seoul2024'
 import { SEOUL_FIVES, SEOUL_POOL, SEOUL_ROUTES, quitRoute, recordRoute, routeState, startRoute } from './seoulRoute'
@@ -76,7 +77,7 @@ export const ACTIONS = [
   'open', 'checkin', 'quest', 'series', 'fullset', 'salvage', 'salvage_dupes', 'salvage_bulk', 'upgrade',
   'ladder_draw', 'ladder', 'cup_enter', 'cup_play', 'cup_clear', 'challenge', 'mail_seen',
   'minigame_start', 'minigame_finish', 'dismantle', 'seoul_start', 'seoul_play', 'seoul_quit',
-  'series_pick', 'shop', 'shop_buy', 'echo_quiz', 'echo_quiz_answer', 'echo_set', 'echo_daily', 'echo_daily_answer', 's16_set',
+  'series_pick', 'shop', 'shop_buy', 'echo_quiz', 'echo_quiz_answer', 'echo_set', 'echo_daily', 'echo_daily_answer', 's16_set', 's16_predict', 's16_predict_claim',
 ] as const
 export type ActionName = (typeof ACTIONS)[number]
 
@@ -226,6 +227,28 @@ function dispatch(
         note(g, '每日老将问答答对：+1 回响试训包')
       }
       return { ok: true, result: { daily: viewDaily(s, bank), correct, won: s.won } }
+    }
+    // ---- S16 赛事预测: two sheets, locked by the server's clock, results entered by hand — engine/s16Predict.ts
+    case 's16_predict': {
+      const stage = str(a.stage, 8)
+      const s = (g.s16Predict ??= {})
+      const picks = (a.picks && typeof a.picks === 'object' ? a.picks : {}) as Record<string, unknown>
+      const why = stage === 'swiss' ? setSwiss(s, picks, env.now) : stage === 'ko' ? setKo(s, picks, env.now) : '没有这个阶段'
+      if (why) return { ok: false, why }
+      return { ok: true, result: { predict: g.s16Predict } }
+    }
+    case 's16_predict_claim': {
+      const stage = str(a.stage, 8)
+      const p = stage === 'swiss' ? g.s16Predict?.swiss : stage === 'ko' ? g.s16Predict?.ko : undefined
+      if (!p) return { ok: false, why: '这个阶段你没有提交预测' }
+      if (p.claimedAt) return { ok: false, why: '已经领过了' }
+      const r = stage === 'swiss' ? swissReward(g.s16Predict!.swiss, env.now) : koReward(g.s16Predict!.ko, env.now)
+      if (!r) return { ok: false, why: '赛果还没确认，确认后就能领' }
+      for (const [k, n] of Object.entries(r.packs)) g.packs[k as keyof typeof g.packs] = (g.packs[k as keyof typeof g.packs] ?? 0) + n
+      p.claimedAt = env.now
+      const got = Object.entries(r.packs).map(([k, n]) => `${k === 'ten' ? '十连包' : k === 'elite' ? '选拔包' : 'S16 世界赛包'} ×${n}`).join('、')
+      note(g, `S16 ${stage === 'swiss' ? '瑞士轮' : '淘汰赛'}预测：${r.label}${got ? `，${got}` : ''}`)
+      return { ok: true, result: { reward: r, got } }
     }
     case 's16_set': {
       const got = claimS16Set(g)

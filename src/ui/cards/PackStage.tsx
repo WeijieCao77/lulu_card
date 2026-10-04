@@ -6,6 +6,7 @@ import type { Pulled } from '../../engine/gacha'
 import type { PackPosition } from './positionPackDesign'
 import { POSITION_PACKS } from './positionPackDesign'
 import { playAnticipation, playPackCue } from '../packAudio'
+import { S16CardBack } from './s16/S16Card'
 import './packStage.css'
 import './packQuick.css'
 import PackAltar from './PackAltar'
@@ -50,10 +51,12 @@ export interface PackStageProps {
   onSellAll: () => void
   /** 峡谷回响: its own deck on the altar and its own card back */
   echo?: boolean
+  /** an S16 世界赛 pack: its card back on the flipped cards */
+  s16?: boolean
 }
 
 /** Presentation only: the server already awarded these cards before this mounts. */
-export default function PackStage({ pulled, packName = '选手卡包', position, fast = false, busy = false, unknownError = false, onFastChange, continueEnabled = false, continueLabel = '继续下一包', onContinue, onDone, onSellAll, echo = false }: PackStageProps) {
+export default function PackStage({ pulled, packName = '选手卡包', position, fast = false, busy = false, unknownError = false, onFastChange, continueEnabled = false, continueLabel = '继续下一包', onContinue, onDone, onSellAll, echo = false, s16 = false }: PackStageProps) {
   const fastFrozen = useRef(fast).current
   const initialOpened = useMemo(() => {
     if (!fastFrozen) return new Set<number>()
@@ -253,7 +256,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
               onClick={e => { if (mythicBusy.current) return; if (e.detail !== 0 && Date.now() < ignoreClickUntil.current) return; up ? setInspect(i) : reveal(i) }}>
               <span className="ritual-card-light" aria-hidden="true" />
               <div className="ritual-flipper">
-                <div className="ritual-card-back" aria-hidden={up}>{echo ? <EchoCardBack size="lg" /> : <Back />}</div>
+                <div className="ritual-card-back" aria-hidden={up}>{echo ? <EchoCardBack size="lg" /> : s16 ? <S16CardBack size="lg" /> : <Back />}</div>
                 <div className="ritual-card-front" aria-hidden={!up}><div className="ritual-face-scale"><CardFace card={p.card} size="lg" footer={p.dupe ? '重复卡' : '新卡'} /></div></div>
               </div>
               {up && <span className="ritual-flip-sparks" aria-hidden="true">{Array.from({ length: 8 }, (_, k) => <i key={k} style={{ '--i': k } as CSSProperties} />)}</span>}

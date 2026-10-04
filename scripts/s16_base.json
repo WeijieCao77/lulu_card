@@ -1,0 +1,1362 @@
+{
+ "Kiin": {
+  "base": "p:P88",
+  "role": "上单",
+  "club": "T18",
+  "rating": 87,
+  "attrs": {
+   "aim": 87,
+   "reaction": 89,
+   "awareness": 81,
+   "utility": 83,
+   "clutch": 84,
+   "teamwork": 83,
+   "communication": 85,
+   "igl": 97
+  }
+ },
+ "Canyon": {
+  "base": "p:P89",
+  "role": "打野",
+  "club": "T18",
+  "rating": 86,
+  "attrs": {
+   "aim": 86,
+   "reaction": 87,
+   "awareness": 81,
+   "utility": 88,
+   "clutch": 85,
+   "teamwork": 81,
+   "communication": 80,
+   "igl": 98
+  }
+ },
+ "Chovy": {
+  "base": "p:P90",
+  "role": "中单",
+  "club": "T18",
+  "rating": 90,
+  "attrs": {
+   "aim": 90,
+   "reaction": 92,
+   "awareness": 90,
+   "utility": 93,
+   "clutch": 83,
+   "teamwork": 83,
+   "communication": 79,
+   "igl": 95
+  }
+ },
+ "Ruler": {
+  "base": "p:P91",
+  "role": "下路",
+  "club": "T18",
+  "rating": 87,
+  "attrs": {
+   "aim": 87,
+   "reaction": 87,
+   "awareness": 87,
+   "utility": 88,
+   "clutch": 86,
+   "teamwork": 81,
+   "communication": 78,
+   "igl": 94
+  }
+ },
+ "Duro": {
+  "base": "p:P92",
+  "role": "辅助",
+  "club": "T18",
+  "rating": 84,
+  "attrs": {
+   "aim": 85,
+   "reaction": 78,
+   "awareness": 85,
+   "utility": 87,
+   "clutch": 87,
+   "teamwork": 82,
+   "communication": 83,
+   "igl": 82
+  }
+ },
+ "Breathe": {
+  "base": "p:P531",
+  "role": "上单",
+  "club": "T1",
+  "rating": 78,
+  "attrs": {
+   "aim": 78,
+   "reaction": 80,
+   "awareness": 81,
+   "utility": 82,
+   "clutch": 77,
+   "teamwork": 77,
+   "communication": 76,
+   "igl": 63
+  }
+ },
+ "Tarzan": {
+  "base": "p:P2",
+  "role": "打野",
+  "club": "T1",
+  "rating": 86,
+  "attrs": {
+   "aim": 91,
+   "reaction": 86,
+   "awareness": 83,
+   "utility": 85,
+   "clutch": 80,
+   "teamwork": 87,
+   "communication": 85,
+   "igl": 91
+  }
+ },
+ "Shanks": {
+  "base": "p:P3",
+  "role": "中单",
+  "club": "T1",
+  "rating": 83,
+  "attrs": {
+   "aim": 84,
+   "reaction": 88,
+   "awareness": 76,
+   "utility": 83,
+   "clutch": 82,
+   "teamwork": 80,
+   "communication": 79,
+   "igl": 82
+  }
+ },
+ "Hope": {
+  "base": "p:P4",
+  "role": "下路",
+  "club": "T1",
+  "rating": 83,
+  "attrs": {
+   "aim": 83,
+   "reaction": 84,
+   "awareness": 87,
+   "utility": 83,
+   "clutch": 81,
+   "teamwork": 81,
+   "communication": 80,
+   "igl": 82
+  }
+ },
+ "Kael": {
+  "base": "p:P5",
+  "role": "辅助",
+  "club": "T1",
+  "rating": 84,
+  "attrs": {
+   "aim": 87,
+   "reaction": 83,
+   "awareness": 87,
+   "utility": 90,
+   "clutch": 81,
+   "teamwork": 83,
+   "communication": 81,
+   "igl": 82
+  }
+ },
+ "BrokenBlade": {
+  "base": "p:P129",
+  "role": "上单",
+  "club": "T26",
+  "rating": 86,
+  "attrs": {
+   "aim": 87,
+   "reaction": 84,
+   "awareness": 88,
+   "utility": 85,
+   "clutch": 86,
+   "teamwork": 85,
+   "communication": 84,
+   "igl": 90
+  }
+ },
+ "SkewMond": {
+  "base": "p:P130",
+  "role": "打野",
+  "club": "T26",
+  "rating": 86,
+  "attrs": {
+   "aim": 88,
+   "reaction": 91,
+   "awareness": 87,
+   "utility": 89,
+   "clutch": 82,
+   "teamwork": 85,
+   "communication": 81,
+   "igl": 88
+  }
+ },
+ "Caps": {
+  "base": "p:P131",
+  "role": "中单",
+  "club": "T26",
+  "rating": 89,
+  "attrs": {
+   "aim": 88,
+   "reaction": 96,
+   "awareness": 85,
+   "utility": 89,
+   "clutch": 87,
+   "teamwork": 85,
+   "communication": 85,
+   "igl": 93
+  }
+ },
+ "Hans Sama": {
+  "base": "p:P132",
+  "role": "下路",
+  "club": "T26",
+  "rating": 85,
+  "attrs": {
+   "aim": 85,
+   "reaction": 90,
+   "awareness": 86,
+   "utility": 84,
+   "clutch": 85,
+   "teamwork": 81,
+   "communication": 80,
+   "igl": 91
+  }
+ },
+ "Labrov": {
+  "base": "p:P133",
+  "role": "辅助",
+  "club": "T26",
+  "rating": 80,
+  "attrs": {
+   "aim": 82,
+   "reaction": 84,
+   "awareness": 76,
+   "utility": 79,
+   "clutch": 82,
+   "teamwork": 80,
+   "communication": 78,
+   "igl": 95
+  }
+ },
+ "Pun": {
+  "base": "p:P252",
+  "role": "上单",
+  "club": "T50",
+  "rating": 75,
+  "attrs": {
+   "aim": 77,
+   "reaction": 74,
+   "awareness": 72,
+   "utility": 72,
+   "clutch": 77,
+   "teamwork": 75,
+   "communication": 77,
+   "igl": 75
+  }
+ },
+ "Hizto": {
+  "base": "p:P253",
+  "role": "打野",
+  "club": "T50",
+  "rating": 80,
+  "attrs": {
+   "aim": 84,
+   "reaction": 88,
+   "awareness": 75,
+   "utility": 87,
+   "clutch": 83,
+   "teamwork": 79,
+   "communication": 75,
+   "igl": 78
+  }
+ },
+ "Dire": {
+  "base": "p:P254",
+  "role": "中单",
+  "club": "T50",
+  "rating": 75,
+  "attrs": {
+   "aim": 79,
+   "reaction": 73,
+   "awareness": 72,
+   "utility": 75,
+   "clutch": 78,
+   "teamwork": 75,
+   "communication": 74,
+   "igl": 75
+  }
+ },
+ "Eddie": {
+  "base": "p:P255",
+  "role": "下路",
+  "club": "T50",
+  "rating": 86,
+  "attrs": {
+   "aim": 86,
+   "reaction": 90,
+   "awareness": 83,
+   "utility": 87,
+   "clutch": 83,
+   "teamwork": 83,
+   "communication": 81,
+   "igl": 90
+  }
+ },
+ "Bie": {
+  "base": "p:P256",
+  "role": "辅助",
+  "club": "T50",
+  "rating": 86,
+  "attrs": {
+   "aim": 88,
+   "reaction": 84,
+   "awareness": 89,
+   "utility": 90,
+   "clutch": 83,
+   "teamwork": 86,
+   "communication": 82,
+   "igl": 90
+  }
+ },
+ "Zeus": {
+  "base": "p:P98",
+  "role": "上单",
+  "club": "T20",
+  "rating": 87,
+  "attrs": {
+   "aim": 87,
+   "reaction": 90,
+   "awareness": 77,
+   "utility": 84,
+   "clutch": 80,
+   "teamwork": 84,
+   "communication": 83,
+   "igl": 83
+  }
+ },
+ "Kanavi": {
+  "base": "p:P99",
+  "role": "打野",
+  "club": "T20",
+  "rating": 85,
+  "attrs": {
+   "aim": 89,
+   "reaction": 91,
+   "awareness": 81,
+   "utility": 91,
+   "clutch": 83,
+   "teamwork": 82,
+   "communication": 79,
+   "igl": 75
+  }
+ },
+ "Zeka": {
+  "base": "p:P100",
+  "role": "中单",
+  "club": "T20",
+  "rating": 86,
+  "attrs": {
+   "aim": 86,
+   "reaction": 86,
+   "awareness": 86,
+   "utility": 85,
+   "clutch": 83,
+   "teamwork": 85,
+   "communication": 83,
+   "igl": 88
+  }
+ },
+ "Gumayusi": {
+  "base": "p:P101",
+  "role": "下路",
+  "club": "T20",
+  "rating": 86,
+  "attrs": {
+   "aim": 83,
+   "reaction": 86,
+   "awareness": 82,
+   "utility": 84,
+   "clutch": 80,
+   "teamwork": 80,
+   "communication": 81,
+   "igl": 87
+  }
+ },
+ "Delight": {
+  "base": "p:P102",
+  "role": "辅助",
+  "club": "T20",
+  "rating": 86,
+  "attrs": {
+   "aim": 84,
+   "reaction": 88,
+   "awareness": 87,
+   "utility": 90,
+   "clutch": 84,
+   "teamwork": 83,
+   "communication": 84,
+   "igl": 85
+  }
+ },
+ "Bin": {
+  "base": "p:P6",
+  "role": "上单",
+  "club": "T2",
+  "rating": 87,
+  "attrs": {
+   "aim": 85,
+   "reaction": 94,
+   "awareness": 80,
+   "utility": 93,
+   "clutch": 83,
+   "teamwork": 80,
+   "communication": 77,
+   "igl": 99
+  }
+ },
+ "Xun": {
+  "base": "p:P7",
+  "role": "打野",
+  "club": "T2",
+  "rating": 83,
+  "attrs": {
+   "aim": 86,
+   "reaction": 86,
+   "awareness": 76,
+   "utility": 85,
+   "clutch": 81,
+   "teamwork": 83,
+   "communication": 80,
+   "igl": 94
+  }
+ },
+ "Knight": {
+  "base": "p:P8",
+  "role": "中单",
+  "club": "T2",
+  "rating": 90,
+  "attrs": {
+   "aim": 93,
+   "reaction": 94,
+   "awareness": 82,
+   "utility": 91,
+   "clutch": 81,
+   "teamwork": 87,
+   "communication": 82,
+   "igl": 87
+  }
+ },
+ "Viper": {
+  "base": "p:P9",
+  "role": "下路",
+  "club": "T2",
+  "rating": 88,
+  "attrs": {
+   "aim": 90,
+   "reaction": 88,
+   "awareness": 89,
+   "utility": 86,
+   "clutch": 83,
+   "teamwork": 86,
+   "communication": 84,
+   "igl": 90
+  }
+ },
+ "ON": {
+  "base": "p:P10",
+  "role": "辅助",
+  "club": "T2",
+  "rating": 83,
+  "attrs": {
+   "aim": 86,
+   "reaction": 90,
+   "awareness": 84,
+   "utility": 94,
+   "clutch": 81,
+   "teamwork": 79,
+   "communication": 75,
+   "igl": 87
+  }
+ },
+ "Myrwn": {
+  "base": "p:P144",
+  "role": "上单",
+  "club": "T29",
+  "rating": 78,
+  "attrs": {
+   "aim": 81,
+   "reaction": 78,
+   "awareness": 80,
+   "utility": 76,
+   "clutch": 78,
+   "teamwork": 78,
+   "communication": 78,
+   "igl": 75
+  }
+ },
+ "Elyoya": {
+  "base": "p:P145",
+  "role": "打野",
+  "club": "T29",
+  "rating": 86,
+  "attrs": {
+   "aim": 84,
+   "reaction": 85,
+   "awareness": 90,
+   "utility": 86,
+   "clutch": 84,
+   "teamwork": 87,
+   "communication": 88,
+   "igl": 80
+  }
+ },
+ "Jojopyun": {
+  "base": "p:P146",
+  "role": "中单",
+  "club": "T29",
+  "rating": 83,
+  "attrs": {
+   "aim": 82,
+   "reaction": 89,
+   "awareness": 81,
+   "utility": 86,
+   "clutch": 82,
+   "teamwork": 80,
+   "communication": 80,
+   "igl": 82
+  }
+ },
+ "Supa": {
+  "base": "p:P147",
+  "role": "下路",
+  "club": "T29",
+  "rating": 84,
+  "attrs": {
+   "aim": 86,
+   "reaction": 86,
+   "awareness": 78,
+   "utility": 85,
+   "clutch": 81,
+   "teamwork": 81,
+   "communication": 78,
+   "igl": 78
+  }
+ },
+ "Alvaro": {
+  "base": "p:P148",
+  "role": "辅助",
+  "club": "T29",
+  "rating": 84,
+  "attrs": {
+   "aim": 85,
+   "reaction": 84,
+   "awareness": 83,
+   "utility": 86,
+   "clutch": 81,
+   "teamwork": 84,
+   "communication": 85,
+   "igl": 78
+  }
+ },
+ "Doran": {
+  "base": "p:P119",
+  "role": "上单",
+  "club": "T24",
+  "rating": 84,
+  "attrs": {
+   "aim": 85,
+   "reaction": 83,
+   "awareness": 79,
+   "utility": 87,
+   "clutch": 82,
+   "teamwork": 80,
+   "communication": 79,
+   "igl": 92
+  }
+ },
+ "Oner": {
+  "base": "p:P120",
+  "role": "打野",
+  "club": "T24",
+  "rating": 85,
+  "attrs": {
+   "aim": 85,
+   "reaction": 84,
+   "awareness": 83,
+   "utility": 88,
+   "clutch": 81,
+   "teamwork": 79,
+   "communication": 75,
+   "igl": 90
+  }
+ },
+ "Faker": {
+  "base": "p:P121",
+  "role": "中单",
+  "club": "T24",
+  "rating": 83,
+  "attrs": {
+   "aim": 81,
+   "reaction": 81,
+   "awareness": 81,
+   "utility": 80,
+   "clutch": 83,
+   "teamwork": 77,
+   "communication": 77,
+   "igl": 92
+  }
+ },
+ "Peyz": {
+  "base": "p:P122",
+  "role": "下路",
+  "club": "T24",
+  "rating": 86,
+  "attrs": {
+   "aim": 88,
+   "reaction": 87,
+   "awareness": 83,
+   "utility": 87,
+   "clutch": 80,
+   "teamwork": 85,
+   "communication": 82,
+   "igl": 81
+  }
+ },
+ "Keria": {
+  "base": "p:P123",
+  "role": "辅助",
+  "club": "T24",
+  "rating": 87,
+  "attrs": {
+   "aim": 88,
+   "reaction": 89,
+   "awareness": 81,
+   "utility": 84,
+   "clutch": 80,
+   "teamwork": 85,
+   "communication": 83,
+   "igl": 86
+  }
+ },
+ "ZUIAN": {
+  "base": "p:P537",
+  "role": "上单",
+  "club": "T12",
+  "rating": 69,
+  "attrs": {
+   "aim": 72,
+   "reaction": 68,
+   "awareness": 68,
+   "utility": 64,
+   "clutch": 69,
+   "teamwork": 71,
+   "communication": 72,
+   "igl": 54
+  }
+ },
+ "Tian": {
+  "base": "p:P529",
+  "role": "打野",
+  "club": "T12",
+  "rating": 83,
+  "attrs": {
+   "aim": 83,
+   "reaction": 85,
+   "awareness": 83,
+   "utility": 87,
+   "clutch": 82,
+   "teamwork": 80,
+   "communication": 79,
+   "igl": 85
+  }
+ },
+ "Creme": {
+  "base": "p:P59",
+  "role": "中单",
+  "club": "T12",
+  "rating": 84,
+  "attrs": {
+   "aim": 88,
+   "reaction": 86,
+   "awareness": 81,
+   "utility": 83,
+   "clutch": 82,
+   "teamwork": 82,
+   "communication": 79,
+   "igl": 85
+  }
+ },
+ "JackeyLove": {
+  "base": "p:P530",
+  "role": "下路",
+  "club": "T12",
+  "rating": 83,
+  "attrs": {
+   "aim": 84,
+   "reaction": 83,
+   "awareness": 83,
+   "utility": 81,
+   "clutch": 85,
+   "teamwork": 81,
+   "communication": 81,
+   "igl": 84
+  }
+ },
+ "Zhuo": {
+  "base": "p:P40",
+  "role": "辅助",
+  "club": "T12",
+  "rating": 84,
+  "attrs": {
+   "aim": 87,
+   "reaction": 82,
+   "awareness": 87,
+   "utility": 85,
+   "clutch": 82,
+   "teamwork": 86,
+   "communication": 86,
+   "igl": 70
+  }
+ },
+ "Rest": {
+  "base": "p:P215",
+  "role": "上单",
+  "club": "T43",
+  "rating": 71,
+  "attrs": {
+   "aim": 71,
+   "reaction": 73,
+   "awareness": 69,
+   "utility": 69,
+   "clutch": 71,
+   "teamwork": 72,
+   "communication": 73,
+   "igl": 56
+  }
+ },
+ "Shad0w": {
+  "base": "p:P216",
+  "role": "打野",
+  "club": "T43",
+  "rating": 85,
+  "attrs": {
+   "aim": 90,
+   "reaction": 86,
+   "awareness": 84,
+   "utility": 86,
+   "clutch": 87,
+   "teamwork": 88,
+   "communication": 85,
+   "igl": 65
+  }
+ },
+ "Pout": {
+  "base": "p:P609",
+  "role": "中单",
+  "club": "T43",
+  "rating": 71,
+  "attrs": {
+   "aim": 74,
+   "reaction": 71,
+   "awareness": 69,
+   "utility": 70,
+   "clutch": 74,
+   "teamwork": 71,
+   "communication": 69,
+   "igl": 60
+  }
+ },
+ "Doggo": {
+  "base": "p:P218",
+  "role": "下路",
+  "club": "T43",
+  "rating": 85,
+  "attrs": {
+   "aim": 86,
+   "reaction": 86,
+   "awareness": 89,
+   "utility": 87,
+   "clutch": 84,
+   "teamwork": 82,
+   "communication": 79,
+   "igl": 70
+  }
+ },
+ "Kino": {
+  "base": "p:OE6e16ea985b",
+  "role": "辅助",
+  "club": "T43",
+  "rating": 66,
+  "attrs": {
+   "aim": 68,
+   "reaction": 67,
+   "awareness": 67,
+   "utility": 67,
+   "clutch": 66,
+   "teamwork": 67,
+   "communication": 68,
+   "igl": 58
+  }
+ },
+ "Siwoo": {
+  "base": "p:P83",
+  "role": "上单",
+  "club": "T17",
+  "rating": 79,
+  "attrs": {
+   "aim": 79,
+   "reaction": 82,
+   "awareness": 78,
+   "utility": 86,
+   "clutch": 83,
+   "teamwork": 72,
+   "communication": 69,
+   "igl": 75
+  }
+ },
+ "Lucid": {
+  "base": "p:P84",
+  "role": "打野",
+  "club": "T17",
+  "rating": 82,
+  "attrs": {
+   "aim": 81,
+   "reaction": 90,
+   "awareness": 82,
+   "utility": 80,
+   "clutch": 84,
+   "teamwork": 80,
+   "communication": 80,
+   "igl": 83
+  }
+ },
+ "ShowMaker": {
+  "base": "p:P85",
+  "role": "中单",
+  "club": "T17",
+  "rating": 84,
+  "attrs": {
+   "aim": 83,
+   "reaction": 86,
+   "awareness": 85,
+   "utility": 82,
+   "clutch": 86,
+   "teamwork": 81,
+   "communication": 79,
+   "igl": 85
+  }
+ },
+ "Smash": {
+  "base": "p:P86",
+  "role": "下路",
+  "club": "T17",
+  "rating": 82,
+  "attrs": {
+   "aim": 79,
+   "reaction": 86,
+   "awareness": 82,
+   "utility": 88,
+   "clutch": 82,
+   "teamwork": 80,
+   "communication": 79,
+   "igl": 61
+  }
+ },
+ "Career": {
+  "base": "p:P87",
+  "role": "辅助",
+  "club": "T17",
+  "rating": 82,
+  "attrs": {
+   "aim": 83,
+   "reaction": 84,
+   "awareness": 83,
+   "utility": 82,
+   "clutch": 82,
+   "teamwork": 83,
+   "communication": 83,
+   "igl": 69
+  }
+ },
+ "TheShy": {
+  "base": "p:P545",
+  "role": "上单",
+  "club": "T4",
+  "rating": 78,
+  "attrs": {
+   "aim": 84,
+   "reaction": 83,
+   "awareness": 69,
+   "utility": 76,
+   "clutch": 76,
+   "teamwork": 73,
+   "communication": 69,
+   "igl": 63
+  }
+ },
+ "Wei": {
+  "base": "p:P17",
+  "role": "打野",
+  "club": "T4",
+  "rating": 78,
+  "attrs": {
+   "aim": 79,
+   "reaction": 79,
+   "awareness": 82,
+   "utility": 73,
+   "clutch": 76,
+   "teamwork": 78,
+   "communication": 78,
+   "igl": 61
+  }
+ },
+ "Rookie": {
+  "base": "p:P18",
+  "role": "中单",
+  "club": "T4",
+  "rating": 84,
+  "attrs": {
+   "aim": 86,
+   "reaction": 86,
+   "awareness": 82,
+   "utility": 81,
+   "clutch": 80,
+   "teamwork": 85,
+   "communication": 86,
+   "igl": 77
+  }
+ },
+ "JiaQi": {
+  "base": "p:P60",
+  "role": "下路",
+  "club": "T4",
+  "rating": 69,
+  "attrs": {
+   "aim": 70,
+   "reaction": 72,
+   "awareness": 66,
+   "utility": 72,
+   "clutch": 66,
+   "teamwork": 68,
+   "communication": 67,
+   "igl": 45
+  }
+ },
+ "Meiko": {
+  "base": "p:P526",
+  "role": "辅助",
+  "club": "T4",
+  "rating": 85,
+  "attrs": {
+   "aim": 88,
+   "reaction": 87,
+   "awareness": 80,
+   "utility": 81,
+   "clutch": 80,
+   "teamwork": 86,
+   "communication": 86,
+   "igl": 86
+  }
+ },
+ "Morgan": {
+  "base": "p:P210",
+  "role": "上单",
+  "club": "T42",
+  "rating": 88,
+  "attrs": {
+   "aim": 84,
+   "reaction": 89,
+   "awareness": 93,
+   "utility": 91,
+   "clutch": 88,
+   "teamwork": 86,
+   "communication": 87,
+   "igl": 82
+  }
+ },
+ "Josedeodo": {
+  "base": "p:P211",
+  "role": "打野",
+  "club": "T42",
+  "rating": 85,
+  "attrs": {
+   "aim": 86,
+   "reaction": 84,
+   "awareness": 87,
+   "utility": 83,
+   "clutch": 81,
+   "teamwork": 84,
+   "communication": 82,
+   "igl": 86
+  }
+ },
+ "Quid": {
+  "base": "p:P212",
+  "role": "中单",
+  "club": "T42",
+  "rating": 88,
+  "attrs": {
+   "aim": 89,
+   "reaction": 89,
+   "awareness": 82,
+   "utility": 90,
+   "clutch": 84,
+   "teamwork": 87,
+   "communication": 86,
+   "igl": 89
+  }
+ },
+ "Yeon": {
+  "base": "p:P213",
+  "role": "下路",
+  "club": "T42",
+  "rating": 82,
+  "attrs": {
+   "aim": 84,
+   "reaction": 86,
+   "awareness": 79,
+   "utility": 82,
+   "clutch": 82,
+   "teamwork": 79,
+   "communication": 78,
+   "igl": 77
+  }
+ },
+ "CoreJJ": {
+  "base": "p:P214",
+  "role": "辅助",
+  "club": "T42",
+  "rating": 85,
+  "attrs": {
+   "aim": 86,
+   "reaction": 84,
+   "awareness": 85,
+   "utility": 87,
+   "clutch": 83,
+   "teamwork": 84,
+   "communication": 84,
+   "igl": 81
+  }
+ },
+ "Dhokla": {
+  "base": "p:P195",
+  "role": "上单",
+  "club": "T39",
+  "rating": 80,
+  "attrs": {
+   "aim": 84,
+   "reaction": 77,
+   "awareness": 77,
+   "utility": 79,
+   "clutch": 85,
+   "teamwork": 80,
+   "communication": 80,
+   "igl": 99
+  }
+ },
+ "Inspired": {
+  "base": "p:P196",
+  "role": "打野",
+  "club": "T39",
+  "rating": 86,
+  "attrs": {
+   "aim": 84,
+   "reaction": 89,
+   "awareness": 85,
+   "utility": 91,
+   "clutch": 86,
+   "teamwork": 83,
+   "communication": 82,
+   "igl": 93
+  }
+ },
+ "Saint": {
+  "base": "p:P197",
+  "role": "中单",
+  "club": "T39",
+  "rating": 85,
+  "attrs": {
+   "aim": 86,
+   "reaction": 86,
+   "awareness": 87,
+   "utility": 90,
+   "clutch": 86,
+   "teamwork": 82,
+   "communication": 79,
+   "igl": 84
+  }
+ },
+ "Berserker": {
+  "base": "p:P198",
+  "role": "下路",
+  "club": "T39",
+  "rating": 90,
+  "attrs": {
+   "aim": 89,
+   "reaction": 93,
+   "awareness": 89,
+   "utility": 92,
+   "clutch": 90,
+   "teamwork": 89,
+   "communication": 87,
+   "igl": 83
+  }
+ },
+ "Isles": {
+  "base": "p:P199",
+  "role": "辅助",
+  "club": "T39",
+  "rating": 82,
+  "attrs": {
+   "aim": 83,
+   "reaction": 85,
+   "awareness": 83,
+   "utility": 85,
+   "clutch": 86,
+   "teamwork": 80,
+   "communication": 81,
+   "igl": 80
+  }
+ },
+ "Thanatos": {
+  "base": "p:P174",
+  "role": "上单",
+  "club": "T35",
+  "rating": 84,
+  "attrs": {
+   "aim": 83,
+   "reaction": 88,
+   "awareness": 83,
+   "utility": 89,
+   "clutch": 80,
+   "teamwork": 78,
+   "communication": 77,
+   "igl": 81
+  }
+ },
+ "Blaber": {
+  "base": "p:P175",
+  "role": "打野",
+  "club": "T35",
+  "rating": 84,
+  "attrs": {
+   "aim": 85,
+   "reaction": 89,
+   "awareness": 84,
+   "utility": 90,
+   "clutch": 81,
+   "teamwork": 82,
+   "communication": 81,
+   "igl": 79
+  }
+ },
+ "Loki": {
+  "base": "p:P559",
+  "role": "中单",
+  "club": "T35",
+  "rating": 80,
+  "attrs": {
+   "aim": 81,
+   "reaction": 77,
+   "awareness": 81,
+   "utility": 80,
+   "clutch": 78,
+   "teamwork": 82,
+   "communication": 82,
+   "igl": 78
+  }
+ },
+ "Tactical": {
+  "base": "p:P375",
+  "role": "下路",
+  "club": "T35",
+  "rating": 75,
+  "attrs": {
+   "aim": 77,
+   "reaction": 76,
+   "awareness": 72,
+   "utility": 77,
+   "clutch": 73,
+   "teamwork": 71,
+   "communication": 69,
+   "igl": 82
+  }
+ },
+ "Vulcan": {
+  "base": "p:P178",
+  "role": "辅助",
+  "club": "T35",
+  "rating": 84,
+  "attrs": {
+   "aim": 88,
+   "reaction": 87,
+   "awareness": 80,
+   "utility": 81,
+   "clutch": 81,
+   "teamwork": 86,
+   "communication": 86,
+   "igl": 80
+  }
+ },
+ "Canna": {
+  "base": "p:P139",
+  "role": "上单",
+  "club": "T28",
+  "rating": 90,
+  "attrs": {
+   "aim": 93,
+   "reaction": 91,
+   "awareness": 87,
+   "utility": 91,
+   "clutch": 88,
+   "teamwork": 87,
+   "communication": 85,
+   "igl": 93
+  }
+ },
+ "Yike": {
+  "base": "p:P140",
+  "role": "打野",
+  "club": "T28",
+  "rating": 85,
+  "attrs": {
+   "aim": 90,
+   "reaction": 88,
+   "awareness": 80,
+   "utility": 91,
+   "clutch": 85,
+   "teamwork": 83,
+   "communication": 79,
+   "igl": 94
+  }
+ },
+ "kyeahoo": {
+  "base": "p:P141",
+  "role": "中单",
+  "club": "T28",
+  "rating": 85,
+  "attrs": {
+   "aim": 85,
+   "reaction": 86,
+   "awareness": 86,
+   "utility": 81,
+   "clutch": 87,
+   "teamwork": 83,
+   "communication": 84,
+   "igl": 85
+  }
+ },
+ "Caliste": {
+  "base": "p:P142",
+  "role": "下路",
+  "club": "T28",
+  "rating": 86,
+  "attrs": {
+   "aim": 87,
+   "reaction": 86,
+   "awareness": 83,
+   "utility": 91,
+   "clutch": 82,
+   "teamwork": 83,
+   "communication": 80,
+   "igl": 93
+  }
+ },
+ "Busio": {
+  "base": "p:P143",
+  "role": "辅助",
+  "club": "T28",
+  "rating": 80,
+  "attrs": {
+   "aim": 84,
+   "reaction": 83,
+   "awareness": 78,
+   "utility": 79,
+   "clutch": 81,
+   "teamwork": 81,
+   "communication": 79,
+   "igl": 83
+  }
+ },
+ "Kratos": {
+  "base": "p:P245",
+  "role": "上单",
+  "club": "T49",
+  "rating": 69,
+  "attrs": {
+   "aim": 66,
+   "reaction": 75,
+   "awareness": 69,
+   "utility": 73,
+   "clutch": 71,
+   "teamwork": 66,
+   "communication": 64,
+   "igl": 51
+  }
+ },
+ "Gury": {
+  "base": "p:P246",
+  "role": "打野",
+  "club": "T49",
+  "rating": 75,
+  "attrs": {
+   "aim": 75,
+   "reaction": 78,
+   "awareness": 81,
+   "utility": 78,
+   "clutch": 74,
+   "teamwork": 72,
+   "communication": 70,
+   "igl": 57
+  }
+ },
+ "Chika": {
+  "base": "p:OEfb98598a1a",
+  "role": "中单",
+  "club": "T49",
+  "rating": 72,
+  "attrs": {
+   "aim": 72,
+   "reaction": 72,
+   "awareness": 70,
+   "utility": 73,
+   "clutch": 70,
+   "teamwork": 71,
+   "communication": 70,
+   "igl": 59
+  }
+ },
+ "Harky": {
+  "base": "p:P593",
+  "role": "下路",
+  "club": "T49",
+  "rating": 75,
+  "attrs": {
+   "aim": 74,
+   "reaction": 78,
+   "awareness": 75,
+   "utility": 76,
+   "clutch": 72,
+   "teamwork": 73,
+   "communication": 73,
+   "igl": 61
+  }
+ },
+ "SiuLoong": {
+  "base": "p:OEef60290790",
+  "role": "辅助",
+  "club": "T49",
+  "rating": 66,
+  "attrs": {
+   "aim": 68,
+   "reaction": 67,
+   "awareness": 67,
+   "utility": 67,
+   "clutch": 66,
+   "teamwork": 67,
+   "communication": 68,
+   "igl": 58
+  }
+ }
+}

@@ -60,6 +60,7 @@ const METALS: { key: CardFilter['rarity']; label: string }[] = [
   { key: 'bronze', label: RARITY_CN.bronze },
   { key: 'coach', label: '教练' },
   { key: 'echo', label: '峡谷回响' },
+  { key: 's16', label: 'S16 世界赛' },
 ]
 
 export function CardFilters({

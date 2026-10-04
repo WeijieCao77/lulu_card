@@ -11,7 +11,7 @@ import {
   SQUAD_PRESETS, autoSquad, clearPreset, collection, levelOf, loadPreset,
   personTaken, presetsOf, renamePreset, savePreset, setSlot,
 } from '../../engine/gacha'
-import { SQUAD_SLOTS, chemistry, isCoachCard, isPlayerCard, cardById, squadPaper, squadPower, squadPowerPoints, squadRating } from '../../engine/cards'
+import { SQUAD_SLOTS, chemistry, isCoachCard, isPlayerCard, s16Hidden, cardById, squadPaper, squadPower, squadPowerPoints, squadRating } from '../../engine/cards'
 import { roleGaps } from '../../engine/arena'
 import { CardFilters, EMPTY_FILTER, matchesFilter } from './Filters'
 import ShareSquad from './ShareSquad'
@@ -57,7 +57,8 @@ export default function SquadScreen() {
   const pool = useMemo(() => {
     const want = picking === 'coach' ? 'coach' : 'player'
     return collection(g)
-      .filter(({ card }) => (want === 'coach' ? isCoachCard(card) : isPlayerCard(card)))
+      // an S16 card is benched until his numbers are revealed
+      .filter(({ card }) => (want === 'coach' ? isCoachCard(card) : isPlayerCard(card) && !s16Hidden(card)))
       .map(({ card }) => card)
   }, [g, picking])
 
@@ -65,7 +66,8 @@ export default function SquadScreen() {
     const want = picking === 'coach' ? 'coach' : 'player'
     const text = q.trim().toLowerCase()
     return collection(g)
-      .filter(({ card }) => (want === 'coach' ? isCoachCard(card) : isPlayerCard(card)))
+      // an S16 card is benched until his numbers are revealed
+      .filter(({ card }) => (want === 'coach' ? isCoachCard(card) : isPlayerCard(card) && !s16Hidden(card)))
       .filter(({ card }) => matchesFilter(card, filter))
       .filter(({ card }) => {
         if (!text) return true

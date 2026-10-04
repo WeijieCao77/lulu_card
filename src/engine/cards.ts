@@ -490,16 +490,17 @@ export const COACH_CARDS: CoachCard[] = [...buildCoachCards(), ...LEGEND_COACH_C
  * the market, the mailbox and the collection know them.
  */
 export const ECHO_CARDS: PlayerCard[] = buildEchoCards()
-type S16Rating = { rating: number; rarity: Rarity; games: number; prev?: number | null; attrs?: Attrs }
+export type S16Rating = { rating: number; rarity: Rarity; games: number; prev?: number | null; attrs?: Attrs }
 /**
  * S16 世界赛 cards. Like 峡谷回响, out of PLAYER_CARDS (no ordinary pack, shop, 全图鉴 or club set deals them) and in
  * ALL_CARDS. Each is the same man as his ordinary card (playerId), so one five cannot hold both. An unrevealed card
  * carries his ordinary card's numbers internally — nothing shows them, and it cannot be fielded — and is filed as
  * bronze, so salvage cannot cash in a guess.
  */
-function buildS16Cards(): PlayerCard[] {
-  const ratings = (S16_RATINGS as { ratings: Record<string, S16Rating>; fmvp: string | null }).ratings
-  const fmvp = (S16_RATINGS as { fmvp: string | null }).fmvp
+export function buildS16Cards(
+  ratings: Record<string, S16Rating> = (S16_RATINGS as { ratings: Record<string, S16Rating> }).ratings,
+  fmvp: string | null = (S16_RATINGS as { fmvp: string | null }).fmvp,
+): PlayerCard[] {
   const base = new Map(BASE_PLAYER_CARDS.map((c) => [c.id, c]))
   const teams = new Map(S16_JSON.teams.map((t) => [t.club, t]))
   const out: PlayerCard[] = []

@@ -17,6 +17,7 @@ import type { SalvageAsk } from './SalvageConfirm'
 import { loadFastPack, saveFastPack } from './packPreferences'
 import EchoQuiz from './echo/EchoQuiz'
 import EchoSet from './echo/EchoSet'
+import S16Section from './s16/S16Section'
 import { ECHO_QUIZ_EVENT, ECHO_SECTION_ID } from './echo/EchoBanner'
 import { EchoCardBack } from './echo/EchoCard'
 import { echoQuizDone } from '../../engine/echoQuiz'
@@ -265,6 +266,8 @@ export default function Packs() {
       </Panel>
       {quiz && <EchoQuiz onClose={() => setQuiz(false)} />}
 
+      <S16Section open={(k, pay) => void open(k, pay)} busy={busy || unknownError} today={today} />
+
       <Panel
         title="卡包"
         actions={
@@ -294,7 +297,7 @@ export default function Packs() {
               </div>
             </div>
           )}
-          {PACK_ORDER.filter((k) => !seriesOfPack(k) && k !== 'seoul2024' && k !== 'echo').map((kind) => {
+          {PACK_ORDER.filter((k) => !seriesOfPack(k) && k !== 'seoul2024' && k !== 'echo' && k !== 's16').map((kind) => {
             const def = PACKS[kind]
             const own = g.packs[kind] ?? 0
             return (
@@ -481,6 +484,7 @@ export default function Packs() {
           packName={openingKind ? PACKS[openingKind].name : '选手卡包'}
           position={openingKind ? packPosition(openingKind) ?? undefined : undefined}
           echo={openingKind === 'echo' || openingKind === 'echoScout'}
+          s16={openingKind === 's16'}
           fast={fastMode}
           busy={busy}
           unknownError={unknownError}

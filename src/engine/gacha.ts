@@ -14,6 +14,8 @@ import { CUP_TEAMS } from './cupTeams'
 import type { Region, Role } from './types'
 import type { SeoulRouteState } from './seoulRoute'
 import { cleanEchoDaily, cleanEchoQuiz } from './echoQuiz'
+import { cleanS16Predict } from './s16Predict'
+import type { S16PredictState } from './s16Predict'
 import type { EchoDailyState, EchoQuizState } from './echoQuiz'
 import type { WeeklySeriesPick } from './weeklySeries'
 import { cleanWeeklySeriesPick } from './weeklySeries'
@@ -888,6 +890,8 @@ export interface GachaState {
   echoSet?: number
   /** how many S16 图鉴 milestones have been collected — see S16_SET_REWARDS */
   s16Set?: number
+  /** S16 赛事预测 — see engine/s16Predict.ts */
+  s16Predict?: S16PredictState
 }
 
 /**
@@ -2602,7 +2606,8 @@ const personSeated = (squad: Squad, cardId: string, exceptSlot: number): boolean
  */
 export function autoSquad(g: GachaState): Squad {
   const level = (id: string) => g.cards[id]?.level ?? 0
-  const mine = collection(g).filter((c) => isPlayerCard(c.card))
+  // an S16 card whose numbers are still 「?」 cannot be fielded
+  const mine = collection(g).filter((c) => isPlayerCard(c.card) && !s16Hidden(c.card))
   const squad = emptySquad()
   // keyed on the person, not the card: the legend and the ordinary card are
   // the same man and only one of them can be on the server
@@ -2832,6 +2837,9 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   mergeCardAliases(g)
   dropRemovedCards(g)
   if (g.echoGift !== 1) delete g.echoGift
+  const sp = cleanS16Predict(g.s16Predict)
+  if (sp) g.s16Predict = sp
+  else delete g.s16Predict
   if (g.s16Set !== undefined) {
     const n = Math.trunc(Number(g.s16Set))
     if (n >= 1 && n <= S16_SET_REWARDS.length) g.s16Set = n
@@ -2911,7 +2919,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
 export const SERVER_KEYS = [
   'version', 'createdAt', 'coins', 'cards', 'packs', 'pity', 'mythicDry', 'pulls', 'ladder',
   'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'seoulRoute',
-  'weeklySeriesPick', 'shop', 'echoQuiz', 'echoGift', 'echoSet', 'echoDaily', 's16Set',
+  'weeklySeriesPick', 'shop', 'echoQuiz', 'echoGift', 'echoSet', 'echoDaily', 's16Set', 's16Predict',
 ] as const
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends', 'cupSquads'] as const
 

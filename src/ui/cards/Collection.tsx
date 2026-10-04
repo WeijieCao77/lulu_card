@@ -14,7 +14,7 @@ import { dismantleFee, dismantleYield } from '../../engine/dismantle'
 import { sparesOf } from '../../engine/inbox'
 import { crestUrl } from '../../engine/dossier'
 import {
-  ALL_CARDS, echoTeamName, MAX_LEVEL, POWER_PER_LEVEL, RARITY_CN, SALVAGE, cardById, cardPower, isPlayerCard, titleClubTags,
+  ALL_CARDS, echoTeamName, s16Hidden, MAX_LEVEL, POWER_PER_LEVEL, RARITY_CN, SALVAGE, cardById, cardPower, isPlayerCard, titleClubTags,
 } from '../../engine/cards'
 import type { Card, Rarity } from '../../engine/cards'
 import { ATTR_CN, ATTR_KEYS, REGION_CN } from '../../engine/types'
@@ -365,13 +365,14 @@ export default function Collection() {
                         <br />
                         {REGION_CN[sel.region]} · {sel.clubTag ?? '赛季自由选手'} · {sel.roles.join(' / ')}
                         
+                        {sel.s16 && <><br /><b>S16 世界赛</b> · {sel.s16.revealed ? `已赛 ${sel.s16.games} 场，数值每个比赛日更新${sel.s16.fmvp ? ' · FMVP 彩卡' : ''}` : '数值开赛后揭晓，揭晓前不能上阵'}</>}
                         {sel.ratingEstimated && <span className="tag warn" title="这位选手还没有足够的比赛数据，评分取同赛区同位置选手的中位数。">数据不足，估算</span>}
                       </div>
                       <div className="grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '4px 10px' }}>
                         {ATTR_KEYS.map((k) => (
                           <div key={k} className="tiny">
                             <span className="faint">{ATTR_CN[k]}</span>{' '}
-                            <b className="mono">{Math.min(99, sel.attrs[k] + owned.level)}</b>
+                            <b className="mono">{s16Hidden(sel) ? '?' : Math.min(99, sel.attrs[k] + owned.level)}</b>
                           </div>
                         ))}
                       </div>
@@ -407,8 +408,8 @@ export default function Collection() {
                   <div>
                     <div className="small">
                       等级 <b>+{owned.level}</b> / +{MAX_LEVEL}
-                      <span className="faint"> · 评分 {sel.rating}</span>
-                      {' '}· 战力 <b>{coin(cardPower(sel, owned.level))}</b>
+                      <span className="faint"> · 评分 {s16Hidden(sel) ? '?' : sel.rating}</span>
+                      {' '}· 战力 <b>{s16Hidden(sel) ? '?' : coin(cardPower(sel, owned.level))}</b>
                     </div>
                     {(sel.kind === 'player' || !sel.legend) && <RatingExplainer />}
                     <div className="tiny faint">
