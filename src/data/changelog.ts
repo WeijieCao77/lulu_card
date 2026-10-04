@@ -26,8 +26,8 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
-  date: '2026-10-04', title: '回响老将回到自己的俱乐部', changes: [
-    { kind: '调整', text: '峡谷回响老将改为属于自己的代表俱乐部：俱乐部改名或被收购的，挂到现在的队（比如 DWG→DK、SKT→T1、Splyce→KOI）；已经解散的（比如 RNG、FPX、TSM、CLG、闪电狼、ahq）作为历史俱乐部保留，同俱乐部的老将之间、和同俱乐部的彩卡之间都有同队默契，不满五人也算。收藏、图鉴和市场都能按这些俱乐部搜索和筛选。' },
+  date: '2026-10-04', title: '回响老将补上俱乐部', changes: [
+    { kind: '调整', text: '原来没有俱乐部的 37 位峡谷回响老将补上了俱乐部：代表俱乐部改名或被收购的，挂到现在的队（比如 Splyce→KOI）；已经解散的（比如 RNG、FPX、TSM、CLG、闪电狼、ahq）作为历史俱乐部保留，同俱乐部的老将之间、和同俱乐部的彩卡之间都有同队默契，不满五人也算。Uzi 改回 RNG。已经挂了俱乐部的其他老将不变。收藏、图鉴和市场都能按这些俱乐部搜索和筛选。' },
   ],
 }, {
   date: '2026-10-04', title: '每日老将问答', changes: [
