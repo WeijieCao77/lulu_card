@@ -113,7 +113,7 @@ kept.append(
     f'{E} .re-inner::before{{background:none}}'
     f'{E} .re-halo{{display:none}}'
     f'{E} .re-portrait{{inset:6.5% 7% 33% 7%;mask-image:none;-webkit-mask-image:none;clip-path:{CHW};overflow:hidden;background:#0b1715}}'
-    f'{E} .re-portrait img{{filter:saturate(.9) contrast(1.05) brightness(.95)}}'
+    f'{E} .re-portrait img{{filter:saturate(.8) contrast(.86) brightness(.86)}}'
     f'{E} .re-portrait::after{{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0a1a17cc 0,transparent 24%,transparent 72%,#0a1a17b0 100%);pointer-events:none}}'
     f'{E} .re-header{{top:9%;left:11%}}'
     f'{E} .re-tier-stamp{{top:9%;right:11%}}'
