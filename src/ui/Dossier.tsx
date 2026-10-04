@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { WORLD_PLAYERS } from '../engine/world'
 import { WORLD_TEAMS, EXTRA_COACHES } from '../engine/teams'
 import { coachDossier, dossierOf, titleCount } from '../engine/dossier'
-import { BASE_PLAYER_CARDS, COACH_CARDS, LEGEND_CARDS, RARITY_CN, titleClubTags } from '../engine/cards'
+import { BASE_PLAYER_CARDS, COACH_CARDS, ECHO_CARDS, LEGEND_CARDS, RARITY_CN, titleClubTags } from '../engine/cards'
 import { SPEC_CN } from '../engine/staff'
 import CoachHonours from './CoachHonours'
 import { CareerEvents, CareerHonours, CareerTeams } from './PlayerCareer'
@@ -63,7 +63,7 @@ for (const c of LEGEND_CARDS) {
   legendsOf.set(c.playerId, list)
 }
 
-type Page = 'players' | 'coaches'
+type Page = 'players' | 'coaches' | 'echo'
 
 export default function Dossier({
   playerId, onOpen, onClose,
@@ -74,12 +74,14 @@ export default function Dossier({
 }) {
   const [page, setPage] = useState<Page>('players')
   const [coachId, setCoachId] = useState<string | null>(null)
+  const [echoId, setEchoId] = useState<string | null>(null)
   const [q, setQ] = useState('')
   const [region, setRegion] = useState<GameRegion | 'all'>('all')
   const [rarity, setRarity] = useState<string>('all')
   const [role, setRole] = useState<Role | 'all'>('all')
   const [playerPage, setPlayerPage] = useState(0)
   const [coachPage, setCoachPage] = useState(0)
+  const [echoPage, setEchoPage] = useState(0)
   const PER_PAGE = 50
 
   const playerRows = useMemo(() => {
@@ -92,6 +94,21 @@ export default function Dossier({
         if (!text) return true
         const team = c.clubId ? teamOf.get(c.clubId)?.name ?? '' : ''
         const hay = `${c.id} ${c.playerId} ${c.ign} ${c.realName ?? ''} ${c.clubTag ?? ''} ${team} ${natName(c.nat)} ${c.nat ?? ''}`
+        return hay.toLowerCase().includes(text)
+      })
+      .sort((a, b) => b.rating - a.rating)
+  }, [q, region, rarity, role])
+
+  // 峡谷回响 (reported 2026-10-04: 「图鉴里无法搜索回响卡」): the retired players, searchable like the rest
+  const echoRows = useMemo(() => {
+    const text = q.trim().toLowerCase()
+    return ECHO_CARDS
+      .filter((c) => {
+        if (region !== 'all' && gameRegionOf(c.region) !== region) return false
+        if (rarity !== 'all' && c.rarity !== rarity) return false
+        if (role !== 'all' && !c.roles.includes(role)) return false
+        if (!text) return true
+        const hay = `${c.ign} ${c.realName ?? ''} ${c.clubTag ?? ''} ${c.echo?.team ?? ''} ${natName(c.nat)} ${c.nat ?? ''} 回响`
         return hay.toLowerCase().includes(text)
       })
       .sort((a, b) => b.rating - a.rating)
@@ -111,18 +128,24 @@ export default function Dossier({
       .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
   }, [q, region, rarity])
 
+  // above the early returns below: a hook after a conditional return breaks React's hook order, and opening a
+  // coach or a 峡谷回响 card rendered nothing at all
+  const listTop = useRef<HTMLDivElement>(null)
   const open = playerId ? playerCardOf.get(playerId) : null
   if (open) return <PlayerDetail card={open} onBack={() => { if (onClose) onClose(); else onOpen(null) }} />
+  if (echoId) {
+    const echo = ECHO_CARDS.find((c) => c.id === echoId)
+    if (echo) return <EchoDetail card={echo} onBack={() => setEchoId(null)} />
+  }
   if (coachId) {
     const coach = coachCardOf.get(coachId)
     if (coach) return <CoachDetail card={coach} onBack={() => setCoachId(null)} />
   }
 
-  const rows = page === 'players' ? playerRows : coachRows
-  const currentPage = page === 'players' ? playerPage : coachPage
-  const setCurrentPage = page === 'players' ? setPlayerPage : setCoachPage
+  const rows = page === 'players' ? playerRows : page === 'echo' ? echoRows : coachRows
+  const currentPage = page === 'players' ? playerPage : page === 'echo' ? echoPage : coachPage
+  const setCurrentPage = page === 'players' ? setPlayerPage : page === 'echo' ? setEchoPage : setCoachPage
   // the pager sits under the list (players asked, 2026-10-02): a turn goes back to the top of the new page
-  const listTop = useRef<HTMLDivElement>(null)
   const turn = (n: number) => {
     setCurrentPage(n)
     listTop.current?.scrollIntoView({ block: 'start' })
@@ -138,6 +161,7 @@ export default function Dossier({
     setRole('all')
     setPlayerPage(0)
     setCoachPage(0)
+    setEchoPage(0)
   }
 
   return (
@@ -147,7 +171,7 @@ export default function Dossier({
       actions={
         <div className="row" style={{ gap: 8 }}>
           <span className="tiny muted mono">
-            {rows.length} / {page === 'players' ? BASE_PLAYER_CARDS.length : COACH_CARDS.length} 条
+            {rows.length} / {page === 'players' ? BASE_PLAYER_CARDS.length : page === 'echo' ? ECHO_CARDS.length : COACH_CARDS.length} 条
           </span>
           {onClose && <button className="ghost sm" onClick={onClose}>返回</button>}
         </div>
@@ -162,13 +186,14 @@ export default function Dossier({
         <div className="seg">
           <button className={page === 'players' ? 'on' : ''} onClick={() => setPage('players')}>选手</button>
           <button className={page === 'coaches' ? 'on' : ''} onClick={() => setPage('coaches')}>教练</button>
+          <button className={page === 'echo' ? 'on' : ''} onClick={() => setPage('echo')}>峡谷回响</button>
         </div>
         <input
           aria-label="搜索选手或教练"
           style={{ width: 200 }}
           placeholder="搜 ID / 真名 / 战队 / 国籍"
           value={q}
-          onChange={(e) => { setQ(e.target.value); setPlayerPage(0); setCoachPage(0) }}
+          onChange={(e) => { setQ(e.target.value); setPlayerPage(0); setCoachPage(0); setEchoPage(0) }}
         />
         <select aria-label="图鉴赛区" style={{ width: 'auto' }} value={region} onChange={(e) => { setRegion(e.target.value as GameRegion | 'all'); setPlayerPage(0); setCoachPage(0) }}>
           <option value="all">全部赛区</option>
@@ -178,8 +203,8 @@ export default function Dossier({
           <option value="all">全部稀有度</option>
           {Object.entries(RARITY_CN).map(([key, label]) => <option key={key} value={key}>{label}</option>)}
         </select>
-        {page === 'players' && (
-          <select aria-label="图鉴位置" style={{ width: 'auto' }} value={role} onChange={(e) => { setRole(e.target.value as Role | 'all'); setPlayerPage(0) }}>
+        {page !== 'coaches' && (
+          <select aria-label="图鉴位置" style={{ width: 'auto' }} value={role} onChange={(e) => { setRole(e.target.value as Role | 'all'); setPlayerPage(0); setEchoPage(0) }}>
             <option value="all">全部位置</option>
             {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
           </select>
@@ -192,7 +217,20 @@ export default function Dossier({
         <p className="empty">没有匹配的记录。试试清除筛选。</p>
       ) : (
         <div className="dossier-list">
-          {page === 'players'
+          {page === 'echo'
+            ? echoRows.slice(safePage * PER_PAGE, (safePage + 1) * PER_PAGE).map((card) => (
+                <button key={card.id} className="dossier-card" onClick={() => setEchoId(card.id)}>
+                  <div className="dossier-card-face"><CardFace card={card} size="sm" /></div>
+                  <div className="dossier-card-info">
+                    <div className="dossier-card-title"><b>{card.ign}</b><span className="tag t3" style={{ marginLeft: 5 }}>峡谷回响</span></div>
+                    <div className="tiny faint">{card.realName ?? '—'}</div>
+                    <div className="tiny"><Flag nat={card.nat} /> {natName(card.nat)} · {REGION_CN[card.region]}</div>
+                    <div className="tiny">{[card.echo?.team, card.echo?.span].filter(Boolean).join(' · ')} · {card.roles.join('/')}</div>
+                    <div className="tiny mono">{RARITY_CN[card.rarity]} {card.rating}</div>
+                  </div>
+                </button>
+              ))
+            : page === 'players'
             ? playerRows.slice(safePage * PER_PAGE, (safePage + 1) * PER_PAGE).map((card) => (
                 <button
                   key={card.id}
@@ -246,6 +284,35 @@ export default function Dossier({
           </div>
         </div>
       )}
+    </Panel>
+  )
+}
+
+/** 峡谷回响 card in the 图鉴: the card, who he was and where he played. No birthday data yet, so no age. */
+function EchoDetail({ card, onBack }: { card: PlayerCard; onBack: () => void }) {
+  const echo = card.echo!
+  const club = card.clubId ? teamOf.get(card.clubId) : null
+  return (
+    <Panel title={card.ign} actions={<button className="ghost sm" onClick={onBack}>返回</button>}>
+      <div className="dossier-head">
+        <CardFace card={card} size="lg" />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 20, fontWeight: 700 }}>{card.realName ?? card.ign}</div>
+          <div className="small muted" style={{ marginTop: 6, lineHeight: 1.9 }}>
+            <Flag nat={card.nat} /> {natName(card.nat)} · {REGION_CN[card.region]} · 已退役
+            <br />
+            代表战队：{echo.team}{echo.span ? `（${echo.span}）` : ''}
+            <br />
+            {club ? `挂靠现役俱乐部：${club.name}（算同队默契和俱乐部集齐）` : '没有挂靠现役俱乐部'}
+            <br />
+            {card.roles.join(' / ')} · 峡谷回响 · {RARITY_CN[card.rarity]} {card.rating}
+          </div>
+          <p className="tiny faint" style={{ lineHeight: 1.7 }}>
+            峡谷回响是退役老将系列，只能从峡谷回响包里开出，单独计入峡谷回响图鉴。
+            {echo.attrsEstimated ? ' 这位选手的比赛数据不全，能力值按评分估算。' : ''}
+          </p>
+        </div>
+      </div>
     </Panel>
   )
 }
