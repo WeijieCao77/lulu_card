@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-04', title: '彩卡大小统一', changes: [
+    { kind: '修复', text: '手机上彩卡和普通卡大小统一：阵容、战报、交易行里彩卡比旁边的普通卡小一圈（阵容里还会挤出格子），现在同一位置的彩卡和普通卡一样大。' },
+  ],
+}, {
   date: '2026-10-03', title: '移除 naiyou', changes: [
     { kind: '调整', text: 'naiyou 因打假赛禁赛，选手卡从游戏中移除：卡包不再开出，图鉴不再显示，已持有的卡和阵容里的他一并移除；持有他的玩家每人补一个试训包，到信箱查看。' },
   ],
