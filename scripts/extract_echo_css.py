@@ -93,6 +93,35 @@ kept.append(
     f'{E}.re-silver{{--re-metal:#9cabb3;--re-glint:#dbe4e7;--re-shadow:#3d4b51;background:color-mix(in srgb,var(--re-metal) 52%,#15251f)}}'
     f'{E}.re-bronze{{--re-metal:#a8603a;--re-glint:#dc9a72;--re-shadow:#4a2a18;background:color-mix(in srgb,var(--re-metal) 58%,#15251f)}}'
     f'{E}::after{{border-color:color-mix(in srgb,var(--re-glint) 42%,transparent)}}')
+# Owner feedback 2026-10-04 (2)+(3): 「卡面太花哨……和彩卡没啥差别……彩卡必须最高级」, then 「黑白照片不行……可以在边框和
+#卡的形象上做手脚」. The 彩卡 is a rounded, full-bleed colour photograph with an iridescent edge. 回响 keeps the photo in
+# full colour but changes the object: a plate with chamfered corners, a double hairline that follows the chamfer in
+# the card's metal, and the photograph mounted in a chamfered window over a dark matte, the name in a calm band below.
+CH = 'polygon(7% 0,93% 0,100% 5%,100% 95%,93% 100%,7% 100%,0 95%,0 5%)'
+CHW = 'polygon(5% 0,95% 0,100% 4%,100% 96%,95% 100%,5% 100%,0 96%,0 4%)'
+def frame(color):
+    svg = ("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>"
+           f"<polygon points='6.2,2.4 93.8,2.4 97.6,6.6 97.6,93.4 93.8,97.6 6.2,97.6 2.4,93.4 2.4,6.6' fill='none' stroke='{color}' stroke-opacity='.5' stroke-width='1' vector-effect='non-scaling-stroke'/></svg>")
+    return 'url("data:image/svg+xml,' + svg.replace('#', '%23').replace('<', '%3C').replace('>', '%3E') + '")'
+kept.append(
+    f'{E}{{border-radius:0;clip-path:{CH};padding:1.2px;box-shadow:none;filter:drop-shadow(0 8px 14px #0007)}}'
+    f'{E} .re-inner{{border-radius:0;clip-path:{CH};background:#0a1513 no-repeat center/100% 100%}}'
+    f'{E}.re-gold .re-inner{{background-image:{frame("#e3c573")}}}'
+    f'{E}.re-silver .re-inner{{background-image:{frame("#c9d6dc")}}}'
+    f'{E}.re-bronze .re-inner{{background-image:{frame("#d58f66")}}}'
+    f'{E}::after,{E}::before{{content:none}}'
+    f'{E} .re-inner::before{{background:none}}'
+    f'{E} .re-halo{{display:none}}'
+    f'{E} .re-portrait{{inset:6.5% 7% 33% 7%;mask-image:none;-webkit-mask-image:none;clip-path:{CHW};overflow:hidden;background:#0b1715}}'
+    f'{E} .re-portrait img{{filter:saturate(.9) contrast(1.05) brightness(.95)}}'
+    f'{E} .re-portrait::after{{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0a1a17cc 0,transparent 24%,transparent 72%,#0a1a17b0 100%);pointer-events:none}}'
+    f'{E} .re-header{{top:9%;left:11%}}'
+    f'{E} .re-tier-stamp{{top:9%;right:11%}}'
+    f'{E} .re-rating{{top:21%;left:11%;background:#0a151380}}'
+    f'{E} .re-copy{{left:8%;right:8%;bottom:4.5%;height:28.5%}}'
+    f'{E} .re-name{{font-size:11.5cqw;margin:1.2cqw 0 1cqw;text-shadow:none;letter-spacing:-.01em}}'
+    f'{E} .re-stats{{padding-top:2.2cqw}}'
+    f'{E} .re-stats b{{font-size:5cqw}}')
 # Card back v2 (owner 2026-10-04: 「卡背不够帅」) is one SVG (EchoBackArt.tsx); the frame only sizes it like a card.
 kept.append('.cardback.echo-back-v2.echo-back-v2{position:relative;aspect-ratio:63/88;width:100%;padding:0;border:0;border-radius:6px;'
             'background:#050d0c;box-shadow:0 8px 20px #0006;overflow:hidden;container-type:inline-size}'

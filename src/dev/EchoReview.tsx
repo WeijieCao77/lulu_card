@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ECHO_CARDS, RARITY_CN } from '../engine/cards'
+import { ECHO_CARDS, LEGEND_CARDS, RARITY_CN } from '../engine/cards'
+import CardFace from '../ui/Card'
 import { EchoCard, EchoCardBack } from '../ui/cards/echo/EchoCard'
 import reference from './echo/reference.webp'
 import '../styles.css'
@@ -34,7 +35,7 @@ function Review() {
       .er-top img{max-width:620px;width:100%;border-radius:8px;border:1px solid #33494a}
       .er-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--w),1fr));gap:22px 18px}
       .er-cell{display:flex;flex-direction:column;gap:6px}
-      .er-cell .cardface,.er-top .cardback{width:var(--w)}.er-metals .cardface.s-lg{width:184px}.er-metals .cardface.s-sm{width:96px}
+      .er-cell .cardface,.er-top .cardback{width:var(--w)}.er-metals .cardface.s-lg,.er-legend .cardface.s-lg{width:184px}.er-metals .cardface.s-sm{width:96px}
       .er-meta{font-size:11.5px;line-height:1.45;color:#9fb0a8}.er-meta b{color:#e8ece6}.er-warn{color:#e8a866}
     `}</style>
     <h1>峡谷回响 · 卡面审核</h1>
@@ -42,6 +43,11 @@ function Review() {
     <div className="er-top">
       <div><div className="er-meta" style={{ marginBottom: 6 }}>站长确认的定稿</div><img src={reference} alt="定稿" /></div>
       <div style={{ ['--w' as string]: '184px' }}><div className="er-meta" style={{ marginBottom: 6 }}>卡背（全部稀有度统一）</div><EchoCardBack size="lg" /></div>
+      <div className="er-legend"><div className="er-meta" style={{ marginBottom: 6 }}>彩卡（必须最高级） vs 回响卡</div>
+        <div style={{ display: 'flex', gap: 14, alignItems: 'flex-end' }}>
+          {['worlds-2013-faker', 'msi-2018-uzi', 'career-doublelift'].map((id) => <div key={id} style={{ width: 184 }}><CardFace card={LEGEND_CARDS.find((c) => c.id === id)!} size="lg" /></div>)}
+          {['Uzi', 'Doublelift', 'Bang'].map((n) => <EchoCard key={n} card={ECHO_CARDS.find((c) => c.ign === n)!} size="lg" />)}
+        </div></div>
       <div className="er-metals"><div className="er-meta" style={{ marginBottom: 6 }}>金 / 银 / 铜 对比</div>
         <div style={{ display: 'flex', gap: 14, alignItems: 'flex-end' }}>
           {(['gold', 'silver', 'bronze'] as const).map((r) => <EchoCard key={r} card={ECHO_CARDS.find((c) => c.rarity === r)!} size="lg" />)}
