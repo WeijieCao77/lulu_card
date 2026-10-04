@@ -27,6 +27,7 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [{
   date: '2026-10-04', title: '回响卡名字显示', changes: [
+    { kind: '修复', text: '峡谷回响卡的详情里年龄显示成 0 岁：老将的生日资料还没补，现在改为显示「已退役」和代表战队、年份。' },
     { kind: '修复', text: '手机上（尤其是微信里或调大了字体）峡谷回响卡的名字和战队被下面的数据挤住，只露出一条边；现在名字完整显示。' },
   ],
 }, {

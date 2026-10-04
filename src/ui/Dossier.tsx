@@ -273,7 +273,7 @@ function PlayerDetail({ card, onBack }: { card: PlayerCard; onBack: () => void }
             <div className="small muted" style={{ marginTop: 6, lineHeight: 1.9 }}>
               <Flag nat={card.nat} /> {natName(card.nat)} · {REGION_CN[card.region]}
               <br />
-              {s?.ageEstimated ? '生日资料待补充' : `${card.age} 岁`}
+              {s?.ageEstimated || card.ageEstimated ? '生日资料待补充' : `${card.age} 岁`}
               {!s?.ageEstimated && player?.birth ? `（${player.birth}）` : ''}
               {' · '}
               {club ? club.name : '暂无战队'} <TeamSourceTag s={s} clubless={!card.clubId} />

@@ -434,7 +434,9 @@ function buildEchoCards(): PlayerCard[] {
     role: e.role as Role,
     roles: e.roles as Role[],
     isIgl: false,
+    // no birthdays in the series data yet: the age is unknown, not zero (reported 2026-10-04: 「年龄都是 0 岁」)
     age: 0,
+    ageEstimated: true,
     attrs: e.attrs as Attrs,
     rating: e.rating,
     rarity: e.rarity as Rarity,

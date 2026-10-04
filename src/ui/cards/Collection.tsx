@@ -361,7 +361,7 @@ export default function Collection() {
                   {isPlayerCard(sel) ? (
                     <>
                       <div className="small muted" style={{ marginBottom: 8, lineHeight: 1.8 }}>
-                        {sel.realName ?? '真名未公开'} · <Flag nat={sel.nat} /> {natName(sel.nat)}{!sel.seoul && !sel.ageEstimated && ` · ${sel.age} 岁${sel.legend ? '（当届）' : ''}`}
+                        {sel.realName ?? '真名未公开'} · <Flag nat={sel.nat} /> {natName(sel.nat)}{sel.echo ? ` · 已退役 · ${[sel.echo.team, sel.echo.span].filter(Boolean).join(' ')}` : !sel.seoul && !sel.ageEstimated && ` · ${sel.age} 岁${sel.legend ? '（当届）' : ''}`}
                         <br />
                         {REGION_CN[sel.region]} · {sel.clubTag ?? '赛季自由选手'} · {sel.roles.join(' / ')}
                         
