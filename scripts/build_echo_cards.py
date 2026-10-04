@@ -34,6 +34,19 @@ team_tag = {t['id']: t['tag'] for t in world['teams']}
 # Clubs (owner 2026-10-04): a retired player keeps the club he is known for — today's club when it was renamed or taken
 # over (DWG → DK, SKT → T1, Splyce → KOI …), otherwise that club as a historical club H:TAG (H:RNG, H:FPX …), the same
 # ids the 名人堂 cards use, even with a single player in it. Worked out by career-recalc/echo_v2/club_resolve.py.
+import unicodedata
+def _norm(s):
+    s = re.sub(r'\s*\(.*?\)\s*', ' ', s or '')
+    return re.sub(r'[^a-z0-9]', '', unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').decode().lower())
+team_name = {t['id']: t['name'] for t in world['teams']}
+def shown_team(name):
+    # Leaguepedia's disambiguation in brackets is not part of the name: 「Rogue (European Team)」 is Rogue
+    return re.sub(r'\s*\(.*?\)\s*$', '', name).strip() if name else name
+def team_now(club, team):
+    # owner 2026-10-04: a renamed club says so — 「DAMWON Gaming（现 DK）」 — so it is clear who he has 默契 with
+    if not club or club.startswith('H:') or not team:
+        return None
+    return team_tag.get(club) if _norm(team) != _norm(team_name.get(club)) else None
 CLUBS = json.load(open(ROOT.parent / 'career-recalc' / 'echo_v2' / 'club_resolve.json', encoding='utf-8'))
 
 ALIAS = {'Balls': 'BalIs'}
@@ -143,7 +156,7 @@ for c in sorted(cards, key=lambda c: (['LPL', 'LCK', 'LEC', 'LCS', 'WEST'].index
         'rating': c['rating'], 'rarity': {'金': 'gold', '银': 'silver', '铜': 'bronze'}[c['tier']],
         'attrs': attrs, 'attrsEstimated': estimated,
         'clubId': CLUBS[pid]['club'], 'clubTag': CLUBS[pid]['clubTag'] or team_tag.get(CLUBS[pid]['club']), 'clubName': CLUBS[pid]['clubName'],
-        'team': rt.get('as_named') or None, 'span': rt.get('span') or None,
+        'team': shown_team(rt.get('as_named')) or None, 'teamNow': team_now(CLUBS[pid]['club'], rt.get('as_named')), 'span': rt.get('span') or None,
         'photo': photo(pid), 'manual': c['manual'], 'birth': BIRTHS.get(pid, {}).get('birth'),
     })
 json.dump({'meta': {'series': '峡谷回响', 'count': len(out), 'note': '由 scripts/build_echo_cards.py 生成，不要手改'}, 'cards': out},

@@ -34,6 +34,7 @@
    "clubTag": "RNG",
    "clubName": "Royal Never Give Up",
    "team": "Royal Never Give Up",
+   "teamNow": null,
    "span": "2017–2024",
    "photo": {
     "img": "/lol/faces/echo/Ming.webp",
@@ -74,6 +75,7 @@
    "clubTag": "RNG",
    "clubName": "Royal Never Give Up",
    "team": "Royal Never Give Up",
+   "teamNow": null,
    "span": "2016–2019",
    "photo": {
     "img": "/lol/faces/echo/Uzi.webp",
@@ -114,6 +116,7 @@
    "clubTag": "IG",
    "clubName": "Invictus Gaming",
    "team": "Invictus Gaming",
+   "teamNow": null,
    "span": "2017–2019",
    "photo": {
     "img": "/lol/faces/echo/Duke.webp",
@@ -154,6 +157,7 @@
    "clubTag": "WE",
    "clubName": "Team WE",
    "team": "Team WE",
+   "teamNow": null,
    "span": "2016–2019",
    "photo": {
     "img": "/lol/faces/echo/Mystic.webp",
@@ -194,6 +198,7 @@
    "clubTag": "FPX",
    "clubName": "FunPlus Phoenix",
    "team": "FunPlus Phoenix",
+   "teamNow": null,
    "span": "2018–2020",
    "photo": {
     "img": "/lol/faces/echo/GimGoon.webp",
@@ -234,6 +239,7 @@
    "clubTag": "FPX",
    "clubName": "FunPlus Phoenix",
    "team": "FunPlus Phoenix",
+   "teamNow": null,
    "span": "2018–2023",
    "photo": {
     "img": "/lol/faces/echo/Lwx.webp",
@@ -274,6 +280,7 @@
    "clubTag": "WE",
    "clubName": "Team WE",
    "team": "Team WE",
+   "teamNow": null,
    "span": "2011–2014",
    "photo": {
     "img": "/lol/faces/echo/WeiXiao.webp",
@@ -314,6 +321,7 @@
    "clubTag": "EDG",
    "clubName": "EDward Gaming",
    "team": "EDward Gaming",
+   "teamNow": null,
    "span": "2014–2021",
    "photo": {
     "img": "/lol/faces/echo/Clearlove.webp",
@@ -354,6 +362,7 @@
    "clubTag": "RNG",
    "clubName": "Royal Never Give Up",
    "team": "Royal Never Give Up",
+   "teamNow": null,
    "span": "2016–2018",
    "photo": {
     "img": "/lol/faces/echo/Mlxg.webp",
@@ -394,6 +403,7 @@
    "clubTag": "IG",
    "clubName": "Invictus Gaming",
    "team": "Invictus Gaming",
+   "teamNow": null,
    "span": "2016–2021",
    "photo": {
     "img": "/lol/faces/echo/Baolan.webp",
@@ -434,6 +444,7 @@
    "clubTag": "OMG",
    "clubName": "Oh My God",
    "team": "Oh My God",
+   "teamNow": null,
    "span": "2012–2014",
    "photo": {
     "img": "/lol/faces/echo/Gogoing.webp",
@@ -474,6 +485,7 @@
    "clubTag": "IG",
    "clubName": "Invictus Gaming",
    "team": "Invictus Gaming",
+   "teamNow": null,
    "span": "2017–2020",
    "photo": {
     "img": "/lol/faces/echo/Ning.webp",
@@ -514,6 +526,7 @@
    "clubTag": "IG",
    "clubName": "Invictus Gaming",
    "team": "Invictus Gaming",
+   "teamNow": null,
    "span": "2012–2014",
    "photo": {
     "img": "/lol/faces/echo/PDD.webp",
@@ -554,6 +567,7 @@
    "clubTag": "OMG",
    "clubName": "Oh My God",
    "team": "Oh My God",
+   "teamNow": null,
    "span": "2016–2020",
    "photo": {
     "img": "/lol/faces/echo/Smlz.webp",
@@ -594,6 +608,7 @@
    "clubTag": "RNG",
    "clubName": "Royal Never Give Up",
    "team": "Royal Never Give Up",
+   "teamNow": null,
    "span": "2016–2018",
    "photo": {
     "img": "/lol/faces/echo/Letme.webp",
@@ -634,6 +649,7 @@
    "clubTag": "WE",
    "clubName": "Team WE",
    "team": "Team WE",
+   "teamNow": null,
    "span": "2016–2022",
    "photo": {
     "img": "/lol/faces/echo/Xiye.webp",
@@ -674,6 +690,7 @@
    "clubTag": "RNG",
    "clubName": "Royal Never Give Up",
    "team": "Royal Never Give Up",
+   "teamNow": null,
    "span": "2020–2021",
    "photo": {
     "img": "/lol/faces/echo/Cryin.webp",
@@ -714,6 +731,7 @@
    "clubTag": "EDG",
    "clubName": "EDward Gaming",
    "team": "EDward Gaming",
+   "teamNow": null,
    "span": "2017–2019",
    "photo": {
     "img": "/lol/faces/echo/iBoy.webp",
@@ -754,6 +772,7 @@
    "clubTag": "JDG",
    "clubName": "JD Gaming",
    "team": "JD Gaming",
+   "teamNow": null,
    "span": "2018–2024",
    "photo": {
     "img": "/lol/faces/echo/Yagao.webp",
@@ -794,6 +813,7 @@
    "clubTag": "WE",
    "clubName": "Team WE",
    "team": "Team WE",
+   "teamNow": null,
    "span": "2016–2018",
    "photo": {
     "img": "/lol/faces/echo/Condi.webp",
@@ -834,6 +854,7 @@
    "clubTag": "OMG",
    "clubName": "Oh My God",
    "team": "Oh My God",
+   "teamNow": null,
    "span": "2012–2014",
    "photo": {
     "img": "/lol/faces/echo/LoveLing.webp",
@@ -874,6 +895,7 @@
    "clubTag": "PE",
    "clubName": "Positive Energy",
    "team": "Positive Energy",
+   "teamNow": null,
    "span": "2013",
    "photo": {
     "img": "/lol/faces/echo/NaMei.webp",
@@ -914,6 +936,7 @@
    "clubTag": "OMG",
    "clubName": "Oh My God",
    "team": "Oh My God",
+   "teamNow": null,
    "span": "2012–2014",
    "photo": {
     "img": "/lol/faces/echo/San.webp",
@@ -954,6 +977,7 @@
    "clubTag": "WE",
    "clubName": "Team WE",
    "team": "Team WE",
+   "teamNow": null,
    "span": "2017–2018",
    "photo": {
     "img": "/lol/faces/echo/Ben.webp",
@@ -994,6 +1018,7 @@
    "clubTag": "IG",
    "clubName": "Invictus Gaming",
    "team": "Invictus Gaming",
+   "teamNow": null,
    "span": "2020–2021",
    "photo": {
     "img": "/lol/faces/echo/Puff.webp",
@@ -1034,6 +1059,7 @@
    "clubTag": "WE",
    "clubName": "Team WE",
    "team": "Team WE",
+   "teamNow": null,
    "span": "2016–2019",
    "photo": {
     "img": "/lol/faces/echo/957.webp",
@@ -1074,6 +1100,7 @@
    "clubTag": "OMG",
    "clubName": "Oh My God",
    "team": "Oh My God",
+   "teamNow": null,
    "span": "2014–2019",
    "photo": {
     "img": "/lol/faces/echo/Xiyang.webp",
@@ -1114,6 +1141,7 @@
    "clubTag": "JDG",
    "clubName": "JD Gaming",
    "team": "JD Gaming",
+   "teamNow": null,
    "span": "2019",
    "photo": {
     "img": "/lol/faces/echo/Flawless.webp",
@@ -1154,6 +1182,7 @@
    "clubTag": "PE",
    "clubName": "Positive Energy",
    "team": "Positive Energy",
+   "teamNow": null,
    "span": "2013–2014",
    "photo": {
     "img": "/lol/faces/echo/Sicca.webp",
@@ -1194,6 +1223,7 @@
    "clubTag": "TES",
    "clubName": "Top Esports",
    "team": "Top Esports",
+   "teamNow": null,
    "span": "2022–2023",
    "photo": {
     "img": "/lol/faces/echo/Wayward.webp",
@@ -1234,6 +1264,7 @@
    "clubTag": "IG",
    "clubName": "Invictus Gaming",
    "team": "Invictus Gaming",
+   "teamNow": null,
    "span": "2012–2016",
    "photo": {
     "img": "/lol/faces/echo/Zz1tai.webp",
@@ -1274,6 +1305,7 @@
    "clubTag": "OMG",
    "clubName": "Oh My God",
    "team": "Oh My God",
+   "teamNow": null,
    "span": "2016–2022",
    "photo": {
     "img": "/lol/faces/echo/COLD.webp",
@@ -1314,6 +1346,7 @@
    "clubTag": "LGD",
    "clubName": "LGD Gaming",
    "team": "LGD Gaming",
+   "teamNow": null,
    "span": "2012–2019",
    "photo": {
     "img": "/lol/faces/echo/pyl.webp",
@@ -1354,6 +1387,7 @@
    "clubTag": "OMG",
    "clubName": "Oh My God",
    "team": "Oh My God",
+   "teamNow": null,
    "span": "2012–2016",
    "photo": {
     "img": "/lol/faces/echo/Cool.webp",
@@ -1394,6 +1428,7 @@
    "clubTag": "LGD",
    "clubName": "LGD Gaming",
    "team": "LGD Gaming",
+   "teamNow": null,
    "span": "2020–2023",
    "photo": {
     "img": "/lol/faces/echo/fearness.webp",
@@ -1434,6 +1469,7 @@
    "clubTag": "OMG",
    "clubName": "Oh My God",
    "team": "Oh My God",
+   "teamNow": null,
    "span": "2013–2014",
    "photo": {
     "img": "/lol/faces/echo/Dada777.webp",
@@ -1474,6 +1510,7 @@
    "clubTag": "LGD",
    "clubName": "LGD Gaming",
    "team": "LGD Gaming",
+   "teamNow": null,
    "span": "2016–2019",
    "photo": {
     "img": "/lol/faces/echo/eimy.webp",
@@ -1514,6 +1551,7 @@
    "clubTag": "IG",
    "clubName": "Invictus Gaming",
    "team": "Invictus Gaming",
+   "teamNow": null,
    "span": "2011–2013",
    "photo": {
     "img": "/lol/faces/echo/xiaoxiao.webp",
@@ -1554,6 +1592,7 @@
    "clubTag": "VG",
    "clubName": "Vici Gaming",
    "team": "Vici Gaming",
+   "teamNow": null,
    "span": "2020",
    "photo": {
     "img": "/lol/faces/echo/Forge.webp",
@@ -1594,6 +1633,7 @@
    "clubTag": "OMG",
    "clubName": "Oh My God",
    "team": "Oh My God",
+   "teamNow": null,
    "span": "2021",
    "photo": {
     "img": "/lol/faces/echo/New.webp",
@@ -1634,6 +1674,7 @@
    "clubTag": "NIP",
    "clubName": "Ninjas in Pyjamas",
    "team": "Victory Five",
+   "teamNow": "NIP",
    "span": "2019–2021",
    "photo": {
     "img": "/lol/faces/echo/y4.webp",
@@ -1674,6 +1715,7 @@
    "clubTag": "TES",
    "clubName": "Top Esports",
    "team": "Top Esports",
+   "teamNow": null,
    "span": "2021–2023",
    "photo": {
     "img": "/lol/faces/echo/Qingtian.webp",
@@ -1714,6 +1756,7 @@
    "clubTag": "T1",
    "clubName": "T1",
    "team": "SK Telecom T1",
+   "teamNow": "T1",
    "span": "2014–2018",
    "photo": {
     "img": "/lol/faces/echo/Bang.webp",
@@ -1754,6 +1797,7 @@
    "clubTag": "DK",
    "clubName": "Dplus Kia",
    "team": "DAMWON Gaming",
+   "teamNow": "DK",
    "span": "2018–2022",
    "photo": {
     "img": "/lol/faces/echo/Nuguri.webp",
@@ -1794,6 +1838,7 @@
    "clubTag": "KRX",
    "clubName": "Kiwoom DRX",
    "team": "DRX",
+   "teamNow": "KRX",
    "span": "2019–2022",
    "photo": {
     "img": "/lol/faces/echo/Deft.webp",
@@ -1834,6 +1879,7 @@
    "clubTag": "T1",
    "clubName": "T1",
    "team": "SK Telecom T1",
+   "teamNow": "T1",
    "span": "2017",
    "photo": {
     "img": "/lol/faces/echo/Huni.webp",
@@ -1874,6 +1920,7 @@
    "clubTag": "T1",
    "clubName": "T1",
    "team": "SK Telecom T1",
+   "teamNow": "T1",
    "span": "2014–2018",
    "photo": {
     "img": "/lol/faces/echo/Wolf.webp",
@@ -1914,6 +1961,7 @@
    "clubTag": "T1",
    "clubName": "T1",
    "team": "SK Telecom T1",
+   "teamNow": "T1",
    "span": "2013–2015",
    "photo": {
     "img": "/lol/faces/echo/MaRin.webp",
@@ -1954,6 +2002,7 @@
    "clubTag": "HLE",
    "clubName": "Hanwha Life Esports",
    "team": "ROX Tigers",
+   "teamNow": "HLE",
    "span": "2016",
    "photo": {
     "img": "/lol/faces/echo/Peanut.webp",
@@ -1994,6 +2043,7 @@
    "clubTag": "KT",
    "clubName": "KT Rolster",
    "team": "KT Rolster",
+   "teamNow": null,
    "span": "2017–2020",
    "photo": {
     "img": "/lol/faces/echo/Smeb.webp",
@@ -2034,6 +2084,7 @@
    "clubTag": "T1",
    "clubName": "T1",
    "team": "SK Telecom T1",
+   "teamNow": "T1",
    "span": "2016–2018",
    "photo": {
     "img": "/lol/faces/echo/Blank.webp",
@@ -2074,6 +2125,7 @@
    "clubTag": "GEN",
    "clubName": "Gen.G",
    "team": "Samsung White",
+   "teamNow": "GEN",
    "span": "2013–2014",
    "photo": {
     "img": "/lol/faces/echo/Mata.webp",
@@ -2114,6 +2166,7 @@
    "clubTag": "HLE",
    "clubName": "Hanwha Life Esports",
    "team": "ROX Tigers",
+   "teamNow": "HLE",
    "span": "2015–2016",
    "photo": {
     "img": "/lol/faces/echo/PraY.webp",
@@ -2154,6 +2207,7 @@
    "clubTag": "CJ",
    "clubName": "CJ Entus",
    "team": "CJ Entus Blaze",
+   "teamNow": null,
    "span": "2012–2015",
    "photo": {
     "img": "/lol/faces/echo/Ambition.webp",
@@ -2194,6 +2248,7 @@
    "clubTag": "KDM",
    "clubName": "Kongdoo Monster",
    "team": "Kongdoo Monster",
+   "teamNow": null,
    "span": "2016–2018",
    "photo": {
     "img": "/lol/faces/echo/Ssol.webp",
@@ -2234,6 +2289,7 @@
    "clubTag": "T1",
    "clubName": "T1",
    "team": "SK Telecom T1",
+   "teamNow": "T1",
    "span": "2013–2016",
    "photo": {
     "img": "/lol/faces/echo/Bengi.webp",
@@ -2274,6 +2330,7 @@
    "clubTag": "KT",
    "clubName": "KT Rolster",
    "team": "KT Rolster",
+   "teamNow": null,
    "span": "2017–2018",
    "photo": {
     "img": "/lol/faces/echo/PawN.webp",
@@ -2314,6 +2371,7 @@
    "clubTag": "TL",
    "clubName": "Team Liquid",
    "team": "Team Liquid",
+   "teamNow": null,
    "span": "2015–2017",
    "photo": {
     "img": "/lol/faces/echo/Piglet.webp",
@@ -2354,6 +2412,7 @@
    "clubTag": "GEN",
    "clubName": "Gen.G",
    "team": "Samsung Galaxy",
+   "teamNow": "GEN",
    "span": "2015–2019",
    "photo": {
     "img": "/lol/faces/echo/CuVee.webp",
@@ -2394,6 +2453,7 @@
    "clubTag": "GEN",
    "clubName": "Gen.G",
    "team": "Samsung Galaxy",
+   "teamNow": "GEN",
    "span": "2015–2018",
    "photo": {
     "img": "/lol/faces/echo/Crown.webp",
@@ -2434,6 +2494,7 @@
    "clubTag": "T1",
    "clubName": "T1",
    "team": "SK Telecom T1",
+   "teamNow": "T1",
    "span": "2013–2014",
    "photo": {
     "img": "/lol/faces/echo/PoohManDu.webp",
@@ -2474,6 +2535,7 @@
    "clubTag": "GEN",
    "clubName": "Gen.G",
    "team": "Samsung White",
+   "teamNow": "GEN",
    "span": "2012–2014",
    "photo": {
     "img": "/lol/faces/echo/DanDy.webp",
@@ -2514,6 +2576,7 @@
    "clubTag": "HLE",
    "clubName": "Hanwha Life Esports",
    "team": "ROX Tigers",
+   "teamNow": "HLE",
    "span": "2015–2016",
    "photo": {
     "img": "/lol/faces/echo/GorillA.webp",
@@ -2554,6 +2617,7 @@
    "clubTag": "HLE",
    "clubName": "Hanwha Life Esports",
    "team": "Hanwha Life Esports",
+   "teamNow": null,
    "span": "2017–2019",
    "photo": {
     "img": "/lol/faces/echo/Key.webp",
@@ -2594,6 +2658,7 @@
    "clubTag": "HLE",
    "clubName": "Hanwha Life Esports",
    "team": "ROX Tigers",
+   "teamNow": "HLE",
    "span": "2015–2016",
    "photo": {
     "img": "/lol/faces/echo/Kuro.webp",
@@ -2634,6 +2699,7 @@
    "clubTag": "GEN",
    "clubName": "Gen.G",
    "team": "Samsung White",
+   "teamNow": "GEN",
    "span": "2013–2014",
    "photo": {
     "img": "/lol/faces/echo/Looper.webp",
@@ -2674,6 +2740,7 @@
    "clubTag": "LGD",
    "clubName": "LGD Gaming",
    "team": "LGD Gaming",
+   "teamNow": null,
    "span": "2015–2018",
    "photo": {
     "img": "/lol/faces/echo/imp.webp",
@@ -2714,6 +2781,7 @@
    "clubTag": "DNS",
    "clubName": "DN SOOPers",
    "team": "Afreeca Freecs",
+   "teamNow": "DNS",
    "span": "2017–2020",
    "photo": {
     "img": "/lol/faces/echo/Spirit.webp",
@@ -2754,6 +2822,7 @@
    "clubTag": "CJ",
    "clubName": "CJ Entus",
    "team": "CJ Entus",
+   "teamNow": null,
    "span": "2014–2015",
    "photo": {
     "img": "/lol/faces/echo/Coco.webp",
@@ -2794,6 +2863,7 @@
    "clubTag": "JAG",
    "clubName": "Jin Air Green Wings",
    "team": "Jin Air Green Wings",
+   "teamNow": null,
    "span": "2016–2018",
    "photo": {
     "img": "/lol/faces/echo/SoHwan.webp",
@@ -2834,6 +2904,7 @@
    "clubTag": "VG",
    "clubName": "Vici Gaming",
    "team": "Vici Gaming",
+   "teamNow": null,
    "span": "2016–2018",
    "photo": {
     "img": "/lol/faces/echo/Easyhoon.webp",
@@ -2874,6 +2945,7 @@
    "clubTag": "CGA",
    "clubName": "Crest Gaming Act",
    "team": "Crest Gaming Act",
+   "teamNow": null,
    "span": "2022",
    "photo": {
     "img": "/lol/faces/echo/Hybrid.webp",
@@ -2914,6 +2986,7 @@
    "clubTag": "CJ",
    "clubName": "CJ Entus",
    "team": "CJ Entus",
+   "teamNow": null,
    "span": "2011–2016",
    "photo": {
     "img": "/lol/faces/echo/MadLife.webp",
@@ -2954,6 +3027,7 @@
    "clubTag": "GEN",
    "clubName": "Gen.G",
    "team": "Samsung Blue",
+   "teamNow": "GEN",
    "span": "2013–2014",
    "photo": {
     "img": "/lol/faces/echo/Heart.webp",
@@ -2994,6 +3068,7 @@
    "clubTag": "KRX",
    "clubName": "Kiwoom DRX",
    "team": "DRX",
+   "teamNow": "KRX",
    "span": "2017–2024",
    "photo": {
     "img": "/lol/faces/echo/Rascal.webp",
@@ -3034,6 +3109,7 @@
    "clubTag": "CJ",
    "clubName": "CJ Entus",
    "team": "CJ Entus Frost",
+   "teamNow": null,
    "span": "2012–2015",
    "photo": {
     "img": "/lol/faces/echo/Space.webp",
@@ -3074,6 +3150,7 @@
    "clubTag": "CJ",
    "clubName": "CJ Entus",
    "team": "CJ Entus",
+   "teamNow": null,
    "span": "2012–2016",
    "photo": {
     "img": "/lol/faces/echo/Shy.webp",
@@ -3114,6 +3191,7 @@
    "clubTag": "KT",
    "clubName": "KT Rolster",
    "team": "KT Rolster",
+   "teamNow": null,
    "span": "2013–2014",
    "photo": {
     "img": "/lol/faces/echo/inSec.webp",
@@ -3154,6 +3232,7 @@
    "clubTag": "T1",
    "clubName": "T1",
    "team": "SK Telecom T1",
+   "teamNow": "T1",
    "span": "2017–2018",
    "photo": {
     "img": "/lol/faces/echo/Untara.webp",
@@ -3194,6 +3273,7 @@
    "clubTag": "GEN",
    "clubName": "Gen.G",
    "team": "Samsung Galaxy",
+   "teamNow": "GEN",
    "span": "2017–2018",
    "photo": {
     "img": "/lol/faces/echo/Haru.webp",
@@ -3234,6 +3314,7 @@
    "clubTag": "KDM",
    "clubName": "Kongdoo Monster",
    "team": "Kongdoo Monster",
+   "teamNow": null,
    "span": "2016–2017",
    "photo": {
     "img": "/lol/faces/echo/GuGer.webp",
@@ -3274,6 +3355,7 @@
    "clubTag": "GEN",
    "clubName": "Gen.G",
    "team": "Samsung Blue",
+   "teamNow": "GEN",
    "span": "2013–2014",
    "photo": {
     "img": "/lol/faces/echo/dade.webp",
@@ -3314,6 +3396,7 @@
    "clubTag": "SUP",
    "clubName": "SuperMassive",
    "team": "Papara SuperMassive",
+   "teamNow": null,
    "span": "2020–2025",
    "photo": {
     "img": "/lol/faces/echo/Armut.webp",
@@ -3354,6 +3437,7 @@
    "clubTag": "DP",
    "clubName": "Dark Passage",
    "team": "Dark Passage",
+   "teamNow": null,
    "span": "2012–2017",
    "photo": {
     "img": "/lol/faces/echo/HolyPhoenix.webp",
@@ -3394,6 +3478,7 @@
    "clubTag": "G2",
    "clubName": "G2 Esports",
    "team": "G2 Esports",
+   "teamNow": null,
    "span": "2018–2022",
    "photo": {
     "img": "/lol/faces/echo/Jankos.webp",
@@ -3434,6 +3519,7 @@
    "clubTag": "CLG.EU",
    "clubName": "Counter Logic Gaming Europe",
    "team": "Counter Logic Gaming Europe",
+   "teamNow": null,
    "span": "2012–2015",
    "photo": {
     "img": "/lol/faces/echo/Froggen.webp",
@@ -3474,6 +3560,7 @@
    "clubTag": "G2",
    "clubName": "G2 Esports",
    "team": "G2 Esports",
+   "teamNow": null,
    "span": "2015–2020",
    "photo": {
     "img": "/lol/faces/echo/Perkz.webp",
@@ -3514,6 +3601,7 @@
    "clubTag": "H2K",
    "clubName": "H2k-Gaming",
    "team": "H2k-Gaming",
+   "teamNow": null,
    "span": "2016",
    "photo": {
     "img": "/lol/faces/echo/Forg1ven.webp",
@@ -3554,6 +3642,7 @@
    "clubTag": "MKOI",
    "clubName": "Movistar KOI",
    "team": "Splyce",
+   "teamNow": "MKOI",
    "span": "2018–2019",
    "photo": {
     "img": "/lol/faces/echo/Xerxe.webp",
@@ -3594,6 +3683,7 @@
    "clubTag": "FNC",
    "clubName": "Fnatic",
    "team": "Fnatic",
+   "teamNow": null,
    "span": "2017–2019",
    "photo": {
     "img": "/lol/faces/echo/Broxah.webp",
@@ -3634,6 +3724,7 @@
    "clubTag": "MKOI",
    "clubName": "Movistar KOI",
    "team": "MAD Lions",
+   "teamNow": "MKOI",
    "span": "2020–2022",
    "photo": {
     "img": "/lol/faces/echo/Kaiser.webp",
@@ -3674,6 +3765,7 @@
    "clubTag": "G2",
    "clubName": "G2 Esports",
    "team": "G2 Esports",
+   "teamNow": null,
    "span": "2016–2017",
    "photo": {
     "img": "/lol/faces/echo/Expect.webp",
@@ -3714,6 +3806,7 @@
    "clubTag": "GMB",
    "clubName": "Gambit Esports",
    "team": "Gambit Esports",
+   "teamNow": null,
    "span": "2012–2020",
    "photo": {
     "img": "/lol/faces/echo/Diamondprox.webp",
@@ -3754,6 +3847,7 @@
    "clubTag": "G2",
    "clubName": "G2 Esports",
    "team": "G2 Esports",
+   "teamNow": null,
    "span": "2018",
    "photo": {
     "img": "/lol/faces/echo/Hjarnan.webp",
@@ -3794,6 +3888,7 @@
    "clubTag": "FNC",
    "clubName": "Fnatic",
    "team": "Fnatic",
+   "teamNow": null,
    "span": "2015–2016",
    "photo": {
     "img": "/lol/faces/echo/Febiven.webp",
@@ -3834,6 +3929,7 @@
    "clubTag": "FB",
    "clubName": "Fenerbahçe Esports",
    "team": "Fenerbahçe Esports",
+   "teamNow": null,
    "span": "2017–2018",
    "photo": {
     "img": "/lol/faces/echo/Thaldrin.webp",
@@ -3874,6 +3970,7 @@
    "clubTag": "GMB",
    "clubName": "Gambit Esports",
    "team": "Gambit Gaming",
+   "teamNow": null,
    "span": "2012–2020",
    "photo": {
     "img": "/lol/faces/echo/Edward.webp",
@@ -3914,6 +4011,7 @@
    "clubTag": "H2K",
    "clubName": "H2k-Gaming",
    "team": "H2k-Gaming",
+   "teamNow": null,
    "span": "2014–2017",
    "photo": {
     "img": "/lol/faces/echo/Odoamne.webp",
@@ -3954,6 +4052,7 @@
    "clubTag": "FNC",
    "clubName": "Fnatic",
    "team": "Fnatic",
+   "teamNow": null,
    "span": "2013–2016",
    "photo": {
     "img": "/lol/faces/echo/YellOwStaR.webp",
@@ -3994,6 +4093,7 @@
    "clubTag": "OG",
    "clubName": "Origen",
    "team": "Origen",
+   "teamNow": null,
    "span": "2015–2019",
    "photo": {
     "img": "/lol/faces/echo/Mithy.webp",
@@ -4034,6 +4134,7 @@
    "clubTag": "UOL",
    "clubName": "Unicorns of Love",
    "team": "Unicorns of Love",
+   "teamNow": null,
    "span": "2014–2017",
    "photo": {
     "img": "/lol/faces/echo/Vizicsacsi.webp",
@@ -4074,6 +4175,7 @@
    "clubTag": "G2",
    "clubName": "G2 Esports",
    "team": "G2 Esports",
+   "teamNow": null,
    "span": "2015–2016",
    "photo": {
     "img": "/lol/faces/echo/Kikis.webp",
@@ -4114,6 +4216,7 @@
    "clubTag": "CLG.EU",
    "clubName": "Counter Logic Gaming Europe",
    "team": "Counter Logic Gaming Europe",
+   "teamNow": null,
    "span": "2012–2015",
    "photo": {
     "img": "/lol/faces/echo/Wickd.webp",
@@ -4154,6 +4257,7 @@
    "clubTag": "FNC",
    "clubName": "Fnatic",
    "team": "Fnatic",
+   "teamNow": null,
    "span": "2011–2014",
    "photo": {
     "img": "/lol/faces/echo/xPeke.webp",
@@ -4194,6 +4298,7 @@
    "clubTag": "MKOI",
    "clubName": "Movistar KOI",
    "team": "Splyce",
+   "teamNow": "MKOI",
    "span": "2016–2017",
    "photo": {
     "img": "/lol/faces/echo/Kold.webp",
@@ -4234,6 +4339,7 @@
    "clubTag": "CLG.EU",
    "clubName": "Counter Logic Gaming Europe",
    "team": "Counter Logic Gaming Europe",
+   "teamNow": null,
    "span": "2012–2013",
    "photo": {
     "img": "/lol/faces/echo/Krepo.webp",
@@ -4274,6 +4380,7 @@
    "clubTag": "SHFT",
    "clubName": "Shifters",
    "team": "Team BDS",
+   "teamNow": "SHFT",
    "span": "2022–2023",
    "photo": {
     "img": "/lol/faces/echo/LIMIT.webp",
@@ -4314,6 +4421,7 @@
    "clubTag": "S04",
    "clubName": "FC Schalke 04",
    "team": "FC Schalke 04 Esports",
+   "teamNow": null,
    "span": "2020–2021",
    "photo": {
     "img": "/lol/faces/echo/Neon.webp",
@@ -4354,6 +4462,7 @@
    "clubTag": "ROC",
    "clubName": "Team ROCCAT",
    "team": "Team ROCCAT",
+   "teamNow": null,
    "span": "2017",
    "photo": {
     "img": "/lol/faces/echo/Wadid.webp",
@@ -4394,6 +4503,7 @@
    "clubTag": "MKOI",
    "clubName": "Movistar KOI",
    "team": "Splyce",
+   "teamNow": "MKOI",
    "span": "2016–2017",
    "photo": {
     "img": "/lol/faces/echo/Sencux.webp",
@@ -4434,6 +4544,7 @@
    "clubTag": "VIT",
    "clubName": "Team Vitality",
    "team": "Team Vitality",
+   "teamNow": null,
    "span": "2016",
    "photo": {
     "img": "/lol/faces/echo/Shook.webp",
@@ -4474,6 +4585,7 @@
    "clubTag": "FNC",
    "clubName": "Fnatic",
    "team": "Fnatic",
+   "teamNow": null,
    "span": "2012–2018",
    "photo": {
     "img": "/lol/faces/echo/sOAZ.webp",
@@ -4514,6 +4626,7 @@
    "clubTag": "GMB",
    "clubName": "Gambit Esports",
    "team": "Gambit Gaming",
+   "teamNow": null,
    "span": "2012–2014",
    "photo": {
     "img": "/lol/faces/echo/Alex_Ich.webp",
@@ -4554,6 +4667,7 @@
    "clubTag": "UOL",
    "clubName": "Unicorns of Love",
    "team": "Unicorns of Love",
+   "teamNow": null,
    "span": "2016–2018",
    "photo": {
     "img": "/lol/faces/echo/Exile.webp",
@@ -4594,6 +4708,7 @@
    "clubTag": "S04",
    "clubName": "FC Schalke 04",
    "team": "FC Schalke 04 Esports",
+   "teamNow": null,
    "span": "2016–2021",
    "photo": {
     "img": "/lol/faces/echo/Gilius.webp",
@@ -4633,7 +4748,8 @@
    "clubId": "T30",
    "clubTag": "NAVI",
    "clubName": "Natus Vincere",
-   "team": "Rogue (European Team)",
+   "team": "Rogue",
+   "teamNow": "NAVI",
    "span": "2019",
    "photo": {
     "img": "/lol/faces/echo/HeaQ.webp",
@@ -4674,6 +4790,7 @@
    "clubTag": "VIT",
    "clubName": "Team Vitality",
    "team": "Team Vitality",
+   "teamNow": null,
    "span": "2018–2020",
    "photo": {
     "img": "/lol/faces/echo/Jactroll.webp",
@@ -4714,6 +4831,7 @@
    "clubTag": "ALL",
    "clubName": "Alliance",
    "team": "Alliance",
+   "teamNow": null,
    "span": "2014",
    "photo": {
     "img": "/lol/faces/echo/Tabzz.webp",
@@ -4754,6 +4872,7 @@
    "clubTag": "TSM",
    "clubName": "TSM",
    "team": "TSM",
+   "teamNow": null,
    "span": "2014–2020",
    "photo": {
     "img": "/lol/faces/echo/Bjergsen.webp",
@@ -4794,6 +4913,7 @@
    "clubTag": "TSM",
    "clubName": "TSM",
    "team": "TSM",
+   "teamNow": null,
    "span": "2016–2023",
    "photo": {
     "img": "/lol/faces/echo/Hauntzer.webp",
@@ -4834,6 +4954,7 @@
    "clubTag": "C9",
    "clubName": "Cloud9",
    "team": "Cloud9",
+   "teamNow": null,
    "span": "2015–2022",
    "photo": {
     "img": "/lol/faces/echo/Jensen.webp",
@@ -4874,6 +4995,7 @@
    "clubTag": "ISG",
    "clubName": "Isurus",
    "team": "Isurus",
+   "teamNow": null,
    "span": "2019–2020",
    "photo": {
     "img": "/lol/faces/echo/Slow.webp",
@@ -4914,6 +5036,7 @@
    "clubTag": "CLG",
    "clubName": "Counter Logic Gaming",
    "team": "Counter Logic Gaming",
+   "teamNow": null,
    "span": "2011–2015",
    "photo": {
     "img": "/lol/faces/echo/Doublelift.webp",
@@ -4954,6 +5077,7 @@
    "clubTag": "TSM",
    "clubName": "TSM",
    "team": "TSM",
+   "teamNow": null,
    "span": "2016–2020",
    "photo": {
     "img": "/lol/faces/echo/Biofrost.webp",
@@ -4994,6 +5118,7 @@
    "clubTag": "DW",
    "clubName": "Dire Wolves",
    "team": "Dire Wolves",
+   "teamNow": null,
    "span": "2014–2018",
    "photo": {
     "img": "/lol/faces/echo/Shernfire.webp",
@@ -5034,6 +5159,7 @@
    "clubTag": "CLG",
    "clubName": "Counter Logic Gaming",
    "team": "Counter Logic Gaming",
+   "teamNow": null,
    "span": "2015–2017",
    "photo": {
     "img": "/lol/faces/echo/Xmithie.webp",
@@ -5074,6 +5200,7 @@
    "clubTag": "DW",
    "clubName": "Dire Wolves",
    "team": "Dire Wolves",
+   "teamNow": null,
    "span": "2015–2020",
    "photo": {
     "img": "/lol/faces/echo/Chippys.webp",
@@ -5114,6 +5241,7 @@
    "clubTag": "FLY",
    "clubName": "FlyQuest",
    "team": "FlyQuest",
+   "teamNow": null,
    "span": "2018–2020",
    "photo": {
     "img": "/lol/faces/echo/Santorin.webp",
@@ -5154,6 +5282,7 @@
    "clubTag": "ISG",
    "clubName": "Isurus",
    "team": "Isurus",
+   "teamNow": null,
    "span": "2019–2022",
    "photo": {
     "img": "/lol/faces/echo/Seiya.webp",
@@ -5194,6 +5323,7 @@
    "clubTag": "VKS",
    "clubName": "Vivo Keyd Stars",
    "team": "Vivo Keyd",
+   "teamNow": "VKS",
    "span": "2019–2023",
    "photo": {
     "img": "/lol/faces/echo/Grell.webp",
@@ -5234,6 +5364,7 @@
    "clubTag": "CLG",
    "clubName": "Counter Logic Gaming",
    "team": "Counter Logic Gaming",
+   "teamNow": null,
    "span": "2013–2017",
    "photo": {
     "img": "/lol/faces/echo/Aphromoo.webp",
@@ -5274,6 +5405,7 @@
    "clubTag": "TSM",
    "clubName": "TSM",
    "team": "TSM",
+   "teamNow": null,
    "span": "2016–2017",
    "photo": {
     "img": "/lol/faces/echo/Svenskeren.webp",
@@ -5314,6 +5446,7 @@
    "clubTag": "CLG",
    "clubName": "Counter Logic Gaming",
    "team": "Counter Logic Gaming",
+   "teamNow": null,
    "span": "2015–2021",
    "photo": {
     "img": "/lol/faces/echo/Pobelter.webp",
@@ -5354,6 +5487,7 @@
    "clubTag": "C9",
    "clubName": "Cloud9",
    "team": "Cloud9",
+   "teamNow": null,
    "span": "2013–2019",
    "photo": {
     "img": "/lol/faces/echo/Sneaky.webp",
@@ -5394,6 +5528,7 @@
    "clubTag": "CLG",
    "clubName": "Counter Logic Gaming",
    "team": "Counter Logic Gaming",
+   "teamNow": null,
    "span": "2016–2020",
    "photo": {
     "img": "/lol/faces/echo/Stixxay.webp",
@@ -5434,6 +5569,7 @@
    "clubTag": "C9",
    "clubName": "Cloud9",
    "team": "Cloud9",
+   "teamNow": null,
    "span": "2013–2016",
    "photo": {
     "img": "/lol/faces/echo/Meteos.webp",
@@ -5474,6 +5610,7 @@
    "clubTag": "CLG",
    "clubName": "Counter Logic Gaming",
    "team": "Counter Logic Gaming",
+   "teamNow": null,
    "span": "2012–2015",
    "photo": {
     "img": "/lol/faces/echo/Link.webp",
@@ -5513,7 +5650,8 @@
    "clubId": "T39",
    "clubTag": "LYON",
    "clubName": "LYON",
-   "team": "Lyon Gaming (2013 Latin American Team)",
+   "team": "Lyon Gaming",
+   "teamNow": "LYON",
    "span": "2017",
    "photo": {
     "img": "/lol/faces/echo/Jirall.webp",
@@ -5554,6 +5692,7 @@
    "clubTag": "FG",
    "clubName": "Furious Gaming",
    "team": "Furious Gaming",
+   "teamNow": null,
    "span": "2014–2018",
    "photo": {
     "img": "/lol/faces/echo/Acce.webp",
@@ -5594,6 +5733,7 @@
    "clubTag": "TSM",
    "clubName": "TSM",
    "team": "TSM",
+   "teamNow": null,
    "span": "2013–2023",
    "photo": {
     "img": "/lol/faces/echo/WildTurtle.webp",
@@ -5634,6 +5774,7 @@
    "clubTag": "AZE",
    "clubName": "Team Aze",
    "team": "Team Aze",
+   "teamNow": null,
    "span": "2022–2023",
    "photo": {
     "img": "/lol/faces/echo/Aloned.webp",
@@ -5674,6 +5815,7 @@
    "clubTag": "CLG",
    "clubName": "Counter Logic Gaming",
    "team": "Counter Logic Gaming",
+   "teamNow": null,
    "span": "2015–2019",
    "photo": {
     "img": "/lol/faces/echo/Darshan.webp",
@@ -5714,6 +5856,7 @@
    "clubTag": "C9",
    "clubName": "Cloud9",
    "team": "Cloud9",
+   "teamNow": null,
    "span": "2016–2018",
    "photo": {
     "img": "/lol/faces/echo/Smoothie.webp",
@@ -5754,6 +5897,7 @@
    "clubTag": "INF",
    "clubName": "INFINITY",
    "team": "INFINITY",
+   "teamNow": null,
    "span": "2017–2020",
    "photo": {
     "img": "/lol/faces/echo/Cotopaco.webp",
@@ -5794,6 +5938,7 @@
    "clubTag": "TSM",
    "clubName": "TSM",
    "team": "TSM",
+   "teamNow": null,
    "span": "2011–2014",
    "photo": {
     "img": "/lol/faces/echo/Xpecial.webp",
@@ -5834,6 +5979,7 @@
    "clubTag": "C9",
    "clubName": "Cloud9",
    "team": "Cloud9",
+   "teamNow": null,
    "span": "2013–2015",
    "photo": {
     "img": "/lol/faces/echo/LemonNation.webp",
@@ -5874,6 +6020,7 @@
    "clubTag": "TL",
    "clubName": "Team Liquid",
    "team": "Team Curse",
+   "teamNow": "TL",
    "span": "2012–2013",
    "photo": {
     "img": "/lol/faces/echo/Saintvicious.webp",
@@ -5914,6 +6061,7 @@
    "clubTag": "FOX",
    "clubName": "Echo Fox",
    "team": "Echo Fox",
+   "teamNow": null,
    "span": "2017",
    "photo": {
     "img": "/lol/faces/echo/Akaadian.webp",
@@ -5954,6 +6102,7 @@
    "clubTag": "TL",
    "clubName": "Team Liquid",
    "team": "Team Liquid",
+   "teamNow": null,
    "span": "2016–2017",
    "photo": {
     "img": "/lol/faces/echo/Matt_Elento.webp",
@@ -5994,6 +6143,7 @@
    "clubTag": "SEN",
    "clubName": "Sentinels",
    "team": "Phoenix1",
+   "teamNow": "SEN",
    "span": "2016–2017",
    "photo": {
     "img": "/lol/faces/echo/Pirean.webp",
@@ -6034,6 +6184,7 @@
    "clubTag": "C9",
    "clubName": "Cloud9",
    "team": "Cloud9",
+   "teamNow": null,
    "span": "2013–2016",
    "photo": {
     "img": "/lol/faces/echo/Hai.webp",
@@ -6074,6 +6225,7 @@
    "clubTag": "C9",
    "clubName": "Cloud9",
    "team": "Cloud9",
+   "teamNow": null,
    "span": "2013–2014",
    "photo": {
     "img": "/lol/faces/echo/Balls.webp",
@@ -6114,6 +6266,7 @@
    "clubTag": "TSM",
    "clubName": "TSM",
    "team": "TSM",
+   "teamNow": null,
    "span": "2012–2015",
    "photo": {
     "img": "/lol/faces/echo/Dyrus.webp",
@@ -6154,6 +6307,7 @@
    "clubTag": "OPT",
    "clubName": "OpTic Gaming",
    "team": "OpTic Gaming",
+   "teamNow": null,
    "span": "2018–2019",
    "photo": {
     "img": "/lol/faces/echo/Big.webp",
@@ -6194,6 +6348,7 @@
    "clubTag": "TL",
    "clubName": "Team Liquid",
    "team": "Team Liquid",
+   "teamNow": null,
    "span": "2016–2017",
    "photo": {
     "img": "/lol/faces/echo/Lourlo.webp",
@@ -6234,6 +6389,7 @@
    "clubTag": "FOX",
    "clubName": "Echo Fox",
    "team": "Echo Fox",
+   "teamNow": null,
    "span": "2016–2017",
    "photo": {
     "img": "/lol/faces/echo/Keith.webp",
@@ -6274,6 +6430,7 @@
    "clubTag": "GAM",
    "clubName": "GAM Esports",
    "team": "GAM Esports",
+   "teamNow": null,
    "span": "2017–2025",
    "photo": {
     "img": "/lol/faces/echo/Levi.webp",
@@ -6314,6 +6471,7 @@
    "clubTag": "PSG",
    "clubName": "PSG Talon",
    "team": "PSG Talon",
+   "teamNow": null,
    "span": "2020–2022",
    "photo": {
     "img": "/lol/faces/echo/Hanabi.webp",
@@ -6354,6 +6512,7 @@
    "clubTag": "TF",
    "clubName": "Team Flash",
    "team": "Team Flash.Vietnam",
+   "teamNow": null,
    "span": "2020–2021",
    "photo": {
     "img": "/lol/faces/echo/Palette.webp",
@@ -6394,6 +6553,7 @@
    "clubTag": "DFM",
    "clubName": "DetonatioN FocusMe",
    "team": "DetonatioN FocusMe",
+   "teamNow": null,
    "span": "2013–2024",
    "photo": {
     "img": "/lol/faces/echo/Yutapon.webp",
@@ -6434,6 +6594,7 @@
    "clubTag": "HLE",
    "clubName": "Hanwha Life Esports",
    "team": "Hanwha Life Esports",
+   "teamNow": null,
    "span": "2019",
    "photo": {
     "img": "/lol/faces/echo/MooJin.webp",
@@ -6474,6 +6635,7 @@
    "clubTag": "FW",
    "clubName": "Flash Wolves",
    "team": "Flash Wolves",
+   "teamNow": null,
    "span": "2013–2018",
    "photo": {
     "img": "/lol/faces/echo/SwordArT.webp",
@@ -6514,6 +6676,7 @@
    "clubTag": "DFM",
    "clubName": "DetonatioN FocusMe",
    "team": "DetonatioN FocusMe",
+   "teamNow": null,
    "span": "2017–2024",
    "photo": {
     "img": "/lol/faces/echo/Steal.webp",
@@ -6554,6 +6717,7 @@
    "clubTag": "HKA",
    "clubName": "Hong Kong Attitude",
    "team": "Hong Kong Attitude",
+   "teamNow": null,
    "span": "2017–2019",
    "photo": {
     "img": "/lol/faces/echo/Unified.webp",
@@ -6594,6 +6758,7 @@
    "clubTag": "FW",
    "clubName": "Flash Wolves",
    "team": "Flash Wolves",
+   "teamNow": null,
    "span": "2013–2018",
    "photo": {
     "img": "/lol/faces/echo/Maple.webp",
@@ -6634,6 +6799,7 @@
    "clubTag": "FW",
    "clubName": "Flash Wolves",
    "team": "Flash Wolves",
+   "teamNow": null,
    "span": "2015–2017",
    "photo": {
     "img": "/lol/faces/echo/Karsa.webp",
@@ -6674,6 +6840,7 @@
    "clubTag": "VKS",
    "clubName": "Vivo Keyd Stars",
    "team": "Vivo Keyd",
+   "teamNow": "VKS",
    "span": "2017–2019",
    "photo": {
     "img": "/lol/faces/echo/Yang.webp",
@@ -6714,6 +6881,7 @@
    "clubTag": "AHQ",
    "clubName": "ahq eSports Club",
    "team": "ahq eSports Club",
+   "teamNow": null,
    "span": "2014–2020",
    "photo": {
     "img": "/lol/faces/echo/Ziv.webp",
@@ -6754,6 +6922,7 @@
    "clubTag": "FW",
    "clubName": "Flash Wolves",
    "team": "Flash Wolves",
+   "teamNow": null,
    "span": "2013–2016",
    "photo": {
     "img": "/lol/faces/echo/NL.webp",
@@ -6794,6 +6963,7 @@
    "clubTag": "DFM",
    "clubName": "DetonatioN FocusMe",
    "team": "DetonatioN FocusMe",
+   "teamNow": null,
    "span": "2013–2021",
    "photo": {
     "img": "/lol/faces/echo/Ceros.webp",
@@ -6834,6 +7004,7 @@
    "clubTag": "AHQ",
    "clubName": "ahq eSports Club",
    "team": "ahq eSports Club",
+   "teamNow": null,
    "span": "2012–2018",
    "photo": {
     "img": "/lol/faces/echo/Albis.webp",
@@ -6874,6 +7045,7 @@
    "clubTag": "AHQ",
    "clubName": "ahq eSports Club",
    "team": "ahq eSports Club",
+   "teamNow": null,
    "span": "2014–2019",
    "photo": {
     "img": "/lol/faces/echo/An.webp",
@@ -6914,6 +7086,7 @@
    "clubTag": "AHQ",
    "clubName": "ahq eSports Club",
    "team": "ahq eSports Club",
+   "teamNow": null,
    "span": "2014–2018",
    "photo": {
     "img": "/lol/faces/echo/Mountain.webp",
@@ -6954,6 +7127,7 @@
    "clubTag": "PNG",
    "clubName": "paiN Gaming",
    "team": "paiN Gaming",
+   "teamNow": null,
    "span": "2012–2017",
    "photo": {
     "img": "/lol/faces/echo/Kami.webp",
@@ -6994,6 +7168,7 @@
    "clubTag": "LLL",
    "clubName": "LOUD",
    "team": "LOUD",
+   "teamNow": null,
    "span": "2022–2024",
    "photo": {
     "img": "/lol/faces/echo/Croc.webp",
@@ -7034,6 +7209,7 @@
    "clubTag": "PNG",
    "clubName": "paiN Gaming",
    "team": "paiN Gaming",
+   "teamNow": null,
    "span": "2015–2017",
    "photo": {
     "img": "/lol/faces/echo/Mylon.webp",
@@ -7074,6 +7250,7 @@
    "clubTag": "SBTC",
    "clubName": "SBTC Esports",
    "team": "SBTC Esports",
+   "teamNow": null,
    "span": "2021–2023",
    "photo": {
     "img": "/lol/faces/echo/Dia1.webp",
@@ -7114,6 +7291,7 @@
    "clubTag": "VKS",
    "clubName": "Vivo Keyd Stars",
    "team": "Keyd Stars",
+   "teamNow": "VKS",
    "span": "2013–2018",
    "photo": {
     "img": "/lol/faces/echo/Revolta.webp",
@@ -7154,6 +7332,7 @@
    "clubTag": "PNG",
    "clubName": "paiN Gaming",
    "team": "paiN Gaming",
+   "teamNow": null,
    "span": "2012–2021",
    "photo": {
     "img": "/lol/faces/echo/brTT.webp",
@@ -7194,6 +7373,7 @@
    "clubTag": "SHG",
    "clubName": "Fukuoka SoftBank HAWKS gaming",
    "team": "Fukuoka SoftBank HAWKS gaming",
+   "teamNow": null,
    "span": "2020–2021",
    "photo": {
     "img": "/lol/faces/echo/Tussle.webp",
@@ -7234,6 +7414,7 @@
    "clubTag": "FW",
    "clubName": "Flash Wolves",
    "team": "Flash Wolves",
+   "teamNow": null,
    "span": "2014–2018",
    "photo": {
     "img": "/lol/faces/echo/MMD.webp",
@@ -7274,6 +7455,7 @@
    "clubTag": "TF",
    "clubName": "Team Flash",
    "team": "Team Flash.Vietnam",
+   "teamNow": null,
    "span": "2020–2024",
    "photo": {
     "img": "/lol/faces/echo/Yoshino.webp",
@@ -7314,6 +7496,7 @@
    "clubTag": "SBTC",
    "clubName": "SBTC Esports",
    "team": "SBTC Esports",
+   "teamNow": null,
    "span": "2021–2022",
    "photo": {
     "img": "/lol/faces/echo/Celebrity.webp",
@@ -7354,6 +7537,7 @@
    "clubTag": "AHQ",
    "clubName": "ahq eSports Club",
    "team": "ahq eSports Club",
+   "teamNow": null,
    "span": "2013–2018",
    "photo": {
     "img": "/lol/faces/echo/Westdoor.webp",
@@ -7394,6 +7578,7 @@
    "clubTag": "INTZ",
    "clubName": "INTZ",
    "team": "INTZ",
+   "teamNow": null,
    "span": "2014–2022",
    "photo": {
     "img": "/lol/faces/echo/micaO.webp",
@@ -7434,6 +7619,7 @@
    "clubTag": "RED",
    "clubName": "RED Canids",
    "team": "RED Canids",
+   "teamNow": null,
    "span": "2016–2018",
    "photo": {
     "img": "/lol/faces/echo/Dioud.webp",
@@ -7474,6 +7660,7 @@
    "clubTag": "GAM",
    "clubName": "GAM Esports",
    "team": "GAM Esports",
+   "teamNow": null,
    "span": "2014–2019",
    "photo": {
     "img": "/lol/faces/echo/Archie.webp",
@@ -7514,6 +7701,7 @@
    "clubTag": "SBTC",
    "clubName": "SBTC Esports",
    "team": "SBTC Esports",
+   "teamNow": null,
    "span": "2022–2023",
    "photo": {
     "img": "/lol/faces/echo/Spot.webp",
@@ -7554,6 +7742,7 @@
    "clubTag": "GAM",
    "clubName": "GAM Esports",
    "team": "GAM Esports",
+   "teamNow": null,
    "span": "2017–2020",
    "photo": {
     "img": "/lol/faces/echo/Slay.webp",
@@ -7594,6 +7783,7 @@
    "clubTag": "INTZ",
    "clubName": "INTZ",
    "team": "INTZ",
+   "teamNow": null,
    "span": "2018–2024",
    "photo": {
     "img": "/lol/faces/echo/Tay.webp",
@@ -7634,6 +7824,7 @@
    "clubTag": "TPA",
    "clubName": "Taipei Assassins",
    "team": "Taipei Assassins",
+   "teamNow": null,
    "span": "2012–2014",
    "photo": {
     "img": "/lol/faces/echo/GodJJ.webp",
@@ -7674,6 +7865,7 @@
    "clubTag": "INTZ",
    "clubName": "INTZ",
    "team": "INTZ",
+   "teamNow": null,
    "span": "2014–2022",
    "photo": {
     "img": "/lol/faces/echo/Jockster.webp",
@@ -7714,6 +7906,7 @@
    "clubTag": "SHG",
    "clubName": "Fukuoka SoftBank HAWKS gaming",
    "team": "Fukuoka SoftBank HAWKS gaming",
+   "teamNow": null,
    "span": "2021",
    "photo": {
     "img": "/lol/faces/echo/Corporal.webp",

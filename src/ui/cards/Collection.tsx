@@ -14,7 +14,7 @@ import { dismantleFee, dismantleYield } from '../../engine/dismantle'
 import { sparesOf } from '../../engine/inbox'
 import { crestUrl } from '../../engine/dossier'
 import {
-  ALL_CARDS, MAX_LEVEL, POWER_PER_LEVEL, RARITY_CN, SALVAGE, cardById, cardPower, isPlayerCard, titleClubTags,
+  ALL_CARDS, echoTeamName, MAX_LEVEL, POWER_PER_LEVEL, RARITY_CN, SALVAGE, cardById, cardPower, isPlayerCard, titleClubTags,
 } from '../../engine/cards'
 import type { Card, Rarity } from '../../engine/cards'
 import { ATTR_CN, ATTR_KEYS, REGION_CN } from '../../engine/types'
@@ -361,7 +361,7 @@ export default function Collection() {
                   {isPlayerCard(sel) ? (
                     <>
                       <div className="small muted" style={{ marginBottom: 8, lineHeight: 1.8 }}>
-                        {sel.realName ?? '真名未公开'} · <Flag nat={sel.nat} /> {natName(sel.nat)}{sel.echo ? ` · ${sel.ageEstimated ? '生日资料待补充' : `${sel.age} 岁`} · 已退役 · ${[sel.echo.team, sel.echo.span].filter(Boolean).join(' ')}` : !sel.seoul && !sel.ageEstimated && ` · ${sel.age} 岁${sel.legend ? '（当届）' : ''}`}
+                        {sel.realName ?? '真名未公开'} · <Flag nat={sel.nat} /> {natName(sel.nat)}{sel.echo ? ` · ${sel.ageEstimated ? '生日资料待补充' : `${sel.age} 岁`} · 已退役 · ${[echoTeamName(sel.echo), sel.echo.span].filter(Boolean).join(' ')}` : !sel.seoul && !sel.ageEstimated && ` · ${sel.age} 岁${sel.legend ? '（当届）' : ''}`}
                         <br />
                         {REGION_CN[sel.region]} · {sel.clubTag ?? '赛季自由选手'} · {sel.roles.join(' / ')}
                         

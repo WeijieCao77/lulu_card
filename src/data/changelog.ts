@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-04', title: '回响卡写明俱乐部改名', changes: [
+    { kind: '调整', text: '峡谷回响卡的代表战队如果后来改了名，卡面上会写明现在的名字，比如「DAMWON Gaming（现 DK）」「SK Telecom T1（现 T1）」「Samsung White（现 GEN）」，和现在这支队的选手有同队默契。' },
+  ],
+}, {
   date: '2026-10-04', title: '回响老将回到自己的俱乐部', changes: [
     { kind: '调整', text: '峡谷回响老将改为属于自己的代表俱乐部：俱乐部改名或被收购的，挂到现在的队（比如 DWG→DK、SKT→T1、Splyce→KOI）；已经解散的（比如 RNG、FPX、TSM、CLG、闪电狼、ahq）作为历史俱乐部保留，同俱乐部的老将之间、和同俱乐部的彩卡之间都有同队默契，不满五人也算。收藏、图鉴和市场都能按这些俱乐部搜索和筛选。' },
   ],

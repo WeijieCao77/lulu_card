@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import type { PlayerCard } from '../../../engine/cards'
-import { RARITY_CN } from '../../../engine/cards'
+import { RARITY_CN, echoTeamName } from '../../../engine/cards'
 import FOCUS from '../../../data/echoPhotoFocus.json'
 import './echoCard.css'
 import './echoAltar.css'
@@ -66,7 +66,7 @@ export function EchoCard({ card, level = 0, dupes = 0, size = 'md', selected, di
     { label: '团战', value: card.attrs.teamwork },
     { label: '决策', value: card.attrs.igl },
   ]
-  const team = [echo.team, echo.span].filter(Boolean).join(' · ')
+  const team = [echoTeamName(echo), echo.span].filter(Boolean).join(' · ')
   return <div
     className={`cardface retired-echo ${RARITY_CLASS[card.rarity] ?? 're-bronze'} s-${size}${selected ? ' sel' : ''}${dimmed ? ' dim' : ''}${onClick ? ' tap' : ''}`}
     style={style} role={onClick ? 'button' : undefined} tabIndex={onClick ? 0 : undefined}

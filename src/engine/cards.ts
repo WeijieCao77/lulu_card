@@ -114,6 +114,8 @@ export interface EchoInfo {
   birth: string | null
   /** the club's full name — for a historical club (clubId H:TAG) the only place it is written */
   clubName: string | null
+  /** today's tag when the club was renamed or taken over since (DAMWON Gaming → DK), so the card can say 「（现 DK）」 */
+  teamNow: string | null
 }
 
 export interface CoachCard {
@@ -420,7 +422,7 @@ function buildLegendCoachCards(): CoachCard[] {
   return out
 }
 
-type EchoRow = (typeof ECHO_JSON.cards)[number] & { birth?: string | null; clubName?: string | null }
+type EchoRow = (typeof ECHO_JSON.cards)[number] & { birth?: string | null; clubName?: string | null; teamNow?: string | null }
 /** whole years from a YYYY-MM-DD birthday to today */
 function ageOn(birth: string, now = new Date()): number {
   const [y, m, d] = birth.split('-').map(Number)
@@ -432,7 +434,7 @@ function buildEchoCards(): PlayerCard[] {
     id: e.id,
     // the same man as his 名人堂彩卡 (H:Uzi …) — one five cannot hold both
     playerId: e.person,
-    echo: { team: e.team, span: e.span, group: e.group, attrsEstimated: e.attrsEstimated, photo: e.photo ?? null, birth: e.birth ?? null, clubName: e.clubName ?? null },
+    echo: { team: e.team, span: e.span, group: e.group, attrsEstimated: e.attrsEstimated, photo: e.photo ?? null, birth: e.birth ?? null, clubName: e.clubName ?? null, teamNow: e.teamNow ?? null },
     ign: e.ign,
     realName: e.realName ?? null,
     nat: e.nat ?? null,
@@ -465,6 +467,9 @@ export const COACH_CARDS: CoachCard[] = [...buildCoachCards(), ...LEGEND_COACH_C
  */
 export const ECHO_CARDS: PlayerCard[] = buildEchoCards()
 export const ALL_CARDS: Card[] = [...PLAYER_CARDS, ...ECHO_CARDS, ...SEOUL_CARDS, ...COACH_CARDS]
+/** 「DAMWON Gaming（现 DK）」: the club as it was, and today's name when it has changed */
+export const echoTeamName = (e: Pick<EchoInfo, 'team' | 'teamNow'>): string | null =>
+  e.team ? `${e.team}${e.teamNow ? `（现 ${e.teamNow}）` : ''}` : null
 export const isEchoCard = (c: Card | undefined): boolean => c?.kind === 'player' && !!c.echo
 
 const byId = new Map(ALL_CARDS.map((c) => [c.id, c]))

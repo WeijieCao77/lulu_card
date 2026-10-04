@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { WORLD_PLAYERS } from '../engine/world'
 import { WORLD_TEAMS, EXTRA_COACHES } from '../engine/teams'
 import { coachDossier, dossierOf, titleCount } from '../engine/dossier'
-import { BASE_PLAYER_CARDS, COACH_CARDS, ECHO_CARDS, LEGEND_CARDS, RARITY_CN, titleClubTags } from '../engine/cards'
+import { BASE_PLAYER_CARDS, COACH_CARDS, ECHO_CARDS, echoTeamName, LEGEND_CARDS, RARITY_CN, titleClubTags } from '../engine/cards'
 import { SPEC_CN } from '../engine/staff'
 import CoachHonours from './CoachHonours'
 import { CareerEvents, CareerHonours, CareerTeams } from './PlayerCareer'
@@ -108,7 +108,7 @@ export default function Dossier({
         if (rarity !== 'all' && c.rarity !== rarity) return false
         if (role !== 'all' && !c.roles.includes(role)) return false
         if (!text) return true
-        const hay = `${c.ign} ${c.realName ?? ''} ${c.clubTag ?? ''} ${c.echo?.team ?? ''} ${natName(c.nat)} ${c.nat ?? ''} 回响`
+        const hay = `${c.ign} ${c.realName ?? ''} ${c.clubTag ?? ''} ${c.echo?.team ?? ''} ${c.echo?.teamNow ?? ''} ${natName(c.nat)} ${c.nat ?? ''} 回响`
         return hay.toLowerCase().includes(text)
       })
       .sort((a, b) => b.rating - a.rating)
@@ -225,7 +225,7 @@ export default function Dossier({
                     <div className="dossier-card-title"><b>{card.ign}</b><span className="tag t3" style={{ marginLeft: 5 }}>峡谷回响</span></div>
                     <div className="tiny faint">{card.realName ?? '—'}</div>
                     <div className="tiny"><Flag nat={card.nat} /> {natName(card.nat)} · {REGION_CN[card.region]}</div>
-                    <div className="tiny">{[card.echo?.team, card.echo?.span].filter(Boolean).join(' · ')} · {card.roles.join('/')}</div>
+                    <div className="tiny">{[card.echo && echoTeamName(card.echo), card.echo?.span].filter(Boolean).join(' · ')} · {card.roles.join('/')}</div>
                     <div className="tiny mono">{RARITY_CN[card.rarity]} {card.rating}</div>
                   </div>
                 </button>
@@ -303,7 +303,7 @@ function EchoDetail({ card, onBack }: { card: PlayerCard; onBack: () => void }) 
             <br />
             {echo.birth ? `${card.age} 岁（${echo.birth}）` : '生日资料待补充'}
             <br />
-            代表战队：{echo.team}{echo.span ? `（${echo.span}）` : ''}
+            代表战队：{echoTeamName(echo)}{echo.span ? ` · ${echo.span}` : ''}
             <br />
             {club ? `所属俱乐部：${club.name}（现役俱乐部，和同队选手有默契）`
               : card.clubId?.startsWith('H:') ? `所属俱乐部：${card.clubTag}（${echo.clubName ?? card.clubTag}，已解散的历史俱乐部；和同俱乐部的老将、彩卡有默契）`
