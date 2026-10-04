@@ -436,6 +436,7 @@ export default function Packs() {
           pulled={opening}
           packName={openingKind ? PACKS[openingKind].name : '选手卡包'}
           position={openingKind ? packPosition(openingKind) ?? undefined : undefined}
+          echo={openingKind === 'echo'}
           fast={fastMode}
           busy={busy}
           unknownError={unknownError}

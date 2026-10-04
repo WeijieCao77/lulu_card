@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ECHO_CARDS, LEGEND_CARDS, RARITY_CN } from '../engine/cards'
 import CardFace from '../ui/Card'
+import PackStage from '../ui/cards/PackStage'
+import type { Pulled } from '../engine/gacha'
 import { EchoCard, EchoCardBack } from '../ui/cards/echo/EchoCard'
 import reference from './echo/reference.webp'
 import '../styles.css'
@@ -21,6 +23,8 @@ function Review() {
   const [rarity, setRarity] = useState<(typeof RARITIES)[number]>('全部')
   const [size, setSize] = useState<(typeof SIZES)[number]>('lg')
   const [lowOnly, setLowOnly] = useState(false)
+  const [pack, setPack] = useState<Pulled[] | null>(null)
+  const openPack = () => { const pick = (r: string) => { const l = ECHO_CARDS.filter((c) => c.rarity === r); return l[Math.floor(Math.random() * l.length)] }; setPack([pick('gold'), pick('silver'), pick('bronze')].map((card) => ({ card, dupe: false, salvage: 0 }))) }
   const cards = useMemo(() => ECHO_CARDS.filter((c) =>
     (group === '全部' || c.echo!.group === group) && (rarity === '全部' || c.rarity === rarity)
     && (!lowOnly || Math.min(c.echo!.photo?.w ?? 0, c.echo!.photo?.h ?? 0) < 500)), [group, rarity, lowOnly])
@@ -60,6 +64,7 @@ function Review() {
       <span>尺寸：{SIZES.map((s) => <button key={s} className={s === size ? 'on' : ''} onClick={() => setSize(s)}>{SIZE_CN[s]}</button>)}</span>
       <span><button className={lowOnly ? 'on' : ''} onClick={() => setLowOnly(!lowOnly)}>只看低分辨率照片</button></span>
       <span className="er-meta">当前 {cards.length} 张</span>
+      <span><button id="er-open" className="on" onClick={openPack}>预览祭坛开包（回响包）</button></span>
     </div>
     <div className="er-grid" style={{ ['--w' as string]: size === 'lg' ? '184px' : size === 'md' ? '132px' : '96px' }}>
       {cards.map((c) => {
@@ -76,6 +81,7 @@ function Review() {
         </div>
       })}
     </div>
+    {pack && <PackStage pulled={pack} packName="峡谷回响包" echo onDone={() => setPack(null)} onSellAll={() => setPack(null)} />}
   </main>
 }
 if (import.meta.env.DEV) createRoot(document.getElementById('root')!).render(<Review />)

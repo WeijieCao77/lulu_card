@@ -2,8 +2,10 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import { playPackCue } from '../packAudio'
 
 /** Mouse, pen and touch share the same drag-to-altar interaction. */
-export default function PackAltar({ count, packName, bursting, onOpen, seal }: {
+export default function PackAltar({ count, packName, bursting, onOpen, seal, deck }: {
   count: number; packName: string; bursting: boolean; onOpen: () => void; seal: ReactNode
+  /** a series' own deck: its layers replace the default pack face, and `className` marks the button for its styles */
+  deck?: { className: string; art: ReactNode }
 }) {
   const scene = useRef<HTMLDivElement>(null)
   const source = useRef<HTMLDivElement>(null)
@@ -66,7 +68,7 @@ export default function PackAltar({ count, packName, bursting, onOpen, seal }: {
     <div className="altar-drag-path" aria-hidden="true"><span>·</span><span>·</span><span>·</span><b>→</b></div>
     <div ref={source} className="altar-pack-source">
       <div className="altar-pack-carrier" style={{ '--drag-x': `${offset.x}px`, '--drag-y': `${offset.y}px` } as CSSProperties}>
-        <button ref={pack} className="ritual-pack" autoFocus disabled={bursting} aria-label={`拖动或点击${packName}，放入仪式台`}
+        <button ref={pack} className={`ritual-pack${deck ? ' ' + deck.className : ''}`} autoFocus disabled={bursting} aria-label={`拖动或点击${packName}，放入仪式台`}
           onClick={() => { if (Date.now() >= ignoreClickUntil.current) place() }}
           onPointerDown={e => {
             if (placedRef.current || drag.current || (e.pointerType === 'mouse' && e.button !== 0)) return
@@ -89,14 +91,16 @@ export default function PackAltar({ count, packName, bursting, onOpen, seal }: {
             else { ignoreClickUntil.current = Date.now() + 600; cancel() }
           }}
           onPointerCancel={() => { ignoreClickUntil.current = Date.now() + 600; cancel() }} onLostPointerCapture={() => { if (drag.current) cancel() }}>
-          <span className="ritual-pack-shadow" aria-hidden="true" />
-          <span className="ritual-pack-half left" /><span className="ritual-pack-half right" />
-          <span className="ritual-pack-side left" /><span className="ritual-pack-side right" />
-          <span className="ritual-pack-crimp top" /><span className="ritual-pack-crimp bottom" />
-          <span className="ritual-pack-foil" />
-          <span className="ritual-pack-kicker">LULU CARDS · RIFT COLLECTION</span>
-          <span className="ritual-pack-seal">{seal}</span>
-          <span className="ritual-pack-title">{packName}</span><span className="ritual-pack-count">{count} 张收藏卡 · 猪之家出品</span>
+          {deck ? deck.art : <>
+            <span className="ritual-pack-shadow" aria-hidden="true" />
+            <span className="ritual-pack-half left" /><span className="ritual-pack-half right" />
+            <span className="ritual-pack-side left" /><span className="ritual-pack-side right" />
+            <span className="ritual-pack-crimp top" /><span className="ritual-pack-crimp bottom" />
+            <span className="ritual-pack-foil" />
+            <span className="ritual-pack-kicker">LULU CARDS · RIFT COLLECTION</span>
+            <span className="ritual-pack-seal">{seal}</span>
+            <span className="ritual-pack-title">{packName}</span><span className="ritual-pack-count">{count} 张收藏卡 · 猪之家出品</span>
+          </>}
         </button>
       </div>
     </div>

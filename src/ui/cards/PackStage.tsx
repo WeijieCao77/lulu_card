@@ -10,6 +10,7 @@ import './packStage.css'
 import './packQuick.css'
 import PackAltar from './PackAltar'
 import MythicReveal from './MythicReveal'
+import { EchoCardBack, EchoDeckArt, EchoSeal } from './echo/EchoCard'
 
 /** Original pig-house seal; shared by the pack and its face-down cards. */
 function Seal() {
@@ -47,10 +48,12 @@ export interface PackStageProps {
   onContinue?: () => void
   onDone: () => void
   onSellAll: () => void
+  /** 峡谷回响: its own deck on the altar and its own card back */
+  echo?: boolean
 }
 
 /** Presentation only: the server already awarded these cards before this mounts. */
-export default function PackStage({ pulled, packName = '选手卡包', position, fast = false, busy = false, unknownError = false, onFastChange, continueEnabled = false, continueLabel = '继续下一包', onContinue, onDone, onSellAll }: PackStageProps) {
+export default function PackStage({ pulled, packName = '选手卡包', position, fast = false, busy = false, unknownError = false, onFastChange, continueEnabled = false, continueLabel = '继续下一包', onContinue, onDone, onSellAll, echo = false }: PackStageProps) {
   const fastFrozen = useRef(fast).current
   const initialOpened = useMemo(() => {
     if (!fastFrozen) return new Set<number>()
@@ -200,7 +203,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
       <button className="ritual-dismiss" onClick={onDone} disabled={busy} aria-label="收下卡牌并关闭">✕</button>
     </header>
 
-    {phase !== 'cards' ? <PackAltar count={pulled.length} packName={title} bursting={phase === 'burst'} onOpen={openPack} seal={<Seal />} /> : <div className={`ritual-board count-${pulled.length}${scrollMode ? ' is-scroll' : ''}`} ref={board} inert={inspect !== null || mythics.length > 0}
+    {phase !== 'cards' ? <PackAltar count={pulled.length} packName={title} bursting={phase === 'burst'} onOpen={openPack} seal={echo ? <EchoSeal /> : <Seal />} deck={echo ? { className: 're-deck-pack', art: <EchoDeckArt /> } : undefined} /> : <div className={`ritual-board count-${pulled.length}${scrollMode ? ' is-scroll' : ''}`} ref={board} inert={inspect !== null || mythics.length > 0}
       style={{ '--card-width': `${layout.width}px`, '--card-scale': layout.width / 184, '--columns': layout.columns } as CSSProperties}
       onPointerDown={e => {
         if (mythicBusy.current) return
@@ -250,7 +253,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
               onClick={e => { if (mythicBusy.current) return; if (e.detail !== 0 && Date.now() < ignoreClickUntil.current) return; up ? setInspect(i) : reveal(i) }}>
               <span className="ritual-card-light" aria-hidden="true" />
               <div className="ritual-flipper">
-                <div className="ritual-card-back" aria-hidden={up}><Back /></div>
+                <div className="ritual-card-back" aria-hidden={up}>{echo ? <EchoCardBack size="lg" /> : <Back />}</div>
                 <div className="ritual-card-front" aria-hidden={!up}><div className="ritual-face-scale"><CardFace card={p.card} size="lg" footer={p.dupe ? '重复卡' : '新卡'} /></div></div>
               </div>
               {up && <span className="ritual-flip-sparks" aria-hidden="true">{Array.from({ length: 8 }, (_, k) => <i key={k} style={{ '--i': k } as CSSProperties} />)}</span>}

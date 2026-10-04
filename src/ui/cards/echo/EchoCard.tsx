@@ -3,6 +3,7 @@ import type { PlayerCard } from '../../../engine/cards'
 import { RARITY_CN } from '../../../engine/cards'
 import FOCUS from '../../../data/echoPhotoFocus.json'
 import './echoCard.css'
+import './echoAltar.css'
 
 /**
  * 峡谷回响 card face and back — the double-thin-line design the owner confirmed on 2026-10-04
@@ -18,15 +19,17 @@ const RARITY_CLASS: Record<string, string> = { bronze: 're-bronze', silver: 're-
  * and a zoom. The image is placed so the face lands horizontally centred, a third of the way down the
  * portrait window, and a far-off figure is enlarged around that point. No entry: a face in the upper third.
  */
-const PORTRAIT_AR = 0.737           // width / height of the portrait window (.re-portrait), the same at every size
+const PORTRAIT_AR = 0.93            // width / height of the framed photo window (.re-portrait), the same at every size
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v))
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`
 function framing(ign: string, photo: { w: number; h: number } | null): { pos: string; origin: string; zoom: number } {
   const v = (FOCUS as Record<string, string>)[ign]
   if (!v || !photo) return { pos: 'center 22%', origin: 'center 22%', zoom: 1 }
   // "z0.8": a close-up that only needs to come back a step — shrink toward the top centre, face stays upper-centre
-  if (v.startsWith('z')) return { pos: 'center 22%', origin: '50% 12%', zoom: Number(v.slice(1)) }
-  const [fx, fy, z = 1] = v.split(/\s+/).map(Number)
+  // the framed window is nearly square, so a close-up already sits back; it never shrinks below the frame
+  if (v.startsWith('z')) return { pos: 'center 22%', origin: '50% 12%', zoom: 1 }
+  const [fx, fy, z0 = 1] = v.split(/\s+/).map(Number)
+  const z = Math.max(1, z0)   // shrinking would open gaps inside the frame
   const ar = photo.w / photo.h
   let px = 0.5, py = 0.5, faceX = fx, faceY = fy
   if (ar > PORTRAIT_AR) {           // wider than the window: slide sideways
@@ -101,4 +104,24 @@ export function EchoCardBack({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   return <div className={`cardback echo-back-v2 s-${size}`} aria-label="峡谷回响卡背">
     <img className="echo-back-art" src="/lol/echo/back.webp" alt="" draggable={false} />
   </div>
+}
+
+/** the echo mark: a hexagon with a pulse through it — the altar's core and the deck's seal */
+export function EchoSeal() {
+  return <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+    <path d="M50 5 88 27v46L50 95 12 73V27L50 5Z" stroke="currentColor" strokeWidth="2" />
+    <path d="M50 15 78 31v38L50 85 22 69V31L50 15Z" stroke="currentColor" opacity=".65" />
+    <path d="M17 52h22l13-18 13 30 10-14h9" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" />
+  </svg>
+}
+
+/** 峡谷回响 deck for PackAltar: two halves carrying the card back, card-edge sides, a gold binding and the seal */
+export function EchoDeckArt() {
+  return <>
+    <span className="ritual-pack-shadow" aria-hidden="true" />
+    <span className="ritual-pack-half left" /><span className="ritual-pack-half right" />
+    <span className="ritual-pack-side left" /><span className="ritual-pack-side right" />
+    <span className="re-deck-binding horizontal" />
+    <span className="re-deck-seal"><EchoSeal /></span>
+  </>
 }

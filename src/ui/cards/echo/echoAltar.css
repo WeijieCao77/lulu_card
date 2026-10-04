@@ -1,0 +1,16 @@
+/* 峡谷回响 deck on the existing PackAltar (designer's altar draft, design/retired-echo/retired-echo-altar.css):
+   the two halves carry the owner's card back, so the cup parts down the middle when the seal breaks; the
+   designer's gold bindings and echo seal hold the deck shut and release first. Interaction and timing are
+   PackAltar / PackStage's own. */
+.altar-opening .re-deck-pack .ritual-pack-half{inset:3% 6%;border-radius:7px;border:1.5px solid #c7aa72;background:#0a1513 url('/lol/echo/back.webp') center/112% auto no-repeat;box-shadow:inset 0 0 0 2px #071b26,0 4px 0 #10212a,0 0 18px #0009}
+.altar-opening .re-deck-pack .ritual-pack-half::before,.altar-opening .re-deck-pack .ritual-pack-half::after{content:none}
+.altar-opening .re-deck-pack .ritual-pack-side{top:5%;bottom:6%;width:9%;z-index:3;background:repeating-linear-gradient(180deg,#e0ce9b 0 1px,#31515b 1px 3px,#0c2631 3px 5px);border-inline:1.5px solid #bea773;box-shadow:inset 0 0 6px #031019,0 0 5px #0009}
+.altar-opening .re-deck-pack .ritual-pack-side.left{left:1.5%;transform:skewY(-4deg)}.altar-opening .re-deck-pack .ritual-pack-side.right{right:1.5%;transform:skewY(4deg)}
+.altar-opening .re-deck-pack .ritual-pack-crimp,.altar-opening .re-deck-pack .ritual-pack-foil{display:none}
+.re-deck-pack .re-deck-binding{position:absolute;z-index:4;pointer-events:none;background:linear-gradient(90deg,#695634,#e4cc91 15%,#9c8050 47%,#e2c68a 85%,#635236);box-shadow:inset 0 1px 0 #ffecbd8c,0 3px 6px #0009}
+.re-deck-pack .re-deck-binding.horizontal{top:52%;left:5%;right:5%;height:9%;border-block:1px solid #f0dba6}
+.re-deck-pack .re-deck-binding.horizontal::before,.re-deck-pack .re-deck-binding.horizontal::after{content:"";position:absolute;top:22%;bottom:22%;width:1px;background:#fff1c9a0}
+.re-deck-pack .re-deck-binding.horizontal::before{left:8%}.re-deck-pack .re-deck-binding.horizontal::after{right:8%}
+.re-deck-pack .re-deck-seal{position:absolute;z-index:6;top:47%;left:36%;width:28%;aspect-ratio:1;display:grid;place-items:center;color:#f1dca7;background:radial-gradient(circle,#31545a 0,#132d37 65%,#091b25 67%);border:2px solid #e1c88a;border-radius:50%;box-shadow:inset 0 0 0 3px #102932,inset 0 0 0 4px #af9764,0 0 16px #ddc58c90,0 7px 8px #000b}
+.re-deck-pack .re-deck-seal svg{width:64%;filter:drop-shadow(0 0 5px #aee7dc)}
+.phase-burst .altar-opening .re-deck-pack .re-deck-binding,.phase-burst .altar-opening .re-deck-pack .re-deck-seal{animation:ritual-seal-release .45s .45s both}
