@@ -21,6 +21,7 @@ import { join } from 'node:path'
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto'
 import sharp from 'sharp'
 import { displayName } from './names.js'
+import { ECHO_QUIZ } from './echo-quiz.js'
 import { progressOf } from './progress.js'
 import { GUARD_SCHEMA } from './market-guard.js'
 
@@ -851,6 +852,8 @@ export function makeCardApi(sql, {
         let g = engine.mergeClientFields(engine.migrateGacha(held[0].state, id), client)
         const env = { now, today, seed }
         if (action === 'challenge') env.challengePuzzle = await challengePuzzle(id, today, g)
+        // 峡谷回响问答: the bank and its answers stay on the server (echo-quiz.js)
+        if (action === 'echo_quiz' || action === 'echo_quiz_answer') env.echoQuiz = ECHO_QUIZ
         t = performance.now()
         if (engine.wantsRival(g, action)) env.rival = await pickRival(g.ladder.div, me, engine.ladderScore(g), g.ladder.points ?? 0)
         mark.rival += performance.now() - t

@@ -7,6 +7,11 @@ import { ALL_CARDS, BASE_PLAYER_CARDS, COACH_CARDS, ECHO_CARDS, LEGEND_CARDS, PL
 import { FULL_SET_CARDS, PACKS, collectionProgress, newGacha, openPack, packCost, seriesOfPack } from '../src/engine/gacha'
 import { clubSets } from '../src/engine/clubSets'
 import { rollShop } from '../src/engine/dailyShop'
+import { mergeClientFields, migrateGacha } from '../src/engine/gacha'
+import { runAction } from '../src/engine/cardActions'
+import { ECHO_QUIZ } from '../echo-quiz.js'
+import { readFileSync, readdirSync, statSync } from 'node:fs'
+import { join } from 'node:path'
 
 let bad = 0
 const check = (name: string, ok: boolean, detail = '') => {
@@ -81,6 +86,37 @@ for (const name of ['Clearlove', 'Perkz', 'DanDy']) {
   if (coach) check(`教练 ${name} 和回响 ${name} 是同一个人`, personOf(coach) === personOf(echo(name)))
 }
 check('其他教练不受影响', personOf(COACH_CARDS.find((c) => !ECHO_CARDS.some((e) => e.ign.toLowerCase() === c.name.toLowerCase()))!).startsWith('c:'))
+
+// 峡谷回响问答: once, five questions, a 回响包 per right answer, answers only on the server
+{
+  const bank = ECHO_QUIZ as { id: string; q: string; options: string[]; answer: number }[]
+  check('题库至少 5 题，每题 4 个选项、答案在范围内、id 不重复', bank.length >= 5 && bank.every((q) => q.options.length === 4 && q.answer >= 0 && q.answer < 4) && new Set(bank.map((q) => q.id)).size === bank.length, String(bank.length))
+  const walk = (d: string): string[] => readdirSync(d).flatMap((f) => statSync(join(d, f)).isDirectory() ? walk(join(d, f)) : [join(d, f)])
+  check('src/ 里没有任何文件引用题库（答案不进浏览器）', !walk('src').some((f) => /(from\s+|import\(\s*)['"][^'"]*echo-quiz(\.js)?['"]/.test(readFileSync(f, 'utf8'))))
+  const day = '2026-10-10'
+  const env = (seed: number) => ({ now: Date.parse(day), today: day, seed, echoQuiz: bank })
+  const g = newGacha('quiz', 'quiz', day)
+  check('没有题库时打不开', !runAction(g, 'echo_quiz', {}, { now: 0, today: day, seed: 1 }).ok)
+  const r = runAction(g, 'echo_quiz', {}, env(7)) as { ok: true; result: { questions: { q: string; options: string[]; right: number | null }[] } }
+  const qs = r.result.questions
+  check('一次 5 道题，未作答时不给答案', qs.length === 5 && qs.every((q) => q.right === null && q.options.length === 4))
+  const again = runAction(g, 'echo_quiz', {}, env(99)) as typeof r
+  check('再打开还是同一套题', JSON.stringify(again.result.questions) === JSON.stringify(qs))
+  const before = g.packs.echo ?? 0
+  const slotOf = (i: number) => { const q = bank.find((x) => x.id === g.echoQuiz!.ids[i])!; return g.echoQuiz!.order[i].indexOf(q.answer) }
+  const right0 = runAction(g, 'echo_quiz_answer', { i: 0, pick: slotOf(0) }, env(1)) as { ok: true; result: { correct: boolean } }
+  check('答对送 1 个回响包', right0.ok && right0.result.correct && (g.packs.echo ?? 0) === before + 1)
+  check('同一题不能再答', !runAction(g, 'echo_quiz_answer', { i: 0, pick: slotOf(0) }, env(1)).ok)
+  const wrong1 = runAction(g, 'echo_quiz_answer', { i: 1, pick: (slotOf(1) + 1) % 4 }, env(1)) as typeof right0
+  check('答错不送', wrong1.ok && !wrong1.result.correct && (g.packs.echo ?? 0) === before + 1)
+  for (const i of [2, 3, 4]) runAction(g, 'echo_quiz_answer', { i, pick: slotOf(i) }, env(1))
+  check('五题答完共送 4 包，记录 won=4', (g.packs.echo ?? 0) === before + 4 && g.echoQuiz!.won === 4)
+  const kept = migrateGacha(JSON.parse(JSON.stringify(g)), 'quiz')
+  check('存档迁移后问答记录还在（不能重答）', !!kept.echoQuiz && kept.echoQuiz.picks.every((p) => p !== null))
+  const forged = mergeClientFields(migrateGacha(JSON.parse(JSON.stringify(newGacha('q2', 'q2', day))), 'q2'), { echoQuiz: g.echoQuiz, packs: { echo: 99 } } as never)
+  check('客户端改不了问答和卡包', !forged.echoQuiz && (forged.packs.echo ?? 0) === 0)
+  check('选项顺序每人打乱', new Set(Array.from({ length: 20 }, (_, k) => { const x = newGacha('s' + k, 's' + k, day); runAction(x, 'echo_quiz', {}, env(k * 31 + 5)); return x.echoQuiz!.order.map((o) => o.join('')).join('|') })).size > 15)
+}
 
 console.log(bad ? `\n${bad} 处不对` : '\n全部通过')
 process.exit(bad ? 1 : 0)

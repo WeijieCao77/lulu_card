@@ -13,6 +13,8 @@ import { WORLD_TEAMS } from './teams'
 import { CUP_TEAMS } from './cupTeams'
 import type { Region, Role } from './types'
 import type { SeoulRouteState } from './seoulRoute'
+import { cleanEchoQuiz } from './echoQuiz'
+import type { EchoQuizState } from './echoQuiz'
 import type { WeeklySeriesPick } from './weeklySeries'
 import { cleanWeeklySeriesPick } from './weeklySeries'
 import { GAME_REGIONS, GAME_REGION_CN, gameRegionOf, type GameRegion } from './gameRegions'
@@ -857,6 +859,8 @@ export interface GachaState {
   weeklySeriesPick?: WeeklySeriesPick
   /** today's 每日商店 shelf — server-owned, see dailyShop.ts */
   shop?: DailyShop
+  /** 峡谷回响问答, once per account — see engine/echoQuiz.ts; absent until started */
+  echoQuiz?: EchoQuizState
 }
 
 /**
@@ -2723,6 +2727,9 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   // a cup drawn against a club that has since left the world
   repairCup(g)
   g.seed = typeof g.seed === 'number' && Number.isFinite(g.seed) ? g.seed >>> 0 : hashStr(id + g.createdAt) >>> 0
+  const quiz = cleanEchoQuiz(g.echoQuiz)
+  if (quiz) g.echoQuiz = quiz
+  else delete g.echoQuiz
   const cleanPick = cleanWeeklySeriesPick(g.weeklySeriesPick)
   if (cleanPick) g.weeklySeriesPick = cleanPick
   else delete g.weeklySeriesPick
@@ -2745,7 +2752,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
 export const SERVER_KEYS = [
   'version', 'createdAt', 'coins', 'cards', 'packs', 'pity', 'mythicDry', 'pulls', 'ladder',
   'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'seoulRoute',
-  'weeklySeriesPick', 'shop',
+  'weeklySeriesPick', 'shop', 'echoQuiz',
 ] as const
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends', 'cupSquads'] as const
 

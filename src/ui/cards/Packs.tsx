@@ -15,6 +15,9 @@ import PackStage from './PackStage'
 import SalvageConfirm from './SalvageConfirm'
 import type { SalvageAsk } from './SalvageConfirm'
 import { loadFastPack, saveFastPack } from './packPreferences'
+import EchoQuiz from './echo/EchoQuiz'
+import { EchoCardBack } from './echo/EchoCard'
+import { ECHO_QUIZ_COUNT, echoQuizDone } from '../../engine/echoQuiz'
 
 /** What the server says came out of a pack, resolved back to cards. */
 interface PulledWire { cardId: string; dupe: boolean; salvage: number }
@@ -30,6 +33,7 @@ export default function Packs() {
   /** the reveal's 分解重复卡, waiting for the player to read the list */
   const [ask, setAsk] = useState<SalvageAsk | null>(null)
   const [fastMode, setFastMode] = useState(() => loadFastPack())
+  const [quiz, setQuiz] = useState(false)
   const openLock = useRef(false)
   const salvageLock = useRef(false)
   const uncertain = useRef(false)
@@ -221,6 +225,31 @@ export default function Packs() {
       </div>
 
 
+      {/* 峡谷回响: its own pack and the launch quiz, above the ordinary shelf (owner 2026-10-04) */}
+      <Panel title="峡谷回响" actions={<span className="tiny muted">退役老将回归 · {PACKS.echo.cost} 金币三张</span>}>
+        <div className="echo-hero">
+          <div className="echo-hero-art"><EchoCardBack size="sm" /></div>
+          <div className="echo-hero-copy">
+            <p className="small" style={{ margin: 0, lineHeight: 1.7 }}>
+              {PACKS.echo.blurb}单独收集，有自己的峡谷回响图鉴，不计入全图鉴。
+            </p>
+            <div className="pack-shelf-actions">
+              <button className="primary sm" onClick={() => void open('echo', 'pack')} disabled={busy || unknownError || (g.packs.echo ?? 0) < 1}>
+                打开（{g.packs.echo ?? 0}）
+              </button>
+              <button className="sm" onClick={() => void open('echo', 'coins')} disabled={busy || unknownError || g.coins < PACKS.echo.cost}>
+                花 {PACKS.echo.cost} 金币
+              </button>
+              <button className="sm" onClick={() => setQuiz(true)}>
+                {echoQuizDone(g.echoQuiz) ? `老将问答：已答对 ${g.echoQuiz!.won}/${ECHO_QUIZ_COUNT}` : `老将问答（答对一题送一包）`}
+              </button>
+            </div>
+          </div>
+        </div>
+        <style>{`.echo-hero{display:flex;gap:16px;align-items:center}.echo-hero-art{width:76px;flex:none}.echo-hero-copy{display:flex;flex-direction:column;gap:10px;min-width:0}`}</style>
+      </Panel>
+      {quiz && <EchoQuiz onClose={() => setQuiz(false)} />}
+
       <Panel
         title="卡包"
         actions={
@@ -250,7 +279,7 @@ export default function Packs() {
               </div>
             </div>
           )}
-          {PACK_ORDER.filter((k) => !seriesOfPack(k) && k !== 'seoul2024').map((kind) => {
+          {PACK_ORDER.filter((k) => !seriesOfPack(k) && k !== 'seoul2024' && k !== 'echo').map((kind) => {
             const def = PACKS[kind]
             const own = g.packs[kind] ?? 0
             return (

@@ -24,7 +24,7 @@
  * lets scripts/check_authority.ts drive every action without a database.
  */
 import {
-  awardMinigame, canPlay, checkIn, claimFullSet, claimQuest, claimSeries, clampState, cupBo, cupOpponent, drawOpponent, enterCup,
+  awardMinigame, canPlay, note, checkIn, claimFullSet, claimQuest, claimSeries, clampState, cupBo, cupOpponent, drawOpponent, enterCup,
   levelOf, oppBumpFor, openPack, packCost, pendingOpponent, primeStamina, recordCup, recordLadder,
   refreshDaily, salvage, salvageBulk, seriesOfPack, spendPlay, upgrade, ladderSlot, leagueEntry, isLadderLeague,
   LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad, cupSquadOf, ladderSquadOf,
@@ -46,6 +46,8 @@ import { cardById, isPlayerCard, personOf, squadRating } from './cards'
 import type { Rarity, Squad } from './cards'
 import { WORLD_TEAMS } from './teams'
 import { markMailSeen } from './inbox'
+import { echoQuizDone, startEchoQuiz, viewEchoQuiz } from './echoQuiz'
+import type { EchoQuizQ } from './echoQuiz'
 import { dismantle } from './dismantle'
 import { SEOUL_TEAMS } from './seoul2024'
 import { SEOUL_FIVES, SEOUL_POOL, SEOUL_ROUTES, quitRoute, recordRoute, routeState, startRoute } from './seoulRoute'
@@ -62,6 +64,8 @@ export interface ActEnv {
   rival?: RivalSquad | null
   /** Chosen and held on the server; never sent to a player before the puzzle ends. */
   challengePuzzle?: { kind: ChallengeKind; answer: string }
+  /** 峡谷回响问答's bank (echo-quiz.js), which only the server holds — see engine/echoQuiz.ts */
+  echoQuiz?: readonly EchoQuizQ[]
 }
 
 export type ActResult =
@@ -72,7 +76,7 @@ export const ACTIONS = [
   'open', 'checkin', 'quest', 'series', 'fullset', 'salvage', 'salvage_dupes', 'salvage_bulk', 'upgrade',
   'ladder_draw', 'ladder', 'cup_enter', 'cup_play', 'cup_clear', 'challenge', 'mail_seen',
   'minigame_start', 'minigame_finish', 'dismantle', 'seoul_start', 'seoul_play', 'seoul_quit',
-  'series_pick', 'shop', 'shop_buy',
+  'series_pick', 'shop', 'shop_buy', 'echo_quiz', 'echo_quiz_answer',
 ] as const
 export type ActionName = (typeof ACTIONS)[number]
 
@@ -388,6 +392,34 @@ function dispatch(
       const reward = awardMinigame(g, live.game, verdict.tier, env.today)
       m.best[live.game] = Math.max(m.best[live.game] ?? 0, verdict.score)
       return { ok: true, result: { game: live.game, tier: verdict.tier, score: verdict.score, summary: verdict.summary, detail: verdict.detail, reward, playsLeft: MINIGAME_DAILY - m.plays } }
+    }
+    // ---- 峡谷回响问答: five questions once, a 回响包 for each right answer — engine/echoQuiz.ts
+    case 'echo_quiz': {
+      const bank = env.echoQuiz
+      if (!bank?.length) return { ok: false, why: '问答还没开放' }
+      g.echoQuiz ??= startEchoQuiz(bank, hashStr(`${g.seed}:${env.seed}:${env.now}:echo-quiz`))
+      const questions = viewEchoQuiz(g.echoQuiz, bank)
+      if (!questions) return { ok: false, why: '题库更新了，请联系站长' }
+      return { ok: true, result: { questions, won: g.echoQuiz.won, done: echoQuizDone(g.echoQuiz) } }
+    }
+    case 'echo_quiz_answer': {
+      const bank = env.echoQuiz
+      const s = g.echoQuiz
+      if (!bank?.length || !s) return { ok: false, why: '先打开问答' }
+      const i = Math.trunc(Number(a.i))
+      const pick = Math.trunc(Number(a.pick))
+      if (!(i >= 0 && i < s.ids.length) || !(pick >= 0 && pick < 4)) return { ok: false, why: '没有这个选项' }
+      if (s.picks[i] != null) return { ok: false, why: '这题已经答过了' }
+      const q = bank.find((x) => x.id === s.ids[i])
+      if (!q) return { ok: false, why: '题库更新了，请联系站长' }
+      s.picks[i] = pick
+      const correct = s.order[i][pick] === q.answer
+      if (correct) {
+        s.won += 1
+        g.packs.echo = (g.packs.echo ?? 0) + 1
+        note(g, `峡谷回响问答第 ${i + 1} 题答对：+1 峡谷回响包`)
+      }
+      return { ok: true, result: { questions: viewEchoQuiz(s, bank), correct, won: s.won, done: echoQuizDone(s) } }
     }
     // ---- 首尔征途: 2024's road with 2024's fives — engine/seoulRoute.ts
     case 'seoul_start': {
