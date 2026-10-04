@@ -3,7 +3,6 @@ import type { PlayerCard } from '../../../engine/cards'
 import { RARITY_CN } from '../../../engine/cards'
 import FOCUS from '../../../data/echoPhotoFocus.json'
 import './echoCard.css'
-import EchoBackArt from './EchoBackArt'
 
 /**
  * 峡谷回响 card face and back — the double-thin-line design the owner confirmed on 2026-10-04
@@ -97,7 +96,9 @@ export function EchoCard({ card, level = 0, dupes = 0, size = 'md', selected, di
   </div>
 }
 
-/** 卡背 v4 — the two characters themselves, echoing (see EchoBackArt.tsx); all type lives in the SVG */
+/** 卡背 — the owner's own artwork (2026-10-04): the Summoner's Cup with hands reaching for it; type and frame are in the image */
 export function EchoCardBack({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
-  return <div className={`cardback echo-back-v2 s-${size}`} aria-label="峡谷回响卡背"><EchoBackArt /></div>
+  return <div className={`cardback echo-back-v2 s-${size}`} aria-label="峡谷回响卡背">
+    <img className="echo-back-art" src="/lol/echo/back.webp" alt="" draggable={false} />
+  </div>
 }

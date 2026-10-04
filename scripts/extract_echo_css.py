@@ -126,7 +126,7 @@ kept.append(
 kept.append('.cardback.echo-back-v2.echo-back-v2{position:relative;aspect-ratio:63/88;width:100%;padding:0;border:0;border-radius:6px;'
             'background:#050d0c;box-shadow:0 8px 20px #0006;overflow:hidden;container-type:inline-size}'
             '.cardback.echo-back-v2.echo-back-v2::before,.cardback.echo-back-v2.echo-back-v2::after{content:none}'
-            '.cardback.echo-back-v2 .echo-back-art{display:block;position:absolute;inset:0;width:100%;height:100%}'
+            '.cardback.echo-back-v2 .echo-back-art{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover}'
             # v3 type, after the 曼谷 back: hairline + inner frame, small header, oversized title, a bold line at the foot
             '.cardback.echo-back-v2.echo-back-v2{border:0;font-family:Arial,"Microsoft YaHei",sans-serif;color:#eef6f1}'
             '.echo-back-v2 .eb-inner{position:absolute;inset:2.2%;border:1px solid color-mix(in srgb,#c9b27c,transparent 55%);border-radius:3px;pointer-events:none;z-index:3}'
