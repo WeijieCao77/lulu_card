@@ -19,12 +19,12 @@ export default function EchoBanner({ owned, quizDone }: { owned: number; quizDon
         <span className="rift-banner-kicker">新系列 / RIFT ECHOES</span>
         <h1 className="rift-banner-title">峡谷回响 · 老将回归</h1>
         <p className="rift-banner-desc">
-          {ECHO_CARDS.length} 位退役老将回归峡谷。每个账号送 1 个回响包，老将问答 {ECHO_QUIZ_COUNT} 道题，答对一题再送一包。
+          {ECHO_CARDS.length} 位退役老将回归峡谷。老将问答：上线活动 {ECHO_QUIZ_COUNT} 道题答对一题送一包，另有每日一题，答对送回响试训包。
         </p>
         <div className="echo-banner-actions">
           <button className="primary sm" onClick={toSection}>去开回响包</button>
           <button className="sm" onClick={() => window.dispatchEvent(new Event(ECHO_QUIZ_EVENT))}>
-            {quizDone ? '查看老将问答' : '老将问答 · 答对送包'}
+            {quizDone ? '老将问答 · 每日一题' : '老将问答 · 答对送包'}
           </button>
           <span className="rift-stat">回响图鉴 <b>{owned}</b>/{ECHO_CARDS.length}</span>
         </div>

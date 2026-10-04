@@ -13,8 +13,8 @@ import { WORLD_TEAMS } from './teams'
 import { CUP_TEAMS } from './cupTeams'
 import type { Region, Role } from './types'
 import type { SeoulRouteState } from './seoulRoute'
-import { cleanEchoQuiz } from './echoQuiz'
-import type { EchoQuizState } from './echoQuiz'
+import { cleanEchoDaily, cleanEchoQuiz } from './echoQuiz'
+import type { EchoDailyState, EchoQuizState } from './echoQuiz'
 import type { WeeklySeriesPick } from './weeklySeries'
 import { cleanWeeklySeriesPick } from './weeklySeries'
 import { GAME_REGIONS, GAME_REGION_CN, gameRegionOf, type GameRegion } from './gameRegions'
@@ -52,6 +52,8 @@ export type PackKind =
   | 'duelist' | 'initiator' | 'controller' | 'sentinel'
   // 峡谷回响: retired players only (owner, 2026-10-04) — its own pack, never in the 每日商店, never discounted
   | 'echo'
+  // one 峡谷回响 card — the 每日老将问答 prize (owner, 2026-10-04); never sold
+  | 'echoScout'
 
 /** the positions a pack can be dealt from; 辅助 is not a pool, it is the absence of one */
 export type PackPosition = Extract<Role, '上单' | '打野' | '中单' | '下路'>
@@ -110,6 +112,12 @@ export const PACKS: Record<PackKind, PackDef> = {
     blurb: '退役老将回归。三张峡谷回响卡，至少一张银卡，不出彩卡。',
     // owner 2026-10-04: priced like the ordinary three-card packs (2,600); odds are the 首尔包's 12% gold, 38% silver
     cost: 2600, draws: 3, mythic: 0, gold: .12, silver: .38, floor: 'silver', shop: true,
+  },
+  echoScout: {
+    kind: 'echoScout', name: '回响试训包', pool: 'echo',
+    blurb: '一张峡谷回响老将卡。每日老将问答答对送的，不卖。',
+    // the 试训包's odds, from the 峡谷回响 pool
+    cost: 0, draws: 1, mythic: 0, gold: 0.03, silver: 0.26, shop: false,
   },
   scout: {
     kind: 'scout', name: '试训包', pool: 'player',
@@ -861,6 +869,8 @@ export interface GachaState {
   shop?: DailyShop
   /** 峡谷回响问答, once per account — see engine/echoQuiz.ts; absent until started */
   echoQuiz?: EchoQuizState
+  /** 每日老将问答 — see engine/echoQuiz.ts */
+  echoDaily?: EchoDailyState
   /** 1 once the 峡谷回响 launch gift (one 回响包) has been delivered — see grantEchoGift */
   echoGift?: 1
   /** how many 峡谷回响图鉴 milestones have been collected — see ECHO_SET_REWARDS */
@@ -2808,6 +2818,9 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   // a cup drawn against a club that has since left the world
   repairCup(g)
   g.seed = typeof g.seed === 'number' && Number.isFinite(g.seed) ? g.seed >>> 0 : hashStr(id + g.createdAt) >>> 0
+  const daily = cleanEchoDaily(g.echoDaily)
+  if (daily) g.echoDaily = daily
+  else delete g.echoDaily
   const quiz = cleanEchoQuiz(g.echoQuiz)
   if (quiz) g.echoQuiz = quiz
   else delete g.echoQuiz
@@ -2833,7 +2846,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
 export const SERVER_KEYS = [
   'version', 'createdAt', 'coins', 'cards', 'packs', 'pity', 'mythicDry', 'pulls', 'ladder',
   'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'seoulRoute',
-  'weeklySeriesPick', 'shop', 'echoQuiz', 'echoGift', 'echoSet',
+  'weeklySeriesPick', 'shop', 'echoQuiz', 'echoGift', 'echoSet', 'echoDaily',
 ] as const
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends', 'cupSquads'] as const
 

@@ -46,7 +46,7 @@ import { cardById, isPlayerCard, personOf, squadRating } from './cards'
 import type { Rarity, Squad } from './cards'
 import { WORLD_TEAMS } from './teams'
 import { markMailSeen } from './inbox'
-import { echoQuizDone, startEchoQuiz, viewEchoQuiz } from './echoQuiz'
+import { dailyQuestion, echoQuizDone, startEchoQuiz, viewDaily, viewEchoQuiz } from './echoQuiz'
 import type { EchoQuizQ } from './echoQuiz'
 import { dismantle } from './dismantle'
 import { SEOUL_TEAMS } from './seoul2024'
@@ -76,7 +76,7 @@ export const ACTIONS = [
   'open', 'checkin', 'quest', 'series', 'fullset', 'salvage', 'salvage_dupes', 'salvage_bulk', 'upgrade',
   'ladder_draw', 'ladder', 'cup_enter', 'cup_play', 'cup_clear', 'challenge', 'mail_seen',
   'minigame_start', 'minigame_finish', 'dismantle', 'seoul_start', 'seoul_play', 'seoul_quit',
-  'series_pick', 'shop', 'shop_buy', 'echo_quiz', 'echo_quiz_answer', 'echo_set',
+  'series_pick', 'shop', 'shop_buy', 'echo_quiz', 'echo_quiz_answer', 'echo_set', 'echo_daily', 'echo_daily_answer',
 ] as const
 export type ActionName = (typeof ACTIONS)[number]
 
@@ -199,6 +199,33 @@ function dispatch(
       const got = claimFullSet(g)
       if (!got) return { ok: false, why: '全图鉴还没集齐，或者已经领过了' }
       return { ok: true, result: { got } }
+    }
+    // ---- 每日老将问答: one question a day, never one this account has seen — engine/echoQuiz.ts
+    case 'echo_daily': {
+      const bank = env.echoQuiz
+      if (!bank?.length) return { ok: false, why: '问答还没开放' }
+      const next = dailyQuestion(g.echoDaily, g.echoQuiz, bank, env.today, hashStr(`${g.seed}:${env.seed}:${env.today}:echo-daily`))
+      if (!next) return { ok: true, result: { daily: null, won: g.echoDaily?.won ?? 0, exhausted: true } }
+      g.echoDaily = next
+      return { ok: true, result: { daily: viewDaily(next, bank), won: next.won } }
+    }
+    case 'echo_daily_answer': {
+      const bank = env.echoQuiz
+      const s = g.echoDaily
+      if (!bank?.length || !s || s.day !== env.today) return { ok: false, why: '先打开今天的题' }
+      if (s.pick != null) return { ok: false, why: '今天的题已经答过了，明天再来' }
+      const pick = Math.trunc(Number(a.pick))
+      if (!(pick >= 0 && pick < 4)) return { ok: false, why: '没有这个选项' }
+      const q = bank.find((x) => x.id === s.id)
+      if (!q) return { ok: false, why: '题库更新了，请联系站长' }
+      s.pick = pick
+      const correct = s.order[pick] === q.answer
+      if (correct) {
+        s.won += 1
+        g.packs.echoScout = (g.packs.echoScout ?? 0) + 1
+        note(g, '每日老将问答答对：+1 回响试训包')
+      }
+      return { ok: true, result: { daily: viewDaily(s, bank), correct, won: s.won } }
     }
     case 'echo_set': {
       const got = claimEchoSet(g)

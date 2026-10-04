@@ -18,7 +18,7 @@ import { battleCode, STAMINA_MAX, STAMINA_POINT_SEC } from './cards-api.js'
  * written — a row holding a pack kind that does not exist would sit in
  * somebody's inbox forever, collected and then silently dropped.
  */
-export const PACK_KINDS = ['scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'emea', 'ame', 'west', 'duelist', 'initiator', 'controller', 'sentinel', 'seoul2024', 'echo', 'legend']
+export const PACK_KINDS = ['scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'emea', 'ame', 'west', 'duelist', 'initiator', 'controller', 'sentinel', 'seoul2024', 'echo', 'echoScout', 'legend']
 
 export const SITE_SCHEMA = `
 create table if not exists site_config (

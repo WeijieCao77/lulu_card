@@ -853,7 +853,7 @@ export function makeCardApi(sql, {
         const env = { now, today, seed }
         if (action === 'challenge') env.challengePuzzle = await challengePuzzle(id, today, g)
         // 峡谷回响问答: the bank and its answers stay on the server (echo-quiz.js)
-        if (action === 'echo_quiz' || action === 'echo_quiz_answer') env.echoQuiz = ECHO_QUIZ
+        if (action.startsWith('echo_quiz') || action.startsWith('echo_daily')) env.echoQuiz = ECHO_QUIZ
         t = performance.now()
         if (engine.wantsRival(g, action)) env.rival = await pickRival(g.ladder.div, me, engine.ladderScore(g), g.ladder.points ?? 0)
         mark.rival += performance.now() - t

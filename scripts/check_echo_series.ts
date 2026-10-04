@@ -121,6 +121,45 @@ check('其他教练不受影响', personOf(COACH_CARDS.find((c) => !ECHO_CARDS.s
   check('选项顺序每人打乱', new Set(Array.from({ length: 20 }, (_, k) => { const x = newGacha('s' + k, 's' + k, day); runAction(x, 'echo_quiz', {}, env(k * 31 + 5)); return x.echoQuiz!.order.map((o) => o.join('')).join('|') })).size > 15)
 }
 
+// 每日老将问答: one a day, a 回响试训包 for a right answer, never a question the account has seen
+{
+  const bank = ECHO_QUIZ as { id: string; q: string; options: string[]; answer: number }[]
+  check('题库 100 题', bank.length === 100, String(bank.length))
+  const g = migrateGacha(JSON.parse(JSON.stringify(newGacha('daily', 'daily', '2026-10-10'))), 'daily')
+  const at = (d: number) => { const day = new Date(Date.UTC(2026, 9, 10 + d)).toISOString().slice(0, 10); return { now: Date.parse(day), today: day, seed: d + 1, echoQuiz: bank } }
+  runAction(g, 'echo_quiz', {}, at(0))
+  const launch = new Set(g.echoQuiz!.ids)
+  const asked: string[] = []
+  let paid = 0, exhausted = false
+  for (let d = 0; d < 120; d++) {
+    const r = runAction(g, 'echo_daily', {}, at(d)) as { ok: true; result: { daily: { right: number | null } | null; exhausted?: boolean } }
+    if (!r.ok) break
+    if (!r.result.daily) { exhausted = true; break }
+    if (d === 0) {
+      const again = runAction(g, 'echo_daily', {}, at(0)) as typeof r
+      check('同一天再打开还是同一题', g.echoDaily!.id === g.echoDaily!.seen.at(-1) && again.ok && JSON.stringify(again.result.daily) === JSON.stringify(r.result.daily))
+      check('作答前不给答案', r.result.daily.right === null)
+    }
+    asked.push(g.echoDaily!.id)
+    const q = bank.find((x) => x.id === g.echoDaily!.id)!
+    const slot = g.echoDaily!.order.indexOf(q.answer)
+    const before = g.packs.echoScout ?? 0
+    const ans = runAction(g, 'echo_daily_answer', { pick: d % 3 === 0 ? (slot + 1) % 4 : slot }, at(d)) as { ok: true; result: { correct: boolean } }
+    if (ans.ok && ans.result.correct) { paid++; if ((g.packs.echoScout ?? 0) !== before + 1) check('答对送回响试训包', false) }
+    if (d === 0) check('一天只能答一次', !runAction(g, 'echo_daily_answer', { pick: slot }, at(0)).ok)
+  }
+  check('每天的题从不重复', new Set(asked).size === asked.length, `${asked.length} 题`)
+  check('不出上线活动那五题', asked.every((id) => !launch.has(id)))
+  check('题答完会提示，不会重复出题', exhausted && asked.length === 95, `${asked.length}`)
+  check('答对的天数 = 回响试训包数', (g.packs.echoScout ?? 0) === paid && g.echoDaily!.won === paid)
+  const kept = migrateGacha(JSON.parse(JSON.stringify(g)), 'daily')
+  check('读档后出过的题还记得', kept.echoDaily!.seen.length === 95)
+  const forged = mergeClientFields(kept, { echoDaily: undefined, packs: { echoScout: 50 } } as never)
+  check('客户端改不了每日题和回响试训包', !!forged.echoDaily && (forged.packs.echoScout ?? 0) === paid)
+  const one = openPack(g, 'echoScout', 'pack', '2026-10-10')
+  check('回响试训包开出 1 张回响卡', one.length === 1 && isEchoCard(one[0].card))
+}
+
 // 上线赠礼: one 回响包 per account, once, with an inbox line
 {
   const day = '2026-10-10'

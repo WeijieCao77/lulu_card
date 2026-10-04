@@ -134,6 +134,11 @@ kept.append(
 # ordinary card's height by min-height, while the panel inside took 100% of a height that, inside a flex row, resolves
 # to the plate's own 0.69 shape, so it stopped short. The panel is pinned to the plate's edges instead.
 kept.append(f'{E} .re-inner{{position:absolute;inset:1.2px;width:auto;height:auto}}')
+# Owner 2026-10-04 (phone 图鉴): on a small card the line under the name was empty. The design hid the team · years
+# line below 128px wide; it is shown at every size now — at least 6.5px, up to two lines, so the club and years fit.
+kept.append('@container (width < 128px){'
+            f'{E} .re-skill{{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal;'
+            'font-size:max(5.4cqw,6.5px);line-height:1.25;margin-top:.6cqw}}')
 # Card back v2 (owner 2026-10-04: 「卡背不够帅」) is one SVG (EchoBackArt.tsx); the frame only sizes it like a card.
 kept.append('.cardback.echo-back-v2.echo-back-v2{position:relative;aspect-ratio:63/88;width:100%;padding:0;border:0;border-radius:6px;'
             'background:#050d0c;box-shadow:0 8px 20px #0006;overflow:hidden;container-type:inline-size}'

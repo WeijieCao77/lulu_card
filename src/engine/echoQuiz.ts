@@ -82,3 +82,54 @@ export function cleanEchoQuiz(raw: unknown): EchoQuizState | undefined {
   const won = Number.isInteger(s.won) ? Math.max(0, Math.min(n, s.won)) : 0
   return { ids: s.ids, order: s.order, picks: s.picks, won }
 }
+
+// ---------------------------------------------------------------- 每日老将问答
+/**
+ * One more question every day, after the launch five (owner, 2026-10-04): a right answer is a 回响试训包 — one card
+ * from the 峡谷回响 pool. An account is never asked the same question twice (「不要重复问出过的题」): the day's
+ * question is drawn from the bank minus everything it has already seen, the launch five included. When the bank runs
+ * out the page says so; a bigger bank is a data change on the server.
+ */
+export interface EchoDailyState {
+  /** server day of the current question */
+  day: string
+  id: string
+  /** shown order of the four options */
+  order: number[]
+  pick: number | null
+  /** every daily question this account has been given, oldest first */
+  seen: string[]
+  /** 回响试训包 paid */
+  won: number
+}
+
+export interface EchoDailyView extends EchoQuizView {
+  day: string
+}
+
+/** today's question for this account, drawing a new one if the day turned; null when nothing unseen is left */
+export function dailyQuestion(
+  prev: EchoDailyState | undefined, quiz: EchoQuizState | undefined, bank: readonly EchoQuizQ[], today: string, seed: number,
+): EchoDailyState | null {
+  if (prev && prev.day === today) return prev
+  const seen = new Set([...(prev?.seen ?? []), ...(quiz?.ids ?? [])])
+  const fresh = bank.filter((q) => !seen.has(q.id))
+  if (!fresh.length) return null
+  const rng = new Rng(seed >>> 0)
+  const q = fresh[Math.floor(rng.next() * fresh.length)]
+  return { day: today, id: q.id, order: rng.shuffle([0, 1, 2, 3]), pick: null, seen: [...(prev?.seen ?? []), q.id], won: prev?.won ?? 0 }
+}
+
+export function viewDaily(s: EchoDailyState, bank: readonly EchoQuizQ[]): EchoDailyView | null {
+  const q = bank.find((x) => x.id === s.id)
+  if (!q) return null
+  return { day: s.day, q: q.q, options: s.order.map((k) => q.options[k]), pick: s.pick, right: s.pick == null ? null : s.order.indexOf(q.answer) }
+}
+
+export function cleanEchoDaily(raw: unknown): EchoDailyState | undefined {
+  const s = raw as EchoDailyState | null
+  if (!s || typeof s !== 'object' || typeof s.day !== 'string' || typeof s.id !== 'string' || !Array.isArray(s.seen)) return undefined
+  if (!Array.isArray(s.order) || s.order.length !== 4 || [...s.order].sort().join() !== '0,1,2,3') return undefined
+  const pick = s.pick === null || (Number.isInteger(s.pick) && s.pick >= 0 && s.pick < 4) ? s.pick : null
+  return { day: s.day, id: s.id, order: s.order, pick, seen: s.seen.filter((x) => typeof x === 'string').slice(-500), won: Number.isInteger(s.won) ? Math.max(0, s.won) : 0 }
+}

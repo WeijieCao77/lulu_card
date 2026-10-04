@@ -19,7 +19,7 @@ import EchoQuiz from './echo/EchoQuiz'
 import EchoSet from './echo/EchoSet'
 import { ECHO_QUIZ_EVENT, ECHO_SECTION_ID } from './echo/EchoBanner'
 import { EchoCardBack } from './echo/EchoCard'
-import { ECHO_QUIZ_COUNT, echoQuizDone } from '../../engine/echoQuiz'
+import { echoQuizDone } from '../../engine/echoQuiz'
 
 /** What the server says came out of a pack, resolved back to cards. */
 interface PulledWire { cardId: string; dupe: boolean; salvage: number }
@@ -249,8 +249,13 @@ export default function Packs() {
               <button className="sm" onClick={() => void open('echo', 'coins')} disabled={busy || unknownError || g.coins < PACKS.echo.cost}>
                 花 {PACKS.echo.cost} 金币
               </button>
+              {(g.packs.echoScout ?? 0) > 0 && (
+                <button className="primary sm" onClick={() => void open('echoScout', 'pack')} disabled={busy || unknownError}>
+                  打开回响试训包（{g.packs.echoScout}）
+                </button>
+              )}
               <button className="sm" onClick={() => setQuiz(true)}>
-                {echoQuizDone(g.echoQuiz) ? `老将问答：已答对 ${g.echoQuiz!.won}/${ECHO_QUIZ_COUNT}` : `老将问答（答对一题送一包）`}
+                {g.echoDaily?.day === today && g.echoDaily.pick != null ? '老将问答（今天已答）' : echoQuizDone(g.echoQuiz) ? '老将问答 · 每日一题' : '老将问答（答对一题送一包）'}
               </button>
             </div>
           </div>
@@ -475,7 +480,7 @@ export default function Packs() {
           pulled={opening}
           packName={openingKind ? PACKS[openingKind].name : '选手卡包'}
           position={openingKind ? packPosition(openingKind) ?? undefined : undefined}
-          echo={openingKind === 'echo'}
+          echo={openingKind === 'echo' || openingKind === 'echoScout'}
           fast={fastMode}
           busy={busy}
           unknownError={unknownError}
