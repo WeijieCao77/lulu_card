@@ -24,7 +24,7 @@ function Review() {
   const [size, setSize] = useState<(typeof SIZES)[number]>('lg')
   const [lowOnly, setLowOnly] = useState(false)
   const [pack, setPack] = useState<Pulled[] | null>(null)
-  const openPack = () => { const pick = (r: string) => { const l = ECHO_CARDS.filter((c) => c.rarity === r); return l[Math.floor(Math.random() * l.length)] }; setPack([pick('gold'), pick('silver'), pick('bronze')].map((card) => ({ card, dupe: false, salvage: 0 }))) }
+  const openPack = () => { const fixed = new URLSearchParams(location.search).get('pack')?.split(','); const pick = (r: string, i: number) => { const l = ECHO_CARDS.filter((c) => c.rarity === r); return (fixed && ECHO_CARDS.find((c) => c.ign === fixed[i])) || l[Math.floor(Math.random() * l.length)] }; setPack([pick('gold', 0), pick('silver', 1), pick('bronze', 2)].map((card) => ({ card, dupe: false, salvage: 0 }))) }
   const cards = useMemo(() => ECHO_CARDS.filter((c) =>
     (group === '全部' || c.echo!.group === group) && (rarity === '全部' || c.rarity === rarity)
     && (!lowOnly || Math.min(c.echo!.photo?.w ?? 0, c.echo!.photo?.h ?? 0) < 500)), [group, rarity, lowOnly])

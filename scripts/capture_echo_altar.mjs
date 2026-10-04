@@ -18,7 +18,7 @@ const send = (method, params = {}) => new Promise((r) => { const id = ++seq; wai
 const js = async (expression) => (await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true })).result?.value
 const shot = async (name) => { const s = await send('Page.captureScreenshot', { format: 'jpeg', quality: 86 }); writeFileSync(resolve(out, name), Buffer.from(s.data, 'base64')) }
 await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 700 })
-await send('Page.navigate', { url: 'http://localhost:5190/echo-review.html' })
+await send('Page.navigate', { url: 'http://localhost:5190/echo-review.html' + (process.argv[5] ? '?pack=' + process.argv[5] : '') })
 await sleep(5000)
 await js(`document.getElementById('er-open').click()`)
 await sleep(1200)

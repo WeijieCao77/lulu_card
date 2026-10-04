@@ -44,6 +44,15 @@ const report = await evalJs(`JSON.stringify({
   broken: [...document.querySelectorAll('.er-grid img')].filter(i => i.complete && !i.naturalWidth).map(i => i.alt),
   clippedNames: [...document.querySelectorAll('.er-grid .re-name')].filter(x => x.scrollWidth > x.clientWidth + 1).map(x => x.textContent),
   clippedTeams: [...document.querySelectorAll('.er-grid .re-skill')].filter(x => x.scrollWidth > x.clientWidth + 1).map(x => x.closest('.cardface').querySelector('.re-name').textContent),
+  // a photo must cover its framed window on every side (object-fit cover + zoom >= 1)
+  gaps: [...document.querySelectorAll('.er-grid .cardface')].map(c => {
+    const w = c.querySelector('.re-portrait').getBoundingClientRect(), i = c.querySelector('.re-portrait img').getBoundingClientRect()
+    const nat = c.querySelector('.re-portrait img'); const s = Math.max(w.width / nat.naturalWidth, w.height / nat.naturalHeight)
+    const shown = { w: nat.naturalWidth * s, h: nat.naturalHeight * s }
+    const zoom = Number(getComputedStyle(c).getPropertyValue('--re-zoom') || 1)
+    const bad = i.left > w.left + 0.5 || i.top > w.top + 0.5 || i.right < w.right - 0.5 || i.bottom < w.bottom - 0.5 || shown.w * zoom < w.width - 0.5 || shown.h * zoom < w.height - 0.5
+    return bad ? c.querySelector('.re-name').textContent : null
+  }).filter(Boolean),
   height: document.documentElement.scrollHeight,
 })`)
 console.log(report)
