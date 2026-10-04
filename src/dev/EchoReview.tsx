@@ -9,6 +9,29 @@ import reference from './echo/reference.webp'
 import EchoBanner from '../ui/cards/echo/EchoBanner'
 import { GateStory } from '../ui/GateWelcome'
 import '../ui/riftChrome.css'
+import EchoQuiz from '../ui/cards/echo/EchoQuiz'
+import { CardCtx } from '../ui/cards/ctx'
+import type { CardCtxValue } from '../ui/cards/ctx'
+import { newGacha } from '../engine/gacha'
+import { runAction } from '../engine/cardActions'
+
+// The quiz popup with stand-in questions (the real bank is server-only, echo-quiz.js, and never imported under src/).
+const SAMPLE_QUIZ = [
+  { id: 's1', q: '（示例题）S3 世界赛决赛，SKT 击败的对手是？', options: ['OMG', 'Fnatic', '皇族', 'NaJin 黑剑'], answer: 2 },
+  { id: 's2', q: '（示例题）S8 世界赛决赛，iG 击败了哪支战队？', options: ['G2', 'Fnatic', 'C9', 'KT'], answer: 1 },
+  { id: 's3', q: '（示例题）Clearlove 的中文名是？', options: ['明凯', '明锴', '名凯', '明恺'], answer: 0 },
+  { id: 's4', q: '（示例题）S9 冠军 FPX 的上单是谁？', options: ['GimGoon', 'Letme', '957', 'Xiyang'], answer: 0 },
+  { id: 's5', q: '（示例题）2019 年 MSI 冠军是哪支战队？', options: ['TL', 'G2', 'SKT', 'iG'], answer: 1 },
+]
+function QuizPreview({ onClose }: { onClose: () => void }) {
+  const [g] = useState(() => newGacha('review', '审核', '2026-10-10'))
+  const env = { now: Date.now(), today: '2026-10-10', seed: 11, echoQuiz: SAMPLE_QUIZ }
+  const ctx = {
+    g, act: async (action: string, args: Record<string, unknown> = {}) => runAction(g, action, args, env),
+    toast: (m: string) => console.log(m),
+  } as unknown as CardCtxValue
+  return <CardCtx.Provider value={ctx}><EchoQuiz onClose={onClose} /></CardCtx.Provider>
+}
 import '../styles.css'
 
 /**
@@ -27,6 +50,7 @@ function Review() {
   const [size, setSize] = useState<(typeof SIZES)[number]>('lg')
   const [lowOnly, setLowOnly] = useState(false)
   const [pack, setPack] = useState<Pulled[] | null>(null)
+  const [quiz, setQuiz] = useState(false)
   const openPack = () => { const fixed = new URLSearchParams(location.search).get('pack')?.split(','); const pick = (r: string, i: number) => { const l = ECHO_CARDS.filter((c) => c.rarity === r); return (fixed && ECHO_CARDS.find((c) => c.ign === fixed[i])) || l[Math.floor(Math.random() * l.length)] }; setPack([pick('gold', 0), pick('silver', 1), pick('bronze', 2)].map((card) => ({ card, dupe: false, salvage: 0 }))) }
   const cards = useMemo(() => ECHO_CARDS.filter((c) =>
     (group === '全部' || c.echo!.group === group) && (rarity === '全部' || c.rarity === rarity)
@@ -75,6 +99,7 @@ function Review() {
       <span><button className={lowOnly ? 'on' : ''} onClick={() => setLowOnly(!lowOnly)}>只看低分辨率照片</button></span>
       <span className="er-meta">当前 {cards.length} 张</span>
       <span><button id="er-open" className="on" onClick={openPack}>预览祭坛开包（回响包）</button></span>
+      <span><button id="er-quiz" className="on" onClick={() => setQuiz(true)}>预览老将问答弹窗</button></span>
     </div>
     <div className="er-grid" style={{ ['--w' as string]: size === 'lg' ? '184px' : size === 'md' ? '132px' : '96px' }}>
       {cards.map((c) => {
@@ -91,6 +116,7 @@ function Review() {
         </div>
       })}
     </div>
+    {quiz && <QuizPreview onClose={() => setQuiz(false)} />}
     {pack && <PackStage pulled={pack} packName="峡谷回响包" echo onDone={() => setPack(null)} onSellAll={() => setPack(null)} />}
   </main>
 }

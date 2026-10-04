@@ -53,10 +53,10 @@ export default function EchoQuiz({ onClose }: { onClose: () => void }) {
             <div className="small"><b>{i + 1}.</b> {q.q}</div>
             <div className="echo-quiz-opts">
               {q.options.map((o, k) => {
-                const state = q.pick == null ? '' : k === q.right ? ' right' : k === q.pick ? ' wrong' : ' dim'
+                const state = q.pick == null ? '' : k === q.right ? ' eq-right' : k === q.pick ? ' eq-wrong' : ' eq-dim'
                 return (
                   <button key={k} className={`sm echo-quiz-opt${state}`} disabled={busy || q.pick != null} onClick={() => void answer(i, k)}>
-                    {LETTERS[k]}. {o}
+                    {LETTERS[k]}. {o}{state === ' eq-right' ? ' ✓' : state === ' eq-wrong' ? ' ✗' : ''}
                   </button>
                 )
               })}
@@ -72,10 +72,10 @@ export default function EchoQuiz({ onClose }: { onClose: () => void }) {
         .echo-quiz{display:flex;flex-direction:column;gap:16px}
         .echo-quiz-q{display:flex;flex-direction:column;gap:8px}
         .echo-quiz-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
-        .echo-quiz-opt{text-align:left;white-space:normal;line-height:1.4}
-        .echo-quiz-opt.right{border-color:var(--win);color:var(--win);opacity:1}
-        .echo-quiz-opt.wrong{border-color:var(--loss);color:var(--loss);opacity:1}
-        .echo-quiz-opt.dim{opacity:.45}
+        .echo-quiz-opt{width:100%;text-align:left;white-space:normal;line-height:1.4}
+        .echo-quiz .echo-quiz-opt.eq-right:disabled,.echo-quiz-opt.eq-right{border-color:#4fbf8b;color:#4fbf8b;opacity:1}
+        .echo-quiz .echo-quiz-opt.eq-wrong:disabled,.echo-quiz-opt.eq-wrong{border-color:#e0675e;color:#e0675e;opacity:1}
+        .echo-quiz-opt.eq-dim{opacity:.45}
         @media (max-width:520px){.echo-quiz-opts{grid-template-columns:1fr}}
       `}</style>
     </Modal>
