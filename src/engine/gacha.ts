@@ -106,8 +106,8 @@ export const PACKS: Record<PackKind, PackDef> = {
   echo: {
     kind: 'echo', name: '峡谷回响包', pool: 'echo',
     blurb: '退役老将回归。三张峡谷回响卡，至少一张银卡，不出彩卡。',
-    // the 首尔包 numbers the owner already approved: 3,000 coins, 12% gold, 38% silver
-    cost: 3000, draws: 3, mythic: 0, gold: .12, silver: .38, floor: 'silver', shop: true,
+    // owner 2026-10-04: priced like the ordinary three-card packs (2,600); odds are the 首尔包's 12% gold, 38% silver
+    cost: 2600, draws: 3, mythic: 0, gold: .12, silver: .38, floor: 'silver', shop: true,
   },
   scout: {
     kind: 'scout', name: '试训包', pool: 'player',

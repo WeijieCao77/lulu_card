@@ -27,17 +27,17 @@ check('id 不和别的卡重复', new Set(ALL_CARDS.map((c) => c.id)).size === A
 
 // the pack
 const def = PACKS.echo
-check('回响包：3000 金币三张、至少一张银卡、不出彩卡、商店能买', def.cost === 3000 && def.draws === 3 && def.floor === 'silver' && def.mythic === 0 && def.shop === true)
+check('回响包：2600 金币三张、至少一张银卡、不出彩卡、商店能买', def.cost === 2600 && def.draws === 3 && def.floor === 'silver' && def.mythic === 0 && def.shop === true)
 check('不属于赛区系列（每周折扣不打它）', seriesOfPack('echo') === null)
 let discounted = false
 for (let d = 0; d < 60; d++) {
   const day = new Date(Date.UTC(2026, 9, 1 + d)).toISOString().slice(0, 10)
-  if (packCost('echo', day, newGacha('t', 't', day)) !== 3000) discounted = true
+  if (packCost('echo', day, newGacha('t', 't', day)) !== 2600) discounted = true
 }
 check('60 天里没有一天打折', !discounted)
 {
   const g = newGacha('t', 't', '2026-10-05')
-  g.coins = 3000 * 400
+  g.coins = 2600 * 400
   let onlyEcho = true, floorOk = true, mythic = 0, golds = 0
   for (let i = 0; i < 400; i++) {
     const out = openPack(g, 'echo', 'coins', '2026-10-05')

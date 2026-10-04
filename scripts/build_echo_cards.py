@@ -87,11 +87,29 @@ def attrs_for(c):
     return {k: max(1, min(99, round(c['rating'] + v))) for k, v in base.items()}, estimated
 
 
+# Owner 2026-10-04 「把这4张低分辨率的照片换掉」: sharper sources, kept beside this script (scripts/echo_photo_overrides/).
+OVERRIDES = Path(__file__).resolve().parent / 'echo_photo_overrides'
+PHOTO_OVERRIDE = {
+    'Sicca': {'file': 'Sicca.jpg', 'source_page': 'https://www.doyo.cn/article/331542',
+              'source_description': 'Sicca as an LPL caster at the desk, cropped from a two-person booth photo; identity matched to the @西卡_李浩宇 weibo photos'},
+    'Alex Ich': {'file': 'Alex_Ich.jpg', 'source_page': 'https://lol.fandom.com/wiki/File:Alexich.jpg',
+                 'source_description': 'Alex Ich at a Gambit match station in a Gambit hoodie'},
+    'Yang': {'file': 'Yang.jpg', 'source_page': 'https://www.oficinadanet.com.br/post/15349-entrevista-com-felipe-yang-zhao',
+             'source_description': 'INTZ Yang on stage with headset, CBLOL 2015 (same article as before, full-size cover image)'},
+    'Acce': {'file': 'Acce.jpg', 'source_page': 'https://www.infobae.com/america/agencias/2020/07/23/argentino-acce-asegura-que-isurus-ya-no-da-miedo-en-la-liga-latina-de-lol/',
+             'source_description': 'Rainbow7 Acce, Mexico City 2020 (EFE / courtesy Riot Games, editorial use); full-size original of the earlier 350px copy'},
+}
+
+
 def photo(pid):
     e = manifest.get(pid)
-    if not e or not e.get('file'):
+    if pid in PHOTO_OVERRIDE:
+        e = PHOTO_OVERRIDE[pid]
+        src = OVERRIDES / e['file']
+    elif not e or not e.get('file'):
         return None
-    src = PHOTOS / e['file']
+    else:
+        src = PHOTOS / e['file']
     dst = OUT_IMG / f"{re.sub(r'[^A-Za-z0-9]+', '_', pid)}.webp"
     if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
         im = Image.open(src).convert('RGB')
