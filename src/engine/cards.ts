@@ -112,6 +112,8 @@ export interface EchoInfo {
   photo: { img: string; w: number; h: number; credit: string | null } | null
   /** YYYY-MM-DD, null where no birthday is published */
   birth: string | null
+  /** the club's full name — for a historical club (clubId H:TAG) the only place it is written */
+  clubName: string | null
 }
 
 export interface CoachCard {
@@ -418,7 +420,7 @@ function buildLegendCoachCards(): CoachCard[] {
   return out
 }
 
-type EchoRow = (typeof ECHO_JSON.cards)[number] & { birth?: string | null }
+type EchoRow = (typeof ECHO_JSON.cards)[number] & { birth?: string | null; clubName?: string | null }
 /** whole years from a YYYY-MM-DD birthday to today */
 function ageOn(birth: string, now = new Date()): number {
   const [y, m, d] = birth.split('-').map(Number)
@@ -430,7 +432,7 @@ function buildEchoCards(): PlayerCard[] {
     id: e.id,
     // the same man as his 名人堂彩卡 (H:Uzi …) — one five cannot hold both
     playerId: e.person,
-    echo: { team: e.team, span: e.span, group: e.group, attrsEstimated: e.attrsEstimated, photo: e.photo ?? null, birth: e.birth ?? null },
+    echo: { team: e.team, span: e.span, group: e.group, attrsEstimated: e.attrsEstimated, photo: e.photo ?? null, birth: e.birth ?? null, clubName: e.clubName ?? null },
     ign: e.ign,
     realName: e.realName ?? null,
     nat: e.nat ?? null,

@@ -9,6 +9,8 @@ import { clubSets } from '../src/engine/clubSets'
 import { rollShop } from '../src/engine/dailyShop'
 import { echoSetProgress, mergeClientFields, migrateGacha } from '../src/engine/gacha'
 import { matchesFilter, readFilter } from '../src/engine/cardFilter'
+import { clubsIn } from '../src/ui/cards/Filters'
+import { chemistry } from '../src/engine/cards'
 import { runAction, squadForPlay } from '../src/engine/cardActions'
 import { ECHO_QUIZ } from '../echo-quiz.js'
 import { readFileSync, readdirSync, statSync } from 'node:fs'
@@ -228,6 +230,22 @@ check('其他教练不受影响', personOf(COACH_CARDS.find((c) => !ECHO_CARDS.s
     g.squad = { slots: [echoUzi.id, legendUzi.id, ...slots.slice(2)], coach: null }
     check('同一个人（回响 Uzi + 名人堂 Uzi）不能同时上阵', !squadForPlay(g).ok)
   }
+}
+
+// 俱乐部（站长 2026-10-04）：还在或改名的挂现在的俱乐部；解散了的是历史俱乐部 H:TAG，人少也算一个俱乐部
+{
+  const club = (ign: string) => echo(ign).clubId
+  check('每张回响卡都有俱乐部', ECHO_CARDS.every((c) => c.clubId && c.clubTag), ECHO_CARDS.filter((c) => !c.clubId).map((c) => c.ign).join(' '))
+  check('Uzi、Letme、Ming、Mlxg 都是 RNG（历史俱乐部）', ['Uzi', 'Letme', 'Ming', 'Mlxg'].every((n) => club(n) === 'H:RNG'))
+  check('Lwx、GimGoon 是 FPX', club('Lwx') === 'H:FPX' && club('GimGoon') === 'H:FPX')
+  check('改名的跟到现在：DWG→DK、SKT→T1、Splyce→KOI、V5→NIP', club('Nuguri') === 'T17' && club('Huni') === 'T24' && club('Xerxe') === 'T29' && club('y4') === 'T8')
+  const rngFour = ['Letme', 'Mlxg', 'Uzi', 'Ming'].map((n) => echo(n).id)
+  const other = BASE_PLAYER_CARDS.find((c) => c.roles.includes('中单') && c.clubTag !== 'RNG')!
+  const ch = chemistry({ slots: [rngFour[0], rngFour[1], other.id, rngFour[2], rngFour[3]], coach: null })
+  check('四个 RNG 老将加一个外人：RNG 四人之间都是同队默契', ch.links.filter((l) => l.why === 'club').length === 6, String(ch.links.filter((l) => l.why === 'club').length))
+  const rngLegend = LEGEND_CARDS.find((c) => c.clubId === 'H:RNG' && c.ign !== 'Uzi' && c.ign !== 'Letme' && c.ign !== 'Ming' && c.ign !== 'Mlxg')
+  if (rngLegend) check(`回响 RNG 和名人堂 RNG（${rngLegend.ign}）同队`, chemistry({ slots: [rngFour[0], rngLegend.id, null, null, null], coach: null }).links.some((l) => l.why === 'club'))
+  check('筛选能按 RNG 俱乐部找到老将', clubsIn(ECHO_CARDS).some((x) => x.label === 'RNG' && x.n >= 4))
 }
 
 // 图鉴和市场的「峡谷回响」筛选

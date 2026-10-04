@@ -305,7 +305,9 @@ function EchoDetail({ card, onBack }: { card: PlayerCard; onBack: () => void }) 
             <br />
             代表战队：{echo.team}{echo.span ? `（${echo.span}）` : ''}
             <br />
-            {club ? `挂靠现役俱乐部：${club.name}（算同队默契和俱乐部集齐）` : '没有挂靠现役俱乐部'}
+            {club ? `所属俱乐部：${club.name}（现役俱乐部，和同队选手有默契）`
+              : card.clubId?.startsWith('H:') ? `所属俱乐部：${card.clubTag}（${echo.clubName ?? card.clubTag}，已解散的历史俱乐部；和同俱乐部的老将、彩卡有默契）`
+              : '没有所属俱乐部'}
             <br />
             {card.roles.join(' / ')} · 峡谷回响 · {RARITY_CN[card.rarity]} {card.rating}
           </div>

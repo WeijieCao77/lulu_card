@@ -31,6 +31,10 @@ manifest = {e['id']: e for e in json.load(open(PHOTOS / 'manifest.json', encodin
 manifest.update({e.get('roster_original_id'): e for e in manifest.copy().values() if e.get('roster_original_id')})
 world = json.load(open(ROOT / 'src' / 'data' / 'world.json', encoding='utf-8'))
 team_tag = {t['id']: t['tag'] for t in world['teams']}
+# Clubs (owner 2026-10-04): a retired player keeps the club he is known for — today's club when it was renamed or taken
+# over (DWG → DK, SKT → T1, Splyce → KOI …), otherwise that club as a historical club H:TAG (H:RNG, H:FPX …), the same
+# ids the 名人堂 cards use, even with a single player in it. Worked out by career-recalc/echo_v2/club_resolve.py.
+CLUBS = json.load(open(ROOT.parent / 'career-recalc' / 'echo_v2' / 'club_resolve.json', encoding='utf-8'))
 
 ALIAS = {'Balls': 'BalIs'}
 # lol attribute -> card attribute (same mapping as the live cards)
@@ -138,7 +142,7 @@ for c in sorted(cards, key=lambda c: (['LPL', 'LCK', 'LEC', 'LCS', 'WEST'].index
         'nat': nat.get(pid), 'region': region, 'group': c['group'], 'role': c['pos'], 'roles': [c['pos']],
         'rating': c['rating'], 'rarity': {'金': 'gold', '银': 'silver', '铜': 'bronze'}[c['tier']],
         'attrs': attrs, 'attrsEstimated': estimated,
-        'clubId': c['club'], 'clubTag': team_tag.get(c['club']) if c['club'] else None,
+        'clubId': CLUBS[pid]['club'], 'clubTag': CLUBS[pid]['clubTag'] or team_tag.get(CLUBS[pid]['club']), 'clubName': CLUBS[pid]['clubName'],
         'team': rt.get('as_named') or None, 'span': rt.get('span') or None,
         'photo': photo(pid), 'manual': c['manual'], 'birth': BIRTHS.get(pid, {}).get('birth'),
     })
