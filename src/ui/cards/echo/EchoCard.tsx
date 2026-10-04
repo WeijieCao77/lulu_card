@@ -3,6 +3,7 @@ import type { PlayerCard } from '../../../engine/cards'
 import { RARITY_CN } from '../../../engine/cards'
 import FOCUS from '../../../data/echoPhotoFocus.json'
 import './echoCard.css'
+import EchoBackArt from './EchoBackArt'
 
 /**
  * 峡谷回响 card face and back — the double-thin-line design the owner confirmed on 2026-10-04
@@ -96,23 +97,13 @@ export function EchoCard({ card, level = 0, dupes = 0, size = 'md', selected, di
   </div>
 }
 
-function EchoGlyph() {
-  return <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
-    <path d="M50 7 82 29v42L50 93 18 71V29L50 7Z" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M50 17 73 33v34L50 83 27 67V33L50 17Z" stroke="currentColor" strokeWidth=".8" opacity=".55" />
-    <path d="M15 52h16l12-15 12 26 8-12h22" stroke="currentColor" strokeWidth="2.4" strokeLinejoin="round" />
-    <circle cx="50" cy="50" r="34" stroke="currentColor" opacity=".3" />
-  </svg>
-}
-
+/** 卡背 v3 — the 曼谷 structure (hero art + oversized type + hairlines), see EchoBackArt.tsx */
 export function EchoCardBack({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
-  return <div className={`cardback retired-echo-back s-${size}`} aria-label="峡谷回响卡背">
-    <div className="re-back-terrain" aria-hidden="true" />
-    <div className="re-back-frame" aria-hidden="true" />
-    <span className="re-back-kicker">RIFT ECHOES · RETURNING LEGENDS</span>
-    <div className="re-back-emblem"><span /><EchoGlyph /><span /></div>
-    <div className="re-back-title">峡谷回响<strong>退役老将回归</strong></div>
-    <div className="re-back-line">记忆仍在峡谷回荡</div>
-    <div className="re-back-bottom"><span>LIMITED SERIES</span><b>RE / 01</b></div>
+  return <div className={`cardback echo-back-v2 s-${size}`} aria-label="峡谷回响卡背">
+    <EchoBackArt />
+    <div className="eb-inner" aria-hidden="true" />
+    <header className="eb-head">LEAGUE OF LEGENDS<span>RETIRED LEGENDS</span></header>
+    <div className="eb-title"><small>RIFT</small><strong>ECHOES</strong></div>
+    <div className="eb-bottom"><b>THE LEGENDS<br />RETURN</b><span>峡谷回响 · 退役老将回归</span><small>2013 — 2025 · ALL REGIONS</small></div>
   </div>
 }

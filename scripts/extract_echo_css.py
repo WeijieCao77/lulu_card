@@ -93,5 +93,23 @@ kept.append(
     f'{E}.re-silver{{--re-metal:#9cabb3;--re-glint:#dbe4e7;--re-shadow:#3d4b51;background:color-mix(in srgb,var(--re-metal) 52%,#15251f)}}'
     f'{E}.re-bronze{{--re-metal:#a8603a;--re-glint:#dc9a72;--re-shadow:#4a2a18;background:color-mix(in srgb,var(--re-metal) 58%,#15251f)}}'
     f'{E}::after{{border-color:color-mix(in srgb,var(--re-glint) 42%,transparent)}}')
+# Card back v2 (owner 2026-10-04: 「卡背不够帅」) is one SVG (EchoBackArt.tsx); the frame only sizes it like a card.
+kept.append('.cardback.echo-back-v2.echo-back-v2{position:relative;aspect-ratio:63/88;width:100%;padding:0;border:0;border-radius:6px;'
+            'background:#050d0c;box-shadow:0 8px 20px #0006;overflow:hidden;container-type:inline-size}'
+            '.cardback.echo-back-v2.echo-back-v2::before,.cardback.echo-back-v2.echo-back-v2::after{content:none}'
+            '.cardback.echo-back-v2 .echo-back-art{display:block;position:absolute;inset:0;width:100%;height:100%}'
+            # v3 type, after the 曼谷 back: hairline + inner frame, small header, oversized title, a bold line at the foot
+            '.cardback.echo-back-v2.echo-back-v2{border:1px solid #c9b27c;font-family:Arial,"Microsoft YaHei",sans-serif;color:#eef6f1}'
+            '.echo-back-v2 .eb-inner{position:absolute;inset:2.2%;border:1px solid color-mix(in srgb,#c9b27c,transparent 55%);border-radius:3px;pointer-events:none;z-index:3}'
+            '.echo-back-v2 .eb-head{position:absolute;z-index:2;top:6.5%;left:9%;right:9%;display:flex;justify-content:space-between;font-size:2.4cqw;letter-spacing:.09em;color:#bfd2c8}'
+            '.echo-back-v2 .eb-head span{color:#e3cb8c}'
+            '.echo-back-v2 .eb-title{position:absolute;z-index:2;top:11.5%;width:100%;text-align:center;text-shadow:0 2px 14px #000a}'
+            '.echo-back-v2 .eb-title small{display:block;font-size:4.6cqw;letter-spacing:.42em;text-indent:.42em;color:#e3cb8c}'
+            '.echo-back-v2 .eb-title strong{display:block;font:400 17cqw/1.02 Impact,"Arial Narrow",sans-serif;letter-spacing:.02em;'
+            'color:#f4fbf7;text-shadow:0 2px 0 #0b2421,0 0 18px #6fd9c655}'
+            '.echo-back-v2 .eb-bottom{position:absolute;z-index:2;bottom:6.5%;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2.4cqw;text-shadow:0 2px 10px #000c}'
+            '.echo-back-v2 .eb-bottom b{font:800 6.6cqw/1.02 Impact,"Arial Narrow",sans-serif;letter-spacing:.01em;color:#f3ead2}'
+            '.echo-back-v2 .eb-bottom span{font-size:3.1cqw;letter-spacing:.12em;color:#cfe0d7}'
+            '.echo-back-v2 .eb-bottom small{font-size:2cqw;letter-spacing:.14em;color:#93a89e}')
 DST.write_text('/* 峡谷回响卡面与卡背 — 由 scripts/extract_echo_css.py 从站长确认的定稿生成，不要手改。 */\n' + '\n'.join(kept) + '\n', encoding='utf-8')
 print(len(kept), 'rules ->', DST)
