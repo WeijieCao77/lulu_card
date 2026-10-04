@@ -122,6 +122,14 @@ kept.append(
     f'{E} .re-name{{font-size:11.5cqw;margin:1.2cqw 0 1cqw;text-shadow:none;letter-spacing:-.01em}}'
     f'{E} .re-stats{{padding-top:2.2cqw}}'
     f'{E} .re-stats b{{font-size:5cqw}}')
+# Player report 2026-10-04 (phone): names cut to a sliver. Phone browsers (WeChat, Android with a larger font setting)
+# enlarge text; the name band was a fixed 28.5% box whose name and team lines were allowed to shrink, so they gave way
+# first. The text keeps its designed size where the browser allows it, and where it does not the band grows upward over
+# the foot of the photograph instead of crushing the name.
+kept.append(
+    f'{E}{{-webkit-text-size-adjust:100%;text-size-adjust:100%}}'
+    f'{E} .re-copy{{height:auto;min-height:28.5%;top:auto;background:linear-gradient(180deg,transparent 0,#0a1513 1.6em)}}'
+    f'{E} .re-copy>*{{flex-shrink:0}}')
 # Card back v2 (owner 2026-10-04: 「卡背不够帅」) is one SVG (EchoBackArt.tsx); the frame only sizes it like a card.
 kept.append('.cardback.echo-back-v2.echo-back-v2{position:relative;aspect-ratio:63/88;width:100%;padding:0;border:0;border-radius:6px;'
             'background:#050d0c;box-shadow:0 8px 20px #0006;overflow:hidden;container-type:inline-size}'
