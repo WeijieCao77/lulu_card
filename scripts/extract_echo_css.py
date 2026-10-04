@@ -83,5 +83,15 @@ kept.append('.cardface.retired-echo.retired-echo.retired-echo.s-sm{min-height:17
             '.cardface.retired-echo.retired-echo.retired-echo.s-lg{min-height:281px}')
 # per-photo framing (src/data/echoPhotoFocus.json): a far-off figure is enlarged around the same focus point
 kept.append('.retired-echo.retired-echo.retired-echo .re-portrait img{transform:scale(var(--re-zoom,1));transform-origin:var(--re-origin,var(--re-portrait-position))}')
+# Owner feedback 2026-10-04: gold and bronze read as the same colour. The review round only re-coloured gold and
+# silver, so bronze fell back to the default — itself a pale gold-copper — and the inner hairline was one fixed
+# gold on every card. Each metal now has its own muted colour, the edge carries a little more of it, and the
+# hairline follows the metal.
+E = '.cardface.retired-echo.retired-echo.retired-echo'
+kept.append(
+    f'{E}.re-gold{{--re-metal:#cfac4e;--re-glint:#f0d98c;--re-shadow:#5e4818;background:color-mix(in srgb,var(--re-metal) 62%,#15251f)}}'
+    f'{E}.re-silver{{--re-metal:#9cabb3;--re-glint:#dbe4e7;--re-shadow:#3d4b51;background:color-mix(in srgb,var(--re-metal) 52%,#15251f)}}'
+    f'{E}.re-bronze{{--re-metal:#a8603a;--re-glint:#dc9a72;--re-shadow:#4a2a18;background:color-mix(in srgb,var(--re-metal) 58%,#15251f)}}'
+    f'{E}::after{{border-color:color-mix(in srgb,var(--re-glint) 42%,transparent)}}')
 DST.write_text('/* 峡谷回响卡面与卡背 — 由 scripts/extract_echo_css.py 从站长确认的定稿生成，不要手改。 */\n' + '\n'.join(kept) + '\n', encoding='utf-8')
 print(len(kept), 'rules ->', DST)
