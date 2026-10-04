@@ -240,7 +240,7 @@ check('其他教练不受影响', personOf(COACH_CARDS.find((c) => !ECHO_CARDS.s
   check('Lwx、GimGoon 是 FPX', club('Lwx') === 'H:FPX' && club('GimGoon') === 'H:FPX')
   check('改名的跟到现在：DWG→DK、SKT→T1、Splyce→KOI、V5→NIP', club('Nuguri') === 'T17' && club('Huni') === 'T24' && club('Kold') === 'T29' && club('y4') === 'T8')
   check('代表战队解散的放回老俱乐部（站长 2026-10-04）：GimGoon→FPX、Karsa→闪电狼、Bjergsen→TSM', club('GimGoon') === 'H:FPX' && club('Karsa') === 'H:FW' && club('Bjergsen') === 'H:TSM')
-  check('站长手动：Doublelift 去 TL', club('Doublelift') === 'T42')
+  check('Doublelift 是 CLG（站长 2026-10-04）', club('Doublelift') === 'H:CLG')
   check('按待得最久的俱乐部：Xerxe（Splyce）→ KOI', club('Xerxe') === 'T29')
   const rngFour = ['Letme', 'Mlxg', 'Uzi', 'Ming'].map((n) => echo(n).id)
   const other = BASE_PLAYER_CARDS.find((c) => c.roles.includes('中单') && c.clubTag !== 'RNG')!
