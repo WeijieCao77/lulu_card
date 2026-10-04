@@ -130,6 +130,10 @@ kept.append(
     f'{E}{{-webkit-text-size-adjust:100%;text-size-adjust:100%}}'
     f'{E} .re-copy{{height:auto;min-height:28.5%;top:auto;background:linear-gradient(180deg,transparent 0,#0a1513 1.6em)}}'
     f'{E} .re-copy>*{{flex-shrink:0}}')
+# Reported 2026-10-04 (phone, 图鉴 list): a strip of the metal plate below the card. The plate is held to the
+# ordinary card's height by min-height, while the panel inside took 100% of a height that, inside a flex row, resolves
+# to the plate's own 0.69 shape, so it stopped short. The panel is pinned to the plate's edges instead.
+kept.append(f'{E} .re-inner{{position:absolute;inset:1.2px;width:auto;height:auto}}')
 # Card back v2 (owner 2026-10-04: 「卡背不够帅」) is one SVG (EchoBackArt.tsx); the frame only sizes it like a card.
 kept.append('.cardback.echo-back-v2.echo-back-v2{position:relative;aspect-ratio:63/88;width:100%;padding:0;border:0;border-radius:6px;'
             'background:#050d0c;box-shadow:0 8px 20px #0006;overflow:hidden;container-type:inline-size}'

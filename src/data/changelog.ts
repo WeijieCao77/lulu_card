@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-04', title: '回响卡底部多一截', changes: [
+    { kind: '修复', text: '手机上图鉴里的峡谷回响卡，卡面下方多出一截金属边框；现在卡面和边框一样高。' },
+  ],
+}, {
   date: '2026-10-04', title: '修复阵容里有回响卡时打不了比赛', changes: [
     { kind: '修复', text: '阵容里放了峡谷回响卡以后，打天梯、杯赛会提示「服务器没有明确回应（500）」：比赛只认到了四个人。现在回响卡能正常上场比赛。' },
   ],
