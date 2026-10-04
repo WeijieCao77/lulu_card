@@ -237,9 +237,10 @@ check('其他教练不受影响', personOf(COACH_CARDS.find((c) => !ECHO_CARDS.s
   const club = (ign: string) => echo(ign).clubId
   check('每张回响卡都有俱乐部', ECHO_CARDS.every((c) => c.clubId && c.clubTag), ECHO_CARDS.filter((c) => !c.clubId).map((c) => c.ign).join(' '))
   check('Uzi、Letme、Ming、Mlxg 都是 RNG（历史俱乐部）', ['Uzi', 'Letme', 'Ming', 'Mlxg'].every((n) => club(n) === 'H:RNG'))
-  check('Lwx 是 FPX', club('Lwx') === 'H:FPX')
+  check('Lwx、GimGoon 是 FPX', club('Lwx') === 'H:FPX' && club('GimGoon') === 'H:FPX')
   check('改名的跟到现在：DWG→DK、SKT→T1、Splyce→KOI、V5→NIP', club('Nuguri') === 'T17' && club('Huni') === 'T24' && club('Kold') === 'T29' && club('y4') === 'T8')
-  check('之前挂上的不动（站长 2026-10-04）：GimGoon 仍是 Gen.G、Doublelift 仍是 TL', club('GimGoon') === 'T18' && club('Doublelift') === 'T42')
+  check('代表战队解散的放回老俱乐部（站长 2026-10-04）：GimGoon→FPX、Karsa→闪电狼、Doublelift→CLG、Bjergsen→TSM', club('GimGoon') === 'H:FPX' && club('Karsa') === 'H:FW' && club('Doublelift') === 'H:CLG' && club('Bjergsen') === 'H:TSM')
+  check('代表战队还在、挂的是别的现役队的先不动（待定）：Xerxe 仍是 GiantX', club('Xerxe') === 'T27')
   const rngFour = ['Letme', 'Mlxg', 'Uzi', 'Ming'].map((n) => echo(n).id)
   const other = BASE_PLAYER_CARDS.find((c) => c.roles.includes('中单') && c.clubTag !== 'RNG')!
   const ch = chemistry({ slots: [rngFour[0], rngFour[1], other.id, rngFour[2], rngFour[3]], coach: null })

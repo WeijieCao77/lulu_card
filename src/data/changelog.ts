@@ -27,7 +27,7 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [{
   date: '2026-10-04', title: '回响老将补上俱乐部', changes: [
-    { kind: '调整', text: '原来没有俱乐部的 37 位峡谷回响老将补上了俱乐部：代表俱乐部改名或被收购的，挂到现在的队（比如 Splyce→KOI）；已经解散的（比如 RNG、FPX、TSM、CLG、闪电狼、ahq）作为历史俱乐部保留，同俱乐部的老将之间、和同俱乐部的彩卡之间都有同队默契，不满五人也算。Uzi 改回 RNG。已经挂了俱乐部的其他老将不变。收藏、图鉴和市场都能按这些俱乐部搜索和筛选。' },
+    { kind: '调整', text: '峡谷回响老将的俱乐部重新整理：代表俱乐部改名或被收购的，挂到现在的队（比如 Splyce→KOI）；已经解散的（比如 RNG、FPX、TSM、CLG、闪电狼、ahq）作为历史俱乐部保留，同俱乐部的老将之间、和同俱乐部的彩卡之间都有同队默契，不满五人也算。代表俱乐部已解散、之前临时挂在别的现役队的老将，也都放回了老俱乐部（比如 GimGoon 回 FPX、Karsa 回闪电狼、Doublelift 回 CLG、Bjergsen 回 TSM，Uzi 回 RNG）。收藏、图鉴和市场都能按这些俱乐部搜索和筛选。' },
   ],
 }, {
   date: '2026-10-04', title: '每日老将问答', changes: [

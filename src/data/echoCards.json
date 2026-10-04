@@ -190,9 +190,9 @@
     "igl": 86
    },
    "attrsEstimated": false,
-   "clubId": "T18",
-   "clubTag": "GEN",
-   "clubName": "Gen.G",
+   "clubId": "H:FPX",
+   "clubTag": "FPX",
+   "clubName": "FunPlus Phoenix",
    "team": "FunPlus Phoenix",
    "span": "2018–2020",
    "photo": {
@@ -670,9 +670,9 @@
     "igl": 76
    },
    "attrsEstimated": false,
-   "clubId": "T4",
-   "clubTag": "IG",
-   "clubName": "Invictus Gaming",
+   "clubId": "H:RNG",
+   "clubTag": "RNG",
+   "clubName": "Royal Never Give Up",
    "team": "Royal Never Give Up",
    "span": "2020–2021",
    "photo": {
@@ -870,9 +870,9 @@
     "igl": 70
    },
    "attrsEstimated": true,
-   "clubId": "T3",
-   "clubTag": "EDG",
-   "clubName": "EDward Gaming",
+   "clubId": "H:PE",
+   "clubTag": "PE",
+   "clubName": "Positive Energy",
    "team": "Positive Energy",
    "span": "2013",
    "photo": {
@@ -1150,9 +1150,9 @@
     "igl": 66
    },
    "attrsEstimated": true,
-   "clubId": "T9",
-   "clubTag": "OMG",
-   "clubName": "Oh My God",
+   "clubId": "H:PE",
+   "clubTag": "PE",
+   "clubName": "Positive Energy",
    "team": "Positive Energy",
    "span": "2013–2014",
    "photo": {
@@ -1550,9 +1550,9 @@
     "igl": 51
    },
    "attrsEstimated": false,
-   "clubId": "T1",
-   "clubTag": "AL",
-   "clubName": "Anyone's Legend",
+   "clubId": "H:VG",
+   "clubTag": "VG",
+   "clubName": "Vici Gaming",
    "team": "Vici Gaming",
    "span": "2020",
    "photo": {
@@ -2150,9 +2150,9 @@
     "igl": 83
    },
    "attrsEstimated": false,
-   "clubId": "T18",
-   "clubTag": "GEN",
-   "clubName": "Gen.G",
+   "clubId": "H:CJ",
+   "clubTag": "CJ",
+   "clubName": "CJ Entus",
    "team": "CJ Entus Blaze",
    "span": "2012–2015",
    "photo": {
@@ -2190,9 +2190,9 @@
     "igl": 60
    },
    "attrsEstimated": false,
-   "clubId": "T16",
-   "clubTag": "DNS",
-   "clubName": "DN SOOPers",
+   "clubId": "H:KDM",
+   "clubTag": "KDM",
+   "clubName": "Kongdoo Monster",
    "team": "Kongdoo Monster",
    "span": "2016–2018",
    "photo": {
@@ -2750,9 +2750,9 @@
     "igl": 66
    },
    "attrsEstimated": false,
-   "clubId": "T22",
-   "clubTag": "KRX",
-   "clubName": "Kiwoom DRX",
+   "clubId": "H:CJ",
+   "clubTag": "CJ",
+   "clubName": "CJ Entus",
    "team": "CJ Entus",
    "span": "2014–2015",
    "photo": {
@@ -2790,9 +2790,9 @@
     "igl": 62
    },
    "attrsEstimated": false,
-   "clubId": "T20",
-   "clubTag": "HLE",
-   "clubName": "Hanwha Life Esports",
+   "clubId": "H:JAG",
+   "clubTag": "JAG",
+   "clubName": "Jin Air Green Wings",
    "team": "Jin Air Green Wings",
    "span": "2016–2018",
    "photo": {
@@ -2830,9 +2830,9 @@
     "igl": 63
    },
    "attrsEstimated": false,
-   "clubId": "T24",
-   "clubTag": "T1",
-   "clubName": "T1",
+   "clubId": "H:VG",
+   "clubTag": "VG",
+   "clubName": "Vici Gaming",
    "team": "Vici Gaming",
    "span": "2016–2018",
    "photo": {
@@ -2870,9 +2870,9 @@
     "igl": 63
    },
    "attrsEstimated": false,
-   "clubId": "T21",
-   "clubTag": "KT",
-   "clubName": "KT Rolster",
+   "clubId": "H:CGA",
+   "clubTag": "CGA",
+   "clubName": "Crest Gaming Act",
    "team": "Crest Gaming Act",
    "span": "2022",
    "photo": {
@@ -3070,9 +3070,9 @@
     "igl": 59
    },
    "attrsEstimated": false,
-   "clubId": "T20",
-   "clubTag": "HLE",
-   "clubName": "Hanwha Life Esports",
+   "clubId": "H:CJ",
+   "clubTag": "CJ",
+   "clubName": "CJ Entus",
    "team": "CJ Entus",
    "span": "2012–2016",
    "photo": {
@@ -3310,9 +3310,9 @@
     "igl": 84
    },
    "attrsEstimated": false,
-   "clubId": "T29",
-   "clubTag": "MKOI",
-   "clubName": "Movistar KOI",
+   "clubId": "H:SUP",
+   "clubTag": "SUP",
+   "clubName": "SuperMassive",
    "team": "Papara SuperMassive",
    "span": "2020–2025",
    "photo": {
@@ -3430,9 +3430,9 @@
     "igl": 58
    },
    "attrsEstimated": false,
-   "clubId": "T36",
-   "clubTag": "DIG",
-   "clubName": "Dignitas",
+   "clubId": "H:CLG.EU",
+   "clubTag": "CLG.EU",
+   "clubName": "Counter Logic Gaming Europe",
    "team": "Counter Logic Gaming Europe",
    "span": "2012–2015",
    "photo": {
@@ -3510,9 +3510,9 @@
     "igl": 64
    },
    "attrsEstimated": false,
-   "clubId": "T31",
-   "clubTag": "SK",
-   "clubName": "SK Gaming",
+   "clubId": "H:H2K",
+   "clubTag": "H2K",
+   "clubName": "H2k-Gaming",
    "team": "H2k-Gaming",
    "span": "2016",
    "photo": {
@@ -3870,9 +3870,9 @@
     "igl": 74
    },
    "attrsEstimated": false,
-   "clubId": "T42",
-   "clubTag": "TL",
-   "clubName": "Team Liquid",
+   "clubId": "H:GMB",
+   "clubTag": "GMB",
+   "clubName": "Gambit Esports",
    "team": "Gambit Gaming",
    "span": "2012–2020",
    "photo": {
@@ -3910,9 +3910,9 @@
     "igl": 74
    },
    "attrsEstimated": false,
-   "clubId": "T27",
-   "clubTag": "GX",
-   "clubName": "GiantX",
+   "clubId": "H:H2K",
+   "clubTag": "H2K",
+   "clubName": "H2k-Gaming",
    "team": "H2k-Gaming",
    "span": "2014–2017",
    "photo": {
@@ -3990,9 +3990,9 @@
     "igl": 69
    },
    "attrsEstimated": false,
-   "clubId": "T26",
-   "clubTag": "G2",
-   "clubName": "G2 Esports",
+   "clubId": "H:OG",
+   "clubTag": "OG",
+   "clubName": "Origen",
    "team": "Origen",
    "span": "2015–2019",
    "photo": {
@@ -4110,9 +4110,9 @@
     "igl": 64
    },
    "attrsEstimated": false,
-   "clubId": "T31",
-   "clubTag": "SK",
-   "clubName": "SK Gaming",
+   "clubId": "H:CLG.EU",
+   "clubTag": "CLG.EU",
+   "clubName": "Counter Logic Gaming Europe",
    "team": "Counter Logic Gaming Europe",
    "span": "2012–2015",
    "photo": {
@@ -4310,9 +4310,9 @@
     "igl": 64
    },
    "attrsEstimated": false,
-   "clubId": "T34",
-   "clubTag": "VIT",
-   "clubName": "Team Vitality",
+   "clubId": "H:S04",
+   "clubTag": "S04",
+   "clubName": "FC Schalke 04",
    "team": "FC Schalke 04 Esports",
    "span": "2020–2021",
    "photo": {
@@ -4350,9 +4350,9 @@
     "igl": 51
    },
    "attrsEstimated": false,
-   "clubId": "T26",
-   "clubTag": "G2",
-   "clubName": "G2 Esports",
+   "clubId": "H:ROC",
+   "clubTag": "ROC",
+   "clubName": "Team ROCCAT",
    "team": "Team ROCCAT",
    "span": "2017",
    "photo": {
@@ -4550,9 +4550,9 @@
     "igl": 62
    },
    "attrsEstimated": false,
-   "clubId": "T27",
-   "clubTag": "GX",
-   "clubName": "GiantX",
+   "clubId": "H:UOL",
+   "clubTag": "UOL",
+   "clubName": "Unicorns of Love",
    "team": "Unicorns of Love",
    "span": "2016–2018",
    "photo": {
@@ -4590,9 +4590,9 @@
     "igl": 54
    },
    "attrsEstimated": false,
-   "clubId": "T31",
-   "clubTag": "SK",
-   "clubName": "SK Gaming",
+   "clubId": "H:S04",
+   "clubTag": "S04",
+   "clubName": "FC Schalke 04",
    "team": "FC Schalke 04 Esports",
    "span": "2016–2021",
    "photo": {
@@ -4750,9 +4750,9 @@
     "igl": 90
    },
    "attrsEstimated": false,
-   "clubId": "T42",
-   "clubTag": "TL",
-   "clubName": "Team Liquid",
+   "clubId": "H:TSM",
+   "clubTag": "TSM",
+   "clubName": "TSM",
    "team": "TSM",
    "span": "2014–2020",
    "photo": {
@@ -4790,9 +4790,9 @@
     "igl": 81
    },
    "attrsEstimated": false,
-   "clubId": "T41",
-   "clubTag": "SR",
-   "clubName": "Shopify Rebellion",
+   "clubId": "H:TSM",
+   "clubTag": "TSM",
+   "clubName": "TSM",
    "team": "TSM",
    "span": "2016–2023",
    "photo": {
@@ -4910,9 +4910,9 @@
     "igl": 81
    },
    "attrsEstimated": false,
-   "clubId": "T42",
-   "clubTag": "TL",
-   "clubName": "Team Liquid",
+   "clubId": "H:CLG",
+   "clubTag": "CLG",
+   "clubName": "Counter Logic Gaming",
    "team": "Counter Logic Gaming",
    "span": "2011–2015",
    "photo": {
@@ -4950,9 +4950,9 @@
     "igl": 75
    },
    "attrsEstimated": false,
-   "clubId": "T36",
-   "clubTag": "DIG",
-   "clubName": "Dignitas",
+   "clubId": "H:TSM",
+   "clubTag": "TSM",
+   "clubName": "TSM",
    "team": "TSM",
    "span": "2016–2020",
    "photo": {
@@ -5030,9 +5030,9 @@
     "igl": 85
    },
    "attrsEstimated": false,
-   "clubId": "T42",
-   "clubTag": "TL",
-   "clubName": "Team Liquid",
+   "clubId": "H:CLG",
+   "clubTag": "CLG",
+   "clubName": "Counter Logic Gaming",
    "team": "Counter Logic Gaming",
    "span": "2015–2017",
    "photo": {
@@ -5230,9 +5230,9 @@
     "igl": 83
    },
    "attrsEstimated": false,
-   "clubId": "T36",
-   "clubTag": "DIG",
-   "clubName": "Dignitas",
+   "clubId": "H:CLG",
+   "clubTag": "CLG",
+   "clubName": "Counter Logic Gaming",
    "team": "Counter Logic Gaming",
    "span": "2013–2017",
    "photo": {
@@ -5270,9 +5270,9 @@
     "igl": 83
    },
    "attrsEstimated": false,
-   "clubId": "T31",
-   "clubTag": "SK",
-   "clubName": "SK Gaming",
+   "clubId": "H:TSM",
+   "clubTag": "TSM",
+   "clubName": "TSM",
    "team": "TSM",
    "span": "2016–2017",
    "photo": {
@@ -5310,9 +5310,9 @@
     "igl": 70
    },
    "attrsEstimated": false,
-   "clubId": "T42",
-   "clubTag": "TL",
-   "clubName": "Team Liquid",
+   "clubId": "H:CLG",
+   "clubTag": "CLG",
+   "clubName": "Counter Logic Gaming",
    "team": "Counter Logic Gaming",
    "span": "2015–2021",
    "photo": {
@@ -5590,9 +5590,9 @@
     "igl": 68
    },
    "attrsEstimated": false,
-   "clubId": "T38",
-   "clubTag": "FLY",
-   "clubName": "FlyQuest",
+   "clubId": "H:TSM",
+   "clubTag": "TSM",
+   "clubName": "TSM",
    "team": "TSM",
    "span": "2013–2023",
    "photo": {
@@ -5670,9 +5670,9 @@
     "igl": 54
    },
    "attrsEstimated": false,
-   "clubId": "T36",
-   "clubTag": "DIG",
-   "clubName": "Dignitas",
+   "clubId": "H:CLG",
+   "clubTag": "CLG",
+   "clubName": "Counter Logic Gaming",
    "team": "Counter Logic Gaming",
    "span": "2015–2019",
    "photo": {
@@ -5790,9 +5790,9 @@
     "igl": 58
    },
    "attrsEstimated": false,
-   "clubId": "T42",
-   "clubTag": "TL",
-   "clubName": "Team Liquid",
+   "clubId": "H:TSM",
+   "clubTag": "TSM",
+   "clubName": "TSM",
    "team": "TSM",
    "span": "2011–2014",
    "photo": {
@@ -5910,9 +5910,9 @@
     "igl": 49
    },
    "attrsEstimated": false,
-   "clubId": "T36",
-   "clubTag": "DIG",
-   "clubName": "Dignitas",
+   "clubId": "H:FOX",
+   "clubTag": "FOX",
+   "clubName": "Echo Fox",
    "team": "Echo Fox",
    "span": "2017",
    "photo": {
@@ -6150,9 +6150,9 @@
     "igl": 42
    },
    "attrsEstimated": false,
-   "clubId": "T36",
-   "clubTag": "DIG",
-   "clubName": "Dignitas",
+   "clubId": "H:OPT",
+   "clubTag": "OPT",
+   "clubName": "OpTic Gaming",
    "team": "OpTic Gaming",
    "span": "2018–2019",
    "photo": {
@@ -6230,9 +6230,9 @@
     "igl": 45
    },
    "attrsEstimated": false,
-   "clubId": "T42",
-   "clubTag": "TL",
-   "clubName": "Team Liquid",
+   "clubId": "H:FOX",
+   "clubTag": "FOX",
+   "clubName": "Echo Fox",
    "team": "Echo Fox",
    "span": "2016–2017",
    "photo": {
@@ -6350,9 +6350,9 @@
     "igl": 76
    },
    "attrsEstimated": false,
-   "clubId": "T47",
-   "clubTag": "GAM",
-   "clubName": "GAM Esports",
+   "clubId": "H:TF",
+   "clubTag": "TF",
+   "clubName": "Team Flash",
    "team": "Team Flash.Vietnam",
    "span": "2020–2021",
    "photo": {
@@ -6470,9 +6470,9 @@
     "igl": 89
    },
    "attrsEstimated": false,
-   "clubId": "T14",
-   "clubTag": "WBG",
-   "clubName": "Weibo Gaming",
+   "clubId": "H:FW",
+   "clubTag": "FW",
+   "clubName": "Flash Wolves",
    "team": "Flash Wolves",
    "span": "2013–2018",
    "photo": {
@@ -6590,9 +6590,9 @@
     "igl": 84
    },
    "attrsEstimated": false,
-   "clubId": "T14",
-   "clubTag": "WBG",
-   "clubName": "Weibo Gaming",
+   "clubId": "H:FW",
+   "clubTag": "FW",
+   "clubName": "Flash Wolves",
    "team": "Flash Wolves",
    "span": "2013–2018",
    "photo": {
@@ -6630,9 +6630,9 @@
     "igl": 79
    },
    "attrsEstimated": false,
-   "clubId": "T12",
-   "clubTag": "TES",
-   "clubName": "Top Esports",
+   "clubId": "H:FW",
+   "clubTag": "FW",
+   "clubName": "Flash Wolves",
    "team": "Flash Wolves",
    "span": "2015–2017",
    "photo": {
@@ -6710,9 +6710,9 @@
     "igl": 77
    },
    "attrsEstimated": false,
-   "clubId": "T1",
-   "clubTag": "AL",
-   "clubName": "Anyone's Legend",
+   "clubId": "H:AHQ",
+   "clubTag": "AHQ",
+   "clubName": "ahq eSports Club",
    "team": "ahq eSports Club",
    "span": "2014–2020",
    "photo": {
@@ -6910,9 +6910,9 @@
     "igl": 77
    },
    "attrsEstimated": false,
-   "clubId": "T9",
-   "clubTag": "OMG",
-   "clubName": "Oh My God",
+   "clubId": "H:AHQ",
+   "clubTag": "AHQ",
+   "clubName": "ahq eSports Club",
    "team": "ahq eSports Club",
    "span": "2014–2018",
    "photo": {
@@ -7070,9 +7070,9 @@
     "igl": 63
    },
    "attrsEstimated": false,
-   "clubId": "T47",
-   "clubTag": "GAM",
-   "clubName": "GAM Esports",
+   "clubId": "H:SBTC",
+   "clubTag": "SBTC",
+   "clubName": "SBTC Esports",
    "team": "SBTC Esports",
    "span": "2021–2023",
    "photo": {
@@ -7270,9 +7270,9 @@
     "igl": 57
    },
    "attrsEstimated": false,
-   "clubId": "T47",
-   "clubTag": "GAM",
-   "clubName": "GAM Esports",
+   "clubId": "H:TF",
+   "clubTag": "TF",
+   "clubName": "Team Flash",
    "team": "Team Flash.Vietnam",
    "span": "2020–2024",
    "photo": {
@@ -7510,9 +7510,9 @@
     "igl": 41
    },
    "attrsEstimated": false,
-   "clubId": "T47",
-   "clubTag": "GAM",
-   "clubName": "GAM Esports",
+   "clubId": "H:SBTC",
+   "clubTag": "SBTC",
+   "clubName": "SBTC Esports",
    "team": "SBTC Esports",
    "span": "2022–2023",
    "photo": {
