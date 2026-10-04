@@ -51,7 +51,6 @@
 .ritual-card-back{transform:translateZ(1px)}.ritual-card-front{transform:rotateY(180deg) translateZ(1px);overflow:hidden;background:#18232d}
 .ritual-face-scale{width:184px;height:282px;transform:scale(var(--card-scale));transform-origin:0 0;pointer-events:none}
 .ritual-face-scale .cardface{width:184px!important;height:282px!important;min-height:282px!important;box-sizing:border-box;margin:0}
-.ritual-face-scale .wc-window{height:100%;min-height:0;aspect-ratio:auto}
 .ritual-card-light{position:absolute;inset:-5px;border-radius:12px;opacity:.06;background:var(--card-glow);filter:blur(10px);transition:opacity .2s;pointer-events:none}
 .ritual-card:hover .ritual-card-light,.ritual-card:focus-visible .ritual-card-light,.ritual-card:active .ritual-card-light{opacity:.7}
 .ritual-card.is-revealed .ritual-card-light{opacity:.23}

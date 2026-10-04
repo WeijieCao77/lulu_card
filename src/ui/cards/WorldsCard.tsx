@@ -15,6 +15,18 @@ export default function WorldsCard({ card, size = 'md', level = 0, dupes = 0, se
     style={style} role={onClick ? 'button' : undefined} tabIndex={onClick ? 0 : undefined}
     aria-label={`${legendEdition(l)} ${card.ign} ${LEGEND_KIND_CN[l.kind]} 彩卡 ${card.rating}${level ? `，强化 ${level}` : ''}`}
     onClick={onClick} onKeyDown={e => { if (onClick && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onClick() } }}>
+    {/* never seen: the ordinary card's stack for the same player, which gives this card the ordinary card's
+        height wherever it sits (worlds.css). No image — the photo slot is an empty box. */}
+    <div className="wc-sizer" aria-hidden="true">
+      <div className="cf-photo" />
+      <div className="cf-name">{card.ign}</div>
+      {size === 'lg' && card.realName && <div className="cf-real">{card.realName}</div>}
+      <div className="cf-meta"><span className="cf-club">{card.clubTag ?? '自由选手'}</span></div>
+      {footer ? <div className="cf-foot">{footer}</div> : <div className="cf-attrs">
+        {(size === 'sm' ? (['aim', 'awareness'] as const) : (['aim', 'reaction', 'awareness', 'utility', 'clutch', 'igl'] as const))
+          .map(k => <span key={k}><i className={k === 'clutch' ? 'cf-attr-long' : undefined}>{ATTR_CN[k]}</i><b>{card.attrs[k]}</b></span>)}
+      </div>}
+    </div>
     <div className="wc-window">
       <img className="wc-photo" src={card.face!} alt={`${card.ign} · ${l.art.year ?? l.year} ${hall ? '职业' : msi ? 'MSI' : '世界赛'}影像`} loading="lazy" decoding="async" />
       <div className="wc-shade" />

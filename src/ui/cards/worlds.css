@@ -1,7 +1,21 @@
-.cardface.worlds-card{container-type:inline-size;position:relative;display:block;isolation:isolate;aspect-ratio:.69;height:auto;min-height:0;padding:3px;border:0;border-radius:12px;background:linear-gradient(135deg,#ffe5a8 0%,#a6edf1 17%,#9c89ce 32%,#f8e7af 49%,#faf3de 54%,#986d35 65%,#ecacda 80%,#a6e4e1 95%);box-shadow:0 15px 35px #0006,0 0 0 1px #fff2;overflow:hidden;color:#fff;transition:transform .25s ease,box-shadow .25s ease;text-align:left}
-.cardface.worlds-card.s-sm{width:96px;padding:3px}.cardface.worlds-card.s-md{width:132px;padding:3px}.cardface.worlds-card.s-lg{width:184px;padding:3px}
+.cardface.worlds-card{container-type:inline-size;position:relative;display:block;isolation:isolate;padding:3px;border:0;border-radius:12px;background:linear-gradient(135deg,#ffe5a8 0%,#a6edf1 17%,#9c89ce 32%,#f8e7af 49%,#faf3de 54%,#986d35 65%,#ecacda 80%,#a6e4e1 95%);box-shadow:0 15px 35px #0006,0 0 0 1px #fff2;overflow:hidden;color:#fff;transition:transform .25s ease,box-shadow .25s ease;text-align:left}
+/* Same box as the ordinary card beside it (2026-10-04, 「手机上彩卡比普通卡小一点」). The 彩卡 used to set its
+   own width (132px at 0,3,0, which beat the squad/report/market `width:100%` rules) and its own .69 shape, so
+   on a phone it sat at 132x212 next to 150x241 ordinary cards. Now the width is whatever the ordinary card's
+   rules say, and the height comes from .wc-sizer: the ordinary card's own stack (photo, name, club line,
+   attributes or footer) laid out invisibly with the same classes, so every context rule, font and floor that
+   sizes an ordinary card sizes this one too. The margins make up the difference between the ordinary card's
+   1px border + 8/8/7 padding (12/12/11 at lg) and the 3px frame here. The picture is drawn over the whole box
+   by .wc-window. Only the padding is set per size: `.cardface.s-lg` pads 12px and loads later. */
+.cardface.worlds-card.s-sm,.cardface.worlds-card.s-md,.cardface.worlds-card.s-lg{padding:3px}
+.worlds-card .wc-sizer{display:flex;flex-direction:column;align-items:center;margin:6px 6px 5px;visibility:hidden;pointer-events:none}
+.cardface.worlds-card.s-lg .wc-sizer{margin:10px 10px 9px}
+/* where a 彩卡 is shown on its own — the 名人堂 gallery and its detail, the pack's 彩卡 spotlight and the
+   tap-to-inspect view — there is no ordinary card to match, and it keeps the photograph's own shape */
 .worlds-gallery .cardface.worlds-card{width:100%}
-.worlds-card .wc-window{position:relative;width:100%;height:100%;min-height:100%;aspect-ratio:.69;border-radius:9px;overflow:hidden;background:#080c15;box-shadow:inset 0 0 0 1px #f7deaa66}
+:is(.worlds-gallery,.worlds-detail,.mythic-hero-card,.ritual-detail-card) .cardface.worlds-card{aspect-ratio:.69}
+:is(.worlds-gallery,.worlds-detail,.mythic-hero-card,.ritual-detail-card) .worlds-card .wc-sizer{display:none}
+.worlds-card .wc-window{position:absolute;inset:3px;border-radius:9px;overflow:hidden;background:#080c15;box-shadow:inset 0 0 0 1px #f7deaa66}
 .worlds-card .wc-photo{position:absolute;inset:0;width:100%;height:80%;object-fit:cover;object-position:var(--wc-position);transform:scale(var(--wc-zoom,1));transform-origin:54% 60%;filter:saturate(.87) contrast(1.07)}
 .worlds-card .wc-shade{position:absolute;inset:0;background:linear-gradient(180deg,#070b13aa 0%,transparent 22%,transparent 40%,#06091265 51%,#060912ed 65%,#060912 85%),linear-gradient(90deg,#05091088,transparent 35%,transparent 80%,#05091088)}
 .worlds-card .wc-window:after{content:"";position:absolute;inset:3.2%;border:1px solid #f0dba73b;border-radius:4px;pointer-events:none;z-index:3;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,0 86%,1% 86%,1% 99%,99% 99%,99% 1%,1% 1%,1% 30%,0 30%)}
