@@ -1,71 +1,68 @@
 /**
- * 峡谷回响卡背 v4 (owner, 2026-10-04: no crystal — 「把卡背做的帅一点，还是要回响元素」).
+ * 峡谷回响卡背 v5 (owner, 2026-10-04: 「帅的是图片……召唤师奖杯加上一些生成的东西」).
  *
- * The echo IS the art: 「回」 and 「响」 stacked large in gold, each trailed by widening, fading outline copies the
- * way a sound rings out, a voiceprint line running between them, sound rings spreading from the centre, a double
- * hairline with gold corner marks. The calligraphy uses the same font stack as the confirmed card face.
+ * The Summoner's Cup on the 2015 Worlds stage (Riot / LoL Esports, data-source/worlds/22654804051.jpg), graded into
+ * the series' teal and gold, with generated layers over it: light rays from the cup, echo rings spreading from the
+ * bowl, drifting gold motes, a vignette. Small type only, a double hairline with gold corner marks.
  */
-const FONT = "'KaiTi','STKaiti','Noto Serif SC','Songti SC',serif"
-
-function EchoGlyph({ ch, x, y, size }: { ch: string; x: number; y: number; size: number }) {
-  const trails = [1.5, 1.32, 1.16]
-  return <g>
-    {trails.map((s, i) => <text key={s} x={x} y={y} textAnchor="middle" dominantBaseline="central" fontFamily={FONT} fontSize={size} fontWeight="700"
-      fill="none" stroke="#d6bd7c" strokeWidth={1.5 / s} strokeOpacity={0.14 + i * 0.12}
-      transform={`translate(${x} ${y}) scale(${s}) translate(${-x} ${-y})`}>{ch}</text>)}
-    <text x={x} y={y + 4} textAnchor="middle" dominantBaseline="central" fontFamily={FONT} fontSize={size} fontWeight="700" fill="#020807" opacity=".55">{ch}</text>
-    <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fontFamily={FONT} fontSize={size} fontWeight="700" fill="url(#eb4-gold)" stroke="#fff3cf" strokeWidth="1" strokeOpacity=".35">{ch}</text>
-  </g>
-}
+const CUP: [number, number] = [298, 296]   // centre of the bowl in the 630×880 frame
 
 export default function EchoBackArt() {
-  // a voiceprint: bars whose height follows an envelope, loudest at the centre
-  const bars = Array.from({ length: 41 }, (_, i) => {
-    const t = (i - 20) / 20
-    const env = Math.exp(-t * t * 3.2)
-    const wobble = 0.55 + 0.45 * Math.abs(Math.sin(i * 1.7) * Math.cos(i * 0.6))
-    return { x: 115 + i * 10, h: 6 + 70 * env * wobble }
+  const motes = Array.from({ length: 34 }, (_, i) => {
+    const a = i * 2.39996, r = 70 + ((i * 53) % 330)
+    return { x: CUP[0] + Math.cos(a) * r * 0.8, y: CUP[1] + 80 + Math.sin(a) * r, s: 1.2 + ((i * 7) % 5) * 0.55, o: 0.25 + ((i * 11) % 7) * 0.08 }
   })
+  const rays = Array.from({ length: 14 }, (_, i) => -80 + i * 12.3)
   return <svg className="echo-back-art" viewBox="0 0 630 880" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
     <defs>
-      <radialGradient id="eb4-bg" cx="50%" cy="50%" r="72%">
-        <stop offset="0" stopColor="#163a34" /><stop offset=".55" stopColor="#0a1c19" /><stop offset="1" stopColor="#030908" />
+      <radialGradient id="eb5-vig" cx="58%" cy="38%" r="75%">
+        <stop offset=".35" stopColor="#000" stopOpacity="0" /><stop offset=".8" stopColor="#020807" stopOpacity=".72" /><stop offset="1" stopColor="#020807" stopOpacity=".95" />
       </radialGradient>
-      <linearGradient id="eb4-gold" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stopColor="#fff5d6" /><stop offset=".38" stopColor="#ecd08d" /><stop offset=".72" stopColor="#c49a4c" /><stop offset="1" stopColor="#f1d896" />
+      <linearGradient id="eb5-foot" x1="0" y1="0" x2="0" y2="1">
+        <stop offset=".55" stopColor="#030a09" stopOpacity="0" /><stop offset=".82" stopColor="#030a09" stopOpacity=".88" /><stop offset="1" stopColor="#030a09" />
       </linearGradient>
-      <linearGradient id="eb4-rule" x1="0" y1="0" x2="1" y2="0">
+      <linearGradient id="eb5-ray" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#fff2c8" stopOpacity=".55" /><stop offset="1" stopColor="#fff2c8" stopOpacity="0" />
+      </linearGradient>
+      <radialGradient id="eb5-halo" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stopColor="#fff4d0" stopOpacity=".55" /><stop offset=".35" stopColor="#e6c77e" stopOpacity=".2" /><stop offset="1" stopColor="#6fd9c6" stopOpacity="0" />
+      </radialGradient>
+      <linearGradient id="eb5-gold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#fff1c4" /><stop offset=".5" stopColor="#d6b46a" /><stop offset="1" stopColor="#9c7a3a" />
+      </linearGradient>
+      <linearGradient id="eb5-rule" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stopColor="#d6bd7c" stopOpacity="0" /><stop offset=".5" stopColor="#d6bd7c" /><stop offset="1" stopColor="#d6bd7c" stopOpacity="0" />
       </linearGradient>
-      <radialGradient id="eb4-hush" cx="50%" cy="50%" r="50%">
-        <stop offset="0" stopColor="#6fd9c6" stopOpacity=".16" /><stop offset="1" stopColor="#6fd9c6" stopOpacity="0" />
-      </radialGradient>
+      <filter id="eb5-soft"><feGaussianBlur stdDeviation="2.4" /></filter>
     </defs>
-    <rect width="630" height="880" fill="url(#eb4-bg)" />
-    {/* sound rings from the centre */}
-    <g fill="none" stroke="#9fd9cb">
-      {[120, 175, 235, 300, 370, 445].map((r, i) => <circle key={r} cx="315" cy="452" r={r} strokeWidth={i < 2 ? 1.4 : 1.1} strokeOpacity={0.17 - i * 0.022} />)}
+    <image href="/lol/echo/back-cup.webp" x="0" y="0" width="630" height="880" preserveAspectRatio="xMidYMid slice" />
+    {/* light rays fanning down from the cup */}
+    <g style={{ mixBlendMode: 'screen' }} opacity=".5">
+      {rays.map((a) => <polygon key={a} points={`${CUP[0]},${CUP[1]} ${CUP[0] + Math.sin((a - 1.6) * Math.PI / 180) * 900},${CUP[1] + Math.cos((a - 1.6) * Math.PI / 180) * 900} ${CUP[0] + Math.sin((a + 1.6) * Math.PI / 180) * 900},${CUP[1] + Math.cos((a + 1.6) * Math.PI / 180) * 900}`} fill="url(#eb5-ray)" opacity=".35" />)}
     </g>
-    <ellipse cx="315" cy="452" rx="260" ry="300" fill="url(#eb4-hush)" />
-    {/* the two characters, echoing */}
-    <EchoGlyph ch="回" x={315} y={318} size={205} />
-    <EchoGlyph ch="响" x={315} y={596} size={205} />
-    {/* the voiceprint between them */}
-    <g transform="translate(0 456)">
-      <rect x="70" y="-0.8" width="490" height="1.6" fill="url(#eb4-rule)" opacity=".7" />
-      {bars.map((b) => <rect key={b.x} x={b.x - 2.2} y={-b.h / 2} width="4.4" height={b.h} rx="2.2" fill="url(#eb4-gold)" opacity={0.35 + 0.6 * (b.h / 76)} />)}
+    <circle cx={CUP[0]} cy={CUP[1]} r="150" fill="url(#eb5-halo)" style={{ mixBlendMode: 'screen' }} />
+    {/* the echo: rings spreading from the bowl */}
+    <g fill="none" stroke="#e8d39a" style={{ mixBlendMode: 'screen' }}>
+      {[70, 118, 172, 232, 298, 370].map((r, i) => <ellipse key={r} cx={CUP[0]} cy={CUP[1]} rx={r} ry={r * 0.86} strokeWidth={i < 2 ? 1.6 : 1.1} strokeOpacity={0.5 - i * 0.075} />)}
+      {[95, 205].map((r) => <ellipse key={r} cx={CUP[0]} cy={CUP[1]} rx={r} ry={r * 0.86} strokeWidth="5" strokeOpacity=".12" filter="url(#eb5-soft)" />)}
     </g>
-    {/* header and foot */}
+    {/* drifting motes */}
+    <g fill="#ffe9b0" style={{ mixBlendMode: 'screen' }}>
+      {motes.map((m, i) => <circle key={i} cx={m.x} cy={m.y} r={m.s} opacity={m.o} />)}
+    </g>
+    <rect width="630" height="880" fill="url(#eb5-vig)" />
+    <rect width="630" height="880" fill="url(#eb5-foot)" />
+    {/* small type */}
     <g fontFamily="'Segoe UI',Arial,sans-serif" textAnchor="middle">
-      <text x="315" y="96" fill="#d6bd7c" fontSize="20" fontWeight="600" letterSpacing="9">RIFT ECHOES</text>
-      <rect x="235" y="112" width="160" height="1.2" fill="url(#eb4-rule)" />
-      <text x="315" y="792" fill="#e9e0c4" fontFamily="'Microsoft YaHei',sans-serif" fontSize="24" letterSpacing="10">退役老将回归</text>
-      <text x="315" y="826" fill="#7f978c" fontSize="13" letterSpacing="5">RETURNING LEGENDS · SERIES 01</text>
+      <text x="315" y="82" fill="#e3cb8c" fontSize="19" fontWeight="600" letterSpacing="10">RIFT ECHOES</text>
+      <rect x="245" y="96" width="140" height="1.2" fill="url(#eb5-rule)" />
+      <text x="315" y="782" fill="#f0e6c8" fontFamily="'Microsoft YaHei',sans-serif" fontSize="28" fontWeight="600" letterSpacing="12">峡谷回响</text>
+      <text x="315" y="814" fill="#a9bbb1" fontFamily="'Microsoft YaHei',sans-serif" fontSize="16" letterSpacing="8">退役老将回归</text>
     </g>
     {/* double hairline and corner marks */}
     <rect x="6" y="6" width="618" height="868" rx="20" fill="none" stroke="#d6bd7c" strokeOpacity=".6" strokeWidth="2" />
     <rect x="20" y="20" width="590" height="840" rx="10" fill="none" stroke="#d6bd7c" strokeOpacity=".22" strokeWidth="1.3" />
-    <g stroke="url(#eb4-gold)" strokeWidth="3" fill="none" strokeLinecap="round">
+    <g stroke="url(#eb5-gold)" strokeWidth="3" fill="none" strokeLinecap="round">
       <path d="M20 66 V20 H66" /><path d="M564 20 H610 V66" /><path d="M610 814 V860 H564" /><path d="M66 860 H20 V814" />
     </g>
   </svg>
