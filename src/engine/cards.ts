@@ -21,6 +21,8 @@ import { LEGENDS } from './legends'
 // player was on it — scripts/build_coached.py, off vlr.gg careers and Liquipedia tenure
 import COACHED_JSON from '../data/coached.json'
 import ECHO_JSON from '../data/echoCards.json'
+import S16_JSON from '../data/s16.json'
+import S16_RATINGS from '../data/s16Ratings.json'
 import type { Legend } from './legends'
 import { decodeDisplayName } from './displayText'
 import { clamp } from './rng'
@@ -74,6 +76,8 @@ export interface PlayerCard {
   legend?: Legend
   /** set on a 峡谷回响 card: a retired player's career, not a night (see ECHO_CARDS) */
   echo?: EchoInfo
+  /** set on an S16 世界赛 card: numbers that follow his Worlds 2026 games (see S16_CARDS) */
+  s16?: S16Info
   ign: string
   realName: string | null
   /** two-letter country code, lowercased, from vlr.gg */
@@ -100,6 +104,26 @@ export interface PlayerCard {
  * The club on the card is the one he spent longest with at the top level (or the owner's pick);
  * clubId is the 2026 club that carries that name forward, null when nobody does.
  */
+/**
+ * S16 世界赛 (owner 2026-10-04, after 虎扑选手股): the card shows the player, his club and his position, and every
+ * number is 「?」 until he has played at Worlds. After each match day scripts/s16_ratings.py rewrites
+ * src/data/s16Ratings.json and the numbers move with his games; the metal is his rank among the revealed. The
+ * final freezes them; the champions get +2 and the FMVP's card becomes a 彩卡.
+ */
+export interface S16Info {
+  club: string
+  /** play-in / main event / still to be decided */
+  stage: string
+  starter: boolean
+  /** false until he has played a Worlds game: the card shows 「?」 and cannot be fielded */
+  revealed: boolean
+  /** Worlds games counted so far */
+  games: number
+  /** the rating before the last update, for the ↑↓ on the card; null on the first */
+  prev: number | null
+  fmvp: boolean
+}
+
 export interface EchoInfo {
   /** the club the card shows, as it was called then */
   team: string | null
@@ -466,7 +490,51 @@ export const COACH_CARDS: CoachCard[] = [...buildCoachCards(), ...LEGEND_COACH_C
  * the market, the mailbox and the collection know them.
  */
 export const ECHO_CARDS: PlayerCard[] = buildEchoCards()
-export const ALL_CARDS: Card[] = [...PLAYER_CARDS, ...ECHO_CARDS, ...SEOUL_CARDS, ...COACH_CARDS]
+type S16Rating = { rating: number; rarity: Rarity; games: number; prev?: number | null; attrs?: Attrs }
+/**
+ * S16 世界赛 cards. Like 峡谷回响, out of PLAYER_CARDS (no ordinary pack, shop, 全图鉴 or club set deals them) and in
+ * ALL_CARDS. Each is the same man as his ordinary card (playerId), so one five cannot hold both. An unrevealed card
+ * carries his ordinary card's numbers internally — nothing shows them, and it cannot be fielded — and is filed as
+ * bronze, so salvage cannot cash in a guess.
+ */
+function buildS16Cards(): PlayerCard[] {
+  const ratings = (S16_RATINGS as { ratings: Record<string, S16Rating>; fmvp: string | null }).ratings
+  const fmvp = (S16_RATINGS as { fmvp: string | null }).fmvp
+  const base = new Map(BASE_PLAYER_CARDS.map((c) => [c.id, c]))
+  const teams = new Map(S16_JSON.teams.map((t) => [t.club, t]))
+  const out: PlayerCard[] = []
+  for (const p of S16_JSON.players) {
+    const b = base.get(p.base)
+    if (!b) continue
+    const r = ratings[p.ign]
+    const isFmvp = !!r && fmvp === p.ign
+    out.push({
+      ...b,
+      id: p.id,
+      legend: undefined,
+      echo: undefined,
+      clubId: p.club,
+      clubTag: teams.get(p.club)?.tag ?? b.clubTag,
+      role: p.role as Role,
+      roles: b.roles.includes(p.role as Role) ? b.roles : [p.role as Role, ...b.roles],
+      attrs: r?.attrs ?? b.attrs,
+      rating: r?.rating ?? b.rating,
+      rarity: isFmvp ? 'mythic' : r?.rarity ?? 'bronze',
+      s16: {
+        club: p.club, stage: teams.get(p.club)?.stage ?? 'main', starter: p.starter, revealed: !!r,
+        games: r?.games ?? 0, prev: r?.prev ?? null, fmvp: isFmvp,
+      },
+    })
+  }
+  return out
+}
+export const S16_CARDS: PlayerCard[] = buildS16Cards()
+export const isS16Card = (c: Card | undefined): boolean => c?.kind === 'player' && !!c.s16
+/** an S16 card whose numbers are still 「?」 — it may be collected and traded, not fielded */
+export const s16Hidden = (c: Card | undefined): boolean => c?.kind === 'player' && !!c.s16 && !c.s16.revealed
+/** a limited series with its own 图鉴 (峡谷回响, S16 世界赛): outside the main collection count and the 全图鉴 */
+export const isSeriesCard = (c: Card | undefined): boolean => isEchoCard(c) || isS16Card(c)
+export const ALL_CARDS: Card[] = [...PLAYER_CARDS, ...ECHO_CARDS, ...S16_CARDS, ...SEOUL_CARDS, ...COACH_CARDS]
 /** 「DAMWON Gaming（现 DK）」: the club as it was, and today's name when it has changed */
 export const echoTeamName = (e: Pick<EchoInfo, 'team' | 'teamNow'>): string | null =>
   e.team ? `${e.team}${e.teamNow ? `（现 ${e.teamNow}）` : ''}` : null

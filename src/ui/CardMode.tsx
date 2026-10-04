@@ -30,7 +30,7 @@ import ThemeToggle from './ThemeToggle'
 import { RiftNavigation, RiftBanner } from './RiftChrome'
 import { echoQuizDone } from '../engine/echoQuiz'
 import { DemoWelcome, GateBrand, GateStory } from './GateWelcome'
-import { ALL_CARDS, isEchoCard } from '../engine/cards'
+import { ALL_CARDS, isEchoCard, isSeriesCard } from '../engine/cards'
 import {
   act as actOnServer, createAccount, dayOf, flushAccount, fetchDay, loadAccount, refreshAccount, retryPending,
   saveAccount, serverNow, whenStale,
@@ -424,7 +424,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
             <WeChat dock />
             <Support />
           </div>
-          <RiftBanner page={tab} owned={ALL_CARDS.filter(c => !isEchoCard(c) && g.cards[c.id]).length} total={ALL_CARDS.filter(c => !isEchoCard(c)).length} echo={{ owned: ALL_CARDS.filter(c => isEchoCard(c) && g.cards[c.id]).length, quizDone: echoQuizDone(g.echoQuiz) }} />
+          <RiftBanner page={tab} owned={ALL_CARDS.filter(c => !isSeriesCard(c) && g.cards[c.id]).length} total={ALL_CARDS.filter(c => !isSeriesCard(c)).length} echo={{ owned: ALL_CARDS.filter(c => isEchoCard(c) && g.cards[c.id]).length, quizDone: echoQuizDone(g.echoQuiz) }} />
           {fresh && tab === 'account' && (
             <div className="panel" style={{ borderColor: 'var(--accent-line)', marginBottom: 14 }}>
               <div className="panel-body">

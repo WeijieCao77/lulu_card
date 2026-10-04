@@ -1,0 +1,62 @@
+/* S16 世界赛卡面（初稿，待站长审）。Night navy and steel until revealed; the metal after. Below the 彩卡 on purpose:
+   no iridescence except on the FMVP's card. Sizes follow the ordinary card (96/132/184 wide, 174/212/281 tall). */
+.cardface.s16card.s16card {
+  --s16-edge: #6f8db3; --s16-glint: #c7dcf5; --s16-deep: #0b1630; --s16-accent: #57c7ff;
+  box-sizing: border-box; position: relative; display: block; flex: 0 0 auto; container-type: inline-size;
+  width: 132px; min-height: 212px; height: auto; padding: 2px; border: 0; border-radius: 9px; overflow: hidden;
+  color: #eef4ff; text-align: left; isolation: isolate;
+  background: linear-gradient(150deg, var(--s16-glint), var(--s16-edge) 35%, #24375a 70%, var(--s16-glint));
+  box-shadow: 0 10px 24px #0008; -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+  transition: transform .2s, box-shadow .2s;
+}
+.cardface.s16card.s16card.s-sm { width: 96px; min-height: 174px }
+.cardface.s16card.s16card.s-md { width: 132px; min-height: 212px }
+.cardface.s16card.s16card.s-lg { width: 184px; min-height: 281px }
+.cardface.s16card.s16card.tap:hover { transform: translateY(-3px); box-shadow: 0 16px 30px #000a }
+.cardface.s16card.s16-gold { --s16-edge: #d6a93c; --s16-glint: #ffe9a6; --s16-accent: #ffd36b }
+.cardface.s16card.s16-silver { --s16-edge: #9fb4c4; --s16-glint: #eef6fb; --s16-accent: #c9e4f5 }
+.cardface.s16card.s16-bronze { --s16-edge: #b06a3f; --s16-glint: #f0b48c; --s16-accent: #f0a274 }
+.cardface.s16card.s16-mythic { background: conic-gradient(from 210deg, #7ae5ff, #c896ff, #ffdea4, #7ae5ff); --s16-accent: #ffe6a8 }
+.s16card .s16-inner { position: absolute; inset: 2px; border-radius: 7px; overflow: hidden; background: radial-gradient(ellipse at 50% 0%, #1d3566 0%, var(--s16-deep) 60%, #050a18 100%) }
+.s16card.s16-hidden .s16-inner::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(135deg, #ffffff05 0 6px, transparent 6px 12px) }
+.s16card .s16-photo { position: absolute; left: 0; right: 0; top: 0; height: 64%; overflow: hidden }
+.s16card .s16-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 22%; display: block }
+.s16card .s16-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, #050a1899 0%, transparent 28%, transparent 60%, var(--s16-deep) 100%) }
+.s16card.s16-hidden .s16-photo img { filter: saturate(.75) brightness(.9) }
+.s16card .s16-top { position: absolute; z-index: 2; top: 4%; left: 7%; right: 7%; display: flex; justify-content: space-between; align-items: center }
+.s16card .s16-mark { font: 700 4.6cqw/1 Arial, sans-serif; letter-spacing: .12em; color: #d9e6ff }
+.s16card .s16-mark b { color: var(--s16-accent); margin-left: .3em }
+.s16card .s16-role { font: 800 4.6cqw/1 Arial, sans-serif; padding: 1.2cqw 2.2cqw; border: 1px solid color-mix(in srgb, var(--s16-accent), transparent 40%); border-radius: 2cqw; color: var(--s16-accent); background: #050a1880 }
+.s16card .s16-rating { position: absolute; z-index: 2; top: 13%; left: 7%; display: flex; flex-direction: column; align-items: flex-start; gap: .8cqw }
+.s16card .s16-rating strong { font: 900 19cqw/.9 Impact, "Arial Narrow", sans-serif; color: #fff; text-shadow: 0 2px 10px #000c }
+.s16card.s16-hidden .s16-rating strong { color: var(--s16-glint); opacity: .9 }
+.s16card .s16-rating i { font: 800 4.6cqw/1 Arial, sans-serif; font-style: normal; padding: .8cqw 1.6cqw; border-radius: 1.5cqw; background: #050a18cc }
+.s16card .s16-rating i.up { color: #5ee08f }
+.s16card .s16-rating i.down { color: #ff7a6e }
+.s16card .s16-rating em { font: 700 4.6cqw/1 Arial, sans-serif; font-style: normal; color: var(--s16-accent) }
+.s16card .s16-copy { position: absolute; z-index: 2; left: 7%; right: 7%; bottom: 4%; display: flex; flex-direction: column; gap: 1.4cqw }
+.s16card .s16-team { display: flex; align-items: center; gap: 1.8cqw; font: 700 5cqw/1 Arial, sans-serif; color: #cfe0ff; letter-spacing: .04em }
+.s16card .s16-crest { width: 7cqw; height: 7cqw; background: center/contain no-repeat; flex: none }
+.s16card .s16-name { display: block; font: 800 13cqw/1 "Arial Narrow", Impact, sans-serif; letter-spacing: -.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0 }
+.s16card .s16-stats { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid color-mix(in srgb, var(--s16-edge), transparent 45%); padding-top: 1.8cqw }
+.s16card .s16-stats span { display: flex; flex-direction: column; align-items: center; gap: .6cqw }
+.s16card .s16-stats b { font: 700 6cqw/1 Arial, sans-serif; color: #fff }
+.s16card.s16-hidden .s16-stats b { color: var(--s16-glint) }
+.s16card .s16-stats small { font: 500 3.6cqw/1 "Microsoft YaHei", sans-serif; color: #9fb3d6 }
+.s16card .s16-foot { display: flex; justify-content: space-between; font: 500 3.6cqw/1.2 "Microsoft YaHei", sans-serif; color: #8ea6cc }
+.s16card .s16-foot b { color: var(--s16-accent) }
+.s16card .s16-dupes { position: absolute; z-index: 3; top: 4%; right: 7%; transform: translateY(120%); font: 700 4.4cqw/1 Arial, sans-serif; color: #fff; background: #050a18cc; padding: .8cqw 1.6cqw; border-radius: 1.5cqw }
+.cardface.s16card.sel { outline: 2px solid var(--accent, #57c7ff); outline-offset: 2px }
+.cardface.s16card.dim { opacity: .4; filter: grayscale(.5) }
+@container (width < 128px) {
+  .s16card .s16-foot { display: none }
+  .s16card .s16-team { font-size: max(5.4cqw, 6.5px) }
+  .s16card .s16-stats small { font-size: max(4.2cqw, 6px) }
+}
+
+.cardback.s16-back { position: relative; aspect-ratio: 63 / 88; width: 100%; padding: 0; border: 0; border-radius: 9px; overflow: hidden; container-type: inline-size; background: radial-gradient(circle at 50% 40%, #1d3566, #0b1630 60%, #050a18); box-shadow: 0 8px 20px #0007 }
+.cardback.s16-back::before, .cardback.s16-back::after { content: none }
+.s16-back .s16-back-inner { position: absolute; inset: 4%; border: 1px solid #57c7ff55; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2cqw; color: #d9e6ff; font-family: Arial, sans-serif }
+.s16-back .s16-back-inner span { font-size: 6cqw; letter-spacing: .4em; text-indent: .4em }
+.s16-back .s16-back-inner b { font: 900 30cqw/1 Impact, sans-serif; color: #57c7ff; text-shadow: 0 0 20px #57c7ff66 }
+.s16-back .s16-back-inner small { font-size: 4.6cqw; letter-spacing: .2em; color: #9fb3d6 }

@@ -24,7 +24,7 @@
  * lets scripts/check_authority.ts drive every action without a database.
  */
 import {
-  awardMinigame, canPlay, claimEchoSet, note, checkIn, claimFullSet, claimQuest, claimSeries, clampState, cupBo, cupOpponent, drawOpponent, enterCup,
+  awardMinigame, canPlay, claimEchoSet, claimS16Set, note, checkIn, claimFullSet, claimQuest, claimSeries, clampState, cupBo, cupOpponent, drawOpponent, enterCup,
   levelOf, oppBumpFor, openPack, packCost, pendingOpponent, primeStamina, recordCup, recordLadder,
   refreshDaily, salvage, salvageBulk, seriesOfPack, spendPlay, upgrade, ladderSlot, leagueEntry, isLadderLeague,
   LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad, cupSquadOf, ladderSquadOf,
@@ -42,7 +42,7 @@ import type { ArenaResult, RivalSquad } from './arena'
 import { challengeBlock, challengeSig, guessChallenge } from './challenge'
 import type { ChallengeKind } from './challenge'
 import { hashStr } from './rng'
-import { cardById, isPlayerCard, personOf, squadRating } from './cards'
+import { cardById, isPlayerCard, personOf, s16Hidden, squadRating } from './cards'
 import type { Rarity, Squad } from './cards'
 import { WORLD_TEAMS } from './teams'
 import { markMailSeen } from './inbox'
@@ -76,7 +76,7 @@ export const ACTIONS = [
   'open', 'checkin', 'quest', 'series', 'fullset', 'salvage', 'salvage_dupes', 'salvage_bulk', 'upgrade',
   'ladder_draw', 'ladder', 'cup_enter', 'cup_play', 'cup_clear', 'challenge', 'mail_seen',
   'minigame_start', 'minigame_finish', 'dismantle', 'seoul_start', 'seoul_play', 'seoul_quit',
-  'series_pick', 'shop', 'shop_buy', 'echo_quiz', 'echo_quiz_answer', 'echo_set', 'echo_daily', 'echo_daily_answer',
+  'series_pick', 'shop', 'shop_buy', 'echo_quiz', 'echo_quiz_answer', 'echo_set', 'echo_daily', 'echo_daily_answer', 's16_set',
 ] as const
 export type ActionName = (typeof ACTIONS)[number]
 
@@ -104,7 +104,7 @@ export function squadForPlay(g: GachaState): { ok: true; squad: Squad } | { ok: 
   const slots = g.squad.slots.slice(0, 5).map((id) => {
     if (!id || !g.cards[id]) return null
     const c = cardById(id)
-    if (!c || !isPlayerCard(c)) return null
+    if (!c || !isPlayerCard(c) || s16Hidden(c)) return null
     const who = personOf(c)
     if (seen.has(who)) return null
     seen.add(who)
@@ -226,6 +226,11 @@ function dispatch(
         note(g, '每日老将问答答对：+1 回响试训包')
       }
       return { ok: true, result: { daily: viewDaily(s, bank), correct, won: s.won } }
+    }
+    case 's16_set': {
+      const got = claimS16Set(g)
+      if (!got) return { ok: false, why: 'S16 图鉴还没到下一档，或者已经领过了' }
+      return { ok: true, result: { got } }
     }
     case 'echo_set': {
       const got = claimEchoSet(g)

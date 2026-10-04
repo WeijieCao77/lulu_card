@@ -1,6 +1,7 @@
 import { SeoulCard, SeoulCardBack } from './cards/SeoulDesign'
 import WorldsCard from './cards/WorldsCard'
 import { EchoCard, EchoCardBack } from './cards/echo/EchoCard'
+import { S16Card, S16CardBack } from './cards/s16/S16Card'
 import { useState } from 'react'
 import { ATTR_CN } from '../engine/types'
 import { RARITY_CN } from '../engine/cards'
@@ -132,6 +133,7 @@ export default function CardFace({
   if (card.legend?.art) return <WorldsCard {...{ card, level, dupes, size, selected, dimmed, onClick, footer }} />
   if (isPlayerCard(card) && card.event === 'seoul-2024') return <SeoulCard {...{ card, level, dupes, size, selected, dimmed, onClick, footer }} />
   if (isPlayerCard(card) && card.echo) return <EchoCard {...{ card, level, dupes, size, selected, dimmed, onClick, footer }} />
+  if (isPlayerCard(card) && card.s16) return <S16Card {...{ card, level, dupes, size, selected, dimmed, onClick, footer }} />
   // The base rating, always: the number on the face says which card this is
   // (the 2024 EDG ZmjjKK is a 97 whatever you have done to it), the +N
   // beside it says what you have done, and 战力 in the detail says what the
@@ -311,7 +313,8 @@ export function PositionCrest({ position }: { position: PackPosition }) {
   </svg>
 }
 
-export function CardBack({ kind = 'player', position, seoul, echo }: { kind?: Card['kind']; position?: PackPosition; seoul?: boolean; echo?: boolean }) {
+export function CardBack({ kind = 'player', position, seoul, echo, s16 }: { kind?: Card['kind']; position?: PackPosition; seoul?: boolean; echo?: boolean; s16?: boolean }) {
+  if (s16) return <S16CardBack />
   if (seoul) return <SeoulCardBack />
   if (echo) return <EchoCardBack />
   const coach = kind === 'coach'

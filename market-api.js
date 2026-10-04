@@ -120,6 +120,9 @@ export const PAIR_PER_DAY = 1
  */
 export const PRICE_CAP = { bronze: 2000, silver: 5000 }
 export const priceCap = (rarity) => PRICE_CAP[rarity] ?? MAX_ASK
+/** S16 世界赛 cards: one cap whatever the metal, which moves every match day (owner, 2026-10-04) */
+export const S16_PRICE_CAP = 10000
+export const capOf = (card) => (card?.s16 ? S16_PRICE_CAP : priceCap(card?.rarity))
 /**
  * High-value trades a day, bought and sold counted apart (owner, 2026-09-27): a trade is high-value when it is a
  * gold card or a 彩卡, or at HIGH_VALUE_PRICE coins or more. Cheap cards are not counted, so filling a
@@ -1259,7 +1262,7 @@ export function makeMarketApi(sql, {
     const card = engine.cardById(cardId)
     if (!card) { json(res, 200, { ok: false, notOwned: true }); return }
     const floor = askFloor(card.rarity)
-    const cap = priceCap(card.rarity)
+    const cap = capOf(card)
     if (!cardId || !Number.isFinite(ask) || ask < floor || ask > cap) {
       json(res, 200, { ok: false, bad: true, min: floor, max: cap })
       return
@@ -1486,13 +1489,13 @@ export function makeMarketApi(sql, {
       // at or over the buy-now price is the buy-now price: nobody pays more
       // than the seller asked to end it
       // a bronze/silver listed before the cap may carry a buy-now over it: that buy-now no longer applies
-      if (l.buyout != null && bid >= l.buyout && l.buyout <= priceCap(engine.cardById(l.card_id)?.rarity)) bid = l.buyout
-      else if (bid > priceCap(engine.cardById(l.card_id)?.rarity)) {
-        json(res, 200, { ok: false, capped: true, max: priceCap(engine.cardById(l.card_id)?.rarity) }); return
+      if (l.buyout != null && bid >= l.buyout && l.buyout <= capOf(engine.cardById(l.card_id))) bid = l.buyout
+      else if (bid > capOf(engine.cardById(l.card_id))) {
+        json(res, 200, { ok: false, capped: true, max: capOf(engine.cardById(l.card_id)) }); return
       }
     } else {
       const lo = Math.ceil(l.ask * (1 - HAGGLE))
-      const hi = Math.min(Math.floor(l.ask * (1 + HAGGLE)), priceCap(engine.cardById(l.card_id)?.rarity))
+      const hi = Math.min(Math.floor(l.ask * (1 + HAGGLE)), capOf(engine.cardById(l.card_id)))
       if (!Number.isFinite(bid) || bid < lo || bid > hi) {
         json(res, 200, { ok: false, range: true, lo, hi })
         return

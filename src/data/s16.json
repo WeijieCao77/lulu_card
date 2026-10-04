@@ -1,0 +1,819 @@
+{
+ "meta": {
+  "event": "2026 英雄联盟全球总决赛（S16）",
+  "start": "2026-10-15",
+  "final": "2026-11-14",
+  "packUntil": "2026-11-21",
+  "note": "由 S16世界赛系列/data 生成；替补和巴西两队名单确定后补进来"
+ },
+ "teams": [
+  {
+   "club": "T18",
+   "tag": "GEN",
+   "name": "Gen.G",
+   "stage": "main",
+   "seed": "KR Korea #1"
+  },
+  {
+   "club": "T1",
+   "tag": "AL",
+   "name": "Anyone's Legend",
+   "stage": "main",
+   "seed": "CN China #1"
+  },
+  {
+   "club": "T26",
+   "tag": "G2",
+   "name": "G2 Esports",
+   "stage": "main",
+   "seed": "EMEA EMEA #1"
+  },
+  {
+   "club": "T50",
+   "tag": "TSW",
+   "name": "Team Secret Whales",
+   "stage": "main",
+   "seed": "APAC Asia-Pacific #1"
+  },
+  {
+   "club": "T20",
+   "tag": "HLE",
+   "name": "Hanwha Life Esports",
+   "stage": "main",
+   "seed": "KR Korea #2"
+  },
+  {
+   "club": "T2",
+   "tag": "BLG",
+   "name": "Bilibili Gaming",
+   "stage": "main",
+   "seed": "CN China #2"
+  },
+  {
+   "club": "T29",
+   "tag": "MKOI",
+   "name": "Movistar KOI",
+   "stage": "main",
+   "seed": "EMEA EMEA #2"
+  },
+  {
+   "club": "T24",
+   "tag": "T1",
+   "name": "T1",
+   "stage": "main",
+   "seed": "KR Korea #3"
+  },
+  {
+   "club": "T12",
+   "tag": "TES",
+   "name": "Top Esports",
+   "stage": "main",
+   "seed": "CN China #3"
+  },
+  {
+   "club": "T43",
+   "tag": "CFO",
+   "name": "CTBC Flying Oyster",
+   "stage": "main",
+   "seed": "APAC Asia-Pacific #2"
+  },
+  {
+   "club": "T17",
+   "tag": "DK",
+   "name": "Dplus Kia",
+   "stage": "main",
+   "seed": "KR Korea #4"
+  },
+  {
+   "club": "T4",
+   "tag": "IG",
+   "name": "Invictus Gaming",
+   "stage": "main",
+   "seed": "CN China #4"
+  },
+  {
+   "club": "T42",
+   "tag": "TL",
+   "name": "Team Liquid",
+   "stage": "main",
+   "seed": "NA North America #1/2"
+  },
+  {
+   "club": "T39",
+   "tag": "LYON",
+   "name": "LYON",
+   "stage": "main",
+   "seed": "NA North America #1/2"
+  },
+  {
+   "club": "T35",
+   "tag": "C9",
+   "name": "Cloud9",
+   "stage": "playin",
+   "seed": "NA North America #3"
+  },
+  {
+   "club": "T28",
+   "tag": "KC",
+   "name": "Karmine Corp",
+   "stage": "playin",
+   "seed": "EMEA EMEA #3"
+  },
+  {
+   "club": "T49",
+   "tag": "MVK",
+   "name": "MVK Esports",
+   "stage": "playin",
+   "seed": "APAC APAC #3"
+  },
+  {
+   "club": "T51",
+   "tag": "FUR",
+   "name": "FURIA",
+   "stage": "tbd",
+   "seed": "BR (待定)"
+  }
+ ],
+ "players": [
+  {
+   "id": "s16:P88",
+   "base": "p:P88",
+   "ign": "Kiin",
+   "club": "T18",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P89",
+   "base": "p:P89",
+   "ign": "Canyon",
+   "club": "T18",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P90",
+   "base": "p:P90",
+   "ign": "Chovy",
+   "club": "T18",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P91",
+   "base": "p:P91",
+   "ign": "Ruler",
+   "club": "T18",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P92",
+   "base": "p:P92",
+   "ign": "Duro",
+   "club": "T18",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P531",
+   "base": "p:P531",
+   "ign": "Breathe",
+   "club": "T1",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P2",
+   "base": "p:P2",
+   "ign": "Tarzan",
+   "club": "T1",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P3",
+   "base": "p:P3",
+   "ign": "Shanks",
+   "club": "T1",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P4",
+   "base": "p:P4",
+   "ign": "Hope",
+   "club": "T1",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P5",
+   "base": "p:P5",
+   "ign": "Kael",
+   "club": "T1",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P129",
+   "base": "p:P129",
+   "ign": "BrokenBlade",
+   "club": "T26",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P130",
+   "base": "p:P130",
+   "ign": "SkewMond",
+   "club": "T26",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P131",
+   "base": "p:P131",
+   "ign": "Caps",
+   "club": "T26",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P132",
+   "base": "p:P132",
+   "ign": "Hans Sama",
+   "club": "T26",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P133",
+   "base": "p:P133",
+   "ign": "Labrov",
+   "club": "T26",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P252",
+   "base": "p:P252",
+   "ign": "Pun",
+   "club": "T50",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P253",
+   "base": "p:P253",
+   "ign": "Hizto",
+   "club": "T50",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P254",
+   "base": "p:P254",
+   "ign": "Dire",
+   "club": "T50",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P255",
+   "base": "p:P255",
+   "ign": "Eddie",
+   "club": "T50",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P256",
+   "base": "p:P256",
+   "ign": "Bie",
+   "club": "T50",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P98",
+   "base": "p:P98",
+   "ign": "Zeus",
+   "club": "T20",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P99",
+   "base": "p:P99",
+   "ign": "Kanavi",
+   "club": "T20",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P100",
+   "base": "p:P100",
+   "ign": "Zeka",
+   "club": "T20",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P101",
+   "base": "p:P101",
+   "ign": "Gumayusi",
+   "club": "T20",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P102",
+   "base": "p:P102",
+   "ign": "Delight",
+   "club": "T20",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P6",
+   "base": "p:P6",
+   "ign": "Bin",
+   "club": "T2",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P7",
+   "base": "p:P7",
+   "ign": "Xun",
+   "club": "T2",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P8",
+   "base": "p:P8",
+   "ign": "Knight",
+   "club": "T2",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P9",
+   "base": "p:P9",
+   "ign": "Viper",
+   "club": "T2",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P10",
+   "base": "p:P10",
+   "ign": "ON",
+   "club": "T2",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P144",
+   "base": "p:P144",
+   "ign": "Myrwn",
+   "club": "T29",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P145",
+   "base": "p:P145",
+   "ign": "Elyoya",
+   "club": "T29",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P146",
+   "base": "p:P146",
+   "ign": "Jojopyun",
+   "club": "T29",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P147",
+   "base": "p:P147",
+   "ign": "Supa",
+   "club": "T29",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P148",
+   "base": "p:P148",
+   "ign": "Alvaro",
+   "club": "T29",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P119",
+   "base": "p:P119",
+   "ign": "Doran",
+   "club": "T24",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P120",
+   "base": "p:P120",
+   "ign": "Oner",
+   "club": "T24",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P121",
+   "base": "p:P121",
+   "ign": "Faker",
+   "club": "T24",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P122",
+   "base": "p:P122",
+   "ign": "Peyz",
+   "club": "T24",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P123",
+   "base": "p:P123",
+   "ign": "Keria",
+   "club": "T24",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P537",
+   "base": "p:P537",
+   "ign": "ZUIAN",
+   "club": "T12",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P529",
+   "base": "p:P529",
+   "ign": "Tian",
+   "club": "T12",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P59",
+   "base": "p:P59",
+   "ign": "Creme",
+   "club": "T12",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P530",
+   "base": "p:P530",
+   "ign": "JackeyLove",
+   "club": "T12",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P40",
+   "base": "p:P40",
+   "ign": "Zhuo",
+   "club": "T12",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P215",
+   "base": "p:P215",
+   "ign": "Rest",
+   "club": "T43",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P216",
+   "base": "p:P216",
+   "ign": "Shad0w",
+   "club": "T43",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P609",
+   "base": "p:P609",
+   "ign": "Pout",
+   "club": "T43",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P218",
+   "base": "p:P218",
+   "ign": "Doggo",
+   "club": "T43",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:OE6e16ea985b",
+   "base": "p:OE6e16ea985b",
+   "ign": "Kino",
+   "club": "T43",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P83",
+   "base": "p:P83",
+   "ign": "Siwoo",
+   "club": "T17",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P84",
+   "base": "p:P84",
+   "ign": "Lucid",
+   "club": "T17",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P85",
+   "base": "p:P85",
+   "ign": "ShowMaker",
+   "club": "T17",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P86",
+   "base": "p:P86",
+   "ign": "Smash",
+   "club": "T17",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P87",
+   "base": "p:P87",
+   "ign": "Career",
+   "club": "T17",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P545",
+   "base": "p:P545",
+   "ign": "TheShy",
+   "club": "T4",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P17",
+   "base": "p:P17",
+   "ign": "Wei",
+   "club": "T4",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P18",
+   "base": "p:P18",
+   "ign": "Rookie",
+   "club": "T4",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P60",
+   "base": "p:P60",
+   "ign": "JiaQi",
+   "club": "T4",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P526",
+   "base": "p:P526",
+   "ign": "Meiko",
+   "club": "T4",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P210",
+   "base": "p:P210",
+   "ign": "Morgan",
+   "club": "T42",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P211",
+   "base": "p:P211",
+   "ign": "Josedeodo",
+   "club": "T42",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P212",
+   "base": "p:P212",
+   "ign": "Quid",
+   "club": "T42",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P213",
+   "base": "p:P213",
+   "ign": "Yeon",
+   "club": "T42",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P214",
+   "base": "p:P214",
+   "ign": "CoreJJ",
+   "club": "T42",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P195",
+   "base": "p:P195",
+   "ign": "Dhokla",
+   "club": "T39",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P196",
+   "base": "p:P196",
+   "ign": "Inspired",
+   "club": "T39",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P197",
+   "base": "p:P197",
+   "ign": "Saint",
+   "club": "T39",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P198",
+   "base": "p:P198",
+   "ign": "Berserker",
+   "club": "T39",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P199",
+   "base": "p:P199",
+   "ign": "Isles",
+   "club": "T39",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P174",
+   "base": "p:P174",
+   "ign": "Thanatos",
+   "club": "T35",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P175",
+   "base": "p:P175",
+   "ign": "Blaber",
+   "club": "T35",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P559",
+   "base": "p:P559",
+   "ign": "Loki",
+   "club": "T35",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P375",
+   "base": "p:P375",
+   "ign": "Tactical",
+   "club": "T35",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P178",
+   "base": "p:P178",
+   "ign": "Vulcan",
+   "club": "T35",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P139",
+   "base": "p:P139",
+   "ign": "Canna",
+   "club": "T28",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P140",
+   "base": "p:P140",
+   "ign": "Yike",
+   "club": "T28",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P141",
+   "base": "p:P141",
+   "ign": "kyeahoo",
+   "club": "T28",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P142",
+   "base": "p:P142",
+   "ign": "Caliste",
+   "club": "T28",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P143",
+   "base": "p:P143",
+   "ign": "Busio",
+   "club": "T28",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P245",
+   "base": "p:P245",
+   "ign": "Kratos",
+   "club": "T49",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P246",
+   "base": "p:P246",
+   "ign": "Gury",
+   "club": "T49",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:OEfb98598a1a",
+   "base": "p:OEfb98598a1a",
+   "ign": "Chika",
+   "club": "T49",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P593",
+   "base": "p:P593",
+   "ign": "Harky",
+   "club": "T49",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:OEef60290790",
+   "base": "p:OEef60290790",
+   "ign": "SiuLoong",
+   "club": "T49",
+   "role": "辅助",
+   "starter": true
+  }
+ ]
+}

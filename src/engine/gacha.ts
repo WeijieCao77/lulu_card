@@ -23,7 +23,7 @@ import { notePull, spendDupes } from './tradeLock'
 import { cleanShop } from './dailyShop'
 import type { DailyShop } from './dailyShop'
 import {
-  ALL_CARDS, SEOUL_CARDS, ECHO_CARDS, isEchoCard, COACH_CARDS, COINS_FOR, DUPES_FOR, LEGEND_CARDS, LEGEND_COACH_CARDS, MAX_LEVEL, RARITY_CN, cardName, PLAYER_CARDS,
+  ALL_CARDS, SEOUL_CARDS, ECHO_CARDS, S16_CARDS, isSeriesCard, isS16Card, s16Hidden, COACH_CARDS, COINS_FOR, DUPES_FOR, LEGEND_CARDS, LEGEND_COACH_CARDS, MAX_LEVEL, RARITY_CN, cardName, PLAYER_CARDS,
   SALVAGE, SQUAD_SLOTS, cardById, cardPower, emptySquad, isPlayerCard, personOf, rarityRank, ratingAt,
   squadRating, squadPower, MERGED_CARDS, REMOVED_CARDS, canonicalCardId,
 } from './cards'
@@ -54,6 +54,8 @@ export type PackKind =
   | 'echo'
   // one 峡谷回响 card — the 每日老将问答 prize (owner, 2026-10-04); never sold
   | 'echoScout'
+  // S16 世界赛: every player equally likely, on sale until the week after the final (owner, 2026-10-04)
+  | 's16'
 
 /** the positions a pack can be dealt from; 辅助 is not a pool, it is the absence of one */
 export type PackPosition = Extract<Role, '上单' | '打野' | '中单' | '下路'>
@@ -87,7 +89,11 @@ export interface PackDef {
    */
   shop?: boolean
   /** coach packs deal from a different deck; a series deals from one region; a position from its players; 'legend' is every 彩卡 */
-  pool: 'player' | 'coach' | 'seoul2024' | 'legend' | 'echo' | Series | Region | PackPosition
+  pool: 'player' | 'coach' | 'seoul2024' | 'legend' | 'echo' | 's16' | Series | Region | PackPosition
+  /** every card of the pool equally likely: no metals rolled, no pity counted (S16 — nothing is known before it is played) */
+  uniform?: boolean
+  /** last Asia/Shanghai day it can be bought; packs already held still open after */
+  until?: string
 }
 
 /**
@@ -112,6 +118,11 @@ export const PACKS: Record<PackKind, PackDef> = {
     blurb: '退役老将回归。三张峡谷回响卡，至少一张银卡，不出彩卡。',
     // owner 2026-10-04: priced like the ordinary three-card packs (2,600); odds are the 首尔包's 12% gold, 38% silver
     cost: 2600, draws: 3, mythic: 0, gold: .12, silver: .38, floor: 'silver', shop: true,
+  },
+  s16: {
+    kind: 's16', name: 'S16 世界赛包', pool: 's16',
+    blurb: 'S16 参赛选手，三张卡，每位选手抽中的机会一样。数值随 S16 比赛揭晓和变化。',
+    cost: 2600, draws: 3, mythic: 0, gold: 0, silver: 0, shop: true, uniform: true, until: '2026-11-21',
   },
   echoScout: {
     kind: 'echoScout', name: '回响试训包', pool: 'echo',
@@ -875,6 +886,8 @@ export interface GachaState {
   echoGift?: 1
   /** how many 峡谷回响图鉴 milestones have been collected — see ECHO_SET_REWARDS */
   echoSet?: number
+  /** how many S16 图鉴 milestones have been collected — see S16_SET_REWARDS */
+  s16Set?: number
 }
 
 /**
@@ -1115,6 +1128,7 @@ const POOLS = {
     silver: SEOUL_CARDS.filter(c => c.rarity === 'silver'),
     bronze: SEOUL_CARDS.filter(c => c.rarity === 'bronze'),
   },
+  s16: { mythic: [] as PlayerCard[], gold: S16_CARDS, silver: S16_CARDS, bronze: S16_CARDS },
   echo: {
     mythic: [] as PlayerCard[],
     gold: ECHO_CARDS.filter((c) => c.rarity === 'gold'),
@@ -1207,6 +1221,7 @@ export function openPack(
     g.packs[kind] = (g.packs[kind] ?? 0) - 1
   } else {
     if (def.shop === false) throw new Error(`${def.name}买不到，只能从玩法奖励获得`)
+    if (def.until && today && today > def.until) throw new Error(`${def.name}已经下架，手里的包还能打开`)
     const price = packCost(kind, today, g)
     if (g.coins < price) throw new Error('金币不够')
     g.coins -= price
@@ -1219,6 +1234,8 @@ export function openPack(
   const certain = def.mythic >= 1
   const metals: Rarity[] = []
   for (let i = 0; i < def.draws; i++) {
+    // a uniform pack rolls no metal and touches no pity counter: the card is drawn straight from the pool below
+    if (def.uniform) { metals.push('bronze'); continue }
     const r = rng.next()
     let metal: Rarity
     // the彩卡 roll happens first and on its own budget, so raising the gold
@@ -1435,9 +1452,9 @@ export function collection(g: GachaState): { card: Card; owned: OwnedCard; ratin
 }
 
 export const collectionProgress = (g: GachaState) => ({
-  // 峡谷回响 has its own 图鉴 and progress (owner, 2026-10-04); the main count is the ordinary game
-  owned: Object.keys(g.cards).filter((id) => !id.startsWith('echo:')).length,
-  total: ALL_CARDS.filter((c) => !isEchoCard(c)).length,
+  // 峡谷回响 and S16 世界赛 have their own 图鉴 and progress (owner, 2026-10-04); the main count is the ordinary game
+  owned: Object.keys(g.cards).filter((id) => !id.startsWith('echo:') && !id.startsWith('s16:')).length,
+  total: ALL_CARDS.filter((c) => !isSeriesCard(c)).length,
 })
 
 /**
@@ -1670,7 +1687,7 @@ export function claimSeries(g: GachaState, region: Series): string | null {
  */
 export const FULL_SET_CARDS: ReadonlySet<string> = new Set(
   // 峡谷回响 is not part of the 全图鉴 (owner, 2026-10-04): it has its own 图鉴 and rewards
-  ALL_CARDS.filter((c) => c.rarity !== 'mythic' && !isEchoCard(c)).map((c) => c.id),
+  ALL_CARDS.filter((c) => c.rarity !== 'mythic' && !isSeriesCard(c)).map((c) => c.id),
 )
 export const FULL_SET_REWARD = { pack: 'legend' as PackKind, count: 1 }
 
@@ -1755,6 +1772,49 @@ export function claimEchoSet(g: GachaState): string | null {
   g.echoSet = prog.claimed + prog.ready.length
   const got = [packs.join('、'), coins ? `+${coins} 金币` : ''].filter(Boolean).join('，')
   note(g, `峡谷回响图鉴奖励：${got}`)
+  return got
+}
+
+/**
+ * S16 图鉴 — the S16 世界赛 series' own collection ladder (owner 2026-10-04: own 图鉴 with rewards, not the 全图鉴),
+ * the same four marks and rewards as 峡谷回响's, paying the series' own pack. The total is the pool as it stands:
+ * when the subs and the Brazilian teams are added, the marks move with it.
+ */
+export const S16_SET_REWARDS: SeriesReward[] = [
+  { at: 0.25, coins: 1500, label: '+1500 金币' },
+  { at: 0.5, coins: 1000, pack: 's16', label: 'S16 世界赛包 ×1，+1000 金币' },
+  { at: 0.75, coins: 4000, label: '+4000 金币' },
+  { at: 1, coins: 10000, pack: 'ten', label: '十连包 ×1，+10000 金币' },
+]
+
+export function s16SetProgress(g: GachaState): EchoSetProgress {
+  let owned = 0
+  for (const id of Object.keys(g.cards)) if (isS16Card(cardById(id))) owned++
+  const total = S16_CARDS.length
+  const claimed = g.s16Set ?? 0
+  const marks = S16_SET_REWARDS.map((r) => milestoneAt(r, total))
+  const ready = S16_SET_REWARDS.filter((_, i) => i >= claimed && owned >= marks[i])
+  const nextIdx = marks.findIndex((m) => owned < m)
+  const next = nextIdx < 0 ? null : { ...S16_SET_REWARDS[nextIdx], need: marks[nextIdx] - owned }
+  return { owned, total, claimed, marks, ready, next }
+}
+
+export function claimS16Set(g: GachaState): string | null {
+  const prog = s16SetProgress(g)
+  if (!prog.ready.length) return null
+  let coins = 0
+  const packs: string[] = []
+  for (const r of prog.ready) {
+    coins += r.coins
+    if (r.pack && r.pack !== 'self') {
+      g.packs[r.pack] = (g.packs[r.pack] ?? 0) + (r.count ?? 1)
+      packs.push(`${PACKS[r.pack].name} ×${r.count ?? 1}`)
+    }
+  }
+  g.coins += coins
+  g.s16Set = prog.claimed + prog.ready.length
+  const got = [packs.join('、'), coins ? `+${coins} 金币` : ''].filter(Boolean).join('，')
+  note(g, `S16 图鉴奖励：${got}`)
   return got
 }
 
@@ -2772,6 +2832,11 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   mergeCardAliases(g)
   dropRemovedCards(g)
   if (g.echoGift !== 1) delete g.echoGift
+  if (g.s16Set !== undefined) {
+    const n = Math.trunc(Number(g.s16Set))
+    if (n >= 1 && n <= S16_SET_REWARDS.length) g.s16Set = n
+    else delete g.s16Set
+  }
   if (g.echoSet !== undefined) {
     const n = Math.trunc(Number(g.echoSet))
     if (n >= 1 && n <= ECHO_SET_REWARDS.length) g.echoSet = n
@@ -2846,7 +2911,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
 export const SERVER_KEYS = [
   'version', 'createdAt', 'coins', 'cards', 'packs', 'pity', 'mythicDry', 'pulls', 'ladder',
   'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'seoulRoute',
-  'weeklySeriesPick', 'shop', 'echoQuiz', 'echoGift', 'echoSet', 'echoDaily',
+  'weeklySeriesPick', 'shop', 'echoQuiz', 'echoGift', 'echoSet', 'echoDaily', 's16Set',
 ] as const
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends', 'cupSquads'] as const
 
@@ -2873,6 +2938,8 @@ function cleanClientSquad(server: GachaState, raw: Partial<Squad>): Squad {
     if (typeof id !== 'string' || !server.cards[id]) return null
     const c = cardById(id)
     if (!c || !isPlayerCard(c)) return null
+    // an S16 card is benched until his numbers are known (owner, 2026-10-04)
+    if (s16Hidden(c)) return null
     const who = personOf(c)
     if (seen.has(who)) return null
     seen.add(who)
