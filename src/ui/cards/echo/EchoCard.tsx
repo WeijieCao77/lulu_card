@@ -13,8 +13,35 @@ import './echoCard.css'
 const MARK: Record<string, string> = { bronze: '铜', silver: '银', gold: '金' }
 const BARS: Record<string, number> = { bronze: 1, silver: 2, gold: 3 }
 const RARITY_CLASS: Record<string, string> = { bronze: 're-bronze', silver: 're-silver', gold: 're-gold' }
-/** where each photograph's face sits, tuned card by card; the default keeps a face in the upper third */
-const focusOf = (ign: string): string => (FOCUS as Record<string, string>)[ign] ?? 'center 22%'
+/**
+ * Framing for one photograph (src/data/echoPhotoFocus.json): the face centre in the source image (fx fy, 0–1)
+ * and a zoom. The image is placed so the face lands horizontally centred, a third of the way down the
+ * portrait window, and a far-off figure is enlarged around that point. No entry: a face in the upper third.
+ */
+const PORTRAIT_AR = 0.737           // width / height of the portrait window (.re-portrait), the same at every size
+const clamp01 = (v: number) => Math.max(0, Math.min(1, v))
+const pct = (v: number) => `${(v * 100).toFixed(1)}%`
+function framing(ign: string, photo: { w: number; h: number } | null): { pos: string; origin: string; zoom: number } {
+  const v = (FOCUS as Record<string, string>)[ign]
+  if (!v || !photo) return { pos: 'center 22%', origin: 'center 22%', zoom: 1 }
+  // "z0.8": a close-up that only needs to come back a step — shrink toward the top centre, face stays upper-centre
+  if (v.startsWith('z')) return { pos: 'center 22%', origin: '50% 12%', zoom: Number(v.slice(1)) }
+  const [fx, fy, z = 1] = v.split(/\s+/).map(Number)
+  const ar = photo.w / photo.h
+  let px = 0.5, py = 0.5, faceX = fx, faceY = fy
+  if (ar > PORTRAIT_AR) {           // wider than the window: slide sideways
+    const vis = PORTRAIT_AR / ar
+    px = clamp01((fx - vis / 2) / (1 - vis))
+    faceX = (fx - px * (1 - vis)) / vis
+  } else {                          // taller: slide up or down
+    const vis = ar / PORTRAIT_AR
+    py = clamp01((fy - vis / 3) / (1 - vis))
+    faceY = (fy - py * (1 - vis)) / vis
+  }
+  // scale about the point that carries the face to (0.5, 0.33); a point inside the frame keeps it covered
+  const toward = (face: number, goal: number) => (z === 1 ? 0.5 : clamp01((goal - face * z) / (1 - z)))
+  return { pos: `${pct(px)} ${pct(py)}`, origin: `${pct(toward(faceX, 0.5))} ${pct(toward(faceY, 0.33))}`, zoom: z }
+}
 
 export interface EchoCardProps {
   card: PlayerCard
@@ -29,7 +56,8 @@ export interface EchoCardProps {
 
 export function EchoCard({ card, level = 0, dupes = 0, size = 'md', selected, dimmed, onClick, footer }: EchoCardProps) {
   const echo = card.echo!
-  const style = { '--re-portrait-position': focusOf(card.ign) } as CSSProperties
+  const f = framing(card.ign, echo.photo)
+  const style = { '--re-portrait-position': f.pos, '--re-origin': f.origin, '--re-zoom': f.zoom } as CSSProperties
   const stats = [
     { label: '对线', value: card.attrs.reaction },
     { label: '团战', value: card.attrs.teamwork },

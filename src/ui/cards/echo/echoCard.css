@@ -191,3 +191,4 @@
 .cardback.retired-echo-back.retired-echo-back.retired-echo-back{border-radius:6px;}
 .cardback.retired-echo-back.retired-echo-back.retired-echo-back::after{content:"";position:absolute;inset:4px;border:1px solid #b5c8bd45;border-radius:3px;box-shadow:none;background:none;z-index:9;pointer-events:none;}
 .cardface.retired-echo.retired-echo.retired-echo.s-sm{min-height:174px}.cardface.retired-echo.retired-echo.retired-echo.s-md{min-height:212px}.cardface.retired-echo.retired-echo.retired-echo.s-lg{min-height:281px}
+.retired-echo.retired-echo.retired-echo .re-portrait img{transform:scale(var(--re-zoom,1));transform-origin:var(--re-origin,var(--re-portrait-position))}

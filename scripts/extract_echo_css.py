@@ -81,5 +81,7 @@ for sel, body in rules(css):
 kept.append('.cardface.retired-echo.retired-echo.retired-echo.s-sm{min-height:174px}'
             '.cardface.retired-echo.retired-echo.retired-echo.s-md{min-height:212px}'
             '.cardface.retired-echo.retired-echo.retired-echo.s-lg{min-height:281px}')
+# per-photo framing (src/data/echoPhotoFocus.json): a far-off figure is enlarged around the same focus point
+kept.append('.retired-echo.retired-echo.retired-echo .re-portrait img{transform:scale(var(--re-zoom,1));transform-origin:var(--re-origin,var(--re-portrait-position))}')
 DST.write_text('/* 峡谷回响卡面与卡背 — 由 scripts/extract_echo_css.py 从站长确认的定稿生成，不要手改。 */\n' + '\n'.join(kept) + '\n', encoding='utf-8')
 print(len(kept), 'rules ->', DST)
