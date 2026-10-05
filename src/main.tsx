@@ -3,8 +3,11 @@ import { createRoot } from 'react-dom/client'
 import App from './App'
 import './styles.css'
 import { startTelemetry, track } from './engine/telemetry'
+import { reloadOnceForNewBuild } from './ui/lazyReload'
 
 startTelemetry()
+// a code file renamed by a deploy since this tab was opened: load the new build instead of failing (lazyReload.ts)
+window.addEventListener('vite:preloadError', (event) => { if (reloadOnceForNewBuild()) event.preventDefault() })
 // Only source locations and fixed categories; never exception text or account IDs.
 let reportedErrors = 0
 window.addEventListener('error', event => {
