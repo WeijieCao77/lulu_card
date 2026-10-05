@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-05', title: '新教练卡 KIM', changes: [
+    { kind: '新增', text: '新增教练卡 KIM（金晶洙）：S8 带 IG 夺冠、两届 MSI 冠军、四个 LCK 冠军的金牌主教练，目前自由身，和 IG、DRX、T1、Gen.G 的选手有同队默契。已加入教练包。' },
+  ],
+}, {
   date: '2026-10-05', title: '修复开包卡住和图鉴白屏', changes: [
     { kind: '修复', text: '部分手机上开包时，祭坛点了没反应、卡包打不开（声音播放出错把开包动画卡住了）。现在声音出错也不影响开包；之前卡住的包，卡其实已经进了收藏，刷新后能看到。' },
     { kind: '修复', text: '网站更新后没刷新页面就点图鉴，有时会整页白屏。现在会自动加载新版本，万一还打不开，会显示一个「刷新页面」的按钮，不再白屏。' },

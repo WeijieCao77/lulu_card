@@ -745,5 +745,34 @@
         "title": "LLA 2021"
       }
     ]
+  },
+  "KIM": {
+    "worlds": [
+      {
+        "title": "2018"
+      }
+    ],
+    "msi": [
+      {
+        "title": "2024"
+      },
+      {
+        "title": "2025"
+      }
+    ],
+    "leagues": [
+      {
+        "title": "LCK 2017 Summer"
+      },
+      {
+        "title": "LCK 2020 Spring"
+      },
+      {
+        "title": "LCK 2024 Spring"
+      },
+      {
+        "title": "LCK 2025 Season"
+      }
+    ]
   }
 }
