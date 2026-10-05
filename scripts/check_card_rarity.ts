@@ -139,7 +139,7 @@ function testCoachCountsAndConsistency() {
   }
   const expectedCoachCounts: Record<string, Record<string, number>> = {
     // 2026-09-28: coaches on the player bands (金 84 / 银 72), honours floor, 2026-09 head-coach moves (+13 cards)
-    'LPL': { gold: 8, silver: 7, bronze: 6 },
+    'LPL': { gold: 9, silver: 7, bronze: 6 }, // + KIM（自由身，最后执教 WBG）
     'LCK': { gold: 8, silver: 10, bronze: 4 },
     'LEC': { gold: 3, silver: 12, bronze: 12 },
     'LCS': { gold: 2, silver: 11, bronze: 5 },
@@ -251,7 +251,7 @@ function testGlobalRarityColorConsistency() {
 
 assert.equal(BASE_PLAYER_CARDS.length, 674); // two duplicate cards merged; naiyou (p:P58) intentionally removed
 assert.equal(LEGEND_CARDS.length, 40);
-assert.equal(COACH_CARDS.length, 127);
+assert.equal(COACH_CARDS.length, 128); // + KIM（金晶洙，自由身，2026-10-05）
 assert.equal(CARD_BALANCE_VERSION, 8);
 testPlayerCountsAndCardStats();
 
