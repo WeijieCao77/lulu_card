@@ -112,5 +112,621 @@
    "T22",
    "T24"
   ]
+ },
+ "titles": {
+  "BigWei": [
+   {
+    "club": "T2",
+    "kind": "league",
+    "event": "LPL 2024 Spring"
+   },
+   {
+    "club": "T2",
+    "kind": "league",
+    "event": "LPL 2024 Summer"
+   },
+   {
+    "club": "T1",
+    "kind": "league",
+    "event": "LPL 2026 Grand Finals"
+   }
+  ],
+  "Daeny": [
+   {
+    "club": "T17",
+    "kind": "worlds",
+    "event": "Worlds 2020"
+   },
+   {
+    "club": "T17",
+    "kind": "league",
+    "event": "LCK 2020 Summer"
+   },
+   {
+    "club": "T2",
+    "kind": "league",
+    "event": "LPL 2026 Split 1"
+   },
+   {
+    "club": "T2",
+    "kind": "league",
+    "event": "LPL 2026 Split 2"
+   }
+  ],
+  "Maokai": [
+   {
+    "club": "T3",
+    "kind": "worlds",
+    "event": "Worlds 2021"
+   },
+   {
+    "club": "T3",
+    "kind": "league",
+    "event": "LPL 2021 Summer"
+   }
+  ],
+  "Helper": [
+   {
+    "club": "H:PSG",
+    "kind": "league",
+    "event": "PCS 2021 Spring"
+   },
+   {
+    "club": "H:PSG",
+    "kind": "league",
+    "event": "PCS 2021 Summer"
+   }
+  ],
+  "Tabe": [
+   {
+    "club": "H:RNG",
+    "kind": "msi",
+    "event": "MSI 2021"
+   },
+   {
+    "club": "H:RNG",
+    "kind": "msi",
+    "event": "MSI 2022"
+   },
+   {
+    "club": "H:RNG",
+    "kind": "league",
+    "event": "LPL 2021 Spring"
+   },
+   {
+    "club": "H:RNG",
+    "kind": "league",
+    "event": "LPL 2022 Spring"
+   },
+   {
+    "club": "T1",
+    "kind": "league",
+    "event": "LPL 2025 Split 2"
+   }
+  ],
+  "Poppy": [
+   {
+    "club": "T12",
+    "kind": "league",
+    "event": "LPL 2025 Split 1"
+   }
+  ],
+  "Ryu": [
+   {
+    "club": "T18",
+    "kind": "league",
+    "event": "LCK 2026 Season"
+   }
+  ],
+  "SSONG": [
+   {
+    "club": "T22",
+    "kind": "worlds",
+    "event": "Worlds 2022"
+   }
+  ],
+  "Homme": [
+   {
+    "club": "T5",
+    "kind": "msi",
+    "event": "MSI 2023"
+   },
+   {
+    "club": "T20",
+    "kind": "msi",
+    "event": "MSI 2026"
+   },
+   {
+    "club": "T5",
+    "kind": "league",
+    "event": "LPL 2020 Spring"
+   },
+   {
+    "club": "T5",
+    "kind": "league",
+    "event": "LPL 2022 Summer"
+   },
+   {
+    "club": "T5",
+    "kind": "league",
+    "event": "LPL 2023 Spring"
+   },
+   {
+    "club": "T5",
+    "kind": "league",
+    "event": "LPL 2023 Summer"
+   }
+  ],
+  "Score": [
+   {
+    "club": "T18",
+    "kind": "league",
+    "event": "LCK 2022 Summer"
+   },
+   {
+    "club": "T18",
+    "kind": "league",
+    "event": "LCK 2023 Spring"
+   },
+   {
+    "club": "T18",
+    "kind": "league",
+    "event": "LCK 2023 Summer"
+   }
+  ],
+  "DanDy": [
+   {
+    "club": "T20",
+    "kind": "league",
+    "event": "LCK 2024 Summer"
+   }
+  ],
+  "kkOma": [
+   {
+    "club": "T24",
+    "kind": "worlds",
+    "event": "Worlds 2015"
+   },
+   {
+    "club": "T24",
+    "kind": "worlds",
+    "event": "Worlds 2016"
+   },
+   {
+    "club": "T24",
+    "kind": "worlds",
+    "event": "Worlds 2024"
+   },
+   {
+    "club": "T24",
+    "kind": "worlds",
+    "event": "Worlds 2025"
+   },
+   {
+    "club": "T24",
+    "kind": "msi",
+    "event": "MSI 2016"
+   },
+   {
+    "club": "T24",
+    "kind": "msi",
+    "event": "MSI 2017"
+   },
+   {
+    "club": "T24",
+    "kind": "league",
+    "event": "LCK 2016 Spring"
+   },
+   {
+    "club": "T24",
+    "kind": "league",
+    "event": "LCK 2017 Spring"
+   },
+   {
+    "club": "T17",
+    "kind": "league",
+    "event": "LCK 2021 Spring"
+   },
+   {
+    "club": "T17",
+    "kind": "league",
+    "event": "LCK 2021 Summer"
+   },
+   {
+    "club": "T24",
+    "kind": "worlds",
+    "event": "Worlds 2013"
+   },
+   {
+    "club": "T24",
+    "kind": "league",
+    "event": "LCK 2015 Spring"
+   },
+   {
+    "club": "T24",
+    "kind": "league",
+    "event": "LCK 2015 Summer"
+   },
+   {
+    "club": "T24",
+    "kind": "league",
+    "event": "LCK 2019 Spring"
+   },
+   {
+    "club": "T24",
+    "kind": "league",
+    "event": "LCK 2019 Summer"
+   },
+   {
+    "club": "T24",
+    "kind": "league",
+    "event": "Champions 2013 Summer"
+   },
+   {
+    "club": "T24",
+    "kind": "league",
+    "event": "Champions 2013-14 Winter"
+   }
+  ],
+  "GrabbZ": [
+   {
+    "club": "T26",
+    "kind": "msi",
+    "event": "MSI 2019"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2019 Spring"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2019 Summer"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2020 Spring"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2020 Summer"
+   }
+  ],
+  "Perkz": [
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2026 Summer"
+   }
+  ],
+  "Reapered": [
+   {
+    "club": "T35",
+    "kind": "league",
+    "event": "LCS 2020 Spring"
+   },
+   {
+    "club": "H:100T",
+    "kind": "league",
+    "event": "LCS 2021 Summer"
+   }
+  ],
+  "Melzhet": [
+   {
+    "club": "T29",
+    "kind": "league",
+    "event": "LEC 2025 Spring"
+   }
+  ],
+  "Nukeduck": [
+   {
+    "club": "T38",
+    "kind": "league",
+    "event": "LTA North 2025 Split 2"
+   },
+   {
+    "club": "T38",
+    "kind": "league",
+    "event": "LTA 2025 Championship"
+   }
+  ],
+  "Thinkcard": [
+   {
+    "club": "T51",
+    "kind": "league",
+    "event": "LTA South 2025 Split 2"
+   },
+   {
+    "club": "H:CLG",
+    "kind": "league",
+    "event": "LCS 2023 Summer"
+   }
+  ],
+  "Reignover": [
+   {
+    "club": "T35",
+    "kind": "league",
+    "event": "LCS 2021 Spring"
+   },
+   {
+    "club": "T39",
+    "kind": "league",
+    "event": "LCS 2026 Lock-In"
+   },
+   {
+    "club": "T39",
+    "kind": "league",
+    "event": "LCS 2026 Spring"
+   }
+  ],
+  "Spawn": [
+   {
+    "club": "T42",
+    "kind": "league",
+    "event": "LCS 2024 Spring"
+   },
+   {
+    "club": "T42",
+    "kind": "league",
+    "event": "LTA 2025 Split 1"
+   }
+  ],
+  "Chawy": [
+   {
+    "club": "T43",
+    "kind": "league",
+    "event": "LCP 2025 Season Kickoff"
+   },
+   {
+    "club": "T43",
+    "kind": "league",
+    "event": "LCP 2025 Mid Season"
+   },
+   {
+    "club": "T43",
+    "kind": "league",
+    "event": "LCP 2025 Season Finals"
+   }
+  ],
+  "CorGi": [
+   {
+    "club": "H:PSG",
+    "kind": "league",
+    "event": "PCS 2022 Spring"
+   },
+   {
+    "club": "H:PSG",
+    "kind": "league",
+    "event": "PCS 2023 Spring"
+   },
+   {
+    "club": "H:PSG",
+    "kind": "league",
+    "event": "PCS 2023 Summer"
+   },
+   {
+    "club": "H:PSG",
+    "kind": "league",
+    "event": "PCS 2024 Spring"
+   },
+   {
+    "club": "H:PSG",
+    "kind": "league",
+    "event": "PCS 2024 Summer"
+   }
+  ],
+  "WarHorse": [
+   {
+    "club": "H:FPX",
+    "kind": "worlds",
+    "event": "Worlds 2019"
+   },
+   {
+    "club": "H:FW",
+    "kind": "league",
+    "event": "LMS 2018 Spring"
+   },
+   {
+    "club": "H:FW",
+    "kind": "league",
+    "event": "LMS 2018 Summer"
+   },
+   {
+    "club": "H:FPX",
+    "kind": "league",
+    "event": "LPL 2019 Summer"
+   },
+   {
+    "club": "T50",
+    "kind": "league",
+    "event": "LCP 2026 Split 1"
+   },
+   {
+    "club": "T50",
+    "kind": "league",
+    "event": "LCP 2026 Split 2"
+   },
+   {
+    "club": "T50",
+    "kind": "league",
+    "event": "LCP 2026 Split 3"
+   },
+   {
+    "club": "H:FW",
+    "kind": "league",
+    "event": "LMS 2017 Summer"
+   }
+  ],
+  "Furyz": [
+   {
+    "club": "T51",
+    "kind": "league",
+    "event": "CBLOL 2026 Split 1"
+   }
+  ],
+  "Raise": [
+   {
+    "club": "T53",
+    "kind": "league",
+    "event": "CBLOL Cup 2026"
+   }
+  ],
+  "Von": [
+   {
+    "club": "T53",
+    "kind": "league",
+    "event": "CBLOL 2022 Split 2"
+   },
+   {
+    "club": "H:INF",
+    "kind": "league",
+    "event": "LLA 2021"
+   }
+  ],
+  "Snok": [
+   {
+    "club": "T97",
+    "kind": "league",
+    "event": "LLA 2024 Opening"
+   }
+  ],
+  "Mafa": [
+   {
+    "club": "T4",
+    "kind": "league",
+    "event": "LPL 2019 Spring"
+   }
+  ],
+  "Edgar": [
+   {
+    "club": "T18",
+    "kind": "worlds",
+    "event": "Worlds 2017"
+   },
+   {
+    "club": "T18",
+    "kind": "worlds",
+    "event": "Worlds 2014"
+   },
+   {
+    "club": "T18",
+    "kind": "league",
+    "event": "Champions 2014 Spring"
+   }
+  ],
+  "Dylan Falco": [
+   {
+    "club": "T25",
+    "kind": "league",
+    "event": "EU LCS 2018 Spring"
+   },
+   {
+    "club": "T25",
+    "kind": "league",
+    "event": "EU LCS 2018 Summer"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2022 Spring"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2023 Winter"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2023 Summer"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2023 Season Finals"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2024 Winter"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2024 Spring"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2024 Summer"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2024 Season Finals"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2025 Summer"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2026 Versus"
+   },
+   {
+    "club": "T26",
+    "kind": "league",
+    "event": "LEC 2026 Spring"
+   }
+  ],
+  "SeeEl": [
+   {
+    "club": "T57",
+    "kind": "league",
+    "event": "LTA South 2025 Split 3"
+   }
+  ],
+  "KIM": [
+   {
+    "club": "T4",
+    "kind": "worlds",
+    "event": "Worlds 2018"
+   },
+   {
+    "club": "T18",
+    "kind": "msi",
+    "event": "MSI 2024"
+   },
+   {
+    "club": "T18",
+    "kind": "msi",
+    "event": "MSI 2025"
+   },
+   {
+    "club": "T22",
+    "kind": "league",
+    "event": "LCK 2017 Summer"
+   },
+   {
+    "club": "T24",
+    "kind": "league",
+    "event": "LCK 2020 Spring"
+   },
+   {
+    "club": "T18",
+    "kind": "league",
+    "event": "LCK 2024 Spring"
+   },
+   {
+    "club": "T18",
+    "kind": "league",
+    "event": "LCK 2025 Season"
+   }
+  ]
  }
 }

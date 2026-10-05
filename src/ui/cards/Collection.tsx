@@ -14,7 +14,7 @@ import { dismantleFee, dismantleYield } from '../../engine/dismantle'
 import { sparesOf } from '../../engine/inbox'
 import { crestUrl } from '../../engine/dossier'
 import {
-  ALL_CARDS, echoTeamName, MAX_LEVEL, POWER_PER_LEVEL, RARITY_CN, SALVAGE, cardById, cardPower, isPlayerCard, titleClubTags,
+  ALL_CARDS, coachTitleLines, echoTeamName, MAX_LEVEL, POWER_PER_LEVEL, RARITY_CN, SALVAGE, cardById, cardPower, isPlayerCard,
 } from '../../engine/cards'
 import type { Card, Rarity } from '../../engine/cards'
 import { ATTR_CN, ATTR_KEYS, REGION_CN } from '../../engine/types'
@@ -388,8 +388,9 @@ export default function Collection() {
                   ) : (
                     <div className="small muted" style={{ lineHeight: 1.9 }}>
                       {sel.free
-                        ? <>自由身教练{sel.titleClubs?.length ? ` · 夺冠俱乐部 ${titleClubTags(sel).join('、')}` : ''}</>
-                        : <>{sel.clubTag ?? '自由身'} 的教练{sel.spec ? '组分析师' : ''}{sel.titleClubs?.length ? ` · 夺冠俱乐部 ${titleClubTags(sel).join('、')}` : ''}</>}
+                        ? <>自由身教练</>
+                        : <>{sel.clubTag ?? '自由身'} 的教练{sel.spec ? '组分析师' : ''}</>}
+                      {coachTitleLines(sel).map((l) => <div key={l} className="tiny">夺冠俱乐部 · {l}</div>)}
                       <br />战术 {sel.tactics} · 培养 {sel.development} · 激励 {sel.motivation}
                       {honoursLine(honoursOf(sel.name)) && <details style={{ marginTop: 4 }}>
                         <summary>执教履历：{honoursLine(honoursOf(sel.name))}</summary>

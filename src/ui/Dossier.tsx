@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { WORLD_PLAYERS } from '../engine/world'
 import { WORLD_TEAMS, EXTRA_COACHES } from '../engine/teams'
 import { coachDossier, dossierOf, titleCount } from '../engine/dossier'
-import { BASE_PLAYER_CARDS, COACH_CARDS, ECHO_CARDS, echoTeamName, LEGEND_CARDS, RARITY_CN, titleClubTags } from '../engine/cards'
+import { BASE_PLAYER_CARDS, COACH_CARDS, ECHO_CARDS, coachTitleLines, echoTeamName, LEGEND_CARDS, RARITY_CN } from '../engine/cards'
 import { SPEC_CN } from '../engine/staff'
 import CoachHonours from './CoachHonours'
 import { CareerEvents, CareerHonours, CareerTeams } from './PlayerCareer'
@@ -445,8 +445,9 @@ function CoachDetail({ card, onBack }: { card: CoachCard; onBack: () => void }) 
               {card.region ? ` · ${REGION_CN[card.region]}` : ''}
               <br />
               {card.free
-                ? <>自由身{card.titleClubs?.length ? ` · 夺冠俱乐部 ${titleClubTags(card).join('、')}` : ''}</>
-                : <>{club ? club.name : '暂无战队'}{card.clubTag ? `（${card.clubTag}）` : ''}{card.titleClubs?.length ? ` · 夺冠俱乐部 ${titleClubTags(card).join('、')}` : ''}</>}
+                ? <>自由身</>
+                : <>{club ? club.name : '暂无战队'}{card.clubTag ? `（${card.clubTag}）` : ''}</>}
+              {coachTitleLines(card).map((l) => <span key={l}><br />夺冠俱乐部 · {l}</span>)}
               <br />
               {coachRole(card)}
               {' · '}{RARITY_CN[card.rarity]} {card.rating ?? '—'}
