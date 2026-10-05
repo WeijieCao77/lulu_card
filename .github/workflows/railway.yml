@@ -47,5 +47,6 @@ jobs:
       - run: npx tsx scripts/check_game_regions.ts
       - run: npx tsx scripts/check_swap_regrade.ts
       - run: npx tsx scripts/check_card_rarity.ts
+      - run: npx tsx scripts/check_coach_bonds.ts
       - run: npx tsx scripts/check_arena_card_scale.ts
       - run: npx tsx scripts/check_series.ts

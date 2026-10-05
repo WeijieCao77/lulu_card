@@ -21,6 +21,7 @@ import { LEGENDS } from './legends'
 // player was on it — scripts/build_coached.py, off vlr.gg careers and Liquipedia tenure
 import COACHED_JSON from '../data/coached.json'
 import ECHO_JSON from '../data/echoCards.json'
+import COACH_TITLE_CLUBS from '../data/coachTitleClubs.json'
 import type { Legend } from './legends'
 import { decodeDisplayName } from './displayText'
 import { clamp } from './rng'
@@ -141,15 +142,19 @@ export interface CoachCard {
   spec?: string
   /** no head-coaching job at present (clubId null): shown as 自由身 */
   free?: boolean
-  /** a 自由身 coach's championship clubs (team ids): named on the card, and his same-club bond */
+  /**
+   * The clubs he won titles with as head coach (team ids, H:TAG for a club that is gone): named on the card, and
+   * a same-club bond with their players (owner 2026-10-05: 冠军教练和他的冠军俱乐部有默契；没有冠军的执教经历不算)
+   */
   titleClubs?: string[]
 }
 
-/** A 自由身 coach's championship clubs as tags, for the card detail. */
+/** A coach's championship clubs as tags, for the card detail. */
 export const titleClubTags = (c: CoachCard): string[] =>
-  (c.titleClubs ?? []).map((id) => WORLD_TEAMS.find((t) => t.id === id)?.tag ?? id)
+  (c.titleClubs ?? []).map((id) => WORLD_TEAMS.find((t) => t.id === id)?.tag ?? id.replace(/^H:/, ''))
+const TITLE_CLUBS = (COACH_TITLE_CLUBS as { clubs: Record<string, string[]> }).clubs
 
-/** Same club for a coach bond: the club he coaches, or — for a 自由身 coach — a club he won titles with. */
+/** Same club for a coach bond: the club he coaches, or a club he won titles with as head coach. */
 export function coachSharesClub(p: PlayerCard, coach: CoachCard): boolean {
   if (sameClubLineage(p, coach)) return true
   return !!coach.titleClubs?.some((id) => sameClubLineage(p, { clubId: id }))
@@ -251,6 +256,7 @@ function coachCard(c: { name: string } & CoachAbilities, club: Pick<CoachCard, '
     ...club,
     ...abilities,
     rating, rarity: coachRarityOf(rating),
+    ...(TITLE_CLUBS[c.name] ? { titleClubs: TITLE_CLUBS[c.name] } : {}),
     ...extra,
   }
 }
@@ -275,12 +281,7 @@ function buildCoachCards(): CoachCard[] {
   for (const f of FORMER_COACHES) {
     if (seen.has(f.coach.name)) continue
     seen.add(f.coach.name)
-    const titleClubs = f.titleClubs.map((tag) => {
-      const t = WORLD_TEAMS.find((x) => x.tag === tag && x.tier === 1)
-      if (!t) throw new Error(`coachChanges: ${f.coach.name} 的夺冠俱乐部 ${tag} 不在 world.json`)
-      return t.id
-    })
-    out.push(coachCard(f.coach, { clubId: null, clubTag: null, region: f.region as Region }, { free: true, titleClubs }))
+    out.push(coachCard(f.coach, { clubId: null, clubTag: null, region: f.region as Region }, { free: true }))
   }
   // the five real analysts are cards too — they coach a different way, and
   // there are few enough of them to be worth chasing

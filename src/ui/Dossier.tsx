@@ -446,7 +446,7 @@ function CoachDetail({ card, onBack }: { card: CoachCard; onBack: () => void }) 
               <br />
               {card.free
                 ? <>自由身{card.titleClubs?.length ? ` · 夺冠俱乐部 ${titleClubTags(card).join('、')}` : ''}</>
-                : <>{club ? club.name : '暂无战队'}{card.clubTag ? `（${card.clubTag}）` : ''}</>}
+                : <>{club ? club.name : '暂无战队'}{card.clubTag ? `（${card.clubTag}）` : ''}{card.titleClubs?.length ? ` · 夺冠俱乐部 ${titleClubTags(card).join('、')}` : ''}</>}
               <br />
               {coachRole(card)}
               {' · '}{RARITY_CN[card.rarity]} {card.rating ?? '—'}

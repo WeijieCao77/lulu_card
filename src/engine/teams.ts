@@ -48,14 +48,14 @@ for (const [tag, change] of Object.entries(COACH_CHANGES.teams as Record<string,
 }
 
 const coaching = new Set(WORLD_TEAMS.map((t) => t.coach?.name).filter(Boolean))
-export const FORMER_COACHES: FormerCoach[] = Object.entries(COACH_CHANGES.former as Record<string, { titleClubs: string[]; numbersFrom?: string }>)
+export const FORMER_COACHES: FormerCoach[] = Object.entries(COACH_CHANGES.former as Record<string, { titleClubs?: string[]; numbersFrom?: string }>)
   .map(([name, f]) => {
     if (coaching.has(name)) throw new Error(`coachChanges: ${name} 仍是主教练，不能算自由身`)
     // a coach new to the game who is between jobs (KIM, 2026-10-05) carries the season read of the club he
     // last coached (`numbersFrom`); the others carry their own original team's
     const team = f.numbersFrom ? byTag.get(f.numbersFrom) : WORLD_TEAMS.find((t) => originalCoach.get(t.tag)?.name === name)
     if (!team) throw new Error(`coachChanges: 找不到 ${name} 原来的球队`)
-    return { coach: { ...originalCoach.get(team.tag)!, name, assistants: [] }, region: team.region, titleClubs: f.titleClubs }
+    return { coach: { ...originalCoach.get(team.tag)!, name, assistants: [] }, region: team.region, titleClubs: f.titleClubs ?? [] }
   })
 
 export const EXTRA_COACHES: ExtraCoach[] = (COACH_CHANGES.extra as { coach: string; team: string }[]).map((x) => {

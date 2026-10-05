@@ -1,0 +1,116 @@
+{
+ "note": "冠军教练和他的冠军俱乐部有默契（站长 2026-10-05）：只算主教练拿的冠军（世界赛、MSI、顶级联赛）；助教冠军和没有冠军的执教经历都不算。俱乐部已解散的用历史俱乐部 H:TAG。来源：Leaguepedia 教练赛事成绩 + coachHonours.json。",
+ "clubs": {
+  "BigWei": [
+   "T2",
+   "T1"
+  ],
+  "Daeny": [
+   "T17",
+   "T2"
+  ],
+  "Maokai": [
+   "T3"
+  ],
+  "Helper": [
+   "H:PSG"
+  ],
+  "Tabe": [
+   "H:RNG",
+   "T1"
+  ],
+  "Poppy": [
+   "T12"
+  ],
+  "Ryu": [
+   "T18"
+  ],
+  "SSONG": [
+   "T22"
+  ],
+  "Homme": [
+   "T5",
+   "T20"
+  ],
+  "Score": [
+   "T18"
+  ],
+  "DanDy": [
+   "T20"
+  ],
+  "kkOma": [
+   "T24",
+   "T17"
+  ],
+  "GrabbZ": [
+   "T26"
+  ],
+  "Perkz": [
+   "T26"
+  ],
+  "Reapered": [
+   "T35",
+   "H:100T"
+  ],
+  "Melzhet": [
+   "T29"
+  ],
+  "Nukeduck": [
+   "T38"
+  ],
+  "Thinkcard": [
+   "T51",
+   "H:CLG"
+  ],
+  "Reignover": [
+   "T35",
+   "T39"
+  ],
+  "Spawn": [
+   "T42"
+  ],
+  "Chawy": [
+   "T43"
+  ],
+  "CorGi": [
+   "H:PSG"
+  ],
+  "WarHorse": [
+   "H:FPX",
+   "H:FW",
+   "T50"
+  ],
+  "Furyz": [
+   "T51"
+  ],
+  "Raise": [
+   "T53"
+  ],
+  "Von": [
+   "T53",
+   "H:INF"
+  ],
+  "Snok": [
+   "T97"
+  ],
+  "Mafa": [
+   "T4"
+  ],
+  "Edgar": [
+   "T18"
+  ],
+  "Dylan Falco": [
+   "T25",
+   "T26"
+  ],
+  "SeeEl": [
+   "T57"
+  ],
+  "KIM": [
+   "T4",
+   "T18",
+   "T22",
+   "T24"
+  ]
+ }
+}
