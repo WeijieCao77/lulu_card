@@ -17,9 +17,6 @@ import { WORLD_PLAYERS } from './world'
 import { WORLD_TEAMS, WORLD_ANALYSTS, EXTRA_COACHES, FORMER_COACHES } from './teams'
 import { DOSSIER, coachDossier, faceUrl, legendPhoto } from './dossier'
 import { LEGENDS } from './legends'
-// which players each coach actually coached: a staff role at a club in months the
-// player was on it — scripts/build_coached.py, off vlr.gg careers and Liquipedia tenure
-import COACHED_JSON from '../data/coached.json'
 import ECHO_JSON from '../data/echoCards.json'
 import COACH_TITLE_CLUBS from '../data/coachTitleClubs.json'
 import type { Legend } from './legends'
@@ -518,9 +515,6 @@ export const echoTeamName = (e: Pick<EchoInfo, 'team' | 'teamNow'>): string | nu
 export const isEchoCard = (c: Card | undefined): boolean => c?.kind === 'player' && !!c.echo
 
 const byId = new Map(ALL_CARDS.map((c) => [c.id, c]))
-const COACHED: Map<string, Set<string>> = new Map(
-  Object.entries(COACHED_JSON as Record<string, string[][]>).map(([coach, rows]) => [coach, new Set(rows.map((r) => r[0]))]),
-)
 /** A retired duplicate id (MERGED_CARDS) still finds the card it was folded into — a market row or an old save may name it. */
 export const cardById = (id: string): Card | undefined => byId.get(id) ?? byId.get(canonicalCardId(id))
 
@@ -660,7 +654,7 @@ export interface ChemReport {
 export interface CoachLink {
   slot: number
   /** Strongest reason shown to the player; country beats region, as for player pairs. */
-  why: 'club' | 'coached' | 'nat' | 'region'
+  why: 'club' | 'nat' | 'region'
   value: number
 }
 
@@ -733,27 +727,20 @@ export function chemistry(squad: Squad): ChemReport {
   if (isCoachCard(coach)) {
     const players = cards.filter(isPlayerCard)
     const sameClub = players.filter((p) => coachSharesClub(p, coach)).length
-    // Men this coach has actually coached before, somewhere: a staff role at a
-    // club in months the player was on it. Not everyone who has ever passed
-    // through a club he coaches — 「只有真的和那位教练同时期呆过的人才有默契
-    // 值，而不是在同一个俱乐部过就有」. Worth less than the men he coaches now,
-    // and a man he coaches now is never counted a second time here.
-    const coachedBefore = players.filter((p) => !coachSharesClub(p, coach)
-      && !!COACHED.get(coach.name)?.has(p.playerId)).length
+    // Only his club now and the clubs he won titles with (coachSharesClub). Men he coached somewhere else
+    // count for nothing (owner 2026-10-05: 「带过的选手加分去掉」).
     cards.forEach((p, slot) => {
       if (!isPlayerCard(p)) return
       const club = coachSharesClub(p, coach)
-      const before = !club && !!COACHED.get(coach.name)?.has(p.playerId)
       const region = sameGameRegion(p.region, coach.region)
       const nat = !!p.nat && !!coach.nat && natCountry(p.nat) === natCountry(coach.nat)
-      const value = (club ? 2 : 0) + (before ? 1 : 0) + (nat ? 2 : region ? 1 : 0)
+      const value = (club ? 2 : 0) + (nat ? 2 : region ? 1 : 0)
       if (value) {
         coachBonus += value
-        coachLinks.push({ slot, why: club ? 'club' : before ? 'coached' : nat ? 'nat' : 'region', value })
+        coachLinks.push({ slot, why: club ? 'club' : nat ? 'nat' : 'region', value })
       }
     })
     if (sameClub >= 2) notes.push(`${coach.name} 与 ${sameClub} 名选手触发同队／队伍传承羁绊`)
-    if (coachedBefore > 0) notes.push(`${coach.name} 以前还带过其中 ${coachedBefore} 人`)
   }
 
   const misfits: number[] = []

@@ -21,7 +21,7 @@ import { GapOdds } from './GapOdds'
 import type { CardFilter } from './Filters'
 
 const WHY_CN = { club: '同队', nat: '同国籍', region: '同赛区' } as const
-const COACH_WHY_CN = { club: '同队', coached: '带过', nat: '同国籍', region: '同赛区' } as const
+const COACH_WHY_CN = { club: '同队', nat: '同国籍', region: '同赛区' } as const
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 export default function SquadScreen() {

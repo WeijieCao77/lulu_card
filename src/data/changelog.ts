@@ -28,6 +28,7 @@ export interface ChangeEntry {
 export const CHANGELOG: ChangeEntry[] = [{
   date: '2026-10-05', title: '新教练卡 KIM、冠军教练默契', changes: [
     { kind: '调整', text: '冠军教练和自己拿过冠军的俱乐部的选手有同队默契（只算当主教练拿的世界赛、MSI、顶级联赛冠军），比如 kkOma 和 T1、DK，Homme 和 JDG、HLE。没拿过冠军的教练只和现在执教的俱乐部有默契。教练卡详情里会逐个俱乐部写明拿的是什么冠军（S 几世界赛、MSI、哪个赛区的哪个赛季）。' },
+    { kind: '调整', text: '教练不再因为「以前带过」某个选手而加默契。教练的默契只看：现在执教的队员、他拿过冠军的俱乐部的选手、同国籍、同赛区。' },
     { kind: '新增', text: '新增教练卡 KIM（金晶洙）：S8 带 IG 夺冠、两届 MSI 冠军、四个 LCK 冠军的金牌主教练，目前自由身，和 IG、DRX、T1、Gen.G 的选手有同队默契。已加入教练包。' },
   ],
 }, {

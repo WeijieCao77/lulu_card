@@ -186,7 +186,7 @@ export const PACKS: Record<PackKind, PackDef> = {
   },
   coach: {
     kind: 'coach', name: '教练包', pool: 'coach',
-    blurb: '一名真实教练。带过阵容里的人，默契更高。',
+    blurb: '一名真实教练。阵容里有他的队员、他拿过冠军的俱乐部的人或同国籍、同赛区的人，默契更高。',
     // A彩卡 used to be a night somebody PLAYED, so this pack had none. Muggle
     // did not play a map of the 2024 final and is one of the reasons it was
     // won, and a booth is where that card belongs.
