@@ -154,7 +154,24 @@ export default function CardFace({
   const asBackdrop = card.rarity === 'mythic' && !!card.face
   const body = isPlayerCard(card)
     ? <PlayerBody card={card} size={size} footer={footer} backdrop={asBackdrop} />
-    : <CoachBody card={card as CoachCard} size={size} footer={footer} backdrop={asBackdrop} />
+    : asBackdrop ? <CoachBody card={card as CoachCard} size={size} footer={footer} backdrop />
+    // Same box as a player card (owner 2026-10-05: 「所有卡的大小统一」). The coach's own stack — the 教练组 band,
+    // three numbers instead of two at the small size — ran taller than the players beside it. The height now
+    // comes from an invisible player-card stack with the same classes, so every context rule that sizes a player
+    // card sizes the coach too; the coach's content is laid over it and the portrait takes what is left.
+    : <>
+      <div className="cf-sizer" aria-hidden="true">
+        <div className="cf-photo" />
+        <div className="cf-name">{(card as CoachCard).name}</div>
+        {size === 'lg' && card.realName && <div className="cf-real">{card.realName}</div>}
+        <div className="cf-meta"><Flag nat={card.nat} /><span className="cf-club">{card.clubTag ?? '自由身'}</span></div>
+        {footer ? <div className="cf-foot">{footer}</div> : <div className="cf-attrs">
+          {(size === 'sm' ? (['aim', 'awareness'] as const) : (['aim', 'reaction', 'awareness', 'utility', 'clutch', 'igl'] as const))
+            .map((k) => <span key={k}><i className={k === 'clutch' ? 'cf-attr-long' : undefined}>{ATTR_CN[k]}</i><b>00</b></span>)}
+        </div>}
+      </div>
+      <div className="cf-coach-layer"><CoachBody card={card as CoachCard} size={size} footer={footer} backdrop={false} /></div>
+    </>
 
   // A grid of彩卡 all animating in step reads as "a row of red cards", not as
   // iridescence. Each one starts somewhere else in the cycle, keyed off its own

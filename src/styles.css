@@ -3299,10 +3299,19 @@ button.primary .faint, button.primary .muted { color: rgba(255, 255, 255, .78); 
 
 /* Coaches use a tactical portrait frame; metal remains the rarity signal (Val_Manager 4f9afab).
    Always dark whatever the theme, like the full-team board. */
-.cardface.cardface-coach { background: linear-gradient(145deg, #233346, #0d1724); color: #eef3f8; border-top: 4px solid #d3b976; }
-.cardface-coach.r-silver { border-top-color: #bdcbd7; }
-.cardface-coach.r-bronze { border-top-color: #c79570; }
-.cardface-coach.r-mythic { border-top-color: #bd99ed; }
+.cardface.cardface-coach { --coach-top: #d3b976; background: linear-gradient(var(--coach-top), var(--coach-top)) top / 100% 4px no-repeat, linear-gradient(145deg, #233346, #0d1724); color: #eef3f8; }
+/* same box as a player card: an invisible player stack sets the height, the coach's own content is laid over it
+   (Card.tsx). The coloured top edge is painted, not a border, so it adds no height. */
+.cardface-coach .cf-sizer { display: flex; flex-direction: column; align-items: center; width: 100%; visibility: hidden; pointer-events: none; }
+.cardface-coach .cf-coach-layer { position: absolute; inset: 0; padding: inherit; display: flex; flex-direction: column; align-items: center; z-index: 3; }
+.cardface-coach .cf-coach-layer .cf-photo { flex: 1 1 auto; min-height: 0; height: auto; aspect-ratio: auto; }
+.cardface-coach .cf-coach-layer .cf-attrs { grid-template-columns: repeat(3, 1fr); }
+/* three numbers in a 96px card: each label sits above its number rather than wrapping beside it */
+.cardface-coach.s-sm .cf-coach-layer .cf-attrs span { display: flex; flex-direction: column; align-items: center; gap: 1px; line-height: 1.1; }
+.cardface-coach.s-sm .cf-coach-layer .cf-attrs i { white-space: nowrap; font-size: 8px; }
+.cardface-coach.r-silver { --coach-top: #bdcbd7; }
+.cardface-coach.r-bronze { --coach-top: #c79570; }
+.cardface-coach.r-mythic { --coach-top: #bd99ed; }
 .cardface-coach .cf-photo { border-radius: 0; border: 0; background: transparent; box-shadow: none; }
 .cardface-coach .cf-coach-label { position: relative; z-index: 3; width: 100%; text-align: center; font-size: 10px; font-weight: 800; letter-spacing: 2px; color: #e9d49f; border-bottom: 1px solid #b6c7db40; padding: 4px 0; }
 .cardface-coach .cf-name { border-color: #b6c7db40; }

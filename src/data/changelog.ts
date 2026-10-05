@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-05', title: '教练卡和选手卡一样大', changes: [
+    { kind: '修复', text: '卡组、完整战队阵容等地方，教练卡比旁边的选手卡高一截；现在教练卡和选手卡在任何位置、任何尺寸都一样大。小尺寸的教练卡三项能力改成名字在上、数字在下，不再挤成两行。' },
+  ],
+}, {
   date: '2026-10-04', title: '回响卡写明俱乐部改名', changes: [
     { kind: '调整', text: '峡谷回响卡的代表战队如果后来改了名，卡面上会写明现在的名字，比如「DAMWON Gaming（现 DK）」「SK Telecom T1（现 T1）」「Samsung White（现 GEN）」，和现在这支队的选手有同队默契。' },
   ],
