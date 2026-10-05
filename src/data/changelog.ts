@@ -26,6 +26,11 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-07', title: '新教练卡 SofM', changes: [
+    { kind: '新增', text: '新增教练卡 SofM：7 月起由打野转任 MVK 主教练，带队打进 S16 入围赛。和 MVK 的选手有同队默契。已加入教练包。他的选手卡不变。' },
+    { kind: '调整', text: 'BigKoro 7 月起在 MVK 改任教练（不再是主教练），教练卡改为自由身，卡面数值不变。' },
+  ],
+}, {
   date: '2026-10-07', title: '每日挑战英雄定位修正', changes: [
     { kind: '修复', text: '每日挑战里能打多个位置的英雄，定位显示的是最常打的位置（克格莫是下路，不是中单）。之前有 26 个英雄显示错了，比如亚索、易、拉克丝。猜的英雄和答案只是有一个位置相同时，显示为「接近」。' },
   ],

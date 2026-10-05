@@ -143,7 +143,7 @@ function testCoachCountsAndConsistency() {
     'LCK': { gold: 8, silver: 10, bronze: 4 },
     'LEC': { gold: 3, silver: 12, bronze: 12 },
     'LCS': { gold: 2, silver: 11, bronze: 5 },
-    'WEST': { gold: 4, silver: 18, bronze: 14 },
+    'WEST': { gold: 4, silver: 19, bronze: 14 }, // + SofM（MVK 主教练，BigKoro 改自由身）
     'null': { gold: 0, silver: 0, bronze: 3 }
   };
   for (const [group, rarityMap] of byGroup) {
@@ -251,7 +251,7 @@ function testGlobalRarityColorConsistency() {
 
 assert.equal(BASE_PLAYER_CARDS.length, 674); // two duplicate cards merged; naiyou (p:P58) intentionally removed
 assert.equal(LEGEND_CARDS.length, 40);
-assert.equal(COACH_CARDS.length, 128); // + KIM（金晶洙，自由身，2026-10-05）
+assert.equal(COACH_CARDS.length, 129); // + KIM（金晶洙，自由身，2026-10-05）+ SofM（MVK，2026-10-05）
 assert.equal(CARD_BALANCE_VERSION, 8);
 testPlayerCountsAndCardStats();
 
