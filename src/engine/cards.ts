@@ -497,9 +497,23 @@ export type S16Rating = { rating: number; rarity: Rarity; games: number; prev?: 
  * carries his ordinary card's numbers internally — nothing shows them, and it cannot be fielded — and is filed as
  * bronze, so salvage cannot cash in a guess.
  */
+/**
+ * The S16 FMVP's 彩卡 rating (owner 2026-10-07: 「fmvp 变成彩卡就可以超过 90 了，对标历届 S 赛 fmvp 彩卡数值」). The
+ * Worlds FMVP/MVP 彩卡 run 94–97 (S11 Scout, S12 Kingen 94 … S6/S10/S14 97, median 96, eight of twelve 95–96), so
+ * the S16 one is set in that band after the final (s16Ratings.json `fmvpRating`, 95 until then) and never under his
+ * S16 rating + 2, the edge every 彩卡 keeps over the ordinary card.
+ */
+export const S16_FMVP_BAND = [94, 97] as const
+export const S16_FMVP_DEFAULT = 95
+const fmvpRatingOf = (set: number | null | undefined, s16: number): number => {
+  const pick = Math.max(S16_FMVP_BAND[0], Math.min(S16_FMVP_BAND[1], Math.round(set ?? S16_FMVP_DEFAULT)))
+  return Math.min(99, Math.max(pick, s16 + 2))
+}
+
 export function buildS16Cards(
   ratings: Record<string, S16Rating> = (S16_RATINGS as { ratings: Record<string, S16Rating> }).ratings,
   fmvp: string | null = (S16_RATINGS as { fmvp: string | null }).fmvp,
+  fmvpRating: number | null = (S16_RATINGS as { fmvpRating?: number | null }).fmvpRating ?? null,
 ): PlayerCard[] {
   const base = new Map(BASE_PLAYER_CARDS.map((c) => [c.id, c]))
   const teams = new Map(S16_JSON.teams.map((t) => [t.club, t]))
@@ -509,6 +523,10 @@ export function buildS16Cards(
     if (!b) continue
     const r = ratings[p.ign]
     const isFmvp = !!r && fmvp === p.ign
+    // the FMVP's card leaves the 90 cap: the rating lifts to the 彩卡 band and every attribute moves with it
+    const rating = r ? (isFmvp ? fmvpRatingOf(fmvpRating, r.rating) : r.rating) : b.rating
+    const attrsAt = r?.attrs ?? b.attrs
+    const lift = r ? rating - r.rating : 0
     out.push({
       ...b,
       id: p.id,
@@ -518,8 +536,8 @@ export function buildS16Cards(
       clubTag: teams.get(p.club)?.tag ?? b.clubTag,
       role: p.role as Role,
       roles: b.roles.includes(p.role as Role) ? b.roles : [p.role as Role, ...b.roles],
-      attrs: r?.attrs ?? b.attrs,
-      rating: r?.rating ?? b.rating,
+      attrs: lift ? Object.fromEntries(Object.entries(attrsAt).map(([k, v]) => [k, Math.max(1, Math.min(99, v + lift))])) as unknown as Attrs : attrsAt,
+      rating,
       rarity: isFmvp ? 'mythic' : r?.rarity ?? 'bronze',
       s16: {
         club: p.club, stage: teams.get(p.club)?.stage ?? 'main', starter: p.starter, revealed: !!r,

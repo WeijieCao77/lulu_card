@@ -72,6 +72,15 @@ check('S16 包：2600 金币三张、等概率、卖到 11/21', def.cost === 260
   const A = built.find((c) => c.ign === a.ign)!, B = built.find((c) => c.ign === b.ign)!
   check('打过比赛就揭晓：数值、金银铜、场数、涨跌', A.s16!.revealed && A.rating === 88 && A.rarity === 'gold' && A.s16!.games === 3 && A.s16!.prev === 85)
   check('FMVP 的卡变成彩卡', B.rarity === 'mythic' && B.s16!.fmvp)
+  // owner 2026-10-07: the FMVP's 彩卡 leaves the 90 cap, in the band of the Worlds FMVP 彩卡 (94–97), 95 until set
+  check('FMVP 彩卡评分没定之前是 95', B.rating === 95, `${B.rating}`)
+  const set97 = buildS16Cards({ [b.ign]: { rating: 80, rarity: 'silver', games: 2, prev: null } }, b.ign, 97).find((c) => c.ign === b.ign)!
+  const set120 = buildS16Cards({ [b.ign]: { rating: 80, rarity: 'silver', games: 2, prev: null } }, b.ign, 120).find((c) => c.ign === b.ign)!
+  const set90 = buildS16Cards({ [b.ign]: { rating: 80, rarity: 'silver', games: 2, prev: null } }, b.ign, 90).find((c) => c.ign === b.ign)!
+  check('FMVP 彩卡评分只在 94–97 之间', set97.rating === 97 && set120.rating === 97 && set90.rating === 94, `${set97.rating} ${set120.rating} ${set90.rating}`)
+  const lifted = Object.keys(set97.attrs).every((k) => set97.attrs[k as keyof typeof set97.attrs] >= B.attrs[k as keyof typeof B.attrs])
+  check('能力随评分一起抬高', lifted)
+  check('普通 S16 卡仍然封 90', built.filter((c) => !c.s16!.fmvp).every((c) => c.rating <= 90))
   check('没打的还是「?」', built.filter((c) => c.ign !== a.ign && c.ign !== b.ign).every((c) => !c.s16!.revealed))
 }
 

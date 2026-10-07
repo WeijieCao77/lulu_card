@@ -18,7 +18,7 @@
   2. 选手的世界赛 z = 单局表现分的加权平均（入围赛/瑞士轮 ×1，八强/四强 ×1.5，决赛 ×2）。
   3. 世界赛评分 = clamp(80 + 12z, 55, 90)（原案 78 + 6z，2025 回测后放大，见 README）；与普通卡评分混合：w = 局数/(局数+2)，
      评分 = round(w·世界赛 + (1−w)·普通卡)。5 局后世界赛占 ~0.71。
-  4. 冠军队（--champion）每人 +2，封顶 90。--fmvp 写入顶层 fmvp（引擎把那张卡做成彩卡）。
+  4. 冠军队（--champion）每人 +2，封顶 90。--fmvp 写入顶层 fmvp（引擎把那张卡做成彩卡，评分按 --fmvp-rating 94–97，不填 95，不受 90 封顶）。
   5. 金属按已亮相选手的名次：前 25% 金、再 35% 银、其余铜；同分取更好的那档。
   6. 八项属性 = 普通卡属性 + (新评分 − 普通卡评分)，各自夹在 1..99。
 
@@ -339,6 +339,7 @@ def main(argv=None) -> int:
                     help="阶段日期：playin:A..B,swiss:A..B,ko:A..B,final:D（ko/qf/sf ×1.5，final ×2，其余 ×1）")
     ap.add_argument("--champion", default=None, help="冠军俱乐部 id，如 T18；每人 +2（封顶 90）")
     ap.add_argument("--fmvp", default=None, help="FMVP 的 ign；引擎把他的卡做成彩卡")
+    ap.add_argument("--fmvp-rating", type=int, default=None, help="FMVP 彩卡评分，94–97（对标历届 S 赛 FMVP 彩卡），不填按 95")
     ap.add_argument("--tz", type=float, default=8.0, help="比赛日按哪个时区划分（小时，默认 8 = 北京时间；OE 原始时间是 UTC）")
     ap.add_argument("--base", default=str(BASE_JSON))
     ap.add_argument("--out", default=str(RATINGS_JSON))
@@ -414,6 +415,7 @@ def main(argv=None) -> int:
         },
         "champion": args.champion,
         "fmvp": args.fmvp,
+        "fmvpRating": args.fmvp_rating,
     }
     if args.dry_run:
         print("\n--dry-run：没有写文件。")
