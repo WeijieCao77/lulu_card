@@ -481,12 +481,9 @@ export function makeCardApi(sql, {
           where a.id_hash = ${hash(id)}`
         if (!rows.length) { json(res, 200, { ok: false, missing: true, today, now: serverNow() }); return }
         state = engine.migrateGacha(rows[0].state, id)
-        // a new ladder season shows on the first look, not only after the first action, and is written
-        // with the same compare-and-set as the stamina anchor below (rollSeason is idempotent)
-        const rolled = engine.rollSeason(state, today)
         saved = Number(rows[0].saved) || null
-        if (state.daily.staminaAt && !rolled) break
-        state.daily.staminaAt ||= saved ?? serverNow()
+        if (state.daily.staminaAt) break
+        state.daily.staminaAt = saved ?? serverNow()
         const wrote = await sql`
           update card_accounts set state = ${sql.json(stored(state))}, rev = rev + 1, seen = now()
            where id_hash = ${hash(id)} and rev = ${rows[0].rev}
@@ -795,7 +792,6 @@ export function makeCardApi(sql, {
           return { missing: true }
         }
         const g = engine.mergeClientFields(engine.migrateGacha(held[0].state, id), client)
-        engine.rollSeason(g, today)
         const taken = await takeMail(me, db)
         engine.applyMail(g, taken)
         return commit(db, g, held[0].rev, { ok: true, result: { mail: taken } })
@@ -858,9 +854,6 @@ export function makeCardApi(sql, {
         mark.read += performance.now() - t
         if (!held.length) return { missing: true }
         let g = engine.mergeClientFields(engine.migrateGacha(held[0].state, id), client)
-        // into this ladder season before anything reads the division (the rival below); runAction's own
-        // roll is then a no-op
-        engine.rollSeason(g, today)
         const env = { now, today, seed }
         if (action === 'challenge') env.challengePuzzle = await challengePuzzle(id, today, g)
         // 峡谷回响问答: the bank and its answers stay on the server (echo-quiz.js)
@@ -1035,121 +1028,18 @@ export function makeCardApi(sql, {
     return own ? [...hundred, own] : hundred
   }
 
-  /**
-   * 上赛季前十 (after 开瓦包: 「再加一个排位上赛季前十排行榜」), one per ladder.
-   *
-   * A finished season does not move, so this is read rarely and kept. Where each account's final rank is:
-   * an account already moved into this season froze it in `lastSeason` (gacha.ts rollSeason); one not seen
-   * since the turn still holds it live, and anything it does rolls it first, so neither changes. 赛季前
-   * (season 0) had no season record of its own — it is everything before S1 — so its 战绩 is the career
-   * count (rollSeason froze the career count for an account that has moved on).
-   *
-   * Six hours, and a stale board is served while the next one is read (开瓦包, 2026-10-06): each read is
-   * every account's save, on the slow pool, and only the very first read after a restart waits for it.
-   * A finished season does not move; only a 封号 can change it.
-   */
-  const LAST_TTL = 6 * 3600_000
-  const lastCaches = new Map()
-  const lastBuilding = new Map()
-  const whole = (v, max = 1e7) => {
-    const n = Number(v)
-    return Number.isFinite(n) && n >= 0 ? Math.min(max, Math.trunc(n)) : 0
-  }
-  async function lastSeasonRows(league) {
-    const prev = engine.seasonOf(serverDay()) - 1
-    if (prev < 0) return { season: null, rows: [] }
-    const key = `${league}:${prev}`
-    const hit = lastCaches.get(key)
-    if (hit && Date.now() - hit.at < LAST_TTL) return hit.value
-    let job = lastBuilding.get(key)
-    if (!job) {
-      job = (async () => {
-        // `state #> '{}'` reads the save once per row; five `state->…` read it five times
-        const found = await (slow ?? sql)`
-          select id_hash, name, coalesce(s->>'season', '0') as season,
-            case when ${league} = 'open' then s->'ladder' else s->'leagues'->${league} end as live,
-            s->'lastSeason'->'ranks'->${league} as rec
-          from (select id_hash, name, state #> '{}' as s from card_accounts where not suspect offset 0) a
-          where coalesce(s->>'season', '0') = ${String(prev)}
-            or s->'lastSeason'->>'season' = ${String(prev)}`
-        const rows = []
-        for (const r of found) {
-          const rolled = r.season !== String(prev)
-          const live = r.live && typeof r.live === 'object' ? r.live : null
-          const l = rolled ? r.rec : live
-          if (!l || typeof l !== 'object') continue
-          // frozen at the turn; or still live: that season's own record, or the career one for 赛季前
-          const wins = rolled ? whole(l.wins) : whole(prev === 0 ? l.wins : l.sWins ?? l.wins)
-          const losses = rolled ? whole(l.losses) : whole(prev === 0 ? l.losses : l.sLosses ?? l.losses)
-          if (wins + losses === 0) continue
-          rows.push({
-            id_hash: r.id_hash, name: r.name, wins, losses,
-            div: whole(l.div, 99), points: whole(l.points, 1e9), stars: whole(l.stars, 999),
-          })
-        }
-        rows.sort((a, b) => b.div - a.div || b.points - a.points || b.stars - a.stars || b.wins - a.wins
-          || (a.id_hash < b.id_hash ? -1 : 1))
-        const value = { season: prev, rows }
-        lastCaches.set(key, { at: Date.now(), value })
-        return value
-      })().finally(() => lastBuilding.delete(key))
-      lastBuilding.set(key, job)
-    }
-    // the old board while the new one is read; only the very first read waits
-    if (hit) { job.catch(() => {}); return hit.value }
-    return job
-  }
-  async function topLast(req, res, bucket) {
-    if (guard(req, res, `ct:${bucket}`, 30)) return
-    if (!sql) { json(res, 200, { ok: false, offline: true }); return }
-    let mine = null
-    let league = 'open'
-    try {
-      const body = JSON.parse(await readBody(req, 4096))
-      const id = normalizeId(body?.id)
-      if (id) mine = hash(id)
-      if (BOARDS.includes(body?.league)) league = body.league
-    } catch { /* an anonymous look is fine */ }
-    try {
-      const { season, rows } = await lastSeasonRows(league)
-      const at = mine ? rows.findIndex((r) => r.id_hash === mine) : -1
-      json(res, 200, {
-        ok: true, season,
-        // where this account finished, when it is not in the ten
-        mine: at >= 10 ? { rank: at + 1, div: rows[at].div, points: rows[at].points, stars: rows[at].stars } : null,
-        rows: rows.slice(0, 10).map((r, i) => ({
-          rank: i + 1, ...displayName(r.name, r.id_hash),
-          div: r.div, points: r.points, stars: r.stars, wins: r.wins, losses: r.losses,
-          me: !!mine && r.id_hash === mine,
-        })),
-      })
-    } catch (err) {
-      console.warn('cards: last-season board failed', err.message)
-      json(res, 500, { ok: false })
-    }
-  }
-
   async function rankedRows(league = 'open') {
       // Which record in the save this board reads: the open ladder is
       // `state.ladder`, where it has always been, and every other ladder keeps
       // its own under `state.leagues`. Picked once, in a CTE, so the name is a
       // plain parameter and never part of the query text — and so the six
       // fields below read one column instead of repeating the path.
-      //
-      // 天梯赛季 (gacha.ts rollSeason): only accounts already moved into this season stand on its board, with
-      // this season's record; an account last seen before the turn still holds last season's rank, and is
-      // on 上赛季前十 (topLast) instead. A save with no season is 赛季前 (season 0).
-      const season = String(engine.seasonOf(serverDay()))
-      // 赛季前 has no season record of its own — it is everything before S1 — so it shows the career one
-      const sw = season === '0' ? 'wins' : 'sWins'
-      const sl = season === '0' ? 'losses' : 'sLosses'
       return sql`
         with lad as (
           select id_hash, name, suspect,
             case when ${league} = 'open' then state->'ladder'
                  else state->'leagues'->${league} end as l
           from card_accounts
-          where coalesce(state->>'season', '0') = ${season}
         ), ranked as (
           select
             id_hash, name,
@@ -1159,11 +1049,10 @@ export function makeCardApi(sql, {
                  then (l->>'points')::int else 0 end as points,
             case when l->>'stars' ~ '^[0-9]{1,3}$'
                  then (l->>'stars')::int else 0 end as stars,
-            -- this season's record; a save from before seasons has only the career one
-            case when coalesce(l->>${sw}, l->>'wins') ~ '^[0-9]{1,7}$'
-                 then coalesce(l->>${sw}, l->>'wins')::int else 0 end as wins,
-            case when coalesce(l->>${sl}, l->>'losses') ~ '^[0-9]{1,7}$'
-                 then coalesce(l->>${sl}, l->>'losses')::int else 0 end as losses
+            case when l->>'wins' ~ '^[0-9]{1,7}$'
+                 then (l->>'wins')::int else 0 end as wins,
+            case when l->>'losses' ~ '^[0-9]{1,7}$'
+                 then (l->>'losses')::int else 0 end as losses
           from lad
           where jsonb_typeof(l) = 'object'
             -- An account whose matches once outran the 体力 clock keeps
@@ -1572,13 +1461,12 @@ export function makeCardApi(sql, {
 
   return {
     /** Forget the cached board and rival pools — for tests that reseed the table. */
-    invalidate() { topCaches.clear(); lastCaches.clear(); rivalCache.clear(); rivalAll = null },
+    invalidate() { topCaches.clear(); rivalCache.clear(); rivalAll = null },
     /** Stage timings of the last few hundred actions, the match queue and the rival sample. */
     timings,
     /** Returns true when it handled the request. */
     async route(req, res, path, bucket) {
       if (path === '/api/card/top') { await top(req, res, bucket); return true }
-      if (path === '/api/card/top_last') { await topLast(req, res, bucket); return true }
       if (path === '/api/card/rivals') { await rivals(req, res, bucket); return true }
       if (path === '/api/card/friend') { await friend(req, res, bucket); return true }
       if (path === '/api/card/friend_cards') { await friendCards(req, res, bucket); return true }

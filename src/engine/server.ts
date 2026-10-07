@@ -15,7 +15,7 @@ export {
   masterPoints, oppBumpFor, canPlay, spendPlay, STAMINA_COST, STAMINA_MAX, STAMINA_REGEN_MS,
 } from './gacha'
 export type { GachaState } from './gacha'
-export { rankName, LEAGUES, LEAGUE_RULES, CUP_LEAGUES, isCupLeague, leagueEntry, MASTER_DIV, rollSeason, seasonOf } from './gacha'
+export { rankName, LEAGUES, LEAGUE_RULES, CUP_LEAGUES, isCupLeague, leagueEntry, MASTER_DIV } from './gacha'
 export type { LeagueKind } from './gacha'
 export { applyMail, escrowCard, restoreCard, mailLine } from './inbox'
 export type { MailItem } from './inbox'

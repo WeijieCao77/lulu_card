@@ -816,15 +816,5 @@
     "runtime": "tsx",
     "file": "scripts/check_evo_trade.ts",
     "estimatedSeconds": 8
-  },
-  {
-    "runtime": "tsx",
-    "file": "scripts/check_seasons.ts",
-    "estimatedSeconds": 8
-  },
-  {
-    "runtime": "tsx",
-    "file": "scripts/check_last_season.ts",
-    "estimatedSeconds": 6
   }
 ]

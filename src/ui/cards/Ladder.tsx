@@ -7,18 +7,17 @@ import {
   ladderOpponent, ladderOf, playLevelOf, masterTitle, oppBumpFor, pendingOpponent,
   leagueEntry, ladderName, ladderSquadOf, LADDER_LEAGUES, LEAGUE_RULES,
   rankName, staminaFillHours, staminaNow, staminaRate, starsOnTier, tierStars,
-  SEASON_DAYS, seasonDaysLeft, seasonFirstDay, seasonLastDay, seasonName, seasonOf,
 } from '../../engine/gacha'
 import { LADDER_BO, RIVAL_MERCY_GAP } from '../../engine/gacha'
-import type { LadderLeague, LadderOutcome, LadderState } from '../../engine/gacha'
+import type { LadderLeague, LadderOutcome } from '../../engine/gacha'
 import type { ArenaResult, RivalSquad } from '../../engine/arena'
 import { arenaOpponentRating } from '../../engine/arena'
 import { chemistry, squadRating } from '../../engine/cards'
 import { WORLD_TEAMS } from '../../engine/teams'
 import { REGION_CN } from '../../engine/types'
 import { track } from '../../engine/telemetry'
-import { fetchLastTop, fetchTop } from '../../engine/account'
-import type { LastBoard, TopRow } from '../../engine/account'
+import { fetchTop } from '../../engine/account'
+import type { TopRow } from '../../engine/account'
 import { GapOdds } from './GapOdds'
 import CupLineup from './CupLineup'
 
@@ -31,10 +30,7 @@ import CupLineup from './CupLineup'
  * What this screen does is ask, and show the scoreboard it is handed.
  */
 export default function Ladder() {
-  const { g, now, today, cloud, act, toast, go } = useCards()
-  // 天梯赛季 (gacha.ts rollSeason): the record on screen is this season's; 赛季前 (0) is everything before S1
-  const season = seasonOf(today)
-  const record = (r: LadderState) => (season > 0 ? `${r.sWins ?? r.wins}–${r.sLosses ?? r.losses}` : `${r.wins}–${r.losses}`)
+  const { g, now, cloud, act, toast, go } = useCards()
   const [busy, setBusy] = useState(false)
   const [shown, setShown] = useState<
     { res: ArenaResult; opp: string; who?: string; out: LadderOutcome } | null
@@ -57,8 +53,6 @@ export default function Ladder() {
   const master = L.div >= MASTER_DIV
   const entry = filled === 5 ? leagueEntry(lineup, league) : ({ ok: true } as const)
   const [top, setTop] = useState<TopRow[] | null | 'loading'>('loading')
-  // 本赛季 or 上赛季前十, one board at a time
-  const [board, setBoard] = useState<'now' | 'last'>('now')
   const [saved, setSaved] = useState(0)
   const [topAt, setTopAt] = useState(0)
   useEffect(() => {
@@ -128,7 +122,7 @@ export default function Ladder() {
           return (
             <button key={k} className={`league-tab${k === league ? ' on' : ''}`} aria-pressed={k === league} onClick={() => pick(k)}>
               <b>{ladderName(k)}</b>
-              <span className="tiny faint">{rec ? `${DIVISIONS[rec.div]} · ${record(rec)}` : '未开始'}</span>
+              <span className="tiny faint">{rec ? `${DIVISIONS[rec.div]} · ${rec.wins}–${rec.losses}` : '未开始'}</span>
             </button>
           )
         })}
@@ -154,34 +148,13 @@ export default function Ladder() {
             )}
           </div>
           <div className="small muted" style={{ marginTop: 10, lineHeight: 1.8 }}>
-            {season > 0
-              ? <><b>本赛季 {seasonName(season)}</b> · 剩 {seasonDaysLeft(today)} 天（{monthDay(seasonLastDay(season))}结束）</>
-              : <><b>{seasonName(1)} {monthDay(seasonFirstDay(1))}（周一）开始</b> · 现在是赛季前</>}
-            <br />
-            {season > 0 ? '本赛季' : '战绩'} <b className="mono">{record(L)}</b>
+            战绩 <b className="mono">{L.wins}–{L.losses}</b>
             {L.streak >= 2 && <span className="pos"> · {L.streak} 连胜</span>}
             {L.streak <= -2 && <span className="neg"> · {-L.streak} 连败</span>}
             <br />
-            {season > 0 ? '本赛季最高' : '最高'}{' '}
-            {master || L.best >= MASTER_DIV
-              ? <><b className="mono">{L.bestPoints ?? 0}</b> 分（{masterTitle(L.bestPoints ?? 0)}）</>
-              : DIVISIONS[L.best]}
-            {(() => {
-              // where this ladder stood when last season ended, and the best it has ever been
-              const last = g.lastSeason?.ranks[league]
-              const peak = Math.max(L.peak ?? 0, L.best, L.div)
-              const peakPts = Math.max(L.peakPoints ?? 0, L.bestPoints ?? 0, L.points ?? 0)
-              return (
-                <>
-                  {last && g.lastSeason && (
-                    <><br />{g.lastSeason.season > 0 ? `上赛季 ${seasonName(g.lastSeason.season)}` : '赛季前'}：<b>{rankName(last.div, last.stars, last.points)}</b></>
-                  )}
-                  {season > 0 && (
-                    <><br />历史最高 <b>{peak >= MASTER_DIV ? `${masterTitle(peakPts)} ${peakPts}` : DIVISIONS[peak]}</b></>
-                  )}
-                </>
-              )
-            })()}
+            {master
+              ? <>最高 <b className="mono">{L.bestPoints ?? 0}</b> 分（{masterTitle(L.bestPoints ?? 0)}）</>
+              : <>最高 {DIVISIONS[L.best]}</>}
             <br />
             {master ? (
               <span className="tiny faint">
@@ -196,10 +169,6 @@ export default function Ladder() {
                 赢一场 +1★（钻石以下三连胜起 +2★），输一场 −1★，铂金起会掉段。到大师后改为计分，不封顶。
               </span>
             )}
-            <span className="tiny faint" style={{ display: 'block', marginTop: 6 }}>
-              每个赛季 {SEASON_DAYS} 天（4 周）。赛季结束段位降两级：大师及以上回铂金，钻石回黄金，铂金回白银，其余回青铜；
-              升段卡包和大师称号的十连包每个赛季都能重新拿。金卡、银卡、铜卡天梯一样。
-            </span>
           </div>
         </Panel>
 
@@ -268,24 +237,18 @@ export default function Ladder() {
 
       <Panel
         title={league === 'open' ? '天梯排行榜' : `${ladderName(league)}排行榜`}
-        actions={board === 'now' ? (
+        actions={
           <span className="tiny muted">
             按段位和大师分排
             {topAt > 0 && <FreshAt at={topAt} />}
           </span>
-        ) : undefined}
+        }
       >
-        <div className="seg board-seg" role="group" aria-label="看哪个赛季的排行榜">
-          <button className={board === 'now' ? 'on' : ''} aria-pressed={board === 'now'} onClick={() => setBoard('now')}>本赛季</button>
-          <button className={board === 'last' ? 'on' : ''} aria-pressed={board === 'last'} onClick={() => setBoard('last')}>上赛季前十</button>
-        </div>
-        {board === 'last' ? <LastSeasonBoard league={league} />
-          : top === 'loading' ? <p className="empty">读取中…</p>
+        {top === 'loading' ? <p className="empty">读取中…</p>
           : !top ? <p className="empty">暂时读不到排行榜（离线或服务器忙）。</p>
             : top.length === 0 ? (
               <p className="empty">
-                {league === 'open' ? '还没有人上榜。'
-                  : `${ladderName(league)}${season > 0 ? '这个赛季' : ''}还没有人打过，第一场就是第一名。`}
+                {league === 'open' ? '还没有人上榜。' : `${ladderName(league)}还没有人打过，第一场就是第一名。`}
               </p>
             )
               : (
@@ -330,7 +293,7 @@ export default function Ladder() {
                     </div>
                   )}
                   <p className="tiny faint" style={{ marginTop: 8, marginBottom: 0 }}>
-                    {season > 0 ? `只算 ${seasonName(season)} 赛季，战绩是本赛季的胜负。` : ''}前 100 名加上你自己。名字后的 <b>#四位</b> 用来区分同名，<b>不是账号 ID</b>。
+                    前 100 名加上你自己。名字后的 <b>#四位</b> 用来区分同名，<b>不是账号 ID</b>。
                     显示「已隐藏」的是昵称含不宜公开的词，或<b>把账号 ID 填成了昵称</b>，去「账号」页改名即可恢复。
                   </p>
                 </>
@@ -361,63 +324,6 @@ export default function Ladder() {
             </div>
           }
         />
-      )}
-    </>
-  )
-}
-
-/** '2026-10-12' → '10月12日' */
-const monthDay = (day: string): string => `${Number(day.slice(5, 7))}月${Number(day.slice(8, 10))}日`
-
-/**
- * 上赛季前十: a finished season's ten, and where this account finished when it is not among them. A list of
- * rows rather than a table, so a phone keeps every column: the rank, the name, then the division over the record.
- */
-function LastSeasonBoard({ league }: { league: LadderLeague }) {
-  const [board, setBoard] = useState<LastBoard | null | 'loading'>('loading')
-  const [tries, setTries] = useState(0)
-  useEffect(() => {
-    let alive = true
-    setBoard('loading')
-    void fetchLastTop(league).then((b) => { if (alive) setBoard(b) })
-    return () => { alive = false }
-  }, [league, tries])
-  if (board === 'loading') return <p className="empty">读取中…</p>
-  if (!board) {
-    return (
-      <div className="empty" role="status">
-        暂时读不到上赛季排行（离线或服务器忙）。{' '}
-        <button className="sm" onClick={() => setTries((n) => n + 1)}>重新加载</button>
-      </div>
-    )
-  }
-  if (board.season === null) {
-    return <p className="empty">{seasonName(1)} 赛季 {monthDay(seasonFirstDay(1))}开始，第一个赛季结束后这里会留下前十名。</p>
-  }
-  if (!board.rows.length) return <p className="empty">{board.season > 0 ? `${seasonName(board.season)} 赛季` : '赛季前'}没有人打过这个天梯。</p>
-  return (
-    <>
-      <p className="tiny muted" style={{ margin: '0 0 10px' }}>
-        {board.season === 0 ? 'S1 开始前' : `${seasonName(board.season)} 赛季结束时`}的最终段位，前十名。
-      </p>
-      <ol className="last-board">
-        {board.rows.map((r) => (
-          <li key={r.rank} className={`last-row${r.me ? ' me' : ''}${r.rank <= 3 ? ` podium p${r.rank}` : ''}`}>
-            <span className="last-rank mono" aria-label={`第 ${r.rank} 名`}>{r.rank}</span>
-            <span className="last-who">
-              <b style={{ color: r.hidden ? 'var(--faint)' : undefined }}>{r.name}</b>
-              <span className="tiny faint mono"> #{r.tag}</span>
-              {r.me && <span className="tag t1" style={{ marginLeft: 5 }}>我</span>}
-            </span>
-            <span className="last-div small">{rankName(r.div, r.stars, r.points)}</span>
-            <span className="last-wl mono tiny muted">{r.wins}–{r.losses}</span>
-          </li>
-        ))}
-      </ol>
-      {board.mine && (
-        <p className="small" style={{ margin: '10px 0 0' }}>
-          你上赛季第 <b>{board.mine.rank}</b> 名 · {rankName(board.mine.div, board.mine.stars, board.mine.points)}
-        </p>
       )}
     </>
   )

@@ -28,7 +28,6 @@ import {
   levelOf, playLevelOf, oppBumpFor, openPack, packCost, pendingOpponent, primeStamina, recordCup, recordLadder,
   refreshDaily, salvage, salvageBulk, seriesOfPack, spendPlay, upgrade, ladderSlot, leagueEntry, isLadderLeague,
   LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad, cupSquadOf, ladderSquadOf,
-  rollSeason,
 } from './gacha'
 import {
   judgeMinigame, MINI_GAMES, MINIGAME_DAILY, MINIGAME_TTL_MS, newMinigame, refreshMinigame,
@@ -128,8 +127,6 @@ export function runAction(
   // the day and the meter are the server's to keep, and every action starts
   // from where they actually are
   refreshDaily(g, env.today)
-  // the first thing done in a new ladder season moves the account into it (gacha.ts rollSeason)
-  rollSeason(g, env.today)
   primeStamina(g, env.now)
 
   const out = dispatch(g, action, args ?? {}, env)

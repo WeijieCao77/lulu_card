@@ -677,14 +677,8 @@ export interface LadderState {
   streak: number
   /** 大师 and above only: the uncapped score the leaderboard ranks on */
   points?: number
-  /** the highest that score has been THIS SEASON (see rollSeason) — a new title pays a 十连包 once a season */
+  /** the highest that score has ever been, which is what a career is judged on */
   bestPoints?: number
-  /** the highest division and 大师 score of every season before this one; `best` is this season's */
-  peak?: number
-  peakPoints?: number
-  /** this season's record; `wins`/`losses` run on for a whole career (the pending draw and the checks read them) */
-  sWins?: number
-  sLosses?: number
   /**
    * The opponent already drawn for the match you have not played yet.
    *
@@ -902,10 +896,6 @@ export interface GachaState {
   echoGift?: 1
   /** how many 峡谷回响图鉴 milestones have been collected — see ECHO_SET_REWARDS */
   echoSet?: number
-  /** the ladder season this account was last rolled into (0: before the first) — see rollSeason */
-  season?: number
-  /** where each ladder stood when the last season ended */
-  lastSeason?: SeasonRecord
 }
 
 /**
@@ -1060,8 +1050,6 @@ export function newGacha(id: string, name: string, today: string): GachaState {
     id,
     name,
     createdAt: today,
-    // born into today's ladder season, so the first load has nothing to roll (and nothing to write)
-    season: seasonOf(today),
     coins: STARTER_COINS,
     cards: {},
     // enough to field a five on the first visit without spending anything
@@ -1924,7 +1912,6 @@ export function recordLadder(
   }
   if (win) {
     L.wins++
-    L.sWins = (L.sWins ?? 0) + 1
     L.streak = Math.max(1, L.streak + 1)
     // Lowered with the daily budget. The shop's two-a-day cap was binding on
     // 55 days out of 60, which means coins were never a decision — you always
@@ -1962,7 +1949,6 @@ export function recordLadder(
     bumpQuest(g, 'win2', 1)
   } else {
     L.losses++
-    L.sLosses = (L.sLosses ?? 0) + 1
     L.streak = Math.min(0, L.streak - 1)
     out.coins = 30
     if (master) {
@@ -1993,8 +1979,7 @@ export function recordLadder(
     out.pointsDelta = (L.points ?? 0) - pointsBefore
     out.title = masterTitle(L.points ?? 0)
     // A new title is the 大师 ladder's version of a promotion, and gets the
-    // same thing a promotion gets — once a season, the first time it is reached
-    // this season (rollSeason starts bestPoints again at the turn).
+    // same thing a promotion gets — once, the first time it is reached.
     //
     // "First time" is a fact about the BEST score, so that is what is
     // compared: the title of the best before this match against the title of
@@ -2023,112 +2008,6 @@ export function recordLadder(
         : out.demoted ? `，掉到${rankName(L.div, L.stars, 0)}` : '')
     + (out.milestone ? `，第 ${out.milestoneWins} 胜，${PACKS[out.milestone].name} +1` : ''))
   return out
-}
-
-// ---------------------------------------------------------------- seasons
-
-/**
- * 天梯赛季 (owner, 2026-10-07, after 开瓦包: 排位奖励都是一次性的，打到大师就没东西可拿了).
- *
- * Every promotion pack and every 大师 title pack was paid the first time and never again, so an account
- * that had been to 大师 had nothing left to climb for. The ladder now runs in seasons of four weeks,
- * Monday to Sunday by the server's (Beijing) calendar, S1 from Monday 2026-10-12; before that it is
- * 「赛季前」 (season 0) and nothing rolls.
- *
- * At the turn every ladder a player has played — the open one and each metal one — drops two divisions
- * (大师 and above to 铂金, 钻石 to 黄金, 铂金 to 白银, the rest to 青铜), and what was reached this season —
- * `best`, `bestPoints` — starts again from there, so each promotion and each title pays its pack again on
- * the way back up. Career wins and losses run on (the pending draw, the milestone packs and the anti-cheat
- * checks count them); the season's own are `sWins`/`sLosses`, and the career best is kept in
- * `peak`/`peakPoints`. No settlement prize at the end: the climb back is the reward.
- *
- * Rolled lazily, on the first thing an account does in a new season (runAction, and the load route so the
- * screen never shows last season's badge) — nothing runs on a clock; the leaderboard only ranks accounts
- * already in this season.
- */
-export const SEASON_START = '2026-10-12'
-export const SEASON_DAYS = 28
-/**
- * The first day of S1 the arithmetic below uses. SEASON_START, except in a check that moves it into the
- * past to exercise the turn (scripts/check_seasons.ts); nothing in the game sets it.
- */
-let seasonStart: string = SEASON_START
-export function setSeasonStartForCheck(day: string | null): void {
-  seasonStart = day && /^\d{4}-\d{2}-\d{2}$/.test(day) ? day : SEASON_START
-}
-const dayNo = (day: string): number => Math.floor(Date.parse(`${day}T00:00:00Z`) / 86_400_000)
-const dayOf = (n: number): string => new Date(n * 86_400_000).toISOString().slice(0, 10)
-/** 0 before the first season, then 1, 2, … */
-export const seasonOf = (today: string): number => {
-  const n = dayNo(today) - dayNo(seasonStart)
-  return Number.isFinite(n) && n >= 0 ? Math.floor(n / SEASON_DAYS) + 1 : 0
-}
-/** the first and last day of a season (season 0 ends the day before the first begins) */
-export const seasonFirstDay = (season: number): string => dayOf(dayNo(seasonStart) + (Math.max(1, season) - 1) * SEASON_DAYS)
-export const seasonLastDay = (season: number): string => dayOf(dayNo(seasonStart) + Math.max(0, season) * SEASON_DAYS - 1)
-/** days left in today's season, today included */
-export const seasonDaysLeft = (today: string): number => dayNo(seasonLastDay(seasonOf(today))) - dayNo(today) + 1
-export const seasonName = (season: number): string => (season > 0 ? `S${season}` : '赛季前')
-/** where a division lands at the turn of a season */
-export const seasonResetDiv = (div: number): number => Math.max(0, Math.min(div, MASTER_DIV) - 2)
-
-export interface SeasonRank {
-  div: number
-  stars: number
-  points: number
-  best: number
-  bestPoints: number
-  /** that season's record (sWins/sLosses); 赛季前 had none of its own — it is everything before S1 — so the career one */
-  wins: number
-  losses: number
-}
-export interface SeasonRecord {
-  season: number
-  ranks: Partial<Record<LeagueKind, SeasonRank>>
-}
-
-/**
- * Move an account into today's season, if it is not there yet. Returns the season that ended, or null.
- * Idempotent: a second call in the same season changes nothing.
- */
-export function rollSeason(g: GachaState, today: string): SeasonRecord | null {
-  const now = seasonOf(today)
-  const was = typeof g.season === 'number' && Number.isFinite(g.season) ? Math.max(0, Math.trunc(g.season)) : 0
-  if (now <= was) return null
-  const record: SeasonRecord = { season: was, ranks: {} }
-  const ladders: [LeagueKind, LadderState | undefined][] = [['open', g.ladder], ...(Object.entries(g.leagues ?? {}) as [LeagueKind, LadderState][])]
-  let moved = ''
-  for (const [league, L] of ladders) {
-    // a ladder never played stays where it is (青铜, nothing to drop) and leaves no record
-    if (!L || L.wins + L.losses === 0) continue
-    record.ranks[league] = {
-      div: L.div, stars: L.stars, points: L.points ?? 0, best: L.best, bestPoints: L.bestPoints ?? 0,
-      wins: was === 0 ? L.wins : L.sWins ?? 0, losses: was === 0 ? L.losses : L.sLosses ?? 0,
-    }
-    L.peak = Math.max(L.peak ?? 0, L.best, L.div)
-    L.peakPoints = Math.max(L.peakPoints ?? 0, L.bestPoints ?? 0, L.points ?? 0)
-    const before = rankName(L.div, L.stars, L.points ?? 0)
-    // one drop a season missed, three at most: an account back after two seasons away starts lower
-    let div = L.div
-    for (let i = 0; i < Math.min(3, now - was); i++) div = seasonResetDiv(div)
-    L.div = div
-    L.stars = 0
-    L.best = div
-    L.points = 0
-    L.bestPoints = 0
-    L.streak = 0
-    L.sWins = 0
-    L.sLosses = 0
-    // the opponent drawn for last season's division is not this season's match
-    delete L.pending
-    if (league === 'open') moved = `${before} → ${rankName(div, 0, 0)}`
-  }
-  g.season = now
-  if (Object.keys(record.ranks).length) {
-    g.lastSeason = record
-    note(g, `${seasonName(now)} 赛季开始${moved ? `：天梯 ${moved}` : ''}，升段卡包和大师称号十连包可以重新拿`)
-  }
-  return record
 }
 
 // ---------------------------------------------------------------- cup
@@ -2915,11 +2794,6 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
         streak: Math.trunc(Number(L.streak) || 0),
         points: Math.max(0, Math.round(Number(L.points) || 0)),
         bestPoints: Math.max(0, Math.round(Number(L.bestPoints) || 0)),
-        // the season fields (rollSeason), kept only when the save has them
-        ...(L.peak != null ? { peak: Math.max(0, Math.trunc(Number(L.peak) || 0)) } : {}),
-        ...(L.peakPoints != null ? { peakPoints: Math.max(0, Math.round(Number(L.peakPoints) || 0)) } : {}),
-        ...(L.sWins != null ? { sWins: Math.max(0, Math.trunc(Number(L.sWins) || 0)) } : {}),
-        ...(L.sLosses != null ? { sLosses: Math.max(0, Math.trunc(Number(L.sLosses) || 0)) } : {}),
         pending: L.pending,
       }
     }
@@ -2949,14 +2823,6 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   // start the new ladder at zero, which is the only fair place to start it
   g.ladder.points ??= 0
   g.ladder.bestPoints ??= g.ladder.points
-  for (const k of ['peak', 'peakPoints', 'sWins', 'sLosses'] as const) {
-    if (g.ladder[k] != null) g.ladder[k] = Math.max(0, Math.trunc(Number(g.ladder[k]) || 0))
-  }
-  // 天梯赛季: a save from before seasons is in season 0 (赛季前); rollSeason moves it on
-  if (typeof g.season !== 'number' || !Number.isFinite(g.season) || g.season < 0) delete g.season
-  else g.season = Math.trunc(g.season)
-  if (!g.lastSeason || typeof g.lastSeason !== 'object' || typeof g.lastSeason.season !== 'number'
-    || !g.lastSeason.ranks || typeof g.lastSeason.ranks !== 'object') delete g.lastSeason
   g.daily ??= {
     claimed: null, streak: 0, questDay: null, picked: [], progress: {}, taken: [],
     stamina: STAMINA_MAX, staminaAt: 0,
@@ -3016,7 +2882,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
 export const SERVER_KEYS = [
   'version', 'createdAt', 'coins', 'cards', 'packs', 'pity', 'mythicDry', 'pulls', 'ladder',
   'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'seoulRoute',
-  'weeklySeriesPick', 'shop', 'echoQuiz', 'echoGift', 'echoSet', 'echoDaily', 'season', 'lastSeason',
+  'weeklySeriesPick', 'shop', 'echoQuiz', 'echoGift', 'echoSet', 'echoDaily',
 ] as const
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends', 'cupSquads'] as const
 
