@@ -205,9 +205,9 @@ export function applyMail(g: GachaState, mail: MailItem[]): void {
     if (m.coins) g.coins += m.coins
     if (m.cardId) {
       restoreCard(g, m.cardId, m.level)
-      // bought or swapped in: it may not be passed on again for a while (engine/tradeLock.ts)
-      // S16 世界赛 cards trade freely — following the games is the point (owner, 2026-10-04)
-      if (TRADED_IN.has(m.kind) && g.cards[m.cardId] && !m.cardId.startsWith('s16:')) noteTradedIn(g.cards[m.cardId], m.at || now)
+      // bought or swapped in: it may not be passed on again for a while (engine/tradeLock.ts) — S16 世界赛 cards too
+      // (owner 2026-10-07: 「s16 的卡和现在的卡在交易上一视同仁」)
+      if (TRADED_IN.has(m.kind) && g.cards[m.cardId]) noteTradedIn(g.cards[m.cardId], m.at || now)
     }
     // a swap that did not happen gives the proposer's 体力 back with his card (market-api.js unwindSwap)
     if (m.kind === 'swap_back' && m.body?.stamina) refundPlay(g, 'swap', now)

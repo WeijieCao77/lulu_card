@@ -10,7 +10,9 @@ import { matchesFilter } from '../src/engine/cardFilter'
 import { rollShop } from '../src/engine/dailyShop'
 import { koReward, setKo, setSwiss, swissReward } from '../src/engine/s16Predict'
 import type { S16PredictState } from '../src/engine/s16Predict'
-import { capOf, S16_PRICE_CAP } from '../market-api.js'
+import { capOf, priceCap } from '../market-api.js'
+import { applyMail } from '../src/engine/inbox'
+import { tradeableCopies } from '../src/engine/tradeLock'
 import S16 from '../src/data/s16.json'
 
 let bad = 0
@@ -85,7 +87,7 @@ check('S16 包：2600 金币三张、等概率、卖到 11/21', def.cost === 260
 }
 
 // market and trading
-check('市场单价上限：S16 卡 1 万，不看金银铜', capOf(S16_CARDS[0]) === 10000 && S16_PRICE_CAP === 10000 && capOf(BASE_PLAYER_CARDS.find((c) => c.rarity === 'bronze')) === 2000)
+check('交易和普通卡一视同仁：按金银铜限价（铜 2000、银 5000、金和彩卡不限）', S16_CARDS.every((c) => capOf(c) === priceCap(c.rarity)) && capOf(BASE_PLAYER_CARDS.find((c) => c.rarity === 'bronze')) === 2000)
 
 // S16 图鉴
 {
@@ -124,6 +126,15 @@ check('市场单价上限：S16 卡 1 万，不看金银铜', capOf(S16_CARDS[0]
   const forged = mergeClientFields(g, { s16Predict: { swiss: s.swiss } } as never)
   check('客户端改不了预测', !forged.s16Predict)
   check('没有赛程时提交会被拒', !runAction(g, 's16_predict', { stage: 'swiss', picks: { qual: teams.slice(0, 8), threeZero: ['T18', 'T1'], zeroThree: ['T35', 'T28'] } }, { now: before, today: day, seed: 1 }).ok)
+}
+
+// 一视同仁 (owner 2026-10-07): an S16 card bought on the market waits like any other before it can be sold on
+{
+  const g = newGacha('S16-HOLD', 'h', day)
+  g.cards = {}
+  const id = S16_CARDS[0].id
+  applyMail(g, [{ kind: 'bought', cardId: id, level: 0, coins: 0, pack: null, count: 1, body: {}, at: Date.now() }])
+  check('买来的 S16 卡和普通卡一样要等才能再卖', !!g.cards[id] && tradeableCopies(g.cards[id], Date.now()) === 0)
 }
 
 console.log(bad ? `\n${bad} 处不对` : '\n全部通过')

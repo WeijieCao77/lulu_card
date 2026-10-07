@@ -120,9 +120,12 @@ export const PAIR_PER_DAY = 1
  */
 export const PRICE_CAP = { bronze: 2000, silver: 5000 }
 export const priceCap = (rarity) => PRICE_CAP[rarity] ?? MAX_ASK
-/** S16 世界赛 cards: one cap whatever the metal, which moves every match day (owner, 2026-10-04) */
-export const S16_PRICE_CAP = 10000
-export const capOf = (card) => (card?.s16 ? S16_PRICE_CAP : priceCap(card?.rarity))
+/**
+ * The cap a listing, buyout or bid runs into: its metal's, for every card alike — S16 世界赛 cards included (owner
+ * 2026-10-07: 「s16 的卡和现在的卡在交易上一视同仁」; the 10,000 S16 cap of the 2026-10-04 plan is gone). An S16
+ * card's metal moves with its numbers, so its cap does too; an unrevealed one is filed bronze.
+ */
+export const capOf = (card) => priceCap(card?.rarity)
 /**
  * High-value trades a day, bought and sold counted apart (owner, 2026-09-27): a trade is high-value when it is a
  * gold card or a 彩卡, or at HIGH_VALUE_PRICE coins or more. Cheap cards are not counted, so filling a
