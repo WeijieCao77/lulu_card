@@ -120,9 +120,13 @@ export const PAIR_PER_DAY = 1
  */
 export const PRICE_CAP = { bronze: 2000, silver: 5000 }
 export const priceCap = (rarity) => PRICE_CAP[rarity] ?? MAX_ASK
-/** S16 世界赛 cards: one cap whatever the metal, which moves every match day (owner, 2026-10-04) */
+/**
+ * S16 世界赛 cards: one cap whatever the metal, which moves every match day (owner, 2026-10-04). The FMVP's card,
+ * once it is a 彩卡, is priced like any 彩卡 (owner 2026-10-07: it stays tradeable — at 10,000 it would hand
+ * 彩卡 out cheaply).
+ */
 export const S16_PRICE_CAP = 10000
-export const capOf = (card) => (card?.s16 ? S16_PRICE_CAP : priceCap(card?.rarity))
+export const capOf = (card) => (card?.s16 && !card.s16.fmvp ? S16_PRICE_CAP : priceCap(card?.rarity))
 /**
  * High-value trades a day, bought and sold counted apart (owner, 2026-09-27): a trade is high-value when it is a
  * gold card or a 彩卡, or at HIGH_VALUE_PRICE coins or more. Cheap cards are not counted, so filling a
