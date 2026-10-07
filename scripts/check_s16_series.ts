@@ -72,8 +72,6 @@ check('S16 包：2600 金币三张、等概率、卖到 11/21', def.cost === 260
   const A = built.find((c) => c.ign === a.ign)!, B = built.find((c) => c.ign === b.ign)!
   check('打过比赛就揭晓：数值、金银铜、场数、涨跌', A.s16!.revealed && A.rating === 88 && A.rarity === 'gold' && A.s16!.games === 3 && A.s16!.prev === 85)
   check('FMVP 的卡变成彩卡', B.rarity === 'mythic' && B.s16!.fmvp)
-  // owner 2026-10-07: still tradeable, but no longer under the S16 cap — priced like any 彩卡
-  check('FMVP 彩卡照常交易，单价不再封 1 万（按彩卡）', capOf(B) > S16_PRICE_CAP && capOf(B) === capOf(BASE_PLAYER_CARDS.find((c) => c.rarity === 'gold')) && capOf(A) === S16_PRICE_CAP)
   check('没打的还是「?」', built.filter((c) => c.ign !== a.ign && c.ign !== b.ign).every((c) => !c.s16!.revealed))
 }
 
