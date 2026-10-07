@@ -197,7 +197,7 @@ export default function Ladder() {
               </span>
             )}
             <span className="tiny faint" style={{ display: 'block', marginTop: 6 }}>
-              每个赛季 {SEASON_DAYS} 天（4 周）。赛季结束段位降两级：大师及以上回铂金，钻石回黄金，铂金回白银，其余回青铜（整季没打的每错过一季再多降一次，最多三次）；
+              每个赛季 {SEASON_DAYS} 天（4 周）。赛季结束段位降两级：大师及以上回铂金，钻石回黄金，铂金回白银，其余回青铜；
               升段卡包和大师称号的十连包每个赛季都能重新拿。金卡、银卡、铜卡天梯一样。
             </span>
           </div>
