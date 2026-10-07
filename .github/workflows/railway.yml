@@ -52,3 +52,5 @@ jobs:
       - run: npx tsx scripts/check_coach_bonds.ts
       - run: npx tsx scripts/check_arena_card_scale.ts
       - run: npx tsx scripts/check_series.ts
+      - run: npx tsx scripts/check_seasons.ts
+      - run: npx tsx scripts/check_last_season.ts
