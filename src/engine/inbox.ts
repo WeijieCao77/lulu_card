@@ -49,15 +49,9 @@ const TRADED_IN = new Set(['bought', 'swap_in', 'gift'])
  * the card itself last, carrying whatever it was raised to. When the card
  * itself leaves with spares behind it, the best spare steps up into its place.
  */
-/** the S16 FMVP's 彩卡 never leaves the account (see escrowCard) */
-export const fmvpLocked = (c: ReturnType<typeof cardById>): boolean => isPlayerCard(c) && !!c.s16?.fmvp
-
 export function escrowCard(g: GachaState, cardId: string, want?: number, now = Date.now()): { ok: boolean; level: number; locked?: string } {
   const owned = g.cards[cardId]
   if (!owned) return { ok: false, level: 0 }
-  // the S16 FMVP's card, once it is a 彩卡, stays with whoever holds it (owner 2026-10-07): bought at the S16 cap of
-  // 10,000 it would hand out 彩卡 cheaply; its extra copies level it the normal way or 分解 at the 彩卡 rate
-  if (fmvpLocked(cardById(cardId))) return { ok: false, level: 0, locked: 'S16 FMVP 彩卡不能交易，多出来的可以升级或分解' }
   // only copies that are neither bound nor on hold may leave (engine/tradeLock.ts)
   if (tradeableCopies(owned, now) < 1) return { ok: false, level: 0, locked: lockedWhy(owned, now) ?? '这张卡现在不能交易' }
   tidy(owned, now)

@@ -11,7 +11,6 @@ import { rollShop } from '../src/engine/dailyShop'
 import { koReward, setKo, setSwiss, swissReward } from '../src/engine/s16Predict'
 import type { S16PredictState } from '../src/engine/s16Predict'
 import { capOf, S16_PRICE_CAP } from '../market-api.js'
-import { fmvpLocked } from '../src/engine/inbox'
 import S16 from '../src/data/s16.json'
 
 let bad = 0
@@ -73,8 +72,6 @@ check('S16 包：2600 金币三张、等概率、卖到 11/21', def.cost === 260
   const A = built.find((c) => c.ign === a.ign)!, B = built.find((c) => c.ign === b.ign)!
   check('打过比赛就揭晓：数值、金银铜、场数、涨跌', A.s16!.revealed && A.rating === 88 && A.rarity === 'gold' && A.s16!.games === 3 && A.s16!.prev === 85)
   check('FMVP 的卡变成彩卡', B.rarity === 'mythic' && B.s16!.fmvp)
-  // owner 2026-10-07: the FMVP 彩卡 can't be listed or swapped; the other S16 cards still trade
-  check('FMVP 彩卡不能交易，别的 S16 卡照常', fmvpLocked(B) && !fmvpLocked(A))
   check('没打的还是「?」', built.filter((c) => c.ign !== a.ign && c.ign !== b.ign).every((c) => !c.s16!.revealed))
 }
 
