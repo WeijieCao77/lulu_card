@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { allChoices, answerPool, type ChallengeKind, type Choice } from '../src/engine/challenge'
+import { allChoices, answerPool, evaluate, roleOfAgent, type ChallengeKind, type Choice } from '../src/engine/challenge'
 import { rankChallengeMatches, COMMON_PLAYER_ALIASES } from '../src/engine/challengeSearch'
 import official from '../src/data/challengeChampionNames.json'
 const all = allChoices()
@@ -35,3 +35,11 @@ assert.deepEqual(rankChallengeMatches(all,'not-a-real-choice-anything'),[])
 assert.deepEqual(rankChallengeMatches(all,'　！　'),[])
 assert(rankChallengeMatches(all,'a').length<=8)
 console.log(`Challenge search: ${checks} checks passed; ${all.length} choices, ${Object.keys(official.names).length} champion mappings`)
+
+// 「深渊巨口克格莫更常作为 adc（下路）出现而不是中单」: a champion's position is the one it is played in most
+assert.equal(roleOfAgent("Kog'Maw"), '下路')
+assert.equal(roleOfAgent('Yasuo'), '中单')
+assert.equal(evaluate('agent', "Kog'Maw", 'Ahri').cells.find((c) => c.label === '定位')?.mark, 'near', '猜中单：和克格莫的第二位置相同，算接近')
+assert.equal(evaluate('agent', "Kog'Maw", 'Jinx').cells.find((c) => c.label === '定位')?.mark, 'hit')
+assert.ok(allChoices().filter((c) => c.id === "Kog'Maw").every((c) => c.hint.endsWith('下路')))
+console.log('champion positions: shown by the position each is played in most')

@@ -18,7 +18,7 @@
  * exactly that reason — the game holds no weapon data, and a quiz that makes
  * its facts up is worse than no quiz.
  */
-import { agentCn, AGENTS, ALL_AGENTS, MAPS, mapCn } from './content'
+import { agentCn, agentRoles, ALL_AGENTS, championOf, MAPS, mapCn } from './content'
 import { natCountry, natName } from './nat'
 import { hashStr } from './rng'
 import { WORLD_PLAYERS } from './world'
@@ -174,12 +174,13 @@ const agentChoices = (): Choice[] =>
     hint: `${a}${roleOfAgent(a) ? ` · ${roleOfAgent(a)}` : ''}`,
   }))
 
-/** The in-game role an agent is filed under, from the game's own table. */
+/**
+ * The position a champion is played in most (champions.json lists them most common first). It used to be
+ * the first of 上单/打野/中单/下路/辅助 the champion appeared under, so 26 champions with two positions showed
+ * the wrong one — players: 「深渊巨口克格莫更常作为 adc（下路）出现而不是中单」.
+ */
 export function roleOfAgent(agent: string): string | null {
-  for (const [role, list] of Object.entries(AGENTS)) {
-    if (list.includes(agent)) return role
-  }
-  return null
+  return championOf(agent)?.positions[0] ?? null
 }
 
 export const KIND_CN: Record<ChallengeKind, string> = {
@@ -375,7 +376,9 @@ export function evaluate(kind: ChallengeKind, answerId: string, guessId: string)
       id: guessId, name: agentCn(guessId), img: imgOf('agent', guessId),
       cells: [typeCell, {
         label: '定位', value: role ?? '?',
-        mark: same(role, roleOfAgent(answerId)),
+        // the same main position is a hit; sharing one of its other positions a near miss, as for players
+        mark: role === roleOfAgent(answerId) ? 'hit'
+          : agentRoles(guessId).some((r) => agentRoles(answerId).includes(r)) ? 'near' : 'miss',
       }],
     }
   }
