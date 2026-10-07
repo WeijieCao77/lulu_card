@@ -8,7 +8,7 @@ import { Panel } from '../common'
 import CardActionDialog from './CardActionDialog'
 import SquadUpgrade from './SquadUpgrade'
 import {
-  SQUAD_PRESETS, autoSquad, clearPreset, collection, levelOf, loadPreset,
+  SQUAD_PRESETS, autoSquad, clearPreset, collection, playLevelOf, loadPreset,
   personTaken, presetsOf, renamePreset, savePreset, setSlot,
 } from '../../engine/gacha'
 import { SQUAD_SLOTS, chemistry, isCoachCard, isPlayerCard, cardById, squadPaper, squadPower, squadPowerPoints, squadRating } from '../../engine/cards'
@@ -38,7 +38,7 @@ export default function SquadScreen() {
   const [sharing, setSharing] = useState(false)
   const [clearIdx, setClearIdx] = useState<number | null>(null)
 
-  const level = (id: string) => levelOf(g, id)
+  const level = (id: string) => playLevelOf(g, id)
   const presets = presetsOf(g)
   const [renaming, setRenaming] = useState<number | null>(null)
   // Not memoised on g.squad: the squad object is mutated in place, so a memo
@@ -428,7 +428,7 @@ export default function SquadScreen() {
                 </p>
               ) : (
                 <div className="cm-grid sm">
-                  {options.slice(0, 120).map(({ card, owned }) => {
+                  {options.slice(0, 120).map(({ card }) => {
                     const inSquad = g.squad.slots.includes(card.id) || g.squad.coach === card.id
                     // the same man under another card — picking him replaces
                     // that one rather than putting him on twice
@@ -440,7 +440,7 @@ export default function SquadScreen() {
                       <CardFace
                         key={card.id}
                         card={card}
-                        level={owned.level}
+                        level={playLevelOf(g, card.id)}
                         size="sm"
                         dimmed={inSquad}
                         onClick={() => pick(card.id)}

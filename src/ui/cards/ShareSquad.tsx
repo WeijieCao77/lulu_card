@@ -17,7 +17,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useCards } from './ctx'
 import { paintShare, SHARE_URL } from './shareCard'
 import { myCode } from '../../engine/account'
-import { levelOf } from '../../engine/gacha'
+import { levelOf, playLevelOf } from '../../engine/gacha'
 import { chemistry, squadPower } from '../../engine/cards'
 
 export default function ShareSquad({ onClose }: { onClose: () => void }) {
@@ -38,7 +38,7 @@ export default function ShareSquad({ onClose }: { onClose: () => void }) {
       // any part of the account id: the id is the whole of the login here,
       // and this picture is made to be posted in a group chat.
       who: { name: g.name || '无名经理', tag: (myCode() ?? '').slice(0, 4).toUpperCase() || undefined },
-      rating: squadPower(g.squad, (id) => levelOf(g, id)),
+      rating: squadPower(g.squad, (id) => playLevelOf(g, id)),
       chem: chemistry(g.squad).score,
     })
       .then(() => { if (alive) setPng(el.toDataURL('image/png')) })

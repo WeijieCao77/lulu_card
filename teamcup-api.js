@@ -113,15 +113,20 @@ export function makeTeamCupApi(sql, {
     const coach = typeof row.squad?.coach === 'string' ? row.squad.coach : null
     const held = row.levels && typeof row.levels === 'object' ? row.levels : {}
     const cards = {}
-    for (const [id, lv] of Object.entries(held)) {
+    for (const [id, raw] of Object.entries(held)) {
+      // { level, evo } per card (进修 rides beside the level, engine/evolve.ts); a bare number from an older query
+      const lv = raw && typeof raw === 'object' ? raw.level : raw
       if (lv === null || lv === undefined) continue
-      cards[id] = { id, level: Math.max(0, Math.min(20, Math.trunc(Number(lv) || 0))), dupes: 0, seen: 1 }
+      cards[id] = { id, level: Math.max(0, Math.min(20, Math.trunc(Number(lv) || 0))), dupes: 0, seen: 1, evo: raw?.evo ?? undefined }
     }
     let five
     try { five = engine.squadForPlay({ squad: { slots, coach }, cards }) } catch { return null }
     if (!five?.ok) return null
     const levels = {}
-    for (const id of [...five.squad.slots, five.squad.coach]) if (id && cards[id]?.level) levels[id] = cards[id].level
+    for (const id of [...five.squad.slots, five.squad.coach]) {
+      const lv = id && cards[id] ? engine.playLevel(id, cards[id]) : 0
+      if (lv) levels[id] = lv
+    }
     let score
     try { score = engine.squadRating(five.squad, (id) => levels[id] ?? 0) } catch { return null }
     if (!Number.isFinite(score)) return null
@@ -148,7 +153,7 @@ export function makeTeamCupApi(sql, {
       if (held[0]?.status !== 'open') return
       const rows = await db`
         select a.id_hash, a.name, sq.squad as squad,
-          (select jsonb_object_agg(k, a.state->'cards'->k->'level')
+          (select jsonb_object_agg(k, jsonb_build_object('level', a.state->'cards'->k->'level', 'evo', a.state->'cards'->k->'evo'))
              from jsonb_array_elements_text(
                (case when jsonb_typeof(sq.squad->'slots') = 'array' then sq.squad->'slots' else '[]'::jsonb end)
                || jsonb_build_array(sq.squad->'coach')) as k
@@ -444,7 +449,7 @@ export function makeTeamCupApi(sql, {
     if (blocked) { json(res, 200, { ok: false, gate: blocked, why: `开过 ${blocked.need} 张卡${blocked.days ? `、账号满 ${blocked.days} 天` : ''}才能报名（现在 ${blocked.have} 张）。` }); return }
     const mine = await sql`
       select a.id_hash, a.name, sq.squad as squad,
-        (select jsonb_object_agg(k, a.state->'cards'->k->'level')
+        (select jsonb_object_agg(k, jsonb_build_object('level', a.state->'cards'->k->'level', 'evo', a.state->'cards'->k->'evo'))
            from jsonb_array_elements_text(
              (case when jsonb_typeof(sq.squad->'slots') = 'array' then sq.squad->'slots' else '[]'::jsonb end)
              || jsonb_build_array(sq.squad->'coach')) as k

@@ -577,8 +577,15 @@ export const SALVAGE: Record<Rarity, number> = {
 export const ratingAt = (base: number, level: number): number =>
   base + growthOf(level) * LEVEL_GAIN
 
-/** the levels a card has actually earned, 0–MAX_LEVEL */
-export const growthOf = (level: number): number => Math.max(0, Math.min(MAX_LEVEL, level))
+/**
+ * How far above +5 进修 can take a card, in levels (engine/evolve.ts). The most a full 进修 can be worth is five
+ * of three points on the attribute a position weighs most — a 上单's 操作, 0.28 in ROLE_WEIGHT (player.ts) — which
+ * is 4.2 rating, 2.8 levels at LEVEL_GAIN 1.5; three levels holds it whole.
+ */
+export const EVO_LEVEL_ROOM = 3
+
+/** the levels a card has actually earned, 0–MAX_LEVEL, and 进修 above it as a fraction (evolve.ts playLevel) */
+export const growthOf = (level: number): number => Math.max(0, Math.min(MAX_LEVEL + EVO_LEVEL_ROOM, level))
 
 /** one ability point is a hundred 战力 */
 export const POWER_PER_POINT = 100

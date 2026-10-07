@@ -2,11 +2,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { CardPicker } from './Picker'
 import type { PickRow } from './Picker'
 import { marketSaleLevel, hasMarketDuplicates } from '../../engine/marketGuidance'
+import { copyLabel, leavingCopy } from '../../engine/inbox'
 import type { Card } from '../../engine/cards'
+import type { OwnedCard } from '../../engine/gacha'
 
 export interface SellCardRow {
   card: Card
-  owned: { level: number; dupes: number; spares?: unknown }
+  owned: OwnedCard
 }
 
 /**
@@ -32,9 +34,12 @@ export function SellCardPicker({
     const source = dupesOnly ? valid.filter((row) => hasMarketDuplicates(row.owned)) : valid
     return source.map((row) => {
       const saleLevel = marketSaleLevel(row.owned)
+      // a trained +5 (进修) leaves with its 进修: say so on the row
+      const out = row.owned.dupes > 0 ? null : leavingCopy(row.card.id, row.owned)
+      const label = out ? copyLabel(out.level, out.evo) : `+${saleLevel}`
       const note = row.owned.dupes > 0
         ? `重复 ${row.owned.dupes} 张，本次出售 +0`
-        : hasMarketDuplicates(row.owned) ? `本次出售强化备用 +${saleLevel}` : `仅此一张 +${saleLevel}`
+        : hasMarketDuplicates(row.owned) ? `本次出售备用 ${label}` : `仅此一张 ${label}`
       return { card: row.card, note }
     })
   }, [rows, dupesOnly])

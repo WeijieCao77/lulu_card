@@ -25,8 +25,10 @@ import type { DailyShop } from './dailyShop'
 import {
   ALL_CARDS, SEOUL_CARDS, ECHO_CARDS, isEchoCard, COACH_CARDS, COINS_FOR, DUPES_FOR, LEGEND_CARDS, LEGEND_COACH_CARDS, MAX_LEVEL, RARITY_CN, cardName, PLAYER_CARDS,
   SALVAGE, SQUAD_SLOTS, cardById, cardPower, emptySquad, isPlayerCard, personOf, rarityRank, ratingAt,
-  squadRating, squadPower, MERGED_CARDS, REMOVED_CARDS, canonicalCardId,
+  squadRating, squadPower, MERGED_CARDS, REMOVED_CARDS, canonicalCardId, EVO_LEVEL_ROOM,
 } from './cards'
+import { cleanEvo, evoRating, playLevel } from './evolve'
+import type { Evo } from './evolve'
 import type { Card, PlayerCard, Rarity, Squad } from './cards'
 import { newChallenge } from './challenge'
 import { squadRegion } from './nationRegion'
@@ -398,6 +400,13 @@ export interface OwnedCard {
    * (engine/dismantle.ts).
    */
   spares?: number[]
+  /** 进修 past +5, one attribute at a time (engine/evolve.ts) */
+  evo?: Evo
+  /**
+   * Extra +5 copies that carry a 进修 of their own, weakest first: a trained card bought or
+   * swapped in while this one was already +5. The stronger copy is always the card.
+   */
+  evoSpares?: Evo[]
   /** copies from the account's first pulls, which never trade (engine/tradeLock.ts) */
   bound?: number
   /** when each traded-in copy may trade again, ms since epoch (engine/tradeLock.ts) */
@@ -430,6 +439,13 @@ function cleanOwnedCards(raw: unknown): Record<string, OwnedCard> {
       .map(x => wholeCount(x)).filter(x => x >= 1 && x <= MAX_LEVEL).sort((a, b) => a - b).slice(0, 99)
     if (spares.length) owned.spares = spares
     else delete owned.spares
+    const evo = cleanEvo(row.evo)
+    if (evo) owned.evo = evo
+    else delete owned.evo
+    const evoSpares = (Array.isArray(row.evoSpares) ? row.evoSpares : [])
+      .map(x => cleanEvo(x)).filter((x): x is Evo => !!x).slice(0, 99)
+    if (evoSpares.length) owned.evoSpares = evoSpares
+    else delete owned.evoSpares
     const bound = wholeCount(row.bound)
     if (bound) owned.bound = bound
     else delete owned.bound
@@ -751,11 +767,16 @@ export interface CupRegistration {
   levels: Record<string, number>
 }
 
-/** Copy the validated five and their current levels; never retain save references. */
+/** a registered level: 0–5, and 进修 above it (growthOf's ceiling), never NaN */
+const regLevel = (raw: unknown): number => {
+  const n = Number(raw)
+  return Number.isFinite(n) ? Math.max(0, Math.min(MAX_LEVEL + EVO_LEVEL_ROOM, n)) : 0
+}
+/** Copy the validated five and their current levels (进修 included, evolve.ts playLevel); never retain save references. */
 export function registerCupSquad(squad: Squad, level: (id: string) => number): CupRegistration {
   const registered = { slots: squad.slots.slice(0, 5), coach: squad.coach }
   const ids = [...registered.slots, registered.coach].filter((id): id is string => !!id)
-  return { squad: registered, levels: Object.fromEntries(ids.map(id => [id, ownedLevel(level(id))])) }
+  return { squad: registered, levels: Object.fromEntries(ids.map(id => [id, regLevel(level(id))])) }
 }
 
 export type QuestKey = 'play3' | 'win2' | 'open2' | 'upgrade1' | 'cup1'
@@ -1078,6 +1099,8 @@ export const note = (g: GachaState, text: string) => {
 }
 
 export const levelOf = (g: GachaState, cardId: string): number => ownedLevel(g.cards[cardId]?.level)
+/** the level a match, 阵容分 and 战力 read: levelOf, and 进修 above +5 as a fraction (evolve.ts) */
+export const playLevelOf = (g: GachaState, cardId: string): number => playLevel(cardId, g.cards[cardId])
 export const owns = (g: GachaState, cardId: string): boolean => !!g.cards[cardId]
 
 // ---------------------------------------------------------------- pulling
@@ -1428,7 +1451,7 @@ export function collection(g: GachaState): { card: Card; owned: OwnedCard; ratin
     .map(([id, owned]) => {
       if (!owned || typeof owned !== 'object' || Array.isArray(owned)) return null
       const card = cardById(id)
-      return card ? { card, owned, rating: ratingAt(card.rating, levelOf(g, id)) } : null
+      return card ? { card, owned, rating: ratingAt(card.rating, playLevelOf(g, id)) } : null
     })
     .filter((x): x is { card: Card; owned: OwnedCard; rating: number } => !!x)
     .sort((a, b) => b.rating - a.rating)
@@ -2541,7 +2564,7 @@ const personSeated = (squad: Squad, cardId: string, exceptSlot: number): boolean
  * not call would still beat an 86 who does on the number alone.
  */
 export function autoSquad(g: GachaState): Squad {
-  const level = (id: string) => g.cards[id]?.level ?? 0
+  const level = (id: string) => playLevelOf(g, id)
   const mine = collection(g).filter((c) => isPlayerCard(c.card))
   const squad = emptySquad()
   // keyed on the person, not the card: the legend and the ordinary card are
@@ -2655,7 +2678,9 @@ export function mergeCardAliases(g: GachaState): void {
       if (!keep) g.cards[to] = { ...old, id: to }
       else {
         const [hi, lo] = old.level > keep.level ? [old, keep] : [keep, old]
-        const spares = [...(hi.spares ?? []), ...(lo.spares ?? []), ...(lo.level > 0 ? [lo.level] : [])].sort((a, b) => a - b)
+        // a trained +5 lower copy is kept as a trained spare below, not as a plain +5 spare
+        const loTrained = lo.level >= MAX_LEVEL && !!lo.evo
+        const spares = [...(hi.spares ?? []), ...(lo.spares ?? []), ...(lo.level > 0 && !loTrained ? [lo.level] : [])].sort((a, b) => a - b)
         const merged: OwnedCard = {
           ...keep, id: to, level: hi.level,
           dupes: keep.dupes + old.dupes + (lo.level > 0 ? 0 : 1),
@@ -2664,6 +2689,17 @@ export function mergeCardAliases(g: GachaState): void {
         }
         if (spares.length) merged.spares = spares.slice(0, 99)
         else delete merged.spares
+        // 进修 (evolve.ts) stays on the copy that is the card; a trained lower copy keeps its own as a trained spare
+        const evoSpares = [...(keep.evoSpares ?? []), ...(old.evoSpares ?? [])]
+        if (hi.level >= MAX_LEVEL && hi.evo) merged.evo = hi.evo
+        else delete merged.evo
+        if (loTrained && lo.evo) evoSpares.push(lo.evo)
+        evoSpares.sort((a, b) => {
+          const c = cardById(to)
+          return isPlayerCard(c) ? evoRating(c, a) - evoRating(c, b) : 0
+        })
+        if (evoSpares.length) merged.evoSpares = evoSpares.slice(0, 99)
+        else delete merged.evoSpares
         const bound = (keep.bound ?? 0) + (old.bound ?? 0)
         if (bound) merged.bound = bound
         else delete merged.bound

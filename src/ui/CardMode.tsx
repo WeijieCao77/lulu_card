@@ -11,6 +11,7 @@ import Challenge from './cards/Challenge'
 import Minigames from './cards/Minigames'
 import Collection from './cards/Collection'
 import SquadScreen from './cards/Squad'
+import Evolve from './cards/Evolve'
 import Ladder from './cards/Ladder'
 import Friends from './cards/Friends'
 import Market from './cards/Market'
@@ -104,7 +105,7 @@ function StaminaChip({ g, onTick }: { g: GachaState; onTick: () => void }) {
 
 // grouped like 开瓦包's sidebar: `group` opens a new section and names it
 export const TABS: { key: string; label: string; beta?: boolean; group?: string }[] = [
-  { key: 'packs', label: '抽卡', group: '卡牌' }, { key: 'shop', label: '每日商店' }, { key: 'collection', label: '收藏' }, { key: 'squad', label: '卡组' },
+  { key: 'packs', label: '抽卡', group: '卡牌' }, { key: 'shop', label: '每日商店' }, { key: 'collection', label: '收藏' }, { key: 'squad', label: '卡组' }, { key: 'evolve', label: '进修' },
   { key: 'ladder', label: '天梯', group: '赛事' }, { key: 'cup', label: '杯赛' }, { key: 'winrate', label: '胜率表' },
   { key: 'worlds', label: '名人堂', group: '发现' }, { key: 'dossier', label: '图鉴' },
   { key: 'challenge', label: '挑战' }, { key: 'minigames', label: '小游戏' },
@@ -358,6 +359,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
     challenge: Challenge,
     minigames: Minigames,
     squad: SquadScreen,
+    evolve: Evolve,
     collection: Collection,
     ladder: Ladder,
     friends: Friends,

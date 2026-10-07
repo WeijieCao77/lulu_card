@@ -1228,6 +1228,10 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
   color: #7a2018;
 }
 .s-lg .cf-plus { font-size: 12px; }
+/* 进修 (engine/evolve.ts): a card trained past +5 keeps the +5 badge and gains an arrow */
+.cardface .cf-plus.cf-evo::after { content: '↑'; margin-left: 1px; color: #1f8a5c; }
+.cardface.r-mythic .cf-plus.cf-evo::after { color: #8ff0bf; }
+.retired-echo .evo-mark { font-style: normal; margin-left: .15em; color: #8ff0bf; }
 
 .cf-dupes {
   position: absolute; top: 7px; right: 8px; z-index: 3;
@@ -1389,6 +1393,24 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
 @media (max-width: 720px) {
   .cm-squad { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .cm-body { padding: 12px 10px 40px; }
+}
+
+/* 进修 (cards/Evolve.tsx): eight attribute buttons, a five-slot tray laid out like the squad */
+.evo-attrs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.evo-attr { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 8px 10px; text-align: left; min-width: 0; }
+.evo-attr .mono { font-size: 18px; line-height: 1.2; }
+.evo-attr.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.evo-attr-name { display: flex; align-items: center; gap: 5px; font-size: 13px; }
+.evo-key { font-style: normal; font-size: 10px; padding: 0 4px; border-radius: 3px; color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+.evo-up { color: var(--win); }
+.evo-tray { margin-top: 4px; }
+.evo-slot { width: 100%; max-width: 150px; aspect-ratio: 5 / 7; border: 1.5px dashed var(--line); border-radius: 8px; display: grid; place-items: center; color: var(--faint); font-size: 18px; }
+@media (max-width: 560px) {
+  .evo-attrs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .evo-attr { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 6px; padding: 7px 8px; }
+  .evo-attr .tiny { grid-column: 1 / -1; }
+  .evo-head > .cardface { margin: 0 auto; }
+  .evo-slot { font-size: 14px; border-radius: 6px; }
 }
 
 /* ---- pack opening ----------------------------------------------------- */

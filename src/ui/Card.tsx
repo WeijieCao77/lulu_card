@@ -3,7 +3,7 @@ import WorldsCard from './cards/WorldsCard'
 import { EchoCard, EchoCardBack } from './cards/echo/EchoCard'
 import { useState } from 'react'
 import { ATTR_CN } from '../engine/types'
-import { RARITY_CN } from '../engine/cards'
+import { MAX_LEVEL, RARITY_CN } from '../engine/cards'
 import { crestUrl } from '../engine/dossier'
 import { FLAG_AS, natName } from '../engine/nat'
 import type { Card, PlayerCard, CoachCard } from '../engine/cards'
@@ -107,7 +107,7 @@ const hashOf = (s: string): number => {
 
 export interface CardFaceProps {
   card: Card
-  /** 0-5 — drawn as pips and folded into the rating */
+  /** 0-5 — drawn as pips; above 5 a 进修 rides as a fraction (engine/evolve.ts playLevel) and the +5 gets an arrow */
   level?: number
   /** spare copies held, shown as a corner badge on the collection grid */
   dupes?: number
@@ -127,11 +127,15 @@ export interface CardFaceProps {
  * look like a gold at a glance, across a grid, on a phone.
  */
 export default function CardFace({
-  card, level = 0, dupes = 0, size = 'md', selected, dimmed, onClick, footer,
+  card, level: played = 0, dupes = 0, size = 'md', selected, dimmed, onClick, footer,
 }: CardFaceProps) {
+  // a match's level carries 进修 above +5 as a fraction (engine/evolve.ts); the badge is the whole level,
+  // and a card that has been trained past it is marked
+  const level = Math.max(0, Math.min(MAX_LEVEL, Math.floor(played)))
+  const evolved = played > MAX_LEVEL
   if (card.legend?.art) return <WorldsCard {...{ card, level, dupes, size, selected, dimmed, onClick, footer }} />
   if (isPlayerCard(card) && card.event === 'seoul-2024') return <SeoulCard {...{ card, level, dupes, size, selected, dimmed, onClick, footer }} />
-  if (isPlayerCard(card) && card.echo) return <EchoCard {...{ card, level, dupes, size, selected, dimmed, onClick, footer }} />
+  if (isPlayerCard(card) && card.echo) return <EchoCard {...{ card, level, evolved, dupes, size, selected, dimmed, onClick, footer }} />
   // The base rating, always: the number on the face says which card this is
   // (the 2024 EDG ZmjjKK is a 97 whatever you have done to it), the +N
   // beside it says what you have done, and 战力 in the detail says what the
@@ -145,7 +149,7 @@ export default function CardFace({
   const title = legend
     ? `${legend.title} · ${card.kind === 'player' ? card.ign : card.name} · 彩卡 ${rating}`
     : `${card.kind === 'player' ? card.ign : card.name} · ${RARITY_CN[card.rarity]} ${rating}`
-      + (level ? `（+${level}）` : '')
+      + (level ? `（+${level}${evolved ? '，进修过' : ''}）` : '')
 
   // A彩卡 IS the photograph — it fills the card and the text sits on a scrim
   // over it. Everything else keeps the round portrait with the club's crest
@@ -209,7 +213,7 @@ export default function CardFace({
             like it was doing, because it was. */}
         <span className="cf-num">
           <b>{rating}</b>
-          {level > 0 && <i className="cf-plus">+{level}</i>}
+          {level > 0 && <i className={`cf-plus${evolved ? ' cf-evo' : ''}`}>+{level}</i>}
         </span>
         {/* Every position he can actually play, not just the first one.
             A card badged 下路 sitting in the 上单 slot reads as a mistake

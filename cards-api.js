@@ -277,6 +277,10 @@ create index if not exists listing_shelf_card_idx on card_listings (card_id) whe
 -- entry in a draw, not a purchase. draw_at is set by the first entry (created
 -- plus the minute) and is when the settler picks one of them. Null: no entries.
 alter table card_listings add column if not exists draw_at timestamptz;
+-- 进修 travels with the card (2026-10-07, engine/evolve.ts): a trained +5 listed or offered
+-- in a swap carries its 进修 to whoever gets it, in the mail body as evo. Null for every other card.
+alter table card_listings add column if not exists evo jsonb;
+alter table card_swaps add column if not exists give_evo jsonb;
 create index if not exists listing_draw_idx on card_listings (draw_at) where status = 'open' and draw_at is not null;
 ${GUARD_SCHEMA}
 ${MARKET_HISTORY_SCHEMA}`
@@ -1103,7 +1107,9 @@ export function makeCardApi(sql, {
     // here for a day, and every rival five arrived un-upgraded
     const lvOf = (id) => {
       const lv = r.cards?.[id]?.level
-      return typeof lv === 'number' && lv > 0 ? Math.min(20, Math.trunc(lv)) : 0
+      if (!(typeof lv === 'number' && lv > 0)) return 0
+      // 进修 above +5 rides in as a fraction of a level (engine/evolve.ts playLevel)
+      return engine.playLevel(id, { level: Math.min(20, Math.trunc(lv)), evo: r.cards[id].evo })
     }
     const levels = {}
     for (const id of slots) {
@@ -1222,7 +1228,7 @@ export function makeCardApi(sql, {
         case when a.state->'ladder'->>'points' ~ '^[0-9]{1,9}$'
              then (a.state->'ladder'->>'points')::int else 0 end as points,
         -- the six cards on the sheet and nothing else of the collection
-        (select coalesce(jsonb_object_agg(k, jsonb_build_object('level', a.state->'cards'->k->'level')), '{}'::jsonb)
+        (select coalesce(jsonb_object_agg(k, jsonb_build_object('level', a.state->'cards'->k->'level', 'evo', a.state->'cards'->k->'evo')), '{}'::jsonb)
            from (select e #>> '{}' as k from jsonb_array_elements(a.state->'squad'->'slots') e
                  union select a.state->'squad'->>'coach') ks
           where k is not null and a.state->'cards' ? k) as cards

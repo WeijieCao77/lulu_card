@@ -6,11 +6,12 @@ import { Panel } from '../common'
 import MatchReport from './Report'
 import {
   CUP_MAX_ROUNDS, CUP_MIN_ROUNDS, PACKS, STAMINA_COST, canPlay, cupBo, cupExitPrize, cupOpponent,
-  cupRoundName, cupTitlePrize, levelOf, staminaNow,
+  cupRoundName, cupTitlePrize, playLevelOf, staminaNow,
 } from '../../engine/gacha'
 import type { CupOutcome, CupRegistration, PackKind } from '../../engine/gacha'
 import type { ArenaResult } from '../../engine/arena'
 import { cardById, cardName, squadRating } from '../../engine/cards'
+import { levelText } from '../../engine/evolve'
 import { CUP_TEAMS } from '../../engine/cupTeams'
 import { track } from '../../engine/telemetry'
 import OpenCup, { CupDivision } from './OpenCup'
@@ -77,7 +78,7 @@ function ClubCup() {
     setBusy(false)
     if (!r.ok) { toast(r.why); return }
     const { res, opp, out, registration: played } = r.result as { res: ArenaResult; opp: string; out: CupOutcome; registration?: CupRegistration }
-    const levels = played?.levels ?? Object.fromEntries([...g.squad.slots, g.squad.coach].filter((id): id is string => !!id).map(id => [id, levelOf(g, id)]))
+    const levels = played?.levels ?? Object.fromEntries([...g.squad.slots, g.squad.coach].filter((id): id is string => !!id).map(id => [id, playLevelOf(g, id)]))
     const rating = squadRating(played?.squad ?? g.squad, id => levels[id] ?? 0)
     track('card_match', { mode: 'cup', won: res.win, round, rating, title: !!out.won })
     setShown({ res, opp, out, levels })
@@ -121,7 +122,7 @@ function ClubCup() {
                 本届报名阵容（{squadRating(registration.squad, id => registration.levels[id] ?? 0)} 分）：
                 {[...registration.squad.slots, registration.squad.coach].filter((id): id is string => !!id).map(id => {
                   const card = cardById(id)
-                  return `${card ? cardName(card) : id} +${registration.levels[id] ?? 0}`
+                  return `${card ? cardName(card) : id} ${levelText(registration.levels[id] ?? 0)}`
                 }).join(' · ')}
               </p>
             ) : live ? (

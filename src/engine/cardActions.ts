@@ -25,7 +25,7 @@
  */
 import {
   awardMinigame, canPlay, claimEchoSet, note, checkIn, claimFullSet, claimQuest, claimSeries, clampState, cupBo, cupOpponent, drawOpponent, enterCup,
-  levelOf, oppBumpFor, openPack, packCost, pendingOpponent, primeStamina, recordCup, recordLadder,
+  levelOf, playLevelOf, oppBumpFor, openPack, packCost, pendingOpponent, primeStamina, recordCup, recordLadder,
   refreshDaily, salvage, salvageBulk, seriesOfPack, spendPlay, upgrade, ladderSlot, leagueEntry, isLadderLeague,
   LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad, cupSquadOf, ladderSquadOf,
 } from './gacha'
@@ -49,6 +49,8 @@ import { markMailSeen } from './inbox'
 import { dailyQuestion, echoQuizDone, startEchoQuiz, viewDaily, viewEchoQuiz } from './echoQuiz'
 import type { EchoQuizQ } from './echoQuiz'
 import { dismantle } from './dismantle'
+import { evolve } from './evolve'
+import { washEvo } from './evoWash'
 import { SEOUL_TEAMS } from './seoul2024'
 import { SEOUL_FIVES, SEOUL_POOL, SEOUL_ROUTES, quitRoute, recordRoute, routeState, startRoute } from './seoulRoute'
 
@@ -75,7 +77,7 @@ export type ActResult =
 export const ACTIONS = [
   'open', 'checkin', 'quest', 'series', 'fullset', 'salvage', 'salvage_dupes', 'salvage_bulk', 'upgrade',
   'ladder_draw', 'ladder', 'cup_enter', 'cup_play', 'cup_clear', 'challenge', 'mail_seen',
-  'minigame_start', 'minigame_finish', 'dismantle', 'seoul_start', 'seoul_play', 'seoul_quit',
+  'minigame_start', 'minigame_finish', 'dismantle', 'evolve', 'evo_wash', 'seoul_start', 'seoul_play', 'seoul_quit',
   'series_pick', 'shop', 'shop_buy', 'echo_quiz', 'echo_quiz_answer', 'echo_set', 'echo_daily', 'echo_daily_answer',
 ] as const
 export type ActionName = (typeof ACTIONS)[number]
@@ -87,7 +89,7 @@ export const wantsRival = (g: GachaState, action: string): boolean =>
 /** What the five this account would field is worth on paper, for finding it a fair rival. */
 export function ladderScore(g: GachaState): number | null {
   const five = squadForPlay(g)
-  return five.ok ? squadRating(five.squad, (id) => levelOf(g, id)) : null
+  return five.ok ? squadRating(five.squad, (id) => playLevelOf(g, id)) : null
 }
 
 /**
@@ -265,6 +267,19 @@ function dispatch(
       if (!upgrade(g, cardId)) return { ok: false, why: '还升不了' }
       return { ok: true, result: { level: levelOf(g, cardId) } }
     }
+    case 'evolve': {
+      // 进修: five spare copies for one attribute on a +5 card (engine/evolve.ts)
+      const feed = Array.isArray(a.feed) ? a.feed.slice(0, 10).map((x) => str(x)) : []
+      const r = evolve(g, str(a.cardId), str(a.attr, 16), feed, env.now)
+      if (!r.ok) return r
+      return { ok: true, result: { gain: r.gain, attr: r.attr, evo: r.evo } }
+    }
+    case 'evo_wash': {
+      // 洗掉进修: the 进修 comes off, the cards it ate stay eaten (engine/evoWash.ts)
+      const r = washEvo(g, str(a.cardId), a.spare == null ? null : Number(a.spare))
+      if (!r.ok) return r
+      return { ok: true, result: {} }
+    }
     case 'dismantle': {
       const r = dismantle(g, str(a.cardId), Number(a.level))
       if (!r.ok) return r
@@ -302,7 +317,7 @@ function dispatch(
       // the league's own handicap, and above 大师 the sharpening on top
       const bump = LEAGUE_RULES[league].oppBump + (master ? oppBumpFor(L.points ?? 0) : 0)
       if (!spendPlay(g, 'ladder', env.now)) return { ok: false, why: '体力不够' }
-      const level = (id: string) => levelOf(g, id)
+      const level = (id: string) => playLevelOf(g, id)
       const res: ArenaResult = rival
         ? playRivalMatch(five.squad, level, rival, LADDER_BO, env.seed, undefined, true)
         : playArenaMatch(five.squad, level, oppId, LADDER_BO, env.seed, bump)
@@ -329,7 +344,7 @@ function dispatch(
       if (!five.ok) return five
       if (!canPlay(g, 'cup', env.now)) return { ok: false, why: `体力不够，入场要 ${STAMINA_COST.cup} 点` }
       try {
-        const level = (id: string) => levelOf(g, id)
+        const level = (id: string) => playLevelOf(g, id)
         enterCup(g, squadRating(five.squad, level), env.now, registerCupSquad(five.squad, level))
         return { ok: true, result: { cup: g.cup } }
       } catch (e) {
@@ -345,7 +360,7 @@ function dispatch(
       if (!cup.registration) {
         const five = squadForPlay({ ...g, squad: cupSquadOf(g, 'club') })
         if (!five.ok) return { ok: false, why: '这届旧杯赛还没有报名阵容，请先凑齐五个人再继续；不会重新收费或抽签。' }
-        cup.registration = registerCupSquad(five.squad, id => levelOf(g, id))
+        cup.registration = registerCupSquad(five.squad, id => playLevelOf(g, id))
       }
       // the ticket was the whole price: nothing is charged per round
       const level = (id: string) => cup.registration!.levels[id] ?? 0

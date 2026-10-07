@@ -3,15 +3,16 @@ import RatingExplainer from '../RatingExplainer'
 import { honoursLine, honoursOf } from '../../engine/coachHonours'
 import CoachHonours from '../CoachHonours'
 import HoldCountdown from './HoldCountdown'
-import { useCards } from './ctx'
+import { useCards, EVO_TARGET } from './ctx'
 import CardFace, { Flag, natName } from '../Card'
 import { Panel } from '../common'
-import { collection, salvagePlan, upgradeCost, SWEEPABLE } from '../../engine/gacha'
+import { collection, playLevelOf, salvagePlan, upgradeCost, SWEEPABLE } from '../../engine/gacha'
+import { EVO_STEPS, canEvolve, cleanEvo, evoAttrs, playLevel } from '../../engine/evolve'
 import SalvageConfirm from './SalvageConfirm'
 import type { SalvageAsk } from './SalvageConfirm'
 import { clubSets } from '../../engine/clubSets'
 import { dismantleFee, dismantleYield } from '../../engine/dismantle'
-import { sparesOf } from '../../engine/inbox'
+import { evoSparesOf, sparesOf } from '../../engine/inbox'
 import { crestUrl } from '../../engine/dossier'
 import {
   ALL_CARDS, coachTitleLines, echoTeamName, MAX_LEVEL, POWER_PER_LEVEL, RARITY_CN, SALVAGE, cardById, cardPower, isPlayerCard,
@@ -28,7 +29,7 @@ const coin = (n: number) => n.toLocaleString('en-US')
 const SETS_OPEN = 'lolcards:card:setsOpen'
 
 export default function Collection() {
-  const { g, version, act, toast, openDossier } = useCards()
+  const { g, version, act, toast, openDossier, go } = useCards()
   const [filter, setFilter] = useState<CardFilter>(EMPTY_FILTER)
   const [dupesOnly, setDupesOnly] = useState(false)
   const [q, setQ] = useState('')
@@ -297,8 +298,8 @@ export default function Collection() {
               <CardFace
                 key={card.id}
                 card={card}
-                level={o?.level ?? 0}
-                dupes={(o?.dupes ?? 0) + (o ? sparesOf(o).length : 0)}
+                level={o ? playLevel(card.id, o) : 0}
+                dupes={(o?.dupes ?? 0) + (o ? sparesOf(o).length + evoSparesOf(card.id, o).length : 0)}
                 dimmed={missing}
                 selected={bulk && picked.has(card.id)}
                 onClick={missing ? undefined : bulk ? () => togglePick(card.id) : () => setOpen(card.id)}
@@ -327,7 +328,7 @@ export default function Collection() {
             </div>
             <div className="modal-body">
               <div className="row" style={{ gap: 18, alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                <CardFace card={sel} level={owned.level} size="lg" />
+                <CardFace card={sel} level={playLevelOf(g, sel.id)} size="lg" />
                 <div style={{ flex: 1, minWidth: 240 }}>
                   {sel.legend && (
                     <div
@@ -371,7 +372,8 @@ export default function Collection() {
                         {ATTR_KEYS.map((k) => (
                           <div key={k} className="tiny">
                             <span className="faint">{ATTR_CN[k]}</span>{' '}
-                            <b className="mono">{Math.min(99, sel.attrs[k] + owned.level)}</b>
+                            <b className="mono">{Math.min(99, evoAttrs(sel, cleanEvo(owned.evo))[k] + owned.level)}</b>
+                            {!!cleanEvo(owned.evo)?.add[k] && <span className="mono evo-up"> ↑{cleanEvo(owned.evo)!.add[k]}</span>}
                           </div>
                         ))}
                       </div>
@@ -409,18 +411,33 @@ export default function Collection() {
                     <div className="small">
                       等级 <b>+{owned.level}</b> / +{MAX_LEVEL}
                       <span className="faint"> · 评分 {sel.rating}</span>
-                      {' '}· 战力 <b>{coin(cardPower(sel, owned.level))}</b>
+                      {' '}· 战力 <b>{coin(Math.round(cardPower(sel, playLevelOf(g, sel.id))))}</b>
+                      {cleanEvo(owned.evo) && <span className="faint"> · 进修 {cleanEvo(owned.evo)!.n}/{EVO_STEPS}</span>}
                     </div>
                     {(sel.kind === 'player' || !sel.legend) && <RatingExplainer />}
                     <div className="tiny faint">
                       重复卡 {owned.dupes} 张
                       {sparesOf(owned).length > 0 && ` · 备用卡 ${sparesOf(owned).map((l) => `+${l}`).join('、')}`}
+                      {evoSparesOf(sel.id, owned).length > 0 && ` · 进修过的备用卡 ${evoSparesOf(sel.id, owned).length} 张`}
                       {' '}· 累计抽到 {owned.seen} 次
                     </div>
                     <HoldCountdown owned={owned} />
                   </div>
                 </div>
                 <Upgrade cardId={sel.id} />
+                {canEvolve(sel) && owned.level >= MAX_LEVEL && (
+                  <button
+                    className={(cleanEvo(owned.evo)?.n ?? 0) < EVO_STEPS ? 'primary sm' : 'sm'}
+                    style={{ marginLeft: 8 }}
+                    onClick={() => {
+                      try { sessionStorage.setItem(EVO_TARGET, sel.id) } catch { /* the page opens on its own list */ }
+                      setOpen(null)
+                      go('evolve')
+                    }}
+                  >
+                    {(cleanEvo(owned.evo)?.n ?? 0) < EVO_STEPS ? '去进修' : '进修已满 · 可洗掉'}
+                  </button>
+                )}
                 {owned.dupes > 0 && (
                   <button
                     className="sm"
@@ -482,14 +499,48 @@ function Upgrade({ cardId }: { cardId: string }) {
  */
 function Spares({ cardId }: { cardId: string }) {
   const { g, act, toast } = useCards()
+  const [washAsk, setWashAsk] = useState<number | null>(null)
   const owned = g.cards[cardId]
   const spares = owned ? sparesOf(owned) : []
-  if (!spares.length) return null
+  const trained = owned ? evoSparesOf(cardId, owned) : []
+  if (!spares.length && !trained.length) return null
   return (
     <div style={{ marginTop: 12 }}>
-      <div className="tiny faint" style={{ marginBottom: 6 }}>
+      {trained.length > 0 && (
+        <div style={{ marginBottom: 10 }}>
+          <div className="tiny faint" style={{ marginBottom: 6 }}>
+            进修过的备用卡：比上场那张弱，进修原样留着。挂市场、换卡时先出它。洗掉进修后变成普通 +{MAX_LEVEL} 备用卡，可以拆解。
+          </div>
+          {trained.map((e, i) => (
+            <div key={i} className="row wrap" style={{ gap: 6, alignItems: 'center', marginBottom: 4 }}>
+              <span className="small mono">
+                +{MAX_LEVEL} · 进修 {e.n} 次（{ATTR_KEYS.filter((k) => e.add[k]).map((k) => `${ATTR_CN[k]} +${e.add[k]}`).join('，')}）
+              </span>
+              {washAsk === i ? (
+                <>
+                  <span className="tiny" style={{ color: 'var(--loss)' }}>洗掉后进修清空，吃掉的卡不退</span>
+                  <button
+                    className="sm primary"
+                    onClick={async () => {
+                      const r = await act('evo_wash', { cardId, spare: i })
+                      setWashAsk(null)
+                      toast(r.ok ? `已洗掉，多了一张 +${MAX_LEVEL} 备用卡。` : r.why)
+                    }}
+                  >
+                    确认洗掉
+                  </button>
+                  <button className="sm ghost" onClick={() => setWashAsk(null)}>取消</button>
+                </>
+              ) : (
+                <button className="sm" onClick={() => setWashAsk(i)}>洗掉进修</button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+      {spares.length > 0 && <div className="tiny faint" style={{ marginBottom: 6 }}>
         备用卡是同一张卡多出来的升级版。拆解后变成重复卡，可以拿去升级。
-      </div>
+      </div>}
       <div className="row wrap" style={{ gap: 6 }}>
         {spares.map((lv, i) => (
           <button
