@@ -15,7 +15,7 @@ import { dismantleFee, dismantleYield } from '../../engine/dismantle'
 import { evoSparesOf, sparesOf } from '../../engine/inbox'
 import { crestUrl } from '../../engine/dossier'
 import {
-  ALL_CARDS, coachTitleLines, echoTeamName, MAX_LEVEL, POWER_PER_LEVEL, RARITY_CN, SALVAGE, cardById, cardPower, isPlayerCard,
+  ALL_CARDS, championNames, coachTitleLines, echoTeamName, MAX_LEVEL, POWER_PER_LEVEL, RARITY_CN, SALVAGE, cardById, cardPower, isPlayerCard,
 } from '../../engine/cards'
 import type { Card, Rarity } from '../../engine/cards'
 import { ATTR_CN, ATTR_KEYS, REGION_CN } from '../../engine/types'
@@ -393,13 +393,14 @@ export default function Collection() {
                         ? <>自由身教练</>
                         : <>{sel.clubTag ?? '自由身'} 的教练{sel.spec ? '组分析师' : ''}</>}
                       {coachTitleLines(sel).map((l) => <div key={l} className="tiny">夺冠俱乐部 · {l}</div>)}
+                      {championNames(sel).length > 0 && <div className="tiny">一起夺冠的选手（有默契）· {championNames(sel).join('、')}</div>}
                       <br />战术 {sel.tactics} · 培养 {sel.development} · 激励 {sel.motivation}
                       {honoursLine(honoursOf(sel.name)) && <details style={{ marginTop: 4 }}>
                         <summary>执教履历：{honoursLine(honoursOf(sel.name))}</summary>
                         <CoachHonours name={sel.name} empty={false} />
                       </details>}
                       <br />
-                      <span className="tiny">{sel.titleClubs?.length ? (sel.free ? '带夺冠俱乐部或同赛区的选手时默契更高。' : '带同队、夺冠俱乐部或同赛区的选手时默契更高。') : sel.free ? '带同赛区的选手时默契更高。' : '带同队或同赛区的选手时默契更高。'}</span>
+                      <span className="tiny">{sel.titleClubs?.length ? (sel.free ? '带当年跟他一起夺冠的选手、同国籍或同赛区的选手时默契更高。' : '带同队、当年跟他一起夺冠、同国籍或同赛区的选手时默契更高。') : sel.free ? '带同国籍或同赛区的选手时默契更高。' : '带同队、同国籍或同赛区的选手时默契更高。'}</span>
                     </div>
                   )}
                 </div>

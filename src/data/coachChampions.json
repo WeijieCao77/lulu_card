@@ -1,0 +1,2918 @@
+{
+ "note": "冠军教练和当年跟他一起拿冠军的队员有默契（站长 2026-10-07），不再按俱乐部：只算主教练拿的世界赛、MSI、顶级联赛冠军；队员 = Leaguepedia 赛事页上夺冠队伍的选手名单。persons 是卡牌里的同一个人（普通卡、S16 卡、彩卡都算；回响卡用 H: 开头的人）。",
+ "coaches": {
+  "BigWei": [
+   {
+    "event": "LPL 2024 Spring",
+    "club": "T2",
+    "team": "Bilibili Gaming",
+    "persons": [
+     "P6",
+     "P7",
+     "P8",
+     "P70",
+     "P10"
+    ],
+    "names": [
+     "Bin",
+     "Xun",
+     "Knight",
+     "Elk",
+     "ON"
+    ],
+    "roster": [
+     "Bin (Chen Ze-Bin)",
+     "Xun",
+     "Knight (Zhuo Ding)",
+     "Elk",
+     "ON"
+    ]
+   },
+   {
+    "event": "LPL 2024 Summer",
+    "club": "T2",
+    "team": "Bilibili Gaming",
+    "persons": [
+     "P6",
+     "P17",
+     "P8",
+     "P70",
+     "P10"
+    ],
+    "names": [
+     "Bin",
+     "Wei",
+     "Knight",
+     "Elk",
+     "ON"
+    ],
+    "roster": [
+     "Bin (Chen Ze-Bin)",
+     "Wei (Yan Yang-Wei)",
+     "Knight (Zhuo Ding)",
+     "Elk",
+     "ON"
+    ]
+   },
+   {
+    "event": "LPL 2026 Grand Finals",
+    "club": "T1",
+    "team": "Anyone's Legend",
+    "persons": [
+     "P531",
+     "P2",
+     "P3",
+     "P4",
+     "P5"
+    ],
+    "names": [
+     "Breathe",
+     "Tarzan",
+     "Shanks",
+     "Hope",
+     "Kael"
+    ],
+    "roster": [
+     "Breathe",
+     "Tarzan (Lee Seung-yong)",
+     "Shanks",
+     "Hope (Wang Jie)",
+     "Kael (Kim Jin-hong)"
+    ]
+   }
+  ],
+  "Daeny": [
+   {
+    "event": "Worlds 2020",
+    "club": "T17",
+    "team": "DAMWON Gaming",
+    "persons": [
+     "H:Nuguri",
+     "P89",
+     "P85",
+     "P107",
+     "P527"
+    ],
+    "names": [
+     "Nuguri",
+     "Canyon",
+     "ShowMaker",
+     "Ghost",
+     "BeryL"
+    ],
+    "roster": [
+     "Nuguri",
+     "Canyon",
+     "ShowMaker",
+     "Ghost (Jang Yong-jun)",
+     "BeryL"
+    ]
+   },
+   {
+    "event": "LCK 2020 Summer",
+    "club": "T17",
+    "team": "DAMWON Gaming",
+    "persons": [
+     "H:Nuguri",
+     "P89",
+     "P85",
+     "P107",
+     "P527"
+    ],
+    "names": [
+     "Nuguri",
+     "Canyon",
+     "ShowMaker",
+     "Ghost",
+     "BeryL"
+    ],
+    "roster": [
+     "Nuguri",
+     "Canyon",
+     "ShowMaker",
+     "Ghost (Jang Yong-jun)",
+     "BeryL"
+    ]
+   },
+   {
+    "event": "LPL 2026 Split 1",
+    "club": "T2",
+    "team": "Bilibili Gaming",
+    "persons": [
+     "P6",
+     "P7",
+     "P8",
+     "P9",
+     "P10"
+    ],
+    "names": [
+     "Bin",
+     "Xun",
+     "Knight",
+     "Viper",
+     "ON"
+    ],
+    "roster": [
+     "Bin (Chen Ze-Bin)",
+     "Xun",
+     "Knight (Zhuo Ding)",
+     "Viper (Park Do-hyeon)",
+     "ON"
+    ]
+   },
+   {
+    "event": "LPL 2026 Split 2",
+    "club": "T2",
+    "team": "Bilibili Gaming",
+    "persons": [
+     "P6",
+     "P7",
+     "P8",
+     "P9",
+     "P10"
+    ],
+    "names": [
+     "Bin",
+     "Xun",
+     "Knight",
+     "Viper",
+     "ON"
+    ],
+    "roster": [
+     "Bin (Chen Ze-Bin)",
+     "Xun",
+     "Knight (Zhuo Ding)",
+     "Viper (Park Do-hyeon)",
+     "ON"
+    ]
+   }
+  ],
+  "Maokai": [
+   {
+    "event": "Worlds 2021",
+    "club": "T3",
+    "team": "EDward Gaming",
+    "persons": [
+     "P1",
+     "P68",
+     "P116",
+     "P9",
+     "P526"
+    ],
+    "names": [
+     "Flandre",
+     "Jiejie",
+     "Scout",
+     "Viper",
+     "Meiko"
+    ],
+    "roster": [
+     "Flandre",
+     "JieJie",
+     "Scout",
+     "Viper (Park Do-hyeon)",
+     "Meiko"
+    ]
+   },
+   {
+    "event": "LPL 2021 Summer",
+    "club": "T3",
+    "team": "EDward Gaming",
+    "persons": [
+     "P1",
+     "P68",
+     "P22",
+     "P116",
+     "P9",
+     "P526"
+    ],
+    "names": [
+     "Flandre",
+     "Jiejie",
+     "JunJia",
+     "Scout",
+     "Viper",
+     "Meiko"
+    ],
+    "roster": [
+     "Flandre",
+     "Jiejie",
+     "JunJia",
+     "Scout",
+     "Viper (Park Do-hyeon)",
+     "Meiko"
+    ]
+   }
+  ],
+  "Helper": [
+   {
+    "event": "PCS 2021 Spring",
+    "club": "H:PSG",
+    "team": "PSG Talon",
+    "persons": [
+     "H:Hanabi",
+     "H:Maple",
+     "H:Unified",
+     "P293"
+    ],
+    "names": [
+     "Hanabi",
+     "Maple",
+     "Unified",
+     "Kaiwing"
+    ],
+    "roster": [
+     "Hanabi (Su Chia-Hsiang)",
+     "River (Kim Dong-woo)",
+     "Maple (Huang Yi-Tang)",
+     "Unified",
+     "Kaiwing"
+    ]
+   },
+   {
+    "event": "PCS 2021 Summer",
+    "club": "H:PSG",
+    "team": "PSG Talon",
+    "persons": [
+     "H:Hanabi",
+     "H:Maple",
+     "H:Unified",
+     "P293"
+    ],
+    "names": [
+     "Hanabi",
+     "Maple",
+     "Unified",
+     "Kaiwing"
+    ],
+    "roster": [
+     "Hanabi (Su Chia-Hsiang)",
+     "River (Kim Dong-woo)",
+     "Maple (Huang Yi-Tang)",
+     "Unified",
+     "Kaiwing"
+    ]
+   }
+  ],
+  "Tabe": [
+   {
+    "event": "MSI 2021",
+    "club": "H:RNG",
+    "team": "Royal Never Give Up",
+    "persons": [
+     "P69",
+     "P17",
+     "H:Cryin",
+     "P24",
+     "H:Ming"
+    ],
+    "names": [
+     "Xiaohu",
+     "Wei",
+     "Cryin",
+     "GALA",
+     "Ming"
+    ],
+    "roster": [
+     "Xiaohu",
+     "Xiaobai",
+     "Wei (Yan Yang-Wei)",
+     "Cryin",
+     "GALA",
+     "Ming (Shi Sen-Ming)"
+    ]
+   },
+   {
+    "event": "MSI 2022",
+    "club": "H:RNG",
+    "team": "Royal Never Give Up",
+    "persons": [
+     "P6",
+     "P17",
+     "P69",
+     "P24",
+     "H:Ming"
+    ],
+    "names": [
+     "Bin",
+     "Wei",
+     "Xiaohu",
+     "GALA",
+     "Ming"
+    ],
+    "roster": [
+     "Bin (Chen Ze-Bin)",
+     "Wei (Yan Yang-Wei)",
+     "Xiaohu",
+     "GALA",
+     "Ming (Shi Sen-Ming)"
+    ]
+   },
+   {
+    "event": "LPL 2021 Spring",
+    "club": "H:RNG",
+    "team": "Royal Never Give Up",
+    "persons": [
+     "P69",
+     "P17",
+     "H:Cryin",
+     "P24",
+     "H:Ming"
+    ],
+    "names": [
+     "Xiaohu",
+     "Wei",
+     "Cryin",
+     "GALA",
+     "Ming"
+    ],
+    "roster": [
+     "Xiaohu",
+     "Wei (Yan Yang-Wei)",
+     "Cryin",
+     "GALA",
+     "Ming (Shi Sen-Ming)"
+    ]
+   },
+   {
+    "event": "LPL 2022 Spring",
+    "club": "H:RNG",
+    "team": "Royal Never Give Up",
+    "persons": [
+     "P6",
+     "P17",
+     "P69",
+     "P24",
+     "H:Ming"
+    ],
+    "names": [
+     "Bin",
+     "Wei",
+     "Xiaohu",
+     "GALA",
+     "Ming"
+    ],
+    "roster": [
+     "Bin (Chen Ze-Bin)",
+     "Wei (Yan Yang-Wei)",
+     "Xiaohu",
+     "GALA",
+     "Ming (Shi Sen-Ming)"
+    ]
+   },
+   {
+    "event": "LPL 2025 Split 2",
+    "club": "T1",
+    "team": "Anyone's Legend",
+    "persons": [
+     "P1",
+     "P2",
+     "P3",
+     "P4",
+     "P5"
+    ],
+    "names": [
+     "Flandre",
+     "Tarzan",
+     "Shanks",
+     "Hope",
+     "Kael"
+    ],
+    "roster": [
+     "Flandre",
+     "Tarzan (Lee Seung-yong)",
+     "Shanks",
+     "Hope (Wang Jie)",
+     "Kael (Kim Jin-hong)"
+    ]
+   }
+  ],
+  "Poppy": [
+   {
+    "event": "LPL 2025 Split 1",
+    "club": "T12",
+    "team": "Top Esports",
+    "persons": [
+     "P57",
+     "P99",
+     "P59",
+     "P530",
+     "P535"
+    ],
+    "names": [
+     "369",
+     "Kanavi",
+     "Creme",
+     "JackeyLove",
+     "Crisp"
+    ],
+    "roster": [
+     "369",
+     "Kanavi",
+     "Creme",
+     "JackeyLove",
+     "Crisp"
+    ]
+   }
+  ],
+  "Ryu": [
+   {
+    "event": "LCK 2026 Season",
+    "club": "T18",
+    "team": "Gen.G",
+    "persons": [
+     "P88",
+     "P89",
+     "P90",
+     "P91",
+     "P92"
+    ],
+    "names": [
+     "Kiin",
+     "Canyon",
+     "Chovy",
+     "Ruler",
+     "Duro"
+    ],
+    "roster": [
+     "Kiin",
+     "Canyon",
+     "Chovy",
+     "Ruler",
+     "Duro"
+    ]
+   }
+  ],
+  "SSONG": [
+   {
+    "event": "Worlds 2022",
+    "club": "T22",
+    "team": "DRX",
+    "persons": [
+     "P114",
+     "P43",
+     "P78",
+     "P100",
+     "H:Deft",
+     "P527"
+    ],
+    "names": [
+     "Kingen",
+     "Juhan",
+     "Pyosik",
+     "Zeka",
+     "Deft",
+     "BeryL"
+    ],
+    "roster": [
+     "Kingen",
+     "Juhan",
+     "Pyosik",
+     "Zeka (Kim Geon-woo)",
+     "Deft",
+     "BeryL"
+    ]
+   }
+  ],
+  "Homme": [
+   {
+    "event": "MSI 2023",
+    "club": "T5",
+    "team": "JD Gaming",
+    "persons": [
+     "P57",
+     "P99",
+     "P8",
+     "P91",
+     "P35"
+    ],
+    "names": [
+     "369",
+     "Kanavi",
+     "Knight",
+     "Ruler",
+     "MISSING"
+    ],
+    "roster": [
+     "369",
+     "Kanavi",
+     "Knight (Zhuo Ding)",
+     "Ruler",
+     "MISSING"
+    ]
+   },
+   {
+    "event": "MSI 2026",
+    "club": "T20",
+    "team": "Hanwha Life Esports",
+    "persons": [
+     "P98",
+     "P99",
+     "P100",
+     "P101",
+     "P102"
+    ],
+    "names": [
+     "Zeus",
+     "Kanavi",
+     "Zeka",
+     "Gumayusi",
+     "Delight"
+    ],
+    "roster": [
+     "Zeus",
+     "Kanavi",
+     "Zeka (Kim Geon-woo)",
+     "Gumayusi",
+     "Delight"
+    ]
+   },
+   {
+    "event": "LPL 2020 Spring",
+    "club": "T5",
+    "team": "JD Gaming",
+    "persons": [
+     "P99",
+     "H:Yagao"
+    ],
+    "names": [
+     "Kanavi",
+     "Yagao"
+    ],
+    "roster": [
+     "Zoom",
+     "Kanavi",
+     "Yagao",
+     "LokeN",
+     "LvMao"
+    ]
+   },
+   {
+    "event": "LPL 2022 Summer",
+    "club": "T5",
+    "team": "JD Gaming",
+    "persons": [
+     "P57",
+     "P99",
+     "H:Yagao",
+     "P4",
+     "P35"
+    ],
+    "names": [
+     "369",
+     "Kanavi",
+     "Yagao",
+     "Hope",
+     "MISSING"
+    ],
+    "roster": [
+     "369",
+     "Kanavi",
+     "Yagao",
+     "Hope (Wang Jie)",
+     "Missing"
+    ]
+   },
+   {
+    "event": "LPL 2023 Spring",
+    "club": "T5",
+    "team": "JD Gaming",
+    "persons": [
+     "P57",
+     "P99",
+     "P8",
+     "P91",
+     "P35"
+    ],
+    "names": [
+     "369",
+     "Kanavi",
+     "Knight",
+     "Ruler",
+     "MISSING"
+    ],
+    "roster": [
+     "369",
+     "Kanavi",
+     "Knight (Zhuo Ding)",
+     "Ruler",
+     "MISSING"
+    ]
+   },
+   {
+    "event": "LPL 2023 Summer",
+    "club": "T5",
+    "team": "JD Gaming",
+    "persons": [
+     "P57",
+     "P99",
+     "P8",
+     "P91",
+     "P35"
+    ],
+    "names": [
+     "369",
+     "Kanavi",
+     "Knight",
+     "Ruler",
+     "MISSING"
+    ],
+    "roster": [
+     "369",
+     "Kanavi",
+     "Knight (Zhuo Ding)",
+     "Ruler",
+     "MISSING"
+    ]
+   }
+  ],
+  "Score": [
+   {
+    "event": "LCK 2022 Summer",
+    "club": "T18",
+    "team": "Gen.G",
+    "persons": [
+     "P119",
+     "H:Peanut",
+     "P90",
+     "P91",
+     "P118"
+    ],
+    "names": [
+     "Doran",
+     "Peanut",
+     "Chovy",
+     "Ruler",
+     "Lehends"
+    ],
+    "roster": [
+     "Doran (Choi Hyeon-jun)",
+     "Peanut",
+     "Chovy",
+     "Ruler",
+     "Lehends"
+    ]
+   },
+   {
+    "event": "LCK 2023 Spring",
+    "club": "T18",
+    "team": "Gen.G",
+    "persons": [
+     "P119",
+     "H:Peanut",
+     "P90",
+     "P122",
+     "P102"
+    ],
+    "names": [
+     "Doran",
+     "Peanut",
+     "Chovy",
+     "Peyz",
+     "Delight"
+    ],
+    "roster": [
+     "Doran (Choi Hyeon-jun)",
+     "Peanut",
+     "Chovy",
+     "Peyz",
+     "Delight"
+    ]
+   },
+   {
+    "event": "LCK 2023 Summer",
+    "club": "T18",
+    "team": "Gen.G",
+    "persons": [
+     "P119",
+     "H:Peanut",
+     "P90",
+     "P122",
+     "P102"
+    ],
+    "names": [
+     "Doran",
+     "Peanut",
+     "Chovy",
+     "Peyz",
+     "Delight"
+    ],
+    "roster": [
+     "Doran (Choi Hyeon-jun)",
+     "Peanut",
+     "Chovy",
+     "Peyz",
+     "Delight"
+    ]
+   }
+  ],
+  "DanDy": [
+   {
+    "event": "LCK 2024 Summer",
+    "club": "T20",
+    "team": "Hanwha Life Esports",
+    "persons": [
+     "P119",
+     "H:Peanut",
+     "P100",
+     "P9",
+     "P102"
+    ],
+    "names": [
+     "Doran",
+     "Peanut",
+     "Zeka",
+     "Viper",
+     "Delight"
+    ],
+    "roster": [
+     "Doran (Choi Hyeon-jun)",
+     "Peanut",
+     "Zeka (Kim Geon-woo)",
+     "Viper (Park Do-hyeon)",
+     "Delight"
+    ]
+   }
+  ],
+  "kkOma": [
+   {
+    "event": "Worlds 2015",
+    "club": "T24",
+    "team": "SK Telecom T1",
+    "persons": [
+     "H:MaRin",
+     "H:Bengi",
+     "P121",
+     "H:Easyhoon",
+     "H:Bang",
+     "H:Wolf"
+    ],
+    "names": [
+     "MaRin",
+     "Bengi",
+     "Faker",
+     "Easyhoon",
+     "Bang",
+     "Wolf"
+    ],
+    "roster": [
+     "MaRin",
+     "Bengi",
+     "Faker",
+     "Easyhoon",
+     "Bang",
+     "Wolf (Lee Jae-wan)"
+    ]
+   },
+   {
+    "event": "Worlds 2016",
+    "club": "T24",
+    "team": "SK Telecom T1",
+    "persons": [
+     "H:Duke",
+     "H:Bengi",
+     "H:Blank",
+     "P121",
+     "H:Bang",
+     "H:Wolf"
+    ],
+    "names": [
+     "Duke",
+     "Bengi",
+     "Blank",
+     "Faker",
+     "Bang",
+     "Wolf"
+    ],
+    "roster": [
+     "Duke (Lee Ho-seong)",
+     "Bengi",
+     "Blank (Kang Sun-gu)",
+     "Faker",
+     "Bang",
+     "Wolf (Lee Jae-wan)"
+    ]
+   },
+   {
+    "event": "Worlds 2024",
+    "club": "T24",
+    "team": "T1",
+    "persons": [
+     "P98",
+     "P120",
+     "P121",
+     "P101",
+     "P123"
+    ],
+    "names": [
+     "Zeus",
+     "Oner",
+     "Faker",
+     "Gumayusi",
+     "Keria"
+    ],
+    "roster": [
+     "Zeus",
+     "Oner",
+     "Faker",
+     "Gumayusi",
+     "Keria"
+    ]
+   },
+   {
+    "event": "Worlds 2025",
+    "club": "T24",
+    "team": "T1",
+    "persons": [
+     "P119",
+     "P120",
+     "P121",
+     "P101",
+     "P123"
+    ],
+    "names": [
+     "Doran",
+     "Oner",
+     "Faker",
+     "Gumayusi",
+     "Keria"
+    ],
+    "roster": [
+     "Doran (Choi Hyeon-jun)",
+     "Oner",
+     "Faker",
+     "Gumayusi",
+     "Keria"
+    ]
+   },
+   {
+    "event": "MSI 2016",
+    "club": "T24",
+    "team": "SK Telecom T1",
+    "persons": [
+     "H:Duke",
+     "H:Blank",
+     "P121",
+     "H:Bang",
+     "H:Wolf"
+    ],
+    "names": [
+     "Duke",
+     "Blank",
+     "Faker",
+     "Bang",
+     "Wolf"
+    ],
+    "roster": [
+     "Duke (Lee Ho-seong)",
+     "Blank (Kang Sun-gu)",
+     "Faker",
+     "Bang",
+     "Wolf (Lee Jae-wan)"
+    ]
+   },
+   {
+    "event": "MSI 2017",
+    "club": "T24",
+    "team": "SK Telecom T1",
+    "persons": [
+     "H:Huni",
+     "H:Peanut",
+     "P121",
+     "H:Bang",
+     "H:Wolf"
+    ],
+    "names": [
+     "Huni",
+     "Peanut",
+     "Faker",
+     "Bang",
+     "Wolf"
+    ],
+    "roster": [
+     "Huni",
+     "Peanut",
+     "Faker",
+     "Bang",
+     "Wolf (Lee Jae-wan)"
+    ]
+   },
+   {
+    "event": "LCK 2016 Spring",
+    "club": "T24",
+    "team": "SK Telecom T1",
+    "persons": [
+     "H:Duke",
+     "H:Blank",
+     "P121",
+     "H:Bang",
+     "H:Wolf"
+    ],
+    "names": [
+     "Duke",
+     "Blank",
+     "Faker",
+     "Bang",
+     "Wolf"
+    ],
+    "roster": [
+     "Duke (Lee Ho-seong)",
+     "Blank (Kang Sun-gu)",
+     "Faker",
+     "Bang",
+     "Wolf (Lee Jae-wan)"
+    ]
+   },
+   {
+    "event": "LCK 2017 Spring",
+    "club": "T24",
+    "team": "SK Telecom T1",
+    "persons": [
+     "H:Huni",
+     "H:Peanut",
+     "P121",
+     "H:Bang",
+     "H:Wolf"
+    ],
+    "names": [
+     "Huni",
+     "Peanut",
+     "Faker",
+     "Bang",
+     "Wolf"
+    ],
+    "roster": [
+     "Huni",
+     "Peanut",
+     "Faker",
+     "Bang",
+     "Wolf (Lee Jae-wan)"
+    ]
+   },
+   {
+    "event": "LCK 2021 Spring",
+    "club": "T17",
+    "team": "DWG KIA",
+    "persons": [
+     "P89",
+     "P85",
+     "P107",
+     "P527"
+    ],
+    "names": [
+     "Canyon",
+     "ShowMaker",
+     "Ghost",
+     "BeryL"
+    ],
+    "roster": [
+     "Khan",
+     "Canyon",
+     "ShowMaker",
+     "Ghost (Jang Yong-jun)",
+     "BeryL"
+    ]
+   },
+   {
+    "event": "LCK 2021 Summer",
+    "club": "T17",
+    "team": "DWG KIA",
+    "persons": [
+     "P89",
+     "P601",
+     "P85",
+     "P107",
+     "P527"
+    ],
+    "names": [
+     "Canyon",
+     "Malrang",
+     "ShowMaker",
+     "Ghost",
+     "BeryL"
+    ],
+    "roster": [
+     "Khan",
+     "Canyon",
+     "Malrang",
+     "ShowMaker",
+     "Ghost (Jang Yong-jun)",
+     "BeryL"
+    ]
+   },
+   {
+    "event": "Worlds 2013",
+    "club": "T24",
+    "team": "SK Telecom T1",
+    "persons": [
+     "P200",
+     "H:Bengi",
+     "P121",
+     "H:Piglet",
+     "H:PoohManDu"
+    ],
+    "names": [
+     "Impact",
+     "Bengi",
+     "Faker",
+     "Piglet",
+     "PoohManDu"
+    ],
+    "roster": [
+     "Impact",
+     "Bengi",
+     "Faker",
+     "Piglet",
+     "PoohManDu"
+    ]
+   },
+   {
+    "event": "LCK 2015 Spring",
+    "club": "T24",
+    "team": "SK Telecom T1",
+    "persons": [
+     "H:MaRin",
+     "H:Bengi",
+     "H:Easyhoon",
+     "P121",
+     "H:Bang",
+     "H:Wolf"
+    ],
+    "names": [
+     "MaRin",
+     "Bengi",
+     "Easyhoon",
+     "Faker",
+     "Bang",
+     "Wolf"
+    ],
+    "roster": [
+     "MaRin",
+     "Tom (Im Jae-hyeon)",
+     "Bengi",
+     "Easyhoon",
+     "Faker",
+     "Bang",
+     "Wolf (Lee Jae-wan)"
+    ]
+   },
+   {
+    "event": "LCK 2015 Summer",
+    "club": "T24",
+    "team": "SK Telecom T1",
+    "persons": [
+     "H:MaRin",
+     "H:Bengi",
+     "P121",
+     "H:Bang",
+     "H:Wolf"
+    ],
+    "names": [
+     "MaRin",
+     "Bengi",
+     "Faker",
+     "Bang",
+     "Wolf"
+    ],
+    "roster": [
+     "MaRin",
+     "Bengi",
+     "Faker",
+     "Bang",
+     "Wolf (Lee Jae-wan)"
+    ]
+   },
+   {
+    "event": "LCK 2019 Spring",
+    "club": "T24",
+    "team": "SK Telecom T1",
+    "persons": [
+     "P121",
+     "P96",
+     "H:Mata"
+    ],
+    "names": [
+     "Faker",
+     "Teddy",
+     "Mata"
+    ],
+    "roster": [
+     "Khan",
+     "Clid",
+     "Faker",
+     "Teddy",
+     "Mata"
+    ]
+   },
+   {
+    "event": "LCK 2019 Summer",
+    "club": "T24",
+    "team": "SK Telecom T1",
+    "persons": [
+     "P121",
+     "P96",
+     "P334"
+    ],
+    "names": [
+     "Faker",
+     "Teddy",
+     "Effort"
+    ],
+    "roster": [
+     "Khan",
+     "Clid",
+     "Faker",
+     "Teddy",
+     "Effort"
+    ]
+   },
+   {
+    "event": "Champions 2013 Summer",
+    "club": "T24",
+    "team": "SK Telecom T1 K",
+    "persons": [
+     "P200",
+     "H:Bengi",
+     "P121",
+     "H:Piglet",
+     "H:PoohManDu"
+    ],
+    "names": [
+     "Impact",
+     "Bengi",
+     "Faker",
+     "Piglet",
+     "PoohManDu"
+    ],
+    "roster": [
+     "Impact",
+     "Bengi",
+     "Faker",
+     "Piglet",
+     "PoohManDu"
+    ]
+   },
+   {
+    "event": "Champions 2013-14 Winter",
+    "club": "T24",
+    "team": "SK Telecom T1 K",
+    "persons": [],
+    "names": [],
+    "roster": []
+   }
+  ],
+  "GrabbZ": [
+   {
+    "event": "MSI 2019",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P154",
+     "H:Jankos",
+     "P131",
+     "H:Perkz",
+     "P158"
+    ],
+    "names": [
+     "Wunder",
+     "Jankos",
+     "Caps",
+     "Perkz",
+     "Mikyx"
+    ],
+    "roster": [
+     "Wunder",
+     "Jankos",
+     "Caps",
+     "Perkz",
+     "Mikyx"
+    ]
+   },
+   {
+    "event": "LEC 2019 Spring",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P154",
+     "H:Jankos",
+     "P131",
+     "H:Perkz",
+     "P158"
+    ],
+    "names": [
+     "Wunder",
+     "Jankos",
+     "Caps",
+     "Perkz",
+     "Mikyx"
+    ],
+    "roster": [
+     "Wunder",
+     "Jankos",
+     "Caps",
+     "Perkz",
+     "Mikyx"
+    ]
+   },
+   {
+    "event": "LEC 2019 Summer",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P154",
+     "H:Jankos",
+     "P131",
+     "H:Perkz",
+     "P158"
+    ],
+    "names": [
+     "Wunder",
+     "Jankos",
+     "Caps",
+     "Perkz",
+     "Mikyx"
+    ],
+    "roster": [
+     "Wunder",
+     "Jankos",
+     "Caps",
+     "Perkz",
+     "Mikyx"
+    ]
+   },
+   {
+    "event": "LEC 2020 Spring",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P154",
+     "H:Jankos",
+     "H:Perkz",
+     "P131",
+     "P158"
+    ],
+    "names": [
+     "Wunder",
+     "Jankos",
+     "Perkz",
+     "Caps",
+     "Mikyx"
+    ],
+    "roster": [
+     "Wunder",
+     "Jankos",
+     "PERKZ",
+     "Caps",
+     "Mikyx"
+    ]
+   },
+   {
+    "event": "LEC 2020 Summer",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P154",
+     "H:Jankos",
+     "P131",
+     "H:Perkz",
+     "P158"
+    ],
+    "names": [
+     "Wunder",
+     "Jankos",
+     "Caps",
+     "Perkz",
+     "Mikyx"
+    ],
+    "roster": [
+     "Wunder",
+     "Jankos",
+     "Caps",
+     "Perkz",
+     "Mikyx"
+    ]
+   }
+  ],
+  "Perkz": [
+   {
+    "event": "LEC 2026 Summer",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P129",
+     "P130",
+     "P131",
+     "P132",
+     "P133"
+    ],
+    "names": [
+     "BrokenBlade",
+     "SkewMond",
+     "Caps",
+     "Hans Sama",
+     "Labrov"
+    ],
+    "roster": [
+     "BrokenBlade",
+     "SkewMond",
+     "Caps",
+     "Hans Sama",
+     "Labrov"
+    ]
+   }
+  ],
+  "Reapered": [
+   {
+    "event": "LCS 2020 Spring",
+    "club": "T35",
+    "team": "Cloud9",
+    "persons": [
+     "P615",
+     "P175",
+     "P448",
+     "P177",
+     "P178"
+    ],
+    "names": [
+     "Licorice",
+     "Blaber",
+     "Nisqy",
+     "Zven",
+     "Vulcan"
+    ],
+    "roster": [
+     "Licorice",
+     "Blaber",
+     "Nisqy",
+     "Zven",
+     "Vulcan (Philippe Laflamme)"
+    ]
+   },
+   {
+    "event": "LCS 2021 Summer",
+    "club": "H:100T",
+    "team": "100 Thieves",
+    "persons": [
+     "P624",
+     "P182",
+     "P204"
+    ],
+    "names": [
+     "Closer",
+     "FBI",
+     "huhi"
+    ],
+    "roster": [
+     "Ssumday",
+     "Closer (Can Çelik)",
+     "Abbedagge",
+     "FBI",
+     "Huhi"
+    ]
+   }
+  ],
+  "Melzhet": [
+   {
+    "event": "LEC 2025 Spring",
+    "club": "T29",
+    "team": "Movistar KOI",
+    "persons": [
+     "P144",
+     "P145",
+     "P146",
+     "P147",
+     "P148"
+    ],
+    "names": [
+     "Myrwn",
+     "Elyoya",
+     "Jojopyun",
+     "Supa",
+     "Alvaro"
+    ],
+    "roster": [
+     "Myrwn",
+     "Elyoya",
+     "Jojopyun",
+     "Supa",
+     "Alvaro (Álvaro Fernández)"
+    ]
+   }
+  ],
+  "Nukeduck": [
+   {
+    "event": "LTA North 2025 Split 2",
+    "club": "T38",
+    "team": "FlyQuest",
+    "persons": [
+     "P554",
+     "P196",
+     "P192",
+     "P193",
+     "P143"
+    ],
+    "names": [
+     "Bwipo",
+     "Inspired",
+     "Quad",
+     "Massu",
+     "Busio"
+    ],
+    "roster": [
+     "Bwipo",
+     "Inspired",
+     "Quad",
+     "Massu",
+     "Busio"
+    ]
+   },
+   {
+    "event": "LTA 2025 Championship",
+    "club": "T38",
+    "team": "FlyQuest",
+    "persons": [
+     "P190",
+     "P554",
+     "P196",
+     "P192",
+     "P193",
+     "P143"
+    ],
+    "names": [
+     "Gakgos",
+     "Bwipo",
+     "Inspired",
+     "Quad",
+     "Massu",
+     "Busio"
+    ],
+    "roster": [
+     "Gakgos",
+     "Bwipo",
+     "Inspired",
+     "Quad",
+     "Massu",
+     "Busio"
+    ]
+   }
+  ],
+  "Thinkcard": [
+   {
+    "event": "LTA South 2025 Split 2",
+    "club": "T51",
+    "team": "FURIA",
+    "persons": [
+     "P257",
+     "P258",
+     "P259",
+     "P260",
+     "P261"
+    ],
+    "names": [
+     "Guigo",
+     "Tatu",
+     "Tutsz",
+     "Ayu",
+     "JoJo"
+    ],
+    "roster": [
+     "Guigo",
+     "Tatu (Pedro Seixas)",
+     "Tutsz",
+     "Ayu (Andrey Saraiva)",
+     "JoJo (Gabriel Dzelme)"
+    ]
+   },
+   {
+    "event": "LCS 2023 Summer",
+    "club": "H:CLG",
+    "team": "NRG",
+    "persons": [
+     "P195",
+     "P206",
+     "P181",
+     "P182",
+     "P183"
+    ],
+    "names": [
+     "Dhokla",
+     "Contractz",
+     "Palafox",
+     "FBI",
+     "Ignar"
+    ],
+    "roster": [
+     "Dhokla",
+     "Contractz",
+     "Palafox",
+     "FBI",
+     "IgNar"
+    ]
+   }
+  ],
+  "Reignover": [
+   {
+    "event": "LCS 2021 Spring",
+    "club": "T35",
+    "team": "Cloud9",
+    "persons": [
+     "P205",
+     "P175",
+     "H:Perkz",
+     "P177",
+     "P178"
+    ],
+    "names": [
+     "Fudge",
+     "Blaber",
+     "Perkz",
+     "Zven",
+     "Vulcan"
+    ],
+    "roster": [
+     "Fudge",
+     "Blaber",
+     "Perkz",
+     "Zven",
+     "Vulcan (Philippe Laflamme)"
+    ]
+   },
+   {
+    "event": "LCS 2026 Lock-In",
+    "club": "T39",
+    "team": "LYON (2024 American Team)",
+    "persons": [
+     "P195",
+     "P196",
+     "P197",
+     "P198",
+     "P199"
+    ],
+    "names": [
+     "Dhokla",
+     "Inspired",
+     "Saint",
+     "Berserker",
+     "Isles"
+    ],
+    "roster": [
+     "Dhokla",
+     "Inspired",
+     "Saint (Kang Sung-in)",
+     "Berserker (Kim Min-cheol)",
+     "Isles"
+    ]
+   },
+   {
+    "event": "LCS 2026 Spring",
+    "club": "T39",
+    "team": "LYON (2024 American Team)",
+    "persons": [
+     "P195",
+     "P196",
+     "P197",
+     "P198",
+     "P199"
+    ],
+    "names": [
+     "Dhokla",
+     "Inspired",
+     "Saint",
+     "Berserker",
+     "Isles"
+    ],
+    "roster": [
+     "Dhokla",
+     "Inspired",
+     "Saint (Kang Sung-in)",
+     "Berserker (Kim Min-cheol)",
+     "Isles"
+    ]
+   }
+  ],
+  "Spawn": [
+   {
+    "event": "LCS 2024 Spring",
+    "club": "T42",
+    "team": "Team Liquid",
+    "persons": [
+     "P200",
+     "P573",
+     "P176",
+     "P213",
+     "P214"
+    ],
+    "names": [
+     "Impact",
+     "UmTi",
+     "APA",
+     "Yeon",
+     "CoreJJ"
+    ],
+    "roster": [
+     "Impact",
+     "UmTi",
+     "APA (Eain Stearns)",
+     "Yeon (Sean Sung)",
+     "CoreJJ"
+    ]
+   },
+   {
+    "event": "LTA 2025 Split 1",
+    "club": "T42",
+    "team": "Team Liquid",
+    "persons": [
+     "P200",
+     "P573",
+     "P176",
+     "P213",
+     "P214"
+    ],
+    "names": [
+     "Impact",
+     "UmTi",
+     "APA",
+     "Yeon",
+     "CoreJJ"
+    ],
+    "roster": [
+     "Impact",
+     "UmTi",
+     "APA (Eain Stearns)",
+     "Yeon (Sean Sung)",
+     "CoreJJ"
+    ]
+   }
+  ],
+  "Chawy": [
+   {
+    "event": "LCP 2025 Season Kickoff",
+    "club": "T43",
+    "team": "CTBC Flying Oyster",
+    "persons": [
+     "P215",
+     "P611",
+     "P22",
+     "P23",
+     "P218",
+     "P293"
+    ],
+    "names": [
+     "Rest",
+     "Driver",
+     "JunJia",
+     "HongQ",
+     "Doggo",
+     "Kaiwing"
+    ],
+    "roster": [
+     "Rest",
+     "Driver",
+     "JunJia",
+     "HongQ",
+     "Doggo",
+     "Kaiwing"
+    ]
+   },
+   {
+    "event": "LCP 2025 Mid Season",
+    "club": "T43",
+    "team": "CTBC Flying Oyster",
+    "persons": [
+     "P215",
+     "P611",
+     "P22",
+     "P23",
+     "P218",
+     "P293"
+    ],
+    "names": [
+     "Rest",
+     "Driver",
+     "JunJia",
+     "HongQ",
+     "Doggo",
+     "Kaiwing"
+    ],
+    "roster": [
+     "Rest",
+     "Driver",
+     "JunJia",
+     "HongQ",
+     "Doggo",
+     "Kaiwing"
+    ]
+   },
+   {
+    "event": "LCP 2025 Season Finals",
+    "club": "T43",
+    "team": "CTBC Flying Oyster",
+    "persons": [
+     "P611",
+     "P215",
+     "P22",
+     "P23",
+     "P218",
+     "P293"
+    ],
+    "names": [
+     "Driver",
+     "Rest",
+     "JunJia",
+     "HongQ",
+     "Doggo",
+     "Kaiwing"
+    ],
+    "roster": [
+     "Driver",
+     "Rest",
+     "JunJia",
+     "HongQ",
+     "Doggo",
+     "Kaiwing"
+    ]
+   }
+  ],
+  "CorGi": [
+   {
+    "event": "PCS 2022 Spring",
+    "club": "H:PSG",
+    "team": "PSG Talon",
+    "persons": [
+     "H:Hanabi",
+     "P43",
+     "H:Unified",
+     "P293"
+    ],
+    "names": [
+     "Hanabi",
+     "Juhan",
+     "Unified",
+     "Kaiwing"
+    ],
+    "roster": [
+     "Hanabi (Su Chia-Hsiang)",
+     "Juhan",
+     "Bay",
+     "Unified",
+     "Kaiwing"
+    ]
+   },
+   {
+    "event": "PCS 2023 Spring",
+    "club": "H:PSG",
+    "team": "PSG Talon",
+    "persons": [
+     "P570",
+     "P22",
+     "P585",
+     "P599"
+    ],
+    "names": [
+     "Azhi",
+     "JunJia",
+     "Wako",
+     "Woody"
+    ],
+    "roster": [
+     "Azhi",
+     "JunJia",
+     "Ubao",
+     "Wako",
+     "Woody"
+    ]
+   },
+   {
+    "event": "PCS 2023 Summer",
+    "club": "H:PSG",
+    "team": "PSG Talon",
+    "persons": [
+     "P570",
+     "P22",
+     "H:Maple",
+     "P585",
+     "P599"
+    ],
+    "names": [
+     "Azhi",
+     "JunJia",
+     "Maple",
+     "Wako",
+     "Woody"
+    ],
+    "roster": [
+     "Azhi",
+     "JunJia",
+     "Maple (Huang Yi-Tang)",
+     "Wako",
+     "Woody"
+    ]
+   },
+   {
+    "event": "PCS 2024 Spring",
+    "club": "H:PSG",
+    "team": "PSG Talon",
+    "persons": [
+     "P570",
+     "P22",
+     "H:Maple",
+     "P586",
+     "P599"
+    ],
+    "names": [
+     "Azhi",
+     "JunJia",
+     "Maple",
+     "Betty",
+     "Woody"
+    ],
+    "roster": [
+     "Azhi",
+     "JunJia",
+     "Maple (Huang Yi-Tang)",
+     "Betty",
+     "Woody"
+    ]
+   },
+   {
+    "event": "PCS 2024 Summer",
+    "club": "H:PSG",
+    "team": "PSG Talon",
+    "persons": [
+     "P570",
+     "P22",
+     "H:Maple",
+     "P586",
+     "P599"
+    ],
+    "names": [
+     "Azhi",
+     "JunJia",
+     "Maple",
+     "Betty",
+     "Woody"
+    ],
+    "roster": [
+     "Azhi",
+     "JunJia",
+     "Maple (Huang Yi-Tang)",
+     "Betty",
+     "Woody"
+    ]
+   }
+  ],
+  "WarHorse": [
+   {
+    "event": "Worlds 2019",
+    "club": "H:FPX",
+    "team": "FunPlus Phoenix",
+    "persons": [
+     "H:GimGoon",
+     "P529",
+     "P536",
+     "H:Lwx",
+     "P535"
+    ],
+    "names": [
+     "GimGoon",
+     "Tian",
+     "Doinb",
+     "Lwx",
+     "Crisp"
+    ],
+    "roster": [
+     "GimGoon",
+     "Tian",
+     "Doinb",
+     "Lwx",
+     "Crisp"
+    ]
+   },
+   {
+    "event": "LMS 2018 Spring",
+    "club": "H:FW",
+    "team": "Flash Wolves",
+    "persons": [
+     "H:Hanabi",
+     "H:MooJin",
+     "H:Maple",
+     "P586",
+     "H:SwordArT"
+    ],
+    "names": [
+     "Hanabi",
+     "MooJin",
+     "Maple",
+     "Betty",
+     "SwordArT"
+    ],
+    "roster": [
+     "Hanabi (Su Chia-Hsiang)",
+     "Moojin",
+     "Maple (Huang Yi-Tang)",
+     "Betty",
+     "SwordArt"
+    ]
+   },
+   {
+    "event": "LMS 2018 Summer",
+    "club": "H:FW",
+    "team": "Flash Wolves",
+    "persons": [
+     "H:MMD",
+     "H:MooJin",
+     "H:Maple",
+     "P586",
+     "H:SwordArT"
+    ],
+    "names": [
+     "MMD",
+     "MooJin",
+     "Maple",
+     "Betty",
+     "SwordArT"
+    ],
+    "roster": [
+     "MMD",
+     "Moojin",
+     "Maple (Huang Yi-Tang)",
+     "Betty",
+     "SwordArT"
+    ]
+   },
+   {
+    "event": "LPL 2019 Summer",
+    "club": "H:FPX",
+    "team": "FunPlus Phoenix",
+    "persons": [
+     "H:GimGoon",
+     "P529",
+     "P536",
+     "H:Lwx",
+     "P535"
+    ],
+    "names": [
+     "GimGoon",
+     "Tian",
+     "Doinb",
+     "Lwx",
+     "Crisp"
+    ],
+    "roster": [
+     "GimGoon",
+     "Tian",
+     "Doinb",
+     "Lwx",
+     "Crisp"
+    ]
+   },
+   {
+    "event": "LCP 2026 Split 1",
+    "club": "T50",
+    "team": "Team Secret Whales",
+    "persons": [
+     "P252",
+     "P253",
+     "P254",
+     "P255",
+     "P256"
+    ],
+    "names": [
+     "Pun",
+     "Hizto",
+     "Dire",
+     "Eddie",
+     "Bie"
+    ],
+    "roster": [
+     "Pun",
+     "Hizto",
+     "Dire",
+     "Eddie",
+     "Bie"
+    ]
+   },
+   {
+    "event": "LCP 2026 Split 2",
+    "club": "T50",
+    "team": "Team Secret Whales",
+    "persons": [
+     "P252",
+     "P253",
+     "P254",
+     "P255",
+     "P256"
+    ],
+    "names": [
+     "Pun",
+     "Hizto",
+     "Dire",
+     "Eddie",
+     "Bie"
+    ],
+    "roster": [
+     "Pun",
+     "Hizto",
+     "Dire",
+     "Eddie",
+     "Bie"
+    ]
+   },
+   {
+    "event": "LCP 2026 Split 3",
+    "club": "T50",
+    "team": "Team Secret Whales",
+    "persons": [
+     "P252",
+     "P253",
+     "P254",
+     "P255",
+     "P256"
+    ],
+    "names": [
+     "Pun",
+     "Hizto",
+     "Dire",
+     "Eddie",
+     "Bie"
+    ],
+    "roster": [
+     "Pun",
+     "Hizto",
+     "Dire",
+     "Eddie",
+     "Bie"
+    ]
+   },
+   {
+    "event": "LMS 2017 Summer",
+    "club": "H:FW",
+    "team": "Flash Wolves",
+    "persons": [
+     "H:MMD",
+     "H:Karsa",
+     "H:Maple",
+     "P586",
+     "H:SwordArT"
+    ],
+    "names": [
+     "MMD",
+     "Karsa",
+     "Maple",
+     "Betty",
+     "SwordArT"
+    ],
+    "roster": [
+     "MMD",
+     "Karsa",
+     "Maple (Huang Yi-Tang)",
+     "Betty",
+     "SwordArt"
+    ]
+   }
+  ],
+  "Furyz": [
+   {
+    "event": "CBLOL 2026 Split 1",
+    "club": "T51",
+    "team": "FURIA",
+    "persons": [
+     "P257",
+     "P258",
+     "P259",
+     "P260",
+     "P261"
+    ],
+    "names": [
+     "Guigo",
+     "Tatu",
+     "Tutsz",
+     "Ayu",
+     "JoJo"
+    ],
+    "roster": [
+     "Guigo",
+     "Tatu (Pedro Seixas)",
+     "Tutsz",
+     "Ayu (Andrey Saraiva)",
+     "JoJo (Gabriel Dzelme)"
+    ]
+   }
+  ],
+  "Raise": [
+   {
+    "event": "CBLOL Cup 2026",
+    "club": "T53",
+    "team": "LOUD",
+    "persons": [
+     "P267",
+     "P268",
+     "P269",
+     "P270",
+     "P271",
+     "P272"
+    ],
+    "names": [
+     "xyno",
+     "YoungJae",
+     "Mago",
+     "Envy",
+     "Bull",
+     "RedBert"
+    ],
+    "roster": [
+     "Xyno",
+     "YoungJae",
+     "Mago",
+     "Envy (Bruno Farias)",
+     "Bull",
+     "RedBert"
+    ]
+   }
+  ],
+  "Von": [
+   {
+    "event": "CBLOL 2022 Split 2",
+    "club": "T53",
+    "team": "LOUD",
+    "persons": [
+     "P294",
+     "H:Croc",
+     "P296",
+     "P501",
+     "P209"
+    ],
+    "names": [
+     "Robo",
+     "Croc",
+     "tinowns",
+     "Brance",
+     "Ceos"
+    ],
+    "roster": [
+     "Robo",
+     "Croc",
+     "Tinowns",
+     "Brance",
+     "Ceos"
+    ]
+   },
+   {
+    "event": "LLA 2021",
+    "club": "H:INF",
+    "team": "INFINITY",
+    "persons": [
+     "P584",
+     "P282"
+    ],
+    "names": [
+     "cody",
+     "Ackerman"
+    ],
+    "roster": [
+     "Buggax",
+     "SolidSnake",
+     "Cody",
+     "Whitelotus",
+     "Ackerman (Gabriel Aparicio)"
+    ]
+   }
+  ],
+  "Snok": [
+   {
+    "event": "LLA 2024 Opening",
+    "club": "T97",
+    "team": "Estral Esports",
+    "persons": [
+     "OE55eb390e50",
+     "P211",
+     "P584",
+     "P610",
+     "P282"
+    ],
+    "names": [
+     "Zothve",
+     "Josedeodo",
+     "cody",
+     "Snaker",
+     "Ackerman"
+    ],
+    "roster": [
+     "Zothve",
+     "Josedeodo",
+     "Cody",
+     "Snaker",
+     "Ackerman (Gabriel Aparicio)"
+    ]
+   }
+  ],
+  "Mafa": [
+   {
+    "event": "LPL 2019 Spring",
+    "club": "T4",
+    "team": "Invictus Gaming",
+    "persons": [
+     "P545",
+     "H:Ning",
+     "P18",
+     "P530",
+     "H:Baolan"
+    ],
+    "names": [
+     "TheShy",
+     "Ning",
+     "Rookie",
+     "JackeyLove",
+     "Baolan"
+    ],
+    "roster": [
+     "TheShy",
+     "Ning",
+     "Rookie",
+     "JackeyLove",
+     "Baolan"
+    ]
+   }
+  ],
+  "Edgar": [
+   {
+    "event": "Worlds 2017",
+    "club": "T18",
+    "team": "Samsung Galaxy",
+    "persons": [
+     "H:CuVee",
+     "H:Ambition",
+     "H:Haru",
+     "H:Crown",
+     "P91",
+     "P214"
+    ],
+    "names": [
+     "CuVee",
+     "Ambition",
+     "Haru",
+     "Crown",
+     "Ruler",
+     "CoreJJ"
+    ],
+    "roster": [
+     "CuVee",
+     "Ambition",
+     "Haru",
+     "Crown",
+     "Ruler",
+     "CoreJJ"
+    ]
+   },
+   {
+    "event": "Worlds 2014",
+    "club": "T18",
+    "team": "Samsung White",
+    "persons": [
+     "H:Looper",
+     "H:DanDy",
+     "H:PawN",
+     "H:imp",
+     "H:Mata"
+    ],
+    "names": [
+     "Looper",
+     "DanDy",
+     "PawN",
+     "imp",
+     "Mata"
+    ],
+    "roster": [
+     "Looper",
+     "Dandy",
+     "PawN",
+     "Imp",
+     "Mata"
+    ]
+   },
+   {
+    "event": "Champions 2014 Spring",
+    "club": "T18",
+    "team": "Samsung Blue",
+    "persons": [
+     "H:Spirit",
+     "H:dade",
+     "H:Deft",
+     "H:Heart"
+    ],
+    "names": [
+     "Spirit",
+     "dade",
+     "Deft",
+     "Heart"
+    ],
+    "roster": [
+     "Acorn",
+     "Spirit",
+     "DADE",
+     "Deft",
+     "Heart"
+    ]
+   }
+  ],
+  "Dylan Falco": [
+   {
+    "event": "EU LCS 2018 Spring",
+    "club": "T25",
+    "team": "Fnatic",
+    "persons": [
+     "P554",
+     "H:Broxah",
+     "P131",
+     "P542",
+     "P581"
+    ],
+    "names": [
+     "Bwipo",
+     "Broxah",
+     "Caps",
+     "Rekkles",
+     "Hylissang"
+    ],
+    "roster": [
+     "Bwipo",
+     "Broxah",
+     "Caps",
+     "Rekkles",
+     "Hylissang"
+    ]
+   },
+   {
+    "event": "EU LCS 2018 Summer",
+    "club": "T25",
+    "team": "Fnatic",
+    "persons": [
+     "H:sOAZ",
+     "P554",
+     "H:Broxah",
+     "P131",
+     "P542",
+     "P581"
+    ],
+    "names": [
+     "sOAZ",
+     "Bwipo",
+     "Broxah",
+     "Caps",
+     "Rekkles",
+     "Hylissang"
+    ],
+    "roster": [
+     "SOAZ",
+     "Bwipo",
+     "Broxah",
+     "Caps",
+     "Rekkles",
+     "Hylissang"
+    ]
+   },
+   {
+    "event": "LEC 2022 Spring",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P129",
+     "H:Jankos",
+     "P131",
+     "P567",
+     "P409"
+    ],
+    "names": [
+     "BrokenBlade",
+     "Jankos",
+     "Caps",
+     "Flakked",
+     "Targamas"
+    ],
+    "roster": [
+     "BrokenBlade",
+     "Jankos",
+     "CaPs",
+     "Flakked",
+     "Targamas"
+    ]
+   },
+   {
+    "event": "LEC 2023 Winter",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P129",
+     "P140",
+     "P131",
+     "P132",
+     "P158"
+    ],
+    "names": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ],
+    "roster": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ]
+   },
+   {
+    "event": "LEC 2023 Summer",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P129",
+     "P140",
+     "P131",
+     "P132",
+     "P158"
+    ],
+    "names": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ],
+    "roster": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ]
+   },
+   {
+    "event": "LEC 2023 Season Finals",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P129",
+     "P140",
+     "P131",
+     "P132",
+     "P158"
+    ],
+    "names": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ],
+    "roster": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ]
+   },
+   {
+    "event": "LEC 2024 Winter",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P129",
+     "P140",
+     "P131",
+     "P132",
+     "P158"
+    ],
+    "names": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ],
+    "roster": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ]
+   },
+   {
+    "event": "LEC 2024 Spring",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P129",
+     "P140",
+     "P131",
+     "P132",
+     "P158"
+    ],
+    "names": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ],
+    "roster": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ]
+   },
+   {
+    "event": "LEC 2024 Summer",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P129",
+     "P140",
+     "P131",
+     "P132",
+     "P158"
+    ],
+    "names": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ],
+    "roster": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ]
+   },
+   {
+    "event": "LEC 2024 Season Finals",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P129",
+     "P140",
+     "P131",
+     "P132",
+     "P158"
+    ],
+    "names": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ],
+    "roster": [
+     "BrokenBlade",
+     "Yike",
+     "Caps",
+     "Hans Sama",
+     "Mikyx"
+    ]
+   },
+   {
+    "event": "LEC 2025 Summer",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P129",
+     "P130",
+     "P131",
+     "P132",
+     "P133"
+    ],
+    "names": [
+     "BrokenBlade",
+     "SkewMond",
+     "Caps",
+     "Hans Sama",
+     "Labrov"
+    ],
+    "roster": [
+     "BrokenBlade",
+     "SkewMond",
+     "Caps",
+     "Hans Sama",
+     "Labrov"
+    ]
+   },
+   {
+    "event": "LEC 2026 Versus",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P129",
+     "P130",
+     "P131",
+     "P132",
+     "P133"
+    ],
+    "names": [
+     "BrokenBlade",
+     "SkewMond",
+     "Caps",
+     "Hans Sama",
+     "Labrov"
+    ],
+    "roster": [
+     "BrokenBlade",
+     "SkewMond",
+     "Caps",
+     "Hans Sama",
+     "Labrov"
+    ]
+   },
+   {
+    "event": "LEC 2026 Spring",
+    "club": "T26",
+    "team": "G2 Esports",
+    "persons": [
+     "P129",
+     "P130",
+     "P131",
+     "P132",
+     "P133"
+    ],
+    "names": [
+     "BrokenBlade",
+     "SkewMond",
+     "Caps",
+     "Hans Sama",
+     "Labrov"
+    ],
+    "roster": [
+     "BrokenBlade",
+     "SkewMond",
+     "Caps",
+     "Hans Sama",
+     "Labrov"
+    ]
+   }
+  ],
+  "SeeEl": [
+   {
+    "event": "LTA South 2025 Split 3",
+    "club": "T57",
+    "team": "Vivo Keyd Stars",
+    "persons": [
+     "P288",
+     "P289",
+     "P290",
+     "P292",
+     "P163",
+     "OE8f6b0419b0"
+    ],
+    "names": [
+     "Boal",
+     "Disamis",
+     "Mireu",
+     "Morttheus",
+     "Trymbi",
+     "scamber"
+    ],
+    "roster": [
+     "Boal",
+     "Disamis",
+     "Mireu",
+     "Morttheus",
+     "Trymbi",
+     "Scamber"
+    ]
+   }
+  ],
+  "KIM": [
+   {
+    "event": "Worlds 2018",
+    "club": "T4",
+    "team": "Invictus Gaming",
+    "persons": [
+     "H:Duke",
+     "P545",
+     "H:Ning",
+     "P18",
+     "P530",
+     "H:Baolan"
+    ],
+    "names": [
+     "Duke",
+     "TheShy",
+     "Ning",
+     "Rookie",
+     "JackeyLove",
+     "Baolan"
+    ],
+    "roster": [
+     "Duke (Lee Ho-seong)",
+     "TheShy",
+     "Ning",
+     "Rookie",
+     "JackeyLove",
+     "Baolan"
+    ]
+   },
+   {
+    "event": "MSI 2024",
+    "club": "T18",
+    "team": "Gen.G",
+    "persons": [
+     "P88",
+     "P89",
+     "P90",
+     "P122",
+     "P118"
+    ],
+    "names": [
+     "Kiin",
+     "Canyon",
+     "Chovy",
+     "Peyz",
+     "Lehends"
+    ],
+    "roster": [
+     "Kiin",
+     "Canyon",
+     "Chovy",
+     "Peyz",
+     "Lehends"
+    ]
+   },
+   {
+    "event": "MSI 2025",
+    "club": "T18",
+    "team": "Gen.G",
+    "persons": [
+     "P88",
+     "P89",
+     "P90",
+     "P91",
+     "P92"
+    ],
+    "names": [
+     "Kiin",
+     "Canyon",
+     "Chovy",
+     "Ruler",
+     "Duro"
+    ],
+    "roster": [
+     "Kiin",
+     "Canyon",
+     "Chovy",
+     "Ruler",
+     "Duro"
+    ]
+   },
+   {
+    "event": "LCK 2017 Summer",
+    "club": "T22",
+    "team": "Longzhu Gaming",
+    "persons": [
+     "P104",
+     "P105",
+     "H:PraY",
+     "H:GorillA"
+    ],
+    "names": [
+     "Cuzz",
+     "Bdd",
+     "PraY",
+     "GorillA"
+    ],
+    "roster": [
+     "Khan",
+     "Cuzz",
+     "Bdd",
+     "PraY",
+     "GorillA"
+    ]
+   },
+   {
+    "event": "LCK 2020 Spring",
+    "club": "T24",
+    "team": "T1",
+    "persons": [
+     "P139",
+     "P104",
+     "P121",
+     "P96",
+     "P334"
+    ],
+    "names": [
+     "Canna",
+     "Cuzz",
+     "Faker",
+     "Teddy",
+     "Effort"
+    ],
+    "roster": [
+     "Canna",
+     "Cuzz",
+     "Faker",
+     "Teddy",
+     "Effort"
+    ]
+   },
+   {
+    "event": "LCK 2024 Spring",
+    "club": "T18",
+    "team": "Gen.G",
+    "persons": [
+     "P88",
+     "P89",
+     "P90",
+     "P122",
+     "P118"
+    ],
+    "names": [
+     "Kiin",
+     "Canyon",
+     "Chovy",
+     "Peyz",
+     "Lehends"
+    ],
+    "roster": [
+     "Kiin",
+     "Canyon",
+     "Chovy",
+     "Peyz",
+     "Lehends"
+    ]
+   },
+   {
+    "event": "LCK 2025 Season",
+    "club": "T18",
+    "team": "Gen.G",
+    "persons": [
+     "P88",
+     "P89",
+     "P90",
+     "P91",
+     "P92"
+    ],
+    "names": [
+     "Kiin",
+     "Canyon",
+     "Chovy",
+     "Ruler",
+     "Duro"
+    ],
+    "roster": [
+     "Kiin",
+     "Canyon",
+     "Chovy",
+     "Ruler",
+     "Duro"
+    ]
+   }
+  ]
+ }
+}
