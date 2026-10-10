@@ -340,6 +340,8 @@ def main(argv=None) -> int:
     ap.add_argument("--champion", default=None, help="冠军俱乐部 id，如 T18；每人 +2（封顶 90）")
     ap.add_argument("--fmvp", default=None, help="FMVP 的 ign；引擎把他的卡做成彩卡")
     ap.add_argument("--fmvp-rating", type=int, default=None, help="FMVP 彩卡评分，94–97（对标历届 S 赛 FMVP 彩卡），不填按 95")
+    ap.add_argument("--final", action="store_true",
+                    help="决赛打完后的最后一次：整个 S16 一场没上的选手（含替补）按普通卡（联赛）数值揭晓并定格，金银铜按普通卡的线（金 84 / 银 72）")
     ap.add_argument("--tz", type=float, default=8.0, help="比赛日按哪个时区划分（小时，默认 8 = 北京时间；OE 原始时间是 UTC）")
     ap.add_argument("--base", default=str(BASE_JSON))
     ap.add_argument("--out", default=str(RATINGS_JSON))
@@ -401,11 +403,22 @@ def main(argv=None) -> int:
     print()
     print_table(res, base)
 
+    if args.final:
+        # owner 2026-10-10: a sub who never played is filled in from his league (ordinary card) numbers after the final,
+        # so nobody who bet on him is left holding a 「?」; written here so later re-rates of the ordinary card can't move it
+        for ign in idle:
+            b = base[ign]
+            r = int(b["rating"])
+            res[ign] = {"rating": r, "rarity": "gold" if r >= 84 else "silver" if r >= 72 else "bronze", "games": 0,
+                        "prev": (prev or {}).get(ign), "attrs": {k: int(v) for k, v in b["attrs"].items()}, "teamname": ""}
+        print(f"\n--final：{len(idle)} 名没上场的选手按普通卡数值定格")
+
     out = {
         "meta": {
             "updatedAt": last_day,
             "matchDays": len(days),
             "games": len(games),
+            "final": bool(args.final),
             "note": "由 scripts/s16_ratings.py 每个比赛日后生成（updatedAt = 已计入的最后一个比赛日，北京时间）；"
                     "没有条目的选手卡面全是「?」",
         },

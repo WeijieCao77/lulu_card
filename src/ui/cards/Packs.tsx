@@ -234,39 +234,9 @@ export default function Packs() {
       </div>
 
 
-      {/* S16 世界赛 first while it is the new series (2026-10-12), then 峡谷回响, then the ordinary shelf */}
+      {/* S16 世界赛 takes 峡谷回响's place at the top (owner 2026-10-10); 峡谷回响 moves onto the ordinary shelf */}
       <S16Section open={(k, pay) => void open(k, pay)} busy={busy || unknownError} today={today} />
 
-      {/* 峡谷回响: its own pack and the launch quiz, above the ordinary shelf (owner 2026-10-04) */}
-      <div id={ECHO_SECTION_ID} />
-      <Panel title="峡谷回响" actions={<span className="tiny muted">退役老将回归 · {PACKS.echo.cost} 金币三张</span>}>
-        <div className="echo-hero">
-          <div className="echo-hero-art"><EchoCardBack size="sm" /></div>
-          <div className="echo-hero-copy">
-            <p className="small" style={{ margin: 0, lineHeight: 1.7 }}>
-              {PACKS.echo.blurb}单独收集，有自己的峡谷回响图鉴，不计入全图鉴。
-            </p>
-            <div className="pack-shelf-actions">
-              <button className="primary sm" onClick={() => void open('echo', 'pack')} disabled={busy || unknownError || (g.packs.echo ?? 0) < 1}>
-                打开（{g.packs.echo ?? 0}）
-              </button>
-              <button className="sm" onClick={() => void open('echo', 'coins')} disabled={busy || unknownError || g.coins < PACKS.echo.cost}>
-                花 {PACKS.echo.cost} 金币
-              </button>
-              {(g.packs.echoScout ?? 0) > 0 && (
-                <button className="primary sm" onClick={() => void open('echoScout', 'pack')} disabled={busy || unknownError}>
-                  打开回响试训包（{g.packs.echoScout}）
-                </button>
-              )}
-              <button className="sm" onClick={() => setQuiz(true)}>
-                {g.echoDaily?.day === today && g.echoDaily.pick != null ? '老将问答（今天已答）' : echoQuizDone(g.echoQuiz) ? '老将问答 · 每日一题' : '老将问答（答对一题送一包）'}
-              </button>
-            </div>
-          </div>
-        </div>
-        <div style={{ marginTop: 14 }}><EchoSet /></div>
-        <style>{`.echo-hero{display:flex;gap:16px;align-items:center}.echo-hero-art{width:76px;flex:none}.echo-hero-copy{display:flex;flex-direction:column;gap:10px;min-width:0}`}</style>
-      </Panel>
       {quiz && <EchoQuiz onClose={() => setQuiz(false)} />}
 
       <Panel
@@ -298,6 +268,31 @@ export default function Packs() {
               </div>
             </div>
           )}
+          {/* 峡谷回响 sits on the shelf like any pack since S16 took its place at the top (owner 2026-10-10) */}
+          <div id={ECHO_SECTION_ID} className="pack-box">
+            <div className="echo-shelf-art"><EchoCardBack size="sm" /></div>
+            <h4>
+              {PACKS.echo.name}
+              {(g.packs.echo ?? 0) > 0 && <span className="pack-own"> ×{g.packs.echo}</span>}
+            </h4>
+            <p>{PACKS.echo.blurb}单独收集，有自己的峡谷回响图鉴，不计入全图鉴。</p>
+            <div className="pack-shelf-actions">
+              <button className="primary sm" onClick={() => void open('echo', 'pack')} disabled={busy || unknownError || (g.packs.echo ?? 0) < 1}>
+                打开（{g.packs.echo ?? 0}）
+              </button>
+              <button className="sm" onClick={() => void open('echo', 'coins')} disabled={busy || unknownError || g.coins < PACKS.echo.cost}>
+                花 {PACKS.echo.cost} 金币
+              </button>
+              {(g.packs.echoScout ?? 0) > 0 && (
+                <button className="primary sm" onClick={() => void open('echoScout', 'pack')} disabled={busy || unknownError}>
+                  打开回响试训包（{g.packs.echoScout}）
+                </button>
+              )}
+              <button className="sm" onClick={() => setQuiz(true)}>
+                {g.echoDaily?.day === today && g.echoDaily.pick != null ? '老将问答（今天已答）' : echoQuizDone(g.echoQuiz) ? '老将问答 · 每日一题' : '老将问答（答对一题送一包）'}
+              </button>
+            </div>
+          </div>
           {PACK_ORDER.filter((k) => !seriesOfPack(k) && k !== 'seoul2024' && k !== 'echo' && k !== 's16').map((kind) => {
             const def = PACKS[kind]
             const own = g.packs[kind] ?? 0
@@ -328,6 +323,8 @@ export default function Packs() {
             )
           })}
         </div>
+        <div style={{ marginTop: 14 }}><EchoSet /></div>
+        <style>{`.echo-shelf-art{width:56px;margin-bottom:6px}`}</style>
       </Panel>
 
       {POSITION_PACK_KINDS.some((k) => (g.packs[k] ?? 0) > 0) && (

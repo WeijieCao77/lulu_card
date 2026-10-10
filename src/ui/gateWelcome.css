@@ -899,7 +899,3 @@
   .lulu-gate .gate-s16-side.right { transform: translate(18%, -50%) rotate(9deg) scale(var(--s16-cover-side)); }
   .lulu-gate .gate-s16 .gate-art-caption { font-size: 0.62rem; padding: 0 12px; }
 }
-@media (max-width: 760px) {
-  .lulu-gate .gate-art.gate-s16 { --s16-cover-y: 44%; display: block; height: 214px; margin: 16px auto 0; border-radius: var(--lulu-radius); }
-  .lulu-gate .gate-s16-tag { top: 8px; left: 10px; font-size: 0.6rem; letter-spacing: 0.12em; }
-}

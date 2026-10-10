@@ -43,7 +43,7 @@ export default function S16Section({ open, busy, today }: { open: (kind: PackKin
         <div className="s16-hero-copy">
           <p className="small" style={{ margin: 0, lineHeight: 1.7 }}>
             S16 参赛的 {S16_CARDS.length} 位选手。开赛前所有数值都是「?」，选手打过 S16 的比赛才揭晓，之后每个比赛日按他的表现更新，金银铜也跟着排名变；没揭晓的卡不能上阵。
-            决赛后数值定格，冠军队全员 +2，<b>FMVP 的卡自动升级成彩卡</b>。S16 卡交易规则和普通卡一样。
+            决赛后冠军队全员 +2，<b>FMVP 的卡自动升级成彩卡</b>（评分 94–97，对标历届 S 赛 FMVP 彩卡）。<b>整个 S16 一场没上的选手（包括替补），决赛后按他联赛里的数值（普通卡数值）揭晓</b>，不会一直是「?」。决赛后所有 S16 卡的数值永久固定，以后普通卡调整也不再跟着变。S16 卡交易规则和普通卡一样。
           </p>
           <p className="tiny faint" style={{ margin: 0 }}>目前已揭晓 {revealed}/{S16_CARDS.length} 位选手。每个选手抽中的机会一样。</p>
           <div className="pack-shelf-actions">
