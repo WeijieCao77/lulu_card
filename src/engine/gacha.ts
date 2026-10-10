@@ -1049,7 +1049,7 @@ export function receiveCard(g: GachaState, cardId: string, from: string): boolea
   const card = cardById(cardId)
   if (!card) return false
   const had = g.cards[cardId]
-  if (had && isS16Card(card)) { had.seen++; g.coins += S16_DUPE_COINS } else if (had) { had.dupes++; had.seen++ } else {
+  if (had) { had.dupes++; had.seen++ } else {
     g.cards[cardId] = {
       id: cardId, level: 0, dupes: 0, seen: 1, got: new Date().toISOString().slice(0, 10),
     }
@@ -1229,16 +1229,7 @@ export interface Pulled {
   dupe: boolean
   /** what a spare copy would sell for, shown on the reveal */
   salvage: number
-  /** an S16 card already owned: not kept, paid out in coins instead (S16_DUPE_COINS) */
-  coins?: number
 }
-
-/**
- * S16 世界赛: one card per player per account (owner 2026-10-10: 「每个人抽卡的时候一人一张…多余的会变成金币分解掉」).
- * A second copy — from a pack, the mail, a swap — is never kept: the account is paid this instead. With no spares an
- * S16 card is never levelled and can't be stockpiled before the FMVP is known.
- */
-export const S16_DUPE_COINS = 400
 
 /**
  * Deal one pack.
@@ -1316,13 +1307,6 @@ export function openPack(
     const list: readonly Card[] = pool[metal].length ? pool[metal] : pool.bronze
     const card = rng.pick(list)
     const had = g.cards[card.id]
-    if (had && isS16Card(card)) {
-      had.seen++
-      g.coins += S16_DUPE_COINS
-      drawn++
-      out.push({ card, dupe: true, salvage: S16_DUPE_COINS, coins: S16_DUPE_COINS })
-      continue
-    }
     if (had) {
       had.dupes++
       had.seen++

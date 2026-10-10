@@ -258,7 +258,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
               <span className="ritual-card-light" aria-hidden="true" />
               <div className="ritual-flipper">
                 <div className="ritual-card-back" aria-hidden={up}>{echo ? <EchoCardBack size="lg" /> : s16 ? <S16CardBack size="lg" /> : <Back />}</div>
-                <div className="ritual-card-front" aria-hidden={!up}><div className="ritual-face-scale"><CardFace card={p.card} size="lg" footer={p.coins ? `已有，换成 ${p.coins} 金币` : p.dupe ? '重复卡' : '新卡'} /></div></div>
+                <div className="ritual-card-front" aria-hidden={!up}><div className="ritual-face-scale"><CardFace card={p.card} size="lg" footer={p.dupe ? '重复卡' : '新卡'} /></div></div>
               </div>
               {up && <span className="ritual-flip-sparks" aria-hidden="true">{Array.from({ length: 8 }, (_, k) => <i key={k} style={{ '--i': k } as CSSProperties} />)}</span>}
             </button>
@@ -295,7 +295,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
     </footer>
     {inspect !== null && <div className="ritual-detail" role="dialog" aria-modal="true" aria-label="卡牌详情" onClick={closeDetail}>
       <div className={`ritual-detail-card rarity-${pulled[inspect].card.rarity}`} onClick={e => e.stopPropagation()}>
-        <span className="ritual-eyebrow">{RARITY_CN[pulled[inspect].card.rarity]} · {pulled[inspect].coins ? `已有这名选手，换成 ${pulled[inspect].coins} 金币` : pulled[inspect].dupe ? '重复卡' : '新卡入藏'}</span>
+        <span className="ritual-eyebrow">{RARITY_CN[pulled[inspect].card.rarity]} · {pulled[inspect].dupe ? '重复卡' : '新卡入藏'}</span>
         <CardFace card={pulled[inspect].card} size="lg" />
         {pulled[inspect].card.legend && <p>{pulled[inspect].card.legend!.title}</p>}
         <button ref={detailClose} onClick={closeDetail}>返回卡桌</button>

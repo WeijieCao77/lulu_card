@@ -1479,12 +1479,6 @@ export function makeMarketApi(sql, {
     if (!rows.length) { json(res, 200, { ok: false, gone: true }); return }
     const l = rows[0]
     if (l.seller_h === me) { json(res, 200, { ok: false, self: true }); return }
-    // S16 世界赛: one card per player per account — no bidding on a player you already hold (a second copy would only
-    // turn into coins on arrival, gacha.ts S16_DUPE_COINS)
-    if (engine.cardById(l.card_id)?.s16) {
-      const held = await sql`select 1 from card_accounts where id_hash = ${me} and state->'cards' ? ${l.card_id}`
-      if (held.length) { json(res, 200, { ok: false, why: '你已经有这名选手的 S16 卡了，每人每名选手只能有一张。' }); return }
-    }
     const auction = !!l.ends
     if (auction && endsAt(l) <= Date.now()) { json(res, 200, { ok: false, gone: true }); return }
     const topRow = await sql`

@@ -4,7 +4,7 @@
  *   npx tsx scripts/check_s16_series.ts
  */
 import { ALL_CARDS, BASE_PLAYER_CARDS, PLAYER_CARDS, S16_CARDS, buildS16Cards, cardById, isS16Card, personOf, s16Hidden } from '../src/engine/cards'
-import { FULL_SET_CARDS, PACKS, S16_DUPE_COINS, S16_SET_REWARDS, autoSquad, collectionProgress, mergeClientFields, migrateGacha, newGacha, openPack, s16SetProgress } from '../src/engine/gacha'
+import { FULL_SET_CARDS, PACKS, S16_SET_REWARDS, autoSquad, collectionProgress, mergeClientFields, migrateGacha, newGacha, openPack, s16SetProgress } from '../src/engine/gacha'
 import { runAction, squadForPlay } from '../src/engine/cardActions'
 import { matchesFilter } from '../src/engine/cardFilter'
 import { rollShop } from '../src/engine/dailyShop'
@@ -156,25 +156,6 @@ check('交易和普通卡一视同仁：按金银铜限价（铜 2000、银 5000
   const s2: S16PredictState = {}; setOne(s2, 'champ', { team: 'T24' }, before, ch)
   check('冠军：选中亚军送选拔包 ×3', champReward(s2.champ, Date.parse('2026-11-15T01:00:00Z'), ch, 'T24')?.packs.elite === 3)
   check('读档后预测还在', cleanS16Predict(JSON.parse(JSON.stringify(s)))?.playin?.team === 'T28' && cleanS16Predict(JSON.parse(JSON.stringify(s)))?.champ?.team === 'T18')
-}
-
-// one S16 card per player per account (owner 2026-10-10): a second copy is paid out, never kept
-{
-  const g = newGacha('S16-ONE', 'o', day)
-  g.cards = {}
-  g.coins = 0
-  const id = S16_CARDS[0].id
-  applyMail(g, [{ kind: 'bought', cardId: id, level: 0, coins: 0, pack: null, count: 1, body: {}, at: Date.now() }])
-  applyMail(g, [{ kind: 'swap_in', cardId: id, level: 0, coins: 0, pack: null, count: 1, body: {}, at: Date.now() }])
-  check('同一名选手第二张 S16 卡到账：不留，换成 400 金币', g.cards[id].dupes === 0 && g.coins === S16_DUPE_COINS, `dupes ${g.cards[id].dupes} coins ${g.coins}`)
-  const h = newGacha('S16-PACKS', 'p', day)
-  h.cards = {}
-  h.packs.s16 = 60
-  let paid = 0
-  for (let i = 0; i < 60; i++) for (const p of openPack(h, 's16', 'pack', '2026-10-13')) if (p.coins) paid += p.coins
-  const s16Owned = Object.entries(h.cards).filter(([k]) => k.startsWith('s16:'))
-  check('开 60 包：每名选手最多一张、没有重复卡', s16Owned.every(([, o]) => (o.dupes ?? 0) === 0) && s16Owned.length <= S16_CARDS.length)
-  check('开出重复的 S16 选手：每张换 400 金币', paid > 0 && paid % S16_DUPE_COINS === 0, String(paid))
 }
 
 console.log(bad ? `\n${bad} 处不对` : '\n全部通过')
