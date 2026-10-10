@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useCards } from './ctx'
 import CupLineup from './CupLineup'
-import { cupSquadOf } from '../../engine/gacha'
+import { cupSquadOf, playLevelOf } from '../../engine/gacha'
+import { levelText } from '../../engine/evolve'
 import type { CupSquadKey } from '../../engine/gacha'
 import { Panel } from '../common'
 import MatchReport from './Report'
@@ -146,7 +147,7 @@ export function CupDivision({ league }: { league: CupLeague }) {
   if (!cloud) return <Panel title={title}><p className="small muted">需要联网。</p></Panel>
   if (!st) return <Panel title={title}><p className="small muted">{why ?? '读取中…'}</p></Panel>
 
-  const myScore = filled === 5 ? squadRating(lineup, (id) => g.cards[id]?.level ?? 0) : null
+  const myScore = filled === 5 ? squadRating(lineup, (id) => playLevelOf(g, id)) : null
   const rows = board === 'today' ? st.boards.today : st.boards.all
   const legacy = st.legacyPending ?? []
 
@@ -246,7 +247,7 @@ export function CupDivision({ league }: { league: CupLeague }) {
                       .map((id) => {
                         const c = cardById(id)
                         const lv = st.last!.champion!.five!.levels[id] ?? 0
-                        return `${c ? cardName(c) : id}${lv ? ` +${lv}` : ''}`
+                        return `${c ? cardName(c) : id}${lv ? ` ${levelText(lv)}` : ''}`
                       }).join(' · ')}
                   </span>
                 )}

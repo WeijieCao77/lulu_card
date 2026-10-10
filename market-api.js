@@ -162,6 +162,9 @@ export const askFloor = (rarity) => Math.max(MIN_ASK, SALVAGE_FLOOR[rarity] ?? M
 
 const hash = (id) => createHash('sha256').update(String(id)).digest('hex')
 
+/** A card's 进修 rides in the mail body (inbox.ts restoreCard reads body.evo); every other card's body is untouched. */
+const withEvo = (body, evo) => (evo && typeof evo === 'object' ? { ...body, evo } : body)
+
 export function makeMarketApi(sql, {
   readBody, json, normalizeId, displayName, rateLimited, engine, token, tokenFrom, tokenOk,
   /** false in the checks, which call settleDue() themselves so nothing moves behind their back */
@@ -190,7 +193,7 @@ export function makeMarketApi(sql, {
     insert into card_mail (to_h, kind, card_id, level, coins, pack, count, body)
     values (${to}, ${kind}, ${extra.cardId ?? null}, ${extra.level ?? 0},
             ${extra.coins ?? 0}, ${extra.pack ?? null}, ${extra.count ?? 1},
-            ${db.json(extra.body ?? {})})`
+            ${db.json(withEvo(extra.body ?? {}, extra.evo))})`
 
   /**
    * Everything that moves a card or a coin runs inside one of these. A
@@ -396,7 +399,7 @@ export function makeMarketApi(sql, {
     return run(async (db) => {
       winners = []
       const ended = await db`
-        select id, seller_h, card_id, level from card_listings
+        select id, seller_h, card_id, level, evo from card_listings
         where status = 'open' and ends is not null and ends <= now()
           and (${seller}::text is null or seller_h = ${seller}::text)
           and (${only}::bigint is null or id = ${only}::bigint)
@@ -430,7 +433,7 @@ export function makeMarketApi(sql, {
           if (!o) continue
           winners.push(o.buyer_h)
           mail.push({ to_h: o.buyer_h, kind: 'bought', card_id: l.card_id, level: l.level, coins: 0,
-            body: { price: o.price, who: names[l.seller_h] } })
+            body: withEvo({ price: o.price, who: names[l.seller_h] }, l.evo) })
           mail.push({ to_h: l.seller_h, kind: 'sold', card_id: null, level: 0, coins: o.price,
             body: { cardId: l.card_id, price: o.price, who: names[o.buyer_h] } })
         }
@@ -446,7 +449,7 @@ export function makeMarketApi(sql, {
         for (const l of ended) {
           if (topOf.has(String(l.id))) continue
           mail.push({ to_h: l.seller_h, kind: 'unsold', card_id: l.card_id, level: l.level, coins: 0,
-            body: { listing: String(l.id) } })
+            body: withEvo({ listing: String(l.id) }, l.evo) })
         }
       }
       await mailRows(db, mail)
@@ -482,10 +485,10 @@ export function makeMarketApi(sql, {
       const dead = await db`
         update card_listings set status = 'expired', closed = now()
         where status = 'open' and ignored >= ${IGNORE_LIMIT}
-        returning id, seller_h, card_id, level`
+        returning id, seller_h, card_id, level, evo`
       for (const l of dead) {
         // and so does the card
-        mail.push({ to_h: l.seller_h, kind: 'listing_expired', card_id: l.card_id, level: l.level, coins: 0, body: { listing: String(l.id) } })
+        mail.push({ to_h: l.seller_h, kind: 'listing_expired', card_id: l.card_id, level: l.level, coins: 0, body: withEvo({ listing: String(l.id) }, l.evo) })
         // and so do the bids still sitting on it. A listing can die with a
         // fresh offer on it — somebody bid after the third ignored one was
         // made and before it was swept — and this used to mark that offer
@@ -533,7 +536,7 @@ export function makeMarketApi(sql, {
       try {
         const sold = await bgTx(async (db) => {
           const rows = await db`
-            select id, seller_h, card_id, level, buyout from card_listings
+            select id, seller_h, card_id, level, evo, buyout from card_listings
             where id = ${d.id} and status = 'open' and draw_at is not null and draw_at <= now()
             for update skip locked`
           return rows.length ? drawOne(db, rows[0]) : null
@@ -627,7 +630,7 @@ export function makeMarketApi(sql, {
       try {
         took = await tx(async (db) => {
           const rows = await db`
-            select id, seller_h, card_id, level from card_listings
+            select id, seller_h, card_id, level, evo from card_listings
             where status = 'open' and ends is null
             order by id limit 50 for update skip locked`
           for (const l of rows) {
@@ -637,7 +640,7 @@ export function makeMarketApi(sql, {
             if (!closed.length) continue
             listings++
             await post(l.seller_h, 'listing_retired', {
-              cardId: l.card_id, level: l.level, body: { listing: String(l.id) },
+              cardId: l.card_id, level: l.level, evo: l.evo, body: { listing: String(l.id) },
             }, db)
             const back = await db`
               update card_offers set status = 'expired', settled = now()
@@ -734,7 +737,7 @@ export function makeMarketApi(sql, {
     }
     const [sellerName, buyerName] = [await nameOf(l.seller_h, db), await nameOf(o.buyer_h, db)]
     await post(o.buyer_h, 'bought', {
-      cardId: l.card_id, level: l.level, body: draw ? { price: o.price, who: sellerName, draw } : { price: o.price, who: sellerName },
+      cardId: l.card_id, level: l.level, evo: l.evo, body: draw ? { price: o.price, who: sellerName, draw } : { price: o.price, who: sellerName },
     }, db)
     await post(l.seller_h, 'sold', {
       coins: o.price, body: { cardId: l.card_id, price: o.price, who: buyerName },
@@ -827,7 +830,7 @@ export function makeMarketApi(sql, {
     if (sort === 'new') {
       const key = cursor ? String(cursor.key) : null
       return sql`
-        select l.id, l.seller_h, l.card_id, l.level, l.ask, l.created, l.ends, l.buyout, l.hours,
+        select l.id, l.seller_h, l.card_id, l.level, l.evo, l.ask, l.created, l.ends, l.buyout, l.hours,
                coalesce(l.open_n, 0) as offers, coalesce(l.bid_n, 0) as bids, l.top_bid as best,
                (l.top_buyer_h = ${mine}) is true as bid, l.created::text as sortkey
         from card_listings l
@@ -847,7 +850,7 @@ export function makeMarketApi(sql, {
       const key = cursor ? Number(cursor.key) : null
       const up = sort === 'price'
       return up ? sql`
-        select l.id, l.seller_h, l.card_id, l.level, l.ask, l.created, l.ends, l.buyout, l.hours,
+        select l.id, l.seller_h, l.card_id, l.level, l.evo, l.ask, l.created, l.ends, l.buyout, l.hours,
                coalesce(l.open_n, 0) as offers, coalesce(l.bid_n, 0) as bids, l.top_bid as best,
                (l.top_buyer_h = ${mine}) is true as bid, l.cur_price as sortkey
         from card_listings l
@@ -861,7 +864,7 @@ export function makeMarketApi(sql, {
           and (${key}::int is null or (l.cur_price, l.id) > (${key}::int, ${cid}::bigint))
         order by l.cur_price asc, l.id asc
         limit ${limit}` : sql`
-        select l.id, l.seller_h, l.card_id, l.level, l.ask, l.created, l.ends, l.buyout, l.hours,
+        select l.id, l.seller_h, l.card_id, l.level, l.evo, l.ask, l.created, l.ends, l.buyout, l.hours,
                coalesce(l.open_n, 0) as offers, coalesce(l.bid_n, 0) as bids, l.top_bid as best,
                (l.top_buyer_h = ${mine}) is true as bid, l.cur_price as sortkey
         from card_listings l
@@ -880,7 +883,7 @@ export function makeMarketApi(sql, {
     const inTail = cursor && cursor.key === 'L'
     const key = cursor && !inTail ? String(cursor.key) : null
     const head = inTail ? [] : await sql`
-      select l.id, l.seller_h, l.card_id, l.level, l.ask, l.created, l.ends, l.buyout, l.hours,
+      select l.id, l.seller_h, l.card_id, l.level, l.evo, l.ask, l.created, l.ends, l.buyout, l.hours,
              coalesce(l.open_n, 0) as offers, coalesce(l.bid_n, 0) as bids, l.top_bid as best,
              (l.top_buyer_h = ${mine}) is true as bid, l.ends::text as sortkey
       from card_listings l
@@ -896,7 +899,7 @@ export function makeMarketApi(sql, {
       limit ${limit}`
     if (head.length >= limit) return head
     const tail = await sql`
-      select l.id, l.seller_h, l.card_id, l.level, l.ask, l.created, l.ends, l.buyout, l.hours,
+      select l.id, l.seller_h, l.card_id, l.level, l.evo, l.ask, l.created, l.ends, l.buyout, l.hours,
              coalesce(l.open_n, 0) as offers, coalesce(l.bid_n, 0) as bids, l.top_bid as best,
              exists (select 1 from card_offers f where f.listing = l.id and f.status = 'open' and f.buyer_h = ${mine}) as bid,
              'L'::text as sortkey
@@ -1062,7 +1065,7 @@ export function makeMarketApi(sql, {
       ? await shelfFast({ sort, limit, cursor, mine, ids, priceMin, priceMax, heldIds, heldLevels })
       : await sql`
       select * from (
-        select l.id, l.seller_h, l.card_id, l.level, l.ask, l.created, l.ends, l.buyout, l.hours,
+        select l.id, l.seller_h, l.card_id, l.level, l.evo, l.ask, l.created, l.ends, l.buyout, l.hours,
                coalesce(o.open_n, 0) as offers,
                coalesce(o.all_n, 0) as bids,
                o.best,
@@ -1105,7 +1108,7 @@ export function makeMarketApi(sql, {
     // read off it, so an older listing vanished from its owner's page as well
     // as every buyer's, with the card still in escrow.
     const own = mine && !cursor ? await sql`
-      select l.id, l.seller_h, l.card_id, l.level, l.ask, l.created, l.ends, l.buyout, l.hours,
+      select l.id, l.seller_h, l.card_id, l.level, l.evo, l.ask, l.created, l.ends, l.buyout, l.hours,
              (select count(*)::int from card_offers o
                where o.listing = l.id and o.status = 'open') as offers,
              (select count(*)::int from card_offers o
@@ -1132,7 +1135,7 @@ export function makeMarketApi(sql, {
     const total = menus?.total ?? null
     const names = await namesOf([...own, ...rows].map((r) => r.seller_h))
     const shape = (r) => ({
-      id: String(r.id), cardId: r.card_id, level: r.level, ask: r.ask,
+      id: String(r.id), cardId: r.card_id, level: r.level, ...(r.evo ? { evo: r.evo } : {}), ask: r.ask,
       seller: names[r.seller_h], mine: r.seller_h === mine,
       offers: r.offers, best: r.best ?? null, bid: r.bid,
       // the auction: when it closes, the buy-now price, how many have bid,
@@ -1183,7 +1186,7 @@ export function makeMarketApi(sql, {
 
   async function liveListings(ids, mine) {
     const rows = await sql`
-      select l.id, l.seller_h, l.card_id, l.level, l.ask, l.created, l.ends, l.buyout, l.hours,
+      select l.id, l.seller_h, l.card_id, l.level, l.evo, l.ask, l.created, l.ends, l.buyout, l.hours,
              coalesce(o.open_n, 0) as offers, coalesce(o.all_n, 0) as bids, o.best, coalesce(o.mine_bid, false) as bid
       from card_listings l
       left join lateral (
@@ -1197,7 +1200,7 @@ export function makeMarketApi(sql, {
     const names = await namesOf(rows.map((r) => r.seller_h))
     return {
       listings: rows.map((r) => ({
-        id: String(r.id), cardId: r.card_id, level: r.level, ask: r.ask,
+        id: String(r.id), cardId: r.card_id, level: r.level, ...(r.evo ? { evo: r.evo } : {}), ask: r.ask,
         seller: names[r.seller_h], mine: r.seller_h === mine,
         offers: r.offers, best: r.best ?? null, bid: r.bid,
         ends: endsAt(r), buyout: r.buyout ?? null, bids: r.bids ?? r.offers, hours: r.hours ?? AUCTION_HOURS,
@@ -1334,8 +1337,8 @@ export function makeMarketApi(sql, {
           where id_hash = ${me} and rev = ${row[0].rev} returning rev`
         if (!w.length) continue
         const r = await db`
-          insert into card_listings (seller_h, card_id, level, ask, buyout, hours, ends, cur_price, open_n, bid_n)
-          values (${me}, ${cardId}, ${esc.level}, ${ask}, ${buyout}, ${hours},
+          insert into card_listings (seller_h, card_id, level, evo, ask, buyout, hours, ends, cur_price, open_n, bid_n)
+          values (${me}, ${cardId}, ${esc.level}, ${esc.evo ? db.json(esc.evo) : null}, ${ask}, ${buyout}, ${hours},
                   now() + make_interval(hours => ${hours}), ${ask}, 0, 0)
           returning id, ends`
         return { ok: true, id: String(r[0].id), ends: endsAt(r[0]), hours, state: stored(g), rev: w[0].rev }
@@ -1373,10 +1376,10 @@ export function makeMarketApi(sql, {
       const rows = await db`
         update card_listings set status = 'pulled', closed = now()
         where id = ${lid}::bigint and seller_h = ${me} and status = 'open'
-        returning id, card_id, level`
+        returning id, card_id, level, evo`
       if (!rows.length) return { gone: true }
       const l = rows[0]
-      await post(me, 'listing_pulled', { cardId: l.card_id, level: l.level }, db)
+      await post(me, 'listing_pulled', { cardId: l.card_id, level: l.level, evo: l.evo }, db)
       const back = await db`
         update card_offers set status = 'expired', settled = now()
         where listing = ${l.id} and status = 'open' returning buyer_h, price`
@@ -1471,7 +1474,7 @@ export function makeMarketApi(sql, {
     const lid = rowId(b?.listing)
     if (!lid) { json(res, 400, { ok: false, bad: true }); return }
     const rows = await sql`
-      select id, seller_h, card_id, level, ask, ends, buyout, created from card_listings
+      select id, seller_h, card_id, level, evo, ask, ends, buyout, created from card_listings
       where id = ${lid}::bigint and status = 'open'`
     if (!rows.length) { json(res, 200, { ok: false, gone: true }); return }
     const l = rows[0]
@@ -1741,7 +1744,7 @@ export function makeMarketApi(sql, {
     const oid = rowId(b?.offer)
     if (!oid) { json(res, 400, { ok: false, bad: true }); return }
     const got = await sql`
-      select o.id, o.buyer_h, o.price, l.id as listing, l.seller_h, l.card_id, l.level, l.status, l.ends
+      select o.id, o.buyer_h, o.price, l.id as listing, l.seller_h, l.card_id, l.level, l.evo, l.status, l.ends
       from card_offers o join card_listings l on l.id = o.listing
       where o.id = ${oid}::bigint and o.status = 'open'`
     if (!got.length || got[0].seller_h !== me) { json(res, 200, { ok: false, gone: true }); return }
@@ -1781,7 +1784,7 @@ export function makeMarketApi(sql, {
         return { gone: true }
       }
       await post(o.buyer_h, 'bought', {
-        cardId: o.card_id, level: o.level, body: { price: o.price, who: sellerName },
+        cardId: o.card_id, level: o.level, evo: o.evo, body: { price: o.price, who: sellerName },
       }, db)
       await post(me, 'sold', {
         coins: o.price, body: { cardId: o.card_id, price: o.price, who: buyerName },
@@ -1833,7 +1836,7 @@ export function makeMarketApi(sql, {
    */
   async function unwindSwap(row, reason, db = sql, refund = true) {
     await post(row.from_h, 'swap_back', {
-      cardId: row.give_id, level: row.give_level, body: { reason, swap: String(row.id), ...(refund ? { stamina: 1 } : {}) },
+      cardId: row.give_id, level: row.give_level, evo: row.give_evo, body: { reason, swap: String(row.id), ...(refund ? { stamina: 1 } : {}) },
     }, db)
   }
 
@@ -1843,7 +1846,7 @@ export function makeMarketApi(sql, {
       const stale = await db`
         update card_swaps set status = 'expired', settled = now()
         where status = 'open' and made < now() - make_interval(days => ${SWAP_DAYS})
-        returning id, from_h, give_id, give_level`
+        returning id, from_h, give_id, give_level, give_evo`
       for (const row of stale) await unwindSwap(row, '三天没答复，自动撤回', db)
     })
   }
@@ -1936,6 +1939,7 @@ export function makeMarketApi(sql, {
       const count = await db`select count(*)::int as n from card_swaps where from_h = ${me} and status = 'open'`
       if ((count[0]?.n ?? 0) >= MAX_SWAPS) return { ok: false, why: 'full' }
       let level = 0
+      let evo = null
       let lockedWhy = ''
       const r = await editAccount(me, id, (g) => {
         if (!engine.canPlay(g, 'swap', Date.now())) return 'stamina'
@@ -1944,12 +1948,13 @@ export function makeMarketApi(sql, {
         if (!esc.ok) return 'notOwned'
         engine.spendPlay(g, 'swap', Date.now())
         level = esc.level
+        evo = esc.evo ?? null
         return null
       }, db)
       if (!r.ok) return r.why === 'locked' ? { ok: false, why: 'locked', lockedWhy } : r
       const ins = await db`
-        insert into card_swaps (from_h, to_h, give_id, give_level, want_id)
-        values (${me}, ${them.row.id_hash}, ${giveId}, ${level}, ${wantId}) returning id`
+        insert into card_swaps (from_h, to_h, give_id, give_level, give_evo, want_id)
+        values (${me}, ${them.row.id_hash}, ${giveId}, ${level}, ${evo ? db.json(evo) : null}, ${wantId}) returning id`
       await post(them.row.id_hash, 'swap_offer', {
         body: { swap: String(ins[0].id), give: giveId, want: wantId, who },
       }, db)
@@ -1972,10 +1977,10 @@ export function makeMarketApi(sql, {
     const me = hash(id)
     if (!(await isVerified(sql, me))) { json(res, 200, { ok: false, why: '先绑手机号再玩。', unverified: true }); return }
     const inbound = await sql`
-      select id, from_h, give_id, give_level, want_id, made from card_swaps
+      select id, from_h, give_id, give_level, give_evo, want_id, made from card_swaps
       where to_h = ${me} and status = 'open' order by made desc`
     const outbound = await sql`
-      select id, to_h, give_id, give_level, want_id, made from card_swaps
+      select id, to_h, give_id, give_level, give_evo, want_id, made from card_swaps
       where from_h = ${me} and status = 'open' order by made desc`
     const names = {}
     for (const r of inbound) if (!(r.from_h in names)) names[r.from_h] = await nameOf(r.from_h)
@@ -1983,11 +1988,11 @@ export function makeMarketApi(sql, {
     json(res, 200, {
       ok: true, days: SWAP_DAYS,
       inbound: inbound.map((r) => ({
-        id: String(r.id), who: names[r.from_h], give: r.give_id, giveLevel: r.give_level,
+        id: String(r.id), who: names[r.from_h], give: r.give_id, giveLevel: r.give_level, ...(r.give_evo ? { giveEvo: r.give_evo } : {}),
         want: r.want_id, madeAt: new Date(r.made).getTime(),
       })),
       outbound: outbound.map((r) => ({
-        id: String(r.id), who: names[r.to_h], give: r.give_id, giveLevel: r.give_level,
+        id: String(r.id), who: names[r.to_h], give: r.give_id, giveLevel: r.give_level, ...(r.give_evo ? { giveEvo: r.give_evo } : {}),
         want: r.want_id, madeAt: new Date(r.made).getTime(),
       })),
     })
@@ -2013,7 +2018,7 @@ export function makeMarketApi(sql, {
     const sid = rowId(b?.swap)
     if (!sid) { json(res, 400, { ok: false, bad: true }); return }
     const got = await sql`
-      select id, from_h, to_h, give_id, give_level, want_id from card_swaps
+      select id, from_h, to_h, give_id, give_level, give_evo, want_id from card_swaps
       where id = ${sid}::bigint and status = 'open'`
     if (!got.length || got[0].to_h !== me) { json(res, 200, { ok: false, gone: true }); return }
     const row = got[0]
@@ -2062,6 +2067,7 @@ export function makeMarketApi(sql, {
         return { ok: false, why: 'rarity' }
       }
       let level = 0
+      let evo = null
       let lockedWhy = ''
       const r = await editAccount(me, id, (g) => {
         if (!engine.canPlay(g, 'swap', Date.now())) return 'stamina'
@@ -2070,6 +2076,7 @@ export function makeMarketApi(sql, {
         if (!esc.ok) return 'notOwned'
         engine.spendPlay(g, 'swap', Date.now())
         level = esc.level
+        evo = esc.evo ?? null
         return null
       }, db)
       if (!r.ok) {
@@ -2090,11 +2097,11 @@ export function makeMarketApi(sql, {
         where id = ${row.id} and status = 'open' returning id`
       if (!won.length) {
         // settled a moment ago from another tab: give the card straight back
-        await post(me, 'swap_back', { cardId: row.want_id, level, body: { reason: '这个交换已经结束了' } }, db)
+        await post(me, 'swap_back', { cardId: row.want_id, level, evo, body: { reason: '这个交换已经结束了' } }, db)
         return { ok: false, gone: true, state: r.state, rev: r.rev }
       }
-      await post(me, 'swap_in', { cardId: row.give_id, level: row.give_level, body: { who: theirName } }, db)
-      await post(row.from_h, 'swap_in', { cardId: row.want_id, level, body: { who: myName } }, db)
+      await post(me, 'swap_in', { cardId: row.give_id, level: row.give_level, evo: row.give_evo, body: { who: theirName } }, db)
+      await post(row.from_h, 'swap_in', { cardId: row.want_id, level, evo, body: { who: myName } }, db)
       return { ok: true, state: r.state, rev: r.rev }
     })
     if (!out.ok && out.why === 'locked') { json(res, 200, { ok: false, locked: true, why: out.lockedWhy }); return }
@@ -2117,7 +2124,7 @@ export function makeMarketApi(sql, {
       const rows = await db`
         update card_swaps set status = 'cancelled', settled = now()
         where id = ${sid}::bigint and from_h = ${me} and status = 'open'
-        returning id, from_h, give_id, give_level`
+        returning id, from_h, give_id, give_level, give_evo`
       if (!rows.length) return { gone: true }
       await unwindSwap(rows[0], '你撤回了', db, false)
       return { ok: true }

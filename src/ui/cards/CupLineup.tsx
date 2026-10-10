@@ -1,5 +1,5 @@
 import { useCards } from './ctx'
-import { cupSquadOf, CUP_SQUAD_NAMES, levelOf } from '../../engine/gacha'
+import { cupSquadOf, CUP_SQUAD_NAMES, playLevelOf } from '../../engine/gacha'
 import type { CupSquadKey, GachaState } from '../../engine/gacha'
 import type { Squad } from '../../engine/cards'
 import { squadRating } from '../../engine/cards'
@@ -37,7 +37,7 @@ export default function CupLineup({ cup }: { cup: CupSquadKey }) {
   const own = !!g.cupSquads?.[cup]
   const squad = cupSquadOf(g, cup)
   const filled = squad.slots.filter(Boolean).length
-  const score = filled === 5 ? squadRating(squad, (id) => levelOf(g, id)) : null
+  const score = filled === 5 ? squadRating(squad, (id) => playLevelOf(g, id)) : null
   // the metal ladders keep a lineup the same way (天梯·金卡赛 …); they say 本赛 rather than 本杯
   const here = cup.startsWith('ladder:') ? '本赛' : '本杯'
   return (

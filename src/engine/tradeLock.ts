@@ -30,9 +30,10 @@ const count = (raw: unknown): number => {
   const n = Number(raw)
   return Number.isFinite(n) ? Math.max(0, Math.trunc(n)) : 0
 }
-const sparesCount = (owned: OwnedCard): number => (Array.isArray(owned.spares) ? owned.spares.length : 0)
+const sparesCount = (owned: OwnedCard): number =>
+  (Array.isArray(owned.spares) ? owned.spares.length : 0) + (Array.isArray(owned.evoSpares) ? owned.evoSpares.length : 0)
 
-/** Every copy the account holds of this card: the card, its plain duplicates, its upgraded spares. */
+/** Every copy the account holds of this card: the card, its plain duplicates, its upgraded spares and trained (进修) spares. */
 export const copiesOf = (owned: OwnedCard): number => 1 + count(owned.dupes) + sparesCount(owned)
 
 /** Bound copies, never more than the card and its plain duplicates. */

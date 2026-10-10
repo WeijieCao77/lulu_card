@@ -73,3 +73,7 @@ export function useCards(): CardCtxValue {
   if (!v) throw new Error('useCards must be used inside CardCtx')
   return v
 }
+
+/** sessionStorage key: the card the collection's 去进修 opens the 进修 page on (Evolve.tsx) */
+export const EVO_TARGET = 'lolcards:evo-target'
+

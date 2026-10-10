@@ -77,9 +77,9 @@ export function suggestMarketPrice(
 /**
  * The level a sale should use for this owned card. Kept in sync with the
  * server's escrow rules: duplicate count first, otherwise the lowest upgraded
- * spare, otherwise the main card level.
+ * spare, otherwise a trained (进修) +5 spare, otherwise the main card level.
  */
-export function marketSaleLevel(owned: { level: number; dupes: number; spares?: unknown; bound?: number } | undefined): number | null {
+export function marketSaleLevel(owned: { level: number; dupes: number; spares?: unknown; evoSpares?: unknown; bound?: number } | undefined): number | null {
   if (!owned) return null
   const level = Number(owned.level)
   if (!Number.isInteger(level) || level < 0 || level > MAX_LEVEL) return null
@@ -89,13 +89,14 @@ export function marketSaleLevel(owned: { level: number; dupes: number; spares?: 
   if (dupes > 0 && 1 + dupes - bound > 0) return 0
   const spares = sparesOf(owned)
   if (spares.length > 0) return spares[0]
+  if (Array.isArray(owned.evoSpares) && owned.evoSpares.length > 0) return MAX_LEVEL
   return bound === 0 ? level : null
 }
 
-export function hasMarketDuplicates(owned: { level: number; dupes: number; spares?: unknown } | undefined): boolean {
+export function hasMarketDuplicates(owned: { level: number; dupes: number; spares?: unknown; evoSpares?: unknown } | undefined): boolean {
   if (!owned) return false
   const level = Number(owned.level)
   if (!Number.isInteger(level) || level < 0 || level > MAX_LEVEL) return false
   const dupes = Number(owned.dupes) || 0
-  return dupes > 0 || sparesOf(owned).length > 0
+  return dupes > 0 || sparesOf(owned).length > 0 || (Array.isArray(owned.evoSpares) && owned.evoSpares.length > 0)
 }

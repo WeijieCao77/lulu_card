@@ -20,12 +20,16 @@ export default function PackAltar({ count, packName, bursting, onOpen, seal, dec
   const ignoreClickUntil = useRef(0)
   const [hint, setHint] = useState('将卡包投入峡谷仪式台')
 
+  // The ResizeObserver can fire once more while the altar is unmounting (refs already detached, effect cleanup not
+  // run yet): that threw 「Cannot read properties of null」 on every pack opened, ~350 reports a day. No refs, no move.
   const deltaToAltar = () => {
-    const a = source.current!.getBoundingClientRect(), b = target.current!.getBoundingClientRect()
+    if (!source.current || !target.current) return { x: 0, y: 0 }
+    const a = source.current.getBoundingClientRect(), b = target.current.getBoundingClientRect()
     return { x: b.x + b.width / 2 - (a.x + a.width / 2), y: b.y + b.height / 2 - (a.y + a.height / 2) }
   }
   const dropInside = (x: number, y: number) => {
-    const r = target.current!.getBoundingClientRect()
+    if (!target.current) return false
+    const r = target.current.getBoundingClientRect()
     return Math.hypot((x - r.x - r.width / 2) / (r.width / 2), (y - r.y - r.height / 2) / (r.height / 2)) <= 1.15
   }
   const place = () => {
@@ -43,6 +47,7 @@ export default function PackAltar({ count, packName, bursting, onOpen, seal, dec
   }
   useEffect(() => {
     const observer = new ResizeObserver(() => {
+      if (!scene.current) return
       if (placedRef.current) setOffset(deltaToAltar())
       else { drag.current = null; setHeld(false); setOver(false); setOffset({ x: 0, y: 0 }) }
     })

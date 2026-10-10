@@ -24,7 +24,11 @@ import CardActionDialog from './CardActionDialog'
 import CardFace from '../Card'
 import { marketSaleLevel, hasMarketDuplicates } from '../../engine/marketGuidance'
 import { cardById, isPlayerCard } from '../../engine/cards'
-import { collection } from '../../engine/gacha'
+import { collection, playLevelOf } from '../../engine/gacha'
+import { playLevel } from '../../engine/evolve'
+import type { Evo } from '../../engine/evolve'
+import { leavingCopy } from '../../engine/inbox'
+import { ATTR_CN, ATTR_KEYS } from '../../engine/types'
 import { BOUND_PULLS, HOLD_DAYS, nextRelease, releaseText, tradeableCopies, waitText as holdWait } from '../../engine/tradeLock'
 import {
   AUCTION_HOURS, AUCTION_HOURS_CHOICES, BID_STEP, BUYOUT_MIN, MAX_LISTINGS, SHELF_PAGE, SNIPE_MINUTES,
@@ -39,6 +43,9 @@ import { matchesQuery } from './Picker'
 import { SellCardPicker } from './SellCardPicker'
 import type { CardFilter } from './Filters'
 import { MarketHistory } from './MarketHistory'
+
+/** 「操作 +3，意识 +2」: what a 进修 added, for a listing's tooltip and the sell notes */
+const evoAdds = (evo: Evo): string => ATTR_KEYS.filter((k) => evo.add[k]).map((k) => `${ATTR_CN[k]} +${evo.add[k]}`).join('，')
 import { useMarketWatchlist, MarketWatchButton } from './MarketWatchlist'
 
 /** the old listings' haggling room, for the ones still running out */
@@ -642,7 +649,11 @@ export default function Market() {
     // can be taken apart. Say which on the shelf rather than in
     // the mailbox afterwards.
     const mine = g.cards[l.cardId]
+    // a trained +5 (进修, engine/evolve.ts) keeps its 进修 with whoever wins it; the stronger copy plays
+    const theirs = playLevel(l.cardId, l)
     const lands = !mine ? ''
+      : l.evo
+        ? theirs > playLevelOf(g, l.cardId) ? '买来上场，你那张留作备用' : '你的更强，买来留作备用'
       : l.level > (mine.level ?? 0)
         ? `你有 +${mine.level}，买来升到 +${l.level}`
         : l.level > 0
@@ -651,7 +662,12 @@ export default function Market() {
     const dear = false
     return (
       <div key={l.id} className="market-box">
-        <CardFace card={card} level={l.level} />
+        <CardFace card={card} level={theirs} />
+        {l.evo && (
+          <div className="tiny evo-up" style={nowrap} title={evoAdds(l.evo)}>
+            进修 {l.evo.n} 次 · 跟卡走
+          </div>
+        )}
         <MarketWatchButton cardId={l.cardId} name={nameOf(l.cardId)} watched={watch.has(l.cardId)} onToggle={watch.toggle} />
         {participated && !l.bid && <div className="tiny warn">已被超价 · 可再次出价</div>}
         {/* one fact a line, none of them allowed to wrap:
@@ -775,6 +791,14 @@ export default function Market() {
           <p style={{ margin: '0 0 4px' }}>
             等级：+{confirmList.level}（{confirmList.hadDuplicates ? '重复/备用卡' : '唯一一张'}）
           </p>
+          {(() => {
+            const out = leavingCopy(confirmList.cardId, g.cards[confirmList.cardId])
+            return out.evo ? (
+              <p className="evo-up" style={{ margin: '0 0 4px' }}>
+                进修 {out.evo.n} 次（{evoAdds(out.evo)}），进修跟着卡一起卖。
+              </p>
+            ) : null
+          })()}
           <p style={{ margin: '0 0 4px' }}>起拍价：{money(confirmList.ask)} 金币</p>
           <p style={{ margin: '0 0 4px' }}>
             一口价：{confirmList.buyout != null ? `${money(confirmList.buyout)} 金币` : '未设置'}
@@ -801,6 +825,14 @@ export default function Market() {
           onChange={setSellCard}
           disabled={busy}
         />
+        {sellCard && (() => {
+          const out = leavingCopy(sellCard, g.cards[sellCard])
+          return out.evo ? (
+            <p className="tiny evo-up" style={{ margin: '6px 0 0' }}>
+              挂出去的是进修过的 +{out.level}（{evoAdds(out.evo)}），进修跟着卡一起卖。
+            </p>
+          ) : null
+        })()}
         {lockedOut > 0 && <p className="tiny faint" style={{ margin: '4px 0 0' }}>
           另有 {lockedOut} 张卡暂时不能挂牌：{BOUND_PULLS > 0 ? `新号前 ${BOUND_PULLS} 抽开出的是绑定卡，可以用、升级、分解，不能交易；` : ''}买来、换来或商店买的卡 {HOLD_DAYS} 天后才能再卖或再换。
         </p>}

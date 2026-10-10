@@ -54,6 +54,7 @@ export function RiftBanner({ page, owned, total, echo }: RiftBannerProps) {
     minigames: ['峡谷训练营', '热热手，把反应、判断和操作练起来。'],
     squad: ['你的首发五人', '选手、位置、队伍羁绊，共同决定阵容的实力。'],
     collection: ['我的藏卡室', '收藏高光，培养你的核心选手。'],
+    evolve: ['选手进修', '满级卡继续成长：选一项能力，喂五张重复卡。'],
     ladder: ['向更高处进发', '带上你的阵容，开启下一场天梯对决。'],
     friends: ['好友大厅', '找到一起收卡、切磋的伙伴。'],
     wechat: ['猪之家微信群', '扫码进群，聊阵容、找队友，也欢迎提出游戏建议。'],
@@ -121,6 +122,7 @@ function getIcon(key: string): React.ReactNode {
   wechat:'M21 11.5a8 8 0 0 1-8 8 9 9 0 0 1-3-.5L5 21l1.5-4A8 8 0 1 1 21 11.5zM8 10h8M8 14h5',
   collection:'M3 7h13v14H3V7zm5-4h13v14m-14-5h5m-5 4h5',
   squad:'M9 3h6v6H9V3zM2 15h7v6H2v-6zm13 0h7v6h-7v-6zm-3-6v3m-7 3v-3h14v3',
+  evolve:'M7 4h10v16H7z M12 16V9 M9 11.5 12 8.5l3 3',
   dossier:'M12 5C8 2 4 2 2 3v17c4-2 7-1 10 1 3-2 6-3 10-1V3c-4-1-7 0-10 2zm0 0v16',
   account:'M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-8 18v-2a8 8 0 0 1 16 0v2',
  }

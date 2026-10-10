@@ -17,12 +17,10 @@ import { WORLD_PLAYERS } from './world'
 import { WORLD_TEAMS, WORLD_ANALYSTS, EXTRA_COACHES, FORMER_COACHES } from './teams'
 import { DOSSIER, coachDossier, faceUrl, legendPhoto } from './dossier'
 import { LEGENDS } from './legends'
-// which players each coach actually coached: a staff role at a club in months the
-// player was on it — scripts/build_coached.py, off vlr.gg careers and Liquipedia tenure
-import COACHED_JSON from '../data/coached.json'
 import ECHO_JSON from '../data/echoCards.json'
 import S16_JSON from '../data/s16.json'
 import S16_RATINGS from '../data/s16Ratings.json'
+import COACH_TITLE_CLUBS from '../data/coachTitleClubs.json'
 import type { Legend } from './legends'
 import { decodeDisplayName } from './displayText'
 import { clamp } from './rng'
@@ -165,15 +163,63 @@ export interface CoachCard {
   spec?: string
   /** no head-coaching job at present (clubId null): shown as 自由身 */
   free?: boolean
-  /** a 自由身 coach's championship clubs (team ids): named on the card, and his same-club bond */
+  /**
+   * The clubs he won titles with as head coach (team ids, H:TAG for a club that is gone): named on the card, and
+   * a same-club bond with their players (owner 2026-10-05: 冠军教练和他的冠军俱乐部有默契；没有冠军的执教经历不算)
+   */
   titleClubs?: string[]
 }
 
-/** A 自由身 coach's championship clubs as tags, for the card detail. */
+/** A coach's championship clubs as tags, for the card detail. */
 export const titleClubTags = (c: CoachCard): string[] =>
-  (c.titleClubs ?? []).map((id) => WORLD_TEAMS.find((t) => t.id === id)?.tag ?? id)
+  (c.titleClubs ?? []).map((id) => WORLD_TEAMS.find((t) => t.id === id)?.tag ?? id.replace(/^H:/, ''))
+const TITLE_CLUBS = (COACH_TITLE_CLUBS as { clubs: Record<string, string[]> }).clubs
+const TITLE_ROWS = (COACH_TITLE_CLUBS as { titles: Record<string, { club: string; kind: string; event: string }[]> }).titles
 
-/** Same club for a coach bond: the club he coaches, or — for a 自由身 coach — a club he won titles with. */
+/** 'LCK 2017 Summer' -> ['LCK', '2017 夏季赛']; the league and the season, in Chinese */
+function leagueTitleCn(event: string): [string, string] {
+  const m = /^(LTA North|LTA South|EU LCS|Champions|CBLOL Cup|[A-Z]+)\s+(.*)$/.exec(event)
+  const league = !m ? event : m[1] === 'Champions' ? 'OGN' : m[1] === 'LTA North' ? 'LTA 北区' : m[1] === 'LTA South' ? 'LTA 南区' : m[1] === 'CBLOL Cup' ? 'CBLOL 杯赛' : m[1]
+  const rest = (m ? m[2] : '')
+    .replace(/Season Finals/, '年度总决赛').replace(/Grand Finals/, '总决赛').replace(/Season Kickoff/, '开幕赛').replace(/Mid Season/, '季中赛')
+    .replace(/Championship/, '总决赛').replace(/Opening/, '开幕赛').replace(/Spring/, '春季赛').replace(/Summer/, '夏季赛').replace(/Winter/, '冬季赛')
+    .replace(/Split (\d)/, (_, n: string) => `第${'一二三四'[Number(n) - 1] ?? n}赛段`).replace(/ Season$/, ' 赛季')
+  return [league, rest]
+}
+
+/** when in the year a title was decided, for listing them in order ('Champions 2013-14 Winter' after 2013 Summer) */
+function titleWhen(event: string): number {
+  const y = /(\d{4})(-\d{2})?/.exec(event)
+  const order = ['Winter', 'Kickoff', 'Lock-In', 'Versus', 'Opening', 'Spring', 'Split 1', 'Mid Season', 'Split 2', 'Summer', 'Split 3', 'Season', 'Championship', 'Grand Finals', 'Season Finals', 'MSI', 'Worlds', 'Cup']
+  const at = order.reduce((best, k, i) => (event.includes(k) ? i : best), -1)
+  return (y ? Number(y[1]) + (y[2] ? 0.5 : 0) : 0) * 100 + at
+}
+
+/**
+ * What he won with each title club, one line per club (owner 2026-10-05: 「写清楚是什么冠军，S 冠还是赛区冠军」):
+ * 'IG：S8 世界赛冠军' · 'GEN：MSI 冠军（2024、2025）、LCK 冠军（2024 春季赛、2025 赛季）'.
+ */
+export function coachTitleLines(c: CoachCard): string[] {
+  const rows = [...(TITLE_ROWS[c.name] ?? [])].sort((x, y) => titleWhen(x.event) - titleWhen(y.event))
+  return (c.titleClubs ?? []).map((club) => {
+    const mine = rows.filter((r) => r.club === club)
+    const parts: string[] = []
+    const worlds = mine.filter((r) => r.kind === 'worlds').map((r) => `S${Number(r.event.slice(-4)) - 2010}`)
+    if (worlds.length) parts.push(`${worlds.join('、')} 世界赛冠军`)
+    const msi = mine.filter((r) => r.kind === 'msi').map((r) => r.event.slice(-4))
+    if (msi.length) parts.push(`MSI 冠军（${msi.join('、')}）`)
+    const leagues = new Map<string, string[]>()
+    for (const r of mine.filter((x) => x.kind === 'league')) {
+      const [league, season] = leagueTitleCn(r.event)
+      leagues.set(league, [...(leagues.get(league) ?? []), season])
+    }
+    for (const [league, seasons] of leagues) parts.push(`${league}${/[A-Za-z]$/.test(league) ? ' ' : ''}冠军（${seasons.join('、')}）`)
+    const tag = WORLD_TEAMS.find((t) => t.id === club)?.tag ?? `${club.replace(/^H:/, '')}（已解散）`
+    return `${tag}：${parts.join('、')}`
+  })
+}
+
+/** Same club for a coach bond: the club he coaches, or a club he won titles with as head coach. */
 export function coachSharesClub(p: PlayerCard, coach: CoachCard): boolean {
   if (sameClubLineage(p, coach)) return true
   return !!coach.titleClubs?.some((id) => sameClubLineage(p, { clubId: id }))
@@ -275,6 +321,7 @@ function coachCard(c: { name: string } & CoachAbilities, club: Pick<CoachCard, '
     ...club,
     ...abilities,
     rating, rarity: coachRarityOf(rating),
+    ...(TITLE_CLUBS[c.name] ? { titleClubs: TITLE_CLUBS[c.name] } : {}),
     ...extra,
   }
 }
@@ -299,12 +346,7 @@ function buildCoachCards(): CoachCard[] {
   for (const f of FORMER_COACHES) {
     if (seen.has(f.coach.name)) continue
     seen.add(f.coach.name)
-    const titleClubs = f.titleClubs.map((tag) => {
-      const t = WORLD_TEAMS.find((x) => x.tag === tag && x.tier === 1)
-      if (!t) throw new Error(`coachChanges: ${f.coach.name} 的夺冠俱乐部 ${tag} 不在 world.json`)
-      return t.id
-    })
-    out.push(coachCard(f.coach, { clubId: null, clubTag: null, region: f.region as Region }, { free: true, titleClubs }))
+    out.push(coachCard(f.coach, { clubId: null, clubTag: null, region: f.region as Region }, { free: true }))
   }
   // the five real analysts are cards too — they coach a different way, and
   // there are few enough of them to be worth chasing
@@ -560,9 +602,6 @@ export const echoTeamName = (e: Pick<EchoInfo, 'team' | 'teamNow'>): string | nu
 export const isEchoCard = (c: Card | undefined): boolean => c?.kind === 'player' && !!c.echo
 
 const byId = new Map(ALL_CARDS.map((c) => [c.id, c]))
-const COACHED: Map<string, Set<string>> = new Map(
-  Object.entries(COACHED_JSON as Record<string, string[][]>).map(([coach, rows]) => [coach, new Set(rows.map((r) => r[0]))]),
-)
 /** A retired duplicate id (MERGED_CARDS) still finds the card it was folded into — a market row or an old save may name it. */
 export const cardById = (id: string): Card | undefined => byId.get(id) ?? byId.get(canonicalCardId(id))
 
@@ -625,8 +664,15 @@ export const SALVAGE: Record<Rarity, number> = {
 export const ratingAt = (base: number, level: number): number =>
   base + growthOf(level) * LEVEL_GAIN
 
-/** the levels a card has actually earned, 0–MAX_LEVEL */
-export const growthOf = (level: number): number => Math.max(0, Math.min(MAX_LEVEL, level))
+/**
+ * How far above +5 进修 can take a card, in levels (engine/evolve.ts). The most a full 进修 can be worth is five
+ * of three points on the attribute a position weighs most — a 上单's 操作, 0.28 in ROLE_WEIGHT (player.ts) — which
+ * is 4.2 rating, 2.8 levels at LEVEL_GAIN 1.5; three levels holds it whole.
+ */
+export const EVO_LEVEL_ROOM = 3
+
+/** the levels a card has actually earned, 0–MAX_LEVEL, and 进修 above it as a fraction (evolve.ts playLevel) */
+export const growthOf = (level: number): number => Math.max(0, Math.min(MAX_LEVEL + EVO_LEVEL_ROOM, level))
 
 /** one ability point is a hundred 战力 */
 export const POWER_PER_POINT = 100
@@ -702,7 +748,7 @@ export interface ChemReport {
 export interface CoachLink {
   slot: number
   /** Strongest reason shown to the player; country beats region, as for player pairs. */
-  why: 'club' | 'coached' | 'nat' | 'region'
+  why: 'club' | 'nat' | 'region'
   value: number
 }
 
@@ -775,27 +821,20 @@ export function chemistry(squad: Squad): ChemReport {
   if (isCoachCard(coach)) {
     const players = cards.filter(isPlayerCard)
     const sameClub = players.filter((p) => coachSharesClub(p, coach)).length
-    // Men this coach has actually coached before, somewhere: a staff role at a
-    // club in months the player was on it. Not everyone who has ever passed
-    // through a club he coaches — 「只有真的和那位教练同时期呆过的人才有默契
-    // 值，而不是在同一个俱乐部过就有」. Worth less than the men he coaches now,
-    // and a man he coaches now is never counted a second time here.
-    const coachedBefore = players.filter((p) => !coachSharesClub(p, coach)
-      && !!COACHED.get(coach.name)?.has(p.playerId)).length
+    // Only his club now and the clubs he won titles with (coachSharesClub). Men he coached somewhere else
+    // count for nothing (owner 2026-10-05: 「带过的选手加分去掉」).
     cards.forEach((p, slot) => {
       if (!isPlayerCard(p)) return
       const club = coachSharesClub(p, coach)
-      const before = !club && !!COACHED.get(coach.name)?.has(p.playerId)
       const region = sameGameRegion(p.region, coach.region)
       const nat = !!p.nat && !!coach.nat && natCountry(p.nat) === natCountry(coach.nat)
-      const value = (club ? 2 : 0) + (before ? 1 : 0) + (nat ? 2 : region ? 1 : 0)
+      const value = (club ? 2 : 0) + (nat ? 2 : region ? 1 : 0)
       if (value) {
         coachBonus += value
-        coachLinks.push({ slot, why: club ? 'club' : before ? 'coached' : nat ? 'nat' : 'region', value })
+        coachLinks.push({ slot, why: club ? 'club' : nat ? 'nat' : 'region', value })
       }
     })
     if (sameClub >= 2) notes.push(`${coach.name} 与 ${sameClub} 名选手触发同队／队伍传承羁绊`)
-    if (coachedBefore > 0) notes.push(`${coach.name} 以前还带过其中 ${coachedBefore} 人`)
   }
 
   const misfits: number[] = []

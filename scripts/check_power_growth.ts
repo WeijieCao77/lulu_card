@@ -20,7 +20,7 @@
 import { createHash } from 'node:crypto'
 import { buildArena, playRivalMatch, ARENA_TEAM } from '../src/engine/arena'
 import {
-  ALL_CARDS, COACH_LEVEL_LIFT, MAX_LEVEL, POWER_PER_LEVEL, POWER_PER_SQUAD_POINT, cardPower, growthOf,
+  ALL_CARDS, COACH_LEVEL_LIFT, EVO_LEVEL_ROOM, MAX_LEVEL, POWER_PER_LEVEL, POWER_PER_SQUAD_POINT, cardPower, growthOf,
   isCoachCard, isPlayerCard, ratingAt, squadPaper, squadPower, squadRating,
 } from '../src/engine/cards'
 import { migrateGacha, newGacha, levelOf } from '../src/engine/gacha'
@@ -51,13 +51,14 @@ const coaches = ALL_CARDS.filter(isCoachCard)
     for (let l = 0; l <= MAX_LEVEL; l++) {
       if (cardPower(c, l) !== 100 * c.rating + POWER_PER_LEVEL * l) off++
     }
-    if (cardPower(c, MAX_LEVEL + 3) !== cardPower(c, MAX_LEVEL)) off++
+    // 进修 (evolve.ts) rides above +5 as a fraction, up to EVO_LEVEL_ROOM; nothing past that counts
+    if (cardPower(c, MAX_LEVEL + EVO_LEVEL_ROOM + 3) !== cardPower(c, MAX_LEVEL + EVO_LEVEL_ROOM)) off++
     if (ratingAt(c.rating, MAX_LEVEL) !== c.rating + MAX_LEVEL) off++
   }
   check(`${players.length} 张选手卡：每级战力 +${POWER_PER_LEVEL}，满级 +${POWER_PER_LEVEL * MAX_LEVEL}，规则评分不再封 99`, off === 0, `${off} 处不对`)
   const grows = coaches.every((c) => cardPower(c, MAX_LEVEL) === 100 * c.rating + POWER_PER_LEVEL * MAX_LEVEL)
   check(`${coaches.length} 张教练卡：每级战力 +${POWER_PER_LEVEL}，和选手一样`, grows)
-  check('growthOf 只认 0～5 级', growthOf(-2) === 0 && growthOf(3) === 3 && growthOf(9) === MAX_LEVEL)
+  check(`growthOf 只认 0～${MAX_LEVEL} 级，加进修最多 ${EVO_LEVEL_ROOM} 级`, growthOf(-2) === 0 && growthOf(3) === 3 && growthOf(99) === MAX_LEVEL + EVO_LEVEL_ROOM)
 }
 
 // ---- the +0 state: original uncoached fixtures, coached fixtures updated for

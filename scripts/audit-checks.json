@@ -806,5 +806,15 @@
     "runtime": "tsx",
     "file": "scripts/check_cup_daily_schedule.ts",
     "estimatedSeconds": 15
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_evolve.ts",
+    "estimatedSeconds": 10
+  },
+  {
+    "runtime": "tsx",
+    "file": "scripts/check_evo_trade.ts",
+    "estimatedSeconds": 8
   }
 ]

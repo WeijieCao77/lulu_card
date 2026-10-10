@@ -49,6 +49,8 @@ function framing(ign: string, photo: { w: number; h: number } | null): { pos: st
 export interface EchoCardProps {
   card: PlayerCard
   level?: number
+  /** trained past +5 (engine/evolve.ts): the +5 gets an arrow */
+  evolved?: boolean
   dupes?: number
   size?: 'sm' | 'md' | 'lg'
   selected?: boolean
@@ -57,7 +59,7 @@ export interface EchoCardProps {
   footer?: string
 }
 
-export function EchoCard({ card, level = 0, dupes = 0, size = 'md', selected, dimmed, onClick, footer }: EchoCardProps) {
+export function EchoCard({ card, level = 0, evolved = false, dupes = 0, size = 'md', selected, dimmed, onClick, footer }: EchoCardProps) {
   const echo = card.echo!
   const f = framing(card.ign, echo.photo)
   const style = { '--re-portrait-position': f.pos, '--re-origin': f.origin, '--re-zoom': f.zoom } as CSSProperties
@@ -70,7 +72,7 @@ export function EchoCard({ card, level = 0, dupes = 0, size = 'md', selected, di
   return <div
     className={`cardface retired-echo ${RARITY_CLASS[card.rarity] ?? 're-bronze'} s-${size}${selected ? ' sel' : ''}${dimmed ? ' dim' : ''}${onClick ? ' tap' : ''}`}
     style={style} role={onClick ? 'button' : undefined} tabIndex={onClick ? 0 : undefined}
-    title={`峡谷回响 · ${card.ign} · ${RARITY_CN[card.rarity]} ${card.rating}${level ? `（+${level}）` : ''}`}
+    title={`峡谷回响 · ${card.ign} · ${RARITY_CN[card.rarity]} ${card.rating}${level ? `（+${level}${evolved ? '，进修过' : ''}）` : ''}`}
     onClick={onClick}
     onKeyDown={(e) => { if (onClick && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onClick() } }}>
     <div className="re-inner">
@@ -82,7 +84,7 @@ export function EchoCard({ card, level = 0, dupes = 0, size = 'md', selected, di
         <b>{MARK[card.rarity]}</b>
         <span>{Array.from({ length: BARS[card.rarity] ?? 1 }, (_, i) => <i key={i} />)}</span>
       </div>
-      <div className="re-rating"><strong>{card.rating}</strong><span>{card.role}</span>{level > 0 && <i>+{level}</i>}</div>
+      <div className="re-rating"><strong>{card.rating}</strong><span>{card.role}</span>{level > 0 && <i>+{level}{evolved && <em className="evo-mark" title="进修过">↑</em>}</i>}</div>
       <div className="re-portrait">
         {card.face && <img src={card.face} alt={card.ign} loading="lazy" decoding="async" />}
       </div>

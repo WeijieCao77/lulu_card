@@ -130,7 +130,18 @@ function flip(k: NonNullable<ReturnType<typeof audio>>, at: number, g: number) {
 
 const C4 = 261.63, E4 = 329.63, G4 = 392, B4 = 493.88, C5 = 523.25, D5 = 587.33, E5 = 659.25, G5 = 783.99, C3 = 130.81, G3 = 196
 
+/**
+ * Sound is decoration: it must never stop the pack opening. Some phone browsers throw from a Web Audio call (a
+ * suspended or closed context, a value one engine accepts and another rejects), and the cue runs inside the altar's
+ * open handler — a throw there left the deck sealed with the pack already paid for (reported 2026-10-05:
+ * 「回响包显示获得了但是没法打开」, and several hundred script errors a day at this spot). Every cue is now silent on
+ * failure.
+ */
 export function playPackCue(cue: PackCue): void {
+  try { playCue(cue) } catch { /* no sound this time; the opening goes on */ }
+}
+
+function playCue(cue: PackCue): void {
   const k = audio()
   if (!k) return
   const now = k.ctx.currentTime + .01
@@ -202,6 +213,10 @@ const anticipated = new WeakSet<object>()
  * Hearthstone does before a legendary. Once per card (`token` is anything unique to it).
  */
 export function playAnticipation(rarity: string, token: object): void {
+  try { anticipate(rarity, token) } catch { /* silent on failure, see playPackCue */ }
+}
+
+function anticipate(rarity: string, token: object): void {
   if (rarity !== 'gold' && rarity !== 'mythic') return
   if (anticipated.has(token)) return
   anticipated.add(token)

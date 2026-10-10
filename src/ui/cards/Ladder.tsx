@@ -4,7 +4,7 @@ import { Panel } from '../common'
 import MatchReport from './Report'
 import {
   DIVISIONS, MASTER_DIV, MASTER_TITLES, PACKS, STAMINA_COST, STAMINA_MAX, canPlay,
-  ladderOpponent, ladderOf, levelOf, masterTitle, oppBumpFor, pendingOpponent,
+  ladderOpponent, ladderOf, playLevelOf, masterTitle, oppBumpFor, pendingOpponent,
   leagueEntry, ladderName, ladderSquadOf, LADDER_LEAGUES, LEAGUE_RULES,
   rankName, staminaFillHours, staminaNow, staminaRate, starsOnTier, tierStars,
 } from '../../engine/gacha'
@@ -43,7 +43,7 @@ export default function Ladder() {
   })
   const pick = (k: LadderLeague) => { setLeague(k); setShown(null); try { localStorage.setItem('luluka-ladder', k) } catch { /* private window */ } }
   const rule = LEAGUE_RULES[league]
-  const level = (id: string) => levelOf(g, id)
+  const level = (id: string) => playLevelOf(g, id)
   // the open ladder plays the 卡组; a metal one its own lineup if it has one (CupLineup)
   const lineup = ladderSquadOf(g, league)
   const filled = lineup.slots.filter(Boolean).length

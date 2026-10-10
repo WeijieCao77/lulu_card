@@ -10,7 +10,8 @@
  * club it belongs to: a returning player should recognise their own game from
  * the front page, not wonder where it went.
  */
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
+import { lazyReload } from './lazyReload'
 import { readCareerPreview } from '../engine/savePreview'
 import { homeCrestUrl, HOME_COUNTS } from '../engine/homeClubs'
 import { ENDING_COUNT } from '../engine/endings'
@@ -34,7 +35,7 @@ import ThemeToggle from './ThemeToggle'
  * chosen a game, in order to draw a chip that says 「创建账号」. Lazy, it costs
  * nothing until somebody taps it.
  */
-const Account = lazy(() => import('./Account'))
+const Account = lazyReload(() => import('./Account'))
 
 type Mode = 'home' | 'career' | 'cards'
 
