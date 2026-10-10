@@ -54,6 +54,9 @@ CHAMPION_BONUS = 2                      # 站长原有规则：冠军队每人 +
 PLACEMENT_BONUS = {                     # 站长 2026-10-10：走得越远越强
     "champion": 4, "runnerup": 3, "sf": 2, "qf": 1, "swiss": 0, "playin": -1,
 }
+PLACEMENT_CAP = {                       # 站长 2026-10-10「早出局有上限」：四强以上才能到 90
+    "playin": 87, "swiss": 88, "qf": 89,
+}
 PLACEMENT_CN = {"champion": "冠军", "runnerup": "亚军", "sf": "四强", "qf": "八强", "swiss": "瑞士轮出局", "playin": "入围赛出局"}
 PLACEMENT_ORDER = ("playin", "swiss", "qf", "sf", "runnerup", "champion")
 PLACEMENT_MAX_TEAMS = {"champion": 1, "runnerup": 1, "sf": 2, "qf": 4}
@@ -294,7 +297,7 @@ def performance(games: list[dict], base_of, stages: dict[str, list[str]]) -> dic
 
 def rate_player(base_rating: int, perf: float, placement: str, champion: bool) -> int:
     x = base_rating + perf + PLACEMENT_BONUS[placement] + (CHAMPION_BONUS if champion else 0)
-    return int(clamp(round_half_up(x), CARD_MIN, CARD_MAX))
+    return int(clamp(round_half_up(x), CARD_MIN, PLACEMENT_CAP.get(placement, CARD_MAX)))
 
 
 def make_entry(ign: str, b: dict, rating: int, games: int, placement: str, out_day: str,

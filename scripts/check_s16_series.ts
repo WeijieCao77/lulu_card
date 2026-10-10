@@ -9,7 +9,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { ALL_CARDS, BASE_PLAYER_CARDS, GOLD_AT, PLAYER_CARDS, S16_CARDS, SILVER_AT, buildS16Cards, cardById, isS16Card, personOf, rarityOf, s16Hidden } from '../src/engine/cards'
-import { FULL_SET_CARDS, PACKS, S16_SET_REWARDS, autoSquad, collectionProgress, mergeClientFields, migrateGacha, newGacha, openPack, s16SetProgress, settleS16Fmvp } from '../src/engine/gacha'
+import { FULL_SET_CARDS, PACKS, S16_SET_REWARDS, autoSquad, collectionProgress, mergeClientFields, migrateGacha, newGacha, openPack, s16SetProgress, settleS16Fmvp, s16PackDef, S16_PACK_AFTER_DAY } from '../src/engine/gacha'
 import { runAction, squadForPlay } from '../src/engine/cardActions'
 import { matchesFilter } from '../src/engine/cardFilter'
 import { rollShop } from '../src/engine/dailyShop'
@@ -55,7 +55,7 @@ check('每日商店不出 S16 卡', !inShop)
 
 // the pack
 const def = PACKS.s16
-check('S16 包：2600 金币三张、等概率、卖到 11/21', def.cost === 2600 && def.draws === 3 && def.uniform === true && def.until === '2026-11-21' && def.shop === true)
+check('S16 包：2600 金币三张、比赛期间等概率、S 赛结束后还卖一阵（暂定 11/28 下架）', def.cost === 2600 && def.draws === 3 && def.uniform === true && def.until === '2026-11-28' && def.shop === true)
 {
   const g = newGacha('p', 'p', day); g.coins = 2600 * 3000
   const pity = g.pity, dry = g.mythicDry
@@ -66,11 +66,11 @@ check('S16 包：2600 金币三张、等概率、卖到 11/21', def.cost === 260
   check('每位选手都抽得到，次数接近（等概率）', seen.size === S16_CARDS.length && Math.min(...counts) > 6000 / S16_CARDS.length * 0.6 && Math.max(...counts) < 6000 / S16_CARDS.length * 1.4, `${Math.min(...counts)}–${Math.max(...counts)}`)
   check('不动保底计数', g.pity === pity && g.mythicDry === dry)
   let refused = false
-  try { openPack(g, 's16', 'coins', '2026-11-22') } catch { refused = true }
+  try { openPack(g, 's16', 'coins', '2026-11-29') } catch { refused = true }
   g.packs.s16 = 1
   let opened = false
-  try { opened = openPack(g, 's16', 'pack', '2026-11-22').length === 3 } catch { opened = false }
-  check('11/22 起买不到，手里的包还能开', refused && opened)
+  try { opened = openPack(g, 's16', 'pack', '2026-11-29').length === 3 } catch { opened = false }
+  check('下架后买不到，手里的包还能开', refused && opened)
 }
 
 // benched until revealed
@@ -197,7 +197,10 @@ check('交易和普通卡一视同仁：按金银铜限价（铜 2000、银 5000
   check('FMVP：发过之后再来的同一张换彩卡分解价，不再给十连包', late?.packs === 0 && g.coins === coins + 4000 && g.packs.ten === 4 && g.cards[fm.id].dupes === 0)
   const h = newGacha('S16-FMVP-1', 'f', day)
   h.cards = { [fm.id]: { id: fm.id, level: 0, dupes: 0, seen: 1, got: day } as never }
-  check('FMVP：只有一张的什么都不用换', settleS16Fmvp(h, fm) === null && !h.s16FmvpPaid)
+  check('FMVP：只有一张的什么都不用换，但记为已结算', settleS16Fmvp(h, fm) === null && h.s16FmvpPaid === 0)
+  h.cards[fm.id].dupes = 2
+  const hc = h.coins
+  check('FMVP：结算后才买到/开到的同一张，换分解价金币，不给十连包', settleS16Fmvp(h, fm)?.packs === 0 && (h.packs.ten ?? 0) === 0 && h.coins === hc + 8000)
   check('FMVP 没确定之前不动重复卡', settleS16Fmvp(g, undefined) === null)
 }
 
@@ -295,6 +298,14 @@ function s16Script(py: string) {
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
+}
+
+// after the event (owner 2026-10-10): still on sale, numbers frozen, odds by metal like 峡谷回响 plus the FMVP 彩卡
+{
+  check('比赛期间：每位选手机会一样', s16PackDef('2026-10-20').uniform === true)
+  const after = s16PackDef(S16_PACK_AFTER_DAY)
+  check('S 赛结束后：按金银铜爆率（金 12%、银 38%、保底银）+ 彩卡爆率', !after.uniform && after.gold === 0.12 && after.silver === 0.38 && after.floor === 'silver' && after.mythic > 0)
+  check('S 赛结束后还在卖（下架日在决赛之后）', !!PACKS.s16.until && PACKS.s16.until > S16_PACK_AFTER_DAY)
 }
 
 console.log(bad ? `\n${bad} 处不对` : '\n全部通过')

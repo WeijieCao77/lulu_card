@@ -15,6 +15,7 @@ import type { Region, Role } from './types'
 import type { SeoulRouteState } from './seoulRoute'
 import { cleanEchoDaily, cleanEchoQuiz } from './echoQuiz'
 import { cleanS16Predict } from './s16Predict'
+import S16_MARKET from '../data/s16Market.json'
 import type { S16PredictState } from './s16Predict'
 import type { EchoDailyState, EchoQuizState } from './echoQuiz'
 import type { WeeklySeriesPick } from './weeklySeries'
@@ -126,7 +127,9 @@ export const PACKS: Record<PackKind, PackDef> = {
   s16: {
     kind: 's16', name: 'S16 世界赛包', pool: 's16',
     blurb: 'S16 参赛选手，三张卡，每位选手抽中的机会一样。数值随 S16 比赛揭晓和变化。',
-    cost: 2600, draws: 3, mythic: 0, gold: 0, silver: 0, shop: true, uniform: true, until: '2026-11-21',
+    // on sale past the final (owner 2026-10-10: 「S 赛结束后依然售卖…大概 S 赛结束 2 周后」下架 — the date is the owner's to
+    // give; 11-28 is two weeks after the final until then). After the final it deals like 峡谷回响 plus the FMVP 彩卡: s16PackDef
+    cost: 2600, draws: 3, mythic: 0, gold: 0, silver: 0, shop: true, uniform: true, until: '2026-11-28',
   },
   echoScout: {
     kind: 'echoScout', name: '回响试训包', pool: 'echo',
@@ -1234,6 +1237,25 @@ export interface Pulled {
 }
 
 /**
+ * The S16 pack once the event is over (owner 2026-10-10): every number is frozen, so it deals like an ordinary pack by
+ * metal — the 峡谷回响 pack's 12% gold / 38% silver with a silver floor — plus the FMVP's 彩卡 at the ordinary three-card
+ * packs' 彩卡 rate: 「继续售卖也有可能开出彩卡…就和正常的卡包一样的爆率，类似老将回归只是多了彩卡」. The switch is the
+ * S16 market's `normalFrom` day (src/data/s16Market.json, Beijing); before it, every player is equally likely.
+ */
+export const S16_PACK_AFTER_DAY = new Date(Date.parse(S16_MARKET.normalFrom) + 8 * 3600_000).toISOString().slice(0, 10)
+export function s16PackDef(today?: string): PackDef {
+  if (!today || today < S16_PACK_AFTER_DAY) return PACKS.s16
+  return {
+    ...PACKS.s16, uniform: false, mythic: 0.0004, gold: 0.12, silver: 0.38, floor: 'silver',
+    blurb: 'S16 世界赛已结束，数值全部定格。三张 S16 卡，至少一张银卡，按金银铜爆率，有机会开出 FMVP 彩卡。',
+  }
+}
+function s16AfterPool(): Record<Rarity, readonly Card[]> {
+  const by = (r: Rarity) => S16_CARDS.filter((c) => c.rarity === r)
+  return { mythic: by('mythic'), gold: by('gold'), silver: by('silver'), bronze: by('bronze') }
+}
+
+/**
  * Deal one pack.
  *
  * Mutates the account: spends the pack (or the coins), advances pity, and
@@ -1244,7 +1266,7 @@ export function openPack(
 ): Pulled[] {
   if (!isPackKind(kind) || kind === 'seoul2024') throw new Error('没有这种卡包')
   if (isLegacyRegionPack(kind)) throw new Error('这个赛区包已并入其他包，请刷新页面')
-  const def = PACKS[kind]
+  const def = kind === 's16' ? s16PackDef(today) : PACKS[kind]
   if (payWith === 'pack') {
     if ((g.packs[kind] ?? 0) < 1) throw new Error('没有这种卡包')
     g.packs[kind] = (g.packs[kind] ?? 0) - 1
@@ -1257,7 +1279,7 @@ export function openPack(
   }
 
   const { rng, done } = roll(g)
-  const pool = POOLS[def.pool]
+  const pool = def.pool === 's16' && !def.uniform ? s16AfterPool() : POOLS[def.pool]
   // a pack that promises a 彩卡 every time is not a lottery, and the pity
   // counters belong to the lotteries: it neither resets them nor counts
   const certain = def.mythic >= 1
@@ -2843,14 +2865,17 @@ export function grantEchoGift(g: GachaState, now = Date.now()): void {
  */
 export function settleS16Fmvp(g: GachaState, fmvp: PlayerCard | undefined = S16_CARDS.find((c) => c.s16?.fmvp)): { packs: number; coins: number } | null {
   // the FMVP's card, once s16Ratings.json names him
-  const owned = fmvp ? g.cards[fmvp.id] : undefined
-  if (!fmvp || !owned) return null
+  if (!fmvp) return null
+  const owned = g.cards[fmvp.id]
+  // every account is settled the first time it is read after the result — holding copies or not — so a copy bought or
+  // pulled later is never paid as a 十连包 (otherwise an account with one copy could buy more and cash them in)
+  if (!owned) { if (g.s16FmvpPaid === undefined) g.s16FmvpPaid = 0; return null }
   const spares = Array.isArray((owned as { spares?: unknown }).spares) ? ((owned as { spares?: unknown[] }).spares ?? []).length : 0
   const extra = wholeCount(owned.dupes) + spares
-  if (!extra) return null
+  if (!extra) { if (g.s16FmvpPaid === undefined) g.s16FmvpPaid = 0; return null }
   owned.dupes = 0
   delete (owned as { spares?: unknown }).spares
-  if (!g.s16FmvpPaid) {
+  if (g.s16FmvpPaid === undefined) {
     g.packs.ten = (g.packs.ten ?? 0) + extra
     g.s16FmvpPaid = extra
     note(g, `S16 FMVP：${cardName(fmvp)} 的卡升级成彩卡，多出来的 ${extra} 张换成十连包 ×${extra}`)
@@ -2907,7 +2932,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   const sp = cleanS16Predict(g.s16Predict)
   if (sp) g.s16Predict = sp
   else delete g.s16Predict
-  if (g.s16FmvpPaid !== undefined && !(Number.isFinite(g.s16FmvpPaid) && g.s16FmvpPaid > 0)) delete g.s16FmvpPaid
+  if (g.s16FmvpPaid !== undefined && !(Number.isFinite(g.s16FmvpPaid) && g.s16FmvpPaid >= 0)) delete g.s16FmvpPaid
   settleS16Fmvp(g)
   if (g.s16Set !== undefined) {
     const n = Math.trunc(Number(g.s16Set))
