@@ -234,6 +234,9 @@ export default function Packs() {
       </div>
 
 
+      {/* S16 世界赛 first while it is the new series (2026-10-12), then 峡谷回响, then the ordinary shelf */}
+      <S16Section open={(k, pay) => void open(k, pay)} busy={busy || unknownError} today={today} />
+
       {/* 峡谷回响: its own pack and the launch quiz, above the ordinary shelf (owner 2026-10-04) */}
       <div id={ECHO_SECTION_ID} />
       <Panel title="峡谷回响" actions={<span className="tiny muted">退役老将回归 · {PACKS.echo.cost} 金币三张</span>}>
@@ -265,8 +268,6 @@ export default function Packs() {
         <style>{`.echo-hero{display:flex;gap:16px;align-items:center}.echo-hero-art{width:76px;flex:none}.echo-hero-copy{display:flex;flex-direction:column;gap:10px;min-width:0}`}</style>
       </Panel>
       {quiz && <EchoQuiz onClose={() => setQuiz(false)} />}
-
-      <S16Section open={(k, pay) => void open(k, pay)} busy={busy || unknownError} today={today} />
 
       <Panel
         title="卡包"

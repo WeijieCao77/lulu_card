@@ -1,6 +1,7 @@
 import React from 'react';
 import './riftChrome.css';
 import EchoBanner from './cards/echo/EchoBanner';
+import S16Banner, { s16OnSale } from './cards/s16/S16Banner';
 
 interface RiftNavigationProps {
   tabs: { key: string; label: string; beta?: boolean; group?: string }[];
@@ -41,10 +42,13 @@ interface RiftBannerProps {
   total: number;
   /** the pack page's banner is the 峡谷回响 ad: its 图鉴 count and whether the quiz is finished */
   echo?: { owned: number; quizDone: boolean };
+  /** while the S16 世界赛 pack is on sale the banner is the S16 ad instead: its 图鉴 count and the server's day */
+  s16?: { owned: number; today: string };
 }
 
-export function RiftBanner({ page, owned, total, echo }: RiftBannerProps) {
+export function RiftBanner({ page, owned, total, echo, s16 }: RiftBannerProps) {
   if (page === 'worlds') return null
+  if (page === 'packs' && s16 && s16OnSale(s16.today)) return <S16Banner owned={s16.owned} />
   if (page === 'packs' && echo) return <EchoBanner owned={echo.owned} quizDone={echo.quizDone} />
   const pages: Record<string, [string, string]> = {
     packs: ['召唤你的传奇', '一张卡，一个高光时刻。开启卡包，组建属于你的五人阵容。'],

@@ -60,3 +60,4 @@
 .s16-back .s16-back-inner span { font-size: 6cqw; letter-spacing: .4em; text-indent: .4em }
 .s16-back .s16-back-inner b { font: 900 30cqw/1 Impact, sans-serif; color: #57c7ff; text-shadow: 0 0 20px #57c7ff66 }
 .s16-back .s16-back-inner small { font-size: 4.6cqw; letter-spacing: .2em; color: #9fb3d6 }
+.s16-back .s16-back-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block }

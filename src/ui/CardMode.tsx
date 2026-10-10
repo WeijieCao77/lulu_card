@@ -42,7 +42,7 @@ import type { ActOutcome } from '../engine/account'
 import { rememberId, rememberedId } from '../engine/cardid'
 import {
   MASTER_DIV, STAMINA_COST, STAMINA_MAX, rankName, refreshDaily,
-  staminaIn, staminaNow, staminaRate, starsOnTier, tierStars,
+  staminaIn, staminaNow, staminaRate, starsOnTier, tierStars, s16SetProgress,
 } from '../engine/gacha'
 import type { GachaState } from '../engine/gacha'
 import { track, countScreen } from '../engine/telemetry'
@@ -428,7 +428,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
             <WeChat dock />
             <Support />
           </div>
-          <RiftBanner page={tab} owned={ALL_CARDS.filter(c => !isSeriesCard(c) && g.cards[c.id]).length} total={ALL_CARDS.filter(c => !isSeriesCard(c)).length} echo={{ owned: ALL_CARDS.filter(c => isEchoCard(c) && g.cards[c.id]).length, quizDone: echoQuizDone(g.echoQuiz) }} />
+          <RiftBanner page={tab} owned={ALL_CARDS.filter(c => !isSeriesCard(c) && g.cards[c.id]).length} total={ALL_CARDS.filter(c => !isSeriesCard(c)).length} echo={{ owned: ALL_CARDS.filter(c => isEchoCard(c) && g.cards[c.id]).length, quizDone: echoQuizDone(g.echoQuiz) }} s16={{ owned: s16SetProgress(g).owned, today }} />
           {fresh && tab === 'account' && (
             <div className="panel" style={{ borderColor: 'var(--accent-line)', marginBottom: 14 }}>
               <div className="panel-body">
