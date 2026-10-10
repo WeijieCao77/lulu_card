@@ -7,6 +7,7 @@ import type { PackPosition } from './positionPackDesign'
 import { POSITION_PACKS } from './positionPackDesign'
 import { playAnticipation, playPackCue } from '../packAudio'
 import { S16CardBack } from './s16/S16Card'
+import { S16DeckArt, S16Seal } from './s16/S16Pack'
 import './packStage.css'
 import './packQuick.css'
 import PackAltar from './PackAltar'
@@ -206,7 +207,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
       <button className="ritual-dismiss" onClick={onDone} disabled={busy} aria-label="收下卡牌并关闭">✕</button>
     </header>
 
-    {phase !== 'cards' ? <PackAltar count={pulled.length} packName={title} bursting={phase === 'burst'} onOpen={openPack} seal={echo ? <EchoSeal /> : <Seal />} deck={echo ? { className: 're-deck-pack', art: <EchoDeckArt /> } : undefined} /> : <div className={`ritual-board count-${pulled.length}${scrollMode ? ' is-scroll' : ''}`} ref={board} inert={inspect !== null || mythics.length > 0}
+    {phase !== 'cards' ? <PackAltar count={pulled.length} packName={title} bursting={phase === 'burst'} onOpen={openPack} seal={echo ? <EchoSeal /> : s16 ? <S16Seal /> : <Seal />} deck={echo ? { className: 're-deck-pack', art: <EchoDeckArt /> } : s16 ? { className: 's16-deck-pack', art: <S16DeckArt count={pulled.length} /> } : undefined} /> : <div className={`ritual-board count-${pulled.length}${scrollMode ? ' is-scroll' : ''}`} ref={board} inert={inspect !== null || mythics.length > 0}
       style={{ '--card-width': `${layout.width}px`, '--card-scale': layout.width / 184, '--columns': layout.columns } as CSSProperties}
       onPointerDown={e => {
         if (mythicBusy.current) return

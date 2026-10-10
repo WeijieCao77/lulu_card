@@ -1,0 +1,17 @@
+/* S16 deck on the existing PackAltar: the arena artwork on both halves, gold card-edge sides, a gold binding across
+   the waist and the cup seal. Interaction and timing are PackAltar / PackStage's own. */
+.altar-opening .s16-deck-pack .ritual-pack-half { inset: 3% 6%; border-radius: 5px; border: 0; padding: 0; overflow: hidden; background: linear-gradient(140deg, #fff2bf 0%, #d4a53a 14%, #6b4a12 30%, #d4a53a 46%, #fff2bf 55%, #c08e2c 68%, #5c3f0e 86%, #d4a53a 100%); box-shadow: 0 5px 0 #1a1206, 0 0 22px #ffc95a33, 0 0 0 1px #0009 }
+.altar-opening .s16-deck-pack .ritual-pack-half::before, .altar-opening .s16-deck-pack .ritual-pack-half::after { content: none }
+.s16-deck-pack .ritual-pack-half { container-type: inline-size }
+.s16-deck-pack .ritual-pack-half > .s16-art { position: absolute; inset: 2.4% }
+.altar-opening .s16-deck-pack .ritual-pack-side { top: 5%; bottom: 6%; width: 8%; z-index: 3; background: repeating-linear-gradient(180deg, #ffe7a0 0 1px, #2a3d6b 1px 3px, #0a1530 3px 5px); border-inline: 1.5px solid #d4a53a; box-shadow: inset 0 0 6px #030812, 0 0 5px #0009 }
+.altar-opening .s16-deck-pack .ritual-pack-side.left { left: 1.5%; transform: skewY(-4deg) }
+.altar-opening .s16-deck-pack .ritual-pack-side.right { right: 1.5%; transform: skewY(4deg) }
+.altar-opening .s16-deck-pack .ritual-pack-crimp, .altar-opening .s16-deck-pack .ritual-pack-foil { display: none }
+.s16-deck-pack .s16-deck-binding { position: absolute; z-index: 4; pointer-events: none; top: 42%; left: 5%; right: 5%; height: 6%; background: linear-gradient(90deg, #5c3f0e, #f6d27a 15%, #a8761e 47%, #fff2b8 62%, #c08e2c 85%, #5c3f0e); border-block: 1px solid #fff2b8; box-shadow: inset 0 1px 0 #fff6d08c, 0 3px 6px #0009 }
+.s16-deck-pack .s16-deck-binding::before, .s16-deck-pack .s16-deck-binding::after { content: ""; position: absolute; top: 22%; bottom: 22%; width: 1px; background: #fff3c9a0 }
+.s16-deck-pack .s16-deck-binding::before { left: 8% }
+.s16-deck-pack .s16-deck-binding::after { right: 8% }
+.s16-deck-pack .s16-deck-seal { position: absolute; z-index: 6; top: 37.8%; left: 41%; width: 18%; aspect-ratio: 1; display: grid; place-items: center; color: #ffe9a6; background: radial-gradient(circle, #1f3f86 0, #0c1a3c 62%, #060d20 66%); border: 2px solid #f0c860; border-radius: 50%; box-shadow: inset 0 0 0 3px #0a1530, inset 0 0 0 4px #b8862a, 0 0 18px #ffc95a90, 0 7px 8px #000b }
+.s16-deck-pack .s16-deck-seal svg { width: 86%; filter: drop-shadow(0 0 4px #ffd46e) }
+.phase-burst .altar-opening .s16-deck-pack .s16-deck-binding, .phase-burst .altar-opening .s16-deck-pack .s16-deck-seal { animation: ritual-seal-release .45s .45s both }
