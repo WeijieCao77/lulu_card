@@ -1358,5 +1358,165 @@
    "communication": 68,
    "igl": 58
   }
+ },
+ "Guigo": {
+  "base": "p:P257",
+  "role": "上单",
+  "club": "T51",
+  "rating": 80,
+  "attrs": {
+   "aim": 81,
+   "reaction": 81,
+   "awareness": 80,
+   "utility": 78,
+   "clutch": 78,
+   "teamwork": 80,
+   "communication": 81,
+   "igl": 86
+  }
+ },
+ "Tatu": {
+  "base": "p:P258",
+  "role": "打野",
+  "club": "T51",
+  "rating": 86,
+  "attrs": {
+   "aim": 87,
+   "reaction": 84,
+   "awareness": 86,
+   "utility": 87,
+   "clutch": 83,
+   "teamwork": 87,
+   "communication": 85,
+   "igl": 88
+  }
+ },
+ "Tutsz": {
+  "base": "p:P259",
+  "role": "中单",
+  "club": "T51",
+  "rating": 78,
+  "attrs": {
+   "aim": 78,
+   "reaction": 79,
+   "awareness": 79,
+   "utility": 79,
+   "clutch": 77,
+   "teamwork": 75,
+   "communication": 76,
+   "igl": 71
+  }
+ },
+ "Ayu": {
+  "base": "p:P260",
+  "role": "下路",
+  "club": "T51",
+  "rating": 80,
+  "attrs": {
+   "aim": 82,
+   "reaction": 81,
+   "awareness": 78,
+   "utility": 79,
+   "clutch": 78,
+   "teamwork": 81,
+   "communication": 82,
+   "igl": 71
+  }
+ },
+ "JoJo": {
+  "base": "p:P261",
+  "role": "辅助",
+  "club": "T51",
+  "rating": 85,
+  "attrs": {
+   "aim": 88,
+   "reaction": 83,
+   "awareness": 82,
+   "utility": 81,
+   "clutch": 80,
+   "teamwork": 87,
+   "communication": 88,
+   "igl": 82
+  }
+ },
+ "Zest": {
+  "base": "p:P278",
+  "role": "上单",
+  "club": "T55",
+  "rating": 84,
+  "attrs": {
+   "aim": 87,
+   "reaction": 88,
+   "awareness": 78,
+   "utility": 88,
+   "clutch": 74,
+   "teamwork": 83,
+   "communication": 81,
+   "igl": 71
+  }
+ },
+ "Curse": {
+  "base": "p:P284",
+  "role": "打野",
+  "club": "T55",
+  "rating": 66,
+  "attrs": {
+   "aim": 70,
+   "reaction": 67,
+   "awareness": 67,
+   "utility": 62,
+   "clutch": 71,
+   "teamwork": 65,
+   "communication": 64,
+   "igl": 67
+  }
+ },
+ "Feisty": {
+  "base": "p:P280",
+  "role": "中单",
+  "club": "T55",
+  "rating": 78,
+  "attrs": {
+   "aim": 77,
+   "reaction": 86,
+   "awareness": 78,
+   "utility": 74,
+   "clutch": 71,
+   "teamwork": 76,
+   "communication": 77,
+   "igl": 71
+  }
+ },
+ "Duduhh": {
+  "base": "p:P281",
+  "role": "下路",
+  "club": "T55",
+  "rating": 68,
+  "attrs": {
+   "aim": 69,
+   "reaction": 75,
+   "awareness": 65,
+   "utility": 69,
+   "clutch": 68,
+   "teamwork": 65,
+   "communication": 64,
+   "igl": 54
+  }
+ },
+ "Ackerman": {
+  "base": "p:P282",
+  "role": "辅助",
+  "club": "T55",
+  "rating": 84,
+  "attrs": {
+   "aim": 87,
+   "reaction": 86,
+   "awareness": 85,
+   "utility": 85,
+   "clutch": 77,
+   "teamwork": 86,
+   "communication": 84,
+   "igl": 73
+  }
  }
 }

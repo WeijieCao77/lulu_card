@@ -4,7 +4,7 @@
   "start": "2026-10-15",
   "final": "2026-11-14",
   "packUntil": "2026-11-21",
-  "note": "由 S16世界赛系列/data 生成；替补和巴西两队名单确定后补进来"
+  "note": "由 S16世界赛系列/data 生成；2026-10-10 补上巴西两队（LØS、FURIA，10/10 决赛定直通/入围）；各队还没有登记替补"
  },
  "teams": [
   {
@@ -131,7 +131,14 @@
    "tag": "FUR",
    "name": "FURIA",
    "stage": "tbd",
-   "seed": "BR (待定)"
+   "seed": "BR 决赛 10/10（胜者直通瑞士轮，败者打入围赛）"
+  },
+  {
+   "club": "T55",
+   "tag": "LØS",
+   "name": "LØS",
+   "stage": "tbd",
+   "seed": "BR 决赛 10/10（胜者直通瑞士轮，败者打入围赛）"
   }
  ],
  "players": [
@@ -812,6 +819,86 @@
    "base": "p:OEef60290790",
    "ign": "SiuLoong",
    "club": "T49",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P257",
+   "base": "p:P257",
+   "ign": "Guigo",
+   "club": "T51",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P258",
+   "base": "p:P258",
+   "ign": "Tatu",
+   "club": "T51",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P259",
+   "base": "p:P259",
+   "ign": "Tutsz",
+   "club": "T51",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P260",
+   "base": "p:P260",
+   "ign": "Ayu",
+   "club": "T51",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P261",
+   "base": "p:P261",
+   "ign": "JoJo",
+   "club": "T51",
+   "role": "辅助",
+   "starter": true
+  },
+  {
+   "id": "s16:P278",
+   "base": "p:P278",
+   "ign": "Zest",
+   "club": "T55",
+   "role": "上单",
+   "starter": true
+  },
+  {
+   "id": "s16:P284",
+   "base": "p:P284",
+   "ign": "Curse",
+   "club": "T55",
+   "role": "打野",
+   "starter": true
+  },
+  {
+   "id": "s16:P280",
+   "base": "p:P280",
+   "ign": "Feisty",
+   "club": "T55",
+   "role": "中单",
+   "starter": true
+  },
+  {
+   "id": "s16:P281",
+   "base": "p:P281",
+   "ign": "Duduhh",
+   "club": "T55",
+   "role": "下路",
+   "starter": true
+  },
+  {
+   "id": "s16:P282",
+   "base": "p:P282",
+   "ign": "Ackerman",
+   "club": "T55",
    "role": "辅助",
    "starter": true
   }
