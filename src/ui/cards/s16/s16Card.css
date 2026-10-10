@@ -108,8 +108,9 @@
 }
 .s16card .s16-pos { font: 700 max(6cqw, 6.5px)/1 var(--s16-num); letter-spacing: .1em; color: var(--acc); padding-top: 1.2cqw; width: 74%; text-align: center; border-top: 1px solid color-mix(in srgb, var(--acc) 50%, transparent) }
 .s16card .s16-trend { font: 700 max(5cqw, 6.5px)/1 var(--s16-num); font-style: normal; padding: .8cqw 1.4cqw; border-radius: 1cqw; white-space: nowrap }
-.s16card .s16-trend.up { color: #6df0a0; background: #0d3a2499 }
-.s16card .s16-trend.down { color: #ff8478; background: #46141199 }
+/* 红涨绿跌，按国内习惯（站长 2026-10-10） */
+.s16card .s16-trend.up { color: #ff8478; background: #46141199 }
+.s16card .s16-trend.down { color: #6df0a0; background: #0d3a2499 }
 .s16card .s16-trend.lock { font: 500 max(3.8cqw, 6px)/1 var(--s16-cn); color: var(--m3); padding: .8cqw .8cqw; letter-spacing: .02em; background: #ffffff10 }
 .s16card .s16-level { font: 700 max(5cqw, 6.5px)/1 var(--s16-num); font-style: normal; color: var(--acc) }
 
