@@ -23,7 +23,7 @@ import { EchoCardBack } from './echo/EchoCard'
 import { echoQuizDone } from '../../engine/echoQuiz'
 
 /** What the server says came out of a pack, resolved back to cards. */
-interface PulledWire { cardId: string; dupe: boolean; salvage: number }
+interface PulledWire { cardId: string; dupe: boolean; salvage: number; coins?: number }
 
 export default function Packs() {
   const { g, today, act, toast } = useCards()
@@ -84,7 +84,7 @@ export default function Packs() {
       }
       const wire = ((r.result as { pulled?: PulledWire[] } | undefined)?.pulled ?? [])
       const out: Pulled[] = wire
-        .map((p) => { const card = cardById(p.cardId); return card ? { card, dupe: p.dupe, salvage: p.salvage } : null })
+        .map((p) => { const card = cardById(p.cardId); return card ? { card, dupe: p.dupe, salvage: p.salvage, ...(p.coins ? { coins: p.coins } : {}) } : null })
         .filter((x): x is Pulled => !!x)
       if (!out.length) { toast('没读到开出的卡，请刷新存档核对收藏后继续。'); markUnknown(); return }
       // A card this page cannot name is a player added to the game after this

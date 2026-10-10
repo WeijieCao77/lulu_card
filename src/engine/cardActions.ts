@@ -174,7 +174,7 @@ function dispatch(
         return {
           ok: true,
           result: {
-            pulled: pulled.map((p) => ({ cardId: p.card.id, dupe: p.dupe, salvage: p.salvage })),
+            pulled: pulled.map((p) => ({ cardId: p.card.id, dupe: p.dupe, salvage: p.salvage, ...(p.coins ? { coins: p.coins } : {}) })),
           },
         }
       } catch (e) {

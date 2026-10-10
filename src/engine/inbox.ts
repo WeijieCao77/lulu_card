@@ -7,8 +7,8 @@
  * still reads the shapes to draw the mailbox, and one copy of the rules is
  * one copy that cannot drift.
  */
-import { cardById, isPlayerCard, MAX_LEVEL } from './cards'
-import { MAIL_MAX, PACKS, refundPlay } from './gacha'
+import { cardById, isPlayerCard, isS16Card, MAX_LEVEL } from './cards'
+import { MAIL_MAX, PACKS, S16_DUPE_COINS, refundPlay } from './gacha'
 import type { GachaState, OwnedCard, PackKind } from './gacha'
 import { cleanEvo, evoRating } from './evolve'
 import type { Evo } from './evolve'
@@ -169,6 +169,12 @@ export function restoreCard(g: GachaState, cardId: string, level: number, evoRaw
   // 进修 only ever sits on a +5
   const evo = lv >= MAX_LEVEL ? cleanEvo(evoRaw) : undefined
   const had = g.cards[cardId]
+  // one S16 card per player per account: a second copy arriving by mail is paid out, not kept
+  if (had && isS16Card(cardById(cardId))) {
+    had.seen++
+    g.coins += S16_DUPE_COINS
+    return
+  }
   if (had) {
     had.seen++
     const main = Math.max(0, Math.trunc(Number(had.level) || 0))
