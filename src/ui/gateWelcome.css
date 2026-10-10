@@ -882,3 +882,24 @@
 .lulu-gate .gate-echo-back .cardback { width: 100%; height: auto; min-height: 0; aspect-ratio: 63 / 88; }
 .lulu-gate .gate-echo-back { width: 160px; top: 45%; }
 .lulu-gate .gate-echo-side { top: 45%; }
+/* S16 世界赛 launch cover (2026-10-12): the S16 card back in the middle, two S16 cards fanned behind it, the pitch
+   underneath. Unlike the other covers it stays on phones, in a compact size. */
+.lulu-gate .gate-s16 { --s16-cover-back: 140px; --s16-cover-side: .82; --s16-cover-y: 42%; background: radial-gradient(circle at 50% 42%, rgba(87, 199, 255, 0.16) 0%, transparent 55%), linear-gradient(160deg, #0d1d3d 0%, #060c1c 100%); border-color: rgba(87, 199, 255, 0.35); overflow: hidden; }
+.lulu-gate .gate-s16 .gate-orbit { background: repeating-conic-gradient(from 0deg at 50% 42%, rgba(87, 199, 255, 0.035) 0deg 15deg, transparent 15deg 45deg), radial-gradient(circle at 50% 42%, transparent 30%, rgba(6, 12, 28, 0.55) 100%); }
+.lulu-gate .gate-s16-tag { position: absolute; z-index: 4; top: 12px; left: 14px; padding: 3px 9px; border: 1px solid rgba(87, 199, 255, 0.55); color: #9fdcff; background: rgba(6, 12, 28, 0.78); font-size: 0.66rem; letter-spacing: 0.18em; }
+.lulu-gate .gate-s16-back { position: absolute; z-index: 3; left: 50%; top: var(--s16-cover-y); width: var(--s16-cover-back); transform: translate(-50%, -50%); filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 22px rgba(87, 199, 255, 0.25)); }
+.lulu-gate .gate-s16-back .cardback { width: 100%; height: auto; min-height: 0; aspect-ratio: 63 / 88; }
+.lulu-gate .gate-s16-side { position: absolute; z-index: 2; left: 50%; top: var(--s16-cover-y); width: 132px; }
+.lulu-gate .gate-s16-side.left { transform: translate(-135%, -50%) rotate(-9deg) scale(var(--s16-cover-side)); }
+.lulu-gate .gate-s16-side.right { transform: translate(35%, -50%) rotate(9deg) scale(var(--s16-cover-side)); }
+.lulu-gate .gate-s16 .gate-art-caption { z-index: 4; color: #b9dcf5; letter-spacing: 0.06em; line-height: 1.6; text-transform: none; font-size: 0.68rem; padding: 0 18px; box-sizing: border-box; }
+@media (max-width: 900px) {
+  .lulu-gate .gate-s16 { --s16-cover-back: 104px; --s16-cover-side: .6; --s16-cover-y: 40%; }
+  .lulu-gate .gate-s16-side.left { transform: translate(-118%, -50%) rotate(-9deg) scale(var(--s16-cover-side)); }
+  .lulu-gate .gate-s16-side.right { transform: translate(18%, -50%) rotate(9deg) scale(var(--s16-cover-side)); }
+  .lulu-gate .gate-s16 .gate-art-caption { font-size: 0.62rem; padding: 0 12px; }
+}
+@media (max-width: 760px) {
+  .lulu-gate .gate-art.gate-s16 { --s16-cover-y: 44%; display: block; height: 214px; margin: 16px auto 0; border-radius: var(--lulu-radius); }
+  .lulu-gate .gate-s16-tag { top: 8px; left: 10px; font-size: 0.6rem; letter-spacing: 0.12em; }
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useCards } from '../ctx'
 import { Panel } from '../../common'
 import { PACKS, S16_SET_REWARDS, s16SetProgress } from '../../../engine/gacha'
@@ -6,6 +6,7 @@ import type { PackKind } from '../../../engine/gacha'
 import { S16_CARDS } from '../../../engine/cards'
 import { S16CardBack } from './S16Card'
 import S16Predict from './S16Predict'
+import { S16_PREDICT_EVENT, S16_SECTION_ID } from './S16Banner'
 
 /**
  * The pack page's S16 世界赛 section: what the series is, the pack (until it comes off sale), and the S16 图鉴 marks.
@@ -15,6 +16,12 @@ export default function S16Section({ open, busy, today }: { open: (kind: PackKin
   const { g, act, toast } = useCards()
   const [claiming, setClaiming] = useState(false)
   const [predict, setPredict] = useState(false)
+  // the banner's 「赛事预测」 button (S16Banner) lives outside this page
+  useEffect(() => {
+    const show = () => setPredict(true)
+    window.addEventListener(S16_PREDICT_EVENT, show)
+    return () => window.removeEventListener(S16_PREDICT_EVENT, show)
+  }, [])
   const def = PACKS.s16
   const onSale = !def.until || today <= def.until
   const p = s16SetProgress(g)
@@ -28,7 +35,8 @@ export default function S16Section({ open, busy, today }: { open: (kind: PackKin
       toast(`S16 图鉴奖励已领取：${(r.result as { got: string }).got}`)
     } finally { setClaiming(false) }
   }
-  return (
+  return (<>
+    <div id={S16_SECTION_ID} />
     <Panel title="S16 世界赛" actions={<span className="tiny muted">限时 · 卖到 {def.until?.slice(5).replace('-', '/')} · {def.cost} 金币三张</span>}>
       <div className="s16-hero">
         <div className="s16-hero-art"><S16CardBack size="sm" /></div>
@@ -80,5 +88,5 @@ export default function S16Section({ open, busy, today }: { open: (kind: PackKin
         @media (max-width:560px){.s16-set-marks{grid-template-columns:repeat(2,minmax(0,1fr))}}
       `}</style>
     </Panel>
-  )
+  </>)
 }

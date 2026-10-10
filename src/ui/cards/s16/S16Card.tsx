@@ -75,9 +75,18 @@ export function S16Card({ card, level = 0, dupes = 0, size = 'md', selected, dim
   )
 }
 
-/** S16 卡背 — a placeholder until the owner's artwork arrives: the emblem on night navy */
+/**
+ * The S16 card back's artwork. null draws the placeholder below (the emblem on night navy). When the owner's art
+ * arrives, drop it next to this file and point this at it — `import S16_BACK_ART from './s16Back.webp'` and
+ * `= S16_BACK_ART` — and every S16 card back changes with it: the pack page, the opening altar, the banner, the login cover.
+ */
+export const S16_BACK_IMAGE: string | null = null
+
+/** S16 卡背 — S16_BACK_IMAGE when there is one, else the placeholder */
 export function S16CardBack({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   return <div className={`cardback s16-back s-${size}`} aria-label="S16 世界赛卡背">
-    <div className="s16-back-inner"><span>WORLDS</span><b>S16</b><small>2026 · 选手股</small></div>
+    {S16_BACK_IMAGE
+      ? <img className="s16-back-img" src={S16_BACK_IMAGE} alt="" decoding="async" />
+      : <div className="s16-back-inner"><span>WORLDS</span><b>S16</b><small>2026 · 选手股</small></div>}
   </div>
 }

@@ -1,9 +1,12 @@
 import './gateWelcome.css'
 import { useEffect, useRef } from 'react'
 import { RELEASE_POLICY, RELEASE_STAGE } from '../../release-policy.js'
-import { ECHO_CARDS } from '../engine/cards'
+import { ECHO_CARDS, S16_CARDS } from '../engine/cards'
 import { EchoCard, EchoCardBack } from './cards/echo/EchoCard'
 import { ECHO_QUIZ_COUNT } from '../engine/echoQuiz'
+import { dayOf } from '../engine/account'
+import { S16Card, S16CardBack } from './cards/s16/S16Card'
+import { s16OnSale } from './cards/s16/S16Banner'
 
 function PigSeal() {
   return <svg viewBox="0 0 80 80" fill="none" aria-hidden="true">
@@ -25,6 +28,30 @@ export function GateStory() {
     <p className="gate-eyebrow">峡谷典藏 · 由你开场</p>
     <h1>每一张高光，<br /><em>都值得收藏。</em></h1>
     <p className="gate-intro">开包寻找心仪选手，组建你的首发五人。<br />让同队默契，成为下一场胜利的伏笔。</p>
+    {s16OnSale(dayOf(Date.now())) ? <S16Cover /> : <EchoCover />}
+    <div className="gate-features"><span>01 / 收集选手</span><span>02 / 组建阵容</span><span>03 / 征战峡谷</span></div>
+  </section>
+}
+
+/**
+ * The cover while the S16 世界赛 pack is on sale (2026-10-12 to PACKS.s16.until): the S16 card back, two players' cards
+ * (「?」 until they have played) and the series in a line. Unlike the others it also shows on phones, in a compact size.
+ */
+function S16Cover() {
+  return <div className="gate-art gate-s16" aria-label="新系列 S16 世界赛">
+    <div className="gate-orbit" />
+    <span className="gate-s16-tag">新系列 · S16 世界赛</span>
+    {(['Faker', 'Chovy'] as const).map((ign, i) => {
+      const card = S16_CARDS.find((c) => c.ign === ign)
+      return card && <div key={ign} className={`gate-s16-side ${i ? 'right' : 'left'}`}><S16Card card={card} size="md" /></div>
+    })}
+    <div className="gate-s16-back"><S16CardBack size="md" /></div>
+    <div className="gate-art-caption">选手股：开赛前全是「?」，选手打完比赛才揭晓数值，每天随比赛涨跌；决赛后冠军队 +2，FMVP 升级成彩卡</div>
+  </div>
+}
+
+function EchoCover() {
+  return <>
     {/* the cover is the 峡谷回响 launch ad (owner 2026-10-04): the series' card back, two of its cards, and what a new account gets */}
     <div className="gate-art gate-echo" aria-label="新系列 峡谷回响">
       <div className="gate-orbit" />
@@ -36,8 +63,7 @@ export function GateStory() {
       <div className="gate-echo-back"><EchoCardBack size="md" /></div>
       <div className="gate-art-caption">{ECHO_CARDS.length} 位退役老将回归峡谷 · 每个账号送 1 个回响包 · 老将问答最多再送 {ECHO_QUIZ_COUNT} 包</div>
     </div>
-    <div className="gate-features"><span>01 / 收集选手</span><span>02 / 组建阵容</span><span>03 / 征战峡谷</span></div>
-  </section>
+  </>
 }
 
 export function DemoWelcome({ onClose }: { onClose: () => void }) {
