@@ -236,4 +236,7 @@ for (const mode of modes) {
 setSeasonStartForCheck(null)
 
 console.log(bad ? `\n${bad} 处不对` : '\n全部通过')
-process.exit(bad ? 1 : 0)
+// a short grace before exiting: an immediate process.exit while PGlite/libuv handles are still closing intermittently
+// aborts on Windows (「Assertion failed: !(handle->flags & UV_HANDLE_CLOSING)」, exit 127) after every check has passed
+process.exitCode = bad ? 1 : 0
+setTimeout(() => process.exit(), 100)
