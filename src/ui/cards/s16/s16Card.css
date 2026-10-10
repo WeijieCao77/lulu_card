@@ -1,63 +1,286 @@
-/* S16 世界赛卡面（初稿，待站长审）。Night navy and steel until revealed; the metal after. Below the 彩卡 on purpose:
-   no iridescence except on the FMVP's card. Sizes follow the ordinary card (96/132/184 wide, 174/212/281 tall). */
+/* S16 世界赛 「冠军之夜」 card face, back and pack (2026-10-10 redesign).
+   A cut-corner night-arena plate inside a bevelled metal frame: roof beams, crowd lights and a lit horizon behind
+   the player, the cup as the series mark. Gunmetal until revealed; bronze / silver / gold after; the FMVP's card
+   alone is iridescent. Sizes follow the ordinary card (96/132/184 wide, 174/212/281 tall). All type is in cqw of
+   the card's width, with pixel floors where the small card would drop under a readable size. */
 .cardface.s16card.s16card {
-  --s16-edge: #6f8db3; --s16-glint: #c7dcf5; --s16-deep: #0b1630; --s16-accent: #57c7ff;
+  --m1: #1c2432; --m2: #56647b; --m3: #b7c4d8; --acc: #8ea5c8; --beam: #5f84c4; --night: #060d1f;
+  --s16-num: "Bahnschrift SemiBold Condensed", "Bahnschrift Condensed", "DIN Condensed", "Roboto Condensed", "Arial Narrow", Bahnschrift, Arial, sans-serif;
+  --s16-ui: Bahnschrift, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  --s16-cn: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   box-sizing: border-box; position: relative; display: block; flex: 0 0 auto; container-type: inline-size;
-  width: 132px; min-height: 212px; height: auto; padding: 2px; border: 0; border-radius: 9px; overflow: hidden;
+  width: 132px; min-height: 212px; height: auto; padding: 0; border: 0; border-radius: 4px; overflow: hidden;
   color: #eef4ff; text-align: left; isolation: isolate;
-  background: linear-gradient(150deg, var(--s16-glint), var(--s16-edge) 35%, #24375a 70%, var(--s16-glint));
-  box-shadow: 0 10px 24px #0008; -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+  background: linear-gradient(140deg, var(--m3) 0%, var(--m2) 14%, var(--m1) 30%, var(--m2) 46%, var(--m3) 55%, var(--m2) 66%, var(--m1) 84%, var(--m2) 100%);
+  box-shadow: 0 10px 24px #000a, 0 0 0 1px #0008;
+  -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
   transition: transform .2s, box-shadow .2s;
 }
+.cardface.s16card.s16card::before, .cardface.s16card.s16card::after { content: none }
 .cardface.s16card.s16card.s-sm { width: 96px; min-height: 174px }
 .cardface.s16card.s16card.s-md { width: 132px; min-height: 212px }
 .cardface.s16card.s16card.s-lg { width: 184px; min-height: 281px }
-.cardface.s16card.s16card.tap:hover { transform: translateY(-3px); box-shadow: 0 16px 30px #000a }
-.cardface.s16card.s16-gold { --s16-edge: #d6a93c; --s16-glint: #ffe9a6; --s16-accent: #ffd36b }
-.cardface.s16card.s16-silver { --s16-edge: #9fb4c4; --s16-glint: #eef6fb; --s16-accent: #c9e4f5 }
-.cardface.s16card.s16-bronze { --s16-edge: #b06a3f; --s16-glint: #f0b48c; --s16-accent: #f0a274 }
-.cardface.s16card.s16-mythic { background: conic-gradient(from 210deg, #7ae5ff, #c896ff, #ffdea4, #7ae5ff); --s16-accent: #ffe6a8 }
-.s16card .s16-inner { position: absolute; inset: 2px; border-radius: 7px; overflow: hidden; background: radial-gradient(ellipse at 50% 0%, #1d3566 0%, var(--s16-deep) 60%, #050a18 100%) }
-.s16card.s16-hidden .s16-inner::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(135deg, #ffffff05 0 6px, transparent 6px 12px) }
-.s16card .s16-photo { position: absolute; left: 0; right: 0; top: 0; height: 64%; overflow: hidden }
-.s16card .s16-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 22%; display: block }
-.s16card .s16-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, #050a1899 0%, transparent 28%, transparent 60%, var(--s16-deep) 100%) }
-.s16card.s16-hidden .s16-photo img { filter: saturate(.75) brightness(.9) }
-.s16card .s16-top { position: absolute; z-index: 2; top: 4%; left: 7%; right: 7%; display: flex; justify-content: space-between; align-items: center }
-.s16card .s16-mark { font: 700 4.6cqw/1 Arial, sans-serif; letter-spacing: .12em; color: #d9e6ff }
-.s16card .s16-mark b { color: var(--s16-accent); margin-left: .3em }
-.s16card .s16-role { font: 800 4.6cqw/1 Arial, sans-serif; padding: 1.2cqw 2.2cqw; border: 1px solid color-mix(in srgb, var(--s16-accent), transparent 40%); border-radius: 2cqw; color: var(--s16-accent); background: #050a1880 }
-.s16card .s16-rating { position: absolute; z-index: 2; top: 13%; left: 7%; display: flex; flex-direction: column; align-items: flex-start; gap: .8cqw }
-.s16card .s16-rating strong { font: 900 19cqw/.9 Impact, "Arial Narrow", sans-serif; color: #fff; text-shadow: 0 2px 10px #000c }
-.s16card.s16-hidden .s16-rating strong { color: var(--s16-glint); opacity: .9 }
-.s16card .s16-rating i { font: 800 4.6cqw/1 Arial, sans-serif; font-style: normal; padding: .8cqw 1.6cqw; border-radius: 1.5cqw; background: #050a18cc }
-.s16card .s16-rating i.up { color: #5ee08f }
-.s16card .s16-rating i.down { color: #ff7a6e }
-.s16card .s16-rating em { font: 700 4.6cqw/1 Arial, sans-serif; font-style: normal; color: var(--s16-accent) }
-.s16card .s16-copy { position: absolute; z-index: 2; left: 7%; right: 7%; bottom: 4%; display: flex; flex-direction: column; gap: 1.4cqw }
-.s16card .s16-team { display: flex; align-items: center; gap: 1.8cqw; font: 700 5cqw/1 Arial, sans-serif; color: #cfe0ff; letter-spacing: .04em }
-.s16card .s16-crest { width: 7cqw; height: 7cqw; background: center/contain no-repeat; flex: none }
-.s16card .s16-name { display: block; font: 800 13cqw/1 "Arial Narrow", Impact, sans-serif; letter-spacing: -.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0 }
-.s16card .s16-stats { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid color-mix(in srgb, var(--s16-edge), transparent 45%); padding-top: 1.8cqw }
-.s16card .s16-stats span { display: flex; flex-direction: column; align-items: center; gap: .6cqw }
-.s16card .s16-stats b { font: 700 6cqw/1 Arial, sans-serif; color: #fff }
-.s16card.s16-hidden .s16-stats b { color: var(--s16-glint) }
-.s16card .s16-stats small { font: 500 3.6cqw/1 "Microsoft YaHei", sans-serif; color: #9fb3d6 }
-.s16card .s16-foot { display: flex; justify-content: space-between; font: 500 3.6cqw/1.2 "Microsoft YaHei", sans-serif; color: #8ea6cc }
-.s16card .s16-foot b { color: var(--s16-accent) }
-.s16card .s16-dupes { position: absolute; z-index: 3; top: 4%; right: 7%; transform: translateY(120%); font: 700 4.4cqw/1 Arial, sans-serif; color: #fff; background: #050a18cc; padding: .8cqw 1.6cqw; border-radius: 1.5cqw }
-.cardface.s16card.sel { outline: 2px solid var(--accent, #57c7ff); outline-offset: 2px }
-.cardface.s16card.dim { opacity: .4; filter: grayscale(.5) }
+.cardface.s16card.s16card.tap { cursor: pointer }
+.cardface.s16card.s16card.tap:hover { transform: translateY(-3px); box-shadow: 0 16px 30px #000b, 0 0 14px color-mix(in srgb, var(--beam) 35%, transparent) }
+.cardface.s16card.s16card.sel { outline: 2px solid var(--accent, #57c7ff); outline-offset: 2px }
+.cardface.s16card.s16card.dim { opacity: .4; filter: grayscale(.5) }
+
+/* metals */
+.cardface.s16card.s16-bronze { --m1: #4a2412; --m2: #a6603a; --m3: #f5c09a; --acc: #f2a77a; --beam: #ff8f55 }
+.cardface.s16card.s16-silver { --m1: #36444f; --m2: #9cb0c0; --m3: #f6fbff; --acc: #d2e7f6; --beam: #8fc4ff }
+.cardface.s16card.s16-gold { --m1: #5a3c0c; --m2: #d4a53a; --m3: #fff2b8; --acc: #ffd46e; --beam: #ffc65a }
+.cardface.s16card.s16-mythic {
+  --m1: #4b3a8c; --m2: #9fd8ff; --m3: #fff6d6; --acc: #ffe7a6; --beam: #b39bff;
+  background: conic-gradient(from var(--s16-spin, 0deg), #ffe08f, #ff9fd0, #b49bff, #7ce0ff, #9effcc, #ffe08f);
+  animation: s16-spin 7s linear infinite;
+  box-shadow: 0 10px 26px #000a, 0 0 16px #c7a6ff66;
+}
+@property --s16-spin { syntax: "<angle>"; inherits: false; initial-value: 0deg }
+@keyframes s16-spin { to { --s16-spin: 360deg } }
+
+/* the plate */
+.s16card .s16-inner {
+  position: absolute; inset: 2.6cqw; overflow: hidden; background: var(--night);
+  clip-path: polygon(8cqw 0, calc(100% - 8cqw) 0, 100% 8cqw, 100% calc(100% - 8cqw), calc(100% - 8cqw) 100%, 8cqw 100%, 0 calc(100% - 8cqw), 0 8cqw);
+}
+.s16card .s16-inner > * { position: absolute }
+.s16card .s16-sky {
+  inset: 0;
+  background:
+    radial-gradient(ellipse 95% 50% at 50% -4%, color-mix(in srgb, var(--beam) 42%, transparent), transparent 72%),
+    radial-gradient(ellipse 130% 34% at 50% 61%, color-mix(in srgb, var(--beam) 22%, #10264f), transparent 70%),
+    linear-gradient(180deg, #0c1a3a 0%, #08122a 52%, #040915 100%);
+}
+/* roof beams: two crossing spotlights from the corners and a fan of thin rays from above */
+.s16card .s16-beams {
+  inset: 0 0 30% 0; pointer-events: none; mix-blend-mode: screen;
+  background:
+    conic-gradient(from 128deg at 4% -4%, transparent 0deg, color-mix(in srgb, var(--beam) 46%, transparent) 9deg, transparent 17deg, transparent 23deg, color-mix(in srgb, var(--beam) 24%, transparent) 28deg, transparent 34deg 360deg),
+    conic-gradient(from 198deg at 96% -4%, transparent 0deg, color-mix(in srgb, var(--beam) 24%, transparent) 6deg, transparent 12deg, transparent 18deg, color-mix(in srgb, var(--beam) 46%, transparent) 25deg, transparent 33deg 360deg),
+    repeating-conic-gradient(from 150deg at 50% -24%, transparent 0deg 2.6deg, color-mix(in srgb, var(--beam) 16%, transparent) 3deg 3.4deg, transparent 3.8deg 6deg);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 40%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 40%, transparent 100%);
+}
+/* crowd lights in the stands, either side of the player */
+.s16card .s16-crowd {
+  left: 0; right: 0; top: 38%; height: 26%; opacity: .5; pointer-events: none;
+  background:
+    radial-gradient(circle, color-mix(in srgb, var(--beam) 60%, #fff) 0 .55px, transparent 1.1px) 0 0 / 6px 5px,
+    radial-gradient(circle, #ffffffb0 0 .5px, transparent 1px) 2px 3px / 9px 7px;
+  -webkit-mask-image: linear-gradient(90deg, #000, transparent 32%, transparent 68%, #000), linear-gradient(180deg, transparent, #000 45%, transparent);
+  -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, #000, transparent 32%, transparent 68%, #000), linear-gradient(180deg, transparent, #000 45%, transparent); mask-composite: intersect;
+}
+.s16card .s16-photo {
+  left: 0; right: 0; top: 3%; height: 63%; overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 13%, #000 70%, transparent 100%), linear-gradient(90deg, transparent 0, #000 15%, #000 85%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(180deg, transparent 0, #000 13%, #000 70%, transparent 100%), linear-gradient(90deg, transparent 0, #000 15%, #000 85%, transparent 100%);
+  mask-composite: intersect;
+}
+.s16card .s16-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; filter: saturate(.92) contrast(1.06) }
+/* dim the photo's own background toward the arena, and a spot from the roof on the player */
+.s16card .s16-photo::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; mix-blend-mode: multiply; background: radial-gradient(ellipse 56% 66% at 50% 40%, #fff 28%, #b3c2e2 56%, #55699a 80%, #22305a 100%) }
+.s16card .s16-photo::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; mix-blend-mode: screen; background: radial-gradient(ellipse 60% 42% at 50% -2%, color-mix(in srgb, var(--beam) 40%, transparent), transparent 75%) }
+/* the arena floor: a lit horizon under the player, then dark stock for the type */
+.s16card .s16-floor {
+  left: 0; right: 0; top: 60%; bottom: 0; pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 0, #040915d0 14%, #040915f2 34%, #040915 60%),
+    repeating-linear-gradient(115deg, #ffffff06 0 1px, transparent 1px 4px);
+}
+.s16card .s16-floor::before { content: ""; position: absolute; top: 0; left: 4%; right: 4%; height: 1px; background: linear-gradient(90deg, transparent, var(--acc) 22%, #fff 50%, var(--acc) 78%, transparent); box-shadow: 0 0 5px var(--acc), 0 0 12px color-mix(in srgb, var(--beam) 60%, transparent) }
+.s16card .s16-floor::after { content: ""; position: absolute; top: -9%; left: 12%; right: 12%; height: 18%; background: radial-gradient(ellipse 50% 50% at 50% 50%, color-mix(in srgb, var(--beam) 40%, transparent), transparent 72%) }
+
+/* rating: a hanging pennant at the top-left */
+.s16card .s16-rating {
+  z-index: 5; top: 0; left: 6%; width: 23cqw; padding: 5cqw 0 5.5cqw; display: flex; flex-direction: column; align-items: center; gap: 1.2cqw;
+}
+.s16card .s16-rating::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, #050b1af0 0%, #07112ad8 70%, #07112a99 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 50% 100%, 0 88%);
+  box-shadow: inset 0 0 0 1px var(--acc);
+}
+.s16card .s16-rating::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1.2cqw; background: linear-gradient(90deg, var(--m2), var(--m3), var(--m2)) }
+.s16card .s16-rating strong {
+  font: 700 23cqw/.86 var(--s16-num); letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+  background: linear-gradient(180deg, #fff 0%, var(--m3) 48%, var(--m2) 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 1px 0 #000) drop-shadow(0 0 5px color-mix(in srgb, var(--beam) 55%, transparent));
+}
+.s16card .s16-pos { font: 700 max(6cqw, 6.5px)/1 var(--s16-num); letter-spacing: .1em; color: var(--acc); padding-top: 1.2cqw; width: 74%; text-align: center; border-top: 1px solid color-mix(in srgb, var(--acc) 50%, transparent) }
+.s16card .s16-trend { font: 700 max(5cqw, 6.5px)/1 var(--s16-num); font-style: normal; padding: .8cqw 1.4cqw; border-radius: 1cqw; white-space: nowrap }
+.s16card .s16-trend.up { color: #6df0a0; background: #0d3a2499 }
+.s16card .s16-trend.down { color: #ff8478; background: #46141199 }
+.s16card .s16-trend.lock { font: 500 max(3.8cqw, 6px)/1 var(--s16-cn); color: var(--m3); padding: .8cqw .8cqw; letter-spacing: .02em; background: #ffffff10 }
+.s16card .s16-level { font: 700 max(5cqw, 6.5px)/1 var(--s16-num); font-style: normal; color: var(--acc) }
+
+/* the series mark at the top-right: the cup over S16 (FMVP on the FMVP's card) */
+.s16card .s16-emblem { z-index: 5; top: 5%; right: 6%; width: 15cqw; display: flex; flex-direction: column; align-items: center; gap: .8cqw; filter: drop-shadow(0 1px 0 #000) drop-shadow(0 0 4px color-mix(in srgb, var(--beam) 70%, transparent)) }
+.s16card .s16-emblem .s16-cup { width: 100%; aspect-ratio: 100 / 140; background: linear-gradient(160deg, #fff 0%, var(--m3) 30%, var(--m2) 62%, var(--m1) 100%) }
+.s16card .s16-emblem b { font: 700 max(6.4cqw, 6.5px)/1 var(--s16-num); letter-spacing: .06em; color: var(--m3) }
+.s16card .s16-cup { display: block; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center }
+.s16card .s16-side { z-index: 5; right: 6.5%; top: 26%; writing-mode: vertical-rl; font: 600 3.3cqw/1 var(--s16-ui); letter-spacing: .28em; color: color-mix(in srgb, var(--acc) 70%, transparent); white-space: nowrap }
+
+/* name, club, numbers */
+.s16card .s16-copy { z-index: 5; left: 7%; right: 7%; bottom: 4.6%; display: flex; flex-direction: column; gap: 1.6cqw }
+.s16card .s16-team { display: flex; align-items: center; gap: 1.6cqw; min-width: 0; font: 700 max(5.4cqw, 6.8px)/1 var(--s16-ui); letter-spacing: .06em; color: var(--acc) }
+.s16card .s16-crest { width: max(7.5cqw, 8px); height: max(7.5cqw, 8px); background: center/contain no-repeat; flex: none; filter: drop-shadow(0 0 2px #000) }
+.s16card .s16-tag { white-space: nowrap }
+.s16card .s16-team .cf-flag { font-size: max(5.4cqw, 7px) }
+.s16card .s16-team .cf-flag.code { font-size: max(4.2cqw, 6px); padding: .4cqw 1cqw; background: #ffffff18; color: #dbe6f7; border-radius: 1cqw }
+.s16card .s16-name {
+  display: block; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font: 700 clamp(9cqw, calc(118cqw / var(--s16-n)), 15cqw)/1.04 var(--s16-num); text-transform: uppercase; letter-spacing: .015em;
+  color: #fff; text-shadow: 0 2px 8px #000, 0 0 10px color-mix(in srgb, var(--beam) 30%, transparent);
+}
+.s16card .s16-stats { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); padding-top: 2cqw; border-top: 1px solid color-mix(in srgb, var(--acc) 45%, transparent) }
+.s16card .s16-stats::before { content: ""; position: absolute; top: -1.3cqw; left: 50%; width: 2.4cqw; height: 2.4cqw; transform: translateX(-50%) rotate(45deg); background: var(--acc); box-shadow: 0 0 4px var(--acc) }
+.s16card .s16-stats span { display: flex; flex-direction: column; align-items: center; gap: .8cqw }
+.s16card .s16-stats span + span { border-left: 1px solid color-mix(in srgb, var(--acc) 20%, transparent) }
+.s16card .s16-stats b { font: 700 max(8.2cqw, 8px)/1 var(--s16-num); color: #fff; font-variant-numeric: tabular-nums }
+.s16card .s16-stats small { font: 500 max(3.9cqw, 6px)/1 var(--s16-cn); color: #9fb1cf }
+.s16card .s16-foot { display: flex; justify-content: space-between; align-items: center; gap: 1cqw; font: 500 max(3.8cqw, 6px)/1.2 var(--s16-cn); color: #8ea3c4; white-space: nowrap }
+.s16card .s16-foot > span { overflow: hidden; text-overflow: ellipsis; min-width: 0 }
+.s16card .s16-tier i { font-style: normal }
+.s16card .s16-tier {
+  flex: none; font: 700 max(3.8cqw, 6px)/1 var(--s16-cn); letter-spacing: .04em; color: #0a1020; padding: .9cqw 2.2cqw;
+  background: linear-gradient(90deg, var(--m2), var(--m3) 50%, var(--m2));
+  clip-path: polygon(1.4cqw 0, 100% 0, calc(100% - 1.4cqw) 100%, 0 100%);
+}
+.s16card .s16-dupes { margin-left: auto; flex: none; font: 700 max(4.6cqw, 7px)/1 var(--s16-num); color: #fff; background: #050a18d8; border: 1px solid color-mix(in srgb, var(--acc) 60%, transparent); padding: .8cqw 1.8cqw; border-radius: 1.5cqw }
+
+/* the plate's hairline */
+.s16card .s16-rim { inset: 0; width: 100%; height: 100%; z-index: 6; pointer-events: none; overflow: visible }
+.s16card .s16-rim polygon, .s16-art .s16a-rim polygon { fill: none; stroke: var(--acc); stroke-opacity: .5; stroke-width: 1 }
+
+/* foil: a quiet static sheen on every revealed card, a moving one on gold, holographic on the FMVP */
+.s16card .s16-foil { inset: 0; z-index: 6; pointer-events: none; overflow: hidden; background: linear-gradient(118deg, transparent 30%, #ffffff0d 44%, transparent 56%) }
+.s16card.s16-hidden .s16-foil { background: repeating-linear-gradient(135deg, #ffffff05 0 5px, transparent 5px 10px) }
+.s16card.s16-gold .s16-foil::before, .s16card.s16-mythic .s16-foil::before {
+  content: ""; position: absolute; top: -20%; bottom: -20%; left: 0; width: 34%;
+  background: linear-gradient(100deg, transparent, #fff4cf4d 50%, transparent); transform: translateX(-160%) skewX(-16deg);
+  animation: s16-sweep 6s ease-in-out infinite;
+}
+@keyframes s16-sweep { 0%, 58% { transform: translateX(-160%) skewX(-16deg) } 100% { transform: translateX(420%) skewX(-16deg) } }
+.s16card.s16-mythic .s16-foil {
+  background:
+    radial-gradient(circle at 18% 22%, #fff 0 .7px, transparent 1.3px) 0 0 / 23px 29px,
+    radial-gradient(circle at 70% 60%, #fff 0 .6px, transparent 1.2px) 0 0 / 31px 37px,
+    repeating-linear-gradient(115deg, #ff7cc8 0px, #ffd56b 14px, #7dffc6 28px, #6cc8ff 42px, #c29cff 56px, #ff7cc8 70px);
+  mix-blend-mode: color-dodge; opacity: .2;
+  -webkit-mask-image: radial-gradient(ellipse 46% 30% at 50% 30%, transparent 35%, #000 90%); mask-image: radial-gradient(ellipse 46% 30% at 50% 30%, transparent 35%, #000 90%);
+  animation: s16-holo 10s linear infinite;
+}
+@keyframes s16-holo { from { background-position: 0 0, 0 0, 0 0 } to { background-position: 0 0, 0 0, 772px 0 } }
+.s16card.s16-mythic .s16-rating strong { background: linear-gradient(180deg, #fff 0%, #ffeab2 32%, #ff9fd0 62%, #8fdcff 100%); -webkit-background-clip: text; background-clip: text }
+.s16card.s16-mythic .s16-rating::after, .s16card.s16-mythic .s16-tier { background: linear-gradient(90deg, #ffe08f, #ff9fd0, #b49bff, #7ce0ff, #9effcc) }
+.s16card.s16-mythic .s16-emblem .s16-cup { background: linear-gradient(160deg, #fff 0%, #ffe9a0 30%, #e0a63a 70%, #8a5a12 100%) }
+.s16card.s16-mythic .s16-emblem { filter: drop-shadow(0 1px 0 #000) drop-shadow(0 0 5px #ffd56b) }
+.s16card.s16-mythic .s16-emblem b { color: #ffe7a6 }
+.s16card.s16-mythic .s16-sky { background: radial-gradient(ellipse 95% 50% at 50% -4%, #c3a6ff66, transparent 72%), radial-gradient(ellipse 60% 30% at 15% 20%, #ff9fd033, transparent 70%), radial-gradient(ellipse 60% 30% at 85% 24%, #7ce0ff33, transparent 70%), radial-gradient(ellipse 130% 34% at 50% 61%, #2b2a6b, transparent 70%), linear-gradient(180deg, #120f36 0%, #0a0e2a 52%, #050816 100%) }
+
+/* unrevealed: gunmetal, the photo cooled and scanned, the number an outline */
+.s16card.s16-hidden .s16-photo img { filter: grayscale(.6) brightness(.8) contrast(1.08) }
+.s16card.s16-hidden .s16-photo::after { mix-blend-mode: normal; background: repeating-linear-gradient(0deg, #08122a55 0 1px, transparent 1px 3px), radial-gradient(ellipse 60% 42% at 50% -2%, #5f84c433, transparent 75%) }
+.s16card.s16-hidden .s16-rating strong { background: none; color: transparent; -webkit-text-stroke: 1px var(--m3); filter: drop-shadow(0 0 4px #5f84c4aa) }
+.s16card.s16-hidden .s16-stats b { color: var(--m3) }
+.s16card.s16-hidden .s16-name { color: #dfe7f3 }
+.s16card.s16-hidden .s16-tier { color: #dfe7f3; background: linear-gradient(90deg, #2c384c, #4c5a72 50%, #2c384c) }
+
+/* small card: drop the side line, keep everything else on its floors */
 @container (width < 128px) {
-  .s16card .s16-foot { display: none }
-  .s16card .s16-team { font-size: max(5.4cqw, 6.5px) }
-  .s16card .s16-stats small { font-size: max(4.2cqw, 6px) }
+  .s16card .s16-side { display: none }
+  .s16card .s16-rating { width: 26cqw; padding: 5cqw 0 6cqw }
+  .s16card .s16-rating strong { font-size: 25cqw }
+  .s16card .s16-emblem { width: 16cqw }
+  .s16card .s16-copy { gap: 2cqw; bottom: 4%; left: 6.5%; right: 6.5% }
+  .s16card .s16-name { font-size: clamp(11cqw, calc(130cqw / var(--s16-n)), 17cqw) }
+  .s16card .s16-floor { top: 57% }
+  .s16card .s16-photo { height: 60% }
+  .s16card .s16-tier { padding: .9cqw 1.6cqw }
+  .s16card .s16-tier i { display: none }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cardface.s16card.s16-mythic, .s16card .s16-foil, .s16card .s16-foil::before { animation: none }
 }
 
-.cardback.s16-back.s16-back { position: relative; aspect-ratio: 63 / 88; width: 100%; height: auto; min-height: 0; padding: 0; border: 0; border-radius: 9px; overflow: hidden; container-type: inline-size; background: radial-gradient(circle at 50% 40%, #1d3566, #0b1630 60%, #050a18); box-shadow: 0 8px 20px #0007 }
-.cardback.s16-back::before, .cardback.s16-back::after { content: none }
-.s16-back .s16-back-inner { position: absolute; inset: 4%; border: 1px solid #57c7ff55; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2cqw; color: #d9e6ff; font-family: Arial, sans-serif }
-.s16-back .s16-back-inner span { font-size: 6cqw; letter-spacing: .4em; text-indent: .4em }
-.s16-back .s16-back-inner b { font: 900 30cqw/1 Impact, sans-serif; color: #57c7ff; text-shadow: 0 0 20px #57c7ff66 }
-.s16-back .s16-back-inner small { font-size: 4.6cqw; letter-spacing: .2em; color: #9fb3d6 }
+/* ---- card back ---- */
+.cardback.s16-back.s16-back {
+  position: relative; aspect-ratio: 63 / 88; width: 100%; height: 100%; min-height: 0; padding: 0; border: 0; border-radius: 5px; overflow: hidden;
+  container-type: inline-size; color: #f4e6c0;
+  background: linear-gradient(140deg, #fff2bf 0%, #d4a53a 14%, #6b4a12 30%, #d4a53a 46%, #fff2bf 55%, #c08e2c 68%, #5c3f0e 86%, #d4a53a 100%);
+  box-shadow: 0 8px 20px #0008, 0 0 0 1px #0008;
+}
+.cardback.s16-back.s16-back::before, .cardback.s16-back.s16-back::after { content: none }
 .s16-back .s16-back-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block }
+.s16-back > .s16-art { position: absolute; inset: 2.6cqw }
+
+/* the arena artwork (back and pack) */
+.s16-art {
+  --gold1: #5c3f0e; --gold2: #d4a53a; --gold3: #fff2b8; --acc: #ffd46e; --beam: #7fa8ff;
+  position: absolute; inset: 0; container-type: inline-size; overflow: hidden; isolation: isolate; color: #f4e6c0; background: #050b1c;
+  font-family: "Bahnschrift", "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  clip-path: polygon(8cqw 0, calc(100% - 8cqw) 0, 100% 8cqw, 100% calc(100% - 8cqw), calc(100% - 8cqw) 100%, 8cqw 100%, 0 calc(100% - 8cqw), 0 8cqw);
+}
+.s16-art > * { position: absolute }
+.s16-art .s16a-sky { inset: 0; background: radial-gradient(ellipse 80% 40% at 50% 38%, #1f3f86 0%, transparent 70%), radial-gradient(ellipse 120% 40% at 50% 0%, #17306a 0%, transparent 70%), linear-gradient(180deg, #0a1736 0%, #071029 50%, #03070f 100%) }
+.s16-art .s16a-beams {
+  inset: 0; mix-blend-mode: screen; pointer-events: none;
+  background:
+    conic-gradient(from 140deg at 0% -2%, transparent 0deg, #7fa8ff55 7deg, transparent 13deg, transparent 19deg, #b9d0ff33 23deg, transparent 28deg 360deg),
+    conic-gradient(from 192deg at 100% -2%, transparent 0deg, #b9d0ff33 5deg, transparent 10deg, transparent 15deg, #7fa8ff55 21deg, transparent 28deg 360deg),
+    conic-gradient(from 16deg at 6% 104%, transparent 0deg, #ffd46e30 6deg, transparent 12deg 360deg),
+    conic-gradient(from 332deg at 94% 104%, transparent 0deg, #ffd46e30 6deg, transparent 12deg 360deg);
+}
+.s16-art .s16a-stars {
+  inset: 0 0 40% 0; opacity: .7; pointer-events: none;
+  background:
+    radial-gradient(circle, #fff 0 .6px, transparent 1.2px) 3px 5px / 17px 13px,
+    radial-gradient(circle, #cfe0ff 0 .5px, transparent 1px) 9px 2px / 23px 19px,
+    radial-gradient(circle, #ffe9b0 0 .7px, transparent 1.4px) 0 0 / 41px 37px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 0%, #000 20%, transparent 80%); mask-image: radial-gradient(ellipse 70% 80% at 50% 0%, #000 20%, transparent 80%);
+}
+/* the arena bowl: lit tiers in perspective under the cup */
+.s16-art .s16a-arena {
+  left: -30%; right: -30%; top: 54%; height: 70%; border-radius: 50%; pointer-events: none;
+  background:
+    repeating-radial-gradient(ellipse 50% 50% at 50% 50%, transparent 0 4.2%, #ffd46e2e 4.5% 4.8%, transparent 5.1% 7.5%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, #1b3570 0%, #0b1838 45%, transparent 70%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 35%, transparent 75%); mask-image: linear-gradient(180deg, #000 0%, #000 35%, transparent 75%);
+}
+.s16-art .s16a-arena::before { content: ""; position: absolute; left: 26%; right: 26%; top: 2%; height: 1px; background: linear-gradient(90deg, transparent, #ffd46e, #fff, #ffd46e, transparent); box-shadow: 0 0 6px #ffd46e, 0 0 16px #ffb93b }
+.s16-art .s16a-halo { left: 50%; top: 31%; width: 92%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, #ffe7a066 0%, #ffbf4a2a 26%, #7fa8ff1a 46%, transparent 66%) }
+.s16-art .s16a-rays {
+  left: 50%; top: 31%; width: 170%; aspect-ratio: 1; transform: translate(-50%, -50%); pointer-events: none; mix-blend-mode: screen;
+  background: repeating-conic-gradient(from 0deg, #ffe7a024 0deg 2deg, transparent 2deg 12deg);
+  -webkit-mask-image: radial-gradient(circle, #000 6%, transparent 50%); mask-image: radial-gradient(circle, #000 6%, transparent 50%);
+}
+.s16-art .s16a-cupwrap { left: 50%; top: 13%; width: 38%; aspect-ratio: 100 / 140; transform: translateX(-50%); filter: drop-shadow(0 0 1px #000) drop-shadow(0 0 10px #ffc95a88) drop-shadow(0 6px 10px #000a) }
+.s16-art .s16a-cup { position: absolute; inset: 0; display: block; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; background: linear-gradient(100deg, #8a5c14 0%, #fff4c4 22%, #e2b04a 40%, #8a5c14 58%, #f6d27a 78%, #a8761e 100%) }
+.s16-art .s16a-engrave { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible }
+.s16-art .s16a-head { top: 6.5%; left: 0; right: 0; text-align: center; font: 600 3.6cqw/1 "Bahnschrift", Arial, sans-serif; letter-spacing: .42em; text-indent: .42em; color: #c9d8f6; white-space: nowrap }
+.s16-art .s16a-title { top: 55%; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 2cqw }
+.s16-art .s16a-title b {
+  font: 700 31cqw/.84 "Bahnschrift SemiBold Condensed", "Bahnschrift Condensed", "DIN Condensed", "Arial Narrow", Impact, sans-serif; letter-spacing: .01em;
+  background: linear-gradient(180deg, #fffbe8 0%, #ffe39a 30%, #d4a53a 58%, #7a5212 62%, #e8bb52 78%, #fff2b8 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 2px 0 #1a1004) drop-shadow(0 0 10px #ffc95a66);
+}
+.s16-art .s16a-title span { font: 500 4.6cqw/1 "PingFang SC", "Microsoft YaHei", sans-serif; letter-spacing: .32em; text-indent: .32em; color: #f1ddae; white-space: nowrap }
+.s16-art .s16a-foot { left: 9%; right: 9%; bottom: 6.5%; display: flex; align-items: center; justify-content: center; gap: 3cqw; font: 600 3.3cqw/1.3 "Bahnschrift", "Microsoft YaHei", sans-serif; letter-spacing: .2em; color: #b9c6e2; white-space: nowrap }
+.s16-art .s16a-foot i { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #ffd46e99) }
+.s16-art .s16a-foot i:last-child { background: linear-gradient(270deg, transparent, #ffd46e99) }
+.s16-art .s16a-rim { inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible }
+.s16-art .s16a-rim polygon { stroke-opacity: .7 }
+.s16-art .s16a-foil { inset: 0; pointer-events: none; overflow: hidden; background: linear-gradient(120deg, transparent 28%, #fff5d00f 42%, transparent 54%) }
+.s16-art .s16a-foil::before { content: ""; position: absolute; top: -20%; bottom: -20%; left: 0; width: 30%; background: linear-gradient(100deg, transparent, #fff4cf38 50%, transparent); transform: translateX(-160%) skewX(-16deg); animation: s16-sweep 7s ease-in-out infinite }
+@media (prefers-reduced-motion: reduce) { .s16-art .s16a-foil::before { animation: none } }
+
+/* the pack's version: a smaller cup up top so the binding and seal sit between it and the title */
+.s16-art-pack .s16a-cupwrap { top: 9%; width: 27% }
+.s16-art-pack .s16a-halo, .s16-art-pack .s16a-rays { top: 23% }
+.s16-art-pack .s16a-title { top: 55% }
+.s16-art-pack .s16a-title b { font-size: 26cqw }
+.s16-art-pack .s16a-arena { top: 57% }
+.s16-art-pack .s16a-foot { justify-content: space-between; align-items: flex-end; bottom: 7%; letter-spacing: .12em; text-align: left; border-top: 1px solid #ffd46e55; padding-top: 3cqw }
+.s16-art-pack .s16a-foot small { display: block; font: 500 3.4cqw/1.4 "PingFang SC", "Microsoft YaHei", sans-serif; letter-spacing: .1em; color: #d9c79a }
+.s16-art-pack .s16a-foot strong { font: 700 10cqw/1 "Bahnschrift SemiBold Condensed", "Bahnschrift", "Arial Narrow", sans-serif; color: #fff2b8; letter-spacing: 0; display: flex; align-items: baseline; gap: 1cqw }
+.s16-art-pack .s16a-foot strong small { font: 600 3.2cqw/1 "Bahnschrift", Arial, sans-serif; letter-spacing: .14em; color: #d9c79a }
