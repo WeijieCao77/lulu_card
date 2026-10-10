@@ -136,6 +136,8 @@ export const HIGH_VALUE_PRICE = 3000
 export const HIGH_VALUE_PER_DAY = 5
 export const isHighValue = (rarity, price) => rarity === 'gold' || rarity === 'mythic' || Number(price) >= HIGH_VALUE_PRICE
 const HIGH_WHY = (side) => `今天的高价交易${side}已满 ${HIGH_VALUE_PER_DAY} 笔（金卡、彩卡，或 ${HIGH_VALUE_PRICE} 金币以上都算，进行中的出价和挂牌也算），北京时间 0 点后再来。便宜的铜卡、银卡不受限制。`
+/** S16 世界赛 cards are auctioned in their own section, in its daily window, and not swapped until the event is over (owner, 2026-10-10) */
+const S16_SWAP_WHY = 'S16 卡只能在 S16 交易区拍卖，不能换卡。'
 const PAIR_WHY = `你今天已经和这位玩家交易过了：同一对账号每天最多交易 ${PAIR_PER_DAY} 次（买卡、换卡都算，进行中的出价和交换也算），北京时间 0 点后再来。`
 
 /**
@@ -181,6 +183,8 @@ export function makeMarketApi(sql, {
    * it on again needs no backfill.
    */
   useSummary = process.env.MARKET_SUMMARY !== '0',
+  /** the server's clock for the S16 trading window (engine/s16Market.ts); only the checks pass another */
+  clock = () => Date.now(),
 }) {
   /** The account as it is written: never with the id in it. */
   const stored = (state) => { const { id, ...rest } = state; void id; return rest }
@@ -209,6 +213,18 @@ export function makeMarketApi(sql, {
   /** scripts on the shelf: who is suspended from trading, and who is about to be (market-guard.js) */
   const guard2 = makeMarketGuard(sql, { bg, displayName: (name, h) => displayName(name, h) })
   const bgTx = (fn) => (work.begin ? work.begin(fn) : fn(work))
+
+  /**
+   * S16 世界赛交易区 (owner, 2026-10-10): S16 cards trade in their own section of the shelf, only inside the daily
+   * window (北京时间 10:00–20:00, src/data/s16Market.json). Outside it no S16 card is listed or bid on; an S16
+   * listing has no buy-now and ends at the close of the day it went up; S16 cards are not swapped. From the last
+   * window before the final S16 trading stops, and from `normalFrom` (after the results) S16 cards trade like any
+   * other card — `s16Gated()` is false then and none of this applies. The server's clock decides, never the client's.
+   */
+  const s16Ids = engine.ALL_CARDS.filter((c) => c.s16).map((c) => c.id)
+  const s16Set = new Set(s16Ids)
+  const s16Window = () => engine.s16MarketWindow(clock())
+  const s16Gated = () => engine.s16Gated(clock())
 
   /**
    * A write the client named (requestId) happens once — the same table and the
@@ -825,7 +841,7 @@ export function makeMarketApi(sql, {
    * `sortkey` is what the cursor carries: the timestamp as TEXT for the two
    * time orders (microseconds survive; a float of the epoch does not quite).
    */
-  async function shelfFast({ sort, limit, cursor, mine, ids, priceMin, priceMax, heldIds, heldLevels }) {
+  async function shelfFast({ sort, limit, cursor, mine, ids, notIds, priceMin, priceMax, heldIds, heldLevels }) {
     const cid = cursor ? cursor.id : '0'
     if (sort === 'new') {
       const key = cursor ? String(cursor.key) : null
@@ -836,6 +852,7 @@ export function makeMarketApi(sql, {
         from card_listings l
         where l.status = 'open' and (l.ends is null or l.ends > now()) and l.seller_h <> ${mine}
           and (${ids}::text[] is null or l.card_id = any(${ids}::text[]))
+          and (${notIds}::text[] is null or l.card_id <> all(${notIds}::text[]))
           and (${priceMin}::int is null or l.cur_price >= ${priceMin}::int)
           and (${priceMax}::int is null or l.cur_price <= ${priceMax}::int)
           and (${heldIds}::text[] is null or not exists (
@@ -856,6 +873,7 @@ export function makeMarketApi(sql, {
         from card_listings l
         where l.status = 'open' and (l.ends is null or l.ends > now()) and l.seller_h <> ${mine}
           and (${ids}::text[] is null or l.card_id = any(${ids}::text[]))
+          and (${notIds}::text[] is null or l.card_id <> all(${notIds}::text[]))
           and (${priceMin}::int is null or l.cur_price >= ${priceMin}::int)
           and (${priceMax}::int is null or l.cur_price <= ${priceMax}::int)
           and (${heldIds}::text[] is null or not exists (
@@ -870,6 +888,7 @@ export function makeMarketApi(sql, {
         from card_listings l
         where l.status = 'open' and (l.ends is null or l.ends > now()) and l.seller_h <> ${mine}
           and (${ids}::text[] is null or l.card_id = any(${ids}::text[]))
+          and (${notIds}::text[] is null or l.card_id <> all(${notIds}::text[]))
           and (${priceMin}::int is null or l.cur_price >= ${priceMin}::int)
           and (${priceMax}::int is null or l.cur_price <= ${priceMax}::int)
           and (${heldIds}::text[] is null or not exists (
@@ -889,6 +908,7 @@ export function makeMarketApi(sql, {
       from card_listings l
       where l.status = 'open' and l.ends > now() and l.seller_h <> ${mine}
         and (${ids}::text[] is null or l.card_id = any(${ids}::text[]))
+        and (${notIds}::text[] is null or l.card_id <> all(${notIds}::text[]))
         and (${priceMin}::int is null or l.cur_price >= ${priceMin}::int)
         and (${priceMax}::int is null or l.cur_price <= ${priceMax}::int)
         and (${heldIds}::text[] is null or not exists (
@@ -906,6 +926,7 @@ export function makeMarketApi(sql, {
       from card_listings l
       where l.status = 'open' and l.ends is null and l.seller_h <> ${mine}
         and (${ids}::text[] is null or l.card_id = any(${ids}::text[]))
+        and (${notIds}::text[] is null or l.card_id <> all(${notIds}::text[]))
         and (${priceMin}::int is null or l.cur_price >= ${priceMin}::int)
         and (${priceMax}::int is null or l.cur_price <= ${priceMax}::int)
         and (${heldIds}::text[] is null or not exists (
@@ -946,8 +967,8 @@ export function makeMarketApi(sql, {
           and not exists (select 1 from unnest(${heldIds}::text[], ${heldLevels}::int[]) as h(cid, lvl)
                            where h.cid = l.card_id and l.level <= h.lvl)
         group by l.card_id` : await poolSlow(mine, priceMin, priceMax, heldIds, heldLevels)
-      const total = (await sql`select count(*)::int as n from card_listings where status = 'open' and (ends is null or ends > now())`)[0].n
-      return { pool: pool.map((r) => [r.card_id, r.n]), total }
+      const { total, total16 } = await totals()
+      return { pool: pool.map((r) => [r.card_id, r.n]), total, total16 }
     }
     const key = `${fast ? 'f' : 's'}|${priceMin ?? ''}|${priceMax ?? ''}`
     let hit = menuCache.get(key)
@@ -961,8 +982,8 @@ export function makeMarketApi(sql, {
               and (${priceMin}::int is null or l.cur_price >= ${priceMin}::int)
               and (${priceMax}::int is null or l.cur_price <= ${priceMax}::int)
             group by l.card_id` : await poolSlow('', priceMin, priceMax, null, null)
-          const total = (await sql`select count(*)::int as n from card_listings where status = 'open' and (ends is null or ends > now())`)[0].n
-          entry.value = { pool: new Map(pool.map((r) => [r.card_id, r.n])), total }
+          const { total, total16 } = await totals()
+          entry.value = { pool: new Map(pool.map((r) => [r.card_id, r.n])), total, total16 }
           entry.at = Date.now()
         } finally {
           entry.inflight = null
@@ -988,7 +1009,14 @@ export function makeMarketApi(sql, {
         if (left > 0) pool.set(r.card_id, left); else pool.delete(r.card_id)
       }
     }
-    return { pool: [...pool], total: value.total }
+    return { pool: [...pool], total: value.total, total16: value.total16 }
+  }
+  /** every open listing, and how many of them are S16 世界赛 cards (the S16 section counts its own) */
+  const totals = async () => {
+    const r = (await sql`
+      select count(*)::int as n, (count(*) filter (where card_id = any(${s16Ids}::text[])))::int as n16
+      from card_listings where status = 'open' and (ends is null or ends > now())`)[0]
+    return { total: r.n, total16: r.n16 }
   }
   const poolSlow = (mine, priceMin, priceMax, heldIds, heldLevels) => sql`
     select l.card_id, count(*)::int as n
@@ -1054,15 +1082,21 @@ export function makeMarketApi(sql, {
     // empty/invalid list must stay [], never fall back to an unfiltered shelf.
     const watchIds = marketWatchIds(b?.watchedIds, new Set(engine.ALL_CARDS.filter((c) => c.kind === 'player').map((c) => c.id)))
     const watchSet = watchIds === null ? null : new Set(watchIds)
-    const ids = narrowed || watchSet !== null
+    let ids = narrowed || watchSet !== null
       ? engine.ALL_CARDS.filter((c) => (watchSet === null || watchSet.has(c.id)) && engine.matchesFilter(c, filter) && engine.matchesQuery(c, q)).map((c) => c.id)
       : null
+    // the S16 世界赛 section shows only S16 cards, the ordinary shelf everything else (owner, 2026-10-10)
+    const s16 = b?.s16 === true
+    if (s16) ids = ids === null ? s16Ids : ids.filter((cid) => s16Set.has(cid))
+    // (after the event S16 cards are ordinary cards and go back on the ordinary shelf too)
+    const gated = s16Gated()
+    const notIds = !s16 && gated && s16Ids.length ? s16Ids : null
     const held = unowned ? await heldBy(mine) : null
     const heldIds = held ? held.ids : null
     const heldLevels = held ? held.levels : null
 
     const rows = fast
-      ? await shelfFast({ sort, limit, cursor, mine, ids, priceMin, priceMax, heldIds, heldLevels })
+      ? await shelfFast({ sort, limit, cursor, mine, ids, notIds, priceMin, priceMax, heldIds, heldLevels })
       : await sql`
       select * from (
         select l.id, l.seller_h, l.card_id, l.level, l.evo, l.ask, l.created, l.ends, l.buyout, l.hours,
@@ -1091,6 +1125,7 @@ export function makeMarketApi(sql, {
           and (l.ends is null or l.ends > now())
           and l.seller_h <> ${mine}
           and (${ids}::text[] is null or l.card_id = any(${ids}::text[]))
+          and (${notIds}::text[] is null or l.card_id <> all(${notIds}::text[]))
           and (${priceMin}::int is null or coalesce(o.best, l.ask) >= ${priceMin}::int)
           and (${priceMax}::int is null or coalesce(o.best, l.ask) <= ${priceMax}::int)
           and (${heldIds}::text[] is null or not exists (
@@ -1131,8 +1166,9 @@ export function makeMarketApi(sql, {
      * feeding: a club menu narrowed by the club you picked has one entry.
      */
     const menus = cursor ? null : await shelfMenus({ mine, priceMin, priceMax, heldIds, heldLevels, fast })
-    const pool = menus ? (watchSet === null ? menus.pool : menus.pool.filter(([id]) => watchSet.has(id))) : null
-    const total = menus?.total ?? null
+    const inTab = (id) => (s16 ? s16Set.has(id) : !gated || !s16Set.has(id))
+    const pool = menus ? menus.pool.filter(([id]) => (watchSet === null || watchSet.has(id)) && inTab(id)) : null
+    const total = menus ? (s16 ? menus.total16 : gated ? menus.total - menus.total16 : menus.total) : null
     const names = await namesOf([...own, ...rows].map((r) => r.seller_h))
     const shape = (r) => ({
       id: String(r.id), cardId: r.card_id, level: r.level, ...(r.evo ? { evo: r.evo } : {}), ask: r.ask,
@@ -1148,8 +1184,10 @@ export function makeMarketApi(sql, {
     json(res, 200, {
       ...shelfConstants(),
       ok: true,
-      now: Date.now(),
+      now: clock(),
       sort,
+      // the S16 section's window as the server's clock has it: the page draws the banner from this
+      s16Window: s16Window(),
       gate: mine ? await tooNew(mine) : { need: TRADE_PULLS, have: 0, days: TRADE_DAYS, wait: TRADE_DAYS * 86_400 },
       ban: mine ? await guard2.banOf(mine) ?? undefined : undefined,
       // a short page is the end of the shelf; a full one may or may not be, and
@@ -1267,6 +1305,14 @@ export function makeMarketApi(sql, {
     // level from what the account actually holds.
     const card = engine.cardById(cardId)
     if (!card) { json(res, 200, { ok: false, notOwned: true }); return }
+    // S16 世界赛: only inside the window, not in its last half hour, no buy-now, and it ends at the window's close
+    const s16w = card.s16 && s16Gated() ? s16Window() : null
+    if (s16w && !s16w.canList) {
+      json(res, 200, { ok: false, s16Closed: true, why: engine.s16ClosedWhy(clock(), s16w), s16Window: s16w }); return
+    }
+    if (s16w && b?.buyout != null && b?.buyout !== '') {
+      json(res, 200, { ok: false, s16NoBuyout: true, why: 'S16 卡没有一口价：当天休市时按最高价成交。' }); return
+    }
     const floor = askFloor(card.rarity)
     const cap = capOf(card)
     if (!cardId || !Number.isFinite(ask) || ask < floor || ask > cap) {
@@ -1283,8 +1329,11 @@ export function makeMarketApi(sql, {
     const buyout = rawBuyout
     // how long it runs: the seller's choice, whole hours, within the range;
     // a client from before the choice existed sends nothing and gets a day
-    const hours = b?.hours == null || b?.hours === '' ? AUCTION_HOURS : Math.round(Number(b.hours))
-    if (!Number.isFinite(hours) || hours < AUCTION_MIN_HOURS || hours > AUCTION_MAX_HOURS) {
+    // (an S16 card's length is not the seller's: it runs to the window's close, rounded up to whole hours here)
+    const hours = s16w ? Math.min(AUCTION_MAX_HOURS, Math.max(1, Math.ceil((s16w.closesAt - clock()) / 3_600_000)))
+      : b?.hours == null || b?.hours === '' ? AUCTION_HOURS : Math.round(Number(b.hours))
+    const s16Ends = s16w ? new Date(s16w.closesAt) : null
+    if (!s16w && (!Number.isFinite(hours) || hours < AUCTION_MIN_HOURS || hours > AUCTION_MAX_HOURS)) {
       json(res, 200, { ok: false, badHours: true, min: AUCTION_MIN_HOURS, max: AUCTION_MAX_HOURS })
       return
     }
@@ -1339,7 +1388,7 @@ export function makeMarketApi(sql, {
         const r = await db`
           insert into card_listings (seller_h, card_id, level, evo, ask, buyout, hours, ends, cur_price, open_n, bid_n)
           values (${me}, ${cardId}, ${esc.level}, ${esc.evo ? db.json(esc.evo) : null}, ${ask}, ${buyout}, ${hours},
-                  now() + make_interval(hours => ${hours}), ${ask}, 0, 0)
+                  coalesce(${s16Ends}::timestamptz, now() + make_interval(hours => ${hours})), ${ask}, 0, 0)
           returning id, ends`
         return { ok: true, id: String(r[0].id), ends: endsAt(r[0]), hours, state: stored(g), rev: w[0].rev }
       }
@@ -1477,8 +1526,16 @@ export function makeMarketApi(sql, {
       select id, seller_h, card_id, level, evo, ask, ends, buyout, created from card_listings
       where id = ${lid}::bigint and status = 'open'`
     if (!rows.length) { json(res, 200, { ok: false, gone: true }); return }
-    const l = rows[0]
+    // an S16 card under the section's rules (until the results of the final are in)
+    const s16 = s16Set.has(rows[0].card_id) && s16Gated()
+    // an S16 listing has no buy-now, whatever a row from before the S16 section says
+    const l = s16 ? { ...rows[0], buyout: null } : rows[0]
     if (l.seller_h === me) { json(res, 200, { ok: false, self: true }); return }
+    // S16 世界赛交易区: bids only inside the daily window, by the server's clock
+    if (s16) {
+      const w = s16Window()
+      if (!w.open) { json(res, 200, { ok: false, s16Closed: true, why: engine.s16ClosedWhy(clock(), w), s16Window: w }); return }
+    }
     const auction = !!l.ends
     if (auction && endsAt(l) <= Date.now()) { json(res, 200, { ok: false, gone: true }); return }
     const topRow = await sql`
@@ -1608,7 +1665,8 @@ export function makeMarketApi(sql, {
         // a bid in the last minutes gives everyone a few more — up to an hour
         // past the day in all, so two people cannot keep a card on the shelf
         // by trading bids every nine minutes
-        const stretched = await db`
+        // …but never on an S16 auction: it ends at the window's close, and the section is shut after it
+        const stretched = s16 ? [] : await db`
           update card_listings set ends = least(
               now() + make_interval(mins => ${SNIPE_MINUTES}),
               created + make_interval(hours => card_listings.hours, mins => ${SNIPE_CAP_MINUTES}))
@@ -1912,6 +1970,7 @@ export function makeMarketApi(sql, {
     const give = engine.cardById(giveId)
     const want = engine.cardById(wantId)
     if (!give || !want) { json(res, 200, { ok: false, notOwned: true }); return }
+    if ((give.s16 || want.s16) && s16Gated()) { json(res, 200, { ok: false, s16: true, why: S16_SWAP_WHY }); return }
     if (give.rarity !== want.rarity) { json(res, 200, { ok: false, rarity: true }); return }
     const them = await byCode(b?.code)
     if (!them.row) { json(res, 200, { ok: false, [them.why]: true }); return }
@@ -2034,6 +2093,8 @@ export function makeMarketApi(sql, {
       json(res, 200, out.gone ? { ok: false, gone: true } : out)
       return
     }
+    // an S16 card never changes hands by swap (S16 世界赛交易区, 2026-10-10); the swap can still be declined
+    if ((s16Set.has(row.give_id) || s16Set.has(row.want_id)) && s16Gated()) { json(res, 200, { ok: false, s16: true, why: S16_SWAP_WHY }); return }
     // Declining stays open to a suspended account (its offers must not be
     // stranded); accepting moves a card, so neither side may be suspended.
     // The swap stays open: it can still be declined, cancelled or expire.

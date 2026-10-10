@@ -14,7 +14,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useCards } from './ctx'
 import { Panel } from '../common'
 import CardFace from '../Card'
-import { cardById, isPlayerCard, RARITY_CN } from '../../engine/cards'
+import { cardById, isPlayerCard, isS16Card, RARITY_CN } from '../../engine/cards'
 import type { Card } from '../../engine/cards'
 import { collection, STAMINA_COST, canPlay } from '../../engine/gacha'
 import type { OwnedCard } from '../../engine/gacha'
@@ -25,6 +25,7 @@ import { playLevel } from '../../engine/evolve'
 import { tradeableCopies } from '../../engine/tradeLock'
 import { answerSwap, cancelSwap, gateText, mySwaps, proposeSwap } from '../../engine/market'
 import { CardPicker } from './Picker'
+import { s16Gated } from '../../engine/s16Market'
 import type { SwapRow } from '../../engine/market'
 
 const MISS: Record<FriendMiss, string> = {
@@ -84,14 +85,16 @@ export default function Swap() {
   // what I can put up: anything I hold; a duplicate goes first at +0, then the
   // lowest upgraded spare, and the card itself last
   // only cards with a copy that may trade now (engine/tradeLock.ts)
-  const sellable = collection(g).filter(({ owned }) => tradeableCopies(owned, now) > 0).sort((a, b) => b.rating - a.rating)
+  // S16 世界赛 cards are auctioned in the market's S16 section and not swapped until the event is over (engine/s16Market.ts)
+  const noS16 = s16Gated(now)
+  const sellable = collection(g).filter(({ card, owned }) => tradeableCopies(owned, now) > 0 && !(noS16 && isS16Card(card))).sort((a, b) => b.rating - a.rating)
   const giveCard = give ? cardById(give) : null
   const giveCopy = give ? leavingCopy(give, g.cards[give], now) : { level: 0 }
   const giveLevel = copyLabel(giveCopy.level, giveCopy.evo)
   // theirs, of the same metal — the only ones the server would accept
   const theirs = (friend?.cards ?? [])
     .map((c) => ({ ...c, card: cardById(c.id) }))
-    .filter((c): c is FriendCard & { card: Card } => !!c.card && (!giveCard || c.card.rarity === giveCard.rarity))
+    .filter((c): c is FriendCard & { card: Card } => !!c.card && !(noS16 && isS16Card(c.card)) && (!giveCard || c.card.rarity === giveCard.rarity))
     .sort((a, b) => b.card.rating - a.card.rating)
 
   const propose = async () => {
@@ -101,7 +104,8 @@ export default function Swap() {
     const r = await proposeSwap(friend.code, give, want)
     setBusy(false)
     if (!r?.ok) {
-      toast(r?.rarity ? '只能同等级互换：银换银，金换金。'
+      toast(r?.s16 ? String(r.why ?? 'S16 卡只能在 S16 交易区拍卖，不能换卡。')
+        : r?.rarity ? '只能同等级互换：银换银，金换金。'
         : r?.banned ? String(r.why ?? '交易已暂停。')
         : r?.theyBanned ? '对方的交易已暂停，暂时不能换卡。'
         : r?.newbie ? gateText(r)
@@ -128,7 +132,8 @@ export default function Swap() {
     const r = await answerSwap(s.id, accept)
     setBusy(false)
     if (!r?.ok) {
-      toast(r?.stamina ? `体力不够，接受交换要 ${STAMINA_COST.swap} 点。`
+      toast(r?.s16 ? `${String(r.why ?? 'S16 卡只能在 S16 交易区拍卖，不能换卡。')}可以拒绝，卡退回对方。`
+        : r?.stamina ? `体力不够，接受交换要 ${STAMINA_COST.swap} 点。`
         : r?.banned ? String(r.why ?? '交易已暂停，可以拒绝，暂时不能接受。')
         : r?.theyBanned ? '对方的交易已暂停，暂时不能接受，可以拒绝退回。'
         : r?.locked ? `${String(r.why ?? '这张卡现在不能交易')}。可以先拒绝，或等到能交易时再接受。`

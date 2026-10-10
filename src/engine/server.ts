@@ -23,6 +23,8 @@ export { cardById, isPlayerCard, squadRating, SALVAGE, ALL_CARDS, PLAYER_CARDS, 
 // the shelf is filtered and sorted before it is paged, so the server needs the
 // same predicate the filter bar runs — see engine/cardFilter.ts
 export { matchesFilter, matchesQuery, readFilter, filterActive } from './cardFilter'
+// S16 世界赛交易区: the daily window the market enforces — the page reads the same function (engine/s16Market.ts)
+export { s16MarketWindow, s16ClosedWhy, s16Gated, S16_MARKET } from './s16Market'
 export type { CardFilter } from './cardFilter'
 export {
   openCupSlot, planOpenCup, planOpenCupFast, openCupRoundAt, pairOpenCupRound, playOpenCupMatch, openCupMatchSeed, openCupPurse,

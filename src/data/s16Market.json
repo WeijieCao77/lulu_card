@@ -1,0 +1,9 @@
+{
+  "_note": "S16 世界赛交易区（站长 2026-10-10）：北京时间每天 openHour:00 开市、closeHour:00 休市，当天挂的 S16 卡都在当天休市时结拍，休市前 lastListMinutes 分钟起不再接受新挂牌，没有一口价。freezeFrom 起（决赛前最后一个交易日休市）S16 卡停止交易；normalFrom 起（录入决赛结果后再改这个时间）S16 卡按普通卡交易：普通货架、拍卖时长自选、可设一口价、可换卡。改时间只改这里，服务器和页面读的是同一份。",
+  "utcOffsetHours": 8,
+  "openHour": 10,
+  "closeHour": 20,
+  "lastListMinutes": 30,
+  "freezeFrom": "2026-11-14T20:00:00+08:00",
+  "normalFrom": "2026-11-15T12:00:00+08:00"
+}

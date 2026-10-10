@@ -76,7 +76,11 @@ console.log(`${open} open listings, ${(await sql`select count(*)::int as n from 
 // ---- the switch is off until the summaries are there and agree
 check('回填之前：开关是关的，货架走旧查询', fast.summaryLive() === false)
 const pre = await call(fast, '/api/market/browse', { id: ME })
-check('旧查询照常回答', pre.ok === true && pre.listings.length === 60 && pre.total === open, `total ${pre.total}`)
+// the ordinary shelf leaves S16 世界赛 cards to their own section while its rules hold (engine/s16Market.ts)
+const s16Ids = engine.ALL_CARDS.filter((c: { s16?: unknown }) => c.s16).map((c: { id: string }) => c.id)
+const openS16 = (await sql`select count(*)::int as n from card_listings where status = 'open' and (ends is null or ends > now()) and card_id = any(${s16Ids}::text[])`)[0].n
+const openShelf = engine.s16Gated(Date.now()) ? open - openS16 : open
+check('旧查询照常回答', pre.ok === true && pre.listings.length === 60 && pre.total === openShelf, `total ${pre.total}`)
 const t0 = Date.now()
 await fast.settleDue({ chores: true, budgetMs: 60_000 })
 check('首轮回填有界，未全部完成时保留旧读路径', !fast.summaryLive())

@@ -14,6 +14,7 @@
 import { rememberedId } from './cardid'
 import type { GachaState } from './gacha'
 import type { Evo } from './evolve'
+import type { S16Window } from './s16Market'
 
 export { escrowCard, restoreCard, mailLine, applyMail, unreadMail, markMailSeen } from './inbox'
 export type { MailItem } from './inbox'
@@ -205,6 +206,8 @@ export interface ShelfQuery {
   priceMax?: number
   /** leave out the cards you already hold at that level or higher */
   unowned?: boolean
+  /** the S16 世界赛 section: only S16 cards (the ordinary shelf leaves them out while the section's rules hold) */
+  s16?: boolean
 }
 
 export interface ShelfPage {
@@ -227,6 +230,8 @@ export interface ShelfPage {
    *  whole market rather than over the page you happen to be looking at */
   pool?: [string, number][]
   protectSec?: number
+  /** the S16 section's window by the server's clock (engine/s16Market.ts) */
+  s16Window?: S16Window
   hours?: number; step?: number; snipe?: number; buyoutMin?: number; now?: number; page?: number
 }
 
