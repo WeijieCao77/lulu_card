@@ -2,8 +2,10 @@
  * S16 赛事预测 (owner 2026-10-04, after 开瓦包's 比赛预测, fitted to the S16 format; no single-match picks).
  *
  * Four pick sheets, each locked by the server's clock (owner 2026-10-10 added the first two: 「冠军预测…入围赛…后面其他比赛也是」):
- *   ⓪ 入围赛 — which of the four Play-In teams goes through to the Swiss stage; locks at the first Play-In match.
- *   ⓪ 冠军 — the champion, from every team at the event; open from launch, locks at the first Swiss match.
+ *   ⓪ 冠军 — the champion, from every team at the event; open from launch, locks before the Play-In like the 入围赛 sheet.
+ *   ⓪ 入围赛 — which of the four Play-In teams goes through to the Swiss stage.
+ * Like 开瓦包, every sheet locks one hour before its stage's first match, and each opens only once its teams are known
+ * (owner 2026-10-10: 「一轮一轮开」).
  *   ① 瑞士轮 — the eight teams that reach the knockout, plus two for 3-0 and two for 0-3. Swiss pairings are drawn
  *      round by round, so the whole stage is one sheet rather than a bracket.
  *   ② 淘汰赛 — once the eight are drawn into the bracket: the winner of every quarter-final, semi-final and the final.
@@ -49,15 +51,15 @@ export function setOne(s: S16PredictState, sheet: 'playin' | 'champ', raw: Recor
   return null
 }
 
-/** 入围赛: the team that goes through. S16 世界赛包 ×2 */
+/** 入围赛: the team that goes through. 十连包 ×1, 开瓦包's tier for a qualifier picked in the right place */
 export function playinReward(p: OnePick | undefined, now: number, d = S16_PREDICT.playin): PredictReward | null {
   if (!p || !confirmed(now, d.confirmedAt) || !d.winner || p.at >= t(d.lockAt)) return null
   return p.team === d.winner
-    ? { label: '猜中入围赛晋级队', packs: { s16: 2 }, detail: '入围赛晋级队猜中' }
+    ? { label: '猜中入围赛晋级队', packs: { ten: 1 }, detail: '入围赛晋级队猜中' }
     : { label: '没猜中入围赛晋级队', packs: {}, detail: '入围赛晋级队没猜中' }
 }
 
-/** 冠军, picked before the Swiss stage: 十连包 ×3 + S16 世界赛包 ×2; the runner-up picked instead: 选拔包 ×3 */
+/** 冠军, picked before the Play-In, one of 19: 十连包 ×3 + S16 世界赛包 ×2; the runner-up picked instead: 选拔包 ×3 */
 export function champReward(p: OnePick | undefined, now: number, d = S16_PREDICT.champ, runnerUp: string | null = runnerUpOf()): PredictReward | null {
   if (!p || !confirmed(now, d.confirmedAt) || !d.champion || p.at >= t(d.lockAt)) return null
   if (p.team === d.champion) return { label: '猜中冠军', packs: { ten: 3, s16: 2 }, detail: '冠军猜中' }

@@ -51,10 +51,19 @@ export default function S16Predict({ onClose, data = S16_PREDICT }: { onClose: (
   return (
     <Modal title="S16 赛事预测" onClose={onClose} onBgClose={() => {}}>
       <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-        四张预测单：入围赛（哪支队晋级）、冠军（谁最后夺冠）、瑞士轮（晋级八强的 8 支队，再猜 2 支 3-0、2 支 0-3）和淘汰赛（八强抽签后填整张对阵）。每张在锁定时间前可以随时改，赛果确认后来这里领奖，每张只领最高一档。
+        冠军预测现在就能填；入围赛、瑞士轮、淘汰赛一轮一轮开：上一轮打完、对阵确定了才开放下一轮。每张都在这一轮第一场开打前 1 小时锁定，锁定前可以随时改；赛果确认后来这里领奖，每张只领最高一档。
       </p>
 
-      <h4 style={{ margin: '12px 0 6px' }}>入围赛 <span className="tiny faint">锁定：{when(pi.lockAt)}</span></h4>
+      <h4 style={{ margin: '12px 0 6px' }}>冠军 <span className="tiny faint">锁定：{when(ch.lockAt)}</span></h4>
+      {ch.teams && <>
+        <div className="tiny faint">选 1 支你认为能夺冠的队（入围赛的队也能选），入围赛开打前锁定</div>
+        <div className="s16p-grid">{ch.teams.map((id) => <Team key={id} id={id} on={chPick === id} onClick={chOpen ? () => setChPick(id) : undefined} />)}</div>
+        {chOpen && <button className="primary sm" disabled={busy || !chPick} onClick={() => void send('s16_predict', { stage: 'champ', picks: { team: chPick } }, '冠军预测已保存，锁定前可以随时改。')}>{mine.champ ? '更新预测' : '提交预测'}</button>}
+        {!chOpen && !mine.champ && <p className="small muted">已锁定，你没有提交这张预测。</p>}
+        {result(chR, 'champ', mine.champ?.claimedAt)}
+      </>}
+      <p className="tiny faint">奖励：猜中冠军送十连包 ×3 + S16 世界赛包 ×2；选中的是亚军送选拔包 ×3。</p>
+      <h4 style={{ margin: '16px 0 6px' }}>入围赛 <span className="tiny faint">锁定：{when(pi.lockAt)}</span></h4>
       {!pi.teams ? <p className="small muted">入围赛 4 支队还差巴西二号种子，确定后开放。</p> : <>
         <div className="tiny faint">选 1 支能打进瑞士轮的队</div>
         <div className="s16p-grid">{pi.teams.map((id) => <Team key={id} id={id} on={piPick === id} onClick={piOpen ? () => setPiPick(id) : undefined} />)}</div>
@@ -62,17 +71,8 @@ export default function S16Predict({ onClose, data = S16_PREDICT }: { onClose: (
         {!piOpen && !mine.playin && <p className="small muted">已锁定，你没有提交这张预测。</p>}
         {result(piR, 'playin', mine.playin?.claimedAt)}
       </>}
-      <p className="tiny faint">奖励：猜中送 S16 世界赛包 ×2。</p>
+      <p className="tiny faint">奖励：猜中送十连包 ×1。</p>
 
-      <h4 style={{ margin: '16px 0 6px' }}>冠军 <span className="tiny faint">锁定：{when(ch.lockAt)}</span></h4>
-      {ch.teams && <>
-        <div className="tiny faint">选 1 支你认为能夺冠的队（入围赛的队也能选）</div>
-        <div className="s16p-grid">{ch.teams.map((id) => <Team key={id} id={id} on={chPick === id} onClick={chOpen ? () => setChPick(id) : undefined} />)}</div>
-        {chOpen && <button className="primary sm" disabled={busy || !chPick} onClick={() => void send('s16_predict', { stage: 'champ', picks: { team: chPick } }, '冠军预测已保存，锁定前可以随时改。')}>{mine.champ ? '更新预测' : '提交预测'}</button>}
-        {!chOpen && !mine.champ && <p className="small muted">已锁定，你没有提交这张预测。</p>}
-        {result(chR, 'champ', mine.champ?.claimedAt)}
-      </>}
-      <p className="tiny faint">奖励：猜中冠军送十连包 ×3 + S16 世界赛包 ×2；选中的是亚军送选拔包 ×3。</p>
 
       <h4 style={{ margin: '16px 0 6px' }}>瑞士轮 <span className="tiny faint">锁定：{when(sw.lockAt)}</span></h4>
       {!sw.teams ? <p className="small muted">16 支队要等入围赛打完才确定，到时候开放。</p> : <>
