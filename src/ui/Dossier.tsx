@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { WORLD_PLAYERS } from '../engine/world'
 import { WORLD_TEAMS, EXTRA_COACHES } from '../engine/teams'
 import { coachDossier, dossierOf, titleCount } from '../engine/dossier'
-import { BASE_PLAYER_CARDS, COACH_CARDS, ECHO_CARDS, coachTitleLines, echoTeamName, LEGEND_CARDS, RARITY_CN } from '../engine/cards'
+import { BASE_PLAYER_CARDS, COACH_CARDS, ECHO_CARDS, championNames, coachTitleLines, echoTeamName, LEGEND_CARDS, RARITY_CN } from '../engine/cards'
 import { SPEC_CN } from '../engine/staff'
 import CoachHonours from './CoachHonours'
 import { CareerEvents, CareerHonours, CareerTeams } from './PlayerCareer'
@@ -448,6 +448,7 @@ function CoachDetail({ card, onBack }: { card: CoachCard; onBack: () => void }) 
                 ? <>自由身</>
                 : <>{club ? club.name : '暂无战队'}{card.clubTag ? `（${card.clubTag}）` : ''}</>}
               {coachTitleLines(card).map((l) => <span key={l}><br />夺冠俱乐部 · {l}</span>)}
+              {championNames(card).length > 0 && <span><br />一起夺冠的选手（有默契）· {championNames(card).join('、')}</span>}
               <br />
               {coachRole(card)}
               {' · '}{RARITY_CN[card.rarity]} {card.rating ?? '—'}

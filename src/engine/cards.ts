@@ -21,6 +21,7 @@ import ECHO_JSON from '../data/echoCards.json'
 import S16_JSON from '../data/s16.json'
 import S16_RATINGS from '../data/s16Ratings.json'
 import COACH_TITLE_CLUBS from '../data/coachTitleClubs.json'
+import COACH_CHAMPIONS from '../data/coachChampions.json'
 import type { Legend } from './legends'
 import { decodeDisplayName } from './displayText'
 import { clamp } from './rng'
@@ -229,10 +230,27 @@ export function coachTitleLines(c: CoachCard): string[] {
   })
 }
 
-/** Same club for a coach bond: the club he coaches, or a club he won titles with as head coach. */
+/**
+ * The people who won a head-coach title with each coach (data/coachChampions.json: the winning roster on each title's
+ * Leaguepedia page, matched to card persons). Owner 2026-10-07: 「改成和单独的冠军队员有默契而不是和俱乐部」 — a player
+ * asked why Viper, EDG's S11 bot laner and now at BLG, had nothing with Maokai; the bond used to go to whoever plays
+ * for EDG today.
+ */
+type ChampionRow = { event: string; persons: string[]; names: string[] }
+const CHAMPIONS_OF = new Map(Object.entries((COACH_CHAMPIONS as { coaches: Record<string, ChampionRow[]> }).coaches)
+  .map(([coach, rows]) => [coach, new Set(rows.flatMap((r) => r.persons))]))
+export const championRows = (coach: CoachCard): ChampionRow[] =>
+  (COACH_CHAMPIONS as { coaches: Record<string, ChampionRow[]> }).coaches[coach.name] ?? []
+/** Everyone in the game who won a head-coach title with him, once each, for the coach's detail page */
+export const championNames = (coach: CoachCard): string[] => [...new Set(championRows(coach).flatMap((r) => r.names))]
+
+/** The coach's own club now: the same-club bond. */
 export function coachSharesClub(p: PlayerCard, coach: CoachCard): boolean {
-  if (sameClubLineage(p, coach)) return true
-  return !!coach.titleClubs?.some((id) => sameClubLineage(p, { clubId: id }))
+  return sameClubLineage(p, coach)
+}
+/** He won a head-coach title together with this player (any of the player's cards: ordinary, S16, 彩卡, 回响). */
+export function coachWonWith(p: PlayerCard, coach: CoachCard): boolean {
+  return !!CHAMPIONS_OF.get(coach.name)?.has(personOf(p))
 }
 
 export type Card = PlayerCard | CoachCard
@@ -765,8 +783,8 @@ export interface ChemReport {
 
 export interface CoachLink {
   slot: number
-  /** Strongest reason shown to the player; country beats region, as for player pairs. */
-  why: 'club' | 'nat' | 'region'
+  /** Strongest reason shown to the player; country beats region, as for player pairs. 'champ': won a title together */
+  why: 'club' | 'champ' | 'nat' | 'region'
   value: number
 }
 
@@ -839,20 +857,23 @@ export function chemistry(squad: Squad): ChemReport {
   if (isCoachCard(coach)) {
     const players = cards.filter(isPlayerCard)
     const sameClub = players.filter((p) => coachSharesClub(p, coach)).length
-    // Only his club now and the clubs he won titles with (coachSharesClub). Men he coached somewhere else
-    // count for nothing (owner 2026-10-05: 「带过的选手加分去掉」).
+    const reunited = players.filter((p) => !coachSharesClub(p, coach) && coachWonWith(p, coach)).length
+    // His club now, and the men he won a head-coach title with (owner 2026-10-07), each worth what a club-mate is.
+    // Men he merely coached somewhere count for nothing (owner 2026-10-05: 「带过的选手加分去掉」).
     cards.forEach((p, slot) => {
       if (!isPlayerCard(p)) return
       const club = coachSharesClub(p, coach)
+      const champ = !club && coachWonWith(p, coach)
       const region = sameGameRegion(p.region, coach.region)
       const nat = !!p.nat && !!coach.nat && natCountry(p.nat) === natCountry(coach.nat)
-      const value = (club ? 2 : 0) + (nat ? 2 : region ? 1 : 0)
+      const value = (club || champ ? 2 : 0) + (nat ? 2 : region ? 1 : 0)
       if (value) {
         coachBonus += value
-        coachLinks.push({ slot, why: club ? 'club' : nat ? 'nat' : 'region', value })
+        coachLinks.push({ slot, why: club ? 'club' : champ ? 'champ' : nat ? 'nat' : 'region', value })
       }
     })
     if (sameClub >= 2) notes.push(`${coach.name} 与 ${sameClub} 名选手触发同队／队伍传承羁绊`)
+    if (reunited > 0) notes.push(`${coach.name} 和其中 ${reunited} 人一起拿过冠军`)
   }
 
   const misfits: number[] = []
