@@ -3008,6 +3008,31 @@ td .cf-flag.code, .small .cf-flag.code { background: var(--panel-3); color: var(
   .league-tab b { font-size: 12px; }
 }
 
+/* 上赛季前十 (Ladder.tsx LastSeasonBoard): ranked rows, the podium tinted by metal, the account's own row marked */
+.board-seg { margin-bottom: 12px; }
+.last-board { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.last-row {
+  display: grid; grid-template-columns: 34px minmax(0, 1fr) auto 64px; align-items: center; gap: 10px;
+  min-height: 44px; padding: 6px 12px; border: 1px solid var(--line-soft); border-radius: var(--radius); background: var(--panel-2);
+}
+.last-who { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.last-wl { text-align: right; }
+.last-rank { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; font-weight: 700; color: var(--muted); }
+.last-row.p1 .last-rank { background: #e8c35a; color: #3a2a00; }
+.last-row.p2 .last-rank { background: #c9ced6; color: #22262c; }
+.last-row.p3 .last-rank { background: #c98a55; color: #2e1600; }
+.last-row.p1 { border-color: color-mix(in srgb, #e8c35a 55%, var(--line-soft)); }
+.last-row.me { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+@media (max-width: 480px) {
+  /* a phone: the division over the record in the last column, so nothing is cut */
+  .last-row { grid-template-columns: 30px minmax(0, 1fr) auto; row-gap: 0; padding: 6px 10px; }
+  .last-div { grid-column: 3; text-align: right; }
+  .last-wl { grid-column: 3; }
+  .last-rank { grid-row: span 2; }
+  .last-who { grid-row: span 2; }
+  .board-seg button { min-height: 40px; }
+}
+
 
 /* ---------------------------------------------------------------- polish
 

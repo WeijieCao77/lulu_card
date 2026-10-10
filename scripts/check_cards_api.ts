@@ -1,4 +1,4 @@
-import { STARTER_COINS } from '../src/engine/gacha'
+import { STARTER_COINS, seasonOf } from '../src/engine/gacha'
 /**
  * The card account endpoints, against a real Postgres.
  *
@@ -236,7 +236,7 @@ const hashOf = (id: string) => createHash('sha256').update(id).digest('hex')
   const mk = async (id: string, name: string, div: number, points: number, wins: number) => {
     await sql`insert into card_accounts (id_hash, name, state)
       values (${hashOf(id)}, ${name},
-        ${JSON.stringify({ ladder: { div, points, stars: 0, wins, losses: 0 } })})`
+        ${JSON.stringify({ season: seasonOf(serverDay()), ladder: { div, points, stars: 0, wins, losses: 0 } })})`
   }
   await mk('VM-1111-1111-1111-1111-1111', '阿伟', 5, 1800, 90)
   await mk('VM-2222-2222-2222-2222-2222', '傻逼', 5, 900, 40)
@@ -289,6 +289,7 @@ const hashOf = (id: string) => createHash('sha256').update(id).digest('hex')
     const league = async (id: string, name: string, open: number, silver: number) => {
       await sql`insert into card_accounts (id_hash, name, state)
         values (${hashOf(id)}, ${name}, ${JSON.stringify({
+          season: seasonOf(serverDay()),
           ladder: { div: 5, points: open, stars: 0, wins: 10, losses: 0 },
           leagues: silver >= 0
             ? { silver: { div: 5, points: silver, stars: 0, wins: 5, losses: 1 } }
