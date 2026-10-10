@@ -4,7 +4,7 @@
  *   npx tsx scripts/check_s16_series.ts
  */
 import { ALL_CARDS, BASE_PLAYER_CARDS, PLAYER_CARDS, S16_CARDS, buildS16Cards, cardById, isS16Card, personOf, s16Hidden } from '../src/engine/cards'
-import { FULL_SET_CARDS, PACKS, S16_SET_REWARDS, autoSquad, collectionProgress, mergeClientFields, migrateGacha, newGacha, openPack, s16SetProgress } from '../src/engine/gacha'
+import { FULL_SET_CARDS, PACKS, S16_SET_REWARDS, autoSquad, collectionProgress, mergeClientFields, migrateGacha, newGacha, openPack, s16SetProgress, settleS16Fmvp } from '../src/engine/gacha'
 import { runAction, squadForPlay } from '../src/engine/cardActions'
 import { matchesFilter } from '../src/engine/cardFilter'
 import { rollShop } from '../src/engine/dailyShop'
@@ -156,6 +156,26 @@ check('交易和普通卡一视同仁：按金银铜限价（铜 2000、银 5000
   const s2: S16PredictState = {}; setOne(s2, 'champ', { team: 'T24' }, before, ch)
   check('冠军：选中亚军送选拔包 ×3', champReward(s2.champ, Date.parse('2026-11-15T01:00:00Z'), ch, 'T24')?.packs.elite === 3)
   check('读档后预测还在', cleanS16Predict(JSON.parse(JSON.stringify(s)))?.playin?.team === 'T28' && cleanS16Predict(JSON.parse(JSON.stringify(s)))?.champ?.team === 'T18')
+}
+
+// FMVP (owner 2026-10-10): each account keeps one copy, the 彩卡; every extra copy becomes a 十连包, once
+{
+  const b = S16_CARDS[1]
+  const fm = buildS16Cards({ [b.ign]: { rating: 88, rarity: 'gold', games: 9, prev: 86 } }, b.ign).find((c) => c.ign === b.ign)!
+  const g = newGacha('S16-FMVP', 'f', day)
+  g.cards = { [fm.id]: { id: fm.id, level: 0, dupes: 4, seen: 5, got: day } as never }
+  g.packs.ten = 0
+  const r = settleS16Fmvp(g, fm)
+  check('FMVP：多出来的 4 张换十连包 ×4，自己留一张', r?.packs === 4 && g.packs.ten === 4 && g.cards[fm.id].dupes === 0 && g.s16FmvpPaid === 4)
+  check('FMVP：再读一次不会重复发', settleS16Fmvp(g, fm) === null && g.packs.ten === 4)
+  g.cards[fm.id].dupes = 1
+  const coins = g.coins
+  const late = settleS16Fmvp(g, fm)
+  check('FMVP：发过之后再来的同一张换彩卡分解价，不再给十连包', late?.packs === 0 && g.coins === coins + 4000 && g.packs.ten === 4 && g.cards[fm.id].dupes === 0)
+  const h = newGacha('S16-FMVP-1', 'f', day)
+  h.cards = { [fm.id]: { id: fm.id, level: 0, dupes: 0, seen: 1, got: day } as never }
+  check('FMVP：只有一张的什么都不用换', settleS16Fmvp(h, fm) === null && !h.s16FmvpPaid)
+  check('FMVP 没确定之前不动重复卡', settleS16Fmvp(g, undefined) === null)
 }
 
 console.log(bad ? `\n${bad} 处不对` : '\n全部通过')

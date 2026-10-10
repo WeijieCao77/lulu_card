@@ -911,6 +911,8 @@ export interface GachaState {
   echoSet?: number
   /** how many S16 图鉴 milestones have been collected — see S16_SET_REWARDS */
   s16Set?: number
+  /** the S16 FMVP's extra copies have been paid out as 十连包 (settleS16Fmvp), once */
+  s16FmvpPaid?: number
   /** S16 赛事预测 — see engine/s16Predict.ts */
   s16Predict?: S16PredictState
 }
@@ -2831,6 +2833,35 @@ export function grantEchoGift(g: GachaState, now = Date.now()): void {
   ].slice(0, MAIL_MAX)
 }
 
+/**
+ * The S16 FMVP (owner 2026-10-10): once the final is in, each account keeps ONE copy of the FMVP's S16 card — the card
+ * itself turns 彩卡 for everyone (buildS16Cards) — and every extra copy it holds becomes a 十连包: 「FMVP 最后只有一张卡
+ * 能够升级为彩卡，剩下的重复的就是会一张换成一个十连包」. Paid once, the first time the account is read after the
+ * result is entered; a copy that arrives after that is worth a 彩卡's salvage instead, so no account ever holds two
+ * FMVP 彩卡 and the pack payout can't be farmed by buying copies later. Pure on the state, so a read that is not
+ * written back simply pays again next time from the same copies — never twice.
+ */
+export function settleS16Fmvp(g: GachaState, fmvp: PlayerCard | undefined = S16_CARDS.find((c) => c.s16?.fmvp)): { packs: number; coins: number } | null {
+  // the FMVP's card, once s16Ratings.json names him
+  const owned = fmvp ? g.cards[fmvp.id] : undefined
+  if (!fmvp || !owned) return null
+  const spares = Array.isArray((owned as { spares?: unknown }).spares) ? ((owned as { spares?: unknown[] }).spares ?? []).length : 0
+  const extra = wholeCount(owned.dupes) + spares
+  if (!extra) return null
+  owned.dupes = 0
+  delete (owned as { spares?: unknown }).spares
+  if (!g.s16FmvpPaid) {
+    g.packs.ten = (g.packs.ten ?? 0) + extra
+    g.s16FmvpPaid = extra
+    note(g, `S16 FMVP：${cardName(fmvp)} 的卡升级成彩卡，多出来的 ${extra} 张换成十连包 ×${extra}`)
+    return { packs: extra, coins: 0 }
+  }
+  const coins = SALVAGE.mythic * extra
+  g.coins += coins
+  note(g, `S16 FMVP：${cardName(fmvp)} 的彩卡每个账号只留一张，多出来的 ${extra} 张换成 ${coins} 金币`)
+  return { packs: 0, coins }
+}
+
 export function migrateGacha(state: GachaState, id: string): GachaState {
   const g = state as GachaState & { version?: number }
   g.version = GACHA_VERSION
@@ -2876,6 +2907,8 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
   const sp = cleanS16Predict(g.s16Predict)
   if (sp) g.s16Predict = sp
   else delete g.s16Predict
+  if (g.s16FmvpPaid !== undefined && !(Number.isFinite(g.s16FmvpPaid) && g.s16FmvpPaid > 0)) delete g.s16FmvpPaid
+  settleS16Fmvp(g)
   if (g.s16Set !== undefined) {
     const n = Math.trunc(Number(g.s16Set))
     if (n >= 1 && n <= S16_SET_REWARDS.length) g.s16Set = n
@@ -2955,7 +2988,7 @@ export function migrateGacha(state: GachaState, id: string): GachaState {
 export const SERVER_KEYS = [
   'version', 'createdAt', 'coins', 'cards', 'packs', 'pity', 'mythicDry', 'pulls', 'ladder',
   'leagues', 'cup', 'daily', 'challenge', 'minigame', 'series', 'fullSet', 'mail', 'log', 'seed', 'seoulRoute',
-  'weeklySeriesPick', 'shop', 'echoQuiz', 'echoGift', 'echoSet', 'echoDaily', 's16Set', 's16Predict',
+  'weeklySeriesPick', 'shop', 'echoQuiz', 'echoGift', 'echoSet', 'echoDaily', 's16Set', 's16Predict', 's16FmvpPaid',
 ] as const
 export const CLIENT_KEYS = ['name', 'squad', 'presets', 'friends', 'cupSquads'] as const
 
