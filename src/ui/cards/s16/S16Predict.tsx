@@ -3,7 +3,8 @@ import { useCards } from '../ctx'
 import { Modal } from '../../common'
 import { WORLD_TEAMS } from '../../../engine/teams'
 import { crestUrl } from '../../../engine/dossier'
-import { S16_PREDICT, koOpen, koReward, swissOpen, swissReward } from '../../../engine/s16Predict'
+import { S16_PREDICT, champOpen, champReward, koOpen, koReward, playinOpen, playinReward, swissOpen, swissReward } from '../../../engine/s16Predict'
+import type { PredictReward } from '../../../engine/s16Predict'
 
 const tagOf = (id: string) => WORLD_TEAMS.find((t) => t.id === id)?.tag ?? id
 const when = (iso: string | null) => (iso ? new Date(iso).toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Shanghai' }) : '待定')
@@ -22,7 +23,9 @@ function Team({ id, on, dim, onClick }: { id: string; on?: boolean; dim?: boolea
 export default function S16Predict({ onClose, data = S16_PREDICT }: { onClose: () => void; data?: typeof S16_PREDICT }) {
   const { g, now, act, toast } = useCards()
   const mine = g.s16Predict ?? {}
-  const sw = data.swiss, ko = data.ko
+  const sw = data.swiss, ko = data.ko, pi = data.playin, ch = data.champ
+  const [piPick, setPiPick] = useState<string>(mine.playin?.team ?? '')
+  const [chPick, setChPick] = useState<string>(mine.champ?.team ?? '')
   const [qual, setQual] = useState<string[]>(mine.swiss?.qual ?? [])
   const [three, setThree] = useState<string[]>(mine.swiss?.threeZero ?? [])
   const [zero, setZero] = useState<string[]>(mine.swiss?.zeroThree ?? [])
@@ -42,13 +45,36 @@ export default function S16Predict({ onClose, data = S16_PREDICT }: { onClose: (
     } finally { setBusy(false) }
   }
   const swR = swissReward(mine.swiss, now, sw), koR = koReward(mine.ko, now, ko)
+  const piR = playinReward(mine.playin, now, pi), chR = champReward(mine.champ, now, ch)
+  const piOpen = playinOpen(now, pi), chOpen = champOpen(now, ch)
+  const result = (r: PredictReward | null, stage: string, claimed?: number) => r && <p className="small">结果：{r.label}。{!claimed && Object.keys(r.packs).length > 0 && <button className="primary sm" disabled={busy} onClick={() => void send('s16_predict_claim', { stage }, '奖励已领取，放进卡包里了。')}>领取奖励</button>}{claimed && ' 已领取。'}</p>
   return (
     <Modal title="S16 赛事预测" onClose={onClose} onBgClose={() => {}}>
       <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-        两张预测单：瑞士轮（选晋级八强的 8 支队，再猜 2 支 3-0、2 支 0-3）和淘汰赛（八强抽签后填整张对阵）。每张在该阶段第一场开打时锁定，赛果确认后来这里领奖，每张只领最高一档。
+        四张预测单：入围赛（哪支队晋级）、冠军（谁最后夺冠）、瑞士轮（晋级八强的 8 支队，再猜 2 支 3-0、2 支 0-3）和淘汰赛（八强抽签后填整张对阵）。每张在锁定时间前可以随时改，赛果确认后来这里领奖，每张只领最高一档。
       </p>
 
-      <h4 style={{ margin: '12px 0 6px' }}>① 瑞士轮 <span className="tiny faint">锁定：{when(sw.lockAt)}</span></h4>
+      <h4 style={{ margin: '12px 0 6px' }}>入围赛 <span className="tiny faint">锁定：{when(pi.lockAt)}</span></h4>
+      {!pi.teams ? <p className="small muted">入围赛 4 支队还差巴西二号种子，确定后开放。</p> : <>
+        <div className="tiny faint">选 1 支能打进瑞士轮的队</div>
+        <div className="s16p-grid">{pi.teams.map((id) => <Team key={id} id={id} on={piPick === id} onClick={piOpen ? () => setPiPick(id) : undefined} />)}</div>
+        {piOpen && <button className="primary sm" disabled={busy || !piPick} onClick={() => void send('s16_predict', { stage: 'playin', picks: { team: piPick } }, '入围赛预测已保存，锁定前可以随时改。')}>{mine.playin ? '更新预测' : '提交预测'}</button>}
+        {!piOpen && !mine.playin && <p className="small muted">已锁定，你没有提交这张预测。</p>}
+        {result(piR, 'playin', mine.playin?.claimedAt)}
+      </>}
+      <p className="tiny faint">奖励：猜中送 S16 世界赛包 ×2。</p>
+
+      <h4 style={{ margin: '16px 0 6px' }}>冠军 <span className="tiny faint">锁定：{when(ch.lockAt)}</span></h4>
+      {ch.teams && <>
+        <div className="tiny faint">选 1 支你认为能夺冠的队（入围赛的队也能选）</div>
+        <div className="s16p-grid">{ch.teams.map((id) => <Team key={id} id={id} on={chPick === id} onClick={chOpen ? () => setChPick(id) : undefined} />)}</div>
+        {chOpen && <button className="primary sm" disabled={busy || !chPick} onClick={() => void send('s16_predict', { stage: 'champ', picks: { team: chPick } }, '冠军预测已保存，锁定前可以随时改。')}>{mine.champ ? '更新预测' : '提交预测'}</button>}
+        {!chOpen && !mine.champ && <p className="small muted">已锁定，你没有提交这张预测。</p>}
+        {result(chR, 'champ', mine.champ?.claimedAt)}
+      </>}
+      <p className="tiny faint">奖励：猜中冠军送十连包 ×3 + S16 世界赛包 ×2；选中的是亚军送选拔包 ×3。</p>
+
+      <h4 style={{ margin: '16px 0 6px' }}>瑞士轮 <span className="tiny faint">锁定：{when(sw.lockAt)}</span></h4>
       {!sw.teams ? <p className="small muted">16 支队要等入围赛打完才确定，到时候开放。</p> : <>
         <div className="tiny faint">选 8 支晋级（已选 {qual.length}/8）</div>
         <div className="s16p-grid">{sw.teams.map((id) => <Team key={id} id={id} on={qual.includes(id)} onClick={swOpen ? () => { toggle(qual, setQual, id, 8); setThree(three.filter((x) => x !== id || !qual.includes(id))); setZero(zero.filter((x) => x !== id)) } : undefined} />)}</div>
@@ -62,7 +88,7 @@ export default function S16Predict({ onClose, data = S16_PREDICT }: { onClose: (
       </>}
       <p className="tiny faint">奖励：8 支全中十连包 ×2；6–7 支十连包 ×1；4–5 支选拔包 ×3；3-0 / 0-3 每猜中一支另送 1 个 S16 世界赛包。</p>
 
-      <h4 style={{ margin: '16px 0 6px' }}>② 淘汰赛 <span className="tiny faint">锁定：{when(ko.lockAt)}</span></h4>
+      <h4 style={{ margin: '16px 0 6px' }}>淘汰赛 <span className="tiny faint">锁定：{when(ko.lockAt)}</span></h4>
       {!ko.bracket ? <p className="small muted">瑞士轮结束、八强抽签后开放。</p> : <div className="s16p-bracket">
         <div>{ko.bracket.map((pair, i) => <div key={i} className="s16p-match">{pair.map((id) => <Team key={id} id={id} on={qf[i] === id} onClick={kOpen ? () => { const n = [...qf]; n[i] = id; setQf(n); setSf(['', '']); setFinal('') } : undefined} />)}</div>)}</div>
         <div>{[0, 1].map((i) => <div key={i} className="s16p-match">{[qf[i * 2], qf[i * 2 + 1]].map((id, k) => id ? <Team key={id} id={id} on={sf[i] === id} onClick={kOpen ? () => { const n = [...sf]; n[i] = id; setSf(n); setFinal('') } : undefined} /> : <span key={k} className="tiny faint">先选八强</span>)}</div>)}</div>

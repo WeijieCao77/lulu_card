@@ -1,7 +1,9 @@
 /**
  * S16 赛事预测 (owner 2026-10-04, after 开瓦包's 比赛预测, fitted to the S16 format; no single-match picks).
  *
- * Two pick sheets, each locked by the server's clock at its first match:
+ * Four pick sheets, each locked by the server's clock (owner 2026-10-10 added the first two: 「冠军预测…入围赛…后面其他比赛也是」):
+ *   ⓪ 入围赛 — which of the four Play-In teams goes through to the Swiss stage; locks at the first Play-In match.
+ *   ⓪ 冠军 — the champion, from every team at the event; open from launch, locks at the first Swiss match.
  *   ① 瑞士轮 — the eight teams that reach the knockout, plus two for 3-0 and two for 0-3. Swiss pairings are drawn
  *      round by round, so the whole stage is one sheet rather than a bracket.
  *   ② 淘汰赛 — once the eight are drawn into the bracket: the winner of every quarter-final, semi-final and the final.
@@ -12,15 +14,20 @@ import DATA from '../data/s16Predict.json'
 
 export interface SwissPick { qual: string[]; threeZero: string[]; zeroThree: string[]; at: number; claimedAt?: number }
 export interface KoPick { qf: string[]; sf: string[]; final: string; at: number; claimedAt?: number }
-export interface S16PredictState { swiss?: SwissPick; ko?: KoPick }
+export interface OnePick { team: string; at: number; claimedAt?: number }
+export interface S16PredictState { playin?: OnePick; champ?: OnePick; swiss?: SwissPick; ko?: KoPick }
 
 interface SwissData { teams: string[] | null; lockAt: string | null; qualified: string[] | null; threeZero: string[] | null; zeroThree: string[] | null; confirmedAt: string | null }
 interface KoData { bracket: string[][] | null; lockAt: string | null; qf: string[] | null; sf: string[] | null; final: string | null; confirmedAt: string | null }
-export const S16_PREDICT = DATA as { swiss: SwissData; ko: KoData }
+interface PlayinData { teams: string[] | null; lockAt: string | null; winner: string | null; confirmedAt: string | null }
+interface ChampData { teams: string[] | null; lockAt: string | null; champion: string | null; confirmedAt: string | null }
+export const S16_PREDICT = DATA as { playin: PlayinData; champ: ChampData; swiss: SwissData; ko: KoData }
 
 export interface PredictReward { label: string; packs: Record<string, number>; detail: string }
 
 const t = (iso: string | null) => (iso ? Date.parse(iso) : NaN)
+export const playinOpen = (now: number, d = S16_PREDICT.playin) => !!d.teams && d.teams.length === 4 && !!d.lockAt && now < t(d.lockAt)
+export const champOpen = (now: number, d = S16_PREDICT.champ) => !!d.teams && d.teams.length >= 16 && !!d.lockAt && now < t(d.lockAt)
 export const swissOpen = (now: number, d = S16_PREDICT.swiss) => !!d.teams && d.teams.length === 16 && !!d.lockAt && now < t(d.lockAt)
 export const koOpen = (now: number, d = S16_PREDICT.ko) => !!d.bracket && d.bracket.length === 4 && !!d.lockAt && now < t(d.lockAt)
 const confirmed = (now: number, iso: string | null) => !!iso && now >= t(iso)
@@ -28,6 +35,39 @@ const confirmed = (now: number, iso: string | null) => !!iso && now >= t(iso)
 const uniq = (xs: unknown[]) => new Set(xs).size === xs.length
 const strs = (v: unknown, n: number): string[] | null =>
   Array.isArray(v) && v.length === n && v.every((x) => typeof x === 'string') && uniq(v) ? (v as string[]) : null
+
+/** check and store a one-team sheet (入围赛 / 冠军); returns a reason when it is refused */
+export function setOne(s: S16PredictState, sheet: 'playin' | 'champ', raw: Record<string, unknown>, now: number,
+  d: PlayinData | ChampData = sheet === 'playin' ? S16_PREDICT.playin : S16_PREDICT.champ): string | null {
+  const name = sheet === 'playin' ? '入围赛' : '冠军'
+  if (!d.teams || d.teams.length < (sheet === 'playin' ? 4 : 16)) return `${name}预测的队伍还没确定`
+  if (!(sheet === 'playin' ? playinOpen(now, d as PlayinData) : champOpen(now, d as ChampData))) return `${name}预测已经锁定了`
+  const team = typeof raw.team === 'string' ? raw.team : ''
+  if (!d.teams.includes(team)) return '选一支参赛队'
+  if (s[sheet]?.claimedAt) return '这张预测已经领过奖了'
+  s[sheet] = { team, at: now }
+  return null
+}
+
+/** 入围赛: the team that goes through. S16 世界赛包 ×2 */
+export function playinReward(p: OnePick | undefined, now: number, d = S16_PREDICT.playin): PredictReward | null {
+  if (!p || !confirmed(now, d.confirmedAt) || !d.winner || p.at >= t(d.lockAt)) return null
+  return p.team === d.winner
+    ? { label: '猜中入围赛晋级队', packs: { s16: 2 }, detail: '入围赛晋级队猜中' }
+    : { label: '没猜中入围赛晋级队', packs: {}, detail: '入围赛晋级队没猜中' }
+}
+
+/** 冠军, picked before the Swiss stage: 十连包 ×3 + S16 世界赛包 ×2; the runner-up picked instead: 选拔包 ×3 */
+export function champReward(p: OnePick | undefined, now: number, d = S16_PREDICT.champ, runnerUp: string | null = runnerUpOf()): PredictReward | null {
+  if (!p || !confirmed(now, d.confirmedAt) || !d.champion || p.at >= t(d.lockAt)) return null
+  if (p.team === d.champion) return { label: '猜中冠军', packs: { ten: 3, s16: 2 }, detail: '冠军猜中' }
+  if (runnerUp && p.team === runnerUp) return { label: '猜中的是亚军', packs: { elite: 3 }, detail: '选了亚军' }
+  return { label: '没猜中冠军', packs: {}, detail: '冠军没猜中' }
+}
+const runnerUpOf = (): string | null => {
+  const ko = S16_PREDICT.ko
+  return ko.final && ko.sf ? ko.sf.find((x) => x !== ko.final) ?? null : null
+}
 
 /** check and store the 瑞士轮 sheet; returns a reason when it is refused */
 export function setSwiss(s: S16PredictState, raw: Record<string, unknown>, now: number, d = S16_PREDICT.swiss): string | null {
@@ -93,9 +133,13 @@ export function cleanS16Predict(raw: unknown): S16PredictState | undefined {
   const r = raw as S16PredictState | null
   if (!r || typeof r !== 'object') return undefined
   const out: S16PredictState = {}
+  for (const k of ['playin', 'champ'] as const) {
+    const one = r[k]
+    if (one && typeof one.team === 'string' && one.team.length <= 16 && Number.isFinite(one.at)) out[k] = { team: one.team, at: one.at, ...(Number.isFinite(one.claimedAt) ? { claimedAt: one.claimedAt } : {}) }
+  }
   const sw = r.swiss
   if (sw && strs(sw.qual, 8) && strs(sw.threeZero, 2) && strs(sw.zeroThree, 2) && Number.isFinite(sw.at)) out.swiss = { qual: sw.qual, threeZero: sw.threeZero, zeroThree: sw.zeroThree, at: sw.at, ...(Number.isFinite(sw.claimedAt) ? { claimedAt: sw.claimedAt } : {}) }
   const ko = r.ko
   if (ko && strs(ko.qf, 4) && strs(ko.sf, 2) && typeof ko.final === 'string' && Number.isFinite(ko.at)) out.ko = { qf: ko.qf, sf: ko.sf, final: ko.final, at: ko.at, ...(Number.isFinite(ko.claimedAt) ? { claimedAt: ko.claimedAt } : {}) }
-  return out.swiss || out.ko ? out : undefined
+  return out.playin || out.champ || out.swiss || out.ko ? out : undefined
 }

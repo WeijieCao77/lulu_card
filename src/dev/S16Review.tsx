@@ -11,6 +11,8 @@ import type { CardCtxValue } from '../ui/cards/ctx'
 import { newGacha } from '../engine/gacha'
 
 const DEMO_PREDICT = {
+  playin: { teams: ['T35', 'T28', 'T49', 'T55'], lockAt: '2026-10-16T02:00:00+08:00', winner: null, confirmedAt: null },
+  champ: { teams: ['T18', 'T1', 'T26', 'T50', 'T20', 'T2', 'T29', 'T24', 'T12', 'T43', 'T17', 'T4', 'T42', 'T39', 'T35', 'T28', 'T49', 'T51', 'T55'], lockAt: '2026-10-24T01:00:00+08:00', champion: null, confirmedAt: null },
   swiss: { teams: ['T18', 'T1', 'T26', 'T50', 'T20', 'T2', 'T29', 'T24', 'T12', 'T43', 'T17', 'T4', 'T42', 'T39', 'T35', 'T28'], lockAt: '2026-10-20T08:00:00+08:00', qualified: null, threeZero: null, zeroThree: null, confirmedAt: null },
   ko: { bracket: [['T18', 'T12'], ['T20', 'T2'], ['T24', 'T26'], ['T17', 'T4']], lockAt: '2026-10-29T08:00:00+08:00', qf: null, sf: null, final: null, confirmedAt: null },
 }

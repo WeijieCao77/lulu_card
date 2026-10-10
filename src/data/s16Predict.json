@@ -1,5 +1,51 @@
 {
- "note": "S16 赛事预测的赛程和赛果，人工填写后上线（engine/s16Predict.ts）。teams/bracket 用俱乐部 id（world.json，如 T18 = Gen.G）；时间用 ISO（带时区）。lockAt = 该阶段第一场开打时间；confirmedAt = 赛果核对完、允许领奖的时间。",
- "swiss": { "teams": null, "lockAt": null, "qualified": null, "threeZero": null, "zeroThree": null, "confirmedAt": null },
- "ko": { "bracket": null, "lockAt": null, "qf": null, "sf": null, "final": null, "confirmedAt": null }
+ "note": "S16 赛事预测的赛程和赛果，人工填写后上线（engine/s16Predict.ts）。teams/bracket 用俱乐部 id（world.json，如 T18 = Gen.G）；时间用 ISO（带时区）。lockAt = 该阶段第一场开打时间；confirmedAt = 赛果核对完、允许领奖的时间。 playin.teams = 入围赛 4 队（巴西二号种子 10/10 决赛后填）；champ.teams = 全部参赛队，开放到瑞士轮第一场。",
+ "playin": {
+  "teams": null,
+  "lockAt": "2026-10-15T18:00:00Z",
+  "winner": null,
+  "confirmedAt": null
+ },
+ "champ": {
+  "teams": [
+   "T18",
+   "T1",
+   "T26",
+   "T50",
+   "T20",
+   "T2",
+   "T29",
+   "T24",
+   "T12",
+   "T43",
+   "T17",
+   "T4",
+   "T42",
+   "T39",
+   "T35",
+   "T28",
+   "T49",
+   "T51",
+   "T55"
+  ],
+  "lockAt": "2026-10-23T17:00:00Z",
+  "champion": null,
+  "confirmedAt": null
+ },
+ "swiss": {
+  "teams": null,
+  "lockAt": "2026-10-23T17:00:00Z",
+  "qualified": null,
+  "threeZero": null,
+  "zeroThree": null,
+  "confirmedAt": null
+ },
+ "ko": {
+  "bracket": null,
+  "lockAt": null,
+  "qf": null,
+  "sf": null,
+  "final": null,
+  "confirmedAt": null
+ }
 }

@@ -8,7 +8,7 @@ import { FULL_SET_CARDS, PACKS, S16_SET_REWARDS, autoSquad, collectionProgress, 
 import { runAction, squadForPlay } from '../src/engine/cardActions'
 import { matchesFilter } from '../src/engine/cardFilter'
 import { rollShop } from '../src/engine/dailyShop'
-import { koReward, setKo, setSwiss, swissReward } from '../src/engine/s16Predict'
+import { champReward, cleanS16Predict, koReward, playinReward, setKo, setOne, setSwiss, swissReward } from '../src/engine/s16Predict'
 import type { S16PredictState } from '../src/engine/s16Predict'
 import { capOf, priceCap } from '../market-api.js'
 import { applyMail } from '../src/engine/inbox'
@@ -135,6 +135,27 @@ check('交易和普通卡一视同仁：按金银铜限价（铜 2000、银 5000
   const id = S16_CARDS[0].id
   applyMail(g, [{ kind: 'bought', cardId: id, level: 0, coins: 0, pack: null, count: 1, body: {}, at: Date.now() }])
   check('买来的 S16 卡和普通卡一样要等才能再卖', !!g.cards[id] && tradeableCopies(g.cards[id], Date.now()) === 0)
+}
+
+// 入围赛 and 冠军 sheets (owner 2026-10-10)
+{
+  const pi = { teams: ['T35', 'T28', 'T49', 'T55'], lockAt: '2026-10-15T18:00:00Z', winner: 'T28', confirmedAt: '2026-10-19T00:00:00Z' }
+  const ch = { teams: S16.teams.map((t) => t.club), lockAt: '2026-10-23T17:00:00Z', champion: 'T18', confirmedAt: '2026-11-15T00:00:00Z' }
+  const before = Date.parse('2026-10-12T04:00:00Z'), afterPi = Date.parse('2026-10-15T18:00:01Z')
+  const s: S16PredictState = {}
+  check('入围赛：只能选那 4 支队', setOne(s, 'playin', { team: 'T18' }, before, pi) !== null)
+  check('入围赛：合法预测能存', setOne(s, 'playin', { team: 'T28' }, before, pi) === null && s.playin?.team === 'T28')
+  check('入围赛：第一场开打后锁定', setOne(s, 'playin', { team: 'T35' }, afterPi, pi) !== null && s.playin?.team === 'T28')
+  check('入围赛：赛果确认前不能领', playinReward(s.playin, afterPi, pi) === null)
+  check('入围赛：猜中送 S16 包 ×2', playinReward(s.playin, Date.parse('2026-10-19T01:00:00Z'), pi)?.packs.s16 === 2)
+  check('冠军：所有参赛队都能选，入围赛的也能', ch.teams.length === 19 && setOne(s, 'champ', { team: 'T55' }, before, ch) === null)
+  check('冠军：瑞士轮开打后锁定', setOne(s, 'champ', { team: 'T18' }, Date.parse('2026-10-23T17:00:01Z'), ch) !== null)
+  setOne(s, 'champ', { team: 'T18' }, before, ch)
+  const r = champReward(s.champ, Date.parse('2026-11-15T01:00:00Z'), ch, 'T24')
+  check('冠军：猜中送十连包 ×3 + S16 包 ×2', r?.packs.ten === 3 && r?.packs.s16 === 2)
+  const s2: S16PredictState = {}; setOne(s2, 'champ', { team: 'T24' }, before, ch)
+  check('冠军：选中亚军送选拔包 ×3', champReward(s2.champ, Date.parse('2026-11-15T01:00:00Z'), ch, 'T24')?.packs.elite === 3)
+  check('读档后预测还在', cleanS16Predict(JSON.parse(JSON.stringify(s)))?.playin?.team === 'T28' && cleanS16Predict(JSON.parse(JSON.stringify(s)))?.champ?.team === 'T18')
 }
 
 console.log(bad ? `\n${bad} 处不对` : '\n全部通过')
