@@ -156,7 +156,7 @@
 /* foil: a quiet static sheen on every revealed card, a moving one on gold, holographic on the FMVP */
 .s16card .s16-foil { inset: 0; z-index: 6; pointer-events: none; overflow: hidden; background: linear-gradient(118deg, transparent 30%, #ffffff0d 44%, transparent 56%) }
 .s16card.s16-hidden .s16-foil { background: repeating-linear-gradient(135deg, #ffffff05 0 5px, transparent 5px 10px) }
-.s16card.s16-gold .s16-foil::before, .s16card.s16-mythic .s16-foil::before {
+.s16card.s16-mythic .s16-foil::before {
   content: ""; position: absolute; top: -20%; bottom: -20%; left: 0; width: 34%;
   background: linear-gradient(100deg, transparent, #fff4cf4d 50%, transparent); transform: translateX(-160%) skewX(-16deg);
   animation: s16-sweep 6s ease-in-out infinite;
@@ -186,6 +186,35 @@
 .s16card.s16-hidden .s16-stats b { color: var(--m3) }
 .s16card.s16-hidden .s16-name { color: #dfe7f3 }
 .s16card.s16-hidden .s16-tier { color: #dfe7f3; background: linear-gradient(90deg, #2c384c, #4c5a72 50%, #2c384c) }
+
+/* revealed metals (owner 2026-10-10 「揭晓之后太炫彩，凸显不出彩卡」): solid, restrained metal cards. Neutral navy
+   arena with only a hint of the metal, a flatter frame, no glow, no moving light, no sparkle — bronze / silver / gold
+   differ by the frame and the rating flag. The FMVP 彩卡 stays the only iridescent, animated card. */
+.cardface.s16card:is(.s16-bronze, .s16-silver, .s16-gold) {
+  background: linear-gradient(155deg, var(--m3) 0%, var(--m2) 26%, var(--m2) 62%, var(--m1) 100%);
+  box-shadow: 0 8px 18px #0009, 0 0 0 1px #0008;
+}
+.cardface.s16card.s16-bronze { --beam: #7c86a0 }
+.cardface.s16card.s16-silver { --beam: #7c8cab }
+.cardface.s16card.s16-gold { --beam: #858aa0 }
+.cardface.s16card:is(.s16-bronze, .s16-silver, .s16-gold).tap:hover { box-shadow: 0 14px 26px #000b, 0 0 0 1px #0008 }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-sky { background: radial-gradient(ellipse 95% 50% at 50% -4%, #3a4c7240, transparent 72%), radial-gradient(ellipse 130% 34% at 50% 61%, #12254a, transparent 70%), linear-gradient(180deg, #0c1834 0%, #08122a 52%, #040915 100%) }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-beams { opacity: .38 }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-crowd { display: none }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-photo::after { background: radial-gradient(ellipse 60% 42% at 50% -2%, #9aaccb26, transparent 75%) }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-floor::before { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--m2) 80%, transparent) 20%, var(--m3) 50%, color-mix(in srgb, var(--m2) 80%, transparent) 80%, transparent); box-shadow: none }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-floor::after { display: none }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-foil { background: linear-gradient(118deg, transparent 34%, #ffffff08 46%, transparent 56%) }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-rim polygon { stroke: var(--m2); stroke-opacity: .45 }
+/* the rating flag carries the metal: a metal-tinted pennant, a solid number */
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-rating::before { background: linear-gradient(180deg, color-mix(in srgb, var(--m1) 55%, #050b1a) 0%, color-mix(in srgb, var(--m1) 35%, #07112a) 100%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--m2) 80%, transparent) }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-rating::after { background: var(--m2); height: 1.4cqw }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-rating strong { background: none; color: color-mix(in srgb, var(--m3) 55%, #fff); filter: drop-shadow(0 1px 0 #000) drop-shadow(0 1px 3px #000a) }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-emblem { filter: drop-shadow(0 1px 0 #000) }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-emblem .s16-cup { background: linear-gradient(170deg, var(--m3) 0%, var(--m2) 55%, var(--m1) 100%) }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-name { text-shadow: 0 1px 4px #000 }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-stats::before { box-shadow: none; background: var(--m2) }
+.s16card:is(.s16-bronze, .s16-silver, .s16-gold) .s16-tier { background: var(--m2) }
 
 /* small card: drop the side line, keep everything else on its floors */
 @container (width < 128px) {
