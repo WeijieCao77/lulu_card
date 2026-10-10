@@ -26,7 +26,7 @@
 .cardface.s16card.s16card.dim { opacity: .4; filter: grayscale(.5) }
 
 /* metals */
-.cardface.s16card.s16-bronze { --m1: #4a2412; --m2: #a6603a; --m3: #f5c09a; --acc: #f2a77a; --beam: #ff8f55 }
+.cardface.s16card.s16-bronze { --m1: #2e2018; --m2: #7a5a42; --m3: #c4a284; --acc: #bf9a7a; --beam: #8a7462 } /* 压暗、去红（站长 2026-10-10：铜太亮、有点红） */
 .cardface.s16card.s16-silver { --m1: #36444f; --m2: #9cb0c0; --m3: #f6fbff; --acc: #d2e7f6; --beam: #8fc4ff }
 .cardface.s16card.s16-gold { --m1: #5a3c0c; --m2: #d4a53a; --m3: #fff2b8; --acc: #ffd46e; --beam: #ffc65a }
 .cardface.s16card.s16-mythic {
