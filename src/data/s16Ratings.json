@@ -1,8 +1,10 @@
 {
  "meta": {
   "updatedAt": null,
-  "matchDays": 0,
-  "note": "由 scripts/s16_ratings.py 每个比赛日后生成；没有条目的选手卡面全是「?」"
+  "eliminated": 0,
+  "revealed": 0,
+  "final": false,
+  "note": "由 scripts/s16_ratings.py 生成：战队出局（src/data/s16Results.json）时这队五人定格，之后永远不变；prev = 普通卡评分（卡面箭头）；没有条目的选手卡面全是「?」"
  },
  "ratings": {},
  "champion": null,

@@ -46,7 +46,7 @@ function S16Cover() {
       return card && <div key={ign} className={`gate-s16-side ${i ? 'right' : 'left'}`}><S16Card card={card} size="md" /></div>
     })}
     <div className="gate-s16-back"><S16CardBack size="md" /></div>
-    <div className="gate-art-caption">选手股：开赛前全是「?」，选手打完比赛才揭晓数值，每天随比赛涨跌；决赛后冠军队 +2，FMVP 升级成彩卡</div>
+    <div className="gate-art-caption">选手股：开赛前全是「?」，战队被淘汰时这队五人揭晓最终数值并定格，走得越远分越高；冠军队再 +2，FMVP 升级成彩卡</div>
   </div>
 }
 

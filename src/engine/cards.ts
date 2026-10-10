@@ -103,23 +103,33 @@ export interface PlayerCard {
  * clubId is the 2026 club that carries that name forward, null when nobody does.
  */
 /**
- * S16 世界赛 (owner 2026-10-04, after 虎扑选手股): the card shows the player, his club and his position, and every
- * number is 「?」 until he has played at Worlds. After each match day scripts/s16_ratings.py rewrites
- * src/data/s16Ratings.json and the numbers move with his games; the metal is his rank among the revealed. The
- * final freezes them; the champions get +2 and the FMVP's card becomes a 彩卡.
+ * S16 世界赛 (owner 2026-10-04, after 虎扑选手股; reveal model reworked 2026-10-10): the card shows the player, his
+ * club and his position, and every number is 「?」 while his team is still in the event. The day the team is
+ * knocked out (recorded in src/data/s16Results.json), scripts/s16_ratings.py writes the five players' final
+ * rating, metal, attributes and arrow into src/data/s16Ratings.json, and that entry never changes again — not
+ * when the ordinary cards are re-rated, not when later results come in. Rating = his ordinary card + his Worlds
+ * play against his lane opponent (weighted by opponent strength, ±6) + how far the team went (冠军 +4 … 入围赛 −1),
+ * champions +2 on top, capped at 90; the metal uses the ordinary cards' lines (GOLD_AT / SILVER_AT), and the FMVP's
+ * card becomes a 彩卡.
  */
 export interface S16Info {
   club: string
   /** play-in / main event / still to be decided */
   stage: string
   starter: boolean
-  /** false until he has played a Worlds game: the card shows 「?」 and cannot be fielded */
+  /** false while his team is still in the event: the card shows 「?」 and cannot be fielded */
   revealed: boolean
-  /** Worlds games counted so far */
+  /** Worlds games he played */
   games: number
-  /** the rating before the last update, for the ↑↓ on the card; null on the first */
+  /** his ordinary card's rating when the S16 card was frozen, for the ▲▼ on the card (「90 ▲4」); null while hidden */
   prev: number | null
   fmvp: boolean
+  /** how far his team went (S16_PLACEMENT_CN), set once the team is out; null while hidden */
+  placement: S16Placement | null
+}
+export type S16Placement = 'champion' | 'runnerup' | 'sf' | 'qf' | 'swiss' | 'playin'
+export const S16_PLACEMENT_CN: Record<S16Placement, string> = {
+  champion: '冠军', runnerup: '亚军', sf: '四强', qf: '八强', swiss: '瑞士轮出局', playin: '入围赛出局',
 }
 
 export interface EchoInfo {
@@ -532,7 +542,15 @@ export const COACH_CARDS: CoachCard[] = [...buildCoachCards(), ...LEGEND_COACH_C
  * the market, the mailbox and the collection know them.
  */
 export const ECHO_CARDS: PlayerCard[] = buildEchoCards()
-export type S16Rating = { rating: number; rarity: Rarity; games: number; prev?: number | null; attrs?: Attrs }
+/**
+ * One frozen S16 entry, written by scripts/s16_ratings.py when the team is out. Everything the card shows is in it
+ * (rating, metal, attrs, prev = the ordinary rating used as the base), so later ordinary re-rates cannot move it.
+ * perf / place are the two adjustments, kept for the record.
+ */
+export type S16Rating = {
+  rating: number; rarity: Rarity; games: number; prev?: number | null; attrs?: Attrs
+  placement?: S16Placement; out?: string; perf?: number; place?: number
+}
 /**
  * S16 世界赛 cards. Like 峡谷回响, out of PLAYER_CARDS (no ordinary pack, shop, 全图鉴 or club set deals them) and in
  * ALL_CARDS. Each is the same man as his ordinary card (playerId), so one five cannot hold both. An unrevealed card
@@ -583,7 +601,7 @@ export function buildS16Cards(
       rarity: isFmvp ? 'mythic' : r?.rarity ?? 'bronze',
       s16: {
         club: p.club, stage: teams.get(p.club)?.stage ?? 'main', starter: p.starter, revealed: !!r,
-        games: r?.games ?? 0, prev: r?.prev ?? null, fmvp: isFmvp,
+        games: r?.games ?? 0, prev: r?.prev ?? null, fmvp: isFmvp, placement: r?.placement ?? null,
       },
     })
   }
