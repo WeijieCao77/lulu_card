@@ -24,9 +24,9 @@ export default function S16Banner({ owned }: { owned: number }) {
       <div className="s16-banner-copy">
         <span className="rift-banner-kicker">新系列 / WORLDS 2026</span>
         <h1 className="rift-banner-title">S16 世界赛 · 选手股</h1>
-        <p className="s16-banner-key"><span>数值随 S16 比赛实时变化</span><i> · </i><span>赛事预测赢卡包</span></p>
+        <p className="s16-banner-key"><span>战队出局即揭晓、永久定格</span><i> · </i><span>赛事预测赢卡包</span></p>
         <p className="rift-banner-desc">
-          {S16_CARDS.length} 位参赛选手，开赛前全是「?」，打完比赛才揭晓。S16 世界赛包 <b>{def.cost.toLocaleString('en-US')} 金币三张</b>
+          {S16_CARDS.length} 位参赛选手，开赛前全是「?」，战队被淘汰时这队五人揭晓最终数值。S16 世界赛包 <b>{def.cost.toLocaleString('en-US')} 金币三张</b>
           {def.until && <>，卖到 {def.until.slice(5).replace('-', '/')}</>}。
         </p>
       </div>

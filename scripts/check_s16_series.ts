@@ -1,9 +1,14 @@
 /**
- * S16 世界赛: the rules the owner set (2026-10-04), checked against the engine.
+ * S16 世界赛: the rules the owner set (2026-10-04, reveal model 2026-10-10), checked against the engine and
+ * scripts/s16_ratings.py (run on a made-up event; needs python3 or python).
  *
  *   npx tsx scripts/check_s16_series.ts
  */
-import { ALL_CARDS, BASE_PLAYER_CARDS, PLAYER_CARDS, S16_CARDS, buildS16Cards, cardById, isS16Card, personOf, s16Hidden } from '../src/engine/cards'
+import { execFileSync } from 'node:child_process'
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { ALL_CARDS, BASE_PLAYER_CARDS, GOLD_AT, PLAYER_CARDS, S16_CARDS, SILVER_AT, buildS16Cards, cardById, isS16Card, personOf, rarityOf, s16Hidden } from '../src/engine/cards'
 import { FULL_SET_CARDS, PACKS, S16_DUPE_COINS, S16_SET_REWARDS, autoSquad, collectionProgress, mergeClientFields, migrateGacha, newGacha, openPack, s16SetProgress } from '../src/engine/gacha'
 import { runAction, squadForPlay } from '../src/engine/cardActions'
 import { matchesFilter } from '../src/engine/cardFilter'
@@ -14,6 +19,8 @@ import { capOf, priceCap } from '../market-api.js'
 import { applyMail } from '../src/engine/inbox'
 import { tradeableCopies } from '../src/engine/tradeLock'
 import S16 from '../src/data/s16.json'
+import S16_RATINGS from '../src/data/s16Ratings.json'
+import S16_RESULTS from '../src/data/s16Results.json'
 
 let bad = 0
 const check = (name: string, ok: boolean, detail = '') => {
@@ -27,7 +34,20 @@ check('卡池 = s16.json 里的选手，每人一张', S16_CARDS.length === S16.
 check('每张都是普通卡的同一个人（同人不能同时上阵）', S16_CARDS.every((c) => { const b = BASE_PLAYER_CARDS.find((x) => x.id === S16.players.find((p) => p.id === c.id)!.base)!; return personOf(b) === personOf(c) }))
 check('俱乐部按 S16 参赛队', S16_CARDS.every((c) => c.clubId === c.s16!.club))
 check('都在总卡表里，不在普通卡池', S16_CARDS.every((c) => cardById(c.id) === c) && !PLAYER_CARDS.some(isS16Card))
-check('开赛前全部未揭晓（卡面是「?」）', S16_CARDS.every((c) => s16Hidden(c)))
+// owner 2026-10-10: a team's five cards stay 「?」 until the team is out (s16Results.json), then freeze
+{
+  const out = (S16_RESULTS as { teams: Record<string, { placement: string; out: string }> }).teams
+  const stored = (S16_RATINGS as unknown as { ratings: Record<string, { rating: number; rarity: string; prev: number | null; placement?: string }> }).ratings
+  const fmvp = (S16_RATINGS as { fmvp: string | null }).fmvp
+  const shown = S16_CARDS.filter((c) => !s16Hidden(c))
+  check('只有已出局（s16Results.json 登记了）的队揭晓，其余都是「?」',
+    S16_CARDS.every((c) => s16Hidden(c) === !(c.ign in stored)) && shown.every((c) => c.s16!.club in out), `${shown.length} 张已揭晓`)
+  check('揭晓的卡：评分 50–90、金银铜按普通卡的线、箭头是普通卡评分、名次和登记一致', Object.entries(stored).every(([ign, r]) => {
+    const card = S16_CARDS.find((c) => c.ign === ign)
+    return !!card && r.rating >= 50 && r.rating <= 90 && r.rarity === rarityOf(r.rating) && typeof r.prev === 'number' &&
+      r.placement === out[card.s16!.club]?.placement && (ign === fmvp || card.rarity === r.rarity)
+  }))
+}
 check('不进全图鉴、不算主图鉴进度', !S16_CARDS.some((c) => FULL_SET_CARDS.has(c.id)) && collectionProgress(newGacha('a', 'a', day)).total === ALL_CARDS.filter((c) => !c.id.startsWith('echo:') && !c.id.startsWith('s16:')).length)
 let inShop = false
 for (let i = 0; i < 1000; i++) { const g = newGacha('s' + i, 's', day); if (rollShop(g, day, i * 7919).slots.some((s) => s.cardId.startsWith('s16:'))) inShop = true }
@@ -70,9 +90,12 @@ check('S16 包：2600 金币三张、等概率、卖到 11/21', def.cost === 260
 // reveal, metals, FMVP
 {
   const a = S16_CARDS[0], b = S16_CARDS[1]
-  const built = buildS16Cards({ [a.ign]: { rating: 88, rarity: 'gold', games: 3, prev: 85 }, [b.ign]: { rating: 80, rarity: 'silver', games: 2, prev: null } }, b.ign)
+  const frozenAttrs = Object.fromEntries(Object.keys(a.attrs).map((k) => [k, 77])) as unknown as typeof a.attrs
+  const built = buildS16Cards({ [a.ign]: { rating: 88, rarity: 'gold', games: 3, prev: 85, attrs: frozenAttrs, placement: 'sf' }, [b.ign]: { rating: 80, rarity: 'silver', games: 2, prev: null } }, b.ign)
   const A = built.find((c) => c.ign === a.ign)!, B = built.find((c) => c.ign === b.ign)!
-  check('打过比赛就揭晓：数值、金银铜、场数、涨跌', A.s16!.revealed && A.rating === 88 && A.rarity === 'gold' && A.s16!.games === 3 && A.s16!.prev === 85)
+  check('有条目就揭晓：数值、金银铜、场数、箭头（普通卡评分）、名次', A.s16!.revealed && A.rating === 88 && A.rarity === 'gold' && A.s16!.games === 3 && A.s16!.prev === 85 && A.s16!.placement === 'sf')
+  // a frozen card shows what the file says, whatever his ordinary card says today
+  check('定格的卡不跟普通卡走：评分和八项属性都用文件里的', A.rating === 88 && Object.values(A.attrs).every((v) => v === 77))
   check('FMVP 的卡变成彩卡', B.rarity === 'mythic' && B.s16!.fmvp)
   // owner 2026-10-07: the FMVP's 彩卡 leaves the 90 cap, in the band of the Worlds FMVP 彩卡 (94–97), 95 until set
   check('FMVP 彩卡评分没定之前是 95', B.rating === 95, `${B.rating}`)
@@ -175,6 +198,102 @@ check('交易和普通卡一视同仁：按金银铜限价（铜 2000、银 5000
   const s16Owned = Object.entries(h.cards).filter(([k]) => k.startsWith('s16:'))
   check('开 60 包：每名选手最多一张、没有重复卡', s16Owned.every(([, o]) => (o.dupes ?? 0) === 0) && s16Owned.length <= S16_CARDS.length)
   check('开出重复的 S16 选手：每张换 400 金币', paid > 0 && paid % S16_DUPE_COINS === 0, String(paid))
+}
+
+// scripts/s16_ratings.py end to end on a made-up event (owner 2026-10-10): reveal on elimination, freeze, metals, clamp
+{
+  const py = ['python3', 'python'].find((cmd) => { try { execFileSync(cmd, ['--version'], { stdio: 'ignore' }); return true } catch { return false } })
+  check('有 Python 可以跑 s16_ratings.py', !!py)
+  if (py) s16Script(py)
+}
+function s16Script(py: string) {
+  const dir = mkdtempSync(join(tmpdir(), 's16-'))
+  try {
+    const POS = ['top', 'jng', 'mid', 'bot', 'sup'] as const
+    const ROLE = { top: '上单', jng: '打野', mid: '中单', bot: '下路', sup: '辅助' } as const
+    const teams = ['AA', 'BB', 'CC', 'DD']
+    const attrs = { aim: 80, reaction: 80, awareness: 80, utility: 80, clutch: 80, teamwork: 80, communication: 80, igl: 80 }
+    const base: Record<string, { base: string; role: string; club: string; rating: number; attrs: typeof attrs }> = {}
+    const roster = { meta: { start: '2030-10-01' }, teams: teams.map((t) => ({ club: t, tag: t, name: `Team ${t}`, stage: 'main' })), players: [] as { ign: string; club: string; role: string; starter: boolean }[] }
+    for (const t of teams) for (const p of POS) {
+      const ign = `${t}${p}`
+      // everyone 80, except AA's mid 89 (has to stop at 90 as champion) and DD's sup 52 (has to stop at 50 after feeding)
+      const rating = ign === 'AAmid' ? 89 : ign === 'DDsup' ? 52 : 80
+      base[ign] = { base: 'p:x', role: ROLE[p], club: t, rating, attrs }
+      roster.players.push({ ign, club: t, role: ROLE[p], starter: true })
+    }
+    base.AAsub = { base: 'p:x', role: '辅助', club: 'AA', rating: 77, attrs }
+    roster.players.push({ ign: 'AAsub', club: 'AA', role: '辅助', starter: false })
+    // identical lines for everyone (so equal stats), except DD's sup, who feeds
+    const cols = ['gameid', 'datacompleteness', 'league', 'year', 'date', 'side', 'position', 'playername', 'teamname', 'result', 'kills', 'deaths', 'assists', 'teamkills', 'damageshare', 'vspm', 'earnedgoldshare', 'golddiffat15', 'xpdiffat15', 'csdiffat15']
+    const lines = [cols.join(',')]
+    const games: [string, string, string][] = [['2030-10-02', 'DD', 'CC'], ['2030-10-02', 'AA', 'BB'], ['2030-10-03', 'CC', 'AA'], ['2030-10-04', 'BB', 'AA'], ['2030-10-05', 'AA', 'BB']]
+    games.forEach(([d, x, y], gi) => {
+      for (const [t, side, win] of [[x, 'Blue', 0], [y, 'Red', 1]] as const) for (const p of POS) {
+        const feed = `${t}${p}` === 'DDsup'
+        lines.push([`g${gi}`, 'complete', 'WLDs', '2030', `${d} 04:00:00`, side, p, `${t}${p}`, `Team ${t}`, win, 2, feed ? 12 : 2, 4, 10, 0.2, feed ? 0.5 : 1.5, 0.2, feed ? -3000 : 0, feed ? -3000 : 0, feed ? -60 : 0].join(','))
+      }
+    })
+    const W = (f: string, v: unknown) => writeFileSync(join(dir, f), typeof v === 'string' ? v : JSON.stringify(v))
+    W('oe.csv', lines.join('\n') + '\n')
+    W('base.json', base)
+    W('roster.json', roster)
+    const stages = { playin: ['2030-10-02', '2030-10-02'], swiss: ['2030-10-03', '2030-10-04'], final: ['2030-10-05', '2030-10-05'] }
+    const results = (t: Record<string, [string, string]>) => W('results.json', { stages, teams: Object.fromEntries(Object.entries(t).map(([k, [placement, out]]) => [k, { placement, out }])) })
+    const run = (...extra: string[]) => execFileSync(py, [join('scripts', 's16_ratings.py'), '--oe', join(dir, 'oe.csv'), '--year', '2030', '--base', join(dir, 'base.json'), '--roster', join(dir, 'roster.json'), '--results', join(dir, 'results.json'), '--out', join(dir, 'out.json'), ...extra], { encoding: 'utf8', env: { ...process.env, PYTHONIOENCODING: 'utf-8' } })
+    type Entry = { rating: number; rarity: string; games: number; prev: number; attrs: Record<string, number>; placement: string; perf: number }
+    const read = () => JSON.parse(readFileSync(join(dir, 'out.json'), 'utf8')) as { ratings: Record<string, Entry>; champion: string | null; fmvp: string | null }
+    const metalOk = (r: Record<string, Entry>) => Object.values(r).every((e) => e.rarity === (e.rating >= GOLD_AT ? 'gold' : e.rating >= SILVER_AT ? 'silver' : 'bronze'))
+    const dd = (r: Record<string, Entry>) => JSON.stringify(Object.entries(r).filter(([k]) => k.startsWith('DD')))
+
+    // 10-02: DD goes out of the play-in
+    results({ DD: ['playin', '2030-10-02'] })
+    run()
+    let r = read().ratings
+    check('脚本：只揭晓已出局的队', Object.keys(r).sort().join() === POS.map((p) => `DD${p}`).sort().join(), Object.keys(r).join())
+    check('脚本：金银铜按普通卡的线', metalOk(r))
+    check('脚本：箭头 prev = 当时的普通卡评分', Object.entries(r).every(([ign, e]) => e.prev === base[ign].rating))
+    check('脚本：评分不低于 50（DD 辅助普通卡 52、每局送）', r.DDsup.rating === 50 && r.DDsup.perf < 0, `${r.DDsup.rating} perf ${r.DDsup.perf}`)
+    const frozen = dd(r)
+
+    // the ordinary cards are re-rated: a frozen card must not move
+    for (const p of POS) base[`DD${p}`].rating = 60
+    W('base.json', base)
+    run()
+    check('脚本：普通卡改了，已定格的卡一点都不动', dd(read().ratings) === frozen)
+    for (const p of POS) base[`DD${p}`].rating = p === 'sup' ? 52 : 80
+    W('base.json', base)
+
+    // CC out on 10-03, BB on 10-05 — but OE only reaches 10-04, so BB has to wait
+    results({ DD: ['playin', '2030-10-02'], CC: ['swiss', '2030-10-03'], BB: ['runnerup', '2030-10-05'] })
+    run('--until', '2030-10-04')
+    r = read().ratings
+    check('脚本：OE 还没更新到出局那天的队先不定格', !Object.keys(r).some((k) => k.startsWith('BB')) && POS.every((p) => `CC${p}` in r) && dd(r) === frozen)
+
+    // --dry-run writes nothing
+    const before = readFileSync(join(dir, 'out.json'), 'utf8')
+    results({ DD: ['playin', '2030-10-02'], CC: ['swiss', '2030-10-03'], BB: ['runnerup', '2030-10-05'], AA: ['champion', '2030-10-05'] })
+    run('--dry-run')
+    check('脚本：--dry-run 不写文件', readFileSync(join(dir, 'out.json'), 'utf8') === before)
+
+    // after the final
+    run('--final', '--fmvp', 'AAbot')
+    const doc = read()
+    r = doc.ratings
+    check('脚本：决赛后全部揭晓，冠军和 FMVP 记下', Object.keys(r).length === roster.players.length && doc.champion === 'AA' && doc.fmvp === 'AAbot')
+    check('脚本：评分不超过 90（AA 中单普通卡 89 + 冠军）', r.AAmid.rating === 90, String(r.AAmid.rating))
+    // same ordinary card, same (neutral) games: the deeper run is never lower
+    const order = [['DDtop', 'playin', 79], ['CCtop', 'swiss', 80], ['BBtop', 'runnerup', 83], ['AAtop', 'champion', 86]] as const
+    check('脚本：同样的表现，走得越远分越高（入围赛 −1 < 瑞士轮 0 < 亚军 +3 < 冠军 +4 +2）', order.every(([ign, pl, want]) => r[ign].placement === pl && r[ign].perf === 0 && r[ign].rating === want),
+      order.map(([ign]) => `${ign} ${r[ign].rating}`).join(' '))
+    check('脚本：一局没上的替补按普通卡数值揭晓', r.AAsub.rating === 77 && r.AAsub.games === 0 && r.AAsub.prev === 77)
+    check('脚本：八项属性随评分平移', r.AAtop.attrs.aim === 86 && r.CCtop.attrs.aim === 80)
+    check('脚本：金银铜按普通卡的线（决赛后）', metalOk(r))
+  } catch (e) {
+    check('脚本跑得通', false, String((e as { stdout?: string }).stdout || e).slice(-800))
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
 }
 
 console.log(bad ? `\n${bad} 处不对` : '\n全部通过')

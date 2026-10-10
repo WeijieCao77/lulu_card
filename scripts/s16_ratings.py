@@ -1,28 +1,30 @@
 #!/usr/bin/env python3
-"""S16 世界赛系列：每个比赛日后，按选手的世界赛对局重算卡面数值（虎扑选手股的玩法）。
+"""S16 世界赛系列：战队被淘汰时，给这支队的五个人定最终数值并永久定格（站长 2026-10-10 的新算法）。
 
-    python scripts/s16_ratings.py --oe <2026_OE.csv> --year 2026 --since 2026-10-15 \
-        [--until 2026-11-14] [--stage-dates playin:2026-10-15..2026-10-19,swiss:...,ko:...,final:2026-11-14] \
-        [--champion T18] [--fmvp Chovy] [--tz 8] [--dry-run]
+    python scripts/s16_ratings.py --oe <2026_OE.csv> [--dry-run]
+        [--fmvp Chovy] [--fmvp-rating 96] [--final] [--refreeze T35] [--unfreeze T35] [--force]
 
 读：
-  scripts/s16_base.json      每位名单选手的普通卡（先验），由 `npx tsx scripts/s16_base_export.ts` 生成
-  src/data/s16Ratings.json   上一次的结果（取 prev，卡面上的 ↑↓）
+  scripts/s16_base.json      每位名单选手的普通卡（评分 + 八项属性），由 `npx tsx scripts/s16_base_export.ts` 生成
+  src/data/s16Results.json   手工登记：哪些队已经出局、名次、出局日期；还有各阶段的日期
+  src/data/s16Ratings.json   上一次的结果（已定格的条目原样保留，永远不重算）
+  src/engine/cards.ts        金银铜的线 GOLD_AT / SILVER_AT（和普通卡同一条线）
 写：
-  src/data/s16Ratings.json   （--dry-run 时只打印表格，不写）
+  src/data/s16Ratings.json   （--dry-run 时只打印，不写）
 
-算法（详见 scripts/S16_RATINGS_README.md）：
-  1. 每局每人取 KDA、参团率、分均伤害、伤害占比、15 分钟经济/补刀/经验差、分均视野、胜负，
-     对本届世界赛同位置的全部对局做 z 分（截断在 ±3），按位置权重加权，再在同位置内重新标准化
-     → 单局表现分（均值 0、标准差 1）。
-  2. 选手的世界赛 z = 单局表现分的加权平均（入围赛/瑞士轮 ×1，八强/四强 ×1.5，决赛 ×2）。
-  3. 世界赛评分 = clamp(80 + 12z, 55, 90)（原案 78 + 6z，2025 回测后放大，见 README）；与普通卡评分混合：w = 局数/(局数+2)，
-     评分 = round(w·世界赛 + (1−w)·普通卡)。5 局后世界赛占 ~0.71。
-  4. 冠军队（--champion）每人 +2，封顶 90。--fmvp 写入顶层 fmvp（引擎把那张卡做成彩卡，评分按 --fmvp-rating 94–97，不填 95，不受 90 封顶）。
-  5. 金属按已亮相选手的名次：前 25% 金、再 35% 银、其余铜；同分取更好的那档。
-  6. 八项属性 = 普通卡属性 + (新评分 − 普通卡评分)，各自夹在 1..99。
+规则（站长 2026-10-10）：
+  * 战队还在比赛 → 五张卡都是「?」（文件里没有条目）。战队出局（登记进 s16Results.json）→ 这五个人的数值、
+    金银铜、八项属性、箭头全部写进文件并定格，以后普通卡怎么调都不再变。
+  * 评分 = 普通卡评分（底分） + 表现分（±6） + 名次分（冠军 +4、亚军 +3、四强 +2、八强 +1、瑞士轮 0、入围赛 −1）
+    + 冠军队 +2；四舍五入，夹在 50–90。FMVP 彩卡另算（引擎里 94–97）。
+  * 表现分：每局和对面同位置的人比（15 分钟经济/经验/补刀差、伤害占比差、参团率差、死亡差、分均视野差、
+    经济占比差），按位置加权成「单局表现」；扣掉按两人普通卡差距本来就该有的优势；每局按对手全队普通卡均值加权
+    （打弱队的局几乎不算）；再按有效局数收缩（打得越多越可信）。
+  * 金银铜按普通卡的固定线（≥ GOLD_AT 金、≥ SILVER_AT 银），不按名次——先揭晓的队不会被后面的结果改档。
+  * 卡面箭头 prev = 普通卡评分（「90 ▲4」= 比他的普通卡高 4）。
+  * 一局没上的（替补）：战队出局时按普通卡数值揭晓（不加减）。
 
-只用 Python 3.12 标准库。
+只用 Python 3.12 标准库。细节和每个常数的来历见 scripts/S16_RATINGS_README.md。
 """
 from __future__ import annotations
 
@@ -33,40 +35,62 @@ import math
 import re
 import sys
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 BASE_JSON = HERE / "s16_base.json"
 RATINGS_JSON = ROOT / "src" / "data" / "s16Ratings.json"
+RESULTS_JSON = ROOT / "src" / "data" / "s16Results.json"
 ROSTER_JSON = ROOT / "src" / "data" / "s16.json"
+CARDS_TS = ROOT / "src" / "engine" / "cards.ts"
 
 WORLDS_LEAGUE = "WLDs"
 
-# --- tunables -----------------------------------------------------------------
-CENTER = 80.0          # 世界赛评分的中心：本届同位置平均水平（世界赛选手普通卡均值约 81–82）
-SCALE = 12.0           # 每 1 个「单局标准差」= 12 分。选手多局平均后的 z 只有 ±0.4 左右，6 分太平（2025 回测）
-WORLDS_MIN, WORLDS_MAX = 55, 90
-BLEND_K = 2.0          # w = games / (games + BLEND_K)
+# --- tunables（2025 世界赛回测定的，见 README「常数」一节）------------------------------
 CARD_MIN, CARD_MAX = 50, 90
-CHAMPION_BONUS = 2
-GOLD_SHARE, SILVER_SHARE = 0.25, 0.35
+CHAMPION_BONUS = 2                      # 站长原有规则：冠军队每人 +2，封顶 90
+PLACEMENT_BONUS = {                     # 站长 2026-10-10：走得越远越强
+    "champion": 4, "runnerup": 3, "sf": 2, "qf": 1, "swiss": 0, "playin": -1,
+}
+PLACEMENT_CN = {"champion": "冠军", "runnerup": "亚军", "sf": "四强", "qf": "八强", "swiss": "瑞士轮出局", "playin": "入围赛出局"}
+PLACEMENT_ORDER = ("playin", "swiss", "qf", "sf", "runnerup", "champion")
+PLACEMENT_MAX_TEAMS = {"champion": 1, "runnerup": 1, "sf": 2, "qf": 4}
+
+PERF_SCALE = 10.0       # 表现分 = PERF_SCALE × 收缩后的平均单局表现（单局表现的标准差 = 1）
+PERF_CAP = 6.0          # 表现分夹在 ±6
+SHRINK_K = 5.0          # 收缩：相当于先放 5 局「表现 0」的满权重对局；有效局数 n → 可信度 n/(n+5)
+OPP_FLOOR, OPP_REF = 72.0, 84.0   # 对手全队普通卡均值 → 这局的权重 (均值 − 72)/(84 − 72)：84 记 1，78 记 0.5
+OPP_W_MIN, OPP_W_MAX = 0.10, 1.25
+EXPECT_PER_PT = 0.03    # 每差 1 分普通卡，单局表现「本来就该」高 0.03（2025 回测里的回归斜率）
+UNKNOWN_BASE = 78.0     # 对面上了名单外的人（替补没登记）时，按 78 估他的普通卡
 Z_CLIP = 3.0
-STAGE_WEIGHT = {"playin": 1.0, "swiss": 1.0, "group": 1.0, "ko": 1.5, "qf": 1.5, "sf": 1.5, "final": 2.0}
+STAGE_WEIGHT = {"playin": 1.0, "swiss": 1.0, "ko": 1.5, "final": 2.0}
 
 ROLE_TO_POS = {"上单": "top", "打野": "jng", "中单": "mid", "下路": "bot", "辅助": "sup"}
 POSITIONS = ("top", "jng", "mid", "bot", "sup")
 
-# 每个位置的指标权重（每行和为 1）。视野对打野/辅助更重，伤害对上中下更重。
-METRICS = ("kda", "kp", "dpm", "dmgshare", "gd15", "csd15", "xpd15", "vspm", "result")
-WEIGHTS = {
-    "top": {"kda": .18, "kp": .08, "dpm": .16, "dmgshare": .14, "gd15": .14, "csd15": .10, "xpd15": .08, "vspm": .02, "result": .10},
-    "jng": {"kda": .18, "kp": .16, "dpm": .08, "dmgshare": .06, "gd15": .12, "csd15": .04, "xpd15": .10, "vspm": .14, "result": .12},
-    "mid": {"kda": .18, "kp": .10, "dpm": .16, "dmgshare": .14, "gd15": .12, "csd15": .10, "xpd15": .08, "vspm": .02, "result": .10},
-    "bot": {"kda": .20, "kp": .10, "dpm": .18, "dmgshare": .16, "gd15": .12, "csd15": .10, "xpd15": .02, "vspm": .02, "result": .10},
-    "sup": {"kda": .22, "kp": .20, "dpm": .04, "dmgshare": .02, "gd15": .08, "csd15": .00, "xpd15": .08, "vspm": .24, "result": .12},
+# 和对位比的八项（每项都是「我 − 对面」，死亡是「对面 − 我」，越大越好）
+METRICS = ("gd15", "xpd15", "csd15", "dmgshare", "kp", "deaths", "vspm", "egs")
+WEIGHTS = {  # 每行和为 1。辅助看参团/视野/少死，上中下看对线和伤害
+    "top": {"gd15": .18, "xpd15": .10, "csd15": .10, "dmgshare": .20, "kp": .10, "deaths": .16, "vspm": .04, "egs": .12},
+    "jng": {"gd15": .12, "xpd15": .12, "csd15": .04, "dmgshare": .10, "kp": .20, "deaths": .16, "vspm": .16, "egs": .10},
+    "mid": {"gd15": .16, "xpd15": .10, "csd15": .10, "dmgshare": .20, "kp": .12, "deaths": .16, "vspm": .04, "egs": .12},
+    "bot": {"gd15": .16, "xpd15": .06, "csd15": .12, "dmgshare": .22, "kp": .10, "deaths": .18, "vspm": .02, "egs": .14},
+    "sup": {"gd15": .10, "xpd15": .10, "csd15": .00, "dmgshare": .04, "kp": .24, "deaths": .22, "vspm": .26, "egs": .04},
 }
+# 每项「我 − 对面」的标准差（2025 年 LCK/LEC/LTA 南北/LCP/MSI/世界赛数据完整的 1752 局），固定写死：
+# 先出局的队和后出局的队用同一把尺子，不随赛事里的对局多少而变
+SCALES = {
+    "top": {"gd15": 759.1, "xpd15": 717.3, "csd15": 17.6, "dmgshare": 0.0868, "kp": 0.2725, "deaths": 2.9, "vspm": 0.3372, "egs": 0.0429},
+    "jng": {"gd15": 646.7, "xpd15": 701.3, "csd15": 15.0, "dmgshare": 0.0674, "kp": 0.2422, "deaths": 3.2, "vspm": 0.4699, "egs": 0.0355},
+    "mid": {"gd15": 693.7, "xpd15": 603.1, "csd15": 14.7, "dmgshare": 0.0873, "kp": 0.2638, "deaths": 2.8, "vspm": 0.3731, "egs": 0.0409},
+    "bot": {"gd15": 773.1, "xpd15": 624.1, "csd15": 15.2, "dmgshare": 0.0835, "kp": 0.2583, "deaths": 2.6, "vspm": 0.4417, "egs": 0.0413},
+    "sup": {"gd15": 392.9, "xpd15": 502.8, "csd15": 7.6, "dmgshare": 0.0424, "kp": 0.2452, "deaths": 3.2, "vspm": 0.5622, "egs": 0.0209},
+}
+# 加权合成后的标准差（同一批对局），除掉它，单局表现的标准差就是 1
+INDEX_SD = {"top": 0.636, "jng": 0.606, "mid": 0.616, "bot": 0.624, "sup": 0.608}
 
 # OE 的 playername（小写、去掉空格符号后）→ 名单上的 ign。大小写和空格差异已自动处理，这里只放真正拼法不同的。
 ALIASES: dict[str, str] = {
@@ -80,10 +104,10 @@ def norm(s: str) -> str:
     return re.sub(r"[^0-9a-z]", "", s.lower())
 
 
-def fnum(v: str) -> float | None:
+def fnum(v) -> float | None:
     if v is None:
         return None
-    v = v.strip()
+    v = str(v).strip()
     if v == "":
         return None
     try:
@@ -93,39 +117,32 @@ def fnum(v: str) -> float | None:
     return x if math.isfinite(x) else None
 
 
+def clamp(x: float, lo: float, hi: float) -> float:
+    return max(lo, min(hi, x))
+
+
+def round_half_up(x: float) -> int:
+    return int(math.floor(x + 0.5))
+
+
+def metal_thresholds(path: Path = CARDS_TS) -> tuple[int, int]:
+    """GOLD_AT / SILVER_AT straight from the engine, so the S16 metals use the ordinary cards' lines."""
+    src = path.read_text(encoding="utf-8")
+    g = re.search(r"export const GOLD_AT\s*=\s*(\d+)", src)
+    s = re.search(r"export const SILVER_AT\s*=\s*(\d+)", src)
+    if not g or not s:
+        sys.exit(f"{path}: GOLD_AT / SILVER_AT not found")
+    return int(g.group(1)), int(s.group(1))
+
+
+def metal_of(rating: int, gold_at: int, silver_at: int) -> str:
+    return "gold" if rating >= gold_at else "silver" if rating >= silver_at else "bronze"
+
+
 # --- reading -------------------------------------------------------------------
-def parse_stage_dates(spec: str | None) -> list[tuple[str, str, str]]:
-    """'playin:2026-10-15..2026-10-19,ko:2026-10-29..2026-11-08,final:2026-11-14' → [(stage, from, to)]"""
-    out: list[tuple[str, str, str]] = []
-    if not spec:
-        return out
-    for part in spec.split(","):
-        part = part.strip()
-        if not part:
-            continue
-        stage, _, rng = part.partition(":")
-        stage = stage.strip().lower()
-        if stage not in STAGE_WEIGHT:
-            sys.exit(f"--stage-dates: unknown stage '{stage}' (known: {', '.join(STAGE_WEIGHT)})")
-        lo, _, hi = rng.partition("..")
-        lo, hi = lo.strip(), (hi.strip() or lo.strip())
-        for d in (lo, hi):
-            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", d):
-                sys.exit(f"--stage-dates: bad date '{d}' in '{part}'")
-        out.append((stage, lo, hi))
-    return out
-
-
-def stage_of(day: str, stages: list[tuple[str, str, str]]) -> str:
-    for stage, lo, hi in stages:
-        if lo <= day <= hi:
-            return stage
-    return "?"
-
-
 def local_day(date_str: str, tz_hours: float) -> str:
     """OE 的 date 是 UTC（'2025-10-15 05:12:00'）；换成 tz 时区的日期作为「比赛日」。"""
-    s = date_str.strip()
+    s = (date_str or "").strip()
     for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%d"):
         try:
             t = datetime.strptime(s[:19], fmt)
@@ -140,7 +157,8 @@ def local_day(date_str: str, tz_hours: float) -> str:
 LATEST_DATE = ""  # the newest date anywhere in the CSV (any league) — shows how far OE has got
 
 
-def read_worlds_rows(path: Path, year: int | None, since: str | None, until: str | None, tz: float) -> list[dict]:
+def read_worlds_rows(path: Path, year: int | None, since: str | None, until: str | None, tz: float,
+                     league: str = WORLDS_LEAGUE) -> list[dict]:
     """Player rows of the Worlds event (league WLDs) within [since, until] (match-day dates in tz)."""
     global LATEST_DATE
     rows: list[dict] = []
@@ -154,12 +172,11 @@ def read_worlds_rows(path: Path, year: int | None, since: str | None, until: str
             dt = (r.get("date") or "")[:19]
             if dt > LATEST_DATE:
                 LATEST_DATE = dt
-            if r.get("league") != WORLDS_LEAGUE:
+            if r.get("league") != league:
                 continue
             if year is not None and (r.get("year") or "").strip() not in ("", str(year)):
                 continue
-            pos = (r.get("position") or "").strip()
-            if pos not in POSITIONS:
+            if (r.get("position") or "").strip() not in POSITIONS:
                 continue
             day = local_day(r.get("date") or "", tz)
             if since and day < since:
@@ -171,117 +188,132 @@ def read_worlds_rows(path: Path, year: int | None, since: str | None, until: str
     return rows
 
 
-def game_metrics(r: dict) -> dict[str, float | None]:
-    k, d, a = fnum(r.get("kills")) or 0, fnum(r.get("deaths")) or 0, fnum(r.get("assists")) or 0
+def _raw(r: dict) -> dict[str, float | None]:
+    k, d, a = fnum(r.get("kills")) or 0.0, fnum(r.get("deaths")) or 0.0, fnum(r.get("assists")) or 0.0
     tk = fnum(r.get("teamkills"))
     return {
-        # log 压掉 15/0/10 这种局的极端值
-        "kda": math.log1p((k + a) / max(1.0, d)),
-        "kp": ((k + a) / tk) if tk and tk > 0 else None,
-        "dpm": fnum(r.get("dpm")),
+        "kp": ((k + a) / tk) if tk and tk > 0 else (0.0 if tk == 0 else None),
+        "deaths": d,
         "dmgshare": fnum(r.get("damageshare")),
-        "gd15": fnum(r.get("golddiffat15")),
-        "csd15": fnum(r.get("csdiffat15")),
-        "xpd15": fnum(r.get("xpdiffat15")),
         "vspm": fnum(r.get("vspm")),
-        "result": fnum(r.get("result")),
+        "egs": fnum(r.get("earnedgoldshare")),
+        "gd15": fnum(r.get("golddiffat15")),
+        "xpd15": fnum(r.get("xpdiffat15")),
+        "csd15": fnum(r.get("csdiffat15")),
     }
 
 
-def _mean_sd(xs: list[float]) -> tuple[float, float]:
-    if not xs:
-        return 0.0, 0.0
-    m = sum(xs) / len(xs)
-    if len(xs) < 2:
-        return m, 0.0
-    var = sum((x - m) ** 2 for x in xs) / (len(xs) - 1)
-    return m, math.sqrt(var)
-
-
-def score_games(rows: list[dict]) -> list[dict]:
-    """Attach r['_z']: the game's performance index, standardised within its position (mean 0, sd 1)."""
-    by_pos: dict[str, list[dict]] = defaultdict(list)
+def pair_rows(rows: list[dict]) -> list[dict]:
+    """Attach r['_opp'] (the opposing row in his position, same game) and r['_mates'] (his team's five rows)."""
+    by_game: dict[str, list[dict]] = defaultdict(list)
     for r in rows:
-        r["_m"] = game_metrics(r)
-        by_pos[r["position"]].append(r)
-    for pos, prow in by_pos.items():
-        stats = {}
-        for m in METRICS:
-            stats[m] = _mean_sd([r["_m"][m] for r in prow if r["_m"][m] is not None])
-        comps = []
-        for r in prow:
-            tot, wsum = 0.0, 0.0
-            for m in METRICS:
-                w = WEIGHTS[pos][m]
-                v = r["_m"][m]
-                mu, sd = stats[m]
-                if w <= 0 or v is None or sd <= 0:
+        by_game[r["gameid"]].append(r)
+    out = []
+    for gid, rs in by_game.items():
+        teams: dict[str, list[dict]] = defaultdict(list)
+        for r in rs:
+            teams[r.get("teamname") or r.get("side") or ""].append(r)
+        if len(teams) != 2:
+            continue
+        (ta, ra), (tb, rb) = teams.items()
+        for mine, theirs in ((ra, rb), (rb, ra)):
+            opp_by_pos = {x["position"]: x for x in theirs}
+            for r in mine:
+                o = opp_by_pos.get(r["position"])
+                if o is None:
                     continue
-                z = max(-Z_CLIP, min(Z_CLIP, (v - mu) / sd))
-                tot += w * z
-                wsum += w
-            r["_c"] = tot / wsum if wsum > 0 else 0.0
-            comps.append(r["_c"])
-        mu, sd = _mean_sd(comps)
-        for r in prow:
-            r["_z"] = (r["_c"] - mu) / sd if sd > 0 else 0.0
-    return rows
-
-
-# --- core ----------------------------------------------------------------------
-def clamp(x: float, lo: float, hi: float) -> float:
-    return max(lo, min(hi, x))
-
-
-def metal_for(ratings: dict[str, int]) -> dict[str, str]:
-    """前 25% 金、再 35% 银、其余铜；同分取更好的那档。"""
-    if not ratings:
-        return {}
-    vals = sorted(ratings.values(), reverse=True)
-    n = len(vals)
-    gold_cut = vals[max(1, math.ceil(n * GOLD_SHARE)) - 1]
-    silver_cut = vals[max(1, math.ceil(n * (GOLD_SHARE + SILVER_SHARE))) - 1]
-    out = {}
-    for ign, v in ratings.items():
-        out[ign] = "gold" if v >= gold_cut else "silver" if v >= silver_cut else "bronze"
+                r["_opp"] = o
+                r["_mates"] = mine
+                r["_foes"] = theirs
+                out.append(r)
     return out
 
 
-def compute(rows: list[dict], prior: dict[str, dict], resolve, stages, champion: str | None,
-            prev: dict[str, int | None] | None = None) -> dict:
-    """rows: Worlds player rows (already filtered). prior: ign → {rating, attrs, club, role}.
-    resolve(row) → roster ign or None. Returns {ign: {...}} for players with ≥ 1 game, plus diagnostics."""
-    score_games(rows)
-    per: dict[str, list[dict]] = defaultdict(list)
-    for r in rows:
-        ign = resolve(r)
-        if ign:
-            per[ign].append(r)
-    out: dict[str, dict] = {}
-    for ign, games in per.items():
-        p = prior[ign]
-        wsum = sum(STAGE_WEIGHT.get(stage_of(g["_day"], stages), 1.0) for g in games)
-        z = sum(STAGE_WEIGHT.get(stage_of(g["_day"], stages), 1.0) * g["_z"] for g in games) / wsum
-        n = len({g["gameid"] for g in games})
-        worlds = clamp(CENTER + SCALE * z, WORLDS_MIN, WORLDS_MAX)
-        w = n / (n + BLEND_K)
-        rating = round(w * worlds + (1 - w) * p["rating"])
-        if champion and p.get("club") == champion:
-            rating += CHAMPION_BONUS
-        rating = int(clamp(rating, CARD_MIN, CARD_MAX))
-        out[ign] = {"rating": rating, "games": n, "z": z, "worlds": worlds, "prior": p["rating"],
-                    "club": p.get("club"), "role": p.get("role"),
-                    "teamname": games[-1].get("teamname", "")}
-    metals = metal_for({k: v["rating"] for k, v in out.items()})
-    for ign, v in out.items():
-        v["rarity"] = metals[ign]
-        shift = v["rating"] - prior[ign]["rating"]
-        v["attrs"] = {k: int(clamp(round(a + shift), 1, 99)) for k, a in prior[ign]["attrs"].items()}
-        v["prev"] = (prev or {}).get(ign)
+def diffs(r: dict) -> dict[str, float | None]:
+    """「我 − 对面同位置」for each metric (deaths: 对面 − 我). The @15 columns in OE are already vs the lane opponent."""
+    me, op = _raw(r), _raw(r["_opp"])
+    out: dict[str, float | None] = {}
+    for m in METRICS:
+        if m in ("gd15", "xpd15", "csd15"):
+            out[m] = me[m]
+        elif m == "deaths":
+            out[m] = op[m] - me[m]
+        else:
+            out[m] = (me[m] - op[m]) if me[m] is not None and op[m] is not None else None
     return out
 
 
-# --- CLI -----------------------------------------------------------------------
+def game_index(r: dict) -> float:
+    """Per-game index vs his lane opponent: weighted, clipped z of the eight diffs, scaled to sd 1."""
+    pos = r["position"]
+    d = diffs(r)
+    tot, wsum = 0.0, 0.0
+    for m in METRICS:
+        w = WEIGHTS[pos][m]
+        v = d[m]
+        if w <= 0 or v is None:
+            continue
+        tot += w * clamp(v / SCALES[pos][m], -Z_CLIP, Z_CLIP)
+        wsum += w
+    if wsum <= 0:
+        return 0.0
+    # missing columns (partial data) → average over what is there, weights renormalised
+    return (tot / wsum) / INDEX_SD[pos]
+
+
+# --- the model -------------------------------------------------------------------
+def opp_weight(opp_avg: float) -> float:
+    return clamp((opp_avg - OPP_FLOOR) / (OPP_REF - OPP_FLOOR), OPP_W_MIN, OPP_W_MAX)
+
+
+def stage_of(day: str, stages: dict[str, list[str]]) -> str | None:
+    for stage, (lo, hi) in stages.items():
+        if lo <= day <= hi:
+            return stage
+    return None
+
+
+def performance(games: list[dict], base_of, stages: dict[str, list[str]]) -> dict:
+    """games: his paired rows. base_of(row) → that player's ordinary rating (or UNKNOWN_BASE).
+    Returns {perf, n_eff, raw, games} — perf already scaled to rating points and capped at ±PERF_CAP."""
+    num, wsum = 0.0, 0.0
+    for g in games:
+        idx = game_index(g)
+        # 本来就该有的优势：他比对位强多少分，单局表现就该高 EXPECT_PER_PT × 分差
+        expect = EXPECT_PER_PT * (base_of(g) - base_of(g["_opp"]))
+        opp_avg = sum(base_of(x) for x in g["_foes"]) / max(1, len(g["_foes"]))
+        w = opp_weight(opp_avg) * STAGE_WEIGHT.get(stage_of(g["_day"], stages) or "", 1.0)
+        g["_idx"], g["_exp"], g["_w"], g["_oppavg"] = idx, expect, w, opp_avg
+        num += w * (idx - expect)
+        wsum += w
+    shrunk = num / (wsum + SHRINK_K) if (wsum + SHRINK_K) > 0 else 0.0
+    perf = clamp(PERF_SCALE * shrunk, -PERF_CAP, PERF_CAP)
+    raw = num / wsum if wsum > 0 else 0.0
+    return {"perf": perf, "n_eff": wsum, "raw": raw, "games": len({g["gameid"] for g in games})}
+
+
+def rate_player(base_rating: int, perf: float, placement: str, champion: bool) -> int:
+    x = base_rating + perf + PLACEMENT_BONUS[placement] + (CHAMPION_BONUS if champion else 0)
+    return int(clamp(round_half_up(x), CARD_MIN, CARD_MAX))
+
+
+def make_entry(ign: str, b: dict, rating: int, games: int, placement: str, out_day: str,
+               perf: float, gold_at: int, silver_at: int) -> dict:
+    shift = rating - int(b["rating"])
+    return {
+        "rating": rating,
+        "rarity": metal_of(rating, gold_at, silver_at),
+        "games": games,
+        "prev": int(b["rating"]),          # 卡面箭头：比普通卡高/低多少
+        "attrs": {k: int(clamp(round_half_up(a + shift), 1, 99)) for k, a in b["attrs"].items()},
+        "placement": placement,
+        "out": out_day,
+        "perf": round(perf, 2),
+        "place": PLACEMENT_BONUS[placement],
+    }
+
+
+# --- CLI helpers -------------------------------------------------------------------
 def load_json(path: Path, default):
     try:
         with open(path, encoding="utf-8") as f:
@@ -315,126 +347,253 @@ def make_resolver(base: dict[str, dict], roster: dict, unmatched: dict, mismatch
     return resolve
 
 
-def print_table(res: dict, base: dict, file=None):
+def club_of_row(r: dict, roster: dict) -> str | None:
+    key = norm(r.get("teamname") or "")
+    for t in roster.get("teams", []):
+        if key in (norm(t.get("name", "")), norm(t.get("tag") or "")):
+            return t["club"]
+    return None
+
+
+def validate_results(results: dict, roster: dict) -> list[str]:
+    errs = []
+    clubs = {t["club"] for t in roster.get("teams", [])}
+    teams = results.get("teams") or {}
+    count: dict[str, int] = defaultdict(int)
+    for club, t in teams.items():
+        if club not in clubs:
+            errs.append(f"s16Results.json: {club} 不是名单里的俱乐部 id")
+        p = (t or {}).get("placement")
+        if p not in PLACEMENT_BONUS:
+            errs.append(f"s16Results.json: {club} 的 placement「{p}」不认识（可选：{', '.join(PLACEMENT_ORDER)}）")
+        else:
+            count[p] += 1
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str((t or {}).get("out") or "")):
+            errs.append(f"s16Results.json: {club} 的 out 要写出局那天的日期 YYYY-MM-DD（北京时间）")
+    for p, mx in PLACEMENT_MAX_TEAMS.items():
+        if count[p] > mx:
+            errs.append(f"s16Results.json: {PLACEMENT_CN[p]} 登记了 {count[p]} 支队（最多 {mx}）")
+    for stage, rng in (results.get("stages") or {}).items():
+        if stage not in STAGE_WEIGHT or not isinstance(rng, list) or len(rng) != 2:
+            errs.append(f"s16Results.json: stages.{stage} 要写成 [\"开始\", \"结束\"]，阶段只认 {', '.join(STAGE_WEIGHT)}")
+    return errs
+
+
+def run(args) -> dict:
+    """The whole update. Returns the output document (also written unless --dry-run)."""
+    roster = load_json(Path(args.roster), {"teams": [], "players": [], "meta": {}})
+    base = load_json(Path(args.base), None)
+    if not base:
+        sys.exit(f"{args.base} 不存在或为空：先跑 `npx tsx scripts/s16_base_export.ts`")
+    results = load_json(Path(args.results), {"stages": {}, "teams": {}})
+    old = load_json(Path(args.out), {"meta": {}, "ratings": {}})
+    gold_at, silver_at = metal_thresholds(Path(args.cards))
+    errs = validate_results(results, roster)
+    if errs:
+        sys.exit("\n".join(errs))
+    stages = results.get("stages") or {}
+    teams_out: dict[str, dict] = results.get("teams") or {}
+    since = args.since or (roster.get("meta") or {}).get("start")
+
+    roster_by_club: dict[str, list[dict]] = defaultdict(list)
+    for p in roster.get("players", []):
+        roster_by_club[p["club"]].append(p)
+    team_name = {t["club"]: t.get("tag") or t.get("name") or t["club"] for t in roster.get("teams", [])}
+    missing_base = [p["ign"] for p in roster.get("players", []) if p["ign"] not in base]
+    if missing_base:
+        sys.exit(f"s16_base.json 里没有：{', '.join(missing_base)}——名单改过就重跑 `npx tsx scripts/s16_base_export.ts`")
+
+    champion = next((c for c, t in teams_out.items() if t["placement"] == "champion"), None)
+    if args.champion and args.champion != champion:
+        sys.exit(f"--champion {args.champion} 和 s16Results.json 里登记的冠军（{champion or '还没登记'}）对不上")
+    if args.fmvp:
+        if args.fmvp not in base:
+            sys.exit(f"--fmvp {args.fmvp}: 名单里没有这个 ign（注意大小写）")
+        if teams_out.get(base[args.fmvp].get("club"), {}).get("placement") not in ("champion", "runnerup"):
+            sys.exit(f"--fmvp {args.fmvp}: 他的队还没在 s16Results.json 里登记成冠军/亚军")
+    if args.final:
+        alive = [team_name[c] for c in roster_by_club if c not in teams_out]
+        if alive:
+            sys.exit(f"--final：这些队还没登记名次：{', '.join(alive)}")
+
+    old_ratings: dict[str, dict] = dict(old.get("ratings") or {})
+    for club in args.unfreeze:
+        for p in roster_by_club.get(club, []):
+            old_ratings.pop(p["ign"], None)
+    refreeze = set(args.refreeze)
+
+    rows = read_worlds_rows(Path(args.oe), args.year, since, args.until, args.tz)
+    paired = pair_rows(rows)
+    days = sorted({r["_day"] for r in rows})
+    last_day = days[-1] if days else None
+
+    unmatched: dict = {}
+    mismatched: dict = {}
+    resolve = make_resolver(base, roster, unmatched, mismatched)
+    for r in rows:
+        r["_ign"] = resolve(r)
+
+    def base_of(r: dict) -> float:
+        ign = r.get("_ign")
+        return float(base[ign]["rating"]) if ign else UNKNOWN_BASE
+
+    per: dict[str, list[dict]] = defaultdict(list)
+    for r in paired:
+        if r.get("_ign"):
+            per[r["_ign"]].append(r)
+    last_game_of_club: dict[str, str] = {}
+    for r in rows:
+        c = club_of_row(r, roster)
+        if c and r["_day"] > last_game_of_club.get(c, ""):
+            last_game_of_club[c] = r["_day"]
+
+    log: list[str] = []
+    ratings: dict[str, dict] = {}
+    detail: dict[str, dict] = {}
+    frozen_now: list[str] = []
+    waiting: list[str] = []
+    for club, players in roster_by_club.items():
+        t = teams_out.get(club)
+        already = [p for p in players if p["ign"] in old_ratings]
+        if t is None:
+            if already:
+                # 文件里已经定格了，但结果表里删掉了这队：不动（定格是永久的）。登记错了就用 --unfreeze 撤销
+                log.append(f"注意：{team_name[club]} 已经定格，但 s16Results.json 里没有它了——保持定格不动；确实登记错了用 --unfreeze {club}")
+                for p in already:
+                    ratings[p["ign"]] = old_ratings[p["ign"]]
+            continue
+        todo = [p for p in players if p["ign"] not in old_ratings or club in refreeze]
+        for p in players:
+            if p not in todo:
+                ratings[p["ign"]] = old_ratings[p["ign"]]
+        if not todo:
+            continue
+        out_day = t["out"]
+        if last_game_of_club.get(club, "") > out_day:
+            log.append(f"注意：{team_name[club]} 登记 {out_day} 出局，但 OE 里 {last_game_of_club[club]} 还有它的比赛——检查 s16Results.json")
+        if (last_day or "") < out_day and not args.force:
+            waiting.append(f"{team_name[club]}（{out_day} 出局，OE 只到 {last_day or '无'}）")
+            for p in todo:
+                if p["ign"] in old_ratings:
+                    ratings[p["ign"]] = old_ratings[p["ign"]]
+            continue
+        for p in todo:
+            ign = p["ign"]
+            b = base[ign]
+            games = [g for g in per.get(ign, []) if g["_day"] <= out_day]
+            if games:
+                pf = performance(games, base_of, stages)
+                rating = rate_player(int(b["rating"]), pf["perf"], t["placement"], club == champion)
+            else:
+                # 一局没上（替补）：按普通卡数值揭晓，不加减
+                pf = {"perf": 0.0, "n_eff": 0.0, "raw": 0.0, "games": 0}
+                rating = int(b["rating"])
+            ratings[ign] = make_entry(ign, b, rating, pf["games"], t["placement"], out_day, pf["perf"], gold_at, silver_at)
+            detail[ign] = pf
+        frozen_now.append(team_name[club])
+
+    fmvp = args.fmvp if args.fmvp else old.get("fmvp")
+    fmvp_rating = args.fmvp_rating if args.fmvp_rating is not None else old.get("fmvpRating")
+    if fmvp and fmvp not in ratings:
+        log.append(f"注意：FMVP {fmvp} 的卡还没定格，先不标彩卡")
+        fmvp, fmvp_rating = None, None
+    done_clubs = sorted({base[i]["club"] for i in ratings})
+    out = {
+        "meta": {
+            "updatedAt": last_day,
+            "eliminated": len([c for c in roster_by_club if c in teams_out]),
+            "revealed": len(ratings),
+            "final": len(done_clubs) == len(roster_by_club) and len(roster_by_club) > 0,
+            "note": "由 scripts/s16_ratings.py 生成：战队出局（src/data/s16Results.json）时这队五人定格，之后永远不变；"
+                    "prev = 普通卡评分（卡面箭头）；没有条目的选手卡面全是「?」",
+        },
+        "ratings": {ign: ratings[ign] for ign in sorted(ratings, key=lambda i: (-ratings[i]["rating"], i.lower()))},
+        "champion": champion,
+        "fmvp": fmvp,
+        "fmvpRating": fmvp_rating,
+    }
+    report = {
+        "rows": rows, "days": days, "unmatched": unmatched, "mismatched": mismatched, "log": log,
+        "frozen_now": frozen_now, "waiting": waiting, "detail": detail, "base": base, "roster": roster,
+        "team_name": team_name, "teams_out": teams_out,
+    }
+    return {"out": out, "report": report}
+
+
+def print_report(res: dict, args, file=None) -> None:
     file = file or sys.stdout
-    hdr = f"{'ign':<14}{'team':<24}{'games':>5}{'prior':>7}{'worlds':>8}{'new':>5}{'Δprev':>7}  metal"
-    print(hdr, file=file)
-    print("-" * len(hdr), file=file)
-    for ign, v in sorted(res.items(), key=lambda kv: (-kv[1]["rating"], -kv[1]["z"])):
-        d = "—" if v["prev"] is None else f"{v['rating'] - v['prev']:+d}"
-        print(f"{ign:<14}{v['teamname'][:23]:<24}{v['games']:>5}{v['prior']:>7}{v['worlds']:>8.1f}{v['rating']:>5}{d:>7}  {v['rarity']}",
-              file=file)
+    out, rep = res["out"], res["report"]
+    rows, days = rep["rows"], rep["days"]
+    p = lambda *a: print(*a, file=file)
+    p(f"OE: {args.oe}（文件里最新的一局：{LATEST_DATE or '无'} UTC）")
+    p(f"世界赛对局（{WORLDS_LEAGUE}，{args.since or '开幕日'} → {args.until or '…'}，tz={args.tz:+g}）："
+      f"{len({r['gameid'] for r in rows})} 局，{len(days)} 个比赛日（最后一天 {days[-1] if days else '无'}）")
+    if rep["unmatched"]:
+        p(f"\n对不上名单的世界赛选手（{len(rep['unmatched'])}）——是名单漏了人，还是要加 ALIASES：")
+        for (name, team), c in sorted(rep["unmatched"].items(), key=lambda kv: (kv[0][1], kv[0][0])):
+            p(f"  {name:<16} {team:<28} {c} 局")
+    if rep["mismatched"]:
+        p("\n名字对上了、队伍对不上（没算）：")
+        for (name, team, ign), c in sorted(rep["mismatched"].items()):
+            p(f"  OE {name} @ {team} ≠ 名单 {ign} @ {rep['base'][ign].get('club')}  {c} 局")
+    if not rows:
+        p("还没有世界赛数据（赛事没开始，或 OE 还没更新）——只保留已经定格的卡。")
+    for line in rep["log"]:
+        p(line)
+    if rep["waiting"]:
+        p(f"\n登记了出局、但 OE 还没更新到出局那天，这次先不定格（OE 更新后再跑；确认要定格加 --force）：")
+        for w in rep["waiting"]:
+            p(f"  {w}")
+    p(f"\n这次新定格：{'、'.join(rep['frozen_now']) or '无'}")
+    p(f"已揭晓 {out['meta']['revealed']} 人，{out['meta']['eliminated']} 支队已出局登记\n")
+    hdr = f"{'ign':<13}{'team':<7}{'名次':<8}{'局':>3}{'有效':>6}{'普通卡':>6}{'表现':>6}{'名次分':>6}{'S16':>5}{'箭头':>6}  金属"
+    p(hdr)
+    p("-" * 78)
+    det = rep["detail"]
+    for ign, v in out["ratings"].items():
+        if ign not in det:
+            continue
+        club = rep["base"][ign]["club"]
+        d = v["rating"] - v["prev"]
+        arrow = "—" if d == 0 else (f"▲{d}" if d > 0 else f"▼{-d}")
+        p(f"{ign:<13}{rep['team_name'].get(club, club):<7}{PLACEMENT_CN[v['placement']]:<8}{v['games']:>3}"
+          f"{det[ign]['n_eff']:>6.1f}{v['prev']:>6}{v['perf']:>+6.1f}{v['place']:>+6d}{v['rating']:>5}{arrow:>6}  {v['rarity']}")
 
 
 def main(argv=None) -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
         sys.stderr.reconfigure(encoding="utf-8", errors="replace")
-    ap = argparse.ArgumentParser(description="S16 世界赛卡面数值更新")
+    ap = argparse.ArgumentParser(description="S16 世界赛卡：出局的队定格最终数值")
     ap.add_argument("--oe", required=True, help="Oracle's Elixir 当年 CSV，如 .../2026_OE.csv")
     ap.add_argument("--year", type=int, default=2026)
-    ap.add_argument("--since", default=None, help="只算这天（含）之后的世界赛对局，YYYY-MM-DD；默认读 s16.json 的 meta.start")
-    ap.add_argument("--until", default=None, help="只算到这天（含），用于回放某个比赛日")
-    ap.add_argument("--stage-dates", default=None,
-                    help="阶段日期：playin:A..B,swiss:A..B,ko:A..B,final:D（ko/qf/sf ×1.5，final ×2，其余 ×1）")
-    ap.add_argument("--champion", default=None, help="冠军俱乐部 id，如 T18；每人 +2（封顶 90）")
-    ap.add_argument("--fmvp", default=None, help="FMVP 的 ign；引擎把他的卡做成彩卡")
-    ap.add_argument("--fmvp-rating", type=int, default=None, help="FMVP 彩卡评分，94–97（对标历届 S 赛 FMVP 彩卡），不填按 95")
-    ap.add_argument("--final", action="store_true",
-                    help="决赛打完后的最后一次：整个 S16 一场没上的选手（含替补）按普通卡（联赛）数值揭晓并定格，金银铜按普通卡的线（金 84 / 银 72）")
-    ap.add_argument("--tz", type=float, default=8.0, help="比赛日按哪个时区划分（小时，默认 8 = 北京时间；OE 原始时间是 UTC）")
+    ap.add_argument("--since", default=None, help="只算这天（含）之后的世界赛对局；默认读名单的 meta.start（开幕日）")
+    ap.add_argument("--until", default=None, help="只算到这天（含），用于回放")
+    ap.add_argument("--champion", default=None, help="（可不填）核对用：冠军俱乐部 id，必须和 s16Results.json 一致")
+    ap.add_argument("--fmvp", default=None, help="FMVP 的 ign；引擎把他的卡做成彩卡。之后不填会沿用上次的")
+    ap.add_argument("--fmvp-rating", type=int, default=None, help="FMVP 彩卡评分，94–97，不填按 95")
+    ap.add_argument("--final", action="store_true", help="决赛后的最后一次：核对所有队都登记了名次")
+    ap.add_argument("--refreeze", default="", help="重新计算这些已定格的队（俱乐部 id，逗号分隔）——只在登记错了、要更正时用")
+    ap.add_argument("--unfreeze", default="", help="撤销这些队的定格（卡面回到「?」）——只在登记错了时用")
+    ap.add_argument("--force", action="store_true", help="OE 还没更新到出局那天也照样定格（会漏掉最后那场的数据）")
+    ap.add_argument("--tz", type=float, default=8.0, help="比赛日按哪个时区划分（默认 8 = 北京时间；OE 原始时间是 UTC）")
     ap.add_argument("--base", default=str(BASE_JSON))
+    ap.add_argument("--roster", default=str(ROSTER_JSON))
+    ap.add_argument("--results", default=str(RESULTS_JSON))
+    ap.add_argument("--cards", default=str(CARDS_TS))
     ap.add_argument("--out", default=str(RATINGS_JSON))
-    ap.add_argument("--dry-run", action="store_true", help="只打印表格，不写文件")
+    ap.add_argument("--dry-run", action="store_true", help="只打印，不写文件")
     args = ap.parse_args(argv)
+    args.refreeze = [c.strip() for c in args.refreeze.split(",") if c.strip()]
+    args.unfreeze = [c.strip() for c in args.unfreeze.split(",") if c.strip()]
 
-    roster = load_json(ROSTER_JSON, {"teams": [], "players": [], "meta": {}})
-    since = args.since or (roster.get("meta") or {}).get("start")
-    base = load_json(Path(args.base), None)
-    if not base:
-        sys.exit(f"{args.base} 不存在或为空：先跑 `npx tsx scripts/s16_base_export.ts`")
-    for ign, b in base.items():
-        b.setdefault("club", None)
-    old = load_json(Path(args.out), {"meta": {}, "ratings": {}})
-    stages = parse_stage_dates(args.stage_dates)
-    if args.champion and args.champion not in {b.get("club") for b in base.values()}:
-        sys.exit(f"--champion {args.champion}: 名单里没有这个俱乐部 id")
-    if args.fmvp and args.fmvp not in base:
-        sys.exit(f"--fmvp {args.fmvp}: 名单里没有这个 ign（注意大小写）")
-
-    rows = read_worlds_rows(Path(args.oe), args.year, since, args.until, args.tz)
-    days = sorted({r["_day"] for r in rows})
-    games = {r["gameid"] for r in rows}
-    last_day = days[-1] if days else None
-
-    # prev：上次文件里的评分。同一个比赛日重跑时沿用上次的 prev，↑↓ 不会被抹掉。
-    old_ratings = old.get("ratings") or {}
-    same_day = last_day is not None and (old.get("meta") or {}).get("updatedAt") == last_day
-    prev = {ign: (v.get("prev") if same_day else v.get("rating")) for ign, v in old_ratings.items()}
-
-    unmatched: dict = {}
-    mismatched: dict = {}
-    resolve = make_resolver(base, roster, unmatched, mismatched)
-    res = compute(rows, base, resolve, stages, args.champion, prev)
-
-    print(f"OE: {args.oe}（文件里最新的一局：{LATEST_DATE or '无'} UTC）")
-    print(f"世界赛对局（{WORLDS_LEAGUE}，{since or '…'} → {args.until or '…'}，tz={args.tz:+g}）："
-          f"{len(games)} 局，{len(days)} 个比赛日，{len(res)} 名选手已亮相")
-    if not rows:
-        print("还没有世界赛数据（赛事没开始，或 OE 还没更新到这一天）——不改任何东西。")
-        return 0
-    if stages:
-        unstaged = [d for d in days if stage_of(d, stages) == "?"]
-        if unstaged:
-            print(f"注意：这些比赛日不在 --stage-dates 里，按 ×1 算：{', '.join(unstaged)}")
-    else:
-        print("注意：没给 --stage-dates，所有对局按 ×1 算（淘汰赛 ×1.5、决赛 ×2 不生效）")
-    if unmatched:
-        print(f"\n对不上名单的世界赛选手（{len(unmatched)}）——是名单漏了人，还是要加 ALIASES：")
-        for (name, team), c in sorted(unmatched.items(), key=lambda kv: (kv[0][1], kv[0][0])):
-            print(f"  {name:<16} {team:<28} {c} 局")
-    if mismatched:
-        print(f"\n名字对上了、队伍对不上（没算）：")
-        for (name, team, ign), c in sorted(mismatched.items()):
-            print(f"  OE {name} @ {team} ≠ 名单 {ign} @ {base[ign].get('club')}  {c} 局")
-    idle = sorted(ign for ign in base if ign not in res)
-    if idle:
-        print(f"\n名单上还没打过世界赛的（卡面仍是「?」，{len(idle)} 人）：{', '.join(idle)}")
-    print()
-    print_table(res, base)
-
-    if args.final:
-        # owner 2026-10-10: a sub who never played is filled in from his league (ordinary card) numbers after the final,
-        # so nobody who bet on him is left holding a 「?」; written here so later re-rates of the ordinary card can't move it
-        for ign in idle:
-            b = base[ign]
-            r = int(b["rating"])
-            res[ign] = {"rating": r, "rarity": "gold" if r >= 84 else "silver" if r >= 72 else "bronze", "games": 0,
-                        "prev": (prev or {}).get(ign), "attrs": {k: int(v) for k, v in b["attrs"].items()}, "teamname": ""}
-        print(f"\n--final：{len(idle)} 名没上场的选手按普通卡数值定格")
-
-    out = {
-        "meta": {
-            "updatedAt": last_day,
-            "matchDays": len(days),
-            "games": len(games),
-            "final": bool(args.final),
-            "note": "由 scripts/s16_ratings.py 每个比赛日后生成（updatedAt = 已计入的最后一个比赛日，北京时间）；"
-                    "没有条目的选手卡面全是「?」",
-        },
-        "ratings": {
-            ign: {"rating": v["rating"], "rarity": v["rarity"], "games": v["games"], "prev": v["prev"], "attrs": v["attrs"]}
-            for ign, v in sorted(res.items(), key=lambda kv: (-kv[1]["rating"], kv[0].lower()))
-        },
-        "champion": args.champion,
-        "fmvp": args.fmvp,
-        "fmvpRating": args.fmvp_rating,
-    }
+    res = run(args)
+    print_report(res, args)
     if args.dry_run:
         print("\n--dry-run：没有写文件。")
         return 0
     with open(args.out, "w", encoding="utf-8", newline="\n") as f:
-        json.dump(out, f, ensure_ascii=False, indent=1)
+        json.dump(res["out"], f, ensure_ascii=False, indent=1)
         f.write("\n")
     print(f"\n已写入 {args.out}")
     return 0

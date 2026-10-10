@@ -59,7 +59,7 @@ function Review() {
   const label = { color: '#9fb0c8', fontSize: 12, margin: '0 0 6px' }
   return <main style={{ padding: '24px clamp(12px, 4vw, 28px) 80px', color: '#e8ece6', background: '#0b0f17', minHeight: '100vh', fontFamily: 'Microsoft YaHei, sans-serif' }}>
     <h1 style={{ margin: '0 0 4px', fontSize: 24 }}>S16 世界赛 · 卡面审核（「冠军之夜」）</h1>
-    <p style={{ color: '#9fb0a8', margin: '0 0 16px' }}>共 {S16_CARDS.length} 张。开赛前全部是「?」，打过比赛才揭晓数值；揭晓后的数值是示例。</p>
+    <p style={{ color: '#9fb0a8', margin: '0 0 16px' }}>共 {S16_CARDS.length} 张。开赛前全部是「?」，战队出局才揭晓数值并定格；揭晓后的数值是示例。</p>
 
     <h3 style={{ margin: '0 0 10px' }}>全部状态 × 大 / 中 / 小</h3>
     <div id="s16-matrix" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, max-content)', gap: '18px 22px', alignItems: 'end', marginBottom: 30, padding: 14, background: '#0d131d' }}>
