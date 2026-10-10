@@ -23,7 +23,8 @@ import { Panel } from '../common'
 import CardActionDialog from './CardActionDialog'
 import CardFace from '../Card'
 import { marketSaleLevel, hasMarketDuplicates } from '../../engine/marketGuidance'
-import { cardById, isPlayerCard } from '../../engine/cards'
+import { cardById, isPlayerCard, isS16Card } from '../../engine/cards'
+import { S16_MARKET, s16ClosedWhy, s16Clock, s16Date, s16Gated, s16MarketWindow, s16WindowText } from '../../engine/s16Market'
 import { collection, playLevelOf } from '../../engine/gacha'
 import { playLevel } from '../../engine/evolve'
 import type { Evo } from '../../engine/evolve'
@@ -189,7 +190,7 @@ export default function Market() {
   const [ask, setAsk] = useState('')
   const [buyout, setBuyout] = useState('')
   const [hours, setHours] = useState<number>(rememberedHours)
-  const [confirmList, setConfirmList] = useState<{ cardId: string; name: string; level: number; hadDuplicates: boolean; rarity: string; ask: number; buyout: number | null; hours: number } | null>(null)
+  const [confirmList, setConfirmList] = useState<{ cardId: string; name: string; level: number; hadDuplicates: boolean; rarity: string; ask: number; buyout: number | null; hours: number; s16Ends?: number | null } | null>(null)
   const listLock = useRef(false)
   const [bidOpen, setBidOpen] = useState<Listing | null>(null)
   const [bidPrice, setBidPrice] = useState('')
@@ -204,6 +205,14 @@ export default function Market() {
   const [priceHi, setPriceHi] = useState('')
   /** leave out what would only be a spare — see the toggle's own note */
   const [unowned, setUnowned] = useState(false)
+  /**
+   * Which section of the market: the ordinary shelf, or 「S16 世界赛」 — S16 cards only, open 10:00–20:00 Beijing
+   * time every day until the final (engine/s16Market.ts). The server keeps the two shelves apart; this only asks.
+   */
+  const [section, setSection] = useState<'all' | 's16'>('all')
+  const inS16 = section === 's16'
+  // the card picked in one section is not for sale in the other
+  useEffect(() => { setSellCard(''); setBuyout('') }, [section])
   const qq = useSettled(q)
   useEffect(() => { setWatchedOnly(false) }, [g.id])
   const loSet = useSettled(priceLo)
@@ -224,8 +233,9 @@ export default function Market() {
       ...(n(hiSet) != null ? { priceMax: n(hiSet) } : {}),
       ...(unowned ? { unowned: true } : {}),
       ...(watchedOnly ? { watchedIds: watch.ids } : {}),
+      ...(section === 's16' ? { s16: true } : {}),
     }
-  }, [sort, filter, qq, loSet, hiSet, unowned, watchedOnly, watch.ids])
+  }, [sort, filter, qq, loSet, hiSet, unowned, watchedOnly, watch.ids, section])
 
   // The newest request wins. Changing the filter while the page before it is
   // still in the air used to be the one way to get a shelf that does not match
@@ -370,7 +380,13 @@ export default function Market() {
   // is for. A spare goes first and goes out unupgraded.
   // ...except copies that may not trade yet: the first pulls (bound) and cards bought or swapped in
   // the last few days (engine/tradeLock.ts). Those are left off the list and counted below it.
-  const everything = collection(g)
+  // The S16 section sells S16 cards; the ordinary one everything else while the section's rules hold (after the
+  // final S16 cards are ordinary cards and can go up from either). The window is the server's clock carried forward.
+  const s16w = s16MarketWindow(now)
+  const s16Rules = s16Gated(now)
+  /** the listing form is under the S16 section's rules: no 一口价, no length to pick, ends at the close */
+  const s16Selling = inS16 && s16Rules
+  const everything = collection(g).filter(({ card }) => (inS16 ? isS16Card(card) : !(s16Rules && isS16Card(card))))
   const sellable = everything.filter(({ owned }) => tradeableCopies(owned, now) > 0).sort((a, b) => b.rating - a.rating)
   const lockedOut = everything.length - sellable.length
   // the held ones, soonest free first, so the list under the picker can say when each comes back
@@ -382,6 +398,7 @@ export default function Market() {
 
   const doList = async () => {
     if (listLock.current || busy) return
+    if (s16Selling && !s16w.canList) { toast(s16ClosedWhy(now, s16w)); return }
     const card = cardById(sellCard)
     const price = Math.round(Number(ask))
     if (!card || !Number.isFinite(price)) { toast('先选一张卡，填个起拍价。'); return }
@@ -390,7 +407,7 @@ export default function Market() {
       toast(`起拍价要在 ${money(floor)} ~ 500,000 之间，不低于分解价。`)
       return
     }
-    const now2 = buyout.trim() === '' ? null : Math.round(Number(buyout))
+    const now2 = s16Selling || buyout.trim() === '' ? null : Math.round(Number(buyout))
     if (now2 != null && (!Number.isFinite(now2) || now2 < Math.ceil(price * BUYOUT_MIN) || now2 > 500000)) {
       toast(`一口价要在 ${money(Math.ceil(price * BUYOUT_MIN))} ~ 500,000 之间，且至少为起拍价的 ${BUYOUT_MIN} 倍，可留空。`)
       return
@@ -409,6 +426,7 @@ export default function Market() {
       ask: price,
       buyout: now2,
       hours,
+      s16Ends: s16Selling ? s16w.closesAt : null,
     })
   }
 
@@ -417,7 +435,7 @@ export default function Market() {
     listLock.current = true
     setBusy(true)
     try {
-      const { cardId, name, level: snapLevel, hadDuplicates: snapHadDupes, rarity, ask: price, buyout: now2, hours: snapHours } = confirmList
+      const { cardId, name, level: snapLevel, hadDuplicates: snapHadDupes, rarity, ask: price, buyout: now2, hours: snapHours, s16Ends } = confirmList
       const owned = g.cards[cardId]
       const card = cardById(cardId)
       if (!owned || typeof owned !== 'object' || Array.isArray(owned) || !card) {
@@ -447,6 +465,7 @@ export default function Market() {
       const r = sent.data
       if (!r?.ok) {
         toast(r?.banned ? String(r.why ?? '交易已暂停。')
+          : r?.s16Closed || r?.s16NoBuyout ? String(r.why)
           : r?.newbie ? gateText(r)
           : r?.locked ? String(r.why ?? '这张卡现在不能交易。')
           : r?.notOwned ? '服务器还没同步这张卡，稍后再挂。'
@@ -455,7 +474,7 @@ export default function Market() {
               : r?.highCap ? String(r.why)
               : r?.badBuyout ? `一口价要在 ${money(Number(r.min ?? 0))} ~ ${money(Number(r.max ?? 500000))} 之间，可留空。`
               : r?.badHours ? `拍卖时长要在 ${r.min} ~ ${r.max} 小时之间。`
-              : r?.bad ? `起拍价要在 ${money(Number(r.min ?? 50))} ~ ${money(Number(r.max ?? 500000))} 之间，不低于分解价${Number(r.max) < 500000 ? '；铜卡最高 2,000、银卡最高 5,000、S16 世界赛卡最高 10,000' : ''}。`
+              : r?.bad ? `起拍价要在 ${money(Number(r.min ?? 50))} ~ ${money(Number(r.max ?? 500000))} 之间，不低于分解价${Number(r.max) < 500000 ? '；铜卡最高 2,000、银卡最高 5,000' : ''}。`
                 : '挂牌失败，稍后再试。')
         return
       }
@@ -463,8 +482,12 @@ export default function Market() {
       void commit()
       setSellCard(''); setAsk(''); setBuyout('')
       setConfirmList(null)
-      try { localStorage.setItem(HOURS_KEY, String(snapHours)) } catch { /* fine */ }
-      toast(`${name} 已挂出，起拍 ${money(price)}${now2 != null ? `，一口价 ${money(now2)}` : ''}。${snapHours} 小时后按最高价成交，流拍退回。`)
+      if (s16Ends != null) {
+        toast(`${name} 已挂到 S16 交易区，起拍 ${money(price)}。今天 ${s16Clock(s16Ends)} 按最高价成交，流拍退回。`)
+      } else {
+        try { localStorage.setItem(HOURS_KEY, String(snapHours)) } catch { /* fine */ }
+        toast(`${name} 已挂出，起拍 ${money(price)}${now2 != null ? `，一口价 ${money(now2)}` : ''}。${snapHours} 小时后按最高价成交，流拍退回。`)
+      }
       void refresh()
     } catch {
       toast('挂牌结果不确定，请刷新后查看。')
@@ -489,10 +512,11 @@ export default function Market() {
     const r = sent.data
     if (!r?.ok) {
       toast(r?.banned ? String(r.why ?? '交易已暂停。')
+        : r?.s16Closed ? String(r.why)
         : r?.newbie ? gateText(r)
         : r?.pair ? String(r.why)
         : r?.highCap ? String(r.why)
-        : r?.capped ? `这张卡最多出到 ${money(Number(r.max ?? 0))}（铜卡 2,000、银卡 5,000、S16 世界赛卡 10,000 封顶）。`
+        : r?.capped ? `这张卡最多出到 ${money(Number(r.max ?? 0))}（铜卡 2,000、银卡 5,000 封顶）。`
         : r?.busy ? '账号正忙，再试一次。'
         : r?.low ? `现在至少要出 ${money(Number(r.min ?? 0))}。`
         : r?.leading ? (r.entered ? '你已报名抽签，等开奖。' : '你已是最高价。')
@@ -635,9 +659,13 @@ export default function Market() {
   }, [])
 
   /** one tile of the shelf */
-  const renderTile = (l: Listing, participated = false) => {
-    const card = cardById(l.cardId)
+  const renderTile = (shown: Listing, participated = false) => {
+    const card = cardById(shown.cardId)
     if (!card) return null
+    // an S16 card under the section's rules: no 一口价, and no bid while the section is shut
+    const s16Tile = s16Rules && isS16Card(card)
+    const shut = s16Tile && !s16w.open
+    const l = s16Tile ? { ...shown, buyout: null } : shown
     const auction = l.ends != null
     const lo = Math.ceil(l.ask * (1 - HAGGLE))
     const hi = Math.floor(l.ask * (1 + HAGGLE))
@@ -681,6 +709,7 @@ export default function Market() {
           {auction && l.buyout != null ? `一口价 ${money(l.buyout)}` : ''}
         </div>
         {inDraw && <div className="tiny warn" style={nowrap}>保护期 · 一口价抽签</div>}
+        {shut && <div className="tiny warn" style={nowrap}>S16 休市中</div>}
         {lands && (
           <div className={`tiny ${dear ? 'warn' : 'faint'}`}>{lands}</div>
         )}
@@ -703,8 +732,8 @@ export default function Market() {
             <button
               className="sm"
               style={{ flex: '1 1 48px', minHeight: 26 }}
-              disabled={busy || !!gate}
-              title={gate ? gateText(gate) : undefined}
+              disabled={busy || !!gate || shut}
+              title={gate ? gateText(gate) : shut ? s16WindowText(now, s16w) : undefined}
               onClick={() => { setBidOpen(l); setBidPrice(String(min)) }}
             >
               出价
@@ -775,6 +804,40 @@ export default function Market() {
         </Panel>
       )}
 
+      <div className="seg" role="tablist" aria-label="交易分区" style={{ marginBottom: 10 }}>
+        <button role="tab" aria-selected={!inS16} className={!inS16 ? 'on' : ''} onClick={() => setSection('all')}>普通卡</button>
+        <button role="tab" aria-selected={inS16} className={inS16 ? 'on' : ''} onClick={() => setSection('s16')}>
+          S16 世界赛
+          {s16Rules && (
+            <span
+              aria-hidden
+              title={s16w.open ? '开市中' : '休市中'}
+              style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', marginLeft: 6, verticalAlign: 'middle', background: s16w.open ? 'var(--pos, #3c9)' : 'var(--line)' }}
+            />
+          )}
+        </button>
+      </div>
+      {inS16 && (
+        <Panel title="S16 世界赛交易区">
+          <p className={`small ${s16w.open ? 'pos' : 'warn'}`} style={{ margin: 0 }} role="status">
+            <b>{s16WindowText(now, s16w)}</b>
+          </p>
+          {s16Rules ? (
+            <p className="tiny faint" style={{ marginBottom: 0, lineHeight: 1.8 }}>
+              北京时间<b>每天 {String(S16_MARKET.openHour).padStart(2, '0')}:00 开市、{String(S16_MARKET.closeHour).padStart(2, '0')}:00 休市</b>，以服务器时间为准。
+              当天挂出的 S16 卡都在<b>当天 {String(S16_MARKET.closeHour).padStart(2, '0')}:00 按最高价成交</b>，流拍退回信箱；
+              没有一口价，最后几分钟出价也不延时；休市前 {S16_MARKET.lastListMinutes} 分钟起不再接受新挂牌。
+              休市时不能挂牌、出价；S16 卡不能换卡。价格上限、每日高价次数、3 天交易冷却和普通卡一样。
+              {s16Date(S16_MARKET.freezeFrom)} 起总决赛期间休市，{s16Date(S16_MARKET.normalFrom)} 起 S16 卡按普通卡交易。
+            </p>
+          ) : (
+            <p className="tiny faint" style={{ marginBottom: 0, lineHeight: 1.8 }}>
+              这里只列 S16 世界赛卡，它们也在普通货架上，规则和普通卡相同。
+            </p>
+          )}
+        </Panel>
+      )}
+
       <ParticipatingAuctions now={now} refreshToken={loadedAt} renderTile={(l) => renderTile(l, true)} />
 
       {confirmList && (
@@ -800,15 +863,21 @@ export default function Market() {
             ) : null
           })()}
           <p style={{ margin: '0 0 4px' }}>起拍价：{money(confirmList.ask)} 金币</p>
-          <p style={{ margin: '0 0 4px' }}>
-            一口价：{confirmList.buyout != null ? `${money(confirmList.buyout)} 金币` : '未设置'}
-          </p>
-          <p style={{ margin: 0 }}>时长：{confirmList.hours} 小时</p>
+          {confirmList.s16Ends != null ? (
+            <p style={{ margin: 0 }}>S16 交易区：没有一口价，今天 {s16Clock(confirmList.s16Ends)} 按最高价成交</p>
+          ) : (
+            <>
+              <p style={{ margin: '0 0 4px' }}>
+                一口价：{confirmList.buyout != null ? `${money(confirmList.buyout)} 金币` : '未设置'}
+              </p>
+              <p style={{ margin: 0 }}>时长：{confirmList.hours} 小时</p>
+            </>
+          )}
         </CardActionDialog>
       )}
 
       <Panel
-        title="挂一张卡出去"
+        title={inS16 ? '挂一张 S16 卡' : '挂一张卡出去'}
         actions={
           <span className="tiny muted">
             {/* three at once, by the owner's rule: a shelf is for the card you
@@ -865,39 +934,59 @@ export default function Market() {
             value={ask}
             onChange={(e) => setAsk(e.target.value)}
           />
-          <input
-            style={{ flex: '1 1 110px' }}
-            type="number"
-            placeholder={buyoutFloor ? `一口价（可空，≥ ${money(buyoutFloor)}）` : '一口价（可空）'}
-            value={buyout}
-            onChange={(e) => setBuyout(e.target.value)}
-          />
-          <select
-            className="sm" aria-label="拍卖时长" title="拍多久：到时最高价成交"
-            style={{ flex: '0 0 auto', width: 'auto' }}
-            value={hours}
-            onChange={(e) => setHours(Number(e.target.value))}
-          >
-            {AUCTION_HOURS_CHOICES.map((h) => <option key={h} value={h}>拍 {h} 小时</option>)}
-          </select>
+          {s16Selling ? (
+            <span className="tiny muted" style={{ flex: '0 0 auto', alignSelf: 'center' }}>
+              {s16w.canList ? `今天 ${s16Clock(s16w.closesAt ?? now)} 结拍 · 无一口价` : '现在不能挂'}
+            </span>
+          ) : (
+            <>
+              <input
+                style={{ flex: '1 1 110px' }}
+                type="number"
+                placeholder={buyoutFloor ? `一口价（可空，≥ ${money(buyoutFloor)}）` : '一口价（可空）'}
+                value={buyout}
+                onChange={(e) => setBuyout(e.target.value)}
+              />
+              <select
+                className="sm" aria-label="拍卖时长" title="拍多久：到时最高价成交"
+                style={{ flex: '0 0 auto', width: 'auto' }}
+                value={hours}
+                onChange={(e) => setHours(Number(e.target.value))}
+              >
+                {AUCTION_HOURS_CHOICES.map((h) => <option key={h} value={h}>拍 {h} 小时</option>)}
+              </select>
+            </>
+          )}
           <button
             className="primary" onClick={() => void doList()}
-            disabled={busy || !sellCard || !ask || !!gate || mineOnShelf.length >= MAX_LISTINGS}
+            disabled={busy || !sellCard || !ask || !!gate || mineOnShelf.length >= MAX_LISTINGS || (s16Selling && !s16w.canList)}
+            title={s16Selling && !s16w.canList ? s16ClosedWhy(now, s16w) : undefined}
           >
             挂出
           </button>
         </div>
+        {s16Selling && !s16w.canList && (
+          <p className="tiny" style={{ color: 'var(--warn)', margin: '6px 0 0' }}>{s16ClosedWhy(now, s16w)}</p>
+        )}
+        {!inS16 && s16Rules && (
+          <p className="tiny faint" style={{ margin: '6px 0 0' }}>S16 世界赛卡在「S16 世界赛」分区挂牌（每天 10:00–20:00）。</p>
+        )}
         {mineOnShelf.length >= MAX_LISTINGS && (
           <p className="tiny" style={{ color: 'var(--warn)', margin: '6px 0 0' }}>
             最多同时挂 {MAX_LISTINGS} 张。卖掉或撤回一张，就能再挂。
           </p>
         )}
-        <p className="tiny faint" style={{ marginBottom: 0, lineHeight: 1.7 }}>
+        {s16Selling ? (
+          <p className="tiny faint" style={{ marginBottom: 0, lineHeight: 1.7 }}>
+            <b>S16 卡到当天 {String(S16_MARKET.closeHour).padStart(2, '0')}:00 按最高价成交</b>，流拍退回信箱；<b>有人出价后不能撤回</b>。
+            <b>最多同时挂 {MAX_LISTINGS} 张</b>（和普通卡合计）。优先卖出 +0 重复卡，再卖最低等级备用卡，只有一张时连强化等级一起卖出。
+          </p>
+        ) : <p className="tiny faint" style={{ marginBottom: 0, lineHeight: 1.7 }}>
           <b>拍卖时长 {AUCTION_HOURS_CHOICES[0]} ~ {AUCTION_HOURS_CHOICES[AUCTION_HOURS_CHOICES.length - 1]} 小时自定，到时最高价成交</b>。
           流拍退回信箱；<b>有人出价后不能撤回</b>。
           一口价可不填，填了则按此价立刻成交，至少为起拍价的 {BUYOUT_MIN} 倍。{protectSec > 0 ? `上架前 ${protectSec} 秒是保护期：一口价报名抽签，到点随机一人成交。` : '内测期间，一口价无需等待，直接成交。'}
           <b>最多同时挂 {MAX_LISTINGS} 张</b>。优先卖出 +0 重复卡，再卖最低等级备用卡，只有一张时连强化等级一起卖出。挂牌前会显示实际出售等级。
-        </p>
+        </p>}
       </Panel>
 
       {(legacyInbound.length > 0 || mineOnShelf.length > 0) && (
@@ -970,7 +1059,7 @@ export default function Market() {
       )}
 
       <Panel
-        title="货架"
+        title={inS16 ? 'S16 世界赛货架' : '货架'}
         actions={
           <span className="tiny muted">
             {narrowed ? `筛出 ${matched} 张` : `${matched} 张在拍`}
@@ -1066,7 +1155,7 @@ export default function Market() {
         {shelf === null ? <p className="empty">读取中…</p>
           : theirs.length === 0 ? (
             <p className="empty">
-              {shelfFail ? '还没读到货架。' : watchedOnly ? (watch.ids.length === 0 ? '还没有关注的选手卡，先关闭筛选并点卡牌上的关注。' : '关注选手暂无符合筛选的在售卡。') : total === 0 ? '货架是空的，挂一张试试。' : '没有符合筛选的卡。'}
+              {shelfFail ? '还没读到货架。' : watchedOnly ? (watch.ids.length === 0 ? '还没有关注的选手卡，先关闭筛选并点卡牌上的关注。' : '关注选手暂无符合筛选的在售卡。') : total === 0 ? (inS16 ? (s16Rules && !s16w.open ? `${s16WindowText(now, s16w)}。当天的 S16 拍卖都在休市时结拍。` : 'S16 交易区还没有挂牌。') : '货架是空的，挂一张试试。') : '没有符合筛选的卡。'}
             </p>
           )
             : (
@@ -1094,7 +1183,9 @@ export default function Market() {
         )}
         <p className="tiny faint" style={{ marginBottom: 0 }}>
           出价即托管金币，被超过立刻退回。每次加价至少 {Math.round(BID_STEP * 100)}%，
-          最后 {SNIPE_MINUTES} 分钟内有人出价会延长 {SNIPE_MINUTES} 分钟。出价不能撤回。
+          {inS16 && s16Rules
+            ? `S16 拍卖到当天 ${String(S16_MARKET.closeHour).padStart(2, '0')}:00 结拍，最后几分钟出价不延时。`
+            : `最后 ${SNIPE_MINUTES} 分钟内有人出价会延长 ${SNIPE_MINUTES} 分钟。`}出价不能撤回。
           {days ? '' : ''}
         </p>
       </Panel>
