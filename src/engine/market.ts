@@ -265,6 +265,8 @@ export const listCardOnMarket = (cardId: string, ask: number, level: number, rar
 
 /** How many listings one seller may have open at once — mirrored from the server. */
 export const MAX_LISTINGS = 3
+/** S16 cards during the event: their own ten, apart from the ordinary three (market-api.js MAX_S16_LISTINGS) */
+export const MAX_S16_LISTINGS = 10
 /** The auction, mirrored from the server: a day on the clock, five percent a step,
  *  ten minutes' grace at the end, and a buy-now price at least a fifth over the start. */
 export const AUCTION_HOURS = 24

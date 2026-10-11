@@ -105,6 +105,11 @@ export const IGNORE_LIMIT = 3
  * a NEW listing while three or more are open.
  */
 export const MAX_LISTINGS = 3
+/**
+ * S16 cards during the event have a shelf of their own (owner 2026-10-11: 每张至少拍 4 小时，但「一次挂多一点」): ten at
+ * once, not counted against the ordinary three, and the S16 ones don't count against those three either.
+ */
+export const MAX_S16_LISTINGS = 10
 
 /** Demo/production defaults are centralized in market-policy.js (sourced from release-policy).
  * Production baseline: 50 pulls and 3 days, also applied to friend swaps. */
@@ -125,7 +130,12 @@ export const priceCap = (rarity) => PRICE_CAP[rarity] ?? MAX_ASK
  * 2026-10-07: 「s16 的卡和现在的卡在交易上一视同仁」; the 10,000 S16 cap of the 2026-10-04 plan is gone). An S16
  * card's metal moves with its numbers, so its cap does too; an unrevealed one is filed bronze.
  */
-export const capOf = (card) => (card?.s16 && !card.s16.revealed ? MAX_ASK : priceCap(card?.rarity))
+/**
+ * A 「?」 S16 card has no metal yet: it is capped by its player's ordinary card (owner 2026-10-11) — a star's is free to
+ * find its price like any gold, an unknown's stays under the bronze/silver caps so a fortune paid for him by an alt
+ * can't move coins to a main. Once revealed it is capped by its own metal like every card.
+ */
+export const capOf = (card) => priceCap(card?.s16 && !card.s16.revealed ? (card.s16.baseRarity ?? 'gold') : card?.rarity)
 /**
  * High-value trades a day, bought and sold counted apart (owner, 2026-09-27): a trade is high-value when it is a
  * gold card or a 彩卡, or at HIGH_VALUE_PRICE coins or more. Cheap cards are not counted, so filling a
@@ -1347,14 +1357,19 @@ export function makeMarketApi(sql, {
     if (isHighValue(card.rarity, Math.max(ask, buyout ?? 0)) && (await highValueToday(me, 'sell')) >= highValuePerDay) {
       json(res, 200, { ok: false, highCap: true, why: HIGH_WHY('卖出') }); return
     }
-    const openN = async () => (await sql`
-      select count(*)::int as n from card_listings where seller_h = ${me} and status = 'open'`)[0]?.n ?? 0
+    // during the event S16 listings and ordinary ones are counted apart, each against its own cap
+    const s16Shelf = !!card.s16 && s16Gated()
+    const shelfCap = s16Shelf ? MAX_S16_LISTINGS : MAX_LISTINGS
+    const split = s16Gated()
+    const openN = async (q = sql) => (await q`
+      select count(*)::int as n from card_listings where seller_h = ${me} and status = 'open'
+        and (${!split} or (card_id like 's16:%') = ${s16Shelf})`)[0]?.n ?? 0
     // Full — but perhaps only with auctions that have ended and that the
     // settler has not reached yet. Those are this seller's to close now; the
     // rest of the market's backlog is not this request's business.
-    if ((await openN()) >= MAX_LISTINGS) {
-      await settleBatch(MAX_LISTINGS, me, null, tx)
-      if ((await openN()) >= MAX_LISTINGS) { json(res, 200, { ok: false, full: true, max: MAX_LISTINGS }); return }
+    if ((await openN()) >= shelfCap) {
+      await settleBatch(shelfCap, me, null, tx)
+      if ((await openN()) >= shelfCap) { json(res, 200, { ok: false, full: true, max: shelfCap }); return }
     }
     // read against the save the server holds, not against what the client says
     const mine = await sql`select state->'cards' as cards from card_accounts where id_hash = ${me}`
@@ -1375,8 +1390,7 @@ export function makeMarketApi(sql, {
       // This only locks the account, never another listing, so a bidder
       // holding listing -> account cannot form the opposite lock order here.
       await db`select id_hash from card_accounts where id_hash = ${me} for update`
-      const count = await db`select count(*)::int as n from card_listings where seller_h = ${me} and status = 'open'`
-      if ((count[0]?.n ?? 0) >= MAX_LISTINGS) return { full: true }
+      if ((await openN(db)) >= shelfCap) return { full: true }
       for (let attempt = 0; attempt < 3; attempt++) {
         const row = await db`select state, rev from card_accounts where id_hash = ${me}`
         if (!row.length) return { notOwned: true }
@@ -1398,7 +1412,7 @@ export function makeMarketApi(sql, {
       return { busy: true }
     })
     if (out.clash) { json(res, 200, { ok: false, clash: true }); return }
-    if (out.full) { json(res, 200, { ok: false, full: true, max: MAX_LISTINGS }); return }
+    if (out.full) { json(res, 200, { ok: false, full: true, max: shelfCap }); return }
     if (out.notOwned) { json(res, 200, { ok: false, notOwned: true }); return }
     if (out.locked) { json(res, 200, { ok: false, locked: true, why: out.locked }); return }
     if (out.busy) { json(res, 409, { ok: false, busy: true }); return }

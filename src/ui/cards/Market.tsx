@@ -32,7 +32,7 @@ import { leavingCopy } from '../../engine/inbox'
 import { ATTR_CN, ATTR_KEYS } from '../../engine/types'
 import { BOUND_PULLS, HOLD_DAYS, nextRelease, releaseText, tradeableCopies, waitText as holdWait } from '../../engine/tradeLock'
 import {
-  AUCTION_HOURS, AUCTION_HOURS_CHOICES, BID_STEP, BUYOUT_MIN, MAX_LISTINGS, SHELF_PAGE, SNIPE_MINUTES,
+  AUCTION_HOURS, AUCTION_HOURS_CHOICES, BID_STEP, BUYOUT_MIN, MAX_LISTINGS, MAX_S16_LISTINGS, SHELF_PAGE, SNIPE_MINUTES,
   answerOffer, askFloorOf, bidOn, browseShelf, failText, gateText, listCardOnMarket, minBidOf, myOffersEx, peekListings, participatingAuctions, unlistCard,
   waitText, withdrawOffer,
 } from '../../engine/market'
@@ -603,7 +603,9 @@ export default function Market() {
     )
   }
 
-  const mineOnShelf = own
+  // during the event the S16 shelf is counted apart from the ordinary one, each with its own cap (market-api.js)
+  const mineOnShelf = s16Rules ? own.filter((l) => isS16Card(cardById(l.cardId)) === inS16) : own
+  const shelfCap = s16Rules && inS16 ? MAX_S16_LISTINGS : MAX_LISTINGS
   const theirs = shelf ?? []
   // The menus are built from the whole market, not from the page in front of
   // you: one card per listing, so 「TES（12）」 counts listings the way it always
@@ -883,7 +885,7 @@ export default function Market() {
             {/* three at once, by the owner's rule: a shelf is for the card you
                 want gone, not a shop window. Counted by the server at the
                 moment of listing, so anything up before the cap stays up. */}
-            已挂 <b className={mineOnShelf.length >= MAX_LISTINGS ? 'neg' : ''}>{mineOnShelf.length}/{MAX_LISTINGS}</b>
+            已挂 <b className={mineOnShelf.length >= shelfCap ? 'neg' : ''}>{mineOnShelf.length}/{shelfCap}</b>
             {' · '}竞拍
           </span>
         }
@@ -959,7 +961,7 @@ export default function Market() {
           )}
           <button
             className="primary" onClick={() => void doList()}
-            disabled={busy || !sellCard || !ask || !!gate || mineOnShelf.length >= MAX_LISTINGS || (s16Selling && !s16w.canList)}
+            disabled={busy || !sellCard || !ask || !!gate || mineOnShelf.length >= shelfCap || (s16Selling && !s16w.canList)}
             title={s16Selling && !s16w.canList ? s16ClosedWhy(now, s16w) : undefined}
           >
             挂出
@@ -971,15 +973,15 @@ export default function Market() {
         {!inS16 && s16Rules && (
           <p className="tiny faint" style={{ margin: '6px 0 0' }}>S16 世界赛卡在「S16 世界赛」分区挂牌（每天 10:00–20:00）。</p>
         )}
-        {mineOnShelf.length >= MAX_LISTINGS && (
+        {mineOnShelf.length >= shelfCap && (
           <p className="tiny" style={{ color: 'var(--warn)', margin: '6px 0 0' }}>
-            最多同时挂 {MAX_LISTINGS} 张。卖掉或撤回一张，就能再挂。
+            最多同时挂 {shelfCap} 张{s16Rules ? (inS16 ? '（S16 卡单独算）' : '（不含 S16 卡）') : ''}。卖掉或撤回一张，就能再挂。
           </p>
         )}
         {s16Selling ? (
           <p className="tiny faint" style={{ marginBottom: 0, lineHeight: 1.7 }}>
             <b>S16 卡到当天 {String(S16_MARKET.closeHour).padStart(2, '0')}:00 按最高价成交</b>，流拍退回信箱；<b>有人出价后不能撤回</b>。
-            <b>最多同时挂 {MAX_LISTINGS} 张</b>（和普通卡合计）。优先卖出 +0 重复卡，再卖最低等级备用卡，只有一张时连强化等级一起卖出。
+            <b>最多同时挂 {MAX_S16_LISTINGS} 张</b>（S16 卡单独算，不占普通卡的 {MAX_LISTINGS} 张）。优先卖出 +0 重复卡，再卖最低等级备用卡，只有一张时连强化等级一起卖出。
           </p>
         ) : <p className="tiny faint" style={{ marginBottom: 0, lineHeight: 1.7 }}>
           <b>拍卖时长 {AUCTION_HOURS_CHOICES[0]} ~ {AUCTION_HOURS_CHOICES[AUCTION_HOURS_CHOICES.length - 1]} 小时自定，到时最高价成交</b>。

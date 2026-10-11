@@ -128,6 +128,8 @@ export interface S16Info {
   fmvp: boolean
   /** how far his team went (S16_PLACEMENT_CN), set once the team is out; null while hidden */
   placement: S16Placement | null
+  /** his ordinary card's metal: a 「?」 card is priced in the market by it (market-api.js capOf) */
+  baseRarity: Rarity
 }
 export type S16Placement = 'champion' | 'runnerup' | 'sf' | 'qf' | 'swiss' | 'playin'
 export const S16_PLACEMENT_CN: Record<S16Placement, string> = {
@@ -620,7 +622,7 @@ export function buildS16Cards(
       rarity: isFmvp ? 'mythic' : r?.rarity ?? 'bronze',
       s16: {
         club: p.club, stage: teams.get(p.club)?.stage ?? 'main', starter: p.starter, revealed: !!r,
-        games: r?.games ?? 0, prev: r?.prev ?? null, fmvp: isFmvp, placement: r?.placement ?? null,
+        games: r?.games ?? 0, prev: r?.prev ?? null, fmvp: isFmvp, placement: r?.placement ?? null, baseRarity: b.rarity,
       },
     })
   }
