@@ -1467,9 +1467,16 @@ export interface UpgradeCost {
   why?: string
 }
 
-export function upgradeCost(g: GachaState, cardId: string): UpgradeCost {
+/**
+ * S16 cards can't be levelled while the event runs (owner 2026-10-11: 「S 赛整个举办期间都不能加 1 或者加 2，就只能作为数量
+ * 存在手里」) — a +5 bought into before the final would otherwise become a +5 FMVP 彩卡. From the S16 market's
+ * `normalFrom` they level like any card.
+ */
+export const S16_LEVEL_FROM = Date.parse(S16_MARKET.normalFrom)
+export function upgradeCost(g: GachaState, cardId: string, now = Date.now()): UpgradeCost {
   const owned = g.cards[cardId]
   if (!owned || typeof owned !== 'object' || Array.isArray(owned) || !cardById(cardId)) return { dupes: 0, coins: 0, to: null, can: false, why: '还没有这张卡' }
+  if (isS16Card(cardById(cardId)) && now < S16_LEVEL_FROM) return { dupes: 0, coins: 0, to: null, can: false, why: 'S16 卡在 S 赛期间不能升级，决赛后开放' }
   const level = levelOf(g, cardId)
   if (level >= MAX_LEVEL) return { dupes: 0, coins: 0, to: null, can: false, why: '已经满级' }
   const dupes = DUPES_FOR[level]

@@ -8,8 +8,8 @@ import { execFileSync } from 'node:child_process'
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { ALL_CARDS, BASE_PLAYER_CARDS, GOLD_AT, PLAYER_CARDS, S16_CARDS, SILVER_AT, buildS16Cards, cardById, isS16Card, personOf, rarityOf, s16Hidden } from '../src/engine/cards'
-import { FULL_SET_CARDS, PACKS, S16_SET_REWARDS, autoSquad, collectionProgress, mergeClientFields, migrateGacha, newGacha, openPack, s16SetProgress, settleS16Fmvp, s16PackDef, S16_PACK_AFTER_DAY } from '../src/engine/gacha'
+import { ALL_CARDS, BASE_PLAYER_CARDS, GOLD_AT, PLAYER_CARDS, S16_CARDS, SILVER_AT, buildS16Cards, cardById, isS16Card, personOf, rarityOf, s16Hidden, s16Suspended } from '../src/engine/cards'
+import { FULL_SET_CARDS, PACKS, S16_SET_REWARDS, autoSquad, collectionProgress, mergeClientFields, migrateGacha, newGacha, openPack, s16SetProgress, settleS16Fmvp, s16PackDef, S16_PACK_AFTER_DAY, upgradeCost } from '../src/engine/gacha'
 import { runAction, squadForPlay } from '../src/engine/cardActions'
 import { matchesFilter } from '../src/engine/cardFilter'
 import { rollShop } from '../src/engine/dailyShop'
@@ -110,7 +110,7 @@ check('S16 包：2600 金币三张、比赛期间等概率、S 赛结束后还�
 }
 
 // market and trading
-check('交易和普通卡一视同仁：按金银铜限价（铜 2000、银 5000、金和彩卡不限）', S16_CARDS.every((c) => capOf(c) === priceCap(c.rarity)) && capOf(BASE_PLAYER_CARDS.find((c) => c.rarity === 'bronze')) === 2000)
+check('揭晓后和普通卡一视同仁按金银铜限价；「?」卡不设上限', S16_CARDS.every((c) => capOf(c) === (c.s16!.revealed ? priceCap(c.rarity) : priceCap('gold'))) && capOf(BASE_PLAYER_CARDS.find((c) => c.rarity === 'bronze')) === 2000)
 
 // S16 图鉴
 {
@@ -306,6 +306,19 @@ function s16Script(py: string) {
   const after = s16PackDef(S16_PACK_AFTER_DAY)
   check('S 赛结束后：按金银铜爆率（金 12%、银 38%、保底银）+ 彩卡爆率', !after.uniform && after.gold === 0.12 && after.silver === 0.38 && after.floor === 'silver' && after.mythic > 0)
   check('S 赛结束后还在卖（下架日在决赛之后）', !!PACKS.s16.until && PACKS.s16.until > S16_PACK_AFTER_DAY)
+}
+
+// owner 2026-10-11 fixes: 「?」 cards uncapped, an eliminated team's cards pause until revealed, no levelling during the event
+{
+  const hidden = S16_CARDS.find((c) => !c.s16!.revealed)!
+  check('「?」卡市场不设上限（不按铜卡 2000 封顶）', capOf(hidden) > 2000, String(capOf(hidden)))
+  check('出局登记了、还没揭晓：暂停交易', s16Suspended(hidden, { teams: { [hidden.s16!.club]: { placement: 'playin' } } }) && !s16Suspended(hidden, { teams: {} }))
+  const g = newGacha('S16-LV', 'l', day)
+  g.cards = { [hidden.id]: { id: hidden.id, level: 0, dupes: 9, seen: 10, got: day } as never }
+  g.coins = 99999
+  const during = upgradeCost(g, hidden.id, Date.parse('2026-10-20T12:00:00+08:00'))
+  const after = upgradeCost(g, hidden.id, Date.parse('2026-11-16T12:00:00+08:00'))
+  check('S 赛期间 S16 卡不能升级，决赛后可以', !during.can && /不能升级/.test(during.why ?? '') && after.can)
 }
 
 console.log(bad ? `\n${bad} 处不对` : '\n全部通过')

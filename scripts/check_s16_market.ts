@@ -31,7 +31,7 @@ const bj = (s: string) => Date.parse(`${s}+08:00`)
 const H = 3_600_000
 
 // ---------------------------------------------------------------- the window, by itself
-check('数据文件：10:00 开市、20:00 休市、休市前 30 分钟停挂', CFG.openHour === 10 && CFG.closeHour === 20 && CFG.lastListMinutes === 30 && CFG.utcOffsetHours === 8)
+check('数据文件：10:00 开市、20:00 休市、休市前 4 小时停挂（至少拍 4 小时）', CFG.openHour === 10 && CFG.closeHour === 20 && CFG.lastListMinutes === 240 && CFG.utcOffsetHours === 8)
 check('数据文件：决赛前休市、录入结果后恢复的两个时间', S16_MARKET.freezeFrom === bj('2026-11-14T20:00:00') && S16_MARKET.normalFrom === bj('2026-11-15T12:00:00'))
 {
   const w = s16MarketWindow(bj('2026-10-12T09:00:00'))
@@ -39,16 +39,16 @@ check('数据文件：决赛前休市、录入结果后恢复的两个时间', S
   check('  文案：已休市，今天 10:00 开市', s16WindowText(bj('2026-10-12T09:00:00')) === '已休市，今天 10:00 开市', s16WindowText(bj('2026-10-12T09:00:00')))
 }
 {
-  const t = bj('2026-10-15T16:48:00')
+  const t = bj('2026-10-15T14:48:00')
   const w = s16MarketWindow(t)
-  check('比赛日 10-15 16:48：开市，20:00 休市，能挂', w.open && w.canList && w.closesAt === bj('2026-10-15T20:00:00') && w.listUntil === bj('2026-10-15T19:30:00'))
-  check('  文案：每天 10:00–20:00 开放 · 还有 3 小时 12 分休市', s16WindowText(t) === 'S16 交易区每天 10:00–20:00 开放 · 还有 3 小时 12 分休市', s16WindowText(t))
+  check('比赛日 10-15 14:48：开市，20:00 休市，能挂', w.open && w.canList && w.closesAt === bj('2026-10-15T20:00:00') && w.listUntil === bj('2026-10-15T16:00:00'))
+  check('  文案：每天 10:00–20:00 开放 · 还有 5 小时 12 分休市', s16WindowText(t) === 'S16 交易区每天 10:00–20:00 开放 · 还有 5 小时 12 分休市', s16WindowText(t))
 }
 {
   const w = s16MarketWindow(bj('2026-10-19T12:00:00'))
   check('没有比赛的 10-19：同样 10:00–20:00', w.open && w.opensAt === bj('2026-10-19T10:00:00') && w.closesAt === bj('2026-10-19T20:00:00'))
 }
-check('19:29 还能挂，19:30 起不能挂但还能出价', s16MarketWindow(bj('2026-10-20T19:29:00')).canList && !s16MarketWindow(bj('2026-10-20T19:30:00')).canList && s16MarketWindow(bj('2026-10-20T19:30:00')).open)
+check('15:59 还能挂，16:00 起不能挂但还能出价', s16MarketWindow(bj('2026-10-20T15:59:00')).canList && !s16MarketWindow(bj('2026-10-20T16:00:00')).canList && s16MarketWindow(bj('2026-10-20T16:00:00')).open)
 {
   const w = s16MarketWindow(bj('2026-10-20T20:00:00'))
   check('20:00 整：休市，下次明天 10:00', !w.open && w.opensAt === bj('2026-10-21T10:00:00') && w.closesAt === bj('2026-10-21T20:00:00'))
@@ -164,10 +164,10 @@ check('普通拍卖最后几分钟有人出价：照常延时', lateOrd.ok === t
 await keepAlive(s1.id)
 check('已经有同一名选手的 S16 卡也能出价（一人一张的规则已取消）', late16.ok === true)
 
-now = bj('2026-10-20T19:45:00')
+now = bj('2026-10-20T16:45:00')
 const tooLate = await call('list', { id: ids.A, cardId: S16[1], ask: 1000 })
-check('19:45：不再接受新的 S16 挂牌', tooLate.ok === false && tooLate.s16Closed === true && /19:30 后不再接受新挂牌/.test(tooLate.why), JSON.stringify(tooLate))
-check('19:45：已有的 S16 拍卖还能出价', (await call('offer', { id: ids.B, listing: s1.id, price: 1200 })).ok === true)
+check('16:45：不再接受新的 S16 挂牌', tooLate.ok === false && tooLate.s16Closed === true && /16:00 后不再接受新挂牌/.test(tooLate.why), JSON.stringify(tooLate))
+check('16:45：已有的 S16 拍卖还能出价', (await call('offer', { id: ids.B, listing: s1.id, price: 1200 })).ok === true)
 
 now = bj('2026-10-20T21:00:00')
 const closedBid = await call('offer', { id: ids.D, listing: s1.id, price: 1300 })
@@ -237,4 +237,4 @@ for (const sort of ['ends', 'new', 'price', 'price_desc']) {
 
 await db.close()
 if (bad) { console.log(`\n${bad} FAILED`); process.exit(1) }
-console.log('\nS16 交易区：每天 10:00–20:00、当天 20:00 结拍、19:30 后不挂、没有一口价、不能换；决赛期间停、结果出来后按普通卡；普通卡不受影响')
+console.log('\nS16 交易区：每天 10:00–20:00、当天 20:00 结拍、16:00 后不挂（至少拍 4 小时）、没有一口价、不能换；决赛期间停、结果出来后按普通卡；普通卡不受影响')

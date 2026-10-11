@@ -33,7 +33,7 @@ export {
 export { BALANCE_VERSION } from './balance'
 export * from './openCupSwiss'
 export * from './teamCup'
-export { squadPaper, chemistry, squadPower } from './cards'
+export { squadPaper, chemistry, squadPower, s16Suspended } from './cards'
 export { playLevel } from './evolve'
 export { progressOf } from '../../progress.js'
 export { answerFor, answerPool, kindFor, imgOf, challengeSig } from './challenge'

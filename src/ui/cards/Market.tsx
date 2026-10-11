@@ -826,7 +826,7 @@ export default function Market() {
             <p className="tiny faint" style={{ marginBottom: 0, lineHeight: 1.8 }}>
               北京时间<b>每天 {String(S16_MARKET.openHour).padStart(2, '0')}:00 开市、{String(S16_MARKET.closeHour).padStart(2, '0')}:00 休市</b>，以服务器时间为准。
               当天挂出的 S16 卡都在<b>当天 {String(S16_MARKET.closeHour).padStart(2, '0')}:00 按最高价成交</b>，流拍退回信箱；
-              没有一口价，最后几分钟出价也不延时；休市前 {S16_MARKET.lastListMinutes} 分钟起不再接受新挂牌。
+              没有一口价，最后几分钟出价也不延时；{S16_MARKET.closeHour - S16_MARKET.lastListMinutes / 60}:00 后不再接受新挂牌（每张至少拍 {S16_MARKET.lastListMinutes / 60} 小时）。
               休市时不能挂牌、出价；S16 卡不能换卡。价格上限、每日高价次数、3 天交易冷却和普通卡一样。
               {s16Date(S16_MARKET.freezeFrom)} 起总决赛期间休市，{s16Date(S16_MARKET.normalFrom)} 起 S16 卡按普通卡交易。
             </p>

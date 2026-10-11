@@ -125,7 +125,7 @@ export const priceCap = (rarity) => PRICE_CAP[rarity] ?? MAX_ASK
  * 2026-10-07: 「s16 的卡和现在的卡在交易上一视同仁」; the 10,000 S16 cap of the 2026-10-04 plan is gone). An S16
  * card's metal moves with its numbers, so its cap does too; an unrevealed one is filed bronze.
  */
-export const capOf = (card) => priceCap(card?.rarity)
+export const capOf = (card) => (card?.s16 && !card.s16.revealed ? MAX_ASK : priceCap(card?.rarity))
 /**
  * High-value trades a day, bought and sold counted apart (owner, 2026-09-27): a trade is high-value when it is a
  * gold card or a 彩卡, or at HIGH_VALUE_PRICE coins or more. Cheap cards are not counted, so filling a
@@ -1307,6 +1307,9 @@ export function makeMarketApi(sql, {
     if (!card) { json(res, 200, { ok: false, notOwned: true }); return }
     // S16 世界赛: only inside the window, not in its last half hour, no buy-now, and it ends at the window's close
     const s16w = card.s16 && s16Gated() ? s16Window() : null
+    if (card.s16 && engine.s16Suspended(card)) {
+      json(res, 200, { ok: false, s16Suspended: true, why: '这支队已经出局，数值揭晓之前暂停交易。' }); return
+    }
     if (s16w && !s16w.canList) {
       json(res, 200, { ok: false, s16Closed: true, why: engine.s16ClosedWhy(clock(), s16w), s16Window: s16w }); return
     }
@@ -1533,6 +1536,7 @@ export function makeMarketApi(sql, {
     if (l.seller_h === me) { json(res, 200, { ok: false, self: true }); return }
     // S16 世界赛交易区: bids only inside the daily window, by the server's clock
     if (s16) {
+      if (engine.s16Suspended(engine.cardById(l.card_id))) { json(res, 200, { ok: false, s16Suspended: true, why: '这支队已经出局，数值揭晓之前暂停交易。' }); return }
       const w = s16Window()
       if (!w.open) { json(res, 200, { ok: false, s16Closed: true, why: engine.s16ClosedWhy(clock(), w), s16Window: w }); return }
     }

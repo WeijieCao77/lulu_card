@@ -20,6 +20,7 @@ import { LEGENDS } from './legends'
 import ECHO_JSON from '../data/echoCards.json'
 import S16_JSON from '../data/s16.json'
 import S16_RATINGS from '../data/s16Ratings.json'
+import S16_RESULTS from '../data/s16Results.json'
 import COACH_TITLE_CLUBS from '../data/coachTitleClubs.json'
 import COACH_CHAMPIONS from '../data/coachChampions.json'
 import type { Legend } from './legends'
@@ -629,6 +630,13 @@ export const S16_CARDS: PlayerCard[] = buildS16Cards()
 export const isS16Card = (c: Card | undefined): boolean => c?.kind === 'player' && !!c.s16
 /** an S16 card whose numbers are still 「?」 — it may be collected and traded, not fielded */
 export const s16Hidden = (c: Card | undefined): boolean => c?.kind === 'player' && !!c.s16 && !c.s16.revealed
+/**
+ * Out of the event but not revealed yet (owner 2026-10-11): from the moment a team is recorded as eliminated in
+ * s16Results.json until scripts/s16_ratings.py has written its numbers, its cards don't trade — anyone can work the
+ * reveal out from the public match data first and buy the winners cheap before everyone else sees them.
+ */
+export const s16Suspended = (c: Card | undefined, results: { teams: Record<string, unknown> } = S16_RESULTS as { teams: Record<string, unknown> }): boolean =>
+  s16Hidden(c) && !!(c as PlayerCard).s16 && Object.prototype.hasOwnProperty.call(results.teams, (c as PlayerCard).s16!.club)
 /** a limited series with its own 图鉴 (峡谷回响, S16 世界赛): outside the main collection count and the 全图鉴 */
 export const isSeriesCard = (c: Card | undefined): boolean => isEchoCard(c) || isS16Card(c)
 export const ALL_CARDS: Card[] = [...PLAYER_CARDS, ...ECHO_CARDS, ...S16_CARDS, ...SEOUL_CARDS, ...COACH_CARDS]
