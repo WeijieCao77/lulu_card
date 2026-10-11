@@ -131,11 +131,10 @@ export const priceCap = (rarity) => PRICE_CAP[rarity] ?? MAX_ASK
  * card's metal moves with its numbers, so its cap does too; an unrevealed one is filed bronze.
  */
 /**
- * A 「?」 S16 card has no metal yet: it is capped by its player's ordinary card (owner 2026-10-11) — a star's is free to
- * find its price like any gold, an unknown's stays under the bronze/silver caps so a fortune paid for him by an alt
- * can't move coins to a main. Once revealed it is capped by its own metal like every card.
+ * A 「?」 S16 card has no metal yet, so no metal cap (owner 2026-10-11: 「问号卡金银铜都没有，有什么好限价的」); once
+ * revealed it is capped by its own metal like every card.
  */
-export const capOf = (card) => priceCap(card?.s16 && !card.s16.revealed ? (card.s16.baseRarity ?? 'gold') : card?.rarity)
+export const capOf = (card) => (card?.s16 && !card.s16.revealed ? MAX_ASK : priceCap(card?.rarity))
 /**
  * High-value trades a day, bought and sold counted apart (owner, 2026-09-27): a trade is high-value when it is a
  * gold card or a 彩卡, or at HIGH_VALUE_PRICE coins or more. Cheap cards are not counted, so filling a

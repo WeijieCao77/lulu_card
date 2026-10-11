@@ -110,7 +110,7 @@ check('S16 包：2600 金币三张、比赛期间等概率、S 赛结束后还�
 }
 
 // market and trading
-check('限价：揭晓后按自己的金银铜；「?」卡按他普通卡的档位（冷门选手铜 2000 / 银 5000，明星金卡不限）', S16_CARDS.every((c) => capOf(c) === priceCap(c.s16!.revealed ? c.rarity : c.s16!.baseRarity)) && capOf(BASE_PLAYER_CARDS.find((c) => c.rarity === 'bronze')) === 2000)
+check('限价：揭晓后按自己的金银铜；「?」卡没有金银铜，不限价', S16_CARDS.every((c) => capOf(c) === (c.s16!.revealed ? priceCap(c.rarity) : priceCap('gold'))) && capOf(BASE_PLAYER_CARDS.find((c) => c.rarity === 'bronze')) === 2000)
 
 // S16 图鉴
 {
@@ -311,9 +311,7 @@ function s16Script(py: string) {
 // owner 2026-10-11 fixes: 「?」 cards uncapped, an eliminated team's cards pause until revealed, no levelling during the event
 {
   const hidden = S16_CARDS.find((c) => !c.s16!.revealed)!
-  const star = S16_CARDS.find((c) => !c.s16!.revealed && c.s16!.baseRarity === 'gold')!
-  const unknown = S16_CARDS.find((c) => !c.s16!.revealed && c.s16!.baseRarity === 'bronze')
-  check('明星的「?」卡不设上限；冷门选手的「?」卡按铜卡 2000 封顶（防天价倒金币）', capOf(star) > 100000 && (!unknown || capOf(unknown) === 2000), `${star.ign} ${capOf(star)} / ${unknown?.ign} ${unknown && capOf(unknown)}`)
+  check('「?」卡不限价', S16_CARDS.filter((c) => !c.s16!.revealed).every((c) => capOf(c) > 100000))
   check('出局登记了、还没揭晓：暂停交易', s16Suspended(hidden, { teams: { [hidden.s16!.club]: { placement: 'playin' } } }) && !s16Suspended(hidden, { teams: {} }))
   const g = newGacha('S16-LV', 'l', day)
   g.cards = { [hidden.id]: { id: hidden.id, level: 0, dupes: 9, seen: 10, got: day } as never }
