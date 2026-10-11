@@ -1,7 +1,12 @@
 {
  "note": "S16 赛事预测的赛程和赛果，人工填写后上线（engine/s16Predict.ts）。teams/bracket 用俱乐部 id（world.json，如 T18 = Gen.G）；时间用 ISO（带时区）。lockAt = 该阶段第一场开打前 1 小时（照开瓦包）；confirmedAt = 赛果核对完、允许领奖的时间。 playin.teams = 入围赛 4 队（巴西二号种子 10/10 决赛后填）；champ.teams = 全部参赛队，开放到瑞士轮第一场。",
  "playin": {
-  "teams": null,
+  "teams": [
+   "T51",
+   "T49",
+   "T35",
+   "T28"
+  ],
   "lockAt": "2026-10-15T17:00:00Z",
   "winner": null,
   "confirmedAt": null

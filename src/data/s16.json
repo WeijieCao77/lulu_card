@@ -4,7 +4,7 @@
   "start": "2026-10-15",
   "final": "2026-11-14",
   "packUntil": "2026-11-28",
-  "note": "由 S16世界赛系列/data 生成；2026-10-10 补上巴西两队（LØS、FURIA，10/10 决赛定直通/入围）；各队还没有登记替补"
+  "note": "由 S16世界赛系列/data 生成；2026-10-10 补上巴西两队（LØS、FURIA，10/10 决赛 LØS 3:2 FURIA：LØS 直通瑞士轮，FURIA 打入围赛）；各队还没有登记替补"
  },
  "teams": [
   {
@@ -130,15 +130,15 @@
    "club": "T51",
    "tag": "FUR",
    "name": "FURIA",
-   "stage": "tbd",
-   "seed": "BR 决赛 10/10（胜者直通瑞士轮，败者打入围赛）"
+   "stage": "playin",
+   "seed": "BR Brazil #2"
   },
   {
    "club": "T55",
    "tag": "LØS",
    "name": "LØS",
-   "stage": "tbd",
-   "seed": "BR 决赛 10/10（胜者直通瑞士轮，败者打入围赛）"
+   "stage": "main",
+   "seed": "BR Brazil #1（CBLOL 决赛 3:2 胜 FURIA）"
   }
  ],
  "players": [
