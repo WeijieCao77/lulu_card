@@ -27,7 +27,7 @@ export default function S16Banner({ owned }: { owned: number }) {
         <p className="s16-banner-key"><span>战队出局即揭晓、永久定格</span><i> · </i><span>赛事预测赢卡包</span></p>
         <p className="rift-banner-desc">
           {S16_CARDS.length} 位参赛选手，开赛前全是「?」，战队被淘汰时这队五人揭晓最终数值。S16 世界赛包 <b>{def.cost.toLocaleString('en-US')} 金币三张</b>
-          {def.until && <>，卖到 {def.until.slice(5).replace('-', '/')}</>}。
+          ，S 赛期间限时开售。
         </p>
       </div>
       <div className="s16-banner-actions">

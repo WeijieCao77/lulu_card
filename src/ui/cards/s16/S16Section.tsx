@@ -38,7 +38,7 @@ export default function S16Section({ open, busy, today }: { open: (kind: PackKin
   }
   return (<>
     <div id={S16_SECTION_ID} />
-    <Panel title="S16 世界赛" actions={<span className="tiny muted">限时 · 卖到 {def.until?.slice(5).replace('-', '/')} · {def.cost} 金币三张</span>}>
+    <Panel title="S16 世界赛" actions={<span className="tiny muted">限时 · 下架时间另行公告 · {def.cost} 金币三张</span>}>
       <div className="s16-hero">
         <div className="s16-hero-art"><S16CardBack size="sm" /></div>
         <div className="s16-hero-copy">
