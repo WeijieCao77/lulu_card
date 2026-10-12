@@ -136,11 +136,11 @@ pass('每日5次限制不变', () => {
   assert.ok(!runAction(g, 'minigame_start', { game: 'aim' }, env(310000)).ok)
 })
 
-pass('同日五金总上限为2000金币五位置包一选拔包', () => {
+pass(`同日五金总上限为${MINIGAME_DAILY * MINI_COINS.金}金币五位置包一选拔包`, () => {
   const g = fresh()
   const coinsBefore = g.coins, eliteBefore = g.packs.elite ?? 0, roleBefore = g.packs.sentinel ?? 0
   for (let i = 0; i < 5; i++) finishSchulte(g, 100000 + i * 60000)
-  assert.equal(g.coins - coinsBefore, 2000)
+  assert.equal(g.coins - coinsBefore, MINIGAME_DAILY * MINI_COINS.金)
   assert.equal((g.packs.elite ?? 0) - eliteBefore, 1)
   assert.equal((g.packs.sentinel ?? 0) - roleBefore, 5)
   assert.ok(!runAction(g, 'minigame_start', { game: 'schulte' }, env(500000)).ok)
