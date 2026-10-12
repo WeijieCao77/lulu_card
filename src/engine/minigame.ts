@@ -38,8 +38,11 @@ export type Tier = '金' | '银' | '铜'
 export const MINIGAME_DAILY = 5
 /** a round left open this long is dead; the play it spent is not refunded */
 export const MINIGAME_TTL_MS = 10 * 60 * 1000
-/** coins alongside the position pack (金/银), or instead of one (铜) */
-export const MINI_COINS: Record<Tier, number> = { 金: 400, 银: 250, 铜: 100 }
+/**
+ * coins alongside the position pack (金/银), or instead of one (铜). 开瓦包's numbers since 2026-10-11 (owner: 「小游戏金币先降到
+ * 和开瓦包一样」 — the economy comparison found lulu paid about 900–1,000 more a day here); it was 400 / 250 / 100.
+ */
+export const MINI_COINS: Record<Tier, number> = { 金: 200, 银: 0, 铜: 80 }
 /** which tiers pay the position pack */
 export const MINI_PAYS_PACK: Record<Tier, boolean> = { 金: true, 银: true, 铜: false }
 /** no human presses twice this fast; a transcript that does is not a human's */

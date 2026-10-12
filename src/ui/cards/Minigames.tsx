@@ -101,7 +101,7 @@ export default function Minigames() {
         }
       >
         <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-          每个位置一个小游戏。金档 +{MINI_COINS.金} 金币、银档 +{MINI_COINS.银} 金币，均给对应位置包；铜档 +{MINI_COINS.铜} 金币。
+          每个位置一个小游戏。金档 +{MINI_COINS.金} 金币{MINI_COINS.银 ? `、银档 +${MINI_COINS.银} 金币` : ''}，金档和银档都给对应位置包；铜档 +{MINI_COINS.铜} 金币。
           每天共 {MINIGAME_DAILY} 次，任意分配。测试中，数值会调。
           每日首次金/银达标额外送 1 个选拔包（每日最多 1 个，铜档不触发）。
         </p>

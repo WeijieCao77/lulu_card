@@ -29,7 +29,7 @@ function finishSchulte(g: GachaState, now: number, today = DAY, taps: number[] =
 }
 
 pass('金档400，银250，铜100', () => {
-  assert.deepEqual(MINI_COINS, { 金: 400, 银: 250, 铜: 100 })
+  assert.deepEqual(MINI_COINS, { 金: 200, 银: 0, 铜: 80 }) // 开瓦包's numbers (owner 2026-10-11)
   for (const [taps, expected, tier] of [[goldTaps, MINI_COINS.金, '金'], [silverTaps, MINI_COINS.银, '银'], [copperTaps, MINI_COINS.铜, '铜']] as const) {
     const g = fresh()
     const beforeCoins = g.coins
