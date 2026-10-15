@@ -42,15 +42,15 @@
 .ritual-board{position:relative;flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none;-webkit-user-select:none;padding:0;margin:8px 0;perspective:1400px}
 .ritual-board.is-scroll{overflow-y:auto;touch-action:pan-y;align-items:flex-start;justify-content:center;padding:12px;box-sizing:border-box;scrollbar-width:thin;scrollbar-gutter:stable}
 .ritual-spread{display:grid;grid-template-columns:repeat(var(--columns),var(--card-width));gap:24px;align-items:center;justify-content:center}
-.ritual-deal{width:var(--card-width);height:calc(var(--card-width)*282/184);animation:ritual-deal .65s calc(var(--order)*65ms) cubic-bezier(.16,.7,.25,1) both;perspective:1100px}
+.ritual-deal{width:var(--card-width);height:calc(var(--card-width)*7/5);animation:ritual-deal .65s calc(var(--order)*65ms) cubic-bezier(.16,.7,.25,1) both;perspective:1100px}
 .ritual-stage .ritual-card{display:block;position:relative;width:100%;height:100%;min-height:0;padding:0;border:0;border-radius:9px;background:transparent;box-shadow:none;--card-glow:#b08758;transition:filter .2s;perspective:1100px;touch-action:manipulation}
 .ritual-card.rarity-silver{--card-glow:#c8e7ef}.ritual-card.rarity-gold{--card-glow:#ffcb64}.ritual-card.rarity-mythic{--card-glow:#c291ff}
 .ritual-flipper{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.2,.7,.2,1);transform:rotateY(0)}
 .is-revealed .ritual-flipper{transform:rotateY(180deg)}
 .ritual-card-back,.ritual-card-front{position:absolute;inset:0;border-radius:8px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 12px 22px #0009}
 .ritual-card-back{transform:translateZ(1px)}.ritual-card-front{transform:rotateY(180deg) translateZ(1px);overflow:hidden;background:#18232d}
-.ritual-face-scale{width:184px;height:282px;transform:scale(var(--card-scale));transform-origin:0 0;pointer-events:none}
-.ritual-face-scale .cardface{width:184px!important;height:282px!important;min-height:282px!important;box-sizing:border-box;margin:0}
+.ritual-face-scale{width:184px;height:257.6px;transform:scale(var(--card-scale));transform-origin:0 0;pointer-events:none}
+.ritual-face-scale>.card-img{width:184px}
 .ritual-card-light{position:absolute;inset:-5px;border-radius:12px;opacity:.06;background:var(--card-glow);filter:blur(10px);transition:opacity .2s;pointer-events:none}
 .ritual-card:hover .ritual-card-light,.ritual-card:focus-visible .ritual-card-light,.ritual-card:active .ritual-card-light{opacity:.7}
 .ritual-card.is-revealed .ritual-card-light{opacity:.23}
@@ -70,7 +70,7 @@
 .ritual-actions .ritual-collect{background:linear-gradient(#a88b50,#69522e);border-color:#dec895;color:#fff0d3;box-shadow:inset 0 1px 0 #ead49d66,0 4px 20px #0005}
 .ritual-detail{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:28px;background:#060b10e8;backdrop-filter:blur(9px);touch-action:pan-y}
 .ritual-detail-card{display:flex;flex-direction:column;align-items:center;gap:16px;max-width:100%;margin:auto;animation:ritual-detail-in .25s ease-out}
-.ritual-detail-card>.cardface{width:min(280px,65vw)!important;flex-shrink:0;box-shadow:0 0 55px #dfbd5430}
+.ritual-detail-card>.card-img{width:min(280px,65vw);flex-shrink:0;box-shadow:0 0 55px #dfbd5430}
 .ritual-detail-card p{font-size:14px;color:#e7d5b2;text-align:center;margin:0;max-width:320px}
 .ritual-detail-card>button{min-width:150px;padding:11px 22px}
 @keyframes ritual-pack-hover{0%,100%{transform:translateY(-14px) rotate(-7deg)}50%{transform:translateY(-23px) rotate(-4deg)}}
@@ -89,7 +89,7 @@
 @keyframes ritual-detail-in{from{opacity:0;transform:translateY(10px) scale(.94)}to{opacity:1;transform:none}}
 @media(max-width:650px){.ritual-stage{padding:max(20px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}.ritual-header h2{font-size:19px}.ritual-eyebrow{font-size:9px;letter-spacing:.18em}.ritual-spread{gap:12px}.ritual-board{margin:4px 0}.ritual-actions button{padding:10px 16px;min-width:110px}.ritual-open-hint b{font-size:14px}.ritual-scenery:before{inset:7px}.ritual-footer{gap:9px}.ritual-detail-card{gap:12px}}
 @media(pointer:coarse){.ritual-touch-hint{display:inline}.ritual-desktop-hint{display:none}.ritual-stage button{min-height:44px}.ritual-stage .ritual-card,.ritual-stage .ritual-pack{min-height:0}}
-@media(max-height:500px) and (min-width:600px){.ritual-stage{padding:12px 24px}.ritual-header h2{font-size:16px;margin-top:3px}.ritual-footer{flex-direction:row;justify-content:center;gap:30px;padding-top:0}.ritual-progress{min-height:0}.ritual-detail{padding:12px}.ritual-detail-card{flex-direction:row;flex-wrap:wrap;justify-content:center}.ritual-detail-card>.cardface{width:160px!important}.ritual-detail-card>.ritual-eyebrow{display:none}.ritual-open-hint{bottom:0}}
+@media(max-height:500px) and (min-width:600px){.ritual-stage{padding:12px 24px}.ritual-header h2{font-size:16px;margin-top:3px}.ritual-footer{flex-direction:row;justify-content:center;gap:30px;padding-top:0}.ritual-progress{min-height:0}.ritual-detail{padding:12px}.ritual-detail-card{flex-direction:row;flex-wrap:wrap;justify-content:center}.ritual-detail-card>.card-img{width:160px}.ritual-detail-card>.ritual-eyebrow{display:none}.ritual-open-hint{bottom:0}}
 /* A real drop target: the unopened pack begins off the altar. */
 .altar-opening{--altar-x:65%;--altar-y:43%;--source-x:24%;--source-y:52%;--altar-size:min(350px,39vw,61vh);--pack-size:min(200px,23vw,35vh);touch-action:none}
 .altar-dropzone,.altar-drop-burst{position:absolute;left:var(--altar-x);top:var(--altar-y);width:var(--altar-size);aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none}
@@ -144,7 +144,7 @@
 .mythic-spotlight{position:relative;display:flex;flex-direction:column;align-items:center;gap:13px;text-align:center;padding:24px;max-height:100%;box-sizing:border-box;overflow-y:auto}
 .mythic-announcement{animation:mythic-word .8s .45s both}.mythic-announcement>span{font-size:9px;letter-spacing:.46em;color:#bfc6f1}.mythic-announcement h2{font-size:25px;margin:6px 0;color:#f3e2ff;text-shadow:0 0 25px #bb8dff;letter-spacing:.15em}.mythic-announcement i{display:block;width:130px;height:1px;margin:auto;background:linear-gradient(90deg,transparent,#f1ce90,transparent)}
 .mythic-hero-card{width:min(245px,58vw,32vh);flex-shrink:0;animation:mythic-card-arrive 1.35s cubic-bezier(.15,.8,.2,1) both;filter:drop-shadow(0 0 18px #c390f455)}
-.mythic-hero-card>.cardface{width:100%!important;box-shadow:0 0 2px 2px #efdaaa,0 0 35px #c888ff88,0 20px 55px #000b}
+.mythic-hero-card>.card-img{width:100%}.mythic-hero-card .cardface{box-shadow:0 0 2px 2px #efdaaa,0 0 35px #c888ff88,0 20px 55px #000b}
 .mythic-identity{display:flex;flex-direction:column;gap:5px;animation:mythic-word .6s .9s both}.mythic-identity strong{font:600 25px/1.1 Georgia,serif;letter-spacing:.08em}.mythic-identity span{font-size:12px;letter-spacing:.08em;color:#cab6d9}
 .ritual-stage .mythic-continue{padding:10px 24px;min-width:170px;border-color:#c5a2ec;background:linear-gradient(#674c82,#302640);box-shadow:0 0 22px #ae74d833;color:#f1dfff}.mythic-continue:disabled{opacity:.55;cursor:default}
 .ritual-stage .mythic-skip{position:absolute;right:max(18px,env(safe-area-inset-right));top:max(18px,env(safe-area-inset-top));padding:7px 12px;min-height:38px;font-size:11px;background:#100d20aa;border-color:#79678b55;color:#b3a3c1;z-index:2}

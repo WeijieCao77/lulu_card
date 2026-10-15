@@ -115,7 +115,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
       const options = candidates.map(columns => {
         const rows = Math.ceil(count / columns)
         const horizontalFit = (el.clientWidth - 24 - (columns - 1) * gap) / columns
-        const verticalFit = (height - 24 - (rows - 1) * gap) / rows * 184 / 282
+        const verticalFit = (height - 24 - (rows - 1) * gap) / rows * 5 / 7
         return { columns, rows, horizontalFit, cardWidth: Math.min(184, horizontalFit, verticalFit) }
       }).filter(option => option.horizontalFit >= minCard)
       // First fit all cards; if that would make them unreadable, scroll a compact grid.

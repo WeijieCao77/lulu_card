@@ -2,7 +2,8 @@ import { SeoulCard, SeoulCardBack } from './cards/SeoulDesign'
 import WorldsCard from './cards/WorldsCard'
 import { EchoCard, EchoCardBack } from './cards/echo/EchoCard'
 import { S16Card, S16CardBack } from './cards/s16/S16Card'
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { ATTR_CN } from '../engine/types'
 import { MAX_LEVEL, RARITY_CN } from '../engine/cards'
 import { crestUrl } from '../engine/dossier'
@@ -121,13 +122,65 @@ export interface CardFaceProps {
 }
 
 /**
+ * A card is a picture: drawn once, on one fixed 5:7 canvas, and scaled to
+ * whatever width the page gives it (Val_Manager 1898176, owner 2026-10-15).
+ *
+ * It used to be laid out afresh in every place it appeared — a fixed width per
+ * size, a height that grew with whatever it held, and each grid overriding the
+ * width — so a 回响卡, a 彩卡, an S16 card and an ordinary card sat side by side
+ * at different proportions, and the 回响卡's own 132px beat the squad column and
+ * ran over the next seat. Now every face is the same canvas, everything on it
+ * (text, photo, crest) scales together, and `size` only says how wide it is shown.
+ */
+export const CARD_W = 160
+export const CARD_H = 224
+
+export function CardScale({ size = 'md', w = CARD_W, h = CARD_H, children }: {
+  size?: 'sm' | 'md' | 'lg'; w?: number; h?: number; children: ReactNode
+}) {
+  const box = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(0)
+  useLayoutEffect(() => {
+    const el = box.current
+    if (!el) return
+    // offsetWidth, not getBoundingClientRect: the layout width, before the
+    // reveal's tilt and flip transforms (or anything else) squeeze it
+    const fit = () => { if (el.offsetWidth > 0) setScale(el.offsetWidth / w) }
+    fit()
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', fit)
+      return () => window.removeEventListener('resize', fit)
+    }
+    const ro = new ResizeObserver(fit)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [w])
+  return (
+    <div ref={box} className={`card-img ci-${size}`}>
+      <span className="ci-space" style={{ paddingTop: `${(h / w) * 100}%` }} />
+      <div
+        className="ci-stage"
+        style={{ width: w, height: h, transform: `scale(${scale || 1})`, visibility: scale ? undefined : 'hidden' }}
+      >
+        {children}
+      </div>
+    </div>
+  )
+}
+
+/** One card, front side, on its canvas: always drawn at the md layout and scaled to `size`. */
+export default function CardFace(props: CardFaceProps) {
+  return <CardScale size={props.size}><FaceOnCanvas {...props} size="md" /></CardScale>
+}
+
+/**
  * One card, front side.
  *
  * The metal is a real gradient rather than a flat colour because the whole
  * emotional payload of the mode is "what came out of the pack" — a gold has to
  * look like a gold at a glance, across a grid, on a phone.
  */
-export default function CardFace({
+function FaceOnCanvas({
   card, level: played = 0, dupes = 0, size = 'md', selected, dimmed, onClick, footer,
 }: CardFaceProps) {
   // a match's level carries 进修 above +5 as a fraction (engine/evolve.ts); the badge is the whole level,
@@ -363,10 +416,12 @@ export function CardSlot({
   label, onClick, hint,
 }: { label: string; onClick?: () => void; hint?: string }) {
   return (
+    <CardScale>
     <div className="cardface slot s-md tap" onClick={onClick} title={hint ?? `选一名${label}`}>
       <div className="cf-slot-plus">＋</div>
       <div className="cf-slot-label">{label}</div>
     </div>
+    </CardScale>
   )
 }
 
