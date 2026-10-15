@@ -163,7 +163,7 @@ export function CupDivision({ league }: { league: CupLeague }) {
         <CupLineup cup={cupKey} />
         {!entry.ok && <p className="small neg">{entry.why}</p>}
         <p className="small muted" style={{ marginTop: 0, lineHeight: 1.75 }}>
-          {(st.next?.format ?? 1) === 2 ? <>先打<b>瑞士轮 BO3：两胜晋级、两败淘汰</b>，输第一场继续参赛；晋级后打<b>Playoff BO5 单败淘汰</b>，决赛也是 BO5。瑞士轮实胜每场 20 金币，Playoff 实胜每场 40 金币，轮空不发金币。</> : <>本赛制的玩家打同一张签表，单败淘汰。BO3，决赛 BO5；每场实胜 40 金币。</>}
+          {(st.next?.format ?? 1) === 2 ? <>先打<b>瑞士轮 BO3：两胜晋级、两败淘汰</b>，输第一场继续参赛；晋级后打<b>Playoff BO5 单败淘汰</b>，决赛也是 BO5。瑞士轮实胜每场 20 金币，Playoff 实胜每场 40 金币，轮空不发金币。</> : <>本赛制的玩家打同一张签表，单败淘汰。64 强之前 BO3，<b>64 强起（含决赛）BO5</b>；每场实胜 40 金币。</>}
           系统按本届赛程自动比赛，不用在线。<b>开赛时锁定本赛制的阵容与强化</b>（设了专用阵容就用专用的，否则用卡组），不符合本赛制的阵容无法参赛，锁定后本场不再变。名次奖励看参赛人数，奖励发到信箱。
           不足 {OPEN_CUP_MIN} 人取消，{OPEN_CUP_RANKED_MIN} 人以上的冠军计入冠军榜。
         </p>

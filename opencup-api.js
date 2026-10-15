@@ -343,7 +343,7 @@ export function makeOpenCupApi(sql, {
         winners.push({ id: through, won: 0 })
         continue
       }
-      const res = await simulate([rivalOf(A), rivalOf(B), last, engine.openCupMatchSeed(seed, k, m.slot), cup.balance_version ?? 1])
+      const res = await simulate([rivalOf(A), rivalOf(B), engine.openCupBo5(cup.rounds, k), engine.openCupMatchSeed(seed, k, m.slot), cup.balance_version ?? 1])
       played.push({ slot: m.slot, winner: res.aWon ? m.a : m.b, maps_a: res.mapsA, maps_b: res.mapsB, detail: res.detail })
       winners.push({ id: res.aWon ? m.a : m.b, won: 1 })
       losers.push(res.aWon ? m.b : m.a)

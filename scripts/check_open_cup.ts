@@ -22,6 +22,7 @@ import {
   OPEN_CUP_MIN, OPEN_CUP_RANKED_MIN, OPEN_CUP_STEP_SEC, OPEN_CUP_WIN_COINS,
   openCupMatchSeed, openCupPlacePrize, openCupPurse, openCupRoundAt, openCupSlot, pairOpenCupRound,
   planOpenCup, playOpenCupMatch,
+  openCupBo5,
 } from '../src/engine/openCup'
 import type { RivalSquad } from '../src/engine/arena'
 import { Rng } from '../src/engine/rng'
@@ -104,6 +105,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   check('同一个种子，同一场比赛', JSON.stringify(r1) === JSON.stringify(r2))
   check('BO3 打到两胜，决赛 BO5 打到三胜',
     Math.max(r1.mapsA, r1.mapsB) === 2 && Math.max(...(() => { const f = playOpenCupMatch(asRival(3), asRival(9), true, 7); return [f.mapsA, f.mapsB] })()) === 3)
+  check('64 强起 BO5，之前 BO3', openCupBo5(12, 11) && openCupBo5(12, 6) && !openCupBo5(12, 5) && openCupBo5(3, 0))
   check('比赛详情带地图比分和双方数据', r1.detail.maps.length === r1.mapsA + r1.mapsB && r1.detail.a.lines.length === 5 && r1.detail.b.lines.length === 5)
   let aWins = 0
   const N = 300
@@ -310,7 +312,7 @@ try {
   let replayOk = true
   for (const m of real.slice(0, 6)) {
     const side = (h: string): RivalSquad => ({ name: 'x', tag: 'x', ...byHash.get(h)!.five, div: 0, points: 0 })
-    const again = playOpenCupMatch(side(m.a), side(m.b), m.round === cup.rounds - 1, openCupMatchSeed(Number(seedRow.seed), m.round, m.slot))
+    const again = playOpenCupMatch(side(m.a), side(m.b), openCupBo5(cup.rounds, m.round), openCupMatchSeed(Number(seedRow.seed), m.round, m.slot))
     if ((again.aWon ? m.a : m.b) !== m.winner || again.mapsA !== m.maps_a) replayOk = false
   }
   check('记录的赛果能用种子原样重算出来', replayOk)

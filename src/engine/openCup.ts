@@ -114,6 +114,11 @@ export function planOpenCupFast(entrants: number, stepSec: number): OpenCupPlan 
 export const openCupRoundAt = (starts: number, stepSec: number, round: number): number =>
   starts + round * stepSec * 1000
 
+/** From the 64 强 on, every tie is a best of five (owner, 2026-10-15); the rounds before it a best of three. */
+export const OPEN_CUP_BO5_FROM = 64
+/** Whether round `round` (0-based) of a knockout `rounds` deep is a BO5: at most OPEN_CUP_BO5_FROM are left in it. */
+export const openCupBo5 = (rounds: number, round: number): boolean => 2 ** Math.max(0, rounds - round) <= OPEN_CUP_BO5_FROM
+
 /** 「决赛」「半决赛」「8 强」「第 1 轮」 — by how many are left when it is played. */
 export function openCupRoundName(rounds: number, round: number): string {
   const left = rounds - round
@@ -197,12 +202,12 @@ export interface OpenCupMatchResult {
  * came out of the shuffle.
  */
 export function playOpenCupMatch(
-  a: RivalSquad, b: RivalSquad, final: boolean, seed: number,
+  a: RivalSquad, b: RivalSquad, bo5: boolean, seed: number,
   /** the score curve the cup started on — open_cups.balance_version */
   balance: number = BALANCE_VERSION,
   frozenScores?: readonly [number, number],
 ): OpenCupMatchResult {
-  const bo = final ? 5 : 3
+  const bo = bo5 ? 5 : 3
   const res = playRivalMatch(
     { slots: a.slots, coach: a.coach, name: a.name, tag: a.tag },
     (id) => a.levels[id] ?? 0, b, bo, seed >>> 0, undefined, balance, frozenScores,

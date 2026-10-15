@@ -27,7 +27,7 @@ export { matchesFilter, matchesQuery, readFilter, filterActive } from './cardFil
 export { s16MarketWindow, s16ClosedWhy, s16Gated, S16_MARKET } from './s16Market'
 export type { CardFilter } from './cardFilter'
 export {
-  openCupSlot, planOpenCup, planOpenCupFast, openCupRoundAt, pairOpenCupRound, playOpenCupMatch, openCupMatchSeed, openCupPurse,
+  openCupSlot, planOpenCup, planOpenCupFast, openCupRoundAt, pairOpenCupRound, playOpenCupMatch, openCupBo5, openCupMatchSeed, openCupPurse,
   OPEN_CUP_MIN, OPEN_CUP_MAX, OPEN_CUP_RANKED_MIN,
 } from './openCup'
 export { BALANCE_VERSION } from './balance'
