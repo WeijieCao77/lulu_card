@@ -1339,10 +1339,9 @@ export function openPack(
   if (def.floor) {
     const bestAt = metals.reduce(
       (b, m, i) => (rarityRank(m) > rarityRank(metals[b]) ? i : b), 0)
-    if (rarityRank(metals[bestAt]) < rarityRank(def.floor)) {
-      metals[bestAt] = def.floor
-      if (def.floor === 'gold') g.pity = 0
-    }
+    // the pack's own promise, not a gold the pity paid: the gold pity keeps
+    // counting through it (owner, 2026-10-15 — the 十连包's gold used to reset it)
+    if (rarityRank(metals[bestAt]) < rarityRank(def.floor)) metals[bestAt] = def.floor
   }
   const out: Pulled[] = []
   // Pity is settled in roll order above. Fisher–Yates only changes reveal order,

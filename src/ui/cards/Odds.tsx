@@ -166,7 +166,7 @@ export function OddsWhy() {
           <b>保底进度挂在账号上</b>，换一种包开不重置。
         </li>
         <li>
-          <b>选拔包保底银卡、十连包保底金卡</b>：一包里最好的一张不够档就补到该档。
+          <b>选拔包保底银卡、十连包保底金卡</b>：一包里最好的一张不够档就补到该档；十连包补出来的金卡不重置金卡保底。
         </li>
       </ul>
       <p className="tiny faint" style={{ marginBottom: 0 }}>

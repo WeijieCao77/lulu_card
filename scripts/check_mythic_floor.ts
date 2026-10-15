@@ -83,6 +83,20 @@ function runChecks() {
     assert(g.mythicDry === afterScout + 16, `west should add 3 after ten, got ${g.mythicDry}`)
   }
 
+  // the 十连包's promised gold is the pack's own: it leaves the gold pity counting
+  {
+    let floored = 0
+    for (let seed = 1; seed <= 400 && !floored; seed++) {
+      const g = newGacha(`CHECK-TENGOLD-${seed}`, '验证', '2026-01-01')
+      g.seed = seed; g.pity = 0; g.mythicDry = 0; g.packs.ten = 1
+      const pulled = openPack(g, 'ten', 'pack')
+      // one gold and a pity of 10: every draw rolled short of gold and the floor lifted one
+      if (pulled.filter(p => p.card.rarity === 'gold').length === 1 && g.pity === 10) floored++
+      assert(g.pity === 0 || g.pity <= 10, `ten pack pity out of range: ${g.pity}`)
+    }
+    assert(floored > 0, 'a ten pack whose only gold is the floor should leave the gold pity at 10')
+  }
+
   // coach and all position packs at 1199 do not pay mythic and do not advance, then scout pays
   const noMythicKinds = ['coach', ...POSITION_PACK_KINDS] as const
   for (const kind of noMythicKinds) {
