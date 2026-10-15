@@ -29,7 +29,9 @@ for(const kind of ['scout','elite','ten','cn','pac','emea','ame'] as const) {
 }
 for(const kind of ['coach','duelist','initiator','west'] as const) { // 其他包 (LCP + CBLOL) has no 彩卡 since the v8 split
   const g=newGacha(kind,'test','2026-09-21');g.mythicDry=MYTHIC_FLOOR;g.packs[kind]=1
-  assert(openPack(g,kind,'pack').every(p=>p.card.rarity!=='mythic'));assert.equal(g.mythicDry,MYTHIC_FLOOR)
+  assert(openPack(g,kind,'pack').every(p=>p.card.rarity!=='mythic'))
+  // …but the 其他包 still counts toward the floor (feedsFloor); the others leave it alone
+  assert.equal(g.mythicDry,MYTHIC_FLOOR+(PACKS[kind].feedsFloor?PACKS[kind].draws:0))
 }
 const g=newGacha('guaranteed','test','2026-09-21');g.packs.legend=1;g.pity=12;g.mythicDry=651
 assert.equal(openPack(g,'legend','pack')[0].card.rarity,'mythic');assert.equal(g.pity,12);assert.equal(g.mythicDry,651)

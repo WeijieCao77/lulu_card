@@ -353,7 +353,7 @@ export default function Packs() {
         actions={<span className="tiny muted">五个赛区，分开收集</span>}
       >
         <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-          赛区包分为五个：LPL、LCK、LEC、LCS、其他（LCP、CBLOL，包含越南等地区队伍）。赛区包只出该赛区的选手，彩卡也只出本赛区的；五个赛区包全部常驻可买，收齐各赛区都有奖励。LPL、LCK、LEC、LCS 包可出彩卡、共享彩卡保底；其他赛区暂无彩卡。
+          赛区包分为五个：LPL、LCK、LEC、LCS、其他（LCP、CBLOL，包含越南等地区队伍）。赛区包只出该赛区的选手，彩卡也只出本赛区的；五个赛区包全部常驻可买，收齐各赛区都有奖励。LPL、LCK、LEC、LCS 包可出彩卡、共享彩卡保底；其他赛区暂无彩卡，但开其他包同样累计彩卡保底。
           {'　'}每个大区收到 25% / 50% / 75% / 90% / 100% 各有一档奖励，收齐送十连包。
           {'　'}每周轮换一个赛区包八折，全服相同，北京时间周一 0 点换下一个（LPL → LCK → LEC → LCS → 其他）。本周八折：<b>{GAME_REGION_CN[featured]}</b>。
         </p>

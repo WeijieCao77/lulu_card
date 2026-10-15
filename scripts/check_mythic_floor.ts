@@ -77,6 +77,10 @@ function runChecks() {
     g.packs.ten = 1
     openPack(g, 'ten', 'pack')
     assert(g.mythicDry === afterScout + 13, `ten should add 10 after elite, got ${g.mythicDry}`)
+    // 其他包 has no 彩卡, but a discount week on it must not cost the floor
+    g.packs.west = 1
+    openPack(g, 'west', 'pack')
+    assert(g.mythicDry === afterScout + 16, `west should add 3 after ten, got ${g.mythicDry}`)
   }
 
   // coach and all position packs at 1199 do not pay mythic and do not advance, then scout pays
@@ -121,10 +125,10 @@ function runChecks() {
     assert(!(kind in g.packs), `${kind} old key should be removed`)
     assert(g.mythicDry === MYTHIC_FLOOR - 1, `${kind} migrated mythicDry should be floor-1, got ${g.mythicDry}`)
 
-    // 其他包 has had no 彩卡 since the 2026-09-27 split: it deals none and leaves the owed floor for a pack that can pay it
+    // 其他包 has had no 彩卡 since the 2026-09-27 split: it deals none, still counts toward the floor, and leaves the payout to a pack that can
     const pulled = openPack(g, 'west', 'pack')
     assert(!pulled.some(p => p.card.rarity === 'mythic'), `west pack after ${kind} migration deals no 彩卡`)
-    assert(g.mythicDry === MYTHIC_FLOOR - 1, `west pack leaves the owed 彩卡 floor alone, got ${g.mythicDry}`)
+    assert(g.mythicDry === MYTHIC_FLOOR + 2, `west pack feeds the floor without spending it, got ${g.mythicDry}`)
     g.packs.cn = 1
     assert(openPack(g, 'cn', 'pack').some(p => p.card.rarity === 'mythic'), `the next LPL pack pays the owed 彩卡`)
   }

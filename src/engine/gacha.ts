@@ -84,6 +84,12 @@ export interface PackDef {
   /** the pack promises at least one card of this metal */
   floor?: Rarity
   /**
+   * Counts toward MYTHIC_FLOOR though it holds no彩卡 of its own: the owed
+   * card waits for the next pack that can pay it. The 其他包 takes its turn as
+   * the week's discounted region, and a week of it must not cost the floor.
+   */
+  feedsFloor?: boolean
+  /**
    * Whether coins can buy it at all.
    *
    * The ten-pull cannot. Capping the shop at two packs a day did nothing while
@@ -176,8 +182,9 @@ export const PACKS: Record<PackKind, PackDef> = {
   west: {
     kind: 'west', name: '其他包', pool: 'WEST',
     blurb: '包含 LCP、CBLOL 选手。三张，至少一张银卡起。',
-    // no 彩卡 since the 2026-09-27 split: every legend is LPL, LCK, LEC or LCS, and a pack with none must not draw one
-    cost: 2600, draws: 3, mythic: 0, gold: 0.05, silver: 0.08, floor: 'silver', shop: true,
+    // no 彩卡 since the 2026-09-27 split: every legend is LPL, LCK, LEC or LCS, and a pack with none must not draw one —
+    // but its draws still move the 彩卡 floor (owner, 2026-10-15), paid out by the next pack that has one
+    cost: 2600, draws: 3, mythic: 0, gold: 0.05, silver: 0.08, floor: 'silver', shop: true, feedsFloor: true,
   },
   ame: {
     kind: 'ame', name: 'LCS 包', pool: 'LCS',
@@ -283,6 +290,8 @@ export const HARD_PITY = 45
  * without moving this would have changed almost nothing.
  */
 export const MYTHIC_PACK_NAMES = PACK_ORDER.filter(k => PACKS[k].mythic > 0 && PACKS[k].mythic < 1).map(k => PACKS[k].name).join('、')
+/** every pack whose draws move the floor: the ones above, and the 其他包 (feedsFloor) */
+export const FLOOR_PACK_NAMES = PACK_ORDER.filter(k => (PACKS[k].mythic > 0 && PACKS[k].mythic < 1) || PACKS[k].feedsFloor).map(k => PACKS[k].name).join('、')
 export const MYTHIC_FLOOR = 1200
 
 // ---------------------------------------------------------------- the day
@@ -1317,10 +1326,10 @@ export function openPack(
       else metal = 'bronze'
     }
     if (certain) { /* outside the pity system */ } else if (metal === 'mythic') { g.mythicDry = 0; g.pity = 0 } else {
-      // a pack with no彩卡 in it must not count toward the floor either —
-      // otherwise the guarantee could be spent on a deck it can never be paid
-      // out of. The coach pack has one now, so it does count.
-      if (def.mythic > 0) g.mythicDry = (g.mythicDry ?? 0) + 1
+      // a pack with no彩卡 in it does not count toward the floor either, unless
+      // it says so (feedsFloor). Counting is safe: `owed` above only pays in a
+      // pack with彩卡, so a floor reached here waits for the next one.
+      if (def.mythic > 0 || def.feedsFloor) g.mythicDry = (g.mythicDry ?? 0) + 1
       if (metal === 'gold') g.pity = 0
       else g.pity++
     }

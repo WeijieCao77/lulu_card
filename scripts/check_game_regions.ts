@@ -226,7 +226,7 @@ function run() {
     if (region === 'WEST') {
       assert.equal(PACKS.west.mythic, 0)
       assert.ok(forced.every(p => p.card.rarity !== 'mythic'), 'no LCP/CBLOL 彩卡 exists, so 其他包 never deals one')
-      assert.equal(g.mythicDry, MYTHIC_FLOOR - 1, '其他包 neither spends nor feeds the 彩卡 floor')
+      assert.equal(g.mythicDry, MYTHIC_FLOOR + 2, '其他包 feeds the 彩卡 floor but never spends it')
     } else {
       assert.ok(forced.some(p => p.card.rarity === 'mythic'), pack + ' mythic floor')
     }
