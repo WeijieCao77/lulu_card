@@ -1,11 +1,12 @@
 import { RiftPackArt } from '../RiftChrome'
 import { useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { useCards } from './ctx'
 import { Panel } from '../common'
 import {
   PACKS, PACK_ORDER, POSITION_PACK_KINDS, QUESTS, CHECKIN_COINS, DAILY_CLEAR_PACKS, HARD_PITY, SOFT_PITY, packPosition,
   collectionProgress, refreshDaily, featuredSeries, packCost, seriesOfPack, seriesProgress,
-  fullSetProgress, FULL_SET_REWARD,
+  fullSetProgress, FULL_SET_REWARD, MULTI_OPEN_MAX, s16PackDef,
 } from '../../engine/gacha'
 import type { CheckIn, PackKind, Pulled, QuestKey, Series } from '../../engine/gacha'
 import { cardById } from '../../engine/cards'
@@ -21,6 +22,8 @@ import S16Section from './s16/S16Section'
 import { ECHO_QUIZ_EVENT, ECHO_SECTION_ID } from './echo/EchoBanner'
 import { EchoCardBack } from './echo/EchoCard'
 import { echoQuizDone } from '../../engine/echoQuiz'
+import MultiOpenSheet from './MultiOpenSheet'
+import { isLegacyRegionPack } from '../../engine/regionMigration'
 
 /** What the server says came out of a pack, resolved back to cards. */
 interface PulledWire { cardId: string; dupe: boolean; salvage: number }
@@ -30,7 +33,11 @@ export default function Packs() {
   const [opening, setOpening] = useState<Pulled[] | null>(null)
   const [openingKind, setOpeningKind] = useState<PackKind | null>(null)
   const [revealSequence, setRevealSequence] = useState(0)
-  const [payWith, setPayWith] = useState<'pack' | 'coins'>('pack')
+  const [payWith, setPayWith] = useState<'pack' | 'coins' | 'auto'>('pack')
+  /** how many packs the reveal on screen came from — more than one after a 连开 */
+  const [openingPacks, setOpeningPacks] = useState(1)
+  /** the 连开 sheet, open for this kind */
+  const [multi, setMulti] = useState<PackKind | null>(null)
   const [busy, setBusy] = useState(false)
   const [unknownError, setUnknownError] = useState(false)
   /** the reveal's 分解重复卡, waiting for the player to read the list */
@@ -60,13 +67,17 @@ export default function Packs() {
 
   // The pack is rolled on the server and comes back already in the
   // collection; what happens here is the reveal.
-  const open = async (kind: PackKind, payWith: 'pack' | 'coins') => {
+  const open = async (kind: PackKind, payWith: 'pack' | 'coins' | 'auto', count = 1) => {
     if (busy || openLock.current || salvageLock.current || uncertain.current || unknownError || ask) return
     openLock.current = true
     setBusy(true)
+    // how it was paid, read before the stock moves: all stock, all coins, or both
+    const own = g.packs[kind] ?? 0
+    const paid = payWith !== 'auto' ? payWith : own >= count ? 'pack' : own > 0 ? 'mixed' : 'coins'
     try {
-      const args: Record<string, unknown> = { kind, payWith }
-      if (payWith === 'coins' && seriesOfPack(kind)) {
+      const args: Record<string, unknown> = count > 1 ? { kind, payWith, count } : { kind, payWith }
+      // 'auto' may buy too; the server checks the price only when it does
+      if (payWith !== 'pack' && seriesOfPack(kind)) {
         args.expectedPrice = packCost(kind, today, g)
       }
       let r
@@ -82,6 +93,7 @@ export default function Packs() {
         if (r.unknown) markUnknown()
         return
       }
+      setMulti(null)
       const wire = ((r.result as { pulled?: PulledWire[] } | undefined)?.pulled ?? [])
       const out: Pulled[] = wire
         .map((p) => { const card = cardById(p.cardId); return card ? { card, dupe: p.dupe, salvage: p.salvage } : null })
@@ -97,7 +109,8 @@ export default function Packs() {
       }
       track('card_pull', {
         kind,
-        paid: payWith,
+        paid,
+        packs: count,
         gold: out.filter((p) => p.card.rarity === 'gold').length,
         dupes: out.filter((p) => p.dupe).length,
         // which cards, so 「我抽到过他」 can be checked against something —
@@ -106,6 +119,7 @@ export default function Packs() {
       })
       setOpening(out)
       setOpeningKind(kind)
+      setOpeningPacks(count)
       setPayWith(payWith)
       setRevealSequence((s) => s + 1)
     } finally {
@@ -123,8 +137,10 @@ export default function Packs() {
 
   const continueNext = async () => {
     if (busy || openLock.current || unknownError || ask) return
-    if (!openingKind) return
-    if (payWith === 'pack') {
+    if (!openingKind || openingPacks > 1) return
+    if (payWith === 'auto') {
+      if ((g.packs[openingKind] ?? 0) < 1 && g.coins < packCost(openingKind, today, g)) { toast('卡包和金币都不够。'); return }
+    } else if (payWith === 'pack') {
       if ((g.packs[openingKind] ?? 0) < 1) {
         toast('卡包不足。')
         return
@@ -138,6 +154,18 @@ export default function Packs() {
     }
     await open(openingKind, payWith)
   }
+
+  /** the shop sells this kind today */
+  const buyable = (kind: PackKind) => {
+    const def = kind === 's16' ? s16PackDef(today) : PACKS[kind]
+    return def.shop !== false && !(def.until && today > def.until) && kind !== 'seoul2024' && !isLegacyRegionPack(kind)
+  }
+  /** 连开 is offered once two packs of this kind can be opened between the stock and the coins */
+  const canMulti = (kind: PackKind) =>
+    (g.packs[kind] ?? 0) + (buyable(kind) ? Math.floor(g.coins / packCost(kind, today, g)) : 0) >= 2
+  const multiButton = (kind: PackKind): ReactNode => canMulti(kind) && (
+    <button className="sm" disabled={busy || unknownError} onClick={() => setMulti(kind)} title={`一次最多 ${MULTI_OPEN_MAX} 包，先用库存`}>连开</button>
+  )
 
   const check = async () => {
     const r = await act('checkin')
@@ -235,7 +263,7 @@ export default function Packs() {
 
 
       {/* S16 世界赛 takes 峡谷回响's place at the top (owner 2026-10-10); 峡谷回响 moves onto the ordinary shelf */}
-      <S16Section open={(k, pay) => void open(k, pay)} busy={busy || unknownError} today={today} />
+      <S16Section open={(k, pay) => void open(k, pay)} busy={busy || unknownError} today={today} multi={multiButton('s16')} />
 
       {quiz && <EchoQuiz onClose={() => setQuiz(false)} />}
 
@@ -264,6 +292,7 @@ export default function Packs() {
                 <button className="primary sm" onClick={() => void open('legend', 'pack')} disabled={busy || unknownError}>
                   打开（{g.packs.legend}）
                 </button>
+                {multiButton('legend')}
                 <span className="tiny faint" style={{ alignSelf: 'center' }}>非卖品</span>
               </div>
             </div>
@@ -283,6 +312,7 @@ export default function Packs() {
               <button className="sm" onClick={() => void open('echo', 'coins')} disabled={busy || unknownError || g.coins < PACKS.echo.cost}>
                 花 {PACKS.echo.cost} 金币
               </button>
+              {multiButton('echo')}
               {(g.packs.echoScout ?? 0) > 0 && (
                 <button className="primary sm" onClick={() => void open('echoScout', 'pack')} disabled={busy || unknownError}>
                   打开回响试训包（{g.packs.echoScout}）
@@ -318,6 +348,7 @@ export default function Packs() {
                       花 {def.cost} 金币
                     </button>
                   )}
+                  {multiButton(kind)}
                 </div>
               </div>
             )
@@ -340,7 +371,7 @@ export default function Packs() {
                 <div key={kind} className="pack-box"><RiftPackArt kind={kind} />
                   <h4>{def.name}<span className="pack-own"> ×{own}</span></h4>
                   <p>{def.blurb}</p>
-                  <div className="pack-shelf-actions"><button className="primary sm" onClick={() => void open(kind, 'pack')} disabled={busy || unknownError || own < 1}>打开（{own}）</button></div>
+                  <div className="pack-shelf-actions"><button className="primary sm" onClick={() => void open(kind, 'pack')} disabled={busy || unknownError || own < 1}>打开（{own}）</button>{multiButton(kind)}</div>
                 </div>
               )
             })}
@@ -427,6 +458,7 @@ export default function Packs() {
                     花 {price} 金币
                     {price < def.cost && <s className="faint" style={{ marginLeft: 4 }}>{def.cost}</s>}
                   </button>
+                  {multiButton(s.pack)}
                 </div>
               </div>
             )
@@ -480,6 +512,7 @@ export default function Packs() {
           key={revealSequence}
           pulled={opening}
           packName={openingKind ? PACKS[openingKind].name : '选手卡包'}
+          packs={openingPacks}
           position={openingKind ? packPosition(openingKind) ?? undefined : undefined}
           echo={openingKind === 'echo' || openingKind === 'echoScout'}
           s16={openingKind === 's16'}
@@ -488,16 +521,20 @@ export default function Packs() {
           unknownError={unknownError}
           onFastChange={setFastMode}
           continueLabel={
-            payWith === 'pack'
+            payWith === 'auto'
+              ? `继续下一包（${openingKind && (g.packs[openingKind] ?? 0) > 0 ? `消耗 1 个${PACKS[openingKind].name}` : `消耗 ${openingKind ? packCost(openingKind, today, g) : 0} 金币`}）`
+              : payWith === 'pack'
               ? `继续下一包（消耗 1 个${openingKind ? PACKS[openingKind].name : '卡包'}）`
               : `继续下一包（消耗 ${openingKind ? packCost(openingKind, today, g) : 0} 金币）`
           }
-          continueEnabled={!busy && !unknownError && !ask && openingKind !== null && (
-            payWith === 'pack'
+          continueEnabled={!busy && !unknownError && !ask && openingKind !== null && openingPacks === 1 && (
+            payWith === 'auto'
+              ? (g.packs[openingKind] ?? 0) >= 1 || g.coins >= packCost(openingKind, today, g)
+              : payWith === 'pack'
               ? (g.packs[openingKind] ?? 0) >= 1
               : g.coins >= (openingKind ? packCost(openingKind, today, g) : 0)
           )}
-          onContinue={() => void continueNext()}
+          onContinue={openingPacks > 1 ? undefined : () => void continueNext()}
           onDone={done}
           onSellAll={() => {
             if (openLock.current || salvageLock.current || uncertain.current || busy || ask) return
@@ -538,6 +575,12 @@ export default function Packs() {
         />
       )}
       {ask && <SalvageConfirm ask={ask} busy={busy} onClose={() => { if (!busy && !salvageLock.current) setAsk(null) }} />}
+      {multi && (
+        <MultiOpenSheet
+          kind={multi} own={g.packs[multi] ?? 0} coins={g.coins} price={packCost(multi, today, g)} buyable={buyable(multi)} busy={busy}
+          onOpen={(count) => void open(multi, 'auto', count)} onClose={() => { if (!busy) setMulti(null) }}
+        />
+      )}
     </>
   )
 }

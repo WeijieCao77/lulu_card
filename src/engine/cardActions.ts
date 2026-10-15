@@ -25,7 +25,7 @@
  */
 import {
   awardMinigame, canPlay, claimEchoSet, claimS16Set, note, checkIn, claimFullSet, claimQuest, claimSeries, clampState, cupBo, cupOpponent, drawOpponent, enterCup,
-  levelOf, playLevelOf, oppBumpFor, openPack, packCost, pendingOpponent, primeStamina, recordCup, recordLadder,
+  levelOf, playLevelOf, oppBumpFor, openPack, openPacks, packCost, pendingOpponent, primeStamina, recordCup, recordLadder,
   refreshDaily, salvage, salvageBulk, seriesOfPack, spendPlay, upgrade, ladderSlot, leagueEntry, isLadderLeague,
   LADDER_BO, LEAGUE_RULES, MASTER_DIV, RIVAL_MERCY_GAP, SERIES, STAMINA_COST, SWEEPABLE, isPackKind, registerCupSquad, cupSquadOf, ladderSquadOf,
   rollSeason,
@@ -34,7 +34,7 @@ import {
   judgeMinigame, MINI_GAMES, MINIGAME_DAILY, MINIGAME_TTL_MS, newMinigame, refreshMinigame,
 } from './minigame'
 import type { MiniGame } from './minigame'
-import type { GachaState, QuestKey, Series } from './gacha'
+import type { GachaState, Pulled, QuestKey, Series } from './gacha'
 import { isLegacyRegionPack } from './regionMigration'
 import { buyShop, ensureShop } from './dailyShop'
 import { BALANCE_VERSION, arenaOpponentRating, playArenaMatch, playCupMatch, playRivalMatch } from './arena'
@@ -148,13 +148,18 @@ function dispatch(
       if (isLegacyRegionPack(kind)) {
         return { ok: false, why: 'LCP、CBLOL 包已并入其他包，请刷新页面。' }
       }
-      const payWith = a.payWith === 'coins' ? 'coins' : 'pack'
+      const payWith = a.payWith === 'coins' ? 'coins' : a.payWith === 'auto' ? 'auto' : 'pack'
+      // 连开: how many packs this one request opens (gacha.ts openPacks)
+      const multi = a.count !== undefined && a.count !== 1
+      const count = multi ? Number(a.count) : 1
+      // whether any coins will be spent: 'auto' buys only what the stock is short of
+      const buys = payWith === 'coins' || (payWith === 'auto' && (g.packs[kind] ?? 0) < (Number.isInteger(count) ? count : 1))
       // Coins buying a series pack must name the exact price the page showed
       // before the purchase. The page could have been open since before the
       // weekly pick changed, before a new week began, or before the prices
       // were rebalanced — the server must not silently charge a different
       // amount than the button the player clicked said it would.
-      if (payWith === 'coins' && seriesOfPack(kind)) {
+      if (buys && seriesOfPack(kind)) {
         const expected = a.expectedPrice
         if (typeof expected !== 'number' || Number.isNaN(expected) || !Number.isFinite(expected)) {
           return { ok: false, why: '页面版本已更新，请刷新后再购买赛区包。' }
@@ -172,14 +177,15 @@ function dispatch(
       // Mixed here rather than inside openPack so the pack itself stays a
       // pure function of the state, which is what the odds scripts measure.
       g.seed = hashStr(`${g.seed}:${env.seed}`) >>> 0
+      const wire = (p: Pulled) => ({ cardId: p.card.id, dupe: p.dupe, salvage: p.salvage })
       try {
-        const pulled = openPack(g, kind, payWith, env.today)
-        return {
-          ok: true,
-          result: {
-            pulled: pulled.map((p) => ({ cardId: p.card.id, dupe: p.dupe, salvage: p.salvage })),
-          },
+        if (multi) {
+          const packs = openPacks(g, kind, payWith, count, env.today)
+          return { ok: true, result: { packs: packs.length, pulled: packs.flat().map(wire) } }
         }
+        // a single 'auto' takes the stock's pack when there is one
+        const pulled = openPack(g, kind, payWith === 'auto' ? ((g.packs[kind] ?? 0) > 0 ? 'pack' : 'coins') : payWith, env.today)
+        return { ok: true, result: { pulled: pulled.map(wire) } }
       } catch (e) {
         return { ok: false, why: e instanceof Error ? e.message : '开不了' }
       }
@@ -277,7 +283,7 @@ function dispatch(
     }
     case 'salvage_dupes': {
       // the reveal's 「分解重复卡」: one spare of each card named, no more
-      const ids = Array.isArray(a.cardIds) ? a.cardIds.map((x) => str(x)).filter(Boolean).slice(0, 20) : []
+      const ids = Array.isArray(a.cardIds) ? a.cardIds.map((x) => str(x)).filter(Boolean).slice(0, 100) : []
       let coins = 0
       for (const id of ids) coins += salvage(g, id, 1)
       return { ok: true, result: { coins } }

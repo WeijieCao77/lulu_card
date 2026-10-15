@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
 import { useCards } from '../ctx'
 import { Panel } from '../../common'
 import { PACKS, S16_SET_REWARDS, s16SetProgress } from '../../../engine/gacha'
@@ -13,7 +14,7 @@ import { S16_PREDICT_EVENT, S16_SECTION_ID } from './S16Banner'
  * Owner 2026-10-04: every player equally likely, the FMVP's card becomes a 彩卡. Owner 2026-10-10: a team's five cards
  * stay 「?」 until the team is knocked out, then reveal and freeze (scripts/s16_ratings.py).
  */
-export default function S16Section({ open, busy, today }: { open: (kind: PackKind, pay: 'pack' | 'coins') => void; busy: boolean; today: string }) {
+export default function S16Section({ open, busy, today, multi }: { open: (kind: PackKind, pay: 'pack' | 'coins') => void; busy: boolean; today: string; /** the 连开 button, from the pack page */ multi?: ReactNode }) {
   const { g, act, toast } = useCards()
   const [claiming, setClaiming] = useState(false)
   const [predict, setPredict] = useState(false)
@@ -53,6 +54,7 @@ export default function S16Section({ open, busy, today }: { open: (kind: PackKin
             {onSale
               ? <button className="sm" onClick={() => open('s16', 'coins')} disabled={busy || g.coins < def.cost}>花 {def.cost} 金币</button>
               : <span className="tiny faint" style={{ alignSelf: 'center' }}>已下架，手里的包还能打开</span>}
+            {multi}
             <button className="sm" onClick={() => setPredict(true)}>S16 赛事预测</button>
           </div>
         </div>

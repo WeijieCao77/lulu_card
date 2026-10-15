@@ -1379,6 +1379,44 @@ export function openPack(
   return out
 }
 
+/** the most packs one 连开 opens */
+export const MULTI_OPEN_MAX = 10
+
+/**
+ * 连开 (as 开瓦包): up to MULTI_OPEN_MAX packs of one kind in one go, each
+ * exactly as openPack opens it — so pity, the floors, the quests and the log
+ * all move pack by pack. Everything that could refuse a pack is checked for all
+ * of them first: an action is saved even when it fails, so a run that stopped
+ * halfway would keep what it had charged.
+ *
+ * 'auto' spends the stock first and buys the rest with coins — six in stock
+ * and ten asked for is six from the stock and four bought.
+ */
+export function openPacks(
+  g: GachaState, kind: PackKind, payWith: 'pack' | 'coins' | 'auto', count: number, today?: string,
+): Pulled[][] {
+  if (!isPackKind(kind) || kind === 'seoul2024') throw new Error('没有这种卡包')
+  if (isLegacyRegionPack(kind)) throw new Error('这个赛区包已并入其他包，请刷新页面')
+  if (!Number.isInteger(count) || count < 1 || count > MULTI_OPEN_MAX) throw new Error(`一次最多开 ${MULTI_OPEN_MAX} 包`)
+  const def = kind === 's16' ? s16PackDef(today) : PACKS[kind]
+  const own = g.packs[kind] ?? 0
+  const fromStock = payWith === 'pack' ? count : payWith === 'auto' ? Math.min(own, count) : 0
+  const bought = count - fromStock
+  if (own < fromStock) throw new Error(own ? `库存只有 ${own} 个${def.name}` : '没有这种卡包')
+  if (bought > 0) {
+    if (def.shop === false) throw new Error(fromStock ? `库存只有 ${own} 个${def.name}，这种包买不到` : `${def.name}买不到，只能从玩法奖励获得`)
+    if (def.until && today && today > def.until) throw new Error(fromStock ? `库存只有 ${own} 个${def.name}，这种包已下架买不到` : `${def.name}已经下架，手里的包还能打开`)
+    const price = packCost(kind, today, g)
+    if (g.coins < price * bought) throw new Error(`金币不够，${bought} 包要 ${price * bought}`)
+  }
+  const out: Pulled[][] = []
+  for (let i = 0; i < count; i++) out.push(openPack(g, kind, i < fromStock ? 'pack' : 'coins', today))
+  return out
+}
+
+/** How many of a 连开 of `count` the stock covers and how many coins buy, under 'auto'. */
+export const multiOpenSplit = (own: number, count: number) => ({ fromStock: Math.min(own, count), bought: Math.max(0, count - own) })
+
 export const isPackKind = (kind: unknown): kind is PackKind =>
   typeof kind === 'string' && Object.prototype.hasOwnProperty.call(PACKS, kind)
 

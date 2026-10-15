@@ -544,6 +544,10 @@
   },
   {
     "runtime": "tsx",
+    "file": "scripts/check_multi_open.ts"
+  },
+  {
+    "runtime": "tsx",
     "file": "scripts/check_agent_drill.ts"
   },
   {

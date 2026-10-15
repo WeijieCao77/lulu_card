@@ -40,6 +40,8 @@ function Back() {
 export interface PackStageProps {
   pulled: Pulled[]
   packName?: string
+  /** how many packs these cards came from — more than one after a 连开; said in the header, not on the pack art */
+  packs?: number
   position?: PackPosition
   fast?: boolean
   busy?: boolean
@@ -57,7 +59,7 @@ export interface PackStageProps {
 }
 
 /** Presentation only: the server already awarded these cards before this mounts. */
-export default function PackStage({ pulled, packName = '选手卡包', position, fast = false, busy = false, unknownError = false, onFastChange, continueEnabled = false, continueLabel = '继续下一包', onContinue, onDone, onSellAll, echo = false, s16 = false }: PackStageProps) {
+export default function PackStage({ pulled, packName = '选手卡包', packs = 1, position, fast = false, busy = false, unknownError = false, onFastChange, continueEnabled = false, continueLabel = '继续下一包', onContinue, onDone, onSellAll, echo = false, s16 = false }: PackStageProps) {
   const fastFrozen = useRef(fast).current
   const initialOpened = useMemo(() => {
     if (!fastFrozen) return new Set<number>()
@@ -190,7 +192,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
     } catch { /* ignore */ }
   }
 
-  return createPortal(<div className={`ritual-stage phase-${phase}`} ref={stage} tabIndex={-1} role="dialog" aria-modal="true" aria-label={`${title}开包`} onKeyDown={e => {
+  return createPortal(<div className={`ritual-stage phase-${phase}`} ref={stage} tabIndex={-1} role="dialog" aria-modal="true" aria-label={`${title}${packs > 1 ? `连开 ${packs} 包` : ''}开包`} onKeyDown={e => {
     if (e.key === 'Escape') { e.stopPropagation(); if (busy) return; mythics.length ? continueMythic() : inspect !== null ? closeDetail() : onDone() }
     if (e.key === 'Tab') {
       const scope = mythics.length ? stage.current?.querySelector('.mythic-entrance') : inspect === null ? stage.current : stage.current?.querySelector('.ritual-detail')
@@ -203,7 +205,7 @@ export default function PackStage({ pulled, packName = '选手卡包', position,
   }}>
     <div className="ritual-scenery" aria-hidden="true"><div className="ritual-orbit" /><div className="ritual-orbit inner" /><div className="ritual-dust">{Array.from({ length: 18 }, (_, i) => <i key={i} style={{ '--i': i } as CSSProperties} />)}</div></div>
     <header className="ritual-header" inert={inspect !== null || mythics.length > 0}>
-      <div><span className="ritual-eyebrow">猪之家出品 · 噜噜卡</span><h2>{title}</h2></div>
+      <div><span className="ritual-eyebrow">猪之家出品 · 噜噜卡</span><h2>{title}{packs > 1 && <> · 连开 {packs} 包</>}</h2></div>
       <button className="ritual-dismiss" onClick={onDone} disabled={busy} aria-label="收下卡牌并关闭">✕</button>
     </header>
 
