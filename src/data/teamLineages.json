@@ -28,8 +28,10 @@
   {
     "id": "gen",
     "region": "LCK",
-    "label": "SSG → KSV → Gen.G",
+    "label": "SSW → SSG → KSV → Gen.G",
     "aliases": [
+      "SSW",
+      "Samsung White",
       "SSG",
       "Samsung Galaxy",
       "KSV",

@@ -29,6 +29,9 @@ const ruler=LEGEND_CARDS.find(c=>c.id==='worlds-2017-ruler')!
 assert.equal(ruler.clubId,'H:SSG')
 const chovy=BASE_PLAYER_CARDS.find(c=>c.ign==='Chovy')!
 assert(sameClubLineage(ruler,chovy))
+// Samsung White's 彩卡 is Gen.G's, as the 回响 Mata already was (owner, 2026-10-15)
+const mata=LEGEND_CARDS.find(c=>c.id==='worlds-2014-mata')!
+assert(sameClubLineage(mata,chovy),'S4 Mata (SSW) inherits Gen.G')
 const kingen=LEGEND_CARDS.find(c=>c.id==='worlds-2022-kingen')!
 const drx=BASE_PLAYER_CARDS.find(c=>c.clubId==='T22')!
 assert(sameClubLineage(kingen,drx))
@@ -36,4 +39,4 @@ assert(!sameClubLineage(LEGEND_CARDS.find(c=>c.id==='worlds-2023-zeus')!,LEGEND_
 assert.equal(personOf(oldFaker),personOf(BASE_PLAYER_CARDS.find(c=>c.ign==='Faker')!))
 const arena=buildArena(squad,()=>0,100)
 assert.equal(Object.values(arena.state.players).filter(p=>p.teamId===ARENA_TEAM).length,4)
-console.log('PASS: 10 sourced lineages; SKT/T1 players and coach; SSG/GenG and DRX/KRX; no academy/tag/transfer collisions; arena integration.')
+console.log('PASS: 10 sourced lineages; SKT/T1 players and coach; SSW/SSG/GenG and DRX/KRX; no academy/tag/transfer collisions; arena integration.')
