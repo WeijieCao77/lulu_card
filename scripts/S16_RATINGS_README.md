@@ -50,6 +50,15 @@ C:\Users\15967\OneDrive\桌面\lol选手\data\oracleselixir\2026_OE.csv
 
 OE 通常比赛后几小时到 1–2 天更新。**OE 还没更新到出局那天时，脚本不会定格那支队**（不然会漏掉淘汰那场的数据），会提示「先不定格」，等 OE 更新了再跑一次就行。
 
+**OE 下不来（Drive「配额已满」）或者还没更新时**：直接从 LoL Esports 官方接口生成只有世界赛的同格式 CSV，比赛打完几分钟就有：
+
+```
+python scripts/s16_lolesports.py
+python scripts/s16_ratings.py --oe "../../lol选手/data/oracleselixir/2026_WLDs_lolesports.csv" --dry-run
+```
+
+接口没有的几项是换算的（15 分钟经验差按等级估、分均视野按插眼 + 排眼换算到 OE 的尺度、经济占比按 OE 的口径扣掉出生钱和被动收入），细节和核对结果见 `scripts/s16_lolesports.py` 开头。入围赛 19 局对过 Leaguepedia：KDA、胜负全对，时长差几秒。
+
 ## 3. 跑一条命令
 
 在仓库根目录（`game` 或 worktree 目录）下：
