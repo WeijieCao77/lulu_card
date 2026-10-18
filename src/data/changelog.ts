@@ -26,6 +26,10 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [{
+  date: '2026-10-19', title: 'S16：MVK 入围赛出局', changes: [
+    { kind: '调整', text: 'MVK 在入围赛出局（入围赛决赛 0:3 负 KC，KC 晋级瑞士轮）。按规则，<b>MVK 五名选手的 S16 卡在数值揭晓前暂停交易</b>，比赛数据更新后揭晓最终数值并恢复交易。' },
+  ],
+}, {
   date: '2026-10-18', title: 'S16：FURIA 入围赛出局', changes: [
     { kind: '调整', text: 'FURIA 在入围赛出局（败者组决赛 1:3 负 MVK）。按规则，<b>FURIA 五名选手的 S16 卡在数值揭晓前暂停交易</b>，比赛数据更新后揭晓最终数值并恢复交易。' },
   ],
