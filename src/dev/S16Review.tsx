@@ -63,13 +63,13 @@ function Review() {
     <p style={{ color: '#9fb0a8', margin: '0 0 16px' }}>共 {S16_CARDS.length} 张。开赛前全部是「?」，战队出局才揭晓数值并定格；揭晓后的数值是示例。</p>
 
     <h3 style={{ margin: '0 0 4px' }}>已揭晓（src/data/s16Ratings.json 的实际数值）</h3>
-    <p style={{ color: '#9fb0a8', margin: '0 0 10px', fontSize: 13 }}>按评分从高到低；括号里是普通卡评分、世界赛表现分、局数。</p>
+    <p style={{ color: '#9fb0a8', margin: '0 0 10px', fontSize: 13 }}>按评分从高到低；下面一行是世界赛表现分、局数，普通卡评分只作对照（不参与计算）。</p>
     <div id="s16-revealed" style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fill,minmax(${w}px,1fr))`, gap: '18px 14px', marginBottom: 30, padding: 14, background: '#0d131d' }}>
       {S16_CARDS.filter((c) => c.s16!.revealed).sort((a, b) => b.rating - a.rating).map((c) => {
         const r = (S16_RATINGS.ratings as Record<string, { perf?: number }>)[c.ign ?? '']
         return <div key={c.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
           <S16Card card={c} size={size} />
-          <span style={{ fontSize: 11, color: '#9fb0c8' }}>{c.clubTag} · 普通卡 {c.s16!.prev} · 表现 {r?.perf != null ? (r.perf >= 0 ? '+' : '') + r.perf.toFixed(1) : '—'} · {c.s16!.games} 局</span>
+          <span style={{ fontSize: 11, color: '#9fb0c8' }}>{c.clubTag} · 表现 {r?.perf != null ? (r.perf >= 0 ? '+' : '') + r.perf.toFixed(1) : '—'} · {c.s16!.games} 局 · 普通卡 {c.s16!.prev}（对照）</span>
         </div>
       })}
     </div>

@@ -111,8 +111,8 @@ export interface PlayerCard {
  * rating, metal, attributes and arrow into src/data/s16Ratings.json, and that entry never changes again — not
  * when the ordinary cards are re-rated, not when later results come in. Rating is banded by how far the team went
  * (owner 2026-10-19: 入围赛 ≤74, 瑞士轮 ≤82, 八强 ≤86, 四强 ≤88, 亚军 ≤89, 冠军 ≤90 — early exits leave room for the
- * deep runs); inside the band his ordinary card + his Worlds play against his lane opponent (weighted by opponent
- * strength, ±6) place him, at 0.6 of a point per point; the metal uses the ordinary cards' lines (GOLD_AT / SILVER_AT), and the FMVP's
+ * deep runs); inside the band only this Worlds counts — his play against his lane opponent, ±6 around the band's
+ * centre, the ordinary card plays no part (owner 2026-10-19); the metal uses the ordinary cards' lines (GOLD_AT / SILVER_AT), and the FMVP's
  * card becomes a 彩卡.
  */
 export interface S16Info {
