@@ -1,12 +1,313 @@
 {
  "meta": {
-  "updatedAt": null,
-  "eliminated": 0,
-  "revealed": 0,
+  "updatedAt": "2026-10-19",
+  "eliminated": 3,
+  "revealed": 15,
   "final": false,
   "note": "由 scripts/s16_ratings.py 生成：战队出局（src/data/s16Results.json）时这队五人定格，之后永远不变；prev = 普通卡评分（卡面箭头）；没有条目的选手卡面全是「?」"
  },
- "ratings": {},
+ "ratings": {
+  "Blaber": {
+   "rating": 72,
+   "rarity": "silver",
+   "games": 9,
+   "prev": 84,
+   "attrs": {
+    "aim": 73,
+    "reaction": 77,
+    "awareness": 72,
+    "utility": 78,
+    "clutch": 69,
+    "teamwork": 70,
+    "communication": 69,
+    "igl": 67
+   },
+   "placement": "playin",
+   "out": "2026-10-17",
+   "perf": 2.61,
+   "place": 68
+  },
+  "JoJo": {
+   "rating": 72,
+   "rarity": "silver",
+   "games": 11,
+   "prev": 85,
+   "attrs": {
+    "aim": 75,
+    "reaction": 70,
+    "awareness": 69,
+    "utility": 68,
+    "clutch": 67,
+    "teamwork": 74,
+    "communication": 75,
+    "igl": 69
+   },
+   "placement": "playin",
+   "out": "2026-10-18",
+   "perf": 1.31,
+   "place": 68
+  },
+  "Thanatos": {
+   "rating": 71,
+   "rarity": "bronze",
+   "games": 9,
+   "prev": 84,
+   "attrs": {
+    "aim": 70,
+    "reaction": 75,
+    "awareness": 70,
+    "utility": 76,
+    "clutch": 67,
+    "teamwork": 65,
+    "communication": 64,
+    "igl": 68
+   },
+   "placement": "playin",
+   "out": "2026-10-17",
+   "perf": 1.28,
+   "place": 68
+  },
+  "Tatu": {
+   "rating": 70,
+   "rarity": "bronze",
+   "games": 11,
+   "prev": 86,
+   "attrs": {
+    "aim": 71,
+    "reaction": 68,
+    "awareness": 70,
+    "utility": 71,
+    "clutch": 67,
+    "teamwork": 71,
+    "communication": 69,
+    "igl": 72
+   },
+   "placement": "playin",
+   "out": "2026-10-18",
+   "perf": -1.89,
+   "place": 68
+  },
+  "Vulcan": {
+   "rating": 70,
+   "rarity": "bronze",
+   "games": 9,
+   "prev": 84,
+   "attrs": {
+    "aim": 74,
+    "reaction": 73,
+    "awareness": 66,
+    "utility": 67,
+    "clutch": 67,
+    "teamwork": 72,
+    "communication": 72,
+    "igl": 66
+   },
+   "placement": "playin",
+   "out": "2026-10-17",
+   "perf": -1.08,
+   "place": 68
+  },
+  "Ayu": {
+   "rating": 68,
+   "rarity": "bronze",
+   "games": 11,
+   "prev": 80,
+   "attrs": {
+    "aim": 70,
+    "reaction": 69,
+    "awareness": 66,
+    "utility": 67,
+    "clutch": 66,
+    "teamwork": 69,
+    "communication": 70,
+    "igl": 59
+   },
+   "placement": "playin",
+   "out": "2026-10-18",
+   "perf": -0.27,
+   "place": 68
+  },
+  "Gury": {
+   "rating": 68,
+   "rarity": "bronze",
+   "games": 11,
+   "prev": 75,
+   "attrs": {
+    "aim": 68,
+    "reaction": 71,
+    "awareness": 74,
+    "utility": 71,
+    "clutch": 67,
+    "teamwork": 65,
+    "communication": 63,
+    "igl": 50
+   },
+   "placement": "playin",
+   "out": "2026-10-19",
+   "perf": 5.44,
+   "place": 68
+  },
+  "Guigo": {
+   "rating": 67,
+   "rarity": "bronze",
+   "games": 11,
+   "prev": 80,
+   "attrs": {
+    "aim": 68,
+    "reaction": 68,
+    "awareness": 67,
+    "utility": 65,
+    "clutch": 65,
+    "teamwork": 67,
+    "communication": 68,
+    "igl": 73
+   },
+   "placement": "playin",
+   "out": "2026-10-18",
+   "perf": -2.16,
+   "place": 68
+  },
+  "Harky": {
+   "rating": 67,
+   "rarity": "bronze",
+   "games": 13,
+   "prev": 75,
+   "attrs": {
+    "aim": 66,
+    "reaction": 70,
+    "awareness": 67,
+    "utility": 68,
+    "clutch": 64,
+    "teamwork": 65,
+    "communication": 65,
+    "igl": 53
+   },
+   "placement": "playin",
+   "out": "2026-10-19",
+   "perf": 2.79,
+   "place": 68
+  },
+  "Tutsz": {
+   "rating": 67,
+   "rarity": "bronze",
+   "games": 11,
+   "prev": 78,
+   "attrs": {
+    "aim": 67,
+    "reaction": 68,
+    "awareness": 68,
+    "utility": 68,
+    "clutch": 66,
+    "teamwork": 64,
+    "communication": 65,
+    "igl": 60
+   },
+   "placement": "playin",
+   "out": "2026-10-18",
+   "perf": 1.02,
+   "place": 68
+  },
+  "Loki": {
+   "rating": 66,
+   "rarity": "bronze",
+   "games": 9,
+   "prev": 80,
+   "attrs": {
+    "aim": 67,
+    "reaction": 63,
+    "awareness": 67,
+    "utility": 66,
+    "clutch": 64,
+    "teamwork": 68,
+    "communication": 68,
+    "igl": 64
+   },
+   "placement": "playin",
+   "out": "2026-10-17",
+   "perf": -3.44,
+   "place": 68
+  },
+  "Tactical": {
+   "rating": 66,
+   "rarity": "bronze",
+   "games": 9,
+   "prev": 75,
+   "attrs": {
+    "aim": 68,
+    "reaction": 67,
+    "awareness": 63,
+    "utility": 68,
+    "clutch": 64,
+    "teamwork": 62,
+    "communication": 60,
+    "igl": 73
+   },
+   "placement": "playin",
+   "out": "2026-10-17",
+   "perf": 0.92,
+   "place": 68
+  },
+  "Kratos": {
+   "rating": 63,
+   "rarity": "bronze",
+   "games": 13,
+   "prev": 69,
+   "attrs": {
+    "aim": 60,
+    "reaction": 69,
+    "awareness": 63,
+    "utility": 67,
+    "clutch": 65,
+    "teamwork": 60,
+    "communication": 58,
+    "igl": 45
+   },
+   "placement": "playin",
+   "out": "2026-10-19",
+   "perf": 3.22,
+   "place": 68
+  },
+  "Chika": {
+   "rating": 62,
+   "rarity": "bronze",
+   "games": 13,
+   "prev": 72,
+   "attrs": {
+    "aim": 62,
+    "reaction": 62,
+    "awareness": 60,
+    "utility": 63,
+    "clutch": 60,
+    "teamwork": 61,
+    "communication": 60,
+    "igl": 49
+   },
+   "placement": "playin",
+   "out": "2026-10-19",
+   "perf": -1.81,
+   "place": 68
+  },
+  "SiuLoong": {
+   "rating": 60,
+   "rarity": "bronze",
+   "games": 13,
+   "prev": 66,
+   "attrs": {
+    "aim": 62,
+    "reaction": 61,
+    "awareness": 61,
+    "utility": 61,
+    "clutch": 60,
+    "teamwork": 61,
+    "communication": 62,
+    "igl": 52
+   },
+   "placement": "playin",
+   "out": "2026-10-19",
+   "perf": 0.77,
+   "place": 68
+  }
+ },
  "champion": null,
  "fmvp": null,
  "fmvpRating": null

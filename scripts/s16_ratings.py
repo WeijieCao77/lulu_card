@@ -15,14 +15,16 @@
 规则（站长 2026-10-10）：
   * 战队还在比赛 → 五张卡都是「?」（文件里没有条目）。战队出局（登记进 s16Results.json）→ 这五个人的数值、
     金银铜、八项属性、箭头全部写进文件并定格，以后普通卡怎么调都不再变。
-  * 评分 = 普通卡评分（底分） + 表现分（±6） + 名次分（冠军 +4、亚军 +3、四强 +2、八强 +1、瑞士轮 0、入围赛 −1）
-    + 冠军队 +2；四舍五入，夹在 50–90。FMVP 彩卡另算（引擎里 94–97）。
+  * 评分按名次分档（站长 2026-10-19：先出局的给后面的队、给冠军留空间）：
+    评分 = 档中心 + 0.6 ×（普通卡评分 + 表现分（±6） − 80），四舍五入，夹在 [50, 档封顶]。
+    档中心/封顶：入围赛 68/74、瑞士轮 75/82、八强 79/86、四强 82/88、亚军 84/89、冠军 86/90。
+    FMVP 彩卡另算（引擎里 94–97）。
   * 表现分：每局和对面同位置的人比（15 分钟经济/经验/补刀差、伤害占比差、参团率差、死亡差、分均视野差、
     经济占比差），按位置加权成「单局表现」；扣掉按两人普通卡差距本来就该有的优势；每局按对手全队普通卡均值加权
     （打弱队的局几乎不算）；再按有效局数收缩（打得越多越可信）。
   * 金银铜按普通卡的固定线（≥ GOLD_AT 金、≥ SILVER_AT 银），不按名次——先揭晓的队不会被后面的结果改档。
   * 卡面箭头 prev = 普通卡评分（「90 ▲4」= 比他的普通卡高 4）。
-  * 一局没上的（替补）：战队出局时按普通卡数值揭晓（不加减）。
+  * 一局没上的（替补）：表现按 0 算，和队友进同一档。
 
 只用 Python 3.12 标准库。细节和每个常数的来历见 scripts/S16_RATINGS_README.md。
 """
@@ -50,13 +52,14 @@ WORLDS_LEAGUE = "WLDs"
 
 # --- tunables（2025 世界赛回测定的，见 README「常数」一节）------------------------------
 CARD_MIN, CARD_MAX = 50, 90
-CHAMPION_BONUS = 2                      # 站长原有规则：冠军队每人 +2，封顶 90
-PLACEMENT_BONUS = {                     # 站长 2026-10-10：走得越远越强
-    "champion": 4, "runnerup": 3, "sf": 2, "qf": 1, "swiss": 0, "playin": -1,
+# 站长 2026-10-19：先出局的队要给后面的队、给冠军留空间（冠军 90 上下，75–90 留给走得远的队）。
+# 每个名次一个档：中心 = 普通卡 80、表现 0 的人在这一档拿几分；封顶 = 这一档最高几分。
+# 评分 = 中心 + SPREAD ×（普通卡 + 表现分 − 80），夹在 [50, 封顶]：同一档里强的人还是比弱的人高，只是整档往下压。
+PLACEMENT_BAND = {
+    "playin": (68, 74), "swiss": (75, 82), "qf": (79, 86), "sf": (82, 88), "runnerup": (84, 89), "champion": (86, 90),
 }
-PLACEMENT_CAP = {                       # 站长 2026-10-10「早出局有上限」：四强以上才能到 90
-    "playin": 87, "swiss": 88, "qf": 89,
-}
+BAND_PIVOT = 80.0       # 普通卡 80 的人落在档的中心
+SPREAD = 0.6            # 普通卡 / 表现差 1 分，S16 差 0.6 分（把 66–90 的普通卡压进一档）
 PLACEMENT_CN = {"champion": "冠军", "runnerup": "亚军", "sf": "四强", "qf": "八强", "swiss": "瑞士轮出局", "playin": "入围赛出局"}
 PLACEMENT_ORDER = ("playin", "swiss", "qf", "sf", "runnerup", "champion")
 PLACEMENT_MAX_TEAMS = {"champion": 1, "runnerup": 1, "sf": 2, "qf": 4}
@@ -296,8 +299,9 @@ def performance(games: list[dict], base_of, stages: dict[str, list[str]]) -> dic
 
 
 def rate_player(base_rating: int, perf: float, placement: str, champion: bool) -> int:
-    x = base_rating + perf + PLACEMENT_BONUS[placement] + (CHAMPION_BONUS if champion else 0)
-    return int(clamp(round_half_up(x), CARD_MIN, PLACEMENT_CAP.get(placement, CARD_MAX)))
+    center, cap = PLACEMENT_BAND[placement]
+    x = center + SPREAD * (base_rating + perf - BAND_PIVOT)
+    return int(clamp(round_half_up(x), CARD_MIN, min(cap, CARD_MAX)))
 
 
 def make_entry(ign: str, b: dict, rating: int, games: int, placement: str, out_day: str,
@@ -312,7 +316,7 @@ def make_entry(ign: str, b: dict, rating: int, games: int, placement: str, out_d
         "placement": placement,
         "out": out_day,
         "perf": round(perf, 2),
-        "place": PLACEMENT_BONUS[placement],
+        "place": PLACEMENT_BAND[placement][0],   # 这一档的中心（普通卡 80、表现 0 的人拿几分）
     }
 
 
@@ -367,7 +371,7 @@ def validate_results(results: dict, roster: dict) -> list[str]:
         if club not in clubs:
             errs.append(f"s16Results.json: {club} 不是名单里的俱乐部 id")
         p = (t or {}).get("placement")
-        if p not in PLACEMENT_BONUS:
+        if p not in PLACEMENT_BAND:
             errs.append(f"s16Results.json: {club} 的 placement「{p}」不认识（可选：{', '.join(PLACEMENT_ORDER)}）")
         else:
             count[p] += 1
@@ -488,9 +492,9 @@ def run(args) -> dict:
                 pf = performance(games, base_of, stages)
                 rating = rate_player(int(b["rating"]), pf["perf"], t["placement"], club == champion)
             else:
-                # 一局没上（替补）：按普通卡数值揭晓，不加减
+                # 一局没上（替补）：表现按 0 算，和队友进同一档
                 pf = {"perf": 0.0, "n_eff": 0.0, "raw": 0.0, "games": 0}
-                rating = int(b["rating"])
+                rating = rate_player(int(b["rating"]), 0.0, t["placement"], club == champion)
             ratings[ign] = make_entry(ign, b, rating, pf["games"], t["placement"], out_day, pf["perf"], gold_at, silver_at)
             detail[ign] = pf
         frozen_now.append(team_name[club])
@@ -549,7 +553,7 @@ def print_report(res: dict, args, file=None) -> None:
             p(f"  {w}")
     p(f"\n这次新定格：{'、'.join(rep['frozen_now']) or '无'}")
     p(f"已揭晓 {out['meta']['revealed']} 人，{out['meta']['eliminated']} 支队已出局登记\n")
-    hdr = f"{'ign':<13}{'team':<7}{'名次':<8}{'局':>3}{'有效':>6}{'普通卡':>6}{'表现':>6}{'名次分':>6}{'S16':>5}{'箭头':>6}  金属"
+    hdr = f"{'ign':<13}{'team':<7}{'名次':<8}{'局':>3}{'有效':>6}{'普通卡':>6}{'表现':>6}{'档中心':>6}{'S16':>5}{'箭头':>6}  金属"
     p(hdr)
     p("-" * 78)
     det = rep["detail"]
@@ -560,7 +564,7 @@ def print_report(res: dict, args, file=None) -> None:
         d = v["rating"] - v["prev"]
         arrow = "—" if d == 0 else (f"▲{d}" if d > 0 else f"▼{-d}")
         p(f"{ign:<13}{rep['team_name'].get(club, club):<7}{PLACEMENT_CN[v['placement']]:<8}{v['games']:>3}"
-          f"{det[ign]['n_eff']:>6.1f}{v['prev']:>6}{v['perf']:>+6.1f}{v['place']:>+6d}{v['rating']:>5}{arrow:>6}  {v['rarity']}")
+          f"{det[ign]['n_eff']:>6.1f}{v['prev']:>6}{v['perf']:>+6.1f}{v['place']:>6d}{v['rating']:>5}{arrow:>6}  {v['rarity']}")
 
 
 def main(argv=None) -> int:
