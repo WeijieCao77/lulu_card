@@ -146,12 +146,12 @@ export const PACKS: Record<PackKind, PackDef> = {
   scout: {
     kind: 'scout', name: '试训包', pool: 'player',
     blurb: '一张选手卡。多是铜卡，也出金卡。',
-    cost: 750, draws: 1, mythic: 0.0001, gold: 0.03, silver: 0.26, shop: true,
+    cost: 750, draws: 1, mythic: 0.0002, gold: 0.03, silver: 0.26, shop: true,
   },
   elite: {
     kind: 'elite', name: '选拔包', pool: 'player',
     blurb: '三张选手卡，至少一张银卡起。',
-    cost: 2400, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
+    cost: 2400, draws: 3, mythic: 0.0008, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
   },
   ten: {
     kind: 'ten', name: '十连包', pool: 'player',
@@ -163,7 +163,7 @@ export const PACKS: Record<PackKind, PackDef> = {
     // is roughly half and half: 1/852 draws measured against 1/636 before, and
     // the progress bar means something. The odds screen measures the engine
     // rather than reading this number, so it followed on its own.
-    cost: 5000, draws: 10, mythic: 0.0006, gold: 0.06, silver: 0.34, floor: 'gold', shop: false,
+    cost: 5000, draws: 10, mythic: 0.0012, gold: 0.06, silver: 0.34, floor: 'gold', shop: false,
   },
   // The series packs: same three cards as a 选拔包 and the same odds, priced a
   // little above it. What you are buying is not volume, it is aim — a 中国包
@@ -172,12 +172,12 @@ export const PACKS: Record<PackKind, PackDef> = {
   cn: {
     kind: 'cn', name: 'LPL 包', pool: 'LPL',
     blurb: '只出 LPL 选手卡，彩卡也只出 LPL 的。三张，至少一张银卡起。',
-    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
+    cost: 2600, draws: 3, mythic: 0.0008, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
   },
   pac: {
     kind: 'pac', name: 'LCK 包', pool: 'LCK',
     blurb: '只出 LCK 选手卡，彩卡也只出 LCK 的。三张，至少一张银卡起。',
-    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
+    cost: 2600, draws: 3, mythic: 0.0008, gold: 0.08, silver: 0.38, floor: 'silver', shop: true,
   },
   west: {
     kind: 'west', name: '其他包', pool: 'WEST',
@@ -190,13 +190,13 @@ export const PACKS: Record<PackKind, PackDef> = {
     kind: 'ame', name: 'LCS 包', pool: 'LCS',
     blurb: '只出 LCS（北美）选手卡，彩卡也只出这个赛区的。三张，至少一张银卡起。',
     // smaller pools than LPL/LCK: at .08/.38 one LCS gold would be likelier than one LCS bronze
-    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.05, silver: 0.08, floor: 'silver', shop: true,
+    cost: 2600, draws: 3, mythic: 0.0008, gold: 0.05, silver: 0.08, floor: 'silver', shop: true,
   },
   emea: {
     kind: 'emea', name: 'LEC 包', pool: 'LEC',
     blurb: '只出 LEC（欧洲）选手卡，彩卡也只出这个赛区的。三张，至少一张银卡起。',
     // smaller pools than LPL/LCK: at .08/.38 one LCS gold would be likelier than one LCS bronze
-    cost: 2600, draws: 3, mythic: 0.0004, gold: 0.05, silver: 0.08, floor: 'silver', shop: true,
+    cost: 2600, draws: 3, mythic: 0.0008, gold: 0.05, silver: 0.08, floor: 'silver', shop: true,
   },
   lcp: { kind: 'lcp', name: 'LCP 包', pool: 'LCP', blurb: '亚太赛区选手，三张卡，至少一张银卡。', cost: 2600, draws: 3, mythic: 0, gold: .08, silver: .38, floor: 'silver', shop: true },
   cblol: { kind: 'cblol', name: 'CBLOL 包', pool: 'CBLOL', blurb: '巴西赛区选手，三张卡，至少一张银卡。', cost: 2600, draws: 3, mythic: 0, gold: .08, silver: .38, floor: 'silver', shop: true },
@@ -292,7 +292,8 @@ export const HARD_PITY = 45
 export const MYTHIC_PACK_NAMES = PACK_ORDER.filter(k => PACKS[k].mythic > 0 && PACKS[k].mythic < 1).map(k => PACKS[k].name).join('、')
 /** every pack whose draws move the floor: the ones above, and the 其他包 (feedsFloor) */
 export const FLOOR_PACK_NAMES = PACK_ORDER.filter(k => (PACKS[k].mythic > 0 && PACKS[k].mythic < 1) || PACKS[k].feedsFloor).map(k => PACKS[k].name).join('、')
-export const MYTHIC_FLOOR = 1200
+// 关服前 (owner, 2026-10-20): 彩卡爆率约两倍 — every pack's natural 彩卡 rate doubled above, and the floor 1200 → 600
+export const MYTHIC_FLOOR = 600
 
 // ---------------------------------------------------------------- the day
 
@@ -1267,7 +1268,7 @@ export const S16_PACK_AFTER_DAY = new Date(Date.parse(S16_MARKET.normalFrom) + 8
 export function s16PackDef(today?: string): PackDef {
   if (!today || today < S16_PACK_AFTER_DAY) return PACKS.s16
   return {
-    ...PACKS.s16, uniform: false, mythic: 0.0004, gold: 0.12, silver: 0.38, floor: 'silver',
+    ...PACKS.s16, uniform: false, mythic: 0.0008, gold: 0.12, silver: 0.38, floor: 'silver',
     blurb: 'S16 世界赛已结束，数值全部定格。三张 S16 卡，至少一张银卡，按金银铜爆率，有机会开出 FMVP 彩卡。',
   }
 }

@@ -17,7 +17,7 @@ function openPacks(g: ReturnType<typeof newGacha>, kind: keyof typeof PACKS, cou
 }
 
 function runChecks() {
-  // 1198 scout pulls no mythic, counter 1199
+  // MYTHIC_FLOOR - 2 scout pulls no mythic, counter MYTHIC_FLOOR - 1
   {
     const g = newGacha('CHECK-1198', '验证', '2026-01-01')
     g.seed = 901
@@ -26,13 +26,13 @@ function runChecks() {
     g.packs.scout = 1
     const first = openPack(g, 'scout', 'pack')
     assert(first.every(p => p.card.rarity !== 'mythic'), 'seed 901 must not produce an early natural mythic')
-    assert(g.mythicDry === 1199, `1198 scout pulls should set mythicDry=1199, got ${g.mythicDry}`)
+    assert(g.mythicDry === MYTHIC_FLOOR - 1, `${MYTHIC_FLOOR - 2} scout pulls should set mythicDry=${MYTHIC_FLOOR - 1}, got ${g.mythicDry}`)
     openPacks(g, 'scout', 1)
-    assert(g.mythicDry === 0, 'draw 1200 must pay and reset')
+    assert(g.mythicDry === 0, `draw ${MYTHIC_FLOOR} must pay and reset`)
   }
 
-  // 1199/1200/1205 states next scout pack must contain mythic
-  for (const dry of [1199, 1200, 1205]) {
+  // floor-1 / floor / floor+5 states next scout pack must contain mythic
+  for (const dry of [MYTHIC_FLOOR - 1, MYTHIC_FLOOR, MYTHIC_FLOOR + 5]) {
     const g = newGacha(`CHECK-${dry}`, '验证', '2026-01-01')
     g.seed = 901
     g.coins = Number.MAX_SAFE_INTEGER
@@ -42,15 +42,15 @@ function runChecks() {
     assert(pulled.some(p => p.card.rarity === 'mythic'), `next scout pack should be mythic when mythicDry=${dry}`)
   }
 
-  // ten pack from 1195 gives one mythic and remaining 5 counter, seed natural no mythic
+  // ten pack from floor-5 gives one mythic and remaining 5 counter, seed natural no mythic
   {
     const g = newGacha('CHECK-TEN', '验证', '2026-01-01')
     g.seed = 901
     g.coins = Number.MAX_SAFE_INTEGER
-    g.mythicDry = 1195
+    g.mythicDry = MYTHIC_FLOOR - 5
     g.packs.ten = 1
     const pulled = openPack(g, 'ten', 'pack')
-    assert(pulled.some(p => p.card.rarity === 'mythic'), 'ten pack at 1195 should contain mythic')
+    assert(pulled.some(p => p.card.rarity === 'mythic'), 'ten pack at floor-5 should contain mythic')
     assert(g.mythicDry === 5, `ten pack after one mythic leaves mythicDry=5, got ${g.mythicDry}`)
     // ensure no natural mythic happened for this seed before floor
     const g2 = newGacha('CHECK-TEN-NAT', '验证', '2026-01-01')
@@ -97,17 +97,17 @@ function runChecks() {
     assert(floored > 0, 'a ten pack whose only gold is the floor should leave the gold pity at 10')
   }
 
-  // coach and all position packs at 1199 do not pay mythic and do not advance, then scout pays
+  // coach and all position packs at floor-1 do not pay mythic and do not advance, then scout pays
   const noMythicKinds = ['coach', ...POSITION_PACK_KINDS] as const
   for (const kind of noMythicKinds) {
     const g = newGacha(`CHECK-NOMY-${kind}`, '验证', '2026-01-01')
     g.seed = 901
     g.coins = Number.MAX_SAFE_INTEGER
-    g.mythicDry = 1199
+    g.mythicDry = MYTHIC_FLOOR - 1
     g.packs[kind] = 1
     const pulled = openPack(g, kind, 'pack')
-    assert(!pulled.some(p => p.card.rarity === 'mythic'), `${kind} should not pay mythic even at 1199`)
-    assert(g.mythicDry === 1199, `${kind} should not advance mythicDry`)
+    assert(!pulled.some(p => p.card.rarity === 'mythic'), `${kind} should not pay mythic even at floor-1`)
+    assert(g.mythicDry === MYTHIC_FLOOR - 1, `${kind} should not advance mythicDry`)
     g.packs.scout = 1
     const scoutPulled = openPack(g, 'scout', 'pack')
     assert(scoutPulled.some(p => p.card.rarity === 'mythic'), 'scout after no-mythic pack should still pay mythic')
