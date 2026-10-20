@@ -77,7 +77,7 @@ export default function S16Predict({ onClose, data = S16_PREDICT }: { onClose: (
       <h4 style={{ margin: '16px 0 6px' }}>瑞士轮 <span className="tiny faint">锁定：{when(sw.lockAt)}</span></h4>
       {!sw.teams ? <p className="small muted">16 支队要等入围赛打完才确定，到时候开放。</p> : <>
         <div className="tiny faint">选 8 支晋级（已选 {qual.length}/8）</div>
-        <div className="s16p-grid">{sw.teams.map((id) => <Team key={id} id={id} on={qual.includes(id)} onClick={swOpen ? () => { toggle(qual, setQual, id, 8); setThree(three.filter((x) => x !== id || !qual.includes(id))); setZero(zero.filter((x) => x !== id)) } : undefined} />)}</div>
+        <div className="s16p-grid">{sw.teams.map((id) => <Team key={id} id={id} on={qual.includes(id)} onClick={swOpen ? () => { if (!qual.includes(id) && qual.length >= 8) return; toggle(qual, setQual, id, 8); setThree(three.filter((x) => x !== id || !qual.includes(id))); setZero(zero.filter((x) => x !== id)) } : undefined} />)}</div>
         <div className="tiny faint">其中 2 支 3-0（已选 {three.length}/2）</div>
         <div className="s16p-grid">{qual.map((id) => <Team key={id} id={id} on={three.includes(id)} onClick={swOpen ? () => toggle(three, setThree, id, 2) : undefined} />)}</div>
         <div className="tiny faint">没晋级的里 2 支 0-3（已选 {zero.length}/2）</div>
