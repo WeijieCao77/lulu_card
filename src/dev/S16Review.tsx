@@ -10,6 +10,7 @@ import S16Predict from '../ui/cards/s16/S16Predict'
 import { CardCtx } from '../ui/cards/ctx'
 import type { CardCtxValue } from '../ui/cards/ctx'
 import { newGacha } from '../engine/gacha'
+import S16_RATINGS from '../data/s16Ratings.json'
 
 const DEMO_PREDICT = {
   playin: { teams: ['T35', 'T28', 'T49', 'T55'], lockAt: '2026-10-16T02:00:00+08:00', winner: null, confirmedAt: null },
@@ -60,6 +61,18 @@ function Review() {
   return <main style={{ padding: '24px clamp(12px, 4vw, 28px) 80px', color: '#e8ece6', background: '#0b0f17', minHeight: '100vh', fontFamily: 'Microsoft YaHei, sans-serif' }}>
     <h1 style={{ margin: '0 0 4px', fontSize: 24 }}>S16 世界赛 · 卡面审核（「冠军之夜」）</h1>
     <p style={{ color: '#9fb0a8', margin: '0 0 16px' }}>共 {S16_CARDS.length} 张。开赛前全部是「?」，战队出局才揭晓数值并定格；揭晓后的数值是示例。</p>
+
+    <h3 style={{ margin: '0 0 4px' }}>已揭晓（src/data/s16Ratings.json 的实际数值）</h3>
+    <p style={{ color: '#9fb0a8', margin: '0 0 10px', fontSize: 13 }}>按评分从高到低；下面一行是世界赛表现分、局数，普通卡评分只作对照（不参与计算）。</p>
+    <div id="s16-revealed" style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fill,minmax(${w}px,1fr))`, gap: '18px 14px', marginBottom: 30, padding: 14, background: '#0d131d' }}>
+      {S16_CARDS.filter((c) => c.s16!.revealed).sort((a, b) => b.rating - a.rating).map((c) => {
+        const r = (S16_RATINGS.ratings as Record<string, { perf?: number }>)[c.ign ?? '']
+        return <div key={c.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+          <S16Card card={c} size={size} />
+          <span style={{ fontSize: 11, color: '#9fb0c8' }}>{c.clubTag} · 表现 {r?.perf != null ? (r.perf >= 0 ? '+' : '') + r.perf.toFixed(1) : '—'} · {c.s16!.games} 局 · 普通卡 {c.s16!.prev}（对照）</span>
+        </div>
+      })}
+    </div>
 
     <h3 style={{ margin: '0 0 10px' }}>全部状态 × 大 / 中 / 小</h3>
     <div id="s16-matrix" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, max-content)', gap: '18px 22px', alignItems: 'end', marginBottom: 30, padding: 14, background: '#0d131d' }}>

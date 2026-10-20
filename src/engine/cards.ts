@@ -109,9 +109,10 @@ export interface PlayerCard {
  * club and his position, and every number is 「?」 while his team is still in the event. The day the team is
  * knocked out (recorded in src/data/s16Results.json), scripts/s16_ratings.py writes the five players' final
  * rating, metal, attributes and arrow into src/data/s16Ratings.json, and that entry never changes again — not
- * when the ordinary cards are re-rated, not when later results come in. Rating = his ordinary card + his Worlds
- * play against his lane opponent (weighted by opponent strength, ±6) + how far the team went (冠军 +4 … 入围赛 −1),
- * champions +2 on top, capped at 90; the metal uses the ordinary cards' lines (GOLD_AT / SILVER_AT), and the FMVP's
+ * when the ordinary cards are re-rated, not when later results come in. Rating is banded by how far the team went
+ * (owner 2026-10-19: 入围赛 ≤74, 瑞士轮 ≤82, 八强 ≤86, 四强 ≤88, 亚军 ≤89, 冠军 ≤90 — early exits leave room for the
+ * deep runs); inside the band only this Worlds counts — his play against his lane opponent, ±6 around the band's
+ * centre, the ordinary card plays no part (owner 2026-10-19); the metal uses the ordinary cards' lines (GOLD_AT / SILVER_AT), and the FMVP's
  * card becomes a 彩卡.
  */
 export interface S16Info {

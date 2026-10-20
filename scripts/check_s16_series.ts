@@ -221,7 +221,7 @@ function s16Script(py: string) {
     const roster = { meta: { start: '2030-10-01' }, teams: teams.map((t) => ({ club: t, tag: t, name: `Team ${t}`, stage: 'main' })), players: [] as { ign: string; club: string; role: string; starter: boolean }[] }
     for (const t of teams) for (const p of POS) {
       const ign = `${t}${p}`
-      // everyone 80, except AA's mid 89 (has to stop at 90 as champion) and DD's sup 52 (has to stop at 50 after feeding)
+      // everyone 80, except AA's mid 89 (must not matter: same games, same S16) and DD's sup 52 (feeds: below the band centre)
       const rating = ign === 'AAmid' ? 89 : ign === 'DDsup' ? 52 : 80
       base[ign] = { base: 'p:x', role: ROLE[p], club: t, rating, attrs }
       roster.players.push({ ign, club: t, role: ROLE[p], starter: true })
@@ -257,7 +257,7 @@ function s16Script(py: string) {
     check('脚本：只揭晓已出局的队', Object.keys(r).sort().join() === POS.map((p) => `DD${p}`).sort().join(), Object.keys(r).join())
     check('脚本：金银铜按普通卡的线', metalOk(r))
     check('脚本：箭头 prev = 当时的普通卡评分', Object.entries(r).every(([ign, e]) => e.prev === base[ign].rating))
-    check('脚本：评分不低于 50（DD 辅助普通卡 52、每局送）', r.DDsup.rating === 50 && r.DDsup.perf < 0, `${r.DDsup.rating} perf ${r.DDsup.perf}`)
+    check('脚本：打得差就低于档中心（DD 辅助只打一局、送了：收缩后 −4.7 → 68 − 5 = 63）', r.DDsup.rating === 63 && r.DDsup.perf < -4 && r.DDsup.perf >= -6, `${r.DDsup.rating} perf ${r.DDsup.perf}`)
     const frozen = dd(r)
 
     // the ordinary cards are re-rated: a frozen card must not move
@@ -285,13 +285,14 @@ function s16Script(py: string) {
     const doc = read()
     r = doc.ratings
     check('脚本：决赛后全部揭晓，冠军和 FMVP 记下', Object.keys(r).length === roster.players.length && doc.champion === 'AA' && doc.fmvp === 'AAbot')
-    check('脚本：评分不超过 90（AA 中单普通卡 89 + 冠军）', r.AAmid.rating === 90, String(r.AAmid.rating))
+    check('脚本：和普通卡无关（AA 中单普通卡 89、上单 80，打得一样 → 一样的分）', r.AAmid.rating === r.AAtop.rating && r.AAmid.rating === 86, `${r.AAmid.rating} ${r.AAtop.rating}`)
     // same ordinary card, same (neutral) games: the deeper run is never lower
-    const order = [['DDtop', 'playin', 79], ['CCtop', 'swiss', 80], ['BBtop', 'runnerup', 83], ['AAtop', 'champion', 86]] as const
-    check('脚本：同样的表现，走得越远分越高（入围赛 −1 < 瑞士轮 0 < 亚军 +3 < 冠军 +4 +2）', order.every(([ign, pl, want]) => r[ign].placement === pl && r[ign].perf === 0 && r[ign].rating === want),
+    const order = [['DDtop', 'playin', 68], ['CCtop', 'swiss', 75], ['BBtop', 'runnerup', 84], ['AAtop', 'champion', 86]] as const
+    check('脚本：同样的表现，走得越远分越高（表现 0 落在档中心：入围赛 68 < 瑞士轮 75 < 亚军 84 < 冠军 86）', order.every(([ign, pl, want]) => r[ign].placement === pl && r[ign].perf === 0 && r[ign].rating === want),
       order.map(([ign]) => `${ign} ${r[ign].rating}`).join(' '))
-    check('脚本：一局没上的替补按普通卡数值揭晓', r.AAsub.rating === 77 && r.AAsub.games === 0 && r.AAsub.prev === 77)
-    check('脚本：八项属性随评分平移', r.AAtop.attrs.aim === 86 && r.CCtop.attrs.aim === 80)
+    check('脚本：一局没上的替补表现按 0、落在队伍那一档的中心（冠军档 86）', r.AAsub.rating === 86 && r.AAsub.games === 0 && r.AAsub.prev === 77, String(r.AAsub.rating))
+    check('脚本：入围赛出局封顶 74', (() => { const e = Object.entries(r).filter(([, v]) => v.placement === 'playin'); return e.length > 0 && e.every(([, v]) => v.rating <= 74) })())
+    check('脚本：八项属性随评分平移', r.AAtop.attrs.aim === 86 && r.CCtop.attrs.aim === 75)
     check('脚本：金银铜按普通卡的线（决赛后）', metalOk(r))
   } catch (e) {
     check('脚本跑得通', false, String((e as { stdout?: string }).stdout || e).slice(-800))
