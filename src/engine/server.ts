@@ -10,7 +10,7 @@ export { runAction, wantsRival, squadForPlay, ladderScore, ACTIONS } from './car
 export { RELEASE_STAGE } from '../../release-policy.js'
 export type { ActEnv, ActResult } from './cardActions'
 export {
-  newGacha, migrateGacha, mergeClientFields, takeServerFields, clampState, refreshDaily,
+  newGacha, migrateGacha, FREE_COINS, mergeClientFields, takeServerFields, clampState, refreshDaily,
   primeStamina, pendingOpponent, SERVER_KEYS, CLIENT_KEYS, STARTER_COINS, GACHA_VERSION,
   masterPoints, oppBumpFor, canPlay, spendPlay, STAMINA_COST, STAMINA_MAX, STAMINA_REGEN_MS,
 } from './gacha'

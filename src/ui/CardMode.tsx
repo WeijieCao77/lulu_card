@@ -397,7 +397,7 @@ export default function CardMode({ onExit }: { onExit: () => void }) {
         <a className="skip-link" href="#main">跳到主内容</a>
         <header className="topbar">
           <button className="brand brand-home" type="button" title="返回首页" aria-label="噜噜卡，返回首页" onClick={() => { flushAccount(g); setAtHome(true) }}>噜<span>噜卡</span><em className="by">猪之家出品</em></button>
-          <div className="chip" title="金币">🪙 <b>{g.coins.toLocaleString('en-US')}</b></div>
+          <div className="chip" title="金币">🪙 <b>{g.coins >= 900_000_000 ? '无限' : g.coins.toLocaleString('en-US')}</b></div>
           <StaminaChip g={g} onTick={() => setNow(serverNow())} />
           <div className="chip" title="段位">
             {/* the rung, not the division — and past 大师 the score IS the rank */}

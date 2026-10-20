@@ -56,3 +56,4 @@ jobs:
       - run: npx tsx scripts/check_series.ts
       - run: npx tsx scripts/check_seasons.ts
       - run: npx tsx scripts/check_last_season.ts
+      - run: npx tsx scripts/check_free_coins.ts
