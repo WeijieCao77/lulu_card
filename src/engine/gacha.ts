@@ -364,8 +364,10 @@ export type PlayKind = keyof typeof STAMINA_COST
  * a day — and the whole of the surplus lands on people who come back more
  * than once, which is the behaviour worth paying for. The wait a player
  * actually feels, one ladder match, goes from two hours to 1h40m.
+ *
+ * 关服前 (owner, 2026-10-21): 30 minutes → 2 minutes a point, so a full meter is back in an hour.
  */
-export const STAMINA_REGEN_MS = 30 * 60 * 1000
+export const STAMINA_REGEN_MS = 2 * 60 * 1000
 
 /**
  * "50 分钟" / "1 小时" — the interval in the largest whole unit that fits it.
